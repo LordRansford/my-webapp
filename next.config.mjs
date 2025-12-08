@@ -1,25 +1,29 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Security headers needed for WebAssembly tools like Pyodide/Runno
+  reactStrictMode: true,
+
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: "/(.*)",
         headers: [
-          { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
-          { key: 'Cross-Origin-Embedder-Policy', value: 'require-corp' },
+          { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+          { key: "Cross-Origin-Embedder-Policy", value: "require-corp" },
+          { key: "X-Frame-Options", value: "DENY" },                   // Prevent clickjacking
+          { key: "X-Content-Type-Options", value: "nosniff" },         // Prevent MIME sniffing
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" }, 
         ],
       },
     ];
   },
 
-  // Allow Next.js image optimisation for media from your WordPress site
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'ransfordsnotes.com',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "ransfordsnotes.com",
+        pathname: "/**",
       },
     ],
   },

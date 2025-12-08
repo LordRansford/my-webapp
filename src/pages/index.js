@@ -1,78 +1,110 @@
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
+import Head from "next/head";
+import Link from "next/link";
+import { fetchRecentPosts } from "@/lib/wordpress";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const formatDate = (isoDate) => {
+  if (!isoDate) return "";
+  return new Intl.DateTimeFormat("en", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  }).format(new Date(isoDate));
+};
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+export async function getStaticProps() {
+  const posts = await fetchRecentPosts(8);
 
-export default function Home() {
+  return {
+    props: { posts },
+    revalidate: 300,
+  };
+}
+
+export default function Home({ posts }) {
   return (
-    <div
-      className={`${geistSans.className} ${geistMono.className} flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black`}
-    >
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <>
+      <Head>
+        <title>Ransford&apos;s Notes</title>
+        <meta
+          name="description"
+          content="Demystifying data, digitalisation, AI, cybersecurity, and engineering with hands-on notes and tools."
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the index.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+      </Head>
+
+      <main className="page-shell">
+        <header className="page-header">
+          <p className="eyebrow">Ransford&apos;s Notes</p>
+          <h1>Demystify, experiment, and deliver.</h1>
+          <p>
+            I share my builds and lessons across data, digitalisation, AI,
+            cybersecurity, and engineering. Each post captures what worked,
+            what failed, and how I tuned things for speed and cost.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs/pages/getting-started?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+          <div className="actions">
+            <Link href="/tools" className="button primary">
+              Open the tools
+            </Link>
+            <a
+              className="button ghost"
+              href="https://ransfordsnotes.com"
+              target="_blank"
+              rel="noreferrer"
+            >
+              View full archive
+            </a>
+          </div>
+        </header>
+
+        <section className="section">
+          <div className="section-heading">
+            <h2>Latest posts</h2>
+            <span className="hint">Pulled straight from WordPress</span>
+          </div>
+
+          {posts.length === 0 ? (
+            <p className="muted">No posts to display yet.</p>
+          ) : (
+            <div className="card-grid">
+              {posts.map((post) => (
+                <article key={post.id} className="card">
+                  <Link href={`/posts/${post.id}`} className="card-link">
+                    <h3
+                      className="card-title"
+                      dangerouslySetInnerHTML={{ __html: post.title }}
+                    />
+                    {post.date && (
+                      <p className="meta">Updated {formatDate(post.date)}</p>
+                    )}
+                    <div
+                      className="excerpt"
+                      dangerouslySetInnerHTML={{ __html: post.excerpt }}
+                    />
+                    <span className="text-link">Read this note →</span>
+                  </Link>
+                </article>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <section className="section">
+          <div className="card">
+            <div className="section-heading">
+              <div>
+                <p className="eyebrow">Hands-on</p>
+                <h2>Work with the ideas immediately</h2>
+                <p className="muted">
+                  Spin up the browser-based Python playground or the Web Crypto
+                  demo. Everything runs on your device—no servers, no waiting.
+                </p>
+              </div>
+              <Link href="/tools" className="button secondary">
+                Launch tools
+              </Link>
+            </div>
+          </div>
+        </section>
       </main>
-    </div>
+    </>
   );
 }
