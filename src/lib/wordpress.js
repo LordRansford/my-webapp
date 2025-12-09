@@ -35,6 +35,8 @@ const sanitizeOptions = {
 };
 
 const safeHtml = (html) => sanitizeHtml(html || "", sanitizeOptions);
+const stripAllHtml = (html) =>
+  sanitizeHtml(html || "", { allowedTags: [], allowedAttributes: {} }).trim();
 
 async function fetchFromWordPress(path) {
   const url = `${WORDPRESS_API_BASE}${path}`;
@@ -69,7 +71,10 @@ export async function fetchRecentPosts(limit = 6) {
     slug: post.slug,
     title: safeHtml(post.title?.rendered || "Untitled entry"),
     excerpt: safeHtml(post.excerpt?.rendered),
+    plainTitle: stripAllHtml(post.title?.rendered),
+    plainExcerpt: stripAllHtml(post.excerpt?.rendered),
     date: post.date || null,
+    tags: Array.isArray(post.tags) ? post.tags : [],
   }));
 }
 
@@ -88,6 +93,37 @@ export async function fetchPostById(id) {
     title: safeHtml(post.title?.rendered || "Untitled entry"),
     excerpt: safeHtml(post.excerpt?.rendered),
     content: safeHtml(post.content?.rendered),
+    plainTitle: stripAllHtml(post.title?.rendered),
+    plainExcerpt: stripAllHtml(post.excerpt?.rendered),
+    plainContent: stripAllHtml(post.content?.rendered),
     date: post.date || null,
+    tags: Array.isArray(post.tags) ? post.tags : [],
   };
+}
+
+export async function fetchPosts(limit = 24) {
+  const posts = await fetchFromWordPress(`/posts?_embed&per_page=${limit}`);
+  if (!posts) return [];
+
+  return posts.map((post) => ({
+    id: post.id,
+    slug: post.slug,
+    title: safeHtml(post.title?.rendered || "Untitled entry"),
+    excerpt: safeHtml(post.excerpt?.rendered),
+    plainTitle: stripAllHtml(post.title?.rendered),
+    plainExcerpt: stripAllHtml(post.excerpt?.rendered),
+    date: post.date || null,
+    tags: Array.isArray(post.tags) ? post.tags : [],
+  }));
+}
+
+export async function fetchTags(limit = 50) {
+  const tags = await fetchFromWordPress(`/tags?per_page=${limit}`);
+  if (!tags) return [];
+
+  return tags.map((tag) => ({
+    id: tag.id,
+    name: tag.name,
+    slug: tag.slug,
+  }));
 }

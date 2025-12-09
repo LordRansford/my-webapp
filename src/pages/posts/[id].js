@@ -1,5 +1,5 @@
-import Head from "next/head";
 import Link from "next/link";
+import Layout from "@/components/Layout";
 import { fetchPostById, fetchRecentPosts } from "@/lib/wordpress";
 
 const formatDate = (isoDate) => {
@@ -40,47 +40,44 @@ export async function getStaticProps({ params }) {
 }
 
 export default function PostPage({ post }) {
-  const plainExcerpt = post.excerpt
-    ? post.excerpt.replace(/<[^>]+>/g, "").slice(0, 160)
-    : "A new note from Ransford";
+  const plainExcerpt =
+    post.plainExcerpt || "A new note from Ransford on data and digitalisation";
 
   return (
-    <>
-      <Head>
-        <title>{post.title} · Ransford&apos;s Notes</title>
-        <meta name="description" content={plainExcerpt} />
-      </Head>
+    <Layout
+      title={`${post.plainTitle || "Post"} · Ransford's Notes`}
+      description={plainExcerpt}
+    >
+      <nav className="breadcrumb">
+        <Link href="/">Home</Link>
+        <span aria-hidden="true"> / </span>
+        <Link href="/posts">Notes</Link>
+        <span aria-hidden="true"> / </span>
+        <span>Post</span>
+      </nav>
 
-      <main className="page-shell">
-        <nav className="breadcrumb">
-          <Link href="/">Home</Link>
-          <span aria-hidden="true"> / </span>
-          <span>Post</span>
-        </nav>
+      <article className="card">
+        <h1
+          className="card-title"
+          dangerouslySetInnerHTML={{ __html: post.title }}
+        />
+        {post.date && (
+          <p className="meta">Published {formatDate(post.date)}</p>
+        )}
+        <div
+          className="post-content"
+          dangerouslySetInnerHTML={{ __html: post.content }}
+        />
+      </article>
 
-        <article className="card">
-          <h1
-            className="card-title"
-            dangerouslySetInnerHTML={{ __html: post.title }}
-          />
-          {post.date && (
-            <p className="meta">Published {formatDate(post.date)}</p>
-          )}
-          <div
-            className="post-content"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
-        </article>
-
-        <div className="actions">
-          <Link href="/" className="button ghost">
-            Back to recent notes
-          </Link>
-          <Link href="/tools" className="button secondary">
-            Try the tools
-          </Link>
-        </div>
-      </main>
-    </>
+      <div className="actions">
+        <Link href="/posts" className="button ghost">
+          Back to all notes
+        </Link>
+        <Link href="/tools" className="button secondary">
+          Try the tools
+        </Link>
+      </div>
+    </Layout>
   );
 }
