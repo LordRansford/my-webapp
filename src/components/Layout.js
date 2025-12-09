@@ -47,8 +47,8 @@ export default function Layout({
             <div className="footer-links">
               <Link href="/tools">Tools</Link>
               <Link href="/posts">Notes</Link>
-              <a href="https://github.com/LordRansford/my-webapp" target="_blank" rel="noreferrer">
-                GitHub
+              <a href="https://ransfordsnotes.com" target="_blank" rel="noreferrer">
+                Archive
               </a>
             </div>
           </div>
