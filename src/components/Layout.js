@@ -22,13 +22,9 @@ export default function Layout({
             <nav className="nav-links" aria-label="Primary">
               <Link href="/posts">Notes</Link>
               <Link href="/tools">Tools</Link>
-              <a
-                href="https://ransfordsnotes.com"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Archive
-              </a>
+              <Link href="/about">About</Link>
+              <Link href="/subscribe">Subscribe</Link>
+              <Link href="/donate">Donate</Link>
             </nav>
           </div>
         </header>
@@ -45,11 +41,14 @@ export default function Layout({
               </p>
             </div>
             <div className="footer-links">
-              <Link href="/tools">Tools</Link>
               <Link href="/posts">Notes</Link>
-              <a href="https://ransfordsnotes.com" target="_blank" rel="noreferrer">
-                Archive
-              </a>
+              <Link href="/tools">Tools</Link>
+              <Link href="/about">About</Link>
+              <Link href="/subscribe">Subscribe</Link>
+              <Link href="/donate">Donate</Link>
+              <Link href="/contact">Contact</Link>
+              <Link href="/privacy">Privacy</Link>
+              <Link href="/terms">Terms</Link>
             </div>
           </div>
         </footer>
