@@ -907,7 +907,7 @@ textarea:focus {
 /* Notes layout */
 .note-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 240px);
   gap: 1.5rem;
   align-items: start;
 }
@@ -918,7 +918,7 @@ textarea:focus {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 16px;
-  padding: 1rem;
+  padding: 0.85rem 0.9rem;
   box-shadow: var(--shadow);
 }
 
