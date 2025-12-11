@@ -1,0 +1,25 @@
+---
+title: "Architecture patterns for AI"
+description: "Keep AI components swappable and observable without bloating the stack."
+tags:
+  - architecture
+  - retrievers
+  - observability
+order: 3
+---
+
+## Preferred shapes
+
+- **Edge scrubbers**: remove PII, enforce schemas, and reject unsafe inputs early.
+- **Retriever → Router → Model**: isolate each so you can upgrade independently.
+- **Policy layer**: a rules engine that can short-circuit a request before the model runs.
+
+## Observability defaults
+
+- Collect prompts and responses with hashed user identifiers.
+- Tag traces with model version, temperature, and data source.
+- Ship metrics to a privacy-aware backend (Plausible, OpenTelemetry collector).
+
+<Callout title="Availability matters" type="warning">
+Cache embeddings, add fallbacks to smaller local models, and provide static responses when providers are unavailable.
+</Callout>

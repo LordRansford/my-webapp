@@ -1,0 +1,29 @@
+---
+title: "RSA key generation lab"
+description: "Generate, inspect, and operationalise RSA keys with browser-grade cryptography."
+tags:
+  - cryptography
+  - rsa
+  - key-management
+order: 2
+---
+
+## Why RSA here?
+
+RSA still underpins S/MIME, VPNs, and legacy identity providers. When you control the key lifecycle you control the blast radius.
+
+<Callout title="Good defaults" type="success">
+Uses the Web Crypto API with `RSA-OAEP`, SHA-256, and exportable keys. No home-grown crypto, no server calls.
+</Callout>
+
+## Generate a pair
+
+Pick your modulus length. 2048 is balanced for most web apps; 4096 is safer but slower on constrained devices.
+
+<RsaPlayground />
+
+## Hardening tips
+
+- Store private keys in an HSM or KMS where possible; if local, encrypt at rest and rotate.
+- Use different key pairs for transport (RSA-OAEP) and signing (RSA-PSS or ECDSA).
+- Keep PEMs short-lived. Automate rotation via CI/CD, and prefer mTLS between services for machine identity.

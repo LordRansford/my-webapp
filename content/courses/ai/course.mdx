@@ -1,0 +1,30 @@
+---
+title: "AI Systems in Production"
+tagline: "Ship AI features that respect latency, privacy, and human oversight."
+description: "Covers retrieval, evaluation, and safe deployment patterns with hands-on Python snippets."
+level: "Intermediate"
+duration: "10 days"
+tags:
+  - ai
+  - mlops
+  - evaluation
+order: 1
+---
+
+## Guiding principles
+
+- Treat models like dependencies: version, verify, and roll them back.
+- Separate **retrieval** from **reasoning** so you can swap LLM providers without touching business logic.
+- Instrument prompts like code: capture latency, token usage, and drift against golden test sets.
+
+<Callout title="Safety first" type="info">
+Align with the CIA triad: confidentiality (PII scrubbing), integrity (input validation and signed outputs), availability (rate protection and graceful degradation).
+</Callout>
+
+## Hands-on
+
+- Build a retrieval chain that caches embeddings locally for reproducibility.
+- Add lightweight red-teaming prompts to your CI so regressions are caught before deploy.
+- Use the Python cell below to experiment with token budgets and latency.
+
+<PythonPlayground />

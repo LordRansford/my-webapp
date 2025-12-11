@@ -10,9 +10,16 @@
   },
   "dependencies": {
     "@runno/runtime": "^0.10.0",
+    "gray-matter": "^4.0.3",
+    "lucide-react": "^0.469.0",
+    "next-mdx-remote": "^5.0.0",
     "next": "16.0.7",
+    "reading-time": "^1.5.0",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "rehype-autolink-headings": "^7.1.0",
+    "rehype-slug": "^6.0.0",
+    "remark-gfm": "^4.0.0",
     "sanitize-html": "^2.17.0"
   },
   "devDependencies": {

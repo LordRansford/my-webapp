@@ -1,0 +1,32 @@
+---
+title: "Detection and response playbook"
+description: "Wire telemetry to threats so you can respond with speed and evidence."
+tags:
+  - detection
+  - incident-response
+  - observability
+order: 3
+---
+
+## Signals that matter
+
+- **Network (OSI 3-4)**: flow logs, TLS fingerprints, rate anomalies.
+- **Application (OSI 5-7)**: auth failures by IP, token reuse, impossible travel, schema misuse.
+- **Platform (OSI 1-2)**: CPU throttling, packet drops, kernel logs, node restarts.
+
+## Build the response muscle
+
+1. Create a "golden path" request and response sample for each critical user journey.
+2. Write one detection per journey that flags data exfil, tampering, or abuse.
+3. Simulate failure: kill a service, expire a token early, or inject a fake credential leak.
+
+<Callout title="Availability is a first-class control" type="warning">
+Recovery time objectives are part of security. Include rollback, cache warmers, and graceful degradation in your runbooks.
+</Callout>
+
+## Quick OSI-to-control map
+
+- Physical/Data Link: link monitoring, port isolation, 802.1X.
+- Network: zero trust segmentation, egress allow-listing.
+- Transport: mTLS with rotated client certs, cipher suite policy.
+- Session/Presentation/Application: JWT expiry, content validation, WAF rules tuned to your domain vocabulary.

@@ -17,14 +17,18 @@ export default function Layout({
         <header className="site-header">
           <div className="site-header__inner">
             <Link href="/" className="brand">
-              Ransford&apos;s Notes
+              <span className="brand__mark">RN</span>
+              <span className="brand__text">Ransford&apos;s Notes</span>
             </Link>
             <nav className="nav-links" aria-label="Primary">
+              <Link href="/courses">Courses</Link>
               <Link href="/posts">Notes</Link>
-              <Link href="/tools">Tools</Link>
+              <Link href="/tools">Labs</Link>
               <Link href="/about">About</Link>
               <Link href="/subscribe">Subscribe</Link>
-              <Link href="/donate">Donate</Link>
+              <Link href="/donate" className="pill pill--accent">
+                Support
+              </Link>
             </nav>
           </div>
         </header>
@@ -36,13 +40,14 @@ export default function Layout({
             <div>
               <p className="eyebrow">Ransford Chung Amponsah</p>
               <p className="muted">
-                Sharing the journey from mechanical engineering into data,
-                digitalisation, and cyber security.
+                Sharing the journey from mechanical engineering into data, digitalisation, and cyber
+                security. Built with TOGAF discipline and SABSA controls.
               </p>
             </div>
             <div className="footer-links">
+              <Link href="/courses">Courses</Link>
               <Link href="/posts">Notes</Link>
-              <Link href="/tools">Tools</Link>
+              <Link href="/tools">Labs</Link>
               <Link href="/about">About</Link>
               <Link href="/subscribe">Subscribe</Link>
               <Link href="/donate">Donate</Link>

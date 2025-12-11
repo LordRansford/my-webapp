@@ -1,4 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { Sparkles } from "lucide-react";
+
+const defaultSnippet = `import secrets
+import time
+
+def audit_latency(trials=3):
+    timings = []
+    for _ in range(trials):
+        start = time.perf_counter()
+        secrets.token_hex(32)
+        timings.append((time.perf_counter() - start) * 1000)
+    return sum(timings) / len(timings)
+
+print("Median keygen latency (ms):", round(audit_latency(), 4))
+print("Confidentiality check: input never leaves the browser.")`;
 
 export default function PythonPlayground() {
   const [ready, setReady] = useState(false);
@@ -21,18 +36,21 @@ export default function PythonPlayground() {
   }, []);
 
   return (
-    <section className="tool-block">
-      <h2>Try Python in your browser</h2>
-      <p>Edit the code and click run:</p>
+    <section className="panel">
+      <div className="panel__header">
+        <div className="chip chip--accent">
+          <Sparkles size={14} aria-hidden="true" />
+          Python (Runno · WASM)
+        </div>
+        <p className="muted">Runs entirely in your browser for fast, isolated experiments.</p>
+      </div>
 
       {ready ? (
         <runno-run runtime="python" editor controls>
-          {`print("Hello from Python in your browser!")`}
+          {defaultSnippet}
         </runno-run>
       ) : (
-        <p style={{ color: "#4b5563" }}>
-          Loading the Python runtime in your browser&hellip;
-        </p>
+        <p className="muted">Loading the Python runtime&hellip;</p>
       )}
     </section>
   );

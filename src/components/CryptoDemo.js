@@ -20,19 +20,20 @@ export default function CryptoDemo() {
   };
 
   return (
-    <section className="tool-block">
-      <h2>Cryptographically secure random number</h2>
-      <p>
-        I lean on the browser&apos;s Web Crypto API here, never{" "}
-        <code>Math.random()</code>, so you get a real cryptography-grade
-        source.
-      </p>
-      <button className="button primary" onClick={generateRandom}>
+    <section className="panel">
+      <div className="panel__header">
+        <p className="eyebrow">Entropy check</p>
+        <p className="muted">
+          Uses <code>crypto.getRandomValues</code> so the output is suitable for keys, tokens, and session
+          secrets.
+        </p>
+      </div>
+      <button className="button secondary" onClick={generateRandom}>
         Generate random number
       </button>
-      {error && <p style={{ color: "#b91c1c" }}>{error}</p>}
+      {error && <p className="status status--warn">{error}</p>}
       {randomNumber !== null && (
-        <p>
+        <p className="status status--ok">
           Random number: <strong>{randomNumber}</strong>
         </p>
       )}

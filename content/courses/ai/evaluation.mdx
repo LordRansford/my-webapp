@@ -1,0 +1,25 @@
+---
+title: "Evaluation you can automate"
+description: "Measure answer quality, safety, and latency with simple, automatable checks."
+tags:
+  - evaluation
+  - quality
+  - safety
+order: 2
+---
+
+## What to measure
+
+- **Correctness**: reference answers or heuristics per intent.
+- **Safety**: jailbreak attempts, prompt injection, and PIIs leaking in outputs.
+- **Performance**: tail latency (p95/p99), cache hit ratio, and cost per request.
+
+## CI-friendly checks
+
+- Small, curated datasets per use case.
+- Deterministic prompts with seeded randomness where possible.
+- Regression thresholds that stop a deploy when quality dips.
+
+<Callout title="Data minimisation" type="success">
+Strip identifiers at the edge. Keep evaluation datasets anonymised and scoped to the minimum fields required.
+</Callout>

@@ -1,0 +1,26 @@
+---
+title: "Runbooks and decision records"
+description: "Make operations a design input, not an afterthought."
+tags:
+  - operations
+  - adr
+  - resilience
+order: 3
+---
+
+## Operability as design
+
+- Every service has a **runbook** with steady-state SLOs, alerts, and safe to retry guidance.
+- **ADRs** capture trade-offs and security posture. Link to threat models and test evidence.
+- **Golden paths**: templates for new services with logging, metrics, and trace exports enabled by default.
+
+## Sample ADR outline
+
+- Context: what changed in the business layer?
+- Decision: what pattern or control did we select?
+- Consequences: which risks reduce, which move, which increase?
+- Verification: how do we know it works (tests, synthetic probes, chaos experiments)?
+
+<Callout title="Availability + Integrity" type="warning">
+Ensure your rollback plan preserves data integrity. Include schema versioning and compensating actions in the runbook.
+</Callout>

@@ -1,0 +1,26 @@
+---
+title: "Patterns and boundaries"
+description: "Choose service slices, data contracts, and trust boundaries without over-building."
+tags:
+  - patterns
+  - c4
+  - boundaries
+order: 2
+---
+
+## Choosing boundaries
+
+- Decompose by **business capability**, not by database table.
+- Protect **data ownership**: the service that owns data enforces rules; consumers read via contracts.
+- Prefer asynchronous integration for resilience; reserve sync calls for user journeys that need immediacy.
+
+## C4 sketch to start
+
+1. Context: who uses the system and why?
+2. Container: which deployable units exist and which trust zone are they in?
+3. Component: how do modules expose capabilities and guardrails?
+4. Code: link to docs and linters that enforce the rules.
+
+<Callout title="Guardrails, not gates" type="success">
+Automate what you can (linting, contract tests, dependency checks) so architects review intent, not syntax.
+</Callout>

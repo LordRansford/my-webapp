@@ -1,0 +1,135 @@
+import fs from "fs";
+import path from "path";
+import matter from "gray-matter";
+import readingTime from "reading-time";
+import { serialize } from "next-mdx-remote/serialize";
+import remarkGfm from "remark-gfm";
+import rehypeSlug from "rehype-slug";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+
+const coursesDir = path.join(process.cwd(), "content", "courses");
+
+const mdxOptions = {
+  remarkPlugins: [remarkGfm],
+  rehypePlugins: [
+    rehypeSlug,
+    [
+      rehypeAutolinkHeadings,
+      {
+        behavior: "wrap",
+        properties: { className: ["anchor"] },
+      },
+    ],
+  ],
+};
+
+const readDirIfExists = (dirPath) => {
+  try {
+    return fs.readdirSync(dirPath);
+  } catch {
+    return [];
+  }
+};
+
+const listCourseSlugs = () =>
+  readDirIfExists(coursesDir).filter((entry) =>
+    fs.statSync(path.join(coursesDir, entry)).isDirectory(),
+  );
+
+const listLessonFiles = (courseSlug) => {
+  const lessonDir = path.join(coursesDir, courseSlug);
+  return readDirIfExists(lessonDir)
+    .filter((file) => file.endsWith(".mdx"))
+    .map((file) => path.join(lessonDir, file));
+};
+
+const toSlug = (filePath) => path.basename(filePath, ".mdx");
+
+const normaliseMeta = (data = {}, fallbackTitle) => ({
+  title: data.title || fallbackTitle || "Untitled lesson",
+  description: data.description || data.tagline || "",
+  tags: Array.isArray(data.tags) ? data.tags : [],
+  level: data.level || "",
+  duration: data.duration || "",
+  order: Number.isFinite(data.order) ? data.order : 99,
+  tagline: data.tagline || data.description || "",
+});
+
+export const getCourseLessons = (courseSlug) => {
+  const files = listLessonFiles(courseSlug);
+
+  return files
+    .map((filePath) => {
+      const source = fs.readFileSync(filePath, "utf8");
+      const { data, content } = matter(source);
+      const meta = normaliseMeta(data, toSlug(filePath));
+
+      return {
+        slug: toSlug(filePath),
+        filePath,
+        meta,
+        readingStats: readingTime(content),
+      };
+    })
+    .sort((a, b) => a.meta.order - b.meta.order);
+};
+
+export const getCoursesIndex = () => {
+  const courseSlugs = listCourseSlugs();
+
+  return courseSlugs.map((slug) => {
+    const lessons = getCourseLessons(slug);
+    const primary = lessons.find((lesson) => lesson.slug === "course") || lessons[0];
+    const meta = primary?.meta || normaliseMeta({}, slug);
+
+    return {
+      slug,
+      meta: {
+        ...meta,
+        lessonCount: lessons.length,
+      },
+      lessons,
+    };
+  });
+};
+
+export const getAllLessonPaths = () =>
+  listCourseSlugs().flatMap((courseSlug) =>
+    getCourseLessons(courseSlug).map((lesson) => ({
+      course: courseSlug,
+      lesson: lesson.slug,
+    })),
+  );
+
+export const getLesson = async (courseSlug, lessonSlug) => {
+  const filePath = path.join(coursesDir, courseSlug, `${lessonSlug}.mdx`);
+
+  if (!fs.existsSync(filePath)) {
+    return null;
+  }
+
+  const source = fs.readFileSync(filePath, "utf8");
+  const { data, content } = matter(source);
+  const serialised = await serialize(content, {
+    scope: data,
+    mdxOptions,
+  });
+
+  const lessons = getCourseLessons(courseSlug);
+  const course = getCoursesIndex().find((entry) => entry.slug === courseSlug);
+
+  return {
+    course: course || {
+      slug: courseSlug,
+      meta: normaliseMeta(data, courseSlug),
+      lessons,
+    },
+    lesson: {
+      slug: lessonSlug,
+      meta: normaliseMeta(data, lessonSlug),
+      readingStats: readingTime(content),
+    },
+    mdx: serialised,
+    lessons,
+  };
+};

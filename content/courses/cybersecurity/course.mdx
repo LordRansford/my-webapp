@@ -1,0 +1,42 @@
+---
+title: "Cybersecurity Foundations"
+tagline: "Design resilient systems with the CIA triad and OSI layering as your guard rails."
+description: "A pragmatic walkthrough of threat modelling, layered controls, and cryptography you can run in-browser."
+level: "Intermediate"
+duration: "2 weeks"
+tags:
+  - security
+  - CIA
+  - OSI
+  - governance
+order: 1
+---
+
+## What you will build
+
+- A repeatable threat model using the **CIA triad** tied to each OSI layer.
+- A control stack mapped to SABSA layers: contextual intent, conceptual policy, logical patterns, and physical enforcement.
+- A cryptography habit you can trust because it runs on the Web Crypto API, not ad-hoc code.
+
+<Callout title="Architect first, then automate" type="info">
+The course keeps the TOGAF path (business → data → application → technology) visible on every page so governance never drifts.
+</Callout>
+
+## Controls by layer
+
+- **Business (TOGAF)**: Define who is protected and why. Record the value-at-risk, sponsor, and acceptable downtime.
+- **Information (Data)**: Classify what flows across the OSI stack. Label PII, secrets, and operational telemetry separately.
+- **Application**: Enforce least privilege in code paths. Prefer signed tokens over shared secrets. Short TTLs, zero implicit trust.
+- **Technology**: Harden the platform—network segmentation, mTLS between services, and SBOMs for every deployable.
+
+## How to study
+
+1. Skim the overview, then jump into the RSA lab to verify your cryptographic assumptions.
+2. Use the CIA traceability list below as your checklist during architecture reviews.
+3. Share your own playbooks by dropping new MDX lessons into `content/courses/cybersecurity/`.
+
+## CIA traceability checklist
+
+- Confidentiality: classification present, key management defined, access logged and alerting active.
+- Integrity: signed artefacts, reproducible builds, change control with approvals.
+- Availability: capacity plan, DoS strategy, backup + restore tested with RTO/RPO targets.
