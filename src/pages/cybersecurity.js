@@ -238,10 +238,9 @@ print('Decrypted:', plain)`}
           <section id="media" className="note-section">
             <h2>Adding media</h2>
             <p>
-              You can add pictures and videos to any note. Use markdown for images:
-              <code> ![alt text](/path/to/image.jpg) </code>. For video, use a simple HTML embed such as
-              <code> &lt;video controls src=&quot;/path/to/video.mp4&quot;&gt;&lt;/video&gt; </code> or an iframe if you are
-              hosting elsewhere. Keep file sizes modest for faster loading and always include alt text.
+              You can add pictures and videos to any note. For images, use standard markdown with a clear alt text. For
+              video, embed the file you upload or link to, using a simple HTML video tag. Keep media sizes modest for
+              fast loading and always include meaningful alt text.
             </p>
           </section>
         </article>
