@@ -34,12 +34,12 @@ export default function DonatePage() {
       <section className="section">
         <h2>Ready to donate?</h2>
         <p>
-          Replace this placeholder with your Stripe or PayPal link, or reach out via the contact page to set
-          up a custom sponsorship.
+          A secure payment option will be published here soon. If you would like to support now or sponsor a
+          new lab, please reach out via the contact page.
         </p>
-        <a className="button primary" href="#" aria-disabled="true">
-          Donate (configure link)
-        </a>
+        <Link className="button primary" href="/contact">
+          Contact to donate
+        </Link>
       </section>
     </Layout>
   );

@@ -33,10 +33,16 @@ export default function ContactPage() {
             </a>
           </li>
           <li>
-            <strong>LinkedIn:</strong> add your link
+            <strong>LinkedIn:</strong>{" "}
+            <Link className="text-link" href="/contact">
+              Request my LinkedIn profile
+            </Link>
           </li>
           <li>
-            <strong>GitHub:</strong> add your repository link
+            <strong>GitHub:</strong> For code and experiments.
+            <a className="text-link" href="https://github.com/LordRansford" target="_blank" rel="noreferrer">
+              github.com/LordRansford
+            </a>
           </li>
         </ul>
         <p>
