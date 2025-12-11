@@ -1,14 +1,17 @@
 import { useCallback, useMemo, useState } from "react";
 import * as tf from "@tensorflow/tfjs";
 import { Brain, Play } from "lucide-react";
+import { loadScore, saveScore } from "@/lib/scores";
 
 const COLORS = ["#7ae7c7", "#7aa8ff"];
 
 export default function TinyModel() {
+  const storedTraining = loadScore("tiny-model");
   const [points, setPoints] = useState([]);
   const [label, setLabel] = useState(0);
   const [status, setStatus] = useState("Click on the canvas to add points, then train.");
   const [model, setModel] = useState(null);
+  const [trained, setTrained] = useState(storedTraining?.score || 0);
 
   const canvasSize = 320;
 
@@ -44,6 +47,9 @@ export default function TinyModel() {
     setModel(net);
     tf.dispose([xs, ys]);
     setStatus("Model trained. Tap anywhere to classify.");
+    const nextCount = trained + 1;
+    setTrained(nextCount);
+    saveScore("tiny-model", { score: nextCount, updatedAt: Date.now() });
   };
 
   const predict = useCallback((x, y) => {

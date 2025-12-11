@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Boxes, Layout, Database } from "lucide-react";
+import { loadScore, saveScore } from "@/lib/scores";
 
 const zones = [
   { id: "entry", label: "Entry", hint: "Edge, gateways, auth" },
@@ -19,8 +20,9 @@ const components = [
 ];
 
 export default function DesignTheSystem() {
+  const storedScore = loadScore("design");
   const [placements, setPlacements] = useState({});
-  const [feedback, setFeedback] = useState("");
+  const [feedback, setFeedback] = useState(storedScore?.score ? `Last score: ${storedScore.score}%` : "");
 
   const available = useMemo(
     () => components.filter((c) => !placements[c.id]),
@@ -39,6 +41,7 @@ export default function DesignTheSystem() {
     );
     const percent = Math.round((hits / total) * 100);
     setFeedback(percent === 100 ? "Great separation of concerns." : `${percent}% correct. Adjust and retest.`);
+    saveScore("design", { score: percent, updatedAt: Date.now() });
   };
 
   const reset = () => {

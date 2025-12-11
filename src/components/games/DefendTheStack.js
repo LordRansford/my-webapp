@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Shield, Zap, Bug } from "lucide-react";
+import { loadScore, saveScore } from "@/lib/scores";
 
 const layers = [
   { id: "physical", label: "Physical", hint: "Rack security, power, cooling" },
@@ -26,9 +27,10 @@ const threats = [
 ];
 
 export default function DefendTheStack() {
+  const storedScore = loadScore("defend");
   const [placed, setPlaced] = useState({});
-  const [score, setScore] = useState(null);
-  const [message, setMessage] = useState("");
+  const [score, setScore] = useState(storedScore?.score ?? null);
+  const [message, setMessage] = useState(storedScore?.score ? "Previous score loaded." : "");
 
   const remainingControls = useMemo(
     () => controls.filter((c) => placed[c.id] !== c.layer),
@@ -48,6 +50,7 @@ export default function DefendTheStack() {
     const percent = Math.round((hits / threats.length) * 100);
     setScore(percent);
     setMessage(percent === 100 ? "Perfect coverage. Ship it." : "Tighten a few layers and retest.");
+    saveScore("defend", { score: percent, updatedAt: Date.now() });
   };
 
   return (
