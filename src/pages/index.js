@@ -2,7 +2,7 @@ import Link from "next/link";
 import Layout from "@/components/Layout";
 import PostCard from "@/components/PostCard";
 import CourseCard from "@/components/CourseCard";
-import { fetchRecentPosts } from "@/lib/wordpress";
+import { getRecentPosts } from "@/lib/posts";
 import { getCoursesIndex } from "@/lib/courses";
 
 const formatDate = (isoDate) => {
@@ -15,7 +15,7 @@ const formatDate = (isoDate) => {
 };
 
 export async function getStaticProps() {
-  const posts = await fetchRecentPosts(6);
+  const posts = getRecentPosts(6);
   const courses = getCoursesIndex();
 
   return {
@@ -114,7 +114,7 @@ export default function Home({ posts, courses }) {
       <section className="section">
         <div className="section-heading">
           <h2>Notes and tools</h2>
-          <span className="hint">Recent posts pulled from WordPress</span>
+          <span className="hint">Recent notes stored locally</span>
         </div>
         {posts.length === 0 ? (
           <p className="muted">No posts to display yet.</p>
@@ -122,10 +122,11 @@ export default function Home({ posts, courses }) {
           <div className="card-grid">
             {posts.map((post) => (
               <PostCard
-                key={post.id}
+                key={post.slug}
                 post={{
                   ...post,
                   date: post.date ? `Updated ${formatDate(post.date)}` : "",
+                  href: `/posts/${post.slug}`,
                 }}
               />
             ))}

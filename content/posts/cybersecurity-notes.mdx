@@ -1,0 +1,39 @@
+---
+title: "Cybersecurity notes"
+date: "2025-02-01"
+tags:
+  - cybersecurity
+  - cryptography
+  - hashing
+excerpt: "A beginner-friendly walkthrough of confidentiality, keys, and hashing with simple exercises."
+---
+
+## Introduction
+
+Security protects confidentiality, integrity, and availability. Ask three quick questions: what must stay secret, what must stay accurate, and what must stay online? Those answers guide every control.
+
+## Symmetric encryption
+
+One shared key locks and unlocks data. It is fast and proven (AES), but the shared key must be exchanged safely. Think of a locker code: if it leaks, privacy is gone.
+
+**Exercise:** List three ways to share a secret key without email. Pick the safest and explain why.
+
+## Asymmetric encryption
+
+Two keys: a public key to lock, a private key to unlock. Share the public key openly; never share the private key. This removes the need for a pre-shared secret.
+
+<Callout title="Try it" type="info">
+Open the RSA sandbox in the tools page or the cybersecurity notes page. Generate a pair, keep the private key safe, and observe how the keys differ.
+</Callout>
+
+## Hashing in practice
+
+A hash turns any input into a fixed-length fingerprint. Small input changes produce large output changes. Hashes support integrity checks and password storage (with salts and slow functions).
+
+**Exercise:** Use the SHA-256 sandbox to hash a sentence. Change one word and note how the hash changes.
+
+## Quick check
+
+- Which part stays secret in asymmetric encryption?
+- Why does symmetric encryption not solve key exchange on its own?
+- When would you choose hashing instead of encryption?

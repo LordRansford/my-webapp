@@ -2,20 +2,14 @@ import { useMemo, useState } from "react";
 import Layout from "@/components/Layout";
 import PostCard from "@/components/PostCard";
 import SearchBar from "@/components/SearchBar";
-import { fetchPosts, fetchTags } from "@/lib/wordpress";
-
-const formatDate = (isoDate) => {
-  if (!isoDate) return "";
-  return new Intl.DateTimeFormat("en", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  }).format(new Date(isoDate));
-};
+import { getAllPosts } from "@/lib/posts";
 
 export async function getStaticProps() {
-  const posts = await fetchPosts(50);
-  const tags = await fetchTags(50);
+  const posts = getAllPosts();
+  const tags = Array.from(new Set(posts.flatMap((p) => p.tags || []))).map((tag) => ({
+    id: tag,
+    name: tag,
+  }));
 
   return {
     props: { posts, tags },
@@ -33,11 +27,10 @@ export default function PostsPage({ posts, tags }) {
     return posts.filter((post) => {
       const matchesText =
         !term ||
-        post.plainTitle.toLowerCase().includes(term) ||
-        post.plainExcerpt.toLowerCase().includes(term);
+        post.title.toLowerCase().includes(term) ||
+        (post.excerpt || "").toLowerCase().includes(term);
 
-      const matchesTag =
-        !activeTag || (Array.isArray(post.tags) && post.tags.includes(activeTag));
+      const matchesTag = !activeTag || (Array.isArray(post.tags) && post.tags.includes(activeTag));
 
       return matchesText && matchesTag;
     });
@@ -61,17 +54,13 @@ export default function PostsPage({ posts, tags }) {
   };
 
   return (
-    <Layout
-      title="Notes · Ransford's Notes"
-      description="Browse all recent notes on data, digitalisation, AI, cybersecurity, and engineering."
-    >
+    <Layout title="Notes - Ransford's Notes" description="Browse all recent notes on cybersecurity, architecture, and AI.">
       <header className="page-header">
         <p className="eyebrow">Notes</p>
-        <h1>Search and explore the latest thinking</h1>
+        <h1>Search and explore</h1>
         <p>
-          This list pulls directly from WordPress. Use the search box to find a
-          topic by title or excerpt. New posts appear within minutes thanks to
-          incremental static regeneration.
+          These notes are stored locally in MDX. Use the search to find a topic by title or summary. New posts are added
+          manually as learning grows.
         </p>
         <SearchBar
           value={query}
@@ -83,10 +72,7 @@ export default function PostsPage({ posts, tags }) {
         />
         {tags.length > 0 && (
           <div className="tag-row" role="list" aria-label="Filter by tag">
-            <button
-              className={`tag ${activeTag === null ? "active" : ""}`}
-              onClick={() => resetAndSetTag(null)}
-            >
+            <button className={`tag ${activeTag === null ? "active" : ""}`} onClick={() => resetAndSetTag(null)}>
               All
             </button>
             {tags.map((tag) => (
@@ -109,10 +95,11 @@ export default function PostsPage({ posts, tags }) {
           <div className="card-grid">
             {pageItems.map((post) => (
               <PostCard
-                key={post.id}
+                key={post.slug}
                 post={{
                   ...post,
-                  date: post.date ? `Updated ${formatDate(post.date)}` : "",
+                  href: `/posts/${post.slug}`,
+                  date: post.date ? new Intl.DateTimeFormat("en", { year: "numeric", month: "short", day: "numeric" }).format(new Date(post.date)) : "",
                 }}
               />
             ))}
@@ -125,10 +112,7 @@ export default function PostsPage({ posts, tags }) {
               <span className="page-indicator">
                 Page {page} of {totalPages}
               </span>
-              <button
-                onClick={() => resetAndSetPage(page + 1)}
-                disabled={page === totalPages}
-              >
+              <button onClick={() => resetAndSetPage(page + 1)} disabled={page === totalPages}>
                 Next
               </button>
             </div>
