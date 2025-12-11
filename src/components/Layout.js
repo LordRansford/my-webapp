@@ -25,6 +25,7 @@ export default function Layout({
               <Link href="/posts">Notes</Link>
               <Link href="/tools">Labs</Link>
               <Link href="/games">Games</Link>
+              <Link href="/cybersecurity">Cybersecurity</Link>
               <Link href="/about">About</Link>
               <Link href="/subscribe">Subscribe</Link>
               <Link href="/donate" className="pill pill--accent">
