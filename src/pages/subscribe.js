@@ -22,6 +22,12 @@ export default function SubscribePage() {
       <section className="section">
         <h2>Join the list</h2>
         <p>Hook this form up to your email service (e.g. Buttondown, Listmonk, or Mailchimp).</p>
+        <p>What you can expect:</p>
+        <ul>
+          <li>Occasional updates when new sections or tools are published.</li>
+          <li>Short notes on improvements or experiments.</li>
+          <li>No daily spam and no third party marketing.</li>
+        </ul>
         <form className="stack" action="#" method="post">
           <label className="control">
             Email

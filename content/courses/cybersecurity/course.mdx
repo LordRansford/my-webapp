@@ -15,16 +15,16 @@ order: 1
 ## What you will build
 
 - A repeatable threat model using the **CIA triad** tied to each OSI layer.
-- A control stack mapped to SABSA layers: contextual intent, conceptual policy, logical patterns, and physical enforcement.
+- A control stack that stays traceable from intent through to enforcement.
 - A cryptography habit you can trust because it runs on the Web Crypto API, not ad-hoc code.
 
 <Callout title="Architect first, then automate" type="info">
-The course keeps the TOGAF path (business → data → application → technology) visible on every page so governance never drifts.
+Keep the intent clear at each step: who is protected, what matters most, and how each layer defends it.
 </Callout>
 
 ## Controls by layer
 
-- **Business (TOGAF)**: Define who is protected and why. Record the value-at-risk, sponsor, and acceptable downtime.
+- **Business**: Define who is protected and why. Record the value-at-risk, sponsor, and acceptable downtime.
 - **Information (Data)**: Classify what flows across the OSI stack. Label PII, secrets, and operational telemetry separately.
 - **Application**: Enforce least privilege in code paths. Prefer signed tokens over shared secrets. Short TTLs, zero implicit trust.
 - **Technology**: Harden the platform—network segmentation, mTLS between services, and SBOMs for every deployable.

@@ -60,7 +60,10 @@ export default function DefendTheStack() {
           <Shield size={14} aria-hidden="true" />
           CIA + OSI practice
         </div>
-        <p className="muted">Place controls on the right layer to block the threats.</p>
+        <p className="muted">
+          Place controls on the right layer to block the threats. Choose a control for a layer, then score to
+          see coverage.
+        </p>
       </div>
       <div className="defend-grid">
         <div className="defend-layers">

@@ -28,70 +28,93 @@ export default function Home({ posts, courses }) {
   return (
     <Layout
       title="Ransford's Notes · Architecture, Security, AI"
-      description="Premium notes and courses on cybersecurity, software architecture, and AI systems with live sandboxes."
+      description="Clear explanations, browser sandboxes, and practical notes for learners from beginner to advanced."
     >
       <div className="hero">
         <div className="hero__copy">
           <p className="eyebrow">Demystify, experiment, and deliver</p>
-          <h1>
-            Secure-by-design learning for <span className="highlight">builders</span> and leaders.
-          </h1>
+          <h1>Welcome to Ransfords Notes</h1>
           <p className="lead">
-            TOGAF discipline, SABSA control mapping, and interactive labs. Build AI, architecture, and
-            cybersecurity skills without leaving your browser.
+            I created this space to make digitalisation, cybersecurity, software architecture, data,
+            engineering, and artificial intelligence easier to grasp. Complex topics become clear, structured
+            lessons with practical tools you can run in your browser.
           </p>
           <div className="actions">
             <Link href="/courses" className="button primary">
-              Explore the courses
+              Start learning
             </Link>
             <Link href="/tools" className="button ghost">
-              Launch the labs
+              Open the sandboxes
             </Link>
             <Link href="/games" className="button secondary">
-              Play the games
+              Play and test yourself
             </Link>
           </div>
         </div>
         <div className="hero__panel">
-          <div className="panel">
-            <p className="eyebrow">Live sandboxes</p>
-            <ul className="hero-list">
-              <li>
-                <span className="dot dot--accent" />
-                RSA key generation (Web Crypto)
-              </li>
-              <li>
-                <span className="dot dot--accent" />
-                Python in-browser (WASM)
-              </li>
-              <li>
-                <span className="dot dot--accent" />
-                Threat modelling checklists (CIA + OSI)
-              </li>
-            </ul>
-            <Link href="/tools" className="text-link">
-              Open the labs →
-            </Link>
-          </div>
+          <p className="eyebrow">How to use this site</p>
+          <ul className="hero-list">
+            <li>
+              <span className="dot dot--accent" />
+              Pick a topic at your level and work through the notes in order
+            </li>
+            <li>
+              <span className="dot dot--accent" />
+              Use the sandboxes to try ideas without installing anything
+            </li>
+            <li>
+              <span className="dot dot--accent" />
+              Revisit sections whenever you meet them in real projects
+            </li>
+          </ul>
+          <p className="muted">
+            If something is unclear, assume I need to explain it better and let me know so I can improve it.
+          </p>
         </div>
       </div>
 
       <section className="section">
         <div className="section-heading">
-          <h2>Course tracks</h2>
-          <span className="hint">MDX-powered, secure by default</span>
+          <h2>What you will find here</h2>
+          <span className="hint">Beginner to advanced, with practical exercises</span>
         </div>
-        <div className="course-grid">
-          {courses.map((course) => (
-            <CourseCard key={course.slug} course={course} />
-          ))}
+        <div className="card-grid">
+          <div className="card">
+            <h3>Structured notes</h3>
+            <p>
+              Clear explanations, diagrams, and examples that connect theory to real systems. Beginner,
+              intermediate, and advanced sections build on each other.
+            </p>
+          </div>
+          <div className="card">
+            <h3>Interactive tools</h3>
+            <p>
+              Sandboxes for Python, cryptography, and AI experiments. Everything runs in your browser; no code
+              is executed on my servers.
+            </p>
+          </div>
+          <div className="card">
+            <h3>Exercises</h3>
+            <p>
+              Practice after each subsection. Try a prompt, observe the result, and compare it to the expected
+              behaviour described in the notes.
+            </p>
+          </div>
+          <div className="card">
+            <h3>Media friendly</h3>
+            <p>
+              You can add pictures and videos to any note. Use standard markdown image syntax
+              (<code>![alt text](path)</code>) or embed videos with simple HTML (<code>&lt;video&gt;</code> or
+              <code>&lt;iframe&gt;</code>).
+            </p>
+          </div>
         </div>
       </section>
 
       <section className="section">
         <div className="section-heading">
-          <h2>Latest notes</h2>
-          <span className="hint">Pulled straight from WordPress</span>
+          <h2>Notes and tools</h2>
+          <span className="hint">Recent posts pulled from WordPress</span>
         </div>
         {posts.length === 0 ? (
           <p className="muted">No posts to display yet.</p>

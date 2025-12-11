@@ -42,7 +42,7 @@ export default function Layout({
               <p className="eyebrow">Ransford Chung Amponsah</p>
               <p className="muted">
                 Sharing the journey from mechanical engineering into data, digitalisation, and cyber
-                security. Built with TOGAF discipline and SABSA controls.
+                security. Everything here aims to stay clear, accurate, and practical.
               </p>
             </div>
             <div className="footer-links">
@@ -53,6 +53,7 @@ export default function Layout({
               <Link href="/subscribe">Subscribe</Link>
               <Link href="/donate">Donate</Link>
               <Link href="/contact">Contact</Link>
+              <Link href="/accessibility">Accessibility</Link>
               <Link href="/privacy">Privacy</Link>
               <Link href="/terms">Terms</Link>
             </div>

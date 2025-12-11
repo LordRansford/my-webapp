@@ -15,41 +15,37 @@ export default function ContactPage() {
 
       <header className="page-header">
         <p className="eyebrow">Contact</p>
-        <h1>Let&apos;s talk</h1>
+        <h1>Get in touch</h1>
         <p className="lead">
-          Have a question about a tutorial, want to suggest a topic, or discuss collaboration? Drop me a
-          line. I am always happy to hear from readers and fellow builders.
+          I am happy to hear about collaborations, classroom use, speaking, corrections, or simply that an
+          explanation finally clicked.
         </p>
       </header>
 
       <section className="section">
-        <h2>Email</h2>
+        <h2>Preferred channels</h2>
+        <p>Email works best for anything detailed.</p>
+        <ul>
+          <li>
+            <strong>Email:</strong>{" "}
+            <a className="text-link" href="mailto:ransford@ransfordsnotes.com">
+              ransford@ransfordsnotes.com
+            </a>
+          </li>
+          <li>
+            <strong>LinkedIn:</strong> add your link
+          </li>
+          <li>
+            <strong>GitHub:</strong> add your repository link
+          </li>
+        </ul>
         <p>
-          The simplest way to reach me is via email. Click below and your email client will open a new
-          message addressed to me.
+          If you are writing about something specific, include who you are, why you are reaching out, and any
+          useful links. It helps me reply clearly and quickly.
         </p>
-        <p>
-          <a className="button primary" href="mailto:contact@ransfordsnotes.com">
-            Send an email
-          </a>
-        </p>
-      </section>
-
-      <section className="section">
-        <h2>LinkedIn</h2>
-        <p>
-          You can also connect with me on LinkedIn for updates and behind-the-scenes notes. I share small
-          wins, experiments, and lessons as I build.
-        </p>
-        <p>
-          <a
-            href="https://www.linkedin.com/in/ransford-amponsah/"
-            target="_blank"
-            rel="noreferrer"
-            className="text-link"
-          >
-            View my LinkedIn
-          </a>
+        <p className="muted">
+          I aim to reply within a few working days. If I am slow, it is because I am juggling work and this
+          project, not because your note is unimportant.
         </p>
       </section>
     </Layout>

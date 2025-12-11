@@ -56,9 +56,7 @@ export default function DesignTheSystem() {
           <Layout size={14} aria-hidden="true" />
           Layered architecture drill
         </div>
-        <p className="muted">
-          Place components into the right zone. This mirrors TOGAF application vs. data vs. technology layers.
-        </p>
+        <p className="muted">Place components into the right zone. Keep boundaries clear and purposeful.</p>
       </div>
 
       <div className="design-grid">

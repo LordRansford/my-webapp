@@ -14,16 +14,16 @@ export async function getStaticProps() {
 export default function CoursesPage({ courses }) {
   return (
     <Layout
-      title="Courses · Ransford's Notes"
-      description="Premium, security-first courses with interactive sandboxes for AI, architecture, and cyber."
+      title="Courses - Ransford's Notes"
+      description="Notes with browser sandboxes for cyber, architecture, and AI."
     >
       <div className="hero">
         <div className="hero__copy">
           <p className="eyebrow">Courses</p>
-          <h1>Security-first learning that ships.</h1>
+          <h1>Notes that build from beginner to advanced.</h1>
           <p className="lead">
-            Three focused tracks — Cybersecurity, Software Architecture, and AI Systems — built with TOGAF
-            alignment and SABSA controls. Every lesson pairs guidance with a live sandbox.
+            Three focused tracks - Cybersecurity, Software Architecture, and AI Systems - each with clear
+            notes and browser labs so you can test ideas straight away.
           </p>
           <div className="actions">
             <Link href="/tools" className="button primary">
@@ -35,11 +35,11 @@ export default function CoursesPage({ courses }) {
           </div>
         </div>
         <div className="hero__panel">
-          <p className="eyebrow">Architecture layers</p>
+          <p className="eyebrow">Learning flow</p>
           <ul className="hero-list">
             <li>
               <span className="dot dot--accent" />
-              Business intent (TOGAF)
+              Clear intent and scope
             </li>
             <li>
               <span className="dot dot--accent" />
@@ -60,7 +60,7 @@ export default function CoursesPage({ courses }) {
       <section className="section">
         <div className="section-heading">
           <h2>Choose a track</h2>
-          <span className="hint">MDX content with embedded, browser-safe tooling</span>
+          <span className="hint">Notes with embedded, browser-safe tooling</span>
         </div>
         <div className="course-grid">
           {courses.map((course) => (

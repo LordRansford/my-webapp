@@ -64,7 +64,7 @@ export default function GamesIndex() {
       <section className="section">
         <div className="section-heading">
           <h2>Pick a game</h2>
-          <span className="hint">Aligned to TOGAF/SABSA themes</span>
+          <span className="hint">Aligned with the notes and sandboxes</span>
         </div>
         <div className="course-grid">
           {games.map((game) => (

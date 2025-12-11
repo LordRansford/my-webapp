@@ -17,8 +17,8 @@ export default function DonatePage() {
         <p className="eyebrow">Support</p>
         <h1>Help keep the labs online</h1>
         <p className="lead">
-          Your support covers hosting, new interactive labs, and time to publish deeper TOGAF, SABSA, and AI
-          content. Every contribution keeps the site independent and vendor-neutral.
+          Your support covers hosting, new interactive labs, and time to publish deeper security, architecture,
+          and AI content. Every contribution keeps the site independent and focused on learners.
         </p>
       </header>
 
