@@ -4,16 +4,16 @@ import Layout from "@/components/Layout";
 import RsaPlayground from "@/components/RsaPlayground";
 
 const sections = [
-  { id: "intro", label: "Introduction" },
-  { id: "symmetric", label: "Symmetric encryption" },
-  { id: "asymmetric", label: "Asymmetric encryption" },
-  { id: "hashing", label: "Hashing in practice" },
-  { id: "exercises", label: "Exercises and checks" },
+  { id: "overview", label: "Overview" },
+  { id: "beginner", label: "Beginner" },
+  { id: "intermediate", label: "Intermediate" },
+  { id: "advanced", label: "Advanced" },
+  { id: "exercises", label: "Exercises" },
   { id: "media", label: "Adding media" },
 ];
 
 export default function CybersecurityNotesPage() {
-  const [activeId, setActiveId] = useState("intro");
+  const [activeId, setActiveId] = useState("overview");
   const [hashInput, setHashInput] = useState("Hello world");
   const [hashOutput, setHashOutput] = useState("");
   const [quizAnswer, setQuizAnswer] = useState("");
@@ -33,7 +33,7 @@ export default function CybersecurityNotesPage() {
           break;
         }
       }
-      setActiveId(current);
+      if (current !== activeId) setActiveId(current);
     };
 
     handler();
@@ -55,7 +55,7 @@ export default function CybersecurityNotesPage() {
   };
 
   return (
-    <Layout title="Cybersecurity Notes" description="Notes on cybersecurity with interactive sandboxes and quick checks.">
+    <Layout title="Cybersecurity Notes" description="Long-form notes on cybersecurity with interactive sandboxes and quick checks.">
       <Head>
         <title>Cybersecurity Notes</title>
       </Head>
@@ -78,75 +78,88 @@ export default function CybersecurityNotesPage() {
             <p className="eyebrow">Notes</p>
             <h1>Cybersecurity Notes</h1>
             <p className="lead">
-              A clear path from first principles to practical experiments. Read the notes, try the sandboxes, and
-              check your understanding as you go.
+              A single page you can read, scan, and practice from. Follow the levels, try the sandboxes, and use the quick
+              checks to see what stuck.
             </p>
           </header>
 
-          <section id="intro" className="note-section">
-            <h2>Introduction</h2>
+          <section id="overview" className="note-section">
+            <h2>Overview</h2>
             <p>
-              Security protects confidentiality, integrity, and availability. It is about the right people seeing the
-              right data at the right time, and no one else. Good security also respects the human who has to use it.
+              These notes move from first principles to advanced ideas. They are written in plain language, with short
+              exercises and browser-only tools. You will see why confidentiality, integrity, and availability matter, how
+              keys and hashes work, and how to think about future threats such as quantum computing.
             </p>
-            <p>
-              Start by noticing threats and impacts. Think about what happens if data leaks, if it changes unexpectedly,
-              or if it becomes unavailable. Those simple checks anchor every control you add later.
-            </p>
-            <div className="panel">
-              <p className="eyebrow">Quick check</p>
-              <p className="muted">List one item you must keep secret, one you must keep accurate, and one that must stay online.</p>
-            </div>
           </section>
 
-          <section id="symmetric" className="note-section">
-            <h2>Symmetric encryption</h2>
+          <section id="beginner" className="note-section">
+            <h2>Beginner: fundamentals</h2>
             <p>
-              Symmetric encryption uses one shared key for both locking and unlocking data. Algorithms such as AES are
-              fast and well tested. The main risk is sharing the key safely with the other party.
+              Information security protects data from unauthorised access, tampering, and loss. The classic trio is
+              confidentiality, integrity, and availability. Imagine a diary: the lock keeps it secret, tamper-evident ink
+              protects integrity, and keeping it in reach protects availability.
             </p>
             <p>
-              Think of a locker with one code. Everyone with the code can open it. If the code leaks, the locker is no
-              longer private.
-            </p>
-            <div className="panel">
-              <p className="eyebrow">Practice</p>
-              <ol className="stack">
-                <li>Write down three ways to share a secret key without email.</li>
-                <li>Decide which is safest and why.</li>
-              </ol>
-            </div>
-          </section>
-
-          <section id="asymmetric" className="note-section">
-            <h2>Asymmetric encryption</h2>
-            <p>
-              Asymmetric encryption uses two keys: a public key to lock data and a private key to unlock it. You can
-              share the public key openly; the private key stays with you. This removes the need to pass a shared secret
-              around.
-            </p>
-            <p>
-              Public keys let anyone send you a private message. Private keys prove identity and must never leave your
-              control. Protect them with strong device security and backups.
+              Cryptography turns readable text (plaintext) into scrambled text (ciphertext) using a key. A key is the
+              secret recipe. Without it, ciphertext should look useless to an attacker.
             </p>
             <div className="panel stack">
-              <p className="eyebrow">Try it</p>
-              <p className="muted">
-                Use the RSA sandbox to generate a pair. Copy the public key, keep the private key safe, and note how the
-                keys differ.
+              <p className="eyebrow">Story: Alice, Bob, and Eve</p>
+              <p>
+                Alice wants to send Bob a secret. If they share one key (symmetric), Eve can ruin things if she steals it
+                during exchange. If they use two keys (asymmetric), Alice can publish a padlock (public key) and keep her
+                private key safe. Bob locks a box with the padlock; only Alice can open it.
               </p>
+              <p className="muted">Notice how asymmetric keys solve the key exchange problem without sharing a secret.</p>
+            </div>
+          </section>
+
+          <section id="intermediate" className="note-section">
+            <h2>Intermediate: modern cryptography</h2>
+            <p>
+              Symmetric ciphers like AES are fast and used for bulk data. Asymmetric systems like RSA and elliptic curves
+              solve key exchange and identity. In practice, protocols use both: asymmetric to agree a session key, then
+              symmetric for speed.
+            </p>
+            <div className="panel stack">
+              <p className="eyebrow">RSA practice</p>
+              <p className="muted">Generate a public/private pair below. Copy the public key, keep the private key safe.</p>
               <RsaPlayground />
             </div>
+            <div className="panel stack">
+              <p className="eyebrow">Diffie-Hellman intuition</p>
+              <p>
+                Diffie-Hellman lets two people agree a secret in public. Think of mixing paint: each shares a public shade,
+                then mixes the other shade with their own private colour. Both end up with the same final colour; an
+                eavesdropper sees only the public shades.
+              </p>
+            </div>
+            <div className="panel stack">
+              <p className="eyebrow">Digital signatures</p>
+              <p>
+                Sign with a private key, verify with a public key. Any tiny change breaks the signature. This proves who
+                signed a message and that it was not altered.
+              </p>
+            </div>
           </section>
 
-          <section id="hashing" className="note-section">
-            <h2>Hashing in practice</h2>
+          <section id="advanced" className="note-section">
+            <h2>Advanced: future and design</h2>
             <p>
-              A hash turns any input into a fixed-length fingerprint. Small changes in input create large changes in the
-              output. Hashes help with integrity checks and password storage when paired with salts and slow functions.
+              Quantum computing threatens RSA and ECC. Post-quantum algorithms such as lattice-based Kyber and Dilithium
+              aim to stay secure even with quantum attacks. Crypto agility matters: design systems so you can swap
+              algorithms as standards change.
             </p>
+            <p>
+              Zero trust is another design shift: never trust by location, always verify identity and device, and grant
+              least privilege. Encrypt internally, log access, and assume breach.
+            </p>
+          </section>
+
+          <section id="exercises" className="note-section">
+            <h2>Exercises and sandboxes</h2>
             <div className="panel stack">
-              <p className="eyebrow">SHA-256 sandbox</p>
+              <p className="eyebrow">Hashing (SHA-256)</p>
               <label className="control">
                 Enter text to hash
                 <textarea
@@ -163,7 +176,7 @@ export default function CybersecurityNotesPage() {
                 <button className="button primary" type="button" onClick={() => computeHash(hashInput)}>
                   Compute hash
                 </button>
-                <p className="muted">Runs in your browser via Web Crypto. No data leaves your device.</p>
+                <p className="muted">Runs locally in your browser via Web Crypto.</p>
               </div>
               {hashOutput && (
                 <div className="hash-output">
@@ -172,10 +185,7 @@ export default function CybersecurityNotesPage() {
                 </div>
               )}
             </div>
-          </section>
 
-          <section id="exercises" className="note-section">
-            <h2>Exercises and checks</h2>
             <div className="panel stack">
               <p className="eyebrow">Quiz</p>
               <p>Which statement is not true about symmetric encryption?</p>
@@ -209,10 +219,7 @@ export default function CybersecurityNotesPage() {
 
             <div className="panel stack">
               <p className="eyebrow">Browser Python (hidden code)</p>
-              <p className="muted">
-                This Python cell runs in your browser via Runno. The code is hidden to keep the focus on the result.
-                Click the run button to see a tiny RSA encrypt and decrypt cycle.
-              </p>
+              <p className="muted">Click run to see a small RSA encrypt and decrypt cycle. Code stays hidden.</p>
               <runno-run runtime="python" hide-source class="runno-embed">
 {`import rsa
 
@@ -234,9 +241,8 @@ print('Decrypted:', plain)`}
               You can add pictures and videos to any note. Use markdown for images:
               <code> ![alt text](/path/to/image.jpg) </code>. For video, use a simple HTML embed such as
               <code> &lt;video controls src=&quot;/path/to/video.mp4&quot;&gt;&lt;/video&gt; </code> or an iframe if you are
-              hosting elsewhere.
+              hosting elsewhere. Keep file sizes modest for faster loading and always include alt text.
             </p>
-            <p className="muted">Keep file sizes small for faster loading, and add meaningful alt text for accessibility.</p>
           </section>
         </article>
       </div>
