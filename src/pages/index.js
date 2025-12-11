@@ -47,6 +47,9 @@ export default function Home({ posts, courses }) {
             <Link href="/tools" className="button ghost">
               Launch the labs
             </Link>
+            <Link href="/games" className="button secondary">
+              Play the games
+            </Link>
           </div>
         </div>
         <div className="hero__panel">

@@ -16,10 +16,7 @@ export default function SubscribePage() {
       <header className="page-header">
         <p className="eyebrow">Newsletter</p>
         <h1>Stay ahead with field-tested notes</h1>
-        <p className="lead">
-          Receive short, practical updates when new labs drop or architecture patterns are published. No
-          spam, just techniques you can apply immediately.
-        </p>
+        <p className="lead">Receive practical updates when new labs, courses, or games go live.</p>
       </header>
 
       <section className="section">
@@ -35,7 +32,7 @@ export default function SubscribePage() {
           </button>
           <p className="muted">
             We value privacy. Unsubscribe anytime. Replace the action with your provider endpoint to enable
-            submissions.
+            submissions. 
           </p>
         </form>
       </section>
