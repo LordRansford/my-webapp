@@ -1,0 +1,461 @@
+# Cybersecurity Notes
+
+## Chapter 3 Advanced Building secure systems that survive real attackers
+
+Chapter 1 gave us the foundations of data, harm, and basic security properties. Chapter 2 showed how trust breaks across networks and how encryption, identity, and integrity are stitched back together.
+
+This chapter is where we stop thinking about single controls and start thinking about systems. Real attackers do not attack one layer. They take a path. Real defenders do not rely on one control. They build resilience. This chapter teaches you how to reason like a security engineer and how to make decisions that hold up under pressure.
+
+<Callout type="memory" title="Memory hook">
+Security is not a product. It is a system of decisions that must still work on a bad day.
+</Callout>
+
+---
+
+## Threat modelling choosing what to defend and why
+
+In earlier chapters, we talked about harm and trust. Threat modelling is where we turn that into a repeatable method. It answers a simple question: what could go wrong in this system, how would it happen, and what would we do about it.
+
+Threat modelling is not paranoia. It is prioritisation. It helps you focus effort where it reduces harm the most.
+
+### What threat modelling produces
+
+A good threat model produces four things:
+A clear system boundary
+A list of assets worth protecting
+A set of realistic attacker goals
+A set of controls mapped to specific failure modes
+
+The practical value is this: when you are busy, threat modelling prevents you from defending the wrong thing perfectly.
+
+### A minimal threat model structure you can reuse
+
+1 Describe the system in one paragraph
+2 Identify assets
+3 Identify entry points
+4 Identify trust boundaries
+5 Identify threats by category
+6 Choose controls and note trade offs
+7 Decide what you will monitor and what you will accept
+
+<ToolCard title="Threat model canvas">
+**Learning intent**  
+Learn to threat model any feature without drowning in jargon.
+
+**Instructions**  
+Fill in assets, entry points, trust boundaries, and attacker goals for a simple system such as login, file upload, or password reset.
+
+**What to observe**  
+Notice how a system boundary changes what is in scope and what is not.
+
+**Common mistake**  
+Listing every possible threat instead of focusing on harm and feasibility.
+
+**Reflection**  
+Which single threat would cause the largest harm for your system and why.
+
+<ThreatModelCanvasTool />
+</ToolCard>
+
+### Questions
+
+* What is the difference between an asset and a vulnerability
+* Why do trust boundaries matter more than components
+* Give one example of a threat that is not technical
+* If you had one day to improve security, how would threat modelling help you choose
+* Explain threat modelling to a colleague without using acronyms
+* Why is a threat model a living document
+
+---
+
+## Attack paths how real breaches unfold
+
+Most breaches are not one clever trick. They are a chain of small wins. Attackers often start with access that looks harmless, then expand it.
+
+A useful mental model is an attack chain:
+Initial access
+Execution
+Persistence
+Privilege escalation
+Discovery
+Lateral movement
+Collection
+Exfiltration
+Impact
+
+You do not need to memorise labels. You need the idea: attackers move through stages, and each stage offers detection and disruption opportunities.
+
+<ToolCard title="Attack chain stepper">
+**Learning intent**  
+See how small issues connect into a full breach.
+
+**Instructions**  
+Step through an example breach path and choose defender actions that disrupt the chain.
+
+**What to observe**  
+Notice that stopping early stages is cheaper than cleaning up late stages.
+
+**Common mistake**  
+Over investing in perimeter controls while ignoring internal detection.
+
+**Reflection**  
+Which stage is your weakest and how would you know.
+
+<AttackChainTool />
+</ToolCard>
+
+### Questions
+
+* Why is initial access often not the most damaging step
+* What is lateral movement in plain English
+* Why does privilege escalation change the whole incident
+* What does persistence mean and why is it dangerous
+* Where would you place detection if you could only place it in one stage
+
+---
+
+## Defence in depth designing so one failure does not end you
+
+Defence in depth is the idea that no single control is trusted to be perfect. The design goal is that one failure does not become total failure.
+
+A helpful way to think about this is layered security goals:
+Prevent what you can
+Detect what you cannot prevent
+Respond fast when detection triggers
+Recover to a known good state
+
+This ties directly to Chapter 1 risk. You reduce harm by reducing likelihood, reducing impact, and improving recovery.
+
+### Control mapping as a discipline
+
+A common failure in security programmes is controls without purpose. Each control should be traceable to a threat and a security property.
+
+Example:
+Threat: attacker steals credentials
+Security property: authenticity
+Controls: phishing resistant authentication, device binding, anomaly detection, session revocation
+
+<ToolCard title="Control mapping workshop">
+**Learning intent**  
+Map controls to threats and properties, not to vibes.
+
+**Instructions**  
+Pick one threat from the threat model and map at least one prevention control, one detection control, one response action, and one recovery plan.
+
+**What to observe**  
+Notice where you have prevention but no detection, or detection but no response.
+
+**Common mistake**  
+Adding controls that do not reduce harm measurably.
+
+**Reflection**  
+Which control gives the biggest harm reduction per effort.
+
+<ControlMappingTool />
+</ToolCard>
+
+### Questions
+
+* What does defence in depth mean in one sentence
+* Why is detection not a failure
+* Give an example of a control that reduces impact rather than likelihood
+* Why is recovery part of security
+* What is a single point of failure and how do you remove it
+
+---
+
+## Identity and access management where most real security lives
+
+In many organisations, security is identity. If you can control who can do what, you reduce the blast radius of almost everything.
+
+Three ideas matter most:
+Authentication proving who you are
+Authorisation what you are allowed to do
+Session control what remains true after login
+
+### Least privilege as a practical rule
+
+Least privilege is not a slogan. It is a design constraint:
+People should have only what they need, only when they need it, and only for as long as they need it.
+
+This is where role based access control becomes useful. Roles represent job functions. Permissions represent actions. The goal is clarity and audibility.
+
+<ToolCard title="Least privilege simulator">
+**Learning intent**  
+Design access so mistakes do not become disasters.
+
+**Instructions**  
+Assign roles and permissions to a scenario such as a team folder, admin console, or customer support tool.
+
+**What to observe**  
+See how one extra permission expands damage.
+
+**Common mistake**  
+Using one admin role for convenience.
+
+**Reflection**  
+Which permission is the most dangerous in your system and why.
+
+<ZeroTrustPolicyTool />
+</ToolCard>
+
+### Questions
+
+* What is the difference between authentication and authorisation
+* Why does admin access change the risk model
+* What is a session and why does session expiry matter
+* Why is least privilege hard in real organisations
+* Give an example where usability pushes against security and how you would handle it
+
+---
+
+## Logs and telemetry evidence beats confidence
+
+Many teams only realise they needed logs after a breach. Logs are not just for debugging. They are how you prove what happened.
+
+A good logging mindset:
+Assume you will need to answer who, what, when, where, and how
+Assume attackers will try to hide
+Assume time matters
+
+### What makes a log useful
+
+A useful log is structured, time ordered, and correlated. It answers questions without guesswork.
+
+Key fields that often matter:
+Timestamp with timezone
+Actor identity
+Action performed
+Target resource
+Outcome
+Source location and device signals
+
+<ToolCard title="Log story builder">
+**Learning intent**  
+Learn to read logs as a narrative, not as noise.
+
+**Instructions**  
+Investigate a simulated incident by following log events and identifying the first suspicious signal.
+
+**What to observe**  
+See how weak logging prevents certainty.
+
+**Common mistake**  
+Logging everything except what you need.
+
+**Reflection**  
+If you had to pick only five log fields, what would they be.
+
+<LogStoryTool />
+</ToolCard>
+
+### Questions
+
+* Why does logging support non repudiation
+* What is the difference between logs and monitoring
+* Why do timestamps cause confusion
+* What is correlation and why is it powerful
+* What is a false positive and why does it matter for detection
+
+---
+
+## Incident response staying calm when it is real
+
+Security is partly design and partly behaviour under pressure. Incident response is the practice of doing the right things quickly when you do not know everything yet.
+
+A practical incident flow:
+Triage decide if this is real and how urgent
+Contain stop it spreading
+Preserve evidence keep what you need to learn
+Eradicate remove the cause
+Recover restore services safely
+Learn improve controls and playbooks
+
+### Triage as a decision problem
+
+Triage is not certainty. It is a decision under uncertainty. You often have partial signals.
+
+A useful quantitative idea is base rates. If an alert is rare and your detector is noisy, many alerts will be false positives. This is why good detection needs context.
+
+You do not need heavy probability maths to understand this. You need the logic: even a good detector can produce many false alarms if the event is rare.
+
+<ToolCard title="Incident triage simulator">
+**Learning intent**  
+Practise triage decisions under uncertainty.
+
+**Instructions**  
+Review simulated alerts, choose severity, and choose first actions.
+
+**What to observe**  
+See how containment choices trade off disruption and harm.
+
+**Common mistake**  
+Jumping to eradication before containment and evidence.
+
+**Reflection**  
+What is the first question you ask when an alert arrives.
+
+<IncidentTriageTool />
+</ToolCard>
+
+### Questions
+
+* Why is containment often the first priority
+* Why can deleting evidence make things worse
+* What is the difference between recovery and eradication
+* Why is communication part of incident response
+* What makes a good post incident review
+
+---
+
+## Vulnerability management turning unknown risk into known work
+
+Most vulnerabilities are not cinematic. They are ordinary mistakes that remain unpatched.
+
+Vulnerability management is the system for:
+Discovering issues
+Prioritising fixes
+Applying patches safely
+Verifying outcomes
+Learning from recurrence
+
+A key concept is that severity is not the same as risk. Severity describes potential. Risk describes likelihood and impact in your context.
+
+### Prioritisation that makes sense
+
+Prioritise by:
+Exploitability
+Exposure
+Business criticality
+Available mitigations
+Observed attacker behaviour
+
+<ToolCard title="Vulnerability lifecycle lab">
+**Learning intent**  
+Turn a vulnerability list into a plan that reduces harm.
+
+**Instructions**  
+Rank vulnerabilities using context, exposure, and impact. Decide patch order and compensating controls.
+
+**What to observe**  
+Notice how context changes priority.
+
+**Common mistake**  
+Chasing the highest score without understanding exposure.
+
+**Reflection**  
+Which single contextual fact would change your priority the most.
+
+<VulnerabilityLifecycleTool />
+</ToolCard>
+
+### Questions
+
+* What is the difference between vulnerability, exploit, and incident
+* Why does exposure change risk
+* What is a compensating control
+* Why do patches sometimes increase risk temporarily
+* What is configuration drift
+
+---
+
+## Ransomware and recovery the reality check
+
+Ransomware is not just encryption of files. Modern ransomware is a business model. It often includes data theft and extortion.
+
+A strong defence is not only prevention. It is recovery.
+
+A good recovery posture includes:
+Backups that cannot be modified by attackers
+Regular restore tests
+Clear recovery priorities
+Isolation of backup credentials
+
+This is where many organisations fail. They have backups but have never rehearsed restoration. In real incidents, unrehearsed recovery becomes chaos.
+
+<ToolCard title="Recovery drill">
+**Learning intent**  
+Practise recovery decisions before you need them.
+
+**Instructions**  
+Choose what to restore first, identify dependencies, and decide when to bring services back.
+
+**What to observe**  
+See how recovery order affects business harm.
+
+**Common mistake**  
+Believing backup existence equals recovery capability.
+
+**Reflection**  
+What is the first service you would restore in your context and why.
+
+<BackupRansomwareRecoveryTool />
+</ToolCard>
+
+### Questions
+
+* Why do attackers target backups
+* What does restore testing prove
+* What is a dependency and why does it matter for recovery
+* What is double extortion
+* What is the business decision behind paying or not paying
+
+---
+
+## Practice studio put it together
+
+This practice studio is designed to feel like real work, not a quiz.
+
+Missions:
+Model a login feature and identify the highest harm path
+Map controls and identify gaps in detection and response
+Investigate a log story and write a short incident summary
+Triage an alert and justify containment choices
+Rank vulnerabilities and justify patch order
+Plan a ransomware recovery and prioritise systems
+
+Write answers in plain English. Focus on what you know, what you suspect, and what you would do next.
+
+---
+
+## Checkpoint
+
+You understand this chapter if you can:
+Build a threat model for a feature and choose controls deliberately
+Explain a breach as an attack path and interrupt it
+Design defence in depth using prevent, detect, respond, recover
+Design least privilege roles and justify them
+Use logs to explain what happened
+Run a triage decision without panic
+Prioritise vulnerabilities using context
+Explain why recovery is part of security
+
+<PrintSummary
+title="Advanced systems summary"
+bullets={[
+"Threat modelling prioritises effort using harm and feasibility",
+"Attack paths explain how small failures connect",
+"Defence in depth assumes controls fail and designs resilience",
+"Identity and access management limits blast radius",
+"Logs turn uncertainty into evidence",
+"Incident response is fast decision making under uncertainty",
+"Vulnerability management turns unknown risk into planned work",
+"Recovery is a security capability, not an afterthought"
+]}
+keyTerms={[
+"Threat model",
+"Attack path",
+"Defence in depth",
+"Least privilege",
+"Telemetry",
+"Containment",
+"Residual risk",
+"Recovery"
+]}
+diagrams={[
+"Threat model canvas",
+"Attack chain",
+"Control mapping grid",
+"Incident timeline"
+]}
+/>

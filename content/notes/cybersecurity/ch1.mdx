@@ -1,0 +1,273 @@
+---
+title: "Cybersecurity Notes - Chapter 1"
+description: "Beginner foundations: why cybersecurity exists, what risk means, and how data, maths, and practice fit together."
+level: "beginner"
+---
+
+# Cybersecurity Notes
+
+## Chapter 1 - Foundations
+
+Cybersecurity exists because information systems fail in predictable ways, and those failures cause harm. This chapter builds the foundations for understanding why security problems exist before learning how they are mitigated. Nothing here assumes prior technical knowledge; everything here is something you can reason about.
+
+---
+
+## What cybersecurity actually is
+
+Cybersecurity is the practice of reducing harm caused when information is seen, changed, unavailable, or trusted incorrectly. Harm can mean safety incidents, financial loss, loss of service, legal consequences, or loss of trust.
+
+### Three lenses for understanding cybersecurity
+
+**The human lens**  
+People make decisions under pressure. Attackers exploit urgency, authority, curiosity, and helpfulness. Most incidents begin with a decision that felt reasonable at the time.
+
+**The system lens**  
+Modern systems are layered and complex. Complexity creates unexpected failure paths. Cybersecurity designs for failure rather than perfection.
+
+**The outcome lens**  
+Security exists to protect outcomes, not technology. Losing a file may be less serious than silently changing it or losing trust in a system.
+
+<Callout type="memory" title="Memory hook">
+Cybersecurity is about reducing harm, not achieving perfection.
+</Callout>
+
+### Practice
+
+<ToolCard
+  title="Security goals sorter"
+  intent="Classify real incidents by the type of harm they cause."
+  predictPrompt="Which harms are about trust rather than secrecy?"
+  reflection="Did any incident affect more than one goal? Note how."
+>
+  <SecurityGoalsSorter />
+</ToolCard>
+
+### Questions
+
+- Explain cybersecurity without using secure or hacker.
+- Give an example of harm that does not involve stolen data.
+- Why can correct information still cause harm?
+- What does trust mean in a computer system?
+
+---
+
+## Risk explained properly
+
+Security decisions are guided by risk, not fear. Risk is often written as:
+
+<MathBlock formula={"Risk = \\text{Likelihood} \\times \\text{Impact}"} />
+
+This answers a practical question: how bad would this be, and how often could it realistically happen?
+
+### Why multiplication is used
+
+If either likelihood or impact is zero, risk should be zero. Multiplication models this correctly; addition does not.
+
+### What the terms mean
+
+**Likelihood** - how often something might occur (relative, not precise).  
+**Impact** - the size of harm if the event occurs (cost, time, safety, trust, recovery).
+
+### Worked examples
+
+A minor phishing email once a year:
+
+<MathBlock formula={"Risk = 0.1 \\times 2 = 0.2"} />
+
+A rare but severe ransomware incident:
+
+<MathBlock formula={"Risk = 0.01 \\times 50 = 0.5"} />
+
+Even though the second event is rarer, its risk is higher because of impact.
+
+<DeeperDive title="Common beginner questions about risk">
+Risk numbers are comparisons, not predictions. Risk can be reduced, transferred, accepted, or avoided. It cannot be eliminated.
+</DeeperDive>
+
+### Questions
+
+- Explain why a rare event with huge impact can outrank a frequent low-impact event.
+- Give an example of impact that is not money.
+- Why should likelihood be revisited over time?
+- How would you reduce risk without changing impact?
+
+---
+
+## Data begins as physical states
+
+A bit is a physical state: high/low voltage, magnetised/not, light on/off. Computers use two states because physical systems are noisy.
+
+<MathInline formula={"bit \\in \\{0,1\\}"} />
+
+Each additional bit doubles the number of possible values.
+
+<MathBlock formula={"2^n"} />
+
+Eight bits can represent:
+
+<MathBlock formula={"2^{8} = 256"} />
+
+distinct values.
+
+### Practice
+
+<ToolCard
+  title="See how bit positions change value"
+  intent="See how bit positions change value."
+  predictPrompt="Which bit changes the value the most?"
+  reflection="How many flips are needed to double the value?"
+>
+  <BitPositionExplorer />
+</ToolCard>
+
+### Questions
+
+- Why do computers prefer two states?
+- How many values can 16 bits represent?
+- Why are bytes eight bits?
+
+---
+
+## Binary arithmetic and overflow
+
+Binary addition works like decimal addition but carry happens at two instead of ten.
+
+<MathBlock formula={"1011_{2} + 0110_{2} = 10001_{2}"} />
+
+When numbers exceed their allocated size, overflow occurs. Overflow has caused serious security vulnerabilities.
+
+<ToolCard
+  title="Binary addition trainer"
+  intent="Practice carrying in base 2."
+  predictPrompt="Where will the carry occur in 1011 + 0110?"
+  reflection="How would overflow show up in an 8-bit register?"
+>
+  <BinaryCarryTrainer />
+</ToolCard>
+
+### Questions
+
+- What is carry in binary addition?
+- Why does overflow matter for security?
+- Convert 13 to binary and add 1; show the result in binary.
+
+---
+
+## Text encoding without fear
+
+Text is stored as numbers. Unicode defines characters. UTF-8 defines how those characters are stored in bytes. The letter A maps to 65. Some characters use multiple bytes. Encoding confusion has caused security bugs.
+
+<ToolCard
+  title="Encoding inspector"
+  intent="Connect characters to bytes."
+  predictPrompt="Will all emojis use one byte?"
+  reflection="How could mismatched encoding lead to a bug?"
+>
+  <EncodingInspector />
+</ToolCard>
+
+### Questions
+
+- What is the difference between Unicode and UTF-8?
+- Why do some characters take multiple bytes?
+- How could encoding differences cause security issues?
+
+---
+
+## Hashing as a function
+
+A hash function maps any length input to a fixed length output.
+
+<MathBlock formula={"h : \\{0,1\\}^* \\rightarrow \\{0,1\\}^n"} />
+
+This means the input can be any length and the output is always the same size. Hashes are fast, deterministic, and sensitive to small changes.
+
+<ToolCard
+  title="Hash avalanche visualiser"
+  intent="See how tiny input changes alter the hash."
+  predictPrompt="Will changing one character change half the hash bits?"
+  reflection="Why does this make tampering obvious?"
+>
+  <HashAvalancheVisualizer />
+</ToolCard>
+
+### Questions
+
+- Why is a hash called one-way?
+- Why does sensitivity to small changes matter?
+- Give two uses for hashes.
+
+---
+
+## Entropy and guessing effort
+
+Entropy measures how hard something is to guess.
+
+<MathBlock formula={"H = L \\times \\log_2(N)"} />
+
+Where:
+- <MathInline formula={"L"} /> is length
+- <MathInline formula={"N"} /> is number of choices per character
+
+A 4-digit PIN:
+
+<MathBlock formula={"H = 4 \\times \\log_2(10) \\approx 13.3"} />
+
+Longer secrets dominate complexity.
+
+<ToolCard
+  title="Entropy simulator"
+  intent="Compare guessing effort for different secrets."
+  predictPrompt="What increases faster, length or added symbols?"
+  reflection="What will you change about your own passwords?"
+>
+  <EntropySimulator />
+</ToolCard>
+
+### Questions
+
+- Why is length usually better than complexity tricks?
+- How many bits of effort does a 6-digit PIN have?
+- Why does reuse break even high-entropy passwords?
+
+---
+
+## Practice studio
+
+Use these missions to reinforce understanding. Treat them as short exercises:
+
+- Classify a phishing scenario by harm.
+- Convert text to bytes and hex.
+- Observe hash avalanche.
+- Build least-privilege roles.
+- Score risk and choose controls.
+
+Each mission ends with what you learned and what you would do differently.
+
+---
+
+## Checkpoint
+
+You understand this chapter if you can:
+
+- Explain risk without formulas.
+- Explain bits without maths jargon.
+- Explain why length beats complexity.
+- Explain why systems assume failure.
+
+<QuizCard title="Beginner knowledge check" />
+
+<PrintSummary
+  title="Beginner foundations summary"
+  bullets={[
+    "Cybersecurity reduces harm, not perfection",
+    "Risk balances likelihood and impact",
+    "Data is physical before it is meaningful",
+    "Math explains security trade-offs",
+    "Length dominates guessing resistance",
+  ]}
+  keyTerms={["Risk", "Bit", "Entropy", "Hash", "Encoding"]}
+  diagrams={["Bit flip", "Risk quadrant", "Hash avalanche"]}
+/>
+
+---

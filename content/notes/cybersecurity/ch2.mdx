@@ -1,0 +1,217 @@
+---
+title: "Cybersecurity Notes - Chapter 2"
+description: "Intermediate foundations: how information moves across networks and how trust is built (and fails)."
+level: "intermediate"
+---
+
+# Cybersecurity Notes
+
+## Chapter 2 - How Information Moves and How Trust Is Built
+
+In Chapter 1, we saw that data is physical, systems fail, and cybersecurity reduces harm rather than chasing perfection. We learned bits, bytes, entropy, and hashes. Now we move to what happens when information leaves one computer and travels through shared spaces to reach another. We focus on why communication is fragile, where trust breaks, and how security mechanisms attempt to restore confidence.
+
+<Callout type="memory" title="Memory hook">
+Networks are shared spaces, not private tunnels.
+</Callout>
+
+---
+
+## From messages to packets
+
+When information is sent across a network, it is broken into smaller pieces called packets. Packetisation exists because many devices share the same links. Breaking messages into packets allows networks to interleave traffic, recover from loss, and route around failures. It also introduces failure modes: packets can be delayed, dropped, duplicated, or arrive out of order.
+
+### Why packet size matters
+
+Packet size is a trade-off:
+
+- Small packets reduce retransmission cost but increase overhead.
+- Large packets reduce overhead but increase cost when loss occurs.
+
+Security design must assume loss and reordering will occur.
+
+### Worked example
+
+If a message is approximately 1 MB and packets are 1 KB:
+
+<MathBlock formula={"\\text{Packets} = \\frac{1000\\ \\text{KB}}{1\\ \\text{KB}} = 1000"} />
+
+If one packet is lost, only that packet needs to be resent. Sending the whole message as one unit would require restarting everything.
+
+<PacketJourneyTool />
+
+### Questions
+
+- Why are messages split into packets?
+- What happens if packets arrive out of order?
+- Why does packet loss not usually corrupt the entire message?
+- Where does reliability come from if the network does not guarantee it?
+- Which security properties are threatened by packet loss?
+- Which properties are threatened by packet modification?
+
+---
+
+## The three numbers that rule networks
+
+Three quantities dominate behaviour: latency, bandwidth, and throughput. They describe different constraints.
+
+**Latency** is the time it takes for a signal to travel from one point to another (milliseconds). High latency means delays even if capacity is high.
+
+**Bandwidth** is the maximum rate at which data can be transmitted (bits per second). It describes capacity, not delivery speed.
+
+**Throughput** is the amount of data actually delivered per unit time. It is affected by latency, loss, and protocol behaviour.
+
+Networks are measured in bits per second, not bytes. 1 byte = 8 bits. 1 MB = 8 Mb. A 10 Mbps link does not deliver 10 MB per second.
+
+### Worked example
+
+If a message is 1 MB:
+
+<MathBlock formula={"1\\ \\text{MB} = 8\\ \\text{Mb}"} />
+
+On a 10 Mbps link:
+
+<MathBlock formula={"\\text{Time} = \\frac{8\\ \\text{Mb}}{10\\ \\text{Mb/s}} = 0.8\\ \\text{s}"} />
+
+Assumes no latency or loss; real networks are noisier.
+
+<LbtSimulator />
+
+### Questions
+
+- What is the difference between bandwidth and throughput?
+- Why do we multiply by 8 when converting MB to Mb?
+- Why does latency matter for security protocols?
+- Calculate delivery time for 5 MB over 20 Mbps.
+- Why does packet loss reduce throughput?
+
+---
+
+## Where attacks can occur in transit
+
+Data passes through many independent systems. Each hop is a boundary where trust may fail. Observation, modification, blocking, and impersonation are all possible depending on attacker position. This ties directly to confidentiality, integrity, availability, and authenticity from Chapter 1.
+
+<InterceptionExplorer />
+
+### Questions
+
+- Name three points where interception can occur.
+- Why is public Wi-Fi especially risky?
+- Which attacks threaten availability?
+- Which threaten authenticity?
+- Why does trust decrease as paths lengthen?
+
+---
+
+## DNS as a trust decision
+
+Humans use names; networks use numbers. DNS maps between them. This mapping is a trust decision. If DNS lies, everything built on top may fail silently.
+
+### End-to-end failure story
+
+User types a familiar domain. Resolver returns an incorrect IP. Browser connects to the wrong system. The site looks correct. Credentials are stolen. Encryption may still succeed; failure occurred earlier.
+
+<DNSJourney />
+
+### Questions
+
+- What problem does DNS solve?
+- Why is caching both useful and risky?
+- What is a resolver?
+- What happens if DNS returns the wrong address?
+- Why might the browser still show a padlock?
+- Which controls reduce DNS risk?
+
+---
+
+## Encryption protects secrecy, not identity
+
+Encryption ensures confidentiality. It does not prove who you are talking to. Perfect encryption can still give data to the wrong party. Weak entropy produces weak keys. Perfect algorithms cannot compensate for poor randomness.
+
+<HandshakeExplorer />
+
+### Questions
+
+- What does encryption guarantee?
+- What does it not guarantee?
+- How can encryption be used in a scam?
+- Why does entropy matter for keys?
+- Why are handshakes necessary?
+
+---
+
+## Certificates and trust chains
+
+Certificates bind keys to identities. A certificate answers: who vouches for this identity? Chains exist because no single entity is universally trusted.
+
+### Failure story
+
+Certificate is misissued or a warning is ignored. Browser establishes a secure connection. User trusts the wrong system. Security mechanisms worked; human trust failed.
+
+<CertificateChainExplorer />
+
+### Questions
+
+- What is a certificate?
+- What is a certificate authority?
+- What is a trust anchor?
+- What does expiry mean?
+- Why are browser warnings serious?
+- What happens if a CA is compromised?
+
+---
+
+## Integrity in transit
+
+Confidentiality hides content. Integrity detects change. A hash detects modification but does not prove who sent the message. Adding a shared secret lets integrity imply authenticity.
+
+<IntegrityLab />
+
+### Questions
+
+- Why does a hash detect change?
+- Why does a plain hash not prove identity?
+- What problem does a shared secret solve?
+- How does integrity support trust?
+
+---
+
+## Practice studio
+
+Apply everything in a realistic scenario involving phishing, DNS manipulation, certificate warnings, and credential theft.
+
+<ToolCard
+  title="Mini incident simulator"
+  intent="Practice reasoning under uncertainty."
+  predictPrompt="What is the safest next action?"
+  reflection="Which decision reduced harm the most?"
+>
+  <MiniIncidentSimulator />
+</ToolCard>
+
+## Checkpoint
+
+You understand this chapter if you can:
+
+- Explain packetisation and loss.
+- Calculate simple transfer times with units.
+- Explain DNS trust failures.
+- Explain why encryption alone is insufficient.
+- Explain certificate warnings.
+- Explain integrity in transit.
+
+<PrintSummary
+  title="Intermediate communication and trust summary"
+  bullets={[
+    "Networks move signals through shared spaces",
+    "Packetisation trades overhead for resilience",
+    "Latency, bandwidth, and throughput constrain behaviour",
+    "DNS is a trust decision",
+    "Encryption protects secrecy, not identity",
+    "Certificates bind keys to identities",
+    "Integrity detects modification in transit",
+  ]}
+  keyTerms={["Packet", "Latency", "Throughput", "DNS", "Certificate", "Integrity"]}
+  diagrams={["Packet journey", "Network path", "DNS resolution", "Trust chain"]}
+/>
+
+---

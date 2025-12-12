@@ -1,5 +1,7 @@
 import "@/styles/globals.css";
+import "katex/dist/katex.min.css";
 import { Manrope, Space_Grotesk } from "next/font/google";
+import { NotesProvider } from "@/components/notes/NotesProvider";
 
 const display = Space_Grotesk({
   subsets: ["latin"],
@@ -14,7 +16,9 @@ const body = Manrope({
 export default function App({ Component, pageProps }) {
   return (
     <div className={`${display.variable} ${body.variable}`}>
-      <Component {...pageProps} />
+      <NotesProvider>
+        <Component {...pageProps} />
+      </NotesProvider>
     </div>
   );
 }

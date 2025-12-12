@@ -21,8 +21,6 @@ export default function Layout({
               <span className="brand__text">Ransford&apos;s Notes</span>
             </Link>
             <nav className="nav-links" aria-label="Primary">
-              <Link href="/courses">Courses</Link>
-              <Link href="/posts">Notes</Link>
               <Link href="/tools">Labs</Link>
               <Link href="/games">Games</Link>
               <Link href="/cybersecurity">Cybersecurity</Link>
@@ -47,8 +45,6 @@ export default function Layout({
               </p>
             </div>
             <div className="footer-links">
-              <Link href="/courses">Courses</Link>
-              <Link href="/posts">Notes</Link>
               <Link href="/tools">Labs</Link>
               <Link href="/about">About</Link>
               <Link href="/subscribe">Subscribe</Link>

@@ -10,12 +10,12 @@ const pages = [
   {
     slug: "intermediate",
     title: "Intermediate",
-    summary: "Modern algorithms and protocols applied to real systems (publishing soon).",
+    summary: "Chapter 1: foundations with tools, Q&A, and RSA practice.",
   },
   {
     slug: "advanced",
     title: "Advanced",
-    summary: "Future-facing topics like post-quantum and zero trust (publishing soon).",
+    summary: "Chapter 3: threats, defence in depth, humans, and response with labs.",
   },
   {
     slug: "summary",
@@ -49,7 +49,7 @@ export default function CybersecurityNotesHub() {
             <p className="muted">{page.summary}</p>
             <div className="course-card__footer">
               <span className="footnote">Open notes</span>
-              <span aria-hidden="true">→</span>
+              <span aria-hidden="true">{"\u003e"}</span>
             </div>
           </Link>
         ))}
