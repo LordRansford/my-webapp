@@ -78,19 +78,19 @@ export default function CybersecurityBeginner() {
             <h1>Beginner level</h1>
             <p className="lead">
               Interactive Cybersecurity Course: From Basics to Advanced. Welcome to a hands-on journey through
-              cybersecurity and cryptography. We&apos;ll start from first principles and build up to advanced topics like
-              post-quantum cryptography and zero trust architecture. Each level is a self-contained module. By the end,
-              you&apos;ll understand how and why security techniques work, with the math, analogies, and best practices that
-              make them tick.
+              cybersecurity and cryptography. We&apos;ll start from first principles - understanding what information
+              security means - and build up to advanced topics like post-quantum cryptography and zero trust
+              architecture. Along the way, you&apos;ll encounter stories (meet Alice, Bob, and an eavesdropper Eve),
+              real-world examples, and interactive exercises. Each level (Beginner, Intermediate, Advanced) is a
+              self-contained module/page. By the end, you&apos;ll not only grasp the how of security techniques, but also
+              why they work - with the math, analogies, and best practices that make them tick. Get ready to learn by
+              doing in a fun, inclusive way!
             </p>
           </header>
 
           <section id="overview" className="note-section">
-            <h2>Overview</h2>
-            <p>
-              Beginner Level: Fundamentals of Cybersecurity and Cryptography. What is Information Security? (First
-              Principles)
-            </p>
+            <h2>Beginner Level: Fundamentals of Cybersecurity and Cryptography</h2>
+            <h3>What is Information Security? (First Principles)</h3>
             <p>
               Information Security is the practice of protecting information from unauthorized access, alteration, or
               destruction. A classic model is the CIA Triad:
@@ -117,66 +117,103 @@ export default function CybersecurityBeginner() {
               ensures confidentiality: even if Eve (an eavesdropper) intercepts the ciphertext, she can&apos;t understand it
               without the secret &quot;recipe.&quot;
             </p>
-            <p>How does encryption work? At a high level:</p>
-            <ol>
-              <li>You start with a readable message (plaintext), e.g. HELLO.</li>
-              <li>You apply an encryption key via an algorithm.</li>
-              <li>The output is ciphertext, e.g. KHOOR.</li>
-              <li>To decrypt, the authorized recipient applies the corresponding decryption key to recover the original.</li>
-            </ol>
+            <div className="panel">
+              <p className="eyebrow">How does encryption work?</p>
+              <ol className="stack">
+                <li>You start with a readable message (plaintext), e.g. HELLO.</li>
+                <li>You apply an encryption key - essentially a secret value or password - via an encryption algorithm.</li>
+                <li>The output is ciphertext, e.g. KHOOR.</li>
+                <li>To decrypt, the authorized recipient applies the corresponding decryption key to recover the original.</li>
+              </ol>
+            </div>
             <p>
-              Plaintext, Ciphertext, and Keys: In any encryption: plaintext is the original data; ciphertext is the
-              encrypted data; the key is the secret that locks or unlocks the data. Without the key, even if you know the
-              algorithm, you shouldn&apos;t be able to easily get plaintext from ciphertext. Under the hood, computers perform
-              encryption on binary data.
+              Real-world example: When you use a messaging app and see a lock icon, your message text is being encrypted.
+              Only the intended recipient&apos;s device (with the key) can decrypt and read it.
             </p>
+            <div className="panel stack">
+              <p className="eyebrow">Plaintext, Ciphertext, and Keys</p>
+              <p>
+                In any encryption: plaintext is the original data; ciphertext is the encrypted data; the key is the secret
+                that locks or unlocks the data. Without the key, even if you know the algorithm, you shouldn&apos;t be able to
+                easily get plaintext from ciphertext.
+              </p>
+              <p>
+                Under the hood, computers perform encryption on binary data. Everything on a computer is ultimately just
+                1s and 0s (binary). For example, the letter `A&apos; is represented in ASCII code as 65, which in binary is
+                01000001. When we encrypt, we are mathematically transforming these numbers.
+              </p>
+            </div>
           </section>
 
           <section id="symmetric-asymmetric" className="note-section">
-            <h2>Symmetric vs. Asymmetric Cryptography</h2>
-            <p>
-              Symmetric Encryption: Uses one key for both encryption and decryption. It&apos;s like a shared house key. These
-              ciphers (e.g. AES) are fast and great for bulk data. The challenge is key exchange—how do you share the
-              secret key securely?
-            </p>
-            <p>
-              Asymmetric Encryption: Uses two keys—a public key and a private key. The public key can be shared openly,
-              while the private key is kept secret. This solves the key exchange problem without needing a shared secret
-              in advance, but it&apos;s slower than symmetric encryption.
-            </p>
+            <h2>Symmetric vs. Asymmetric Cryptography (One Key or Two?)</h2>
+            <div className="panel stack">
+              <p className="eyebrow">Symmetric Encryption</p>
+              <p>
+                Uses one key for both encryption and decryption. It&apos;s like a shared house key - if Alice and Bob both have
+                a copy, either can lock or unlock the door. Symmetric ciphers (e.g. AES) are typically very fast and great
+                for bulk data encryption. The challenge is key exchange - how do you share the secret key securely with
+                someone in the first place? If Eve intercepts the key during exchange, she can decrypt everything.
+              </p>
+            </div>
+            <div className="panel stack">
+              <p className="eyebrow">Asymmetric Encryption</p>
+              <p>
+                Uses two keys - a public key and a private key - which are mathematically linked. It&apos;s more like a padlock:
+                you can give out copies of an open padlock (public key) to anyone, but only you have the physical key
+                (private key) that opens it. Asymmetric encryption solves the key exchange problem (no need to share a
+                secret in advance), but it&apos;s slower and more computationally intensive than symmetric encryption.
+              </p>
+              <p>
+                Public-key cryptography illustrated via the padlock analogy: Public keys are like open padlocks anyone can
+                use to lock a box for you, but only your private key can unlock it.
+              </p>
+            </div>
             <div className="panel stack">
               <p className="eyebrow">Try RSA keys</p>
               <p className="muted">Generate a pair and observe the difference between public and private material.</p>
               <RsaPlayground />
             </div>
+            <p>
+              In practice, modern secure systems use both types: they use asymmetric encryption to exchange a symmetric
+              key, and then use symmetric encryption for the bulk of the data. This is how HTTPS secures the web.
+            </p>
           </section>
 
           <section id="story" className="note-section">
             <h2>Story Time: Alice and Bob&apos;s Secret Message</h2>
             <p>
-              Alice wants to send a secret message to Bob without Eve reading it. They start with symmetric encryption
-              using a shared password (key). Problem: how do they share the key safely? If Alice emails the key, Eve could
-              steal it—this is the key exchange problem. Enter public-key cryptography: Alice generates a public/private
-              key pair. She publishes the public key. Bob uses it to encrypt his message. Even if Eve intercepts it, she
-              can&apos;t decrypt it; only Alice&apos;s private key can.
+              Let&apos;s tie these concepts together in a story: - Alice wants to send a secret message to Bob without Eve
+              (the eavesdropper) reading it. They start with a simple approach: agree on a password (key) and use it to
+              scramble messages (symmetric encryption). This is like both having the same secret decoder ring. - Problem:
+              How do they agree on the secret key in the first place? If Alice just emails the key to Bob, Eve could steal
+              it - oops! This is the key exchange problem. - Enter public-key cryptography: Alice generates a matching key
+              pair - a public key (padlock) and private key (secret key). She publishes the public key openly (even Eve
+              can see it, but that&apos;s fine). Bob uses Alice&apos;s public key to encrypt the message. Now, even if Eve
+              intercepts the encrypted message, she can&apos;t decrypt it - only Alice&apos;s private key can unlock it. Alice and
+              Bob have solved the secret-sharing dilemma by using clever math instead of a shared password. - When Alice
+              replies, she can do the same with Bob&apos;s public key. Now both sides are communicating securely without ever
+              having exchanged a private secret.
             </p>
+            <p>This simple story underpins almost all secure communication on the internet today.</p>
           </section>
 
           <section id="real-world" className="note-section">
-            <h2>Real-World Examples</h2>
+            <h2>Real-World Examples (You Use This Everyday!)</h2>
             <ul>
               <li>
-                Web Browsing (HTTPS): The padlock icon shows your browser used the site&apos;s public key to establish a secure
-                connection, exchange a symmetric session key, then encrypt data with that key.
+                Web Browsing (HTTPS): Your browser uses the website&apos;s public key to establish a secure connection, then
+                exchanges a symmetric session key to encrypt data.
               </li>
               <li>
-                Secure Messaging: Apps like Signal and WhatsApp use end-to-end encryption with public-private key pairs.
+                Secure Messaging: Apps use end-to-end encryption with public-private key pairs. Messages encrypted with the
+                recipient&apos;s public key can only be decrypted with their private key.
               </li>
               <li>
                 Wi-Fi Security: WPA2 uses symmetric encryption (AES) with the Wi-Fi password as the shared key.
               </li>
               <li>
-                ATM Cards and PINs: Chips use cryptographic keys; PINs are verified with one-way hashing.
+                ATM Cards and PINs: Chips use cryptographic keys; PINs are verified by one-way hashing.
               </li>
             </ul>
           </section>
@@ -184,9 +221,9 @@ export default function CybersecurityBeginner() {
           <section id="hands-on" className="note-section">
             <h2>Hands-On Exercise</h2>
             <p>
-              Secret Message with a Shift Cipher: Enter a short message and choose a number shift (the key). The tool will
-              encrypt your message by shifting letters, and you can try to decrypt it by shifting back. (Toy cipher for
-              learning only.)
+              Secret Message with a Shift Cipher: Below is a simple interactive tool. Enter a short message and choose a
+              number shift (the key). The tool will encrypt your message by shifting letters, and you can try to decrypt it
+              by shifting back. This simulates the Caesar cipher discussed earlier.
             </p>
             <p>
               Binary Peek: Input any character and see its numeric code and binary representation. This shows how computers
@@ -218,9 +255,13 @@ export default function CybersecurityBeginner() {
           <section id="wrap-up" className="note-section">
             <h2>Beginner Wrap-Up</h2>
             <p>
-              You learned why we need cybersecurity, what cryptography is, and the difference between symmetric and
-              asymmetric encryption. Alice, Bob, and Eve will stay with us as we move to intermediate topics: modern
-              algorithms (AES, RSA, ECC, hashing), how they combine in real systems, and how math underpins security.
+              Great job on completing the beginner level! You&apos;ve learned why we need cybersecurity, what cryptography
+              is, and the difference between symmetric and asymmetric encryption. You also met Alice, Bob, and Eve - who
+              will continue to guide us. You even tried out a simple cipher yourself.
+            </p>
+            <p>
+              Coming up next: Intermediate level with modern cryptographic algorithms (AES, RSA, ECC, hashing), how these
+              pieces work together in real systems, and more hands-on practice.
             </p>
           </section>
         </article>
