@@ -215,3 +215,24 @@ You understand this chapter if you can:
 />
 
 ---
+
+## Quick visual anchors I use
+
+- Ladder sketch of DNS: user -> resolver -> root -> TLD -> auth -> answer. I highlight cache points in yellow.
+- TLS handshake grid: client messages in one column, server messages in another, mark where identity is asserted and where secrecy begins.
+- Packet layers as nested boxes: payload, TCP/UDP, IP, link. It keeps me clear on where addresses and ports live.
+
+### Extra practice prompts
+
+- Draw a spoofed DNS response and mark which field an attacker changes.
+- Explain to a friend why a padlock icon can still show during a phishing attack.
+- Pick one public Wi-Fi scenario and list three things you would log to prove what happened.
+
+## References that keep me grounded
+
+- IETF RFC 1034 and 1035 (DNS concepts) - reminds me what DNS really is.
+- OWASP ASVS sections on transport and session - useful checklists for application layer.
+- Mozilla SSL configuration generator - practical defaults for TLS.
+- CERT guides on logging and monitoring - helps me keep log fields disciplined.
+
+I treat these as checklists, then translate them into the patterns above so they stay practical.

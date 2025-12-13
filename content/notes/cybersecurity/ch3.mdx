@@ -459,3 +459,28 @@ diagrams={[
 "Incident timeline"
 ]}
 />
+
+---
+
+## Visual frameworks I lean on
+
+- Attack path grid: columns for access, execute, persist, escalate, move, impact. I place existing controls and see gaps.
+- Defence in depth rings: people, process, tech. I map each control to the ring and to CIA to spot single points of failure.
+- Identity flow: user -> IdP -> token -> app -> resource. I mark where logs must exist for authentication, authorisation, and accounting.
+- Incident swim lane: detections, decisions, comms, containment, recovery. Keeps me calm when writing playbooks.
+
+### Additional practice prompts
+
+- Take one MITRE ATT&CK technique and map it to your own stack. Where would you detect it.
+- Redraw a recent breach story as an attack path and mark where one control would have stopped it.
+- Create a tiny runbook for MFA fatigue: signals, thresholds, actions, evidence to keep.
+
+## References I revisit for depth
+
+- MITRE ATT&CK Navigator - for thinking in attacker techniques.
+- NIST SP 800-61 (Computer Security Incident Handling Guide) - clear response lifecycle.
+- OWASP ASVS and Top 10 - reliable for application control mapping.
+- CISA KEV catalog - informs prioritisation for vulnerability management.
+- Cloud provider security best practices (AWS, Azure, GCP) - practical identity and logging patterns.
+
+I read them, then rewrite the key moves in my own words inside these notes so they stay personal and applicable.
