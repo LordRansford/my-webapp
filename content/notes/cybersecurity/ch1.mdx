@@ -1,13 +1,12 @@
 ---
 title: "Cybersecurity Notes - Chapter 1"
-description: "Foundations I had to learn the hard way: harm, risk, bits, hashes, and why simple practice matters."
+description: "Foundations I built for myself: harm, risk, maths, and browser labs that make it real."
 level: "beginner"
 ---
 
 import ToolCard from "@/components/notes/ToolCard"
 import { Callout } from "@/components/notes/Callout"
 import { DeeperDive } from "@/components/notes/DeeperDive"
-import { PrintSummary } from "@/components/notes/PrintSummary"
 import { MathBlock, MathInline } from "@/components/notes/Math"
 import { FlowDiagram, LayerDiagram, TimelineDiagram, BoundaryDiagram } from "@/components/notes/diagrams"
 import SecurityGoalsSorter from "@/components/notes/tools/cybersecurity/ch1/SecurityGoalsSorter"
@@ -19,49 +18,41 @@ import EncodingInspector from "@/components/notes/tools/cybersecurity/ch1/Encodi
 import HashAvalancheVisualizer from "@/components/notes/tools/cybersecurity/ch1/HashAvalancheVisualizer"
 import EntropySimulator from "@/components/notes/tools/cybersecurity/ch1/EntropySimulator"
 import Quiz from "@/components/Quiz"
+import Recap from "@/components/notes/Recap"
 
 # Cybersecurity Notes
 
 ## Chapter 1 - Foundations
 
-I wrote these notes because I was confused by security jargon. I needed a place to reason things out: why harm happens, how risk is judged, how bits become meaning, and how maths underpins trust. I learn best by making small changes, seeing what breaks, and then generalising. That is the flow here.
+I wrote these notes because I was confused by security jargon. I wanted one page where I could reason slowly: why harm happens, how I measure risk, how bits become meaning, and how maths underpins trust. I learn by trying small experiments, so every abstraction here is paired with a tool and questions.
 
 ---
 
 ## Why security exists at all
 
-I treat cybersecurity as harm reduction. Systems fail and people make hurried decisions. If I can predict where harm appears, I can design to reduce it.
+Cybersecurity is harm reduction. Systems fail, people hurry, and attackers use that. If I understand how a harmless signal becomes a harmful outcome, I can break the chain early.
 
 <FlowDiagram
   title="Harm chain"
-  steps={[
-    "Signal or data",
-    "Interpretation",
-    "Decision",
-    "Action",
-    "Outcome"
-  ]}
+  steps={["Signal", "Interpretation", "Decision", "Action", "Outcome"]}
 />
 
-<Callout type="memory" title="What I remind myself">
-Security is not perfection. It is making sure small failures do not become big harms.
+<Callout type="memory" title="My anchor">
+Security is about reducing harm, not chasing perfection.
 </Callout>
 
-<ToolCard title="Sort harms" description="Classify incidents by the main harm I see first." lazy>
+<ToolCard title="Sort harms" description="Classify incidents by the main harm." lazy>
   <SecurityGoalsSorter />
 </ToolCard>
 
 <Quiz
-  title="Quick check"
+  title="Harm and outcomes"
   questions={[
-    {
-      id: "harm",
-      prompt: "What do I protect when I think about cybersecurity?",
-      options: [
-        { id: "a", text: "Only secrets", correct: false, explanation: "Secrets matter but so do integrity and uptime." },
-        { id: "b", text: "Information and the outcomes that depend on it", correct: true, explanation: "Harm appears when outcomes fail, not just when secrets leak." }
-      ]
-    }
+    { id: "h1", prompt: "What is cybersecurity protecting for me?", options: [ { id: "a", text: "Only secrets", correct: false, explanation: "Integrity and uptime are harm too." }, { id: "b", text: "Information and outcomes", correct: true, explanation: "Harm shows up when outcomes fail." } ] },
+    { id: "h2", prompt: "Why do I map incidents to harms?", options: [ { id: "a", text: "To pick controls that match harm", correct: true, explanation: "Wrong harm, wrong control." }, { id: "b", text: "To fill compliance forms", correct: false, explanation: "Forms are secondary; harm mapping guides action." } ] },
+    { id: "h3", prompt: "What happens if I ignore availability?", options: [ { id: "a", text: "Users lose service", correct: true, explanation: "Downtime is a harm." }, { id: "b", text: "No impact", correct: false, explanation: "Availability is part of security." } ] },
+    { id: "h4", prompt: "Why do attackers start with people?", options: [ { id: "a", text: "People make rushed decisions", correct: true, explanation: "Pressure and confusion are common." }, { id: "b", text: "People run faster code", correct: false, explanation: "Code speed is irrelevant here." } ] },
+    { id: "h5", prompt: "What is a secondary harm?", options: [ { id: "a", text: "A follow-on impact from the same event", correct: true, explanation: "One incident can hit multiple goals." }, { id: "b", text: "A harmless side effect", correct: false, explanation: "Secondary harms can be serious." } ] },
   ]}
 />
 
@@ -69,89 +60,81 @@ Security is not perfection. It is making sure small failures do not become big h
 
 ## CIA triad in my own words
 
-The Study Notes stress confidentiality, integrity, and availability. I keep them as a tension diagram: pushing one can stress the others.
+The Study Notes anchor on confidentiality, integrity, and availability. I picture them as a balance I tune per system.
 
 <BoundaryDiagram
   title="CIA triad"
-  zones={[
-    { label: "Confidentiality", detail: "Only the right people can see" },
-    { label: "Integrity", detail: "What I read is correct" },
-    { label: "Availability", detail: "It works when needed" }
-  ]}
+  inside={["Confidentiality", "Integrity", "Availability"]}
+  outside={["Pressure", "Noise", "Failure paths"]}
+  boundaryLabel="Balance"
 />
 
-- **Confidentiality**: I stop unintended disclosure. Encryption and access controls help, but people, misconfigurations, and logs can leak.
-- **Integrity**: I need assurance that data is not tampered. Hashes, signatures, and checksums help, but only if keys and code paths are trusted.
-- **Availability**: If a service is down, security fails its purpose. Redundancy, throttling, and graceful degradation matter.
+- **Confidentiality**: I keep data from the wrong eyes. Encryption and access control help, but logs, screenshots, and misconfigurations can leak.
+- **Integrity**: I need confidence that what I read is correct. Hashes, signatures, and well-defined processes help, but only if keys and pipelines are trusted.
+- **Availability**: A secure system that is down is still a failure. Redundancy, graceful degradation, and rate limits protect uptime.
 
-<DeeperDive title="Common mistakes I made">
-I once encrypted a backup without checking restore. I achieved confidentiality and lost availability. Balance the three, do not chase one.
+<DeeperDive title="Where I went wrong">
+I once encrypted backups without testing restore. I achieved confidentiality and broke availability. Balance matters.
 </DeeperDive>
 
 <Quiz
-  title="Triad micro quiz"
+  title="CIA depth"
   questions={[
-    {
-      id: "triad1",
-      prompt: "Which event is mostly about integrity?",
-      options: [
-        { id: "a", text: "API responds slowly", correct: false, explanation: "Slow responses hit availability." },
-        { id: "b", text: "Invoice total silently changes", correct: true, explanation: "Silent change is an integrity failure." }
-      ]
-    }
+    { id: "cia1", prompt: "What breaks confidentiality most often?", options: [ { id: "a", text: "Plaintext logs", correct: true, explanation: "Logs leak quietly." }, { id: "b", text: "Power outages", correct: false, explanation: "Outages hurt availability." } ] },
+    { id: "cia2", prompt: "What proves integrity for me?", options: [ { id: "a", text: "A hash from a trusted path", correct: true, explanation: "Hash plus trusted pipeline helps." }, { id: "b", text: "A checksum from an unknown source", correct: false, explanation: "Unknown sources cannot prove integrity." } ] },
+    { id: "cia3", prompt: "Why is availability a security goal?", options: [ { id: "a", text: "Because service loss is harm", correct: true, explanation: "Downtime is real harm." }, { id: "b", text: "Because users like speed", correct: false, explanation: "Speed and availability differ." } ] },
+    { id: "cia4", prompt: "Which control improves two goals at once?", options: [ { id: "a", text: "Rate limiting", correct: true, explanation: "It helps availability and can limit data abuse." }, { id: "b", text: "Turning off logging", correct: false, explanation: "That hurts integrity and accountability." } ] },
+    { id: "cia5", prompt: "What is the risk of over-focusing on confidentiality?", options: [ { id: "a", text: "I might block needed access", correct: true, explanation: "Over-locking can kill availability." }, { id: "b", text: "No risk", correct: false, explanation: "Balance is required." } ] },
   ]}
 />
 
 ---
 
-## Identity and accountability
+## Identity, authentication, and accountability
 
-The Study Notes emphasise IAAA: identification, authentication, authorisation, accountability. I use it as a flow when thinking about access.
+The Study Notes use IAAA. I keep it as a simple flow so I do not mix steps.
 
 <FlowDiagram
   title="IAAA flow"
-  steps={["Claim who I am", "Prove it", "Check what I can do", "Log what I did"]}
+  steps={["Claim who I am", "Prove it", "Check what I can do", "Record what I did"]}
 />
 
-- **Identification**: I present a claim (email, badge ID).
-- **Authentication**: I prove it (password, token, biometrics). MFA is simply using more than one factor: something I know, have, or am.
-- **Authorisation**: The system checks the actions I can take. Least privilege is the default: only the rights I need, only when I need them.
-- **Accountability**: Logs make actions traceable. Without logs, disputes become opinions.
+- **Identification**: I state who I am (email, badge ID).
+- **Authentication**: I prove it (password, token, biometrics). MFA mixes factors I know, have, and am.
+- **Authorisation**: The system decides what I am allowed right now. Least privilege is the default: only what I need, only when I need it.
+- **Accountability**: Logs make actions traceable. Without them, disputes become opinions.
 
 <ToolCard title="Risk dial" description="See how likelihood and impact combine." lazy>
   <RiskDial />
 </ToolCard>
 
 <Quiz
-  title="Identity check"
+  title="IAAA depth"
   questions={[
-    {
-      id: "iaaa1",
-      prompt: "Where does MFA sit?",
-      options: [
-        { id: "a", text: "Authentication", correct: true, explanation: "MFA strengthens proof of identity." },
-        { id: "b", text: "Authorisation", correct: false, explanation: "Authorisation decides actions after login." }
-      ]
-    }
+    { id: "iaaa1", prompt: "Where does MFA sit?", options: [ { id: "a", text: "Authentication", correct: true, explanation: "MFA strengthens proof." }, { id: "b", text: "Authorisation", correct: false, explanation: "Authorisation happens after login." } ] },
+    { id: "iaaa2", prompt: "What makes logs useful?", options: [ { id: "a", text: "Timestamps and identity", correct: true, explanation: "Who and when are key." }, { id: "b", text: "Random samples", correct: false, explanation: "Sampling without context loses accountability." } ] },
+    { id: "iaaa3", prompt: "Why do I time-limit privileges?", options: [ { id: "a", text: "To shrink the blast radius", correct: true, explanation: "Short windows reduce harm." }, { id: "b", text: "To annoy users", correct: false, explanation: "It is for safety." } ] },
+    { id: "iaaa4", prompt: "Which factor is NOT MFA?", options: [ { id: "a", text: "Something you forgot", correct: true, explanation: "Forgotten items are not factors." }, { id: "b", text: "Something you have", correct: false, explanation: "Possession is a factor." } ] },
+    { id: "iaaa5", prompt: "What happens if identification is weak?", options: [ { id: "a", text: "Impersonation risk grows", correct: true, explanation: "Weak claims invite spoofing." }, { id: "b", text: "No impact", correct: false, explanation: "Weak claims break trust." } ] },
   ]}
 />
 
 ---
 
-## Risk in numbers I can reason with
+## Risk with numbers I trust
 
-I avoided formulas until I understood the story. Now I use one simple equation:
+I avoided formulas until I could tell the story. Now I use one simple equation:
 
 <MathBlock formula={"Risk = \\text{Likelihood} \times \\text{Impact}"} />
 
 <Callout type="note" title="How I read it">
-If either likelihood or impact is near zero, risk is near zero. I do not over-fit false precision.
+If either term approaches zero, risk drops sharply. I do not pretend the numbers are precise; they are a comparison tool.
 </Callout>
 
-I work small examples to internalise it:
+Worked examples I use:
 
-- Phishing that lands monthly with small clean-up: <MathInline formula={"0.5 \times 2 = 1"} />
-- Ransomware once a year but catastrophic: <MathInline formula={"0.05 \times 50 = 2.5"} />
+- Phishing that lands monthly with small cleanup: <MathInline formula={"0.5 \times 2 = 1"} />.
+- Ransomware once a year but catastrophic: <MathInline formula={"0.05 \times 50 = 2.5"} />.
 
 <TimelineDiagram
   title="Harm story"
@@ -163,11 +146,22 @@ I work small examples to internalise it:
   ]}
 />
 
+<Quiz
+  title="Risk reasoning"
+  questions={[
+    { id: "r1", prompt: "Why multiply likelihood and impact?", options: [ { id: "a", text: "Zero in one term zeros risk", correct: true, explanation: "Product captures that behaviour." }, { id: "b", text: "To make maths harder", correct: false, explanation: "It is about behaviour, not difficulty." } ] },
+    { id: "r2", prompt: "What changes first in fast-moving threats?", options: [ { id: "a", text: "Likelihood", correct: true, explanation: "Frequency often shifts before impact." }, { id: "b", text: "Colour of dashboards", correct: false, explanation: "Colours do not affect risk." } ] },
+    { id: "r3", prompt: "How do I reduce risk without changing impact?", options: [ { id: "a", text: "Lower likelihood", correct: true, explanation: "Prevention reduces events." }, { id: "b", text: "Change units", correct: false, explanation: "Units do not affect the product." } ] },
+    { id: "r4", prompt: "Why revisit risk regularly?", options: [ { id: "a", text: "Likelihood and impact move", correct: true, explanation: "Context changes." }, { id: "b", text: "Maths decays", correct: false, explanation: "The model holds; inputs change." } ] },
+    { id: "r5", prompt: "Which is harder to estimate?", options: [ { id: "a", text: "Likelihood", correct: true, explanation: "Frequency is often fuzzy." }, { id: "b", text: "Impact", correct: false, explanation: "Impact can be scoped with scenarios." } ] },
+  ]}
+/>
+
 ---
 
-## Bits, bytes, and why position matters
+## Bits, bytes, and weight
 
-I struggled with binary until I flipped bits by hand. A bit is a physical state. Stacking bits doubles choices each time:
+I finally understood binary by flipping bits. A bit is a physical state (voltage high/low, magnetised/not). Each extra bit doubles possibilities.
 
 <MathBlock formula={"2^8 = 256"} />
 
@@ -184,16 +178,13 @@ I struggled with binary until I flipped bits by hand. A bit is a physical state.
 </ToolCard>
 
 <Quiz
-  title="Binary check"
+  title="Binary depth"
   questions={[
-    {
-      id: "bin1",
-      prompt: "What happens when I flip the leftmost bit in an 8-bit number?",
-      options: [
-        { id: "a", text: "It adds 128", correct: true, explanation: "Most significant bit doubles the range." },
-        { id: "b", text: "It adds 1", correct: false, explanation: "The rightmost bit adds 1." }
-      ]
-    }
+    { id: "b1", prompt: "What does the leftmost bit do in 8 bits?", options: [ { id: "a", text: "Adds 128", correct: true, explanation: "It is the most significant bit." }, { id: "b", text: "Adds 1", correct: false, explanation: "Rightmost bit adds 1." } ] },
+    { id: "b2", prompt: "Why is binary convenient for hardware?", options: [ { id: "a", text: "Two clear states", correct: true, explanation: "Noise tolerant." }, { id: "b", text: "Humans love base 2", correct: false, explanation: "We prefer base 10; hardware prefers 2." } ] },
+    { id: "b3", prompt: "What causes overflow?", options: [ { id: "a", text: "Result needs more bits than available", correct: true, explanation: "Overflow loses information." }, { id: "b", text: "Too many users", correct: false, explanation: "Users do not cause overflow." } ] },
+    { id: "b4", prompt: "Why pad binary numbers when adding?", options: [ { id: "a", text: "To align positions", correct: true, explanation: "Alignment keeps carries correct." }, { id: "b", text: "To make it pretty", correct: false, explanation: "It is functional, not cosmetic." } ] },
+    { id: "b5", prompt: "How many values in 16 bits?", options: [ { id: "a", text: "65,536", correct: true, explanation: "2^16." }, { id: "b", text: "256", correct: false, explanation: "That is 8 bits." } ] },
   ]}
 />
 
@@ -201,47 +192,46 @@ I struggled with binary until I flipped bits by hand. A bit is a physical state.
 
 ## Encoding and meaning
 
-Bytes are just numbers. Meaning appears when I apply an encoding like UTF-8.
+Bytes are just numbers until I choose an encoding. ASCII maps basic English to single bytes. UTF-8 keeps ASCII for the first 128 symbols and uses extra bytes for others.
 
 <LayerDiagram
   title="Encoding stack"
-  layers={[
-    { label: "Idea" },
-    { label: "Characters" },
-    { label: "Bytes" },
-    { label: "Signals" }
-  ]}
+  layers={[{ label: "Idea" }, { label: "Characters" }, { label: "Bytes" }, { label: "Signals" }]}
 />
 
 <ToolCard title="Encoding inspector" description="See how text becomes bytes." lazy>
   <EncodingInspector />
 </ToolCard>
 
+<Quiz
+  title="Encoding depth"
+  questions={[
+    { id: "e1", prompt: "Why do emojis use more bytes?", options: [ { id: "a", text: "UTF-8 uses multi-byte sequences", correct: true, explanation: "Beyond ASCII range." }, { id: "b", text: "They are compressed", correct: false, explanation: "Not compression; encoding." } ] },
+    { id: "e2", prompt: "What is a code point?", options: [ { id: "a", text: "A number assigned to a character", correct: true, explanation: "Unicode code point." }, { id: "b", text: "A network port", correct: false, explanation: "Different concept." } ] },
+    { id: "e3", prompt: "Why does encoding matter for security?", options: [ { id: "a", text: "Mismatched decoding causes bugs", correct: true, explanation: "Ambiguity can be exploited." }, { id: "b", text: "Encoding is encryption", correct: false, explanation: "Encoding is not secrecy." } ] },
+    { id: "e4", prompt: "How many ASCII characters?", options: [ { id: "a", text: "128", correct: true, explanation: "7-bit ASCII." }, { id: "b", text: "256", correct: false, explanation: "UTF-8 uses bytes, but ASCII is 128." } ] },
+    { id: "e5", prompt: "Why normalise input?", options: [ { id: "a", text: "To avoid visually identical different code points", correct: true, explanation: "Homoglyph attacks exist." }, { id: "b", text: "To shrink storage", correct: false, explanation: "Security first." } ] },
+  ]}
+/>
+
 ---
 
 ## Hashes and integrity
 
-Hashes reassure me that data stayed the same. One changed bit should shift many output characters (avalanche).
-
-<Callout type="tip" title="Why I trust hashes carefully">
-A hash proves integrity if I trust the key path and algorithm choice. MD5 and SHA-1 are broken for collisions; I use SHA-256 or better.
-</Callout>
+Hashes let me check if data changed. A tiny input change should flip many output bits (avalanche). I only trust hashes when the algorithm is sound and the path is trusted.
 
 <ToolCard title="Hash avalanche" description="See how tiny changes alter a hash." lazy>
   <HashAvalancheVisualizer />
 </ToolCard>
 
 <Quiz
-  title="Hash check"
+  title="Hash depth"
   questions={[
-    {
-      id: "hash1",
-      prompt: "Why is hashing not encryption?",
-      options: [
-        { id: "a", text: "Hashing is one-way", correct: true, explanation: "I cannot reverse a good hash." },
-        { id: "b", text: "Hashing hides keys", correct: false, explanation: "Keys are not involved." }
-      ]
-    }
+    { id: "hsh1", prompt: "Why are MD5 and SHA-1 unsafe?", options: [ { id: "a", text: "Collision attacks", correct: true, explanation: "Collisions weaken integrity." }, { id: "b", text: "They are too long", correct: false, explanation: "Length is not the issue." } ] },
+    { id: "hsh2", prompt: "What makes a hash one-way?", options: [ { id: "a", text: "No feasible inversion", correct: true, explanation: "You cannot retrieve the original." }, { id: "b", text: "Hidden key", correct: false, explanation: "Hashes do not rely on secret keys." } ] },
+    { id: "hsh3", prompt: "Why salt passwords?", options: [ { id: "a", text: "To stop rainbow tables", correct: true, explanation: "Salts make precomputation hard." }, { id: "b", text: "To shorten output", correct: false, explanation: "Salts do not shorten hashes." } ] },
+    { id: "hsh4", prompt: "What is avalanche effect?", options: [ { id: "a", text: "Small input change, large output change", correct: true, explanation: "Good hashes avalanche." }, { id: "b", text: "Output always grows", correct: false, explanation: "Output is fixed size." } ] },
+    { id: "hsh5", prompt: "Why use SHA-256 over SHA-1?", options: [ { id: "a", text: "Stronger collision resistance", correct: true, explanation: "Better integrity assurance." }, { id: "b", text: "Shorter output", correct: false, explanation: "SHA-256 is longer." } ] },
   ]}
 />
 
@@ -249,65 +239,52 @@ A hash proves integrity if I trust the key path and algorithm choice. MD5 and SH
 
 ## Entropy and guessing effort
 
-I remember entropy as the difficulty of guessing. Length beats clever substitutions.
+Entropy is how hard it is to guess. Length dominates clever substitutions. The simple model I use is:
 
 <MathBlock formula={"H = L \times \log_2(N)"} />
+
+where \(L\) is length and \(N\) is character set size. Example: a 4-digit PIN has <MathInline formula={"4 \times \log_2(10) \approx 13.3"} /> bits of effort.
 
 <ToolCard title="Entropy simulator" description="See how length and charset change effort." lazy>
   <EntropySimulator />
 </ToolCard>
 
+<Quiz
+  title="Entropy depth"
+  questions={[
+    { id: "en1", prompt: "What increases entropy fastest?", options: [ { id: "a", text: "Length", correct: true, explanation: "Length multiplies effort." }, { id: "b", text: "Swapping letters for numbers", correct: false, explanation: "Minor substitutions help less." } ] },
+    { id: "en2", prompt: "Why is reuse dangerous?", options: [ { id: "a", text: "A breach exposes all reused sites", correct: true, explanation: "Reuse removes entropy across sites." }, { id: "b", text: "It slows logins", correct: false, explanation: "Speed is not the concern." } ] },
+    { id: "en3", prompt: "What is log2 in the formula?", options: [ { id: "a", text: "Logarithm base 2", correct: true, explanation: "We measure bits." }, { id: "b", text: "A random constant", correct: false, explanation: "It is defined." } ] },
+    { id: "en4", prompt: "Why avoid predictable patterns?", options: [ { id: "a", text: "They shrink the real search space", correct: true, explanation: "Guessers skip patterns." }, { id: "b", text: "They break hashing", correct: false, explanation: "Hashing still works; guessing is easier." } ] },
+    { id: "en5", prompt: "Why is a long passphrase strong?", options: [ { id: "a", text: "More combinations to try", correct: true, explanation: "Length multiplies possibilities." }, { id: "b", text: "It confuses computers", correct: false, explanation: "Computers do not confuse; they brute force." } ] },
+  ]}
+/>
+
 ---
 
 ## Practice studio
 
-- Match incidents to harms using the sorter, then explain each choice aloud.
+- Use the sorter to explain each harm in one sentence.
 - Flip bits and predict values before checking.
-- Encode emoji and note byte length changes.
-- Hash a sentence, change one character, count differences.
-- Adjust entropy slider until it feels hard to guess, then explain why.
+- Encode emoji and explain why byte length jumps.
+- Hash a sentence, change one character, and count differences.
+- Adjust the entropy slider until it feels strong; justify the choice.
 
 ---
 
-## Checkpoint quiz
-
-<Quiz
-  title="Chapter 1 checkpoint"
-  questions={[
-    {
-      id: "chk1",
-      prompt: "What makes risk drop fastest in the simple formula?",
-      options: [
-        { id: "a", text: "Reducing likelihood or impact towards zero", correct: true, explanation: "Either factor near zero collapses the product." },
-        { id: "b", text: "Changing units", correct: false, explanation: "Units do not change the product." }
-      ]
-    },
-    {
-      id: "chk2",
-      prompt: "Why do I treat availability as security?",
-      options: [
-        { id: "a", text: "Because downtime is harm", correct: true, explanation: "If users cannot use a service, security failed its purpose." },
-        { id: "b", text: "Because availability is only performance", correct: false, explanation: "Security must preserve service, not just speed." }
-      ]
-    },
-    {
-      id: "chk3",
-      prompt: "What does UTF-8 change?",
-      options: [
-        { id: "a", text: "It maps characters to bytes", correct: true, explanation: "Encoding turns symbols into byte sequences." },
-        { id: "b", text: "It encrypts text", correct: false, explanation: "Encoding is not encryption." }
-      ]
-    }
+<Recap
+  title="Chapter 1 recap"
+  points={[
+    "Security is harm reduction balanced across confidentiality, integrity, and availability.",
+    "Risk is a product; small shifts in either term can dominate decisions.",
+    "Bits are physical states; encoding gives meaning and hashing checks integrity.",
+    "Entropy favours length and variety; reuse erases effort.",
   ]}
-/>
-
-<PrintSummary
-  title="Chapter 1 – what I carry forward"
-  bullets={[
-    "Harm reduction is the goal; I balance confidentiality, integrity, availability.",
-    "Risk is a product, not a vibe; small changes in either factor can dominate.",
-    "Bits are physical states; position controls weight.",
-    "Encoding gives meaning; hashing gives integrity if the path is trusted.",
-    "Entropy favours length and variety; guessing effort is maths, not myth."
+  terms={["Confidentiality", "Integrity", "Availability", "Entropy", "Hash", "Encoding", "Least privilege", "MFA"]}
+  actions={[
+    "Balance CIA for each system instead of chasing one goal.",
+    "Revisit likelihood and impact regularly; adjust controls.",
+    "Test backups and restores, not just encryption.",
+    "Use long, unique secrets stored in a manager; enable MFA.",
   ]}
 />

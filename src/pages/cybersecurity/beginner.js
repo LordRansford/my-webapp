@@ -6,9 +6,10 @@ import { loadNote } from "@/lib/content/loadNote";
 import ToolCard from "@/components/notes/ToolCard";
 import { Callout } from "@/components/notes/Callout";
 import { DeeperDive } from "@/components/notes/DeeperDive";
-import { PrintSummary } from "@/components/notes/PrintSummary";
 import { MathInline, MathBlock } from "@/components/notes/Math";
 import { FlowDiagram, LayerDiagram, TimelineDiagram, BoundaryDiagram, ComparisonDiagram } from "@/components/notes/diagrams";
+import Recap from "@/components/notes/Recap";
+import NotesPager from "@/components/notes/NotesPager";
 
 const SecurityGoalsSorter = dynamic(() => import("@/components/notes/tools/cybersecurity/ch1/SecurityGoalsSorter"), { ssr: false });
 const RiskDial = dynamic(() => import("@/components/notes/tools/cybersecurity/ch1/RiskDial"), { ssr: false });
@@ -20,13 +21,12 @@ const HashAvalancheVisualizer = dynamic(() => import("@/components/notes/tools/c
 const EntropySimulator = dynamic(() => import("@/components/notes/tools/cybersecurity/ch1/EntropySimulator"), { ssr: false });
 const Quiz = dynamic(() => import("@/components/Quiz"), { ssr: false });
 
-export default function Page({ source, meta }) {
+export default function Page({ source }) {
   const mdxComponents = useMemo(
     () => ({
       ToolCard,
       Callout,
       DeeperDive,
-      PrintSummary,
       MathInline,
       MathBlock,
       FlowDiagram,
@@ -43,19 +43,18 @@ export default function Page({ source, meta }) {
       HashAvalancheVisualizer,
       EntropySimulator,
       Quiz,
+      Recap,
     }),
     []
   );
 
   return (
-    <NotesLayout
-      title="Cybersecurity Notes"
-      subtitle="Chapter 1 – Foundations"
-      pageKey="cybersecurity-ch1"
-    >
-      <article className="prose max-w-4xl prose-neutral text-[17px] leading-[1.85]">
-        <MDXRenderer source={source} components={mdxComponents} />
-      </article>
+    <NotesLayout title="Cybersecurity Notes" subtitle="Chapter 1 – Foundations" pageKey="cybersecurity-ch1">
+      <MDXRenderer source={source} components={mdxComponents} />
+      <NotesPager
+        prev={null}
+        next={{ href: "/cybersecurity/intermediate", label: "Chapter 2" }}
+      />
     </NotesLayout>
   );
 }
@@ -65,7 +64,6 @@ export async function getStaticProps() {
   return {
     props: {
       source: note.source,
-      meta: note.meta,
     },
   };
 }

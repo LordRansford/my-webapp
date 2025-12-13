@@ -1,238 +1,234 @@
 ---
 title: "Cybersecurity Notes - Chapter 2"
-description: "Intermediate foundations: how information moves across networks and how trust is built (and fails)."
+description: "How I understand networks: packets, latency, DNS, TLS, and where trust fails." 
 level: "intermediate"
 ---
+
+import ToolCard from "@/components/notes/ToolCard"
+import { Callout } from "@/components/notes/Callout"
+import { DeeperDive } from "@/components/notes/DeeperDive"
+import { MathBlock, MathInline } from "@/components/notes/Math"
+import { FlowDiagram, LayerDiagram, TimelineDiagram, BoundaryDiagram, ComparisonDiagram } from "@/components/notes/diagrams"
+import Quiz from "@/components/Quiz"
+import Recap from "@/components/notes/Recap"
+import {
+  PacketJourneyTool,
+  LbtSimulator,
+  InterceptionExplorer,
+  DNSJourney,
+  HandshakeExplorer,
+  CertificateChainExplorer,
+  IntegrityLab,
+  MiniIncidentSimulator,
+} from "@/components/notes/cybersecurity/chapter2-tools"
 
 # Cybersecurity Notes
 
 ## Chapter 2 - How Information Moves and How Trust Is Built
 
-In Chapter 1, we saw that data is physical, systems fail, and cybersecurity reduces harm rather than chasing perfection. We learned bits, bytes, entropy, and hashes. Now we move to what happens when information leaves one computer and travels through shared spaces to reach another. We focus on why communication is fragile, where trust breaks, and how security mechanisms attempt to restore confidence.
+In Chapter 1, I learned that data is physical and security is harm reduction. Now I follow the data as it leaves one machine, crosses shared space, and returns. I want to know where trust is assumed, how to measure it, and how to fix it when it fails.
 
-<Callout type="memory" title="Memory hook">
-Networks are shared spaces, not private tunnels.
-</Callout>
+<Callout type="memory" title="My reminder">Networks are shared spaces, not private tunnels.</Callout>
 
 ---
 
 ## From messages to packets
 
-When information is sent across a network, it is broken into smaller pieces called packets. Packetisation exists because many devices share the same links. Breaking messages into packets allows networks to interleave traffic, recover from loss, and route around failures. It also introduces failure modes: packets can be delayed, dropped, duplicated, or arrive out of order.
+Messages are chopped into packets so many devices can share links and recover from loss. Packets can be delayed, dropped, duplicated, or reordered. Reliability is rebuilt by protocols, not the wire.
 
-### Why packet size matters
+<FlowDiagram title="Packet journey" steps={["Message", "Segments", "Packets", "Frames", "Signals"]} />
 
-Packet size is a trade-off:
+<Callout type="note" title="Trade-offs">
+Small packets waste overhead; large packets make loss expensive. I choose sizes based on loss patterns and MTU.
+</Callout>
 
-- Small packets reduce retransmission cost but increase overhead.
-- Large packets reduce overhead but increase cost when loss occurs.
+<MathBlock formula={"\\text{Packets} = \frac{\\text{Message size}}{\\text{Packet size}}"} />
 
-Security design must assume loss and reordering will occur.
+<ToolCard title="Packet journey" description="See how messages split and reassemble." lazy>
+  <PacketJourneyTool />
+</ToolCard>
 
-### Worked example
-
-If a message is approximately 1 MB and packets are 1 KB:
-
-<MathBlock formula={"\\text{Packets} = \\frac{1000\\ \\text{KB}}{1\\ \\text{KB}} = 1000"} />
-
-If one packet is lost, only that packet needs to be resent. Sending the whole message as one unit would require restarting everything.
-
-<PacketJourneyTool />
-
-### Questions
-
-- Why are messages split into packets?
-- What happens if packets arrive out of order?
-- Why does packet loss not usually corrupt the entire message?
-- Where does reliability come from if the network does not guarantee it?
-- Which security properties are threatened by packet loss?
-- Which properties are threatened by packet modification?
+<Quiz
+  title="Packets and loss"
+  questions={[
+    { id: "p1", prompt: "Why split messages?", options: [ { id: "a", text: "Share links and recover loss", correct: true, explanation: "Packets interleave traffic and allow partial resend." }, { id: "b", text: "Make data smaller", correct: false, explanation: "Total data size stays similar." } ] },
+    { id: "p2", prompt: "What happens to out-of-order packets?", options: [ { id: "a", text: "Protocols reorder", correct: true, explanation: "TCP reassembles." }, { id: "b", text: "They are discarded", correct: false, explanation: "Not always; TCP reorders." } ] },
+    { id: "p3", prompt: "Why do large packets hurt on loss?", options: [ { id: "a", text: "More data must be resent", correct: true, explanation: "Retransmission cost grows." }, { id: "b", text: "Routers dislike them", correct: false, explanation: "Cost, not dislike." } ] },
+    { id: "p4", prompt: "Which property is hit by dropped packets?", options: [ { id: "a", text: "Availability", correct: true, explanation: "Service can stutter." }, { id: "b", text: "Font choice", correct: false, explanation: "Aesthetics unaffected." } ] },
+    { id: "p5", prompt: "Why do I care about MTU?", options: [ { id: "a", text: "Avoid fragmentation", correct: true, explanation: "Fragmentation risks loss." }, { id: "b", text: "For decoration", correct: false, explanation: "MTU is technical." } ] },
+  ]}
+/>
 
 ---
 
 ## The three numbers that rule networks
 
-Three quantities dominate behaviour: latency, bandwidth, and throughput. They describe different constraints.
+Latency, bandwidth, and throughput describe constraints. Latency is travel time. Bandwidth is capacity. Throughput is what I actually get after loss and protocol overhead.
 
-**Latency** is the time it takes for a signal to travel from one point to another (milliseconds). High latency means delays even if capacity is high.
+<ComparisonDiagram
+  title="Latency vs bandwidth"
+  left={{ label: "Latency", detail: "Time per trip" }}
+  right={{ label: "Bandwidth", detail: "Capacity per second" }}
+/>
 
-**Bandwidth** is the maximum rate at which data can be transmitted (bits per second). It describes capacity, not delivery speed.
+<MathBlock formula={"1\\ \text{MB} = 8\\ \text{Mb}"} />
 
-**Throughput** is the amount of data actually delivered per unit time. It is affected by latency, loss, and protocol behaviour.
+<ToolCard title="Latency / bandwidth simulator" description="See how latency, loss, and bandwidth interact." lazy>
+  <LbtSimulator />
+</ToolCard>
 
-Networks are measured in bits per second, not bytes. 1 byte = 8 bits. 1 MB = 8 Mb. A 10 Mbps link does not deliver 10 MB per second.
-
-### Worked example
-
-If a message is 1 MB:
-
-<MathBlock formula={"1\\ \\text{MB} = 8\\ \\text{Mb}"} />
-
-On a 10 Mbps link:
-
-<MathBlock formula={"\\text{Time} = \\frac{8\\ \\text{Mb}}{10\\ \\text{Mb/s}} = 0.8\\ \\text{s}"} />
-
-Assumes no latency or loss; real networks are noisier.
-
-<LbtSimulator />
-
-### Questions
-
-- What is the difference between bandwidth and throughput?
-- Why do we multiply by 8 when converting MB to Mb?
-- Why does latency matter for security protocols?
-- Calculate delivery time for 5 MB over 20 Mbps.
-- Why does packet loss reduce throughput?
+<Quiz
+  title="Latency, bandwidth, throughput"
+  questions={[
+    { id: "l1", prompt: "Why convert MB to Mb?", options: [ { id: "a", text: "Links are measured in bits", correct: true, explanation: "Network speeds use bits." }, { id: "b", text: "To confuse", correct: false, explanation: "It is a convention." } ] },
+    { id: "l2", prompt: "What limits TLS handshakes most?", options: [ { id: "a", text: "Latency", correct: true, explanation: "Round trips matter." }, { id: "b", text: "Disk speed", correct: false, explanation: "Disks are not in the handshake path." } ] },
+    { id: "l3", prompt: "Throughput falls when?", options: [ { id: "a", text: "Loss increases", correct: true, explanation: "Retransmissions drop throughput." }, { id: "b", text: "Screen is dim", correct: false, explanation: "Display does not matter." } ] },
+    { id: "l4", prompt: "Why add buffers carefully?", options: [ { id: "a", text: "Too much causes bloat", correct: true, explanation: "Bufferbloat raises latency." }, { id: "b", text: "Buffers delete data", correct: false, explanation: "They store, not delete." } ] },
+    { id: "l5", prompt: "How long for 5 MB on 20 Mbps?", options: [ { id: "a", text: "~2 seconds", correct: true, explanation: "5 MB = 40 Mb; 40/20=2s ideal." }, { id: "b", text: "~0.2 seconds", correct: false, explanation: "Too optimistic." } ] },
+  ]}
+/>
 
 ---
 
 ## Where attacks can occur in transit
 
-Data passes through many independent systems. Each hop is a boundary where trust may fail. Observation, modification, blocking, and impersonation are all possible depending on attacker position. This ties directly to confidentiality, integrity, availability, and authenticity from Chapter 1.
+Data hops across networks, each hop with its own trust boundary. An attacker positioned at a hop can observe, modify, or block traffic.
 
-<InterceptionExplorer />
+<BoundaryDiagram
+  title="Trust boundary"
+  inside={["Client", "ISP", "Resolver"]}
+  outside={["Open Wi-Fi", "Rogue gateway", "Compromised router"]}
+/>
 
-### Questions
+<ToolCard title="Interception explorer" description="See what each attacker position can do." lazy>
+  <InterceptionExplorer />
+</ToolCard>
 
-- Name three points where interception can occur.
-- Why is public Wi-Fi especially risky?
-- Which attacks threaten availability?
-- Which threaten authenticity?
-- Why does trust decrease as paths lengthen?
+<Quiz
+  title="Transit threats"
+  questions={[
+    { id: "t1", prompt: "Why is public Wi-Fi risky?", options: [ { id: "a", text: "Shared broadcast domain", correct: true, explanation: "Easy to observe traffic." }, { id: "b", text: "Better coffee", correct: false, explanation: "Coffee is unrelated." } ] },
+    { id: "t2", prompt: "Which goal does DoS attack?", options: [ { id: "a", text: "Availability", correct: true, explanation: "It takes service down." }, { id: "b", text: "Colour", correct: false, explanation: "Aesthetics again." } ] },
+    { id: "t3", prompt: "What mitigates spoofing on local nets?", options: [ { id: "a", text: "Port security / 802.1X", correct: true, explanation: "Tie identity to port." }, { id: "b", text: "Bigger fonts", correct: false, explanation: "Fonts do nothing." } ] },
+    { id: "t4", prompt: "Why still use TLS on trusted networks?", options: [ { id: "a", text: "Threats may exist inside", correct: true, explanation: "Inside attacks happen." }, { id: "b", text: "TLS is faster", correct: false, explanation: "Speed not main reason." } ] },
+    { id: "t5", prompt: "What is authenticity loss?", options: [ { id: "a", text: "Talking to the wrong party", correct: true, explanation: "Authenticity is about identity." }, { id: "b", text: "Packet delay", correct: false, explanation: "Delay is availability." } ] },
+  ]}
+/>
 
 ---
 
 ## DNS as a trust decision
 
-Humans use names; networks use numbers. DNS maps between them. This mapping is a trust decision. If DNS lies, everything built on top may fail silently.
+DNS maps names to IP addresses. It is a trust step: if DNS lies, the padlock can still appear while I talk to the wrong server.
 
-### End-to-end failure story
+<FlowDiagram title="DNS flow" steps={["Query", "Resolver", "Root/TLD", "Authoritative", "Response"]} />
 
-User types a familiar domain. Resolver returns an incorrect IP. Browser connects to the wrong system. The site looks correct. Credentials are stolen. Encryption may still succeed; failure occurred earlier.
+<ToolCard title="DNS journey" description="Walk through resolution and poisoning." lazy>
+  <DNSJourney />
+</ToolCard>
 
-<DNSJourney />
-
-### Questions
-
-- What problem does DNS solve?
-- Why is caching both useful and risky?
-- What is a resolver?
-- What happens if DNS returns the wrong address?
-- Why might the browser still show a padlock?
-- Which controls reduce DNS risk?
+<Quiz
+  title="DNS depth"
+  questions={[
+    { id: "d1", prompt: "Why cache DNS?", options: [ { id: "a", text: "Reduce latency", correct: true, explanation: "Caching speeds lookups." }, { id: "b", text: "Remove trust", correct: false, explanation: "Trust still required." } ] },
+    { id: "d2", prompt: "What if cache is poisoned?", options: [ { id: "a", text: "Users go to attacker", correct: true, explanation: "Wrong IP returned." }, { id: "b", text: "Page loads faster", correct: false, explanation: "Fast to wrong host is still wrong." } ] },
+    { id: "d3", prompt: "Why does padlock still show?", options: [ { id: "a", text: "TLS to attacker domain still valid", correct: true, explanation: "TLS secures the wrong endpoint." }, { id: "b", text: "Browser bug", correct: false, explanation: "It is expected if cert matches host." } ] },
+    { id: "d4", prompt: "What reduces DNS risk?", options: [ { id: "a", text: "DNSSEC, DoH/DoT, pinned IPs", correct: true, explanation: "They harden resolution." }, { id: "b", text: "Changing fonts", correct: false, explanation: "Not relevant." } ] },
+    { id: "d5", prompt: "What is a resolver?", options: [ { id: "a", text: "Server that looks up names", correct: true, explanation: "It resolves names to IPs." }, { id: "b", text: "A firewall", correct: false, explanation: "Different role." } ] },
+  ]}
+/>
 
 ---
 
 ## Encryption protects secrecy, not identity
 
-Encryption ensures confidentiality. It does not prove who you are talking to. Perfect encryption can still give data to the wrong party. Weak entropy produces weak keys. Perfect algorithms cannot compensate for poor randomness.
+Encryption keeps content secret but does not prove who I am talking to. I still need authentication and key agreement with good entropy.
 
-<HandshakeExplorer />
+<FlowDiagram title="Handshake steps" steps={["Hello", "Keys", "Verify", "Secure channel"]} />
 
-### Questions
+<ToolCard title="TLS handshake" description="Step through the handshake." lazy>
+  <HandshakeExplorer />
+</ToolCard>
 
-- What does encryption guarantee?
-- What does it not guarantee?
-- How can encryption be used in a scam?
-- Why does entropy matter for keys?
-- Why are handshakes necessary?
+<Quiz
+  title="Encryption depth"
+  questions={[
+    { id: "e1", prompt: "What does encryption guarantee?", options: [ { id: "a", text: "Confidentiality", correct: true, explanation: "It hides content." }, { id: "b", text: "Identity", correct: false, explanation: "Identity needs certificates." } ] },
+    { id: "e2", prompt: "Why is entropy vital for keys?", options: [ { id: "a", text: "Predictable keys are guessable", correct: true, explanation: "Weak randomness breaks secrecy." }, { id: "b", text: "It makes keys pretty", correct: false, explanation: "Aesthetics again." } ] },
+    { id: "e3", prompt: "How can encryption be misused?", options: [ { id: "a", text: "Encrypted phishing", correct: true, explanation: "TLS can hide malicious traffic." }, { id: "b", text: "It stops all attacks", correct: false, explanation: "It is one control only." } ] },
+    { id: "e4", prompt: "Why handshakes?", options: [ { id: "a", text: "Agree keys and identity", correct: true, explanation: "They set secrets and trust." }, { id: "b", text: "Add latency", correct: false, explanation: "Latency is side effect." } ] },
+    { id: "e5", prompt: "What does perfect secrecy still lack?", options: [ { id: "a", text: "Assurance of who I talk to", correct: true, explanation: "Identity separate." }, { id: "b", text: "Maths", correct: false, explanation: "Maths is present." } ] },
+  ]}
+/>
 
 ---
 
 ## Certificates and trust chains
 
-Certificates bind keys to identities. A certificate answers: who vouches for this identity? Chains exist because no single entity is universally trusted.
+Certificates bind keys to identities using a chain of trust. A warning ignored is a trust failure even if encryption stays strong.
 
-### Failure story
+<BoundaryDiagram title="Trust chain" inside={["Leaf cert", "Intermediate", "Root"]} outside={["User", "Rogue CA"]} />
 
-Certificate is misissued or a warning is ignored. Browser establishes a secure connection. User trusts the wrong system. Security mechanisms worked; human trust failed.
+<ToolCard title="Certificate chain" description="Inspect a chain and simulate failure." lazy>
+  <CertificateChainExplorer />
+</ToolCard>
 
-<CertificateChainExplorer />
-
-### Questions
-
-- What is a certificate?
-- What is a certificate authority?
-- What is a trust anchor?
-- What does expiry mean?
-- Why are browser warnings serious?
-- What happens if a CA is compromised?
+<Quiz
+  title="Certificates"
+  questions={[
+    { id: "c1", prompt: "What is a trust anchor?", options: [ { id: "a", text: "Root CA", correct: true, explanation: "Roots anchor trust." }, { id: "b", text: "User browser", correct: false, explanation: "Browser stores anchors." } ] },
+    { id: "c2", prompt: "Why do certs expire?", options: [ { id: "a", text: "Limit risk window", correct: true, explanation: "Expiry forces renewal." }, { id: "b", text: "To sell more", correct: false, explanation: "Security reason first." } ] },
+    { id: "c3", prompt: "What if a CA is compromised?", options: [ { id: "a", text: "Chain trust breaks", correct: true, explanation: "All issued certs suspect." }, { id: "b", text: "Nothing", correct: false, explanation: "It is serious." } ] },
+    { id: "c4", prompt: "Why heed browser warnings?", options: [ { id: "a", text: "They signal trust failure", correct: true, explanation: "Warnings matter." }, { id: "b", text: "They are decoration", correct: false, explanation: "Not cosmetic." } ] },
+    { id: "c5", prompt: "What binds name to key?", options: [ { id: "a", text: "Certificate subject/ SAN", correct: true, explanation: "Identity fields." }, { id: "b", text: "Cipher suite", correct: false, explanation: "Cipher is unrelated." } ] },
+  ]}
+/>
 
 ---
 
 ## Integrity in transit
 
-Confidentiality hides content. Integrity detects change. A hash detects modification but does not prove who sent the message. Adding a shared secret lets integrity imply authenticity.
+Hashes detect change. Adding a shared secret (MAC) ties integrity to identity. Integrity does not encrypt; it prevents undetected tampering.
 
-<IntegrityLab />
+<ToolCard title="Integrity lab" description="See how tampering is caught." lazy>
+  <IntegrityLab />
+</ToolCard>
 
-### Questions
-
-- Why does a hash detect change?
-- Why does a plain hash not prove identity?
-- What problem does a shared secret solve?
-- How does integrity support trust?
+<Quiz
+  title="Integrity"
+  questions={[
+    { id: "i1", prompt: "Why plain hash is not enough?", options: [ { id: "a", text: "Anyone can recompute", correct: true, explanation: "Hash alone lacks identity." }, { id: "b", text: "Hashes are secret", correct: false, explanation: "Hashes are public." } ] },
+    { id: "i2", prompt: "What does MAC add?", options: [ { id: "a", text: "Shared secret", correct: true, explanation: "Secret binds identity." }, { id: "b", text: "Longer messages", correct: false, explanation: "MAC is about trust." } ] },
+    { id: "i3", prompt: "Which goal is this?", options: [ { id: "a", text: "Integrity", correct: true, explanation: "Tamper detection." }, { id: "b", text: "Confidentiality", correct: false, explanation: "MAC does not hide." } ] },
+    { id: "i4", prompt: "Why keep keys separate?", options: [ { id: "a", text: "Limit blast radius", correct: true, explanation: "Separation helps." }, { id: "b", text: "Because RAM is free", correct: false, explanation: "Not the reason." } ] },
+    { id: "i5", prompt: "What is replay?", options: [ { id: "a", text: "Old valid message resent", correct: true, explanation: "Integrity needs freshness." }, { id: "b", text: "New message", correct: false, explanation: "Replay is reuse." } ] },
+  ]}
+/>
 
 ---
 
 ## Practice studio
 
-Apply everything in a realistic scenario involving phishing, DNS manipulation, certificate warnings, and credential theft.
+Put it together: phishing plus DNS manipulation plus cert warnings plus credential theft. Decide quickly, but justify.
 
-<ToolCard
-  title="Mini incident simulator"
-  intent="Practice reasoning under uncertainty."
-  predictPrompt="What is the safest next action?"
-  reflection="Which decision reduced harm the most?"
->
+<ToolCard title="Mini incident simulator" description="Practice reasoning under uncertainty." lazy>
   <MiniIncidentSimulator />
 </ToolCard>
 
-## Checkpoint
-
-You understand this chapter if you can:
-
-- Explain packetisation and loss.
-- Calculate simple transfer times with units.
-- Explain DNS trust failures.
-- Explain why encryption alone is insufficient.
-- Explain certificate warnings.
-- Explain integrity in transit.
-
-<PrintSummary
-  title="Intermediate communication and trust summary"
-  bullets={[
-    "Networks move signals through shared spaces",
-    "Packetisation trades overhead for resilience",
-    "Latency, bandwidth, and throughput constrain behaviour",
-    "DNS is a trust decision",
-    "Encryption protects secrecy, not identity",
-    "Certificates bind keys to identities",
-    "Integrity detects modification in transit",
+<Recap
+  title="Chapter 2 recap"
+  points={[
+    "Packets and loss shape reliability; MTU and retransmission matter.",
+    "Latency, bandwidth, and throughput pull in different directions.",
+    "DNS is a trust step; padlocks do not prove name truth.",
+    "Encryption hides content but identity needs certificates and chains.",
+    "Integrity needs secrets when identity matters; hashes alone are not enough.",
   ]}
-  keyTerms={["Packet", "Latency", "Throughput", "DNS", "Certificate", "Integrity"]}
-  diagrams={["Packet journey", "Network path", "DNS resolution", "Trust chain"]}
+  terms={["Latency", "Bandwidth", "Throughput", "DNS", "TLS", "Certificate", "MAC", "MTU"]}
+  actions={[
+    "Measure real latency and loss before tuning packet size.",
+    "Harden DNS with DNSSEC/DoH and monitor cache integrity.",
+    "Treat TLS warnings as incidents; review trust anchors.",
+    "Use MACs or AEAD when integrity plus identity is needed.",
+  ]}
 />
-
----
-
-## Quick visual anchors I use
-
-- Ladder sketch of DNS: user -> resolver -> root -> TLD -> auth -> answer. I highlight cache points in yellow.
-- TLS handshake grid: client messages in one column, server messages in another, mark where identity is asserted and where secrecy begins.
-- Packet layers as nested boxes: payload, TCP/UDP, IP, link. It keeps me clear on where addresses and ports live.
-
-### Extra practice prompts
-
-- Draw a spoofed DNS response and mark which field an attacker changes.
-- Explain to a friend why a padlock icon can still show during a phishing attack.
-- Pick one public Wi-Fi scenario and list three things you would log to prove what happened.
-
-## References that keep me grounded
-
-- IETF RFC 1034 and 1035 (DNS concepts) - reminds me what DNS really is.
-- OWASP ASVS sections on transport and session - useful checklists for application layer.
-- Mozilla SSL configuration generator - practical defaults for TLS.
-- CERT guides on logging and monitoring - helps me keep log fields disciplined.
-
-I treat these as checklists, then translate them into the patterns above so they stay practical.
