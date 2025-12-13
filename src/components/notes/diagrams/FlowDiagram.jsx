@@ -2,16 +2,26 @@
 
 import { DiagramFrame } from './DiagramFrame'
 
-export function FlowDiagram({ title, steps = [], accent = '#2563eb', reducedMotion = false }) {
+export function FlowDiagram({ title, steps = [], accent = '#2563eb', reducedMotion = false, highlight = -1 }) {
   return (
     <DiagramFrame title={title} ariaLabel={title} reducedMotion={reducedMotion}>
       <svg viewBox={`0 0 ${steps.length * 140} 140`} role="img" aria-label={title} className="w-full h-auto">
         {steps.map((step, idx) => {
           const x = 40 + idx * 140
+          const active = idx === highlight
           return (
             <g key={idx} data-step={idx} className="transition">
-              <rect x={x - 30} y={40} width="120" height="60" rx="12" fill="#f8fafc" stroke="#cbd5e1" />
-              <text x={x + 30} y={75} textAnchor="middle" className="text-[12px] fill-gray-800">
+              <rect
+                x={x - 30}
+                y={40}
+                width="120"
+                height="60"
+                rx="12"
+                fill={active ? '#e0e7ff' : '#f8fafc'}
+                stroke={active ? accent : '#cbd5e1'}
+                strokeWidth={active ? 2 : 1}
+              />
+              <text x={x + 30} y={75} textAnchor="middle" className={`text-[12px] ${active ? 'fill-gray-900 font-semibold' : 'fill-gray-800'}`}>
                 {step}
               </text>
               {idx < steps.length - 1 ? (

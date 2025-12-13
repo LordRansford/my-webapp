@@ -2,17 +2,34 @@
 
 import { DiagramFrame } from './DiagramFrame'
 
-export function LayerDiagram({ title, layers = [], accent = '#2563eb', showMapping = false, reducedMotion = false }) {
+export function LayerDiagram({
+  title,
+  layers = [],
+  accent = '#2563eb',
+  showMapping = false,
+  reducedMotion = false,
+  highlight = -1,
+}) {
   const height = layers.length * 40 + 20
   return (
     <DiagramFrame title={title} ariaLabel={title} reducedMotion={reducedMotion}>
       <svg viewBox={`0 0 300 ${height}`} className="w-full h-auto" role="img" aria-label={title}>
         {layers.map((layer, idx) => {
           const y = 10 + idx * 40
+          const active = idx === highlight
           return (
             <g key={layer.label} data-step={idx}>
-              <rect x="20" y={y} width="160" height="32" rx="8" fill="#f8fafc" stroke="#cbd5e1" />
-              <text x="100" y={y + 20} textAnchor="middle" className="text-[12px] fill-gray-800">
+              <rect
+                x="20"
+                y={y}
+                width="160"
+                height="32"
+                rx="8"
+                fill={active ? '#e0e7ff' : '#f8fafc'}
+                stroke={active ? accent : '#cbd5e1'}
+                strokeWidth={active ? 2 : 1}
+              />
+              <text x="100" y={y + 20} textAnchor="middle" className={`text-[12px] ${active ? 'fill-gray-900 font-semibold' : 'fill-gray-800'}`}>
                 {layer.label}
               </text>
               {showMapping && layer.mapTo ? (
