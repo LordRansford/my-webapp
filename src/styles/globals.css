@@ -10,11 +10,11 @@
   --bg: #f5f5f7;
   --bg-soft: #ffffff;
   --surface: #ffffff;
-  --surface-2: #f0f0f4;
+  --surface-2: #eef1f7;
   --card: #ffffff;
   --text: #1c1c1e;
   --muted: #6e6e73;
-  --line: #d2d2d7;
+  --line: #dfe3ec;
   --accent: #007aff;
   --accent-2: #34c759;
   --shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
@@ -1410,4 +1410,31 @@ textarea:focus {
   .note-sidebar {
     position: static;
   }
+}
+hr {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line), transparent);
+  margin: 1.5rem 0;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  border: none;
+  padding-bottom: 0;
+}
+
+.prose a {
+  text-decoration: none;
+  border: 0;
+}
+
+article {
+  background: radial-gradient(circle at 10% 20%, rgba(255,255,255,0.85), rgba(239,243,250,0.9)),
+    radial-gradient(circle at 80% 0%, rgba(213,223,245,0.5), transparent 45%);
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.06);
 }
