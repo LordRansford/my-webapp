@@ -1,9 +1,18 @@
-'use client'
+"use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
+import { use_tool_state } from "@/components/notes/hooks/use_tool_state";
+import ToolStateActions from "@/components/notes/ToolStateActions";
 
 export default function BitPositionExplorer() {
-  const [bits, setBits] = useState(Array(8).fill(0));
+  const { state, set_state, reset, copy_share_link, export_json, import_json, is_ready } = use_tool_state({
+    tool_id: "bit-position-explorer",
+    initial_state: { bits: Array(8).fill(0) },
+  });
+
+  if (!is_ready) return <p className="text-sm text-gray-600">Loading.</p>;
+
+  const bits = state.bits;
 
   const value = useMemo(
     () =>
@@ -15,11 +24,10 @@ export default function BitPositionExplorer() {
   );
 
   function toggleBit(index) {
-    setBits((prev) => prev.map((b, i) => (i === index ? (b === 1 ? 0 : 1) : b)));
-  }
-
-  function reset() {
-    setBits(Array(8).fill(0));
+    set_state((prev) => ({
+      ...prev,
+      bits: prev.bits.map((b, i) => (i === index ? (b === 1 ? 0 : 1) : b)),
+    }));
   }
 
   return (
@@ -51,9 +59,12 @@ export default function BitPositionExplorer() {
         </p>
       </div>
 
-      <button onClick={reset} className="text-xs text-gray-600 underline hover:text-gray-900">
-        Reset
-      </button>
+      <ToolStateActions
+        onReset={() => reset()}
+        onCopy={copy_share_link}
+        onExport={export_json}
+        onImport={import_json}
+      />
     </div>
   );
 }

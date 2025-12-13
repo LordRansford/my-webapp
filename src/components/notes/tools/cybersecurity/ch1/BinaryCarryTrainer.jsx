@@ -1,10 +1,18 @@
-'use client'
+"use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
+import { use_tool_state } from "@/components/notes/hooks/use_tool_state";
+import ToolStateActions from "@/components/notes/ToolStateActions";
 
 export default function BinaryCarryTrainer() {
-  const [a, setA] = useState("1011");
-  const [b, setB] = useState("0110");
+  const { state, set_state, reset, copy_share_link, export_json, import_json, is_ready } = use_tool_state({
+    tool_id: "binary-carry-trainer",
+    initial_state: { a: "1011", b: "0110" },
+  });
+
+  if (!is_ready) return <p className="text-sm text-gray-600">Loading.</p>;
+
+  const { a, b } = state;
 
   const steps = useMemo(() => addBinary(a, b), [a, b]);
 
@@ -15,8 +23,16 @@ export default function BinaryCarryTrainer() {
       </p>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <Field label="First number" value={a} onChange={setA} />
-        <Field label="Second number" value={b} onChange={setB} />
+        <Field
+          label="First number"
+          value={a}
+          onChange={(val) => set_state((prev) => ({ ...prev, a: val }))}
+        />
+        <Field
+          label="Second number"
+          value={b}
+          onChange={(val) => set_state((prev) => ({ ...prev, b: val }))}
+        />
       </div>
 
       <div className="rounded-lg border px-3 py-3 bg-gray-50 leading-6">
@@ -35,6 +51,13 @@ export default function BinaryCarryTrainer() {
           ))}
         </ol>
       </div>
+
+      <ToolStateActions
+        onReset={() => reset()}
+        onCopy={copy_share_link}
+        onExport={export_json}
+        onImport={import_json}
+      />
     </div>
   );
 }

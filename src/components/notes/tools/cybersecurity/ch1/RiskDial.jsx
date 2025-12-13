@@ -1,18 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { use_tool_state } from "@/components/notes/hooks/use_tool_state";
+import ToolStateActions from "@/components/notes/ToolStateActions";
 
 export default function RiskDial() {
-  const [likelihood, setLikelihood] = useState(2);
-  const [impact, setImpact] = useState(2);
+  const { state, set_state, reset, copy_share_link, export_json, import_json, is_ready } = use_tool_state({
+    tool_id: "risk-dial",
+    initial_state: { likelihood: 2, impact: 2 },
+  });
 
+  if (!is_ready) return <p className="text-sm text-gray-600">Loading.</p>;
+
+  const likelihood = state.likelihood;
+  const impact = state.impact;
   const risk = likelihood * impact;
 
-  const riskLabel = () => {
+  function riskLabel() {
     if (risk <= 4) return "Low";
     if (risk <= 9) return "Medium";
     return "High";
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -23,13 +30,27 @@ export default function RiskDial() {
       <div className="space-y-4">
         <div>
           <label className="text-xs text-gray-600">Likelihood</label>
-          <input type="range" min="1" max="5" value={likelihood} onChange={(e) => setLikelihood(Number(e.target.value))} className="w-full" />
+          <input
+            type="range"
+            min="1"
+            max="5"
+            value={likelihood}
+            onChange={(e) => set_state((prev) => ({ ...prev, likelihood: Number(e.target.value) }))}
+            className="w-full"
+          />
           <div className="text-sm">{likelihood}</div>
         </div>
 
         <div>
           <label className="text-xs text-gray-600">Impact</label>
-          <input type="range" min="1" max="5" value={impact} onChange={(e) => setImpact(Number(e.target.value))} className="w-full" />
+          <input
+            type="range"
+            min="1"
+            max="5"
+            value={impact}
+            onChange={(e) => set_state((prev) => ({ ...prev, impact: Number(e.target.value) }))}
+            className="w-full"
+          />
           <div className="text-sm">{impact}</div>
         </div>
       </div>
@@ -49,6 +70,13 @@ export default function RiskDial() {
       <p className="text-sm text-gray-700">
         Notice how increasing either factor increases risk, and how zero likelihood or zero impact would result in zero risk.
       </p>
+
+      <ToolStateActions
+        onReset={() => reset()}
+        onCopy={copy_share_link}
+        onExport={export_json}
+        onImport={import_json}
+      />
     </div>
   );
 }

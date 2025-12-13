@@ -1,6 +1,8 @@
-'use client'
+"use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
+import { use_tool_state } from "@/components/notes/hooks/use_tool_state";
+import ToolStateActions from "@/components/notes/ToolStateActions";
 
 const scenarios = [
   { id: "phish", text: "Phishing email steals credentials" },
@@ -11,7 +13,14 @@ const scenarios = [
 const goals = ["Confidentiality", "Integrity", "Availability", "Trust"];
 
 export default function SecurityGoalsSorter() {
-  const [answers, setAnswers] = useState({});
+  const { state, set_state, reset, copy_share_link, export_json, import_json, is_ready } = use_tool_state({
+    tool_id: "security-goals-sorter",
+    initial_state: { answers: {} },
+  });
+
+  if (!is_ready) return <p className="text-sm text-gray-600">Loading.</p>;
+
+  const answers = state.answers;
 
   const coverage = useMemo(() => {
     const filled = Object.keys(answers).length;
@@ -36,9 +45,12 @@ export default function SecurityGoalsSorter() {
                     key={g}
                     type="button"
                     onClick={() =>
-                      setAnswers((prev) => ({
+                      set_state((prev) => ({
                         ...prev,
-                        [s.id]: prev[s.id] === g ? undefined : g,
+                        answers: {
+                          ...prev.answers,
+                          [s.id]: prev.answers[s.id] === g ? undefined : g,
+                        },
                       }))
                     }
                     className={`px-3 py-1 rounded-full border text-xs ${
@@ -63,6 +75,13 @@ export default function SecurityGoalsSorter() {
           {coverage}% complete. Aim to explain why you chose each harm in one sentence.
         </p>
       </div>
+
+      <ToolStateActions
+        onReset={() => reset()}
+        onCopy={copy_share_link}
+        onExport={export_json}
+        onImport={import_json}
+      />
     </div>
   );
 }

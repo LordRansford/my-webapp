@@ -1,6 +1,7 @@
-'use client'
+"use client";
 
 import { useEffect, useMemo, useState } from 'react'
+import { ErrorBoundary } from './ErrorBoundary'
 
 export function ToolCard({
   title,
@@ -39,9 +40,7 @@ export function ToolCard({
                 <button
                   key={m}
                   onClick={() => on_mode_change(m)}
-                  className={`px-3 py-1 text-xs rounded-full transition ${
-                    mode === m ? 'bg-gray-900 text-white' : 'text-gray-700'
-                  }`}
+                  className={`px-3 py-1 text-xs rounded-full transition ${mode === m ? 'bg-gray-900 text-white' : 'text-gray-700'}`}
                   aria-label={`Mode ${m}`}
                 >
                   {m}
@@ -63,7 +62,13 @@ export function ToolCard({
         <div className="px-4 pb-4">
           {actions ? <div className="mb-3 flex flex-wrap gap-2">{actions}</div> : null}
           <div className="rounded-xl bg-gray-50 p-3">
-            {content_ready ? children : <p className="text-sm text-gray-600">Loading tool…</p>}
+            {content_ready ? (
+              <ErrorBoundary>
+                {children}
+              </ErrorBoundary>
+            ) : (
+              <p className="text-sm text-gray-600">Loading tool.</p>
+            )}
           </div>
         </div>
       ) : null}
