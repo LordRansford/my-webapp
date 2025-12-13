@@ -1,17 +1,18 @@
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
-import { NotesLayout } from "@/components/notes/NotesLayout";
+import NotesLayout from "@/components/notes/Layout";
 import { MDXRenderer } from "@/components/notes/MDXRenderer";
 import { loadNote } from "@/lib/content/loadNote";
 import ToolCard from "@/components/notes/ToolCard";
-import { Callout } from "@/components/notes/Callout";
+import Callout from "@/components/notes/Callout";
 import { DeeperDive } from "@/components/notes/DeeperDive";
 import { MathInline, MathBlock } from "@/components/notes/Math";
-import { FlowDiagram, LayerDiagram, TimelineDiagram, BoundaryDiagram, ComparisonDiagram } from "@/components/notes/diagrams";
+import GlossaryTip from "@/components/notes/GlossaryTip";
+import QuizBlock from "@/components/notes/QuizBlock";
 import Recap from "@/components/notes/Recap";
-import NotesPager from "@/components/notes/NotesPager";
 
-const Quiz = dynamic(() => import("@/components/Quiz"), { ssr: false });
+const NoteImage = dynamic(() => import("@/components/notes/NoteMedia").then((m) => m.NoteImage));
+const NoteVideo = dynamic(() => import("@/components/notes/NoteMedia").then((m) => m.NoteVideo));
 const ThreatModelCanvasTool = dynamic(() => import("@/components/notes/tools/cybersecurity/ch3/ThreatModelCanvasTool"), { ssr: false });
 const AttackChainTool = dynamic(() => import("@/components/notes/tools/cybersecurity/ch3/AttackChainTool"), { ssr: false });
 const ControlMappingTool = dynamic(() => import("@/components/notes/tools/cybersecurity/ch3/ControlMappingTool"), { ssr: false });
@@ -20,8 +21,9 @@ const LogStoryTool = dynamic(() => import("@/components/notes/tools/cybersecurit
 const IncidentTriageTool = dynamic(() => import("@/components/notes/tools/cybersecurity/ch3/IncidentTriageTool"), { ssr: false });
 const VulnerabilityLifecycleTool = dynamic(() => import("@/components/notes/tools/cybersecurity/ch3/VulnerabilityLifecycleTool"), { ssr: false });
 const BackupRansomwareRecoveryTool = dynamic(() => import("@/components/notes/tools/cybersecurity/ch3/BackupRansomwareRecoveryTool"), { ssr: false });
+const Quiz = dynamic(() => import("@/components/Quiz"), { ssr: false });
 
-export default function Page({ source }) {
+export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
     () => ({
       ToolCard,
@@ -29,12 +31,11 @@ export default function Page({ source }) {
       DeeperDive,
       MathInline,
       MathBlock,
-      FlowDiagram,
-      LayerDiagram,
-      TimelineDiagram,
-      BoundaryDiagram,
-      ComparisonDiagram,
-      Quiz,
+      GlossaryTip,
+      QuizBlock,
+      Recap,
+      NoteImage,
+      NoteVideo,
       ThreatModelCanvasTool,
       AttackChainTool,
       ControlMappingTool,
@@ -43,18 +44,14 @@ export default function Page({ source }) {
       IncidentTriageTool,
       VulnerabilityLifecycleTool,
       BackupRansomwareRecoveryTool,
-      Recap,
+      Quiz,
     }),
     []
   );
 
   return (
-    <NotesLayout title="Cybersecurity Notes" subtitle="Chapter 3 – Systems, attackers, and resilience" pageKey="cybersecurity-ch3">
+    <NotesLayout meta={{ title: "Cybersecurity Notes – Advanced", description: "Chapter 3 – Systems, attackers, and resilience", level: "Advanced" }} headings={headings}>
       <MDXRenderer source={source} components={mdxComponents} />
-      <NotesPager
-        prev={{ href: "/cybersecurity/intermediate", label: "Chapter 2" }}
-        next={null}
-      />
     </NotesLayout>
   );
 }
@@ -64,6 +61,7 @@ export async function getStaticProps() {
   return {
     props: {
       source: note.source,
+      headings: note.headings,
     },
   };
 }

@@ -1,15 +1,17 @@
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
-import { NotesLayout } from "@/components/notes/NotesLayout";
+import NotesLayout from "@/components/notes/Layout";
 import { MDXRenderer } from "@/components/notes/MDXRenderer";
 import { loadNote } from "@/lib/content/loadNote";
 import ToolCard from "@/components/notes/ToolCard";
-import { Callout } from "@/components/notes/Callout";
+import Callout from "@/components/notes/Callout";
 import { DeeperDive } from "@/components/notes/DeeperDive";
 import { MathInline, MathBlock } from "@/components/notes/Math";
 import { FlowDiagram, LayerDiagram, TimelineDiagram, BoundaryDiagram, ComparisonDiagram } from "@/components/notes/diagrams";
 import Recap from "@/components/notes/Recap";
-import NotesPager from "@/components/notes/NotesPager";
+import PageNav from "@/components/notes/PageNav";
+import GlossaryTip from "@/components/notes/GlossaryTip";
+import QuizBlock from "@/components/notes/QuizBlock";
 
 const SecurityGoalsSorter = dynamic(() => import("@/components/notes/tools/cybersecurity/ch1/SecurityGoalsSorter"), { ssr: false });
 const RiskDial = dynamic(() => import("@/components/notes/tools/cybersecurity/ch1/RiskDial"), { ssr: false });
@@ -21,7 +23,7 @@ const HashAvalancheVisualizer = dynamic(() => import("@/components/notes/tools/c
 const EntropySimulator = dynamic(() => import("@/components/notes/tools/cybersecurity/ch1/EntropySimulator"), { ssr: false });
 const Quiz = dynamic(() => import("@/components/Quiz"), { ssr: false });
 
-export default function Page({ source }) {
+export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
     () => ({
       ToolCard,
@@ -44,17 +46,16 @@ export default function Page({ source }) {
       EntropySimulator,
       Quiz,
       Recap,
+      PageNav,
+      GlossaryTip,
+      QuizBlock,
     }),
     []
   );
 
   return (
-    <NotesLayout title="Cybersecurity Notes" subtitle="Chapter 1 – Foundations" pageKey="cybersecurity-ch1">
+    <NotesLayout meta={{ title: "Cybersecurity Notes – Beginner", description: "Chapter 1 - Foundations", level: "Beginner" }} headings={headings}>
       <MDXRenderer source={source} components={mdxComponents} />
-      <NotesPager
-        prev={null}
-        next={{ href: "/cybersecurity/intermediate", label: "Chapter 2" }}
-      />
     </NotesLayout>
   );
 }
@@ -64,6 +65,7 @@ export async function getStaticProps() {
   return {
     props: {
       source: note.source,
+      headings: note.headings,
     },
   };
 }
