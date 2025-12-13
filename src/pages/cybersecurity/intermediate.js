@@ -65,13 +65,7 @@ export default function Page({ source }) {
   );
 
   return (
-    <NotesLayout
-      title="Cybersecurity Notes"
-      subtitle="Chapter 2 – How information moves and trust is built"
-      pageKey="cybersecurity-ch2"
-      prev={{ href: "/cybersecurity/beginner", label: "Chapter 1" }}
-      next={{ href: "/cybersecurity/advanced", label: "Chapter 3" }}
-    >
+    <NotesLayout title="Cybersecurity Notes" subtitle="Chapter 2 – How information moves and trust is built" pageKey="cybersecurity-ch2">
       <MDXRenderer source={source} components={mdxComponents} />
       <NotesPager
         prev={{ href: "/cybersecurity/beginner", label: "Chapter 1" }}

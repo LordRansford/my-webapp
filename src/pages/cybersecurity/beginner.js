@@ -49,15 +49,12 @@ export default function Page({ source }) {
   );
 
   return (
-    <NotesLayout
-      title="Cybersecurity Notes"
-      subtitle="Chapter 1 – Foundations"
-      pageKey="cybersecurity-ch1"
-      prev={null}
-      next={{ href: "/cybersecurity/intermediate", label: "Chapter 2" }}
-    >
+    <NotesLayout title="Cybersecurity Notes" subtitle="Chapter 1 – Foundations" pageKey="cybersecurity-ch1">
       <MDXRenderer source={source} components={mdxComponents} />
-      <NotesPager prev={null} next={{ href: "/cybersecurity/intermediate", label: "Chapter 2" }} />
+      <NotesPager
+        prev={null}
+        next={{ href: "/cybersecurity/intermediate", label: "Chapter 2" }}
+      />
     </NotesLayout>
   );
 }

@@ -1,21 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Layout from "@/components/Layout";
 import { ProgressBar } from "./ProgressBar";
-import NotesPager from "./NotesPager";
 
-const cyberChapters = [
-  { href: "/cybersecurity/beginner", label: "Beginner" },
-  { href: "/cybersecurity/intermediate", label: "Intermediate" },
-  { href: "/cybersecurity/advanced", label: "Advanced" },
-];
-
-export function NotesLayout({ title, subtitle, pageKey, children, prev, next }) {
+export function NotesLayout({ title, subtitle, pageKey, children }) {
   const [headings, setHeadings] = useState([]);
   const [query, setQuery] = useState("");
-  const [tocOpen, setTocOpen] = useState(true); // desktop collapse
+  const [tocOpen, setTocOpen] = useState(false); // desktop collapse
   const [mobileToc, setMobileToc] = useState(false);
   const [activeId, setActiveId] = useState("");
   const observerRef = useRef(null);
@@ -71,31 +63,11 @@ export function NotesLayout({ title, subtitle, pageKey, children, prev, next }) 
     <Layout title={title} description={subtitle}>
       <div id="top" />
       <ProgressBar />
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border bg-white/80 p-3 shadow-sm backdrop-blur">
-        <div className="flex flex-col gap-1">
-          <p className="eyebrow m-0">Notes</p>
-          <h1 className="text-2xl font-semibold leading-tight">{title}</h1>
-          {subtitle && <p className="lead m-0">{subtitle}</p>}
-        </div>
-        <div className="flex flex-col items-end gap-2">
-          <div className="flex flex-wrap items-center gap-2">
-            {cyberChapters.map((c) => (
-              <Link
-                key={c.href}
-                href={c.href}
-                className={`rounded-full border px-3 py-1 text-sm transition ${
-                  pageKey && c.href.includes(pageKey.split("-")[0])
-                    ? "border-blue-500 bg-blue-50 text-blue-800"
-                    : "border-transparent bg-gray-100 text-gray-800 hover:border-gray-200"
-                }`}
-              >
-                {c.label}
-              </Link>
-            ))}
-          </div>
-          {(prev || next) && <NotesPager prev={prev} next={next} />}
-        </div>
-      </div>
+      <header className="page-header">
+        <p className="eyebrow">Notes</p>
+        <h1>{title}</h1>
+        {subtitle && <p className="lead">{subtitle}</p>}
+      </header>
 
       <div className="mb-3 flex items-center justify-between gap-3 lg:hidden">
         <button
@@ -109,7 +81,9 @@ export function NotesLayout({ title, subtitle, pageKey, children, prev, next }) 
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(180px,280px)_1fr]">
         <aside
-          className={`hidden lg:sticky lg:top-24 lg:h-[calc(100vh-140px)] lg:overflow-auto lg:block`}
+          className={`${
+            tocOpen ? "lg:block" : "lg:block"
+          } hidden lg:sticky lg:top-24 lg:h-[calc(100vh-140px)] lg:overflow-auto`}
         >
           <div className="rounded-xl border bg-white/80 p-3 shadow-sm backdrop-blur">
             <div className="flex items-center justify-between gap-2">
