@@ -18,14 +18,14 @@ export default function SecurityGoalsSorter() {
     initial_state: { answers: {} },
   });
 
-  if (!is_ready) return <p className="text-sm text-gray-600">Loading.</p>;
-
   const answers = state.answers;
 
   const coverage = useMemo(() => {
     const filled = Object.keys(answers).length;
     return Math.round((filled / scenarios.length) * 100);
   }, [answers]);
+
+  if (!is_ready) return <p className="text-sm text-gray-600">Loading.</p>;
 
   return (
     <div className="space-y-4 text-sm">

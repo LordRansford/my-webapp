@@ -10,8 +10,6 @@ export default function BitFlipVisualizer() {
     initial_state: { bits: Array(8).fill(0) },
   });
 
-  if (!is_ready) return <p className="text-sm text-gray-600">Loading.</p>;
-
   const value = useMemo(
     () =>
       state.bits.reduce((sum, bit, idx) => {
@@ -20,6 +18,8 @@ export default function BitFlipVisualizer() {
       }, 0),
     [state.bits]
   );
+
+  if (!is_ready) return <p className="text-sm text-gray-600">Loading.</p>;
 
   const toggleBit = (index) => {
     set_state((prev) => ({

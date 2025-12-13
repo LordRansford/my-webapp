@@ -10,8 +10,6 @@ export default function BitPositionExplorer() {
     initial_state: { bits: Array(8).fill(0) },
   });
 
-  if (!is_ready) return <p className="text-sm text-gray-600">Loading.</p>;
-
   const bits = state.bits;
 
   const value = useMemo(
@@ -22,6 +20,8 @@ export default function BitPositionExplorer() {
       }, 0),
     [bits]
   );
+
+  if (!is_ready) return <p className="text-sm text-gray-600">Loading.</p>;
 
   function toggleBit(index) {
     set_state((prev) => ({

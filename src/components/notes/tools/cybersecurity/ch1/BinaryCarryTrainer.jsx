@@ -10,11 +10,11 @@ export default function BinaryCarryTrainer() {
     initial_state: { a: "1011", b: "0110" },
   });
 
-  if (!is_ready) return <p className="text-sm text-gray-600">Loading.</p>;
-
   const { a, b } = state;
 
   const steps = useMemo(() => addBinary(a, b), [a, b]);
+
+  if (!is_ready) return <p className="text-sm text-gray-600">Loading.</p>;
 
   return (
     <div className="space-y-4 text-sm">

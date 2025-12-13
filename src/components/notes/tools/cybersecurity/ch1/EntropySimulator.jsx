@@ -10,8 +10,6 @@ export default function EntropySimulator() {
     initial_state: { length: 12, charset: "lower+upper+digits" },
   });
 
-  if (!is_ready) return <p className="text-sm text-gray-600">Loading.</p>;
-
   const charsets = {
     lower: 26,
     "lower+upper": 52,
@@ -21,6 +19,8 @@ export default function EntropySimulator() {
 
   const charsetSize = charsets[state.charset] || 26;
   const entropy = useMemo(() => state.length * Math.log2(charsetSize), [state.length, charsetSize]);
+
+  if (!is_ready) return <p className="text-sm text-gray-600">Loading.</p>;
 
   return (
     <div className="space-y-4 text-sm">
