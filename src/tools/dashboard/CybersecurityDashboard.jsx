@@ -59,7 +59,7 @@ export default function CybersecurityDashboard() {
     }
 
     return out;
-  }, [threats, query]);
+  }, [data, threats, query]);
 
   return (
     <div className="rn-dashboard-grid">

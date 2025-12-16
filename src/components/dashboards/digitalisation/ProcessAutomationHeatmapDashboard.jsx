@@ -32,10 +32,10 @@ export default function ProcessAutomationHeatmapDashboard() {
             </div>
             <p className="mt-2 text-xs text-slate-700">
               {item.complexity <= 4
-                ? "Automation friendly—standardise inputs and proceed."
+                ? "Automation friendly-standardise inputs and proceed."
                 : item.volume >= 7
-                ? "High volume and high complexity—consider augmentation before full automation."
-                : "Complex work—keep humans in the loop and improve guidance first."}
+                ? "High volume and high complexity-consider augmentation before full automation."
+                : "Complex work-keep humans in the loop and improve guidance first."}
             </p>
           </div>
         ))}
@@ -43,3 +43,4 @@ export default function ProcessAutomationHeatmapDashboard() {
     </div>
   );
 }
+

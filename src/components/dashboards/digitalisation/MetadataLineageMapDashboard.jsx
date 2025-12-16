@@ -54,10 +54,11 @@ export default function MetadataLineageMapDashboard() {
             </div>
           ))}
           <div className="rounded-xl bg-amber-50 p-3 text-xs text-amber-800">
-            Fields without a source or definition stand out—fill those gaps early to build trust.
+            Fields without a source or definition stand out-fill those gaps early to build trust.
           </div>
         </div>
       </div>
     </div>
   );
 }
+

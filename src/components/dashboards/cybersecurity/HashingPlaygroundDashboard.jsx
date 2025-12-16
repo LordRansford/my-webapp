@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Hash, RefreshCw } from "lucide-react";
 
 async function hashText(text, algorithm = "SHA-256") {
@@ -20,7 +20,7 @@ export default function HashingPlaygroundDashboard() {
   const [hashSalted, setHashSalted] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const computeHashes = async () => {
+  const computeHashes = useCallback(async () => {
     setLoading(true);
     try {
       const plain = await hashText(text, algorithm);
@@ -32,11 +32,11 @@ export default function HashingPlaygroundDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [algorithm, salt, text]);
 
   React.useEffect(() => {
     computeHashes();
-  }, [text, salt, algorithm]);
+  }, [computeHashes]);
 
   const changed = useMemo(() => {
     if (!text || !salt) return false;
@@ -139,4 +139,3 @@ export default function HashingPlaygroundDashboard() {
     </div>
   );
 }
-
