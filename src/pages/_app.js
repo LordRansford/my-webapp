@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import "katex/dist/katex.min.css";
 import { Manrope, Space_Grotesk, JetBrains_Mono, Inter } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { NotesProvider } from "@/components/notes/NotesProvider";
 
 const display = Space_Grotesk({
@@ -41,6 +42,7 @@ export default function App({ Component, pageProps }) {
       <NotesProvider>
         <Component {...pageProps} />
       </NotesProvider>
+      <SpeedInsights />
     </div>
   );
 }
