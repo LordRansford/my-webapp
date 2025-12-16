@@ -48,76 +48,78 @@ export function SystemLandscapeCanvas() {
         often. The simple rules below highlight obvious layering problems.
       </p>
 
-      <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white p-3 text-sm">
-        <table className="min-w-full border-separate border-spacing-y-2">
-          <thead className="text-xs uppercase tracking-wide text-slate-500">
-            <tr>
-              <th className="text-left">Component</th>
-              <th className="text-left">Layer</th>
-              <th className="text-left">Primarily talks to</th>
-              <th className="text-left">Health</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => {
-              const violation = isViolation(row);
-              return (
-                <tr key={row.id} className="align-middle">
-                  <td className="pr-2">
-                    <input
-                      className="w-full rounded-xl border border-slate-200 px-2 py-1 text-sm"
-                      placeholder="Web app, API gateway, pricing service"
-                      value={row.name}
-                      onChange={(e) => updateRow(row.id, { name: e.target.value })}
-                    />
-                  </td>
-                  <td className="pr-2">
-                    <select
-                      className="w-full rounded-xl border border-slate-200 px-2 py-1 text-sm"
-                      value={row.layer}
-                      onChange={(e) => updateRow(row.id, { layer: e.target.value })}
-                    >
-                      {allLayers.map((layer) => (
-                        <option key={layer}>{layer}</option>
-                      ))}
-                    </select>
-                  </td>
-                  <td className="pr-2">
-                    <select
-                      className="w-full rounded-xl border border-slate-200 px-2 py-1 text-sm"
-                      value={row.talksTo}
-                      onChange={(e) => updateRow(row.id, { talksTo: e.target.value })}
-                    >
-                      {allLayers.map((layer) => (
-                        <option key={layer}>{layer}</option>
-                      ))}
-                    </select>
-                  </td>
-                  <td className="pr-2">
-                    <span
-                      className={
-                        "inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium " +
-                        (violation ? "bg-rose-50 text-rose-700" : "bg-emerald-50 text-emerald-700")
-                      }
-                    >
-                      {violation ? "Layering risk" : "Looks sensible"}
-                    </span>
-                  </td>
-                  <td className="text-right">
-                    <button
-                      type="button"
-                      onClick={() => removeRow(row.id)}
-                      className="rounded-full px-2 py-1 text-xs text-slate-400 hover:bg-slate-100 hover:text-slate-700"
-                    >
-                      Remove
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+      <div className="rounded-2xl border border-slate-200 bg-white p-3 text-sm">
+        <div className="overflow-x-auto">
+          <table className="min-w-full border-separate border-spacing-y-2">
+            <thead className="text-xs uppercase tracking-wide text-slate-500">
+              <tr>
+                <th className="text-left">Component</th>
+                <th className="text-left">Layer</th>
+                <th className="text-left">Primarily talks to</th>
+                <th className="text-left">Health</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row) => {
+                const violation = isViolation(row);
+                return (
+                  <tr key={row.id} className="align-middle">
+                    <td className="pr-2">
+                      <input
+                        className="w-full rounded-xl border border-slate-200 px-2 py-1 text-sm"
+                        placeholder="Web app, API gateway, pricing service"
+                        value={row.name}
+                        onChange={(e) => updateRow(row.id, { name: e.target.value })}
+                      />
+                    </td>
+                    <td className="pr-2">
+                      <select
+                        className="w-full rounded-xl border border-slate-200 px-2 py-1 text-sm"
+                        value={row.layer}
+                        onChange={(e) => updateRow(row.id, { layer: e.target.value })}
+                      >
+                        {allLayers.map((layer) => (
+                          <option key={layer}>{layer}</option>
+                        ))}
+                      </select>
+                    </td>
+                    <td className="pr-2">
+                      <select
+                        className="w-full rounded-xl border border-slate-200 px-2 py-1 text-sm"
+                        value={row.talksTo}
+                        onChange={(e) => updateRow(row.id, { talksTo: e.target.value })}
+                      >
+                        {allLayers.map((layer) => (
+                          <option key={layer}>{layer}</option>
+                        ))}
+                      </select>
+                    </td>
+                    <td className="pr-2">
+                      <span
+                        className={
+                          "inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium " +
+                          (violation ? "bg-rose-50 text-rose-700" : "bg-emerald-50 text-emerald-700")
+                        }
+                      >
+                        {violation ? "Layering risk" : "Looks sensible"}
+                      </span>
+                    </td>
+                    <td className="text-right">
+                      <button
+                        type="button"
+                        onClick={() => removeRow(row.id)}
+                        className="rounded-full px-2 py-1 text-xs text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+                      >
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
 
         <button
           type="button"

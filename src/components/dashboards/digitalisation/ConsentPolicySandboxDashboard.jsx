@@ -15,7 +15,7 @@ export default function ConsentPolicySandboxDashboard() {
     if (form.dataType === "Sensitive") list.push("Higher sensitivity: consider DPIA and explicit consent.");
     if (form.retention.includes("36")) list.push("Long retention: validate legal basis and storage controls.");
     if (form.expectation === "Unexpected") list.push("User expectations misaligned: reinforce transparency and choice.");
-    if (!list.length) list.push("Looks reasonable—still confirm with your policy checklist.");
+    if (!list.length) list.push("Looks reasonable-still confirm with your policy checklist.");
     return list;
   }, [form]);
 
@@ -83,3 +83,4 @@ export default function ConsentPolicySandboxDashboard() {
     </div>
   );
 }
+

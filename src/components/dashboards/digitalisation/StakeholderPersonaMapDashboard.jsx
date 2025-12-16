@@ -27,8 +27,9 @@ export default function StakeholderPersonaMapDashboard() {
         ))}
       </div>
       <div className="mt-3 text-xs text-slate-700">
-        Balance gains and worries—design comms that speak to both.
+        Balance gains and worries-design comms that speak to both.
       </div>
     </div>
   );
 }
+

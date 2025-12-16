@@ -138,7 +138,7 @@ export default function LogHuntGame() {
             <ul className="mt-1 space-y-1 pl-4 list-disc">
               {LOGS.filter((l) => l.suspicious).map((log) => (
                 <li key={log.id}>
-                  <span className="font-semibold">{log.message}</span> — {log.explain}
+                  <span className="font-semibold">{log.message}</span> - {log.explain}
                 </li>
               ))}
             </ul>
@@ -163,3 +163,4 @@ export default function LogHuntGame() {
     </div>
   );
 }
+

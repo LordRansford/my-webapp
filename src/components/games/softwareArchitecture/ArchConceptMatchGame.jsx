@@ -135,7 +135,7 @@ export default function ArchConceptMatchGame() {
       </div>
 
       <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="text-sm text-slate-800">{feedback || (allMatched ? "Great—every term is matched." : "Pick a description, then a term to match.")}</div>
+        <div className="text-sm text-slate-800">{feedback || (allMatched ? "Great-every term is matched." : "Pick a description, then a term to match.")}</div>
         <button
           onClick={reset}
           className="inline-flex items-center justify-center rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-800 shadow-sm transition hover:border-sky-300 hover:text-sky-800 focus:outline-none focus:ring-2 focus:ring-sky-300"
@@ -146,3 +146,4 @@ export default function ArchConceptMatchGame() {
     </div>
   );
 }
+

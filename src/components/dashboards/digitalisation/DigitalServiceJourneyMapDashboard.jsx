@@ -39,8 +39,9 @@ export default function DigitalServiceJourneyMapDashboard() {
         ))}
       </div>
       <div className="mt-3 rounded-xl bg-slate-50 p-3 text-xs text-slate-700">
-        Highlight high-pain steps for redesign—look for manual channels and legacy systems first.
+        Highlight high-pain steps for redesign-look for manual channels and legacy systems first.
       </div>
     </div>
   );
 }
+

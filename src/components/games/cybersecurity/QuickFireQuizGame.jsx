@@ -105,7 +105,7 @@ export default function QuickFireQuizGame() {
   const timeRemaining = useMemo(() => {
     const elapsed = (Date.now() - startTime) / 1000;
     return Math.max(0, Math.round(TIMER_SECONDS - elapsed));
-  }, [startTime, answered, index]);
+  }, [startTime]);
 
   const answer = (optionIndex) => {
     if (finished || !current) return;

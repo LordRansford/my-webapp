@@ -27,7 +27,7 @@ function decode_state(b64) {
   return safe_json_parse(json, null)
 }
 
-export function use_tool_state({ tool_id, initial_state }) {
+export function useToolState({ tool_id, initial_state }) {
   const [state, set_state] = useState(initial_state)
   const [is_ready, set_is_ready] = useState(false)
   const initial_ref = useRef(initial_state)
@@ -102,3 +102,6 @@ export function use_tool_state({ tool_id, initial_state }) {
     is_ready,
   }
 }
+
+// Temporary alias to avoid breaking existing imports while keeping hook naming compliant.
+export const use_tool_state = useToolState

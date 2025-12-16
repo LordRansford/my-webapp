@@ -51,10 +51,11 @@ export default function PromptPlayground() {
               </span>
             ))
           ) : (
-            <span className="text-slate-500">No rule matches yet—clarify the ask.</span>
+            <span className="text-slate-500">No rule matches yet-clarify the ask.</span>
           )}
         </div>
       </div>
     </div>
   );
 }
+
