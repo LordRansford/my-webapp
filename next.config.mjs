@@ -2,6 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
 
+  // Silence Next.js 16 Turbopack warning when a webpack config is present.
+  turbopack: {},
+
   webpack: (config) => {
     config.resolve.fallback = {
       ...(config.resolve.fallback || {}),
