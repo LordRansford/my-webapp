@@ -1,0 +1,85 @@
+---
+title: "Software architecture dashboards"
+description: "Interactive sandboxes for structure, flows and reliability."
+topic: "architecture"
+layout: "dashboards"
+progressGroup: "architecture"
+---
+
+# Software architecture dashboards
+
+These dashboards are small practice environments for software architecture. They are not production tools. They are thinking tools that help you see how structure, data and behaviour work together.
+
+I use them to turn abstract ideas into something concrete you can poke, adjust and argue with. You can change inputs, see how the picture responds, and decide what feels sensible for your own systems.
+
+<DashboardIntroNote>
+These dashboards run entirely in the browser. Nothing is sent to a server. They do not store or log what you type.
+</DashboardIntroNote>
+
+<DashboardGrid>
+
+  <ToolCard
+    id="system-landscape"
+    title="System landscape canvas"
+    level="all"
+    intent="See the big picture and layering rules."
+    icon="layers"
+  >
+    <SystemLandscapeCanvas />
+  </ToolCard>
+
+  <ToolCard
+    id="domain-model"
+    title="Domain model sandbox"
+    level="beginner"
+    intent="Practise designing entities and relationships."
+    icon="schema"
+  >
+    <DomainModelSandbox />
+  </ToolCard>
+
+  <ToolCard
+    id="coupling-cohesion"
+    title="Coupling and cohesion visualiser"
+    level="intermediate"
+    intent="Make hidden coupling and god objects visible."
+    icon="graph"
+  >
+    <CouplingCohesionVisualizer />
+  </ToolCard>
+
+  <ToolCard
+    id="microservice-boundaries"
+    title="Microservice boundary designer"
+    level="intermediate"
+    intent="Explore different ways to slice services."
+    icon="modules"
+  >
+    <MicroserviceBoundaryDesigner />
+  </ToolCard>
+
+  <ToolCard
+    id="data-storage-planner"
+    title="Data storage planner"
+    level="beginner"
+    intent="Match data shapes to storage options."
+    icon="database"
+  >
+    <DataStoragePlanner />
+  </ToolCard>
+
+  <ToolCard
+    id="request-journey"
+    title="Request journey explorer"
+    level="all"
+    intent="Understand where latency and risk come from."
+    icon="timeline"
+  >
+    <RequestJourneyExplorer />
+  </ToolCard>
+
+</DashboardGrid>
+
+<DashboardFooterNote>
+If you take a screenshot of a dashboard and write a short explanation of what you changed and why, that is already an architecture note. The tools are here to support your judgement, not replace it.
+</DashboardFooterNote>

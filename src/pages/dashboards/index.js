@@ -25,11 +25,17 @@ export default function DashboardsLanding() {
       </div>
 
       <section className="rn-section">
-        <div className="rn-grid rn-grid-2" style={{ marginBottom: "2rem" }}>
+        <div className="rn-grid rn-grid-3" style={{ marginBottom: "2rem" }}>
           <Link href="/dashboards/ai" className="rn-card rn-card-button">
             <div className="rn-card-title">AI Dashboards</div>
             <div className="rn-card-body">
               Interactive labs covering data distributions, correlation, regression, classification, confusion matrices, ROC curves, bias and fairness, drift monitoring, feature importance, embeddings, clustering, prompts, hallucination, agents, RAG, diffusion, cost planning, MLOps, governance, and roles.
+            </div>
+          </Link>
+          <Link href="/dashboards/architecture" className="rn-card rn-card-button">
+            <div className="rn-card-title">Architecture Dashboards</div>
+            <div className="rn-card-body">
+              Practice environments for structure, coupling, service slicing, data storage choices, and request journeys so you can stress-test architectural decisions safely.
             </div>
           </Link>
           <Link href="/dashboards/cybersecurity" className="rn-card rn-card-button">

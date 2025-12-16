@@ -6,6 +6,7 @@ import Link from "next/link";
 const dashboardLinks = [
   { href: "/dashboards", label: "All dashboards" },
   { href: "/dashboards/ai", label: "AI dashboards" },
+  { href: "/dashboards/architecture", label: "Architecture dashboards" },
   { href: "/dashboards/cybersecurity", label: "Cybersecurity dashboards" },
   { href: "/dashboards/digitalisation", label: "Digitalisation dashboards" },
 ];
@@ -64,4 +65,3 @@ export default function DashboardNav() {
     </div>
   );
 }
-

@@ -37,6 +37,17 @@ export const dashboards: DashboardConfig[] = [
     lastUpdatedNote: "Updated with website, DNS/email, redirect, and cookie/storage labs.",
   },
   {
+    id: "architecture",
+    title: "Software architecture dashboard",
+    description: "Interactive sandboxes for structure, flows, boundaries, and reliability in software systems.",
+    href: "/dashboards/architecture",
+    tags: ["Architecture", "Design", "Reliability"],
+    mode: "static",
+    dataSummary: "Browser-only sandboxes to explore architecture scenarios. No external calls.",
+    licensingSummary: "Educational tools and visualisations generated locally.",
+    lastUpdatedNote: "Updated with the initial set of six architecture dashboards.",
+  },
+  {
     id: "cim",
     title: "CIM and schema dashboard",
     description: "Schema exploration, validation summaries, and example mappings. Coming later.",
