@@ -1,0 +1,70 @@
+---
+title: "Practitioner: Detection and Response Analyst"
+description: "Decision driven notes for detection and response. Focus on signals, certainty, timelines, and ethics."
+role: "Detection and Response Analyst"
+level: "practitioner"
+---
+
+import ProgressBar from '@/components/notes/ProgressBar'
+import PageNav from '@/components/notes/PageNav'
+import Callout from '@/components/notes/Callout'
+import ToolCard from '@/components/notes/ToolCard'
+import QuizBlock from '@/components/notes/QuizBlock'
+import DetectionCoverageTool from '@/components/notes/tools/cybersecurity/advanced/DetectionCoverageTool'
+import IncidentTimelineTool from '@/components/notes/tools/cybersecurity/advanced/IncidentTimelineTool'
+import EvidenceChecklistTool from '@/components/notes/tools/cybersecurity/practitioner/EvidenceChecklistTool'
+
+<ProgressBar mode="scroll" />
+
+# Practitioner  Detection and Response Analyst  
+## Signals, certainty, and containment
+
+<Callout variant="concept">
+I live in ambiguity. My decisions must balance false positives, false negatives, and business impact. Ethics matters when action affects users.
+</Callout>
+
+## 1. Decision  Which signals matter most
+Signal quality beats signal quantity. I prioritise signals that give high certainty with low noise.
+
+<ToolCard
+  title="Map attack stages to signals"
+  description="Select which signals detect which attack stages and find the blind spots."
+>
+  <DetectionCoverageTool />
+</ToolCard>
+
+## 2. Decision  When to act
+Acting too early can disrupt business; acting too late increases impact. I document thresholds.
+
+<ToolCard
+  title="Capture evidence needs"
+  description="List evidence required before major response actions, so I can defend the decision."
+>
+  <EvidenceChecklistTool />
+</ToolCard>
+
+## 3. Incident realism  Build the timeline
+<ToolCard
+  title="Walk an incident timeline"
+  description="Practise choosing containment, communication, and recovery steps under time pressure."
+>
+  <IncidentTimelineTool />
+</ToolCard>
+
+## 4. Ethics and accountability
+Containment can affect users. I apply least harm: preserve safety, respect privacy, and justify disruption.
+
+<QuizBlock
+  title="Response judgement check"
+  questions={[
+    { q: "Why is confidence important before containment", a: "Because containment can disrupt services and users; unjustified action erodes trust." },
+    { q: "Why track assumptions during response", a: "Because decisions rely on them; if they are wrong, the response must adapt quickly." }
+  ]}
+/>
+
+<PageNav
+  prevHref="/notes/cybersecurity/practitioner"
+  prevLabel="Practitioner index"
+  showTop
+  showBottom
+/>

@@ -1,0 +1,72 @@
+---
+title: "Practitioner: Cloud and Platform Security"
+description: "Role based notes for cloud and platform security: identity, shared responsibility, and resilient operations."
+role: "Cloud and Platform Security"
+level: "practitioner"
+---
+
+import ProgressBar from '@/components/notes/ProgressBar'
+import PageNav from '@/components/notes/PageNav'
+import Callout from '@/components/notes/Callout'
+import ToolCard from '@/components/notes/ToolCard'
+import QuizBlock from '@/components/notes/QuizBlock'
+import ZeroTrustPlannerTool from '@/components/notes/tools/cybersecurity/advanced/ZeroTrustPlannerTool'
+import SupplyChainRiskTool from '@/components/notes/tools/cybersecurity/advanced/SupplyChainRiskTool'
+import EvidenceChecklistTool from '@/components/notes/tools/cybersecurity/practitioner/EvidenceChecklistTool'
+
+<ProgressBar mode="scroll" />
+
+# Practitioner  Cloud and Platform Security  
+## Identity centric defence and resilient platforms
+
+<Callout variant="concept">
+Cloud makes identity the control plane. My job is to design guardrails, verify shared responsibility, and keep recovery paths ready.
+</Callout>
+
+## 1. Decision  How to enforce least privilege in cloud
+Permissions sprawl quickly. I design landing zones, baseline policies, and automated checks.
+
+<ToolCard
+  title="Plan zero trust guardrails"
+  description="Lay out identity, segmentation, and monitoring controls for cloud workloads."
+>
+  <ZeroTrustPlannerTool />
+</ToolCard>
+
+## 2. Decision  Which dependencies are safe enough
+Cloud stacks rely on many managed services and images. I identify critical dependencies and plan verification.
+
+<ToolCard
+  title="Mark critical dependencies"
+  description="Highlight dependencies that need extra verification, isolation, or rollback plans."
+>
+  <SupplyChainRiskTool />
+</ToolCard>
+
+## 3. Evidence and readiness
+I need proof that controls work: guardrail tests, break-glass drills, backup restores, and audit trails.
+
+<ToolCard
+  title="Evidence checklist for platform readiness"
+  description="Select evidence that shows the platform can withstand and recover from incidents."
+>
+  <EvidenceChecklistTool />
+</ToolCard>
+
+## 4. Ethics and accountability
+Cloud decisions affect cost, performance, and user trust. I document trade offs and ensure privacy and accessibility are respected.
+
+<QuizBlock
+  title="Platform judgement check"
+  questions={[
+    { q: "Why is identity the cloud perimeter", a: "Because most access is mediated by identity and API calls, not physical networks." },
+    { q: "Why do I need rollback paths", a: "Because cloud misconfigurations propagate fast; safe rollback reduces blast radius." }
+  ]}
+/>
+
+<PageNav
+  prevHref="/notes/cybersecurity/practitioner"
+  prevLabel="Practitioner index"
+  showTop
+  showBottom
+/>

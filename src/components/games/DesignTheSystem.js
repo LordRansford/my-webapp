@@ -69,7 +69,7 @@ export default function DesignTheSystem() {
                 {c.label}
               </span>
             ))}
-            {available.length === 0 && <p className="muted">All placed — adjust below if needed.</p>}
+            {available.length === 0 && <p className="muted">All placed - adjust below if needed.</p>}
           </div>
         </div>
 

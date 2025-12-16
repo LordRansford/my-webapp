@@ -24,9 +24,11 @@ export default function QuizBlock({ title = "Quiz", questions = [] }) {
       <div className="mt-3 space-y-3">
         {questions.map((q, idx) => {
           const isOpen = answers[idx]?.open;
+          const questionText = q?.q ?? q?.question ?? "";
+          const answerText = q?.a ?? q?.answer ?? "Answer not provided.";
           return (
             <div key={idx} className="rounded-xl border border-gray-100 bg-gray-50 p-3">
-              <p className="text-sm font-medium text-gray-900">{q.q}</p>
+              <p className="text-sm font-medium text-gray-900">{questionText}</p>
               <button
                 className="mt-2 rounded-full border px-3 py-1 text-xs text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-blue-200"
                 onClick={() =>
@@ -38,7 +40,7 @@ export default function QuizBlock({ title = "Quiz", questions = [] }) {
               >
                 {isOpen ? "Hide answer" : "Show answer"}
               </button>
-              {isOpen ? <p className="mt-2 text-sm text-gray-800">{q.a}</p> : null}
+              {isOpen ? <p className="mt-2 text-sm text-gray-800">{answerText}</p> : null}
             </div>
           );
         })}

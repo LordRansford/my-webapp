@@ -49,7 +49,7 @@ export default function RsaPlayground() {
         publicKey: bufferToPem("PUBLIC", publicKey),
         privateKey: bufferToPem("PRIVATE", privateKey),
       });
-      setStatus("Keys ready — copy and store them securely.");
+      setStatus("Keys ready - copy and store them securely.");
     } catch (err) {
       setError(`Unable to generate keys: ${err.message}`);
     } finally {

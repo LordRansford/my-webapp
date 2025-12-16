@@ -9,7 +9,7 @@ import path from "path";
  */
 
 const ROOT = process.cwd();
-const beginnerPath = path.join(ROOT, "content", "notes", "cybersecurity", "beginner.mdx");
+const beginnerPath = path.join(ROOT, "content", "notes", "cybersecurity", "ch1.mdx");
 
 function parseHeadings(content) {
   const lines = content.split("\n");
@@ -40,6 +40,7 @@ function checkSections(content) {
   const sections = content.split("\n## ").slice(1);
   const errors = [];
   sections.forEach((sec, idx) => {
+    if (idx === 0) return; // skip intro metadata section
     const hasCallout = sec.includes("<Callout");
     const hasTool = sec.includes("<ToolCard");
     const hasQuiz = sec.includes("<QuizBlock");

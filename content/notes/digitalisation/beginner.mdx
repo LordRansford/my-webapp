@@ -1,0 +1,166 @@
+---
+title: "Digitalisation Strategy Notes - Beginner"
+description: "Foundations of digitalisation, why it matters, and how data, people, processes, and technology fit together."
+level: "Beginner"
+---
+
+import ProgressBar from "@/components/notes/ProgressBar"
+import PageNav from "@/components/notes/PageNav"
+import Callout from "@/components/notes/Callout"
+import GlossaryTip from "@/components/notes/GlossaryTip"
+import ToolCard from "@/components/notes/ToolCard"
+import QuizBlock from "@/components/notes/QuizBlock"
+
+import DigitalMaturityGauge from "@/components/notes/tools/digitalisation/beginner/DigitalMaturityGauge"
+import DataValueChain from "@/components/notes/tools/digitalisation/beginner/DataValueChain"
+import ChangeImpactSimulator from "@/components/notes/tools/digitalisation/beginner/ChangeImpactSimulator"
+import StrategyRoadmapCanvas from "@/components/notes/tools/digitalisation/beginner/StrategyRoadmapCanvas"
+import DigitalisationDashboard from "@/components/dashboards/DigitalisationDashboard"
+
+<ProgressBar mode="scroll" />
+
+# Digitalisation Strategy Notes - Beginner
+
+These notes are calm and honest. Digitalisation is not magic. It is the deliberate redesign of how an organisation creates value using digital technology, data, and new ways of working. The focus here is value, not tools, and people, not buzzwords.
+
+<PageNav prevHref="/" prevLabel="Home" nextHref="/digitalisation/intermediate" nextLabel="Intermediate" showTop showBottom />
+
+---
+
+## What digitalisation really is
+
+<Callout variant="concept">
+Digitalisation is the deliberate redesign of how an organisation creates value using digital technology, data, and new ways of working.
+</Callout>
+
+Digitalisation is about value, how work is done, people and processes, and decisions about problems, capabilities, data use, protection, and ways of working. The rest of this page builds that picture step by step.
+
+---
+
+## Why digitalisation matters
+
+Digitalisation matters because expectations are higher, complexity is greater, and competition and scrutiny are sharper. People compare every service to the best digital products they use daily. Manual processes cannot keep up with data, regulation, and risk.
+
+<Callout variant="concept">
+If your core services cannot be delivered reliably, securely, and simply through digital channels, you have a digitalisation problem.
+</Callout>
+
+Digitalisation is not a one time project. It is an ongoing capability if an organisation wants to stay useful and trusted.
+
+---
+
+## Digitisation vs digitalisation vs digital transformation
+
+<GlossaryTip term="Digitisation">
+Plain: Converting analogue information into digital form, such as scanning paper into PDF.  
+Formal: Transforming analogue artefacts into digital representations without altering the underlying process.
+</GlossaryTip>
+
+<GlossaryTip term="Digitalisation">
+Plain: Changing how work is done using digital tools and data.  
+Formal: Redesigning processes, controls, and user experience with digital capabilities at the core.
+</GlossaryTip>
+
+<GlossaryTip term="Digital transformation">
+Plain: Reshaping how an organisation operates and creates value with digital at the centre.  
+Formal: Strategic reconfiguration of business models, operating models, and services enabled by digital capabilities.
+</GlossaryTip>
+
+Digitisation without digitalisation gives the worst of both worlds. Digitalisation without transformation improves efficiency but rarely changes outcomes. These notes focus on digitalisation because that is where strategy meets architecture, data, people, and change.
+
+<ToolCard title="Digitisation vs digitalisation explorer" description="Classify scenarios and see the impact on value.">
+<ChangeImpactSimulator mode="digitisation-vs-digitalisation" />
+</ToolCard>
+
+---
+
+## Data as a strategic asset
+
+Data becomes an asset when it is correct enough to trust, accessible enough to use, governed enough to protect, and connected enough to create insight. Treating data strategically means deciding who is responsible, how it is collected, stored, shared, measured, and used safely.
+
+<Callout variant="concept">
+Digitalisation without data discipline is automation of confusion.
+</Callout>
+
+<ToolCard title="Data value chain mapper" description="Explore how raw data becomes decisions and value.">
+<DataValueChain />
+</ToolCard>
+
+---
+
+## People and culture
+
+Culture is the hard part. Systems succeed only when people trust them, know how to use them, and are supported to change habits. A digital culture shows up in the questions people ask: do we use data to decide, do we share information, do we test ideas, do we treat security and privacy as design constraints.
+
+<GlossaryTip term="Digital culture">
+Plain: Shared behaviours that support using digital tools and data to improve outcomes.  
+Formal: Collective attitudes, norms, and practices that enable adoption of digital capabilities and continuous improvement.
+</GlossaryTip>
+
+<ToolCard title="Change impact simulator" description="Adjust people, process, and technology levers to see how outcomes shift.">
+<ChangeImpactSimulator mode="culture" />
+</ToolCard>
+
+---
+
+## Processes and technology foundations
+
+<Callout variant="concept">
+If you automate a broken process, you get a faster broken process.
+</Callout>
+
+Process first: understand real steps, delays, and bottlenecks; decide which steps add value. Technology second: cloud platforms, integration, identity and access, observability. Technology supports better processes; it does not replace thinking.
+
+<ToolCard title="Digital process canvas" description="Redraw a manual process as a digital flow and see needed capabilities.">
+<StrategyRoadmapCanvas mode="process" />
+</ToolCard>
+
+---
+
+## Planning and maturity
+
+Digitalisation is a journey in three horizons: short term visible wins, medium term shared platforms and data foundations, long term operating model change. Maturity models help if used to decide realistic next steps, not to chase a score.
+
+<GlossaryTip term="Digital maturity">
+Plain: How far an organisation has progressed in using digital tools, data, and ways of working.  
+Formal: A staged description of capability and adoption of digital practices relative to desired outcomes.
+</GlossaryTip>
+
+<ToolCard title="Digital maturity gauge" description="Place an organisation on a simple maturity scale and explore next steps.">
+<DigitalMaturityGauge />
+</ToolCard>
+
+---
+
+## Observing digitalisation in practice
+
+Digitalisation must be observable. It should show up in usage of digital channels, time saved, platform adoption, and indicators of data quality. Measuring change is part of doing digitalisation well.
+
+<DigitalisationDashboard />
+
+---
+
+## Practice and reflection
+
+<QuizBlock
+  questions={[
+    {
+      q: "How is digitalisation different from putting forms online?",
+      a: "It redesigns how work is done and how value is created, not just where forms live.",
+    },
+    {
+      q: "Why is data discipline essential?",
+      a: "Without trustworthy, governed data, digital tools only automate confusion and error.",
+    },
+    {
+      q: "Why is culture difficult but critical?",
+      a: "Systems succeed only when people trust and use them; habits and incentives must change.",
+    },
+    {
+      q: "Why think in horizons?",
+      a: "To make change realistic, sequenced, and sustainable instead of attempted all at once.",
+    },
+  ]}
+/>
+
+<PageNav prevHref="/" prevLabel="Home" nextHref="/digitalisation/intermediate" nextLabel="Intermediate" showTop showBottom />

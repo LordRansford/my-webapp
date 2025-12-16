@@ -1,0 +1,473 @@
+---
+title: "Cybersecurity Notes: Advanced"
+description: "My advanced notes on architecture, adversaries, cryptographic protocols, zero trust, detection, and supply chain risk."
+level: "advanced"
+---
+
+import ProgressBar from '@/components/notes/ProgressBar'
+import PageNav from '@/components/notes/PageNav'
+import Callout from '@/components/notes/Callout'
+import GlossaryTip from '@/components/notes/GlossaryTip'
+import ToolCard from '@/components/learn/ToolCard'
+import QuizBlock from '@/components/notes/QuizBlock'
+
+import TrustGraphTool from '@/components/notes/tools/cybersecurity/advanced/TrustGraphTool'
+import ProtocolAssumptionsTool from '@/components/notes/tools/cybersecurity/advanced/ProtocolAssumptionsTool'
+import CertificateChainTool from '@/components/notes/tools/cybersecurity/advanced/CertificateChainTool'
+import ZeroTrustPlannerTool from '@/components/notes/tools/cybersecurity/advanced/ZeroTrustPlannerTool'
+import DetectionCoverageTool from '@/components/notes/tools/cybersecurity/advanced/DetectionCoverageTool'
+import SupplyChainRiskTool from '@/components/notes/tools/cybersecurity/advanced/SupplyChainRiskTool'
+import IncidentTimelineTool from '@/components/notes/tools/cybersecurity/advanced/IncidentTimelineTool'
+
+import AdvancedCryptoPlayground from "@/components/dashboards/cybersecurity/advanced/AdvancedCryptoPlayground"
+import PkiChainVisualizer from "@/components/dashboards/cybersecurity/advanced/PkiChainVisualizer"
+import ProtocolFlowExplorer from "@/components/dashboards/cybersecurity/advanced/ProtocolFlowExplorer"
+import TokenSecurityLab from "@/components/dashboards/cybersecurity/advanced/TokenSecurityLab"
+import SecureDesignTradeoffLab from "@/components/dashboards/cybersecurity/advanced/SecureDesignTradeoffLab"
+import DetectionRuleTuner from "@/components/dashboards/cybersecurity/advanced/DetectionRuleTuner"
+import AdvancedQuizBoard from "@/components/dashboards/cybersecurity/advanced/AdvancedQuizBoard"
+
+<ProgressBar mode="scroll" />
+
+# Cybersecurity Notes  
+## Advanced  
+### Real security engineering under real constraints
+
+<Callout variant="concept">
+At this level, security is decision making under uncertainty. The question is not whether a control exists. The question is whether the system remains defensible when assumptions fail.
+</Callout>
+
+<PageNav
+  prevHref="/cybersecurity/intermediate"
+  prevLabel="Intermediate"
+  showTop
+  showBottom
+/>
+
+---
+
+## Transition from Intermediate to Advanced
+
+In the intermediate notes, I focused on attacker and defender thinking, attack surfaces, identity basics, cryptography foundations, and detection instincts. In the advanced notes, I switch to systems level thinking.
+
+I treat security as an engineering property across components, identities, data flows, and operations. I assume compromise is possible. The objective becomes limiting impact, increasing detection certainty, and recovering safely.
+
+---
+
+## 1. Security architecture and system design thinking
+
+<Callout variant="concept">
+A secure design is one that fails safely. It expects mistakes, bugs, and adversaries. It minimises blast radius and maximises observability.
+</Callout>
+
+### What I mean by architecture in security
+Architecture is the shape of a system. It defines what can happen even when everyone is trying to do the right thing. When security breaks, architecture determines whether the failure is contained or catastrophic.
+
+<GlossaryTip term="Security architecture">
+Security architecture is the structured design of a system so that security properties remain true across trust boundaries, dependencies, and time.
+</GlossaryTip>
+
+### Assumptions are the real attack surface
+Every design includes assumptions. Advanced security begins when I write them down.
+
+Examples:
+- this service will always authenticate requests
+- this network segment is safe
+- this key will never leak
+- this log will always be available
+
+Attackers do not attack my controls first. They attack my assumptions.
+
+### Blast radius and trust graphs
+When something is compromised, the question becomes how far the attacker can move.
+
+<GlossaryTip term="Blast radius">
+Blast radius is the maximum impact an attacker can reach from a single compromise, including lateral movement, data access, and control of operations.
+</GlossaryTip>
+
+A practical way to reason about blast radius is a trust graph.
+
+Nodes are:
+- users
+- services
+- devices
+- secrets
+- data stores
+
+Edges are:
+- trust relationships
+- allowed calls
+- shared credentials
+- delegated permissions
+
+If a node is compromised, edges define the paths an attacker can walk.
+
+<ToolCard
+  title="Map trust relationships and measure blast radius"
+  description="Model a system as a trust graph. Compromise one node and observe which assets become reachable. Use this to learn why least privilege matters."
+>
+  <TrustGraphTool />
+</ToolCard>
+
+### Formal reasoning hint
+If a node has average branching factor b and an attacker can move k steps, the number of reachable nodes grows roughly like:
+
+\[
+1 + b + b^2 + \dots + b^k
+\]
+
+This is not to show off maths. It shows why small permission expansions can explode into systemic risk.
+
+<ToolCard
+  title="Advanced cryptography playground"
+  description="Explore small thought experiments about keys, signatures and key exchange."
+>
+  <AdvancedCryptoPlayground />
+</ToolCard>
+
+### Adversarial scenario
+Assume a single developer machine is compromised. If that machine can access production secrets, an attacker can often jump directly to production control. A secure architecture ensures that compromise of a workstation does not equal compromise of the organisation.
+
+### Quiz
+<QuizBlock
+  title="Architecture judgement check"
+  questions={[
+    { q: "Why do attackers target assumptions", a: "Assumptions are unguarded. Controls often rely on them. Breaking them collapses the system silently." },
+    { q: "What is blast radius", a: "The maximum impact reachable after a compromise, including data access and lateral movement." },
+    { q: "Why does least privilege reduce systemic risk", a: "It reduces edges in the trust graph, which reduces reachable paths after compromise." },
+    { q: "What is one example of an architectural assumption that often fails", a: "That internal networks are safe or that developer devices are trustworthy." },
+    { q: "How would you reduce blast radius if one service is compromised", a: "Constrain permissions, isolate networks, segment data, require strong identity checks, and limit secrets scope and lifetime." },
+    { q: "Why is writing assumptions down a security control", a: "It makes them testable. Hidden assumptions cannot be verified or defended." },
+    { q: "What is the failure mode of over centralised privileges", a: "Single compromise becomes organisation wide compromise." },
+    { q: "What is the most important output of security architecture", a: "A defensible system where failures are contained, detectable, and recoverable." }
+  ]}
+/>
+
+<PageNav showTop showBottom />
+
+---
+
+## 2. Applied cryptography and protocol reasoning
+
+<Callout variant="concept">
+Advanced cryptography is not about algorithms. It is about protocols and key lifecycle. Strong maths can still fail if a protocol leaks meaning or assumes trust incorrectly.
+</Callout>
+
+### Cryptography solves specific problems
+Cryptography is a toolset for preserving properties:
+- confidentiality with encryption
+- integrity with hashes and signatures
+- authenticity with signatures and certificate systems
+
+But cryptography does not fix:
+- broken access control
+- weak identity
+- unsafe defaults
+- incorrect parsing
+
+### Protocols and assumptions
+A protocol is a sequence of messages with rules. Every message is an opportunity for misunderstanding, replay, or manipulation.
+
+<GlossaryTip term="Protocol">
+A protocol is an agreed set of message formats, orders, and validation rules that allows systems to communicate reliably and securely.
+</GlossaryTip>
+
+Attackers often exploit:
+- replay of valid messages
+- downgrade to weaker options
+- confusion between similar message types
+- error messages that leak secrets
+- timing differences
+
+<ToolCard
+  title="Break a protocol by changing assumptions"
+  description="Explore how replay, downgrade, and message confusion break otherwise strong cryptography. Learn why protocols fail even with good algorithms."
+>
+  <ProtocolAssumptionsTool />
+</ToolCard>
+
+<ToolCard
+  title="Protocol flow explorer"
+  description="Step through a simplified OAuth or token based login flow and see what each party knows."
+>
+  <ProtocolFlowExplorer />
+</ToolCard>
+
+### Certificates and chain of trust
+In real systems, I usually rely on certificates to bind identity to keys. This creates a chain of trust.
+
+<GlossaryTip term="Chain of trust">
+A chain of trust is a sequence of verifications where each certificate or signature is validated by a trusted issuer above it.
+</GlossaryTip>
+
+If any part of the chain is incorrectly trusted, authenticity collapses.
+
+<ToolCard
+  title="PKI chain visualiser"
+  description="Build a simple certificate chain and see how trust flows from root to leaf."
+>
+  <PkiChainVisualizer />
+</ToolCard>
+
+<ToolCard
+  title="Explore certificate chains and failure points"
+  description="Build a chain of trust, then introduce a break. Observe what should fail and what often fails in real systems when validation is weak."
+>
+  <CertificateChainTool />
+</ToolCard>
+
+### Quiz
+<QuizBlock
+  title="Protocol and cryptography judgement check"
+  questions={[
+    { q: "Why can a secure algorithm still lead to insecure outcomes", a: "Because the protocol around it can leak meaning, accept replay, mishandle errors, or trust the wrong identity." },
+    { q: "What is a replay attack in plain terms", a: "Reusing a valid message later to trigger the same effect again, even if the attacker cannot read it." },
+    { q: "What is a downgrade attack", a: "Forcing parties to use weaker settings or older versions that are easier to break." },
+    { q: "Why are certificates used", a: "To bind identity to keys so systems can authenticate who they are talking to." },
+    { q: "What breaks when chain of trust validation is wrong", a: "Authenticity. Attackers can impersonate trusted parties." },
+    { q: "Why are error messages part of protocol security", a: "They can leak secrets or provide clues about internal state." },
+    { q: "What is key lifecycle", a: "Generation, storage, rotation, revocation, and destruction of keys." },
+    { q: "What is the most common cause of cryptographic failure", a: "Key management and incorrect assumptions, not weak mathematics." }
+  ]}
+/>
+
+<PageNav showTop showBottom />
+
+---
+
+## 3. Identity, trust, and zero trust architecture
+
+<Callout variant="concept">
+Zero trust is an architectural stance. It assumes compromise, removes implicit trust, and forces continuous verification across every boundary.
+</Callout>
+
+### What zero trust actually means
+Zero trust means:
+- never trust location by default
+- always verify identity and context
+- enforce least privilege
+- segment access
+- continuously evaluate risk
+
+<GlossaryTip term="Zero trust">
+Zero trust is an approach where no entity is trusted by default, even inside the network, and access is granted based on verified identity and context.
+</GlossaryTip>
+
+### Identity becomes the new perimeter
+Network perimeters are porous. Identity becomes the control plane.
+
+Identity includes:
+- users
+- services
+- devices
+
+Advanced systems treat identity as a lifecycle, not a login:
+- issuance
+- proof
+- expiry
+- revocation
+- monitoring
+
+<ToolCard
+  title="Plan a zero trust control model"
+  description="Identify implicit trust, redesign boundaries, and plan least privilege enforcement. Learn how to reduce blast radius without killing usability."
+>
+  <ZeroTrustPlannerTool />
+</ToolCard>
+
+<ToolCard
+  title="Token security lab"
+  description="Play with a synthetic token and see how expiry, scope and audience affect risk."
+>
+  <TokenSecurityLab />
+</ToolCard>
+
+### Quiz
+<QuizBlock
+  title="Zero trust judgement check"
+  questions={[
+    { q: "Why is location an unreliable trust signal", a: "Because attackers often gain internal access through credentials, compromised endpoints, or misconfigurations." },
+    { q: "What does continuous verification mean", a: "Access decisions are evaluated repeatedly based on identity, device, context, and risk signals." },
+    { q: "Why does zero trust reduce blast radius", a: "It reduces implicit trust paths and constrains lateral movement." },
+    { q: "What is a common zero trust failure", a: "Keeping legacy broad permissions and merely adding more authentication prompts." },
+    { q: "What should be monitored in an identity centric system", a: "Unusual logins, token use anomalies, privilege changes, and unexpected service to service access." },
+    { q: "Why is least privilege hard in practice", a: "Because organisations lack visibility, rely on convenience, and fear breaking workflows." },
+    { q: "What is the role of segmentation", a: "To prevent a compromise in one zone from spreading to others." },
+    { q: "What is the most important zero trust question", a: "What do I assume is safe, and how do I verify it instead." }
+  ]}
+/>
+
+<PageNav showTop showBottom />
+
+---
+
+## 4. Detection, response, and operational security
+
+<Callout variant="concept">
+Prevention fails. Advanced security treats detection and response as first class controls, not an afterthought.
+</Callout>
+
+### Detection requires visibility
+I cannot defend what I cannot see.
+
+Signals include:
+- logs
+- metrics
+- traces
+- behavioural indicators
+
+The advanced challenge is not collecting data. The challenge is converting signals into decisions with acceptable false positives.
+
+<GlossaryTip term="Signal to noise">
+Signal to noise describes how much useful information exists relative to irrelevant activity. Low signal to noise leads to alert fatigue.
+</GlossaryTip>
+
+<ToolCard
+  title="Evaluate detection coverage and blind spots"
+  description="Model attacks and see whether current signals would detect them. Learn why some attacks are invisible without correct instrumentation."
+>
+  <DetectionCoverageTool />
+</ToolCard>
+
+<ToolCard
+  title="Detection rule tuner"
+  description="Adjust a simple rule threshold and see how false positives and false negatives change."
+>
+  <DetectionRuleTuner />
+</ToolCard>
+
+### Response is a timeline problem
+Incidents are sequences. Response quality depends on:
+- speed of detection
+- certainty of diagnosis
+- containment options
+- recovery paths
+
+<ToolCard
+  title="Build an incident timeline and test response options"
+  description="Walk through an incident timeline. Decide when to contain, what evidence to preserve, and what to prioritise."
+>
+  <IncidentTimelineTool />
+</ToolCard>
+
+### Quiz
+<QuizBlock
+  title="Operational judgement check"
+  questions={[
+    { q: "Why is prevention alone insufficient", a: "Because unknown vulnerabilities exist and attackers adapt faster than patch cycles." },
+    { q: "What is alert fatigue", a: "When too many low quality alerts cause real threats to be missed." },
+    { q: "What is the purpose of containment", a: "To stop spread and limit damage while preserving evidence and service continuity." },
+    { q: "Why is forensic evidence fragile", a: "Because systems change quickly and attackers often try to erase traces." },
+    { q: "What makes a detection signal actionable", a: "Context, low false positive rate, and clear response steps." },
+    { q: "Why do organisations miss breaches for months", a: "Low visibility, poor correlation, and weak triage processes." },
+    { q: "What is the difference between detection and response", a: "Detection identifies events. Response contains, eradicates, and recovers." },
+    { q: "What is the advanced goal of operations security", a: "To reduce time to detect, time to contain, and time to recover." }
+  ]}
+/>
+
+<PageNav showTop showBottom />
+
+---
+
+## 5. Supply chain and systemic risk
+
+<Callout variant="concept">
+Modern systems are ecosystems. Supply chain risk is the risk I inherit from what I depend on.
+</Callout>
+
+Dependencies include:
+- libraries
+- build tools
+- container images
+- cloud services
+- identity providers
+
+A compromise in a trusted dependency can bypass controls because it rides the trusted path.
+
+<GlossaryTip term="Supply chain risk">
+Risk introduced through third party components, update paths, and service dependencies that I do not fully control.
+</GlossaryTip>
+
+<ToolCard
+  title="Measure dependency risk and blast radius"
+  description="Map dependency chains and simulate compromise of one dependency. Learn how verification and isolation reduce systemic impact."
+>
+  <SupplyChainRiskTool />
+</ToolCard>
+
+### Quiz
+<QuizBlock
+  title="Supply chain judgement check"
+  questions={[
+    { q: "Why are supply chain attacks effective", a: "They abuse trust. Systems accept updates and dependencies as legitimate by default." },
+    { q: "What reduces supply chain risk", a: "Dependency visibility, verification, least privilege, isolation, and rapid revocation paths." },
+    { q: "Why is systemic risk different from local risk", a: "Because it can affect many systems simultaneously through shared dependencies." },
+    { q: "What is a trusted update path", a: "A mechanism a system uses to accept new code or configuration that is assumed legitimate." },
+    { q: "Why is dependency sprawl dangerous", a: "It increases attack surface and reduces the ability to reason about trust." },
+    { q: "What is one strong architectural mitigation", a: "Reducing blast radius so a dependency compromise cannot reach crown jewels." },
+    { q: "Why is verification important", a: "It turns trust into a checkable claim rather than a hope." },
+    { q: "What is the key supply chain question", a: "If this dependency is compromised, what can the attacker reach next." }
+  ]}
+/>
+
+<PageNav showTop showBottom />
+
+---
+
+## 6. Adversarial trade offs and failure analysis
+
+<Callout variant="concept">
+Every control has a cost and a failure mode. Advanced security is the practice of choosing the least bad trade off with eyes open.
+</Callout>
+
+Trade offs include:
+- usability vs security friction
+- performance vs inspection
+- privacy vs observability
+- centralisation vs resilience
+
+A good decision is one where:
+- assumptions are explicit
+- trade offs are understood
+- residual risk is accepted consciously
+- recovery is planned
+
+<ToolCard
+  title="Secure design trade off lab"
+  description="Compare a few design options and see how they affect risk and complexity."
+>
+  <SecureDesignTradeoffLab />
+</ToolCard>
+
+### Ending transition
+If I can explain the reasoning in this page, I am ready to handle real systems. The next step is practitioner thinking where decisions are tied to role, responsibility, evidence, and ethics.
+
+<ToolCard
+  title="Advanced recap quiz"
+  description="Check your understanding of advanced crypto, protocols, tokens and detection."
+>
+  <AdvancedQuizBoard />
+</ToolCard>
+
+<QuizBlock
+  title="Final advanced judgement check"
+  questions={[
+    { q: "Why is complexity the enemy of security", a: "Because it multiplies assumptions and makes failure modes harder to predict and detect." },
+    { q: "What is residual risk", a: "Risk that remains after controls are applied and must be accepted or mitigated further." },
+    { q: "What is a defensible decision", a: "A decision with explicit assumptions, evidence, known trade offs, and a recovery plan." },
+    { q: "Why do controls create new risks", a: "They add complexity, dependencies, and new attack surfaces." },
+    { q: "What is the advanced security mindset", a: "Assume compromise is possible, limit impact, detect early, recover safely." },
+    { q: "Why is observability a security feature", a: "Because I cannot respond to what I cannot see." },
+    { q: "What is the most common cause of security failure at scale", a: "Unmanaged trust and hidden assumptions across dependencies and identities." },
+    { q: "What should an advanced system optimise for", a: "Containment, verifiability, detection certainty, and recovery speed." }
+  ]}
+/>
+
+<PageNav
+  prevHref="/cybersecurity/intermediate"
+  prevLabel="Intermediate"
+  nextHref="/notes/cybersecurity/practitioner"
+  nextLabel="Practitioner track"
+  showTop
+  showBottom
+/>

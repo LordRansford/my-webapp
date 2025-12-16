@@ -115,7 +115,7 @@ export default function DefendTheStack() {
           </button>
           {score !== null && (
             <div className="status status--ok">
-              Score: {score}% — {message}
+              Score: {score}% - {message}
             </div>
           )}
           <button

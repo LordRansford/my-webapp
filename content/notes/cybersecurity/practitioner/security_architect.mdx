@@ -1,0 +1,70 @@
+---
+title: "Practitioner: Security Architect"
+description: "Role based notes for a security architect: assumptions, design decisions, evidence, and systemic safety."
+role: "Security Architect"
+level: "practitioner"
+---
+
+import ProgressBar from '@/components/notes/ProgressBar'
+import PageNav from '@/components/notes/PageNav'
+import Callout from '@/components/notes/Callout'
+import ToolCard from '@/components/notes/ToolCard'
+import QuizBlock from '@/components/notes/QuizBlock'
+import ControlSelectionTool from '@/components/notes/tools/cybersecurity/practitioner/ControlSelectionTool'
+import EvidenceChecklistTool from '@/components/notes/tools/cybersecurity/practitioner/EvidenceChecklistTool'
+import IncidentTimelineTool from '@/components/notes/tools/cybersecurity/advanced/IncidentTimelineTool'
+
+<ProgressBar mode="scroll" />
+
+# Practitioner  Security Architect  
+## Designing for defensible systems
+
+<Callout variant="concept">
+My job is to design systems that fail safely. I make assumptions explicit, reduce blast radius, and ensure the system is observable.
+</Callout>
+
+## 1. Decision  Which assumptions are allowed
+Architecture is mostly assumptions. I catalogue them, challenge them, and design controls to catch when they fail.
+
+<ToolCard
+  title="Map assumptions to controls"
+  description="List core assumptions and pick controls that would detect or contain failure."
+>
+  <ControlSelectionTool />
+</ToolCard>
+
+## 2. Decision  How to prove the design is secure
+Designs without evidence are optimistic. I need artefacts that show the design resists expected attacks.
+
+<ToolCard
+  title="Evidence checklist for architecture"
+  description="Pick evidence sources that prove architecture properties, like segmentation tests and identity validation."
+>
+  <EvidenceChecklistTool />
+</ToolCard>
+
+## 3. Incident realism  When architecture fails
+<ToolCard
+  title="Architecture failure rehearsal"
+  description="Walk through an incident where a boundary fails. Decide what isolates, what alerts, and what recovers first."
+>
+  <IncidentTimelineTool />
+</ToolCard>
+
+## 4. Ethics and accountability
+Design choices affect safety, privacy, and inclusivity. I document impacts and seek consent when risk shifts to users.
+
+<QuizBlock
+  title="Architect judgement check"
+  questions={[
+    { q: "Why do assumptions need evidence", a: "Because assumptions without tests become silent failure points." },
+    { q: "What is the architect’s accountability", a: "To design for containment, observability, and honest trade offs." }
+  ]}
+/>
+
+<PageNav
+  prevHref="/notes/cybersecurity/practitioner"
+  prevLabel="Practitioner index"
+  showTop
+  showBottom
+/>

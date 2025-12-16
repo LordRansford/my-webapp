@@ -1,0 +1,84 @@
+---
+title: "Practitioner: Security Engineer"
+description: "Decision based notes for a security engineer, focused on controls, evidence, and safe operations."
+role: "Security Engineer"
+level: "practitioner"
+---
+
+import ProgressBar from '@/components/notes/ProgressBar'
+import PageNav from '@/components/notes/PageNav'
+import Callout from '@/components/notes/Callout'
+import GlossaryTip from '@/components/notes/GlossaryTip'
+import ToolCard from '@/components/notes/ToolCard'
+import QuizBlock from '@/components/notes/QuizBlock'
+
+import ControlSelectionTool from '@/components/notes/tools/cybersecurity/practitioner/ControlSelectionTool'
+import EvidenceChecklistTool from '@/components/notes/tools/cybersecurity/practitioner/EvidenceChecklistTool'
+import IncidentTimelineTool from '@/components/notes/tools/cybersecurity/advanced/IncidentTimelineTool'
+
+<ProgressBar mode="scroll" />
+
+# Practitioner  Security Engineer  
+## Decisions, evidence, and safe delivery
+
+<Callout variant="concept">
+This role lives close to systems. The work is not to add controls randomly. The work is to choose controls that reduce risk measurably without breaking the product.
+</Callout>
+
+## 1. Decision  What is the threat model for this change
+I must define what I am defending and against whom. Without this, controls become theatre.
+
+<GlossaryTip term="Threat model">
+A threat model is a structured description of assets, attackers, attack surfaces, assumptions, and controls.
+</GlossaryTip>
+
+<ToolCard
+  title="Pick the right controls for the threat"
+  description="Choose a threat model, then select controls and see what risks remain."
+>
+  <ControlSelectionTool />
+</ToolCard>
+
+<QuizBlock
+  title="Threat modelling in practice"
+  questions={[
+    { q: "Why is a threat model required before controls", a: "Because controls must reduce specific risks. Without a model I cannot justify choices or measure residual risk." },
+    { q: "What is the most common threat model failure", a: "Assuming trusted networks or trusted users without verification." }
+  ]}
+/>
+
+## 2. Decision  What evidence proves the control works
+Controls that cannot be tested are beliefs, not security.
+
+<ToolCard
+  title="Build an evidence checklist"
+  description="Decide what I would measure or test to prove a control works."
+>
+  <EvidenceChecklistTool />
+</ToolCard>
+
+## 3. Incident realism  A timeline I must be ready for
+<ToolCard
+  title="Walk through an incident timeline"
+  description="Practise containment, evidence preservation, and recovery decisions."
+>
+  <IncidentTimelineTool />
+</ToolCard>
+
+## 4. Ethics and accountability
+Security changes affect users. I keep friction proportional to risk. I avoid collecting unnecessary data. I am honest about uncertainty.
+
+<QuizBlock
+  title="Judgement check"
+  questions={[
+    { q: "What makes a security decision defensible", a: "Clear assumptions, evidence, known trade offs, and a recovery plan." },
+    { q: "When is security friction unethical", a: "When it is disproportionate to risk or excludes users unnecessarily." }
+  ]}
+/>
+
+<PageNav
+  prevHref="/notes/cybersecurity/practitioner"
+  prevLabel="Practitioner index"
+  showTop
+  showBottom
+/>

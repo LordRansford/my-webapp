@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "title": "AI dashboard dataset",
+    "version": "1.0",
+    "updatedAtISO": "2025-12-14",
+    "purpose": "Educational dataset for Ransfords Notes dashboards. Not real world telemetry."
+  },
+  "modelFamilies": [
+    { "family": "Linear models", "type": "Supervised", "strength": "Fast, interpretable", "risk": "Underfit", "useCase": "Baseline and tabular" },
+    { "family": "Tree ensembles", "type": "Supervised", "strength": "Strong on tabular", "risk": "Leakage sensitivity", "useCase": "Credit scoring, churn" },
+    { "family": "CNNs", "type": "Supervised", "strength": "Vision patterns", "risk": "Spurious cues", "useCase": "Image classification" },
+    { "family": "Transformers", "type": "Supervised or self-supervised", "strength": "General sequence modelling", "risk": "Hallucination, context limits", "useCase": "Language, multimodal" },
+    { "family": "Diffusion models", "type": "Generative", "strength": "High quality synthesis", "risk": "Copyright, bias amplification", "useCase": "Images, audio" }
+  ],
+  "failureModes": [
+    { "mode": "Data leakage", "category": "Experiment", "severity": 5, "why": "Evaluation looks great, deployment fails", "commonIn": "Healthcare, finance, security" },
+    { "mode": "Distribution shift", "category": "Deployment", "severity": 5, "why": "World changes, model stays the same", "commonIn": "All production systems" },
+    { "mode": "Automation bias", "category": "Human factors", "severity": 4, "why": "Humans over trust fluent systems", "commonIn": "Support desks, triage, security" },
+    { "mode": "Over optimisation on one metric", "category": "Evaluation", "severity": 4, "why": "Best score, worst outcome", "commonIn": "Rare event detection" },
+    { "mode": "Prompt injection", "category": "Security", "severity": 4, "why": "Untrusted input controls behaviour", "commonIn": "Agentic systems" }
+  ],
+  "evaluationScenarios": [
+    { "scenario": "Rare event classification", "metricTrap": "Accuracy", "preferred": "Cost sensitive evaluation", "notes": "Most examples are normal. Accuracy hides failure." },
+    { "scenario": "Imbalanced alerts", "metricTrap": "Recall only", "preferred": "Precision and ops capacity", "notes": "Flooding analysts breaks the system." },
+    { "scenario": "Search relevance", "metricTrap": "Single offline score", "preferred": "Online monitoring and feedback", "notes": "Users shift behaviour over time." }
+  ],
+  "governanceControls": [
+    { "control": "Data provenance", "goal": "Know what data is and where it came from", "riskReduced": "Leakage and legal risk" },
+    { "control": "Model cards", "goal": "Describe intended use and limits", "riskReduced": "Misuse and over trust" },
+    { "control": "Red teaming", "goal": "Test how systems break", "riskReduced": "Unexpected failure modes" },
+    { "control": "Monitoring", "goal": "Detect drift and regressions", "riskReduced": "Silent degradation" }
+  ]
+}

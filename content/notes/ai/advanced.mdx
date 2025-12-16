@@ -1,0 +1,245 @@
+---
+title: "AI Notes, Advanced"
+description: "How modern AI systems behave at scale, why they fail, and how to design and govern them honestly."
+level: "Advanced"
+---
+
+import ProgressBar from "@/components/notes/ProgressBar"
+import PageNav from "@/components/notes/PageNav"
+import Callout from "@/components/notes/Callout"
+import GlossaryTip from "@/components/notes/GlossaryTip"
+import ToolCard from "@/components/notes/ToolCard"
+import QuizBlock from "@/components/notes/QuizBlock"
+import MathInline from "@/components/notes/MathInline"
+import MathBlock from "@/components/notes/MathBlock"
+
+import TrustGraphTool from "@/components/notes/tools/ai/advanced/TrustGraphTool"
+import ProtocolAssumptionsTool from "@/components/notes/tools/ai/advanced/ProtocolAssumptionsTool"
+import CertificateChainTool from "@/components/notes/tools/ai/advanced/CertificateChainTool"
+import ZeroTrustPlannerTool from "@/components/notes/tools/ai/advanced/ZeroTrustPlannerTool"
+import DetectionCoverageTool from "@/components/notes/tools/ai/advanced/DetectionCoverageTool"
+import SupplyChainRiskTool from "@/components/notes/tools/ai/advanced/SupplyChainRiskTool"
+import IncidentTimelineTool from "@/components/notes/tools/ai/advanced/IncidentTimelineTool"
+
+<ProgressBar mode="scroll" />
+
+# AI Notes - Advanced
+
+Intermediate covered evaluation, failure classes, sessions, leakage, and representation. Advanced is where I treat AI systems as living systems with constraints, trade offs, and people. My goal is not to list features. My goal is to explain why these systems break and how to design them so failure is contained, visible, and recoverable.
+
+<PageNav prevHref="/ai/intermediate" prevLabel="Intermediate" nextHref="/ai/summary" nextLabel="Summary" showTop showBottom />
+
+---
+
+## Transformers and attention as information routing
+
+<Callout variant="concept">
+Attention is weighted routing, not memory. The context window is a hard wall, not a soft suggestion.
+</Callout>
+
+Transformers succeed because they repeatedly ask which tokens matter most right now. Each token assigns weights to other tokens. Those weights shape the next representation. There is no persistent world model, only dynamic weighting inside a fixed context window.
+
+The context window is a boundary. Tokens outside it do not exist to the model. That is why long documents get summarised incorrectly and why earlier facts are contradicted. The model is not lying; it is operating in a truncated universe.
+
+<GlossaryTip term="Attention">
+Plain: A way to score which parts of the input should influence the current step.  
+Formal: A weighted sum of value vectors where weights come from query-key similarity.  
+Example: A translation model giving high weight to the subject token when generating a verb.
+</GlossaryTip>
+
+<GlossaryTip term="Context window">
+Plain: The slice of tokens the model can see at once.  
+Formal: A fixed-length sequence limit in the transformer architecture.  
+Example: A 8k-token model cannot use a fact placed at token 10000 when answering.
+</GlossaryTip>
+
+Attention is powerful because it routes information flexibly. It is brittle because it forgets everything outside the window. If I push too much into the prompt, important facts fall out. Grounding and retrieval help, but they only extend the window-they do not create memory.
+
+<ToolCard title="See blast radius when context is wrong">
+<TrustGraphTool />
+</ToolCard>
+
+After using the tool, notice how a single trusted edge changes blast radius. In transformers, a single misplaced token can dominate attention and drag the model into confident error.
+
+<QuizBlock title="Attention and context checks">
+  {[
+    { q: "Why is attention not memory", a: "It is dynamic weighting within the current context, with no persistence beyond the window." },
+    { q: "Why does window size matter operationally", a: "Facts outside the window cannot influence output, causing confident omissions." },
+    { q: "Why can adding more prompt text hurt", a: "Important tokens can be pushed out of scope, weakening attention on what matters." },
+    { q: "What is one real mitigation for window limits", a: "Use retrieval to bring only relevant snippets and keep prompts concise." },
+  ]}
+</QuizBlock>
+
+---
+
+## Large language models as probabilistic systems
+
+<Callout variant="concept">
+LLMs optimise likelihood, not truth. Fluency is not reliability.
+</Callout>
+
+An LLM chooses the next token that maximises the probability under its learned distribution. High probability feels like confidence. Humans equate confidence with correctness. That is a trap.
+
+<GlossaryTip term="Calibration">
+Plain: When probability estimates match reality.  
+Formal: p(y=1|x)=0.7 should mean roughly 70% of such cases are true.  
+Example: An email model outputting 0.9 spam probability that is correct 90% of the time.
+</GlossaryTip>
+
+LLMs often miscalibrate. They sound certain on thin evidence. They hallucinate when the distribution is flat. That is expected behaviour, not a bug.
+
+<ToolCard title="Check protocol assumptions to reduce bad confidence">
+<ProtocolAssumptionsTool />
+</ToolCard>
+
+<QuizBlock title="LLM behaviour checks">
+  {[
+    { q: "What objective does an LLM optimise", a: "Next token likelihood given context." },
+    { q: "Why does fluency mislead humans", a: "We equate smooth language with understanding, but the model is pattern matching." },
+    { q: "Why is hallucination expected", a: "When the distribution is uncertain or under-specified, the model still must output a token." },
+    { q: "What does calibration measure", a: "Whether predicted probabilities match observed outcomes." },
+  ]}
+</QuizBlock>
+
+---
+
+## Retrieval, grounding, and embeddings
+
+<Callout variant="concept">
+Grounding reduces hallucination; it does not erase it. Retrieval quality matters more than model size.
+</Callout>
+
+Grounding attaches generation to external data via retrieval. The model remains a pattern engine; retrieval narrows the pattern space. If retrieval is weak, the model will confidently interpolate with the wrong evidence.
+
+<GlossaryTip term="Retrieval-augmented generation">
+Plain: Fetch relevant documents, then ask the model to answer using them.  
+Formal: Retrieve top-k contexts, concatenate to prompt, decode tokens conditioned on combined context.  
+Example: A support bot pulling the latest policy snippet before answering.
+</GlossaryTip>
+
+Embeddings power retrieval. They encode similarity. Similarity is an opinion derived from training data. If embeddings encode past bias, retrieval repeats it.
+
+<ToolCard title="Explore certificate chains and failure points">
+<CertificateChainTool />
+</ToolCard>
+
+<QuizBlock title="Grounding and embedding checks">
+  {[
+    { q: "Why does grounding help", a: "It injects external facts to constrain generation." },
+    { q: "Why can grounding still fail", a: "If retrieval misses key facts, the model fills gaps with guesses." },
+    { q: "Why are embeddings subjective", a: "They encode similarity based on training data, reflecting its biases." },
+    { q: "What happens if retrieval returns stale data", a: "The model will repeat outdated information confidently." },
+  ]}
+</QuizBlock>
+
+---
+
+## Agentic systems and tool use
+
+<Callout variant="concept">
+An agent is a loop: observe, plan, act, observe. Each loop compounds error.
+</Callout>
+
+Agent systems give models tools, memory, and goals. Autonomy amplifies risk. Without stop conditions, humans, and monitoring, small misreads snowball.
+
+<GlossaryTip term="Runaway behaviour">
+Plain: When an agent keeps acting in a harmful way because feedback is wrong or missing.  
+Formal: Positive feedback without dampening leads to unbounded actions.  
+Example: An automated cleaner deleting resources faster after each “success”.
+</GlossaryTip>
+
+<ToolCard title="Plan zero trust controls for an agent environment">
+<ZeroTrustPlannerTool />
+</ToolCard>
+
+<QuizBlock title="Agent risk checks">
+  {[
+    { q: "Why do agents break more often than single-turn models", a: "They act repeatedly, so small errors compound across steps." },
+    { q: "What mitigates runaway behaviour", a: "Strong stop conditions, monitoring, and human escalation paths." },
+    { q: "Why are guardrails insufficient alone", a: "Guardrails are prompts; agents can route around them when context shifts." },
+    { q: "What should always accompany an autonomous tool", a: "Clear scope, logging, and the ability to revoke actions quickly." },
+  ]}
+</QuizBlock>
+
+---
+
+## Detection and operations at scale
+
+<Callout variant="concept">
+Prevention fails. Detection and response decide whether failure becomes disaster.
+</Callout>
+
+LLM-based systems need signals: unusual tool calls, spikes in refusals, unexpected prompt tokens. Traditional systems need auth anomalies, privilege changes, and sensitive reads. The challenge is choosing signals that matter without drowning in noise.
+
+<ToolCard title="Evaluate detection coverage">
+<DetectionCoverageTool />
+</ToolCard>
+
+<QuizBlock title="Detection checks">
+  {[
+    { q: "Why is alert fatigue a security risk", a: "Important events get ignored when noise is high." },
+    { q: "What makes a signal actionable", a: "Context, low false positives, and clear response steps." },
+    { q: "Why must LLM systems log tool use", a: "Tool misuse is a primary failure mode; without logs you cannot see it." },
+    { q: "What is a practical mitigation for noise", a: "Tune thresholds, aggregate signals, and align alerts to response capacity." },
+  ]}
+</QuizBlock>
+
+---
+
+## Supply chain and systemic risk
+
+<Callout variant="concept">
+Dependencies are attack paths. Trust is rarely isolated.
+</Callout>
+
+Modern AI stacks depend on packages, build systems, identity providers, and hosting. A compromise in one trusted dependency can bypass controls. Reducing blast radius means reducing implicit trust and isolating dependencies.
+
+<ToolCard title="Map dependency blast">
+<SupplyChainRiskTool />
+</ToolCard>
+
+<QuizBlock title="Supply chain checks">
+  {[
+    { q: "Why are supply chain attacks effective", a: "They ride trusted paths where validation is weak." },
+    { q: "What reduces supply chain blast radius", a: "Isolation, verification, least privilege, and rapid revocation paths." },
+    { q: "Why is dependency sprawl dangerous", a: "More trust edges and harder visibility." },
+    { q: "What must you log about dependencies", a: "Versions, provenance, and update history." },
+  ]}
+</QuizBlock>
+
+---
+
+## Governance, safety, and limits
+
+<Callout variant="concept">
+Governance is not paperwork. It is how we make decisions under uncertainty and accept residual risk honestly.
+</Callout>
+
+Real governance fails when incentives reward shipping over safety. Model cards unread, red teaming skipped, monitoring underfunded. The result is surprise failures that were foreseeable.
+
+<GlossaryTip term="Residual risk">
+Plain: The risk that remains after controls.  
+Formal: Risk not eliminated by mitigation, consciously accepted.  
+Example: Accepting some false positives to avoid missing high-impact fraud.
+</GlossaryTip>
+
+<ToolCard title="Incident rehearsal checklist">
+<IncidentTimelineTool />
+</ToolCard>
+
+<QuizBlock title="Governance checks">
+  {[
+    { q: "Why does governance often fail", a: "Incentives reward speed; safety work is deprioritised or papered over." },
+    { q: "What is residual risk", a: "The risk you accept after mitigations; it must be explicit." },
+    { q: "Why do model cards matter", a: "They document intended use, limits, and evaluation so misuse is visible." },
+    { q: "Why is human-in-the-loop different from human-on-the-loop", a: "In-the-loop means humans approve actions; on-the-loop often means humans are nominally present but systems act autonomously." },
+  ]}
+</QuizBlock>
+
+---
+
+<Callout variant="concept">
+If you remember one thing from this page, remember that modern AI fails because we treat pattern engines like truth engines. Architecture, monitoring, and honest governance are how we keep that gap from hurting people.
+</Callout>
+
+<PageNav prevHref="/ai/intermediate" prevLabel="Intermediate" nextHref="/ai/summary" nextLabel="Summary" showTop showBottom />

@@ -62,7 +62,7 @@ export default function SchemaInspector() {
             <ul className="stack" style={{ margin: 0 }}>
               {(parsed.data.relationships || []).map((r, idx) => (
                 <li key={idx} className="text-sm text-gray-800">
-                  {r.from} —[{r.type}]→ {r.to}
+                  {`${r.from} -[${r.type}]-> ${r.to}`}
                 </li>
               ))}
             </ul>

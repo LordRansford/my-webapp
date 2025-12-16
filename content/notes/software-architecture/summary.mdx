@@ -1,0 +1,148 @@
+---
+title: "Software Architecture Notes - Summary"
+description: "Consolidation of software architecture concepts with interactive tools, dashboards, and reflection."
+level: "Summary"
+---
+
+import ProgressBar from "@/components/notes/ProgressBar"
+import PageNav from "@/components/notes/PageNav"
+import Callout from "@/components/notes/Callout"
+import GlossaryTip from "@/components/notes/GlossaryTip"
+import ToolCard from "@/components/learn/ToolCard"
+import QuizBlock from "@/components/notes/QuizBlock"
+
+import ArchitectureDashboard from "@/components/dashboards/ArchitectureDashboard"
+import DecisionDashboard from "@/components/dashboards/DecisionDashboard"
+import DigitalisationDashboard from "@/components/dashboards/DigitalisationDashboard"
+import ArchConceptMatchGame from "@/components/games/softwareArchitecture/ArchConceptMatchGame"
+import ArchStyleSorterGame from "@/components/games/softwareArchitecture/ArchStyleSorterGame"
+import QualityTradeoffGame from "@/components/games/softwareArchitecture/QualityTradeoffGame"
+import RequestFlowGame from "@/components/games/softwareArchitecture/RequestFlowGame"
+import ArchQuickFireQuizGame from "@/components/games/softwareArchitecture/ArchQuickFireQuizGame"
+
+<ProgressBar mode="scroll" />
+
+# Software Architecture Notes - Summary
+
+This page ties together the Beginner, Intermediate, and Advanced pages. It is lighter, more visual, and more playful, but still serious. The goal is to consolidate, test understanding, and invite exploration.
+
+<PageNav prevHref="/software-architecture/advanced" prevLabel="Advanced" nextHref={null} showTop showBottom />
+
+---
+
+## What you should now understand
+
+If you have worked through the earlier pages, you should have a coherent mental model of architecture: purpose, structure, boundaries, quality attributes, trade-offs, organisational impact, resilience, and governance.
+
+<Callout variant="concept">
+If you can explain architecture without naming a framework or tool, you understand it.
+</Callout>
+
+---
+
+## Architecture as thinking
+
+Architecture is not a deliverable. It is a way of thinking: slowing down, asking what will change, who is affected, what assumptions are hidden, and how failure will occur.
+
+<GlossaryTip term="Architectural thinking">
+Plain: Reasoning about systems, trade-offs, and long-term consequences.  
+Formal: A discipline of evaluating structure, qualities, and risk to guide sustainable system evolution.
+</GlossaryTip>
+
+---
+
+## Practice games
+
+<ToolCard
+  title="Architecture concept match"
+  description="Match plain language descriptions to key architecture terms."
+>
+  <ArchConceptMatchGame />
+</ToolCard>
+
+<ToolCard
+  title="Architecture style sorter"
+  description="Pick which architecture style best fits each scenario."
+>
+  <ArchStyleSorterGame />
+</ToolCard>
+
+<ToolCard
+  title="Quality attribute trade off lab"
+  description="Adjust design choices and see how they change latency, scalability and reliability."
+>
+  <QualityTradeoffGame />
+</ToolCard>
+
+<ToolCard
+  title="Request flow explorer"
+  description="Follow a synthetic request as it travels through a simple architecture."
+>
+  <RequestFlowGame />
+</ToolCard>
+
+---
+
+## Dashboards and system signals
+
+Architecture must be observable. These dashboards simulate how architects reason about live systems.
+
+### Architecture health dashboard
+
+<ArchitectureDashboard />
+
+### Decision and change dashboard
+
+<DecisionDashboard />
+
+### Digitalisation and delivery dashboard
+
+<DigitalisationDashboard />
+
+<Callout variant="concept">
+If you cannot see the system, you cannot steer it.
+</Callout>
+
+---
+
+## Recap challenge
+
+<ToolCard
+  title="Software architecture quick fire quiz"
+  description="A short mixed level quiz that revisits key architecture concepts."
+>
+  <ArchQuickFireQuizGame />
+</ToolCard>
+
+---
+
+## Reflection and next steps
+
+Ask yourself:
+- Where do I see architectural problems in systems I know
+- What decisions would I revisit with this understanding
+- How would I explain architecture to a non-technical leader
+- What trade-offs am I currently ignoring
+
+<QuizBlock
+  questions={[
+    {
+      q: "What distinguishes architecture from design and implementation?",
+      a: "Architecture focuses on decisions that shape structure and are costly to change.",
+    },
+    {
+      q: "Why are trade-offs unavoidable in architecture?",
+      a: "Because improving one quality attribute often degrades another.",
+    },
+    {
+      q: "Why must architecture be observable?",
+      a: "Because unobserved systems cannot be understood or improved.",
+    },
+    {
+      q: "What is the architect ultimately responsible for?",
+      a: "The long-term health and adaptability of the system.",
+    },
+  ]}
+/>
+
+<PageNav prevHref="/software-architecture/advanced" prevLabel="Advanced" nextHref={null} showTop showBottom />

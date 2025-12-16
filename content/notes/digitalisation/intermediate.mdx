@@ -1,0 +1,180 @@
+---
+title: "Digitalisation Strategy Notes - Intermediate"
+description: "Designing and executing digitalisation strategy, from vision and operating models to platforms, governance, and roadmaps."
+level: "Intermediate"
+---
+
+import ProgressBar from "@/components/notes/ProgressBar"
+import PageNav from "@/components/notes/PageNav"
+import Callout from "@/components/notes/Callout"
+import GlossaryTip from "@/components/notes/GlossaryTip"
+import ToolCard from "@/components/notes/ToolCard"
+import QuizBlock from "@/components/notes/QuizBlock"
+
+import StrategyRoadmapCanvas from "@/components/notes/tools/digitalisation/beginner/StrategyRoadmapCanvas"
+import OperatingModelLab from "@/components/notes/tools/digitalisation/intermediate/OperatingModelLab"
+import CapabilityMapper from "@/components/notes/tools/digitalisation/intermediate/CapabilityMapper"
+import PortfolioPrioritiser from "@/components/notes/tools/digitalisation/intermediate/PortfolioPrioritiser"
+import PolicyImpactSimulator from "@/components/notes/tools/digitalisation/intermediate/PolicyImpactSimulator"
+import DigitalisationDashboard from "@/components/dashboards/DigitalisationDashboard"
+
+<ProgressBar mode="scroll" />
+
+# Digitalisation Strategy Notes - Intermediate
+
+These notes build on the beginner page. The language is now set. The aim here is to turn intent into design: vision into outcomes, operating models into capabilities, and realistic roadmaps instead of wish lists.
+
+<PageNav prevHref="/digitalisation/beginner" prevLabel="Beginner" nextHref="/digitalisation/advanced" nextLabel="Advanced" showTop showBottom />
+
+---
+
+## From foundations to design
+
+The beginner page established that digitalisation is about value, people, process, data, and technology working together. At this level the questions change from “what is digitalisation” to:
+
+- What exactly are we trying to achieve
+- How will work need to change
+- Which capabilities and platforms do we need
+- How do we sequence this so it is realistic
+
+<Callout variant="concept">
+Digitalisation strategy at this level is about turning intent into an operating model, shared platforms, and a realistic plan.
+</Callout>
+
+---
+
+## Vision, outcomes, and value
+
+A lot of strategies fail because they start with technology. I start with a small set of clear outcomes that matter to real people.
+
+Examples include reducing time for a key journey, improving quality and speed of decisions, reducing the cost and risk of running core systems, or enabling a service that was not possible before.
+
+<GlossaryTip term="Outcome">
+Plain: A specific change in the real world that shows the strategy is working.  
+Formal: An observable, measurable state that indicates the desired value has been delivered.
+</GlossaryTip>
+
+A good vision is short, tied to real problems, measurable, and honest about what will not change. If we cannot explain the value, it is hard to justify the work.
+
+<ToolCard title="Vision to value canvas" description="Connect a simple digital vision to concrete outcomes and measures of value.">
+<StrategyRoadmapCanvas mode="vision" />
+</ToolCard>
+
+---
+
+## Operating model and capabilities
+
+Digitalisation changes how the organisation runs. An operating model describes how people, process, technology, and governance work together to deliver value.
+
+<GlossaryTip term="Operating model">
+Plain: How the organisation actually runs day to day.  
+Formal: The blueprint of structure, process, technology, and decision making that delivers value.
+</GlossaryTip>
+
+Capabilities sit beneath the operating model. A capability is something the organisation needs to do repeatedly, such as managing relationships, collecting and analysing data, building and operating digital services, or managing risk and compliance.
+
+<Callout variant="concept">
+You cannot digitalise everything at once. Strengthen the capabilities that matter most for your outcomes.
+</Callout>
+
+<ToolCard title="Operating model lab" description="Sketch services, ownership, and flows. Notice how responsibility and flow align.">
+<OperatingModelLab />
+</ToolCard>
+
+<ToolCard title="Capability mapper" description="Identify key capabilities, score their current strength, and explore where to invest.">
+<CapabilityMapper />
+</ToolCard>
+
+---
+
+## Platforms, data, and architecture for digitalisation
+
+Technology now becomes more concrete but remains strategy led. The question is which shared platforms support the capabilities and outcomes we need, how data moves safely, and what architectural approach keeps change easier rather than harder.
+
+<GlossaryTip term="Platform">
+Plain: A shared foundation others can build on.  
+Formal: A set of reusable capabilities, services, and standards that enable teams to deliver value faster and more safely.
+</GlossaryTip>
+
+Platforms avoid rebuilding the same foundations in every service. Data and architecture choices must match the platform approach: clear data domains and ownership, common identifiers and standards, an integration approach that can evolve, and observability and resilience from the start.
+
+<ToolCard title="Platform and data canvas" description="Identify shared platforms and the data flows they need to support.">
+<StrategyRoadmapCanvas mode="platforms" />
+</ToolCard>
+
+---
+
+## Governance, funding, and risk
+
+Digitalisation touches risk, money, and responsibility, so governance becomes central. Governance here is not long policy documents; it is clear answers to who owns the roadmap, who can approve platforms or major changes, how data and privacy decisions are made, and how security standards are enforced.
+
+<GlossaryTip term="Governance">
+Plain: How decisions are made, recorded, and enforced.  
+Formal: The decision rights, processes, and controls that keep work aligned with purpose and constraints.
+</GlossaryTip>
+
+Funding should be iterative: ongoing investment in core platforms and data, with outcomes over feature lists. Risk is a design parameter, not an afterthought.
+
+<Callout variant="concept">
+Too little governance creates chaos. Too much governance freezes useful change.
+</Callout>
+
+<ToolCard title="Policy and risk impact simulator" description="Adjust governance and funding choices and observe how risk and delivery capacity change.">
+<PolicyImpactSimulator />
+</ToolCard>
+
+---
+
+## Roadmapping and prioritisation
+
+Even with a clear vision, operating model, and platform view, we cannot do everything at once. Roadmapping is the sequence of what changes when and why. Dependencies matter: analytics needs data quality first; identity should stabilise before modernising every small application.
+
+Prioritisation weighs strategic value, risk reduction, cost, and readiness. A roadmap is realistic when it respects dependencies, capacity, and genuine priorities.
+
+<GlossaryTip term="Roadmap">
+Plain: A sequenced plan that shows how change will happen over time.  
+Formal: A time based view of initiatives, dependencies, and outcomes needed to deliver strategy.
+</GlossaryTip>
+
+<ToolCard title="Digital portfolio prioritiser" description="Rank digital initiatives based on value, risk, and readiness, then place them on a simple roadmap.">
+<PortfolioPrioritiser />
+</ToolCard>
+
+<ToolCard title="Strategy roadmap canvas" description="Lay out short, medium, and long term steps for a digitalisation scenario.">
+<StrategyRoadmapCanvas mode="roadmap" />
+</ToolCard>
+
+---
+
+## Practice and reflection
+
+<DigitalisationDashboard />
+
+This dashboard gives a feel for the signals a digital leader might track: adoption of digital channels, use of core platforms, progress against roadmap milestones, and basic quality indicators. Strategy and measurement belong together.
+
+<QuizBlock
+  questions={[
+    {
+      q: "Why do I start with outcomes rather than technology when designing digitalisation strategy?",
+      a: "Because digitalisation is about real world change, and without clear outcomes technology has nothing solid to aim at."
+    },
+    {
+      q: "What is the relationship between operating model and digital capabilities?",
+      a: "The operating model describes how the organisation runs; digital capabilities are the skills and tools that let that model function in a modern way."
+    },
+    {
+      q: "Why are shared platforms important for digitalisation?",
+      a: "They provide reusable foundations so teams can build services faster, more consistently, and more safely."
+    },
+    {
+      q: "How does governance help digitalisation instead of blocking it?",
+      a: "Good governance clarifies who decides what, balances risk and ambition, and supports safe autonomy rather than freezing change."
+    },
+    {
+      q: "What makes a digital roadmap realistic rather than a wish list?",
+      a: "It respects dependencies, sequences short, medium, and long term steps, and matches capacity, risk, and real priorities."
+    }
+  ]}
+ />
+
+<PageNav prevHref="/digitalisation/beginner" prevLabel="Beginner" nextHref="/digitalisation/advanced" nextLabel="Advanced" showTop showBottom />

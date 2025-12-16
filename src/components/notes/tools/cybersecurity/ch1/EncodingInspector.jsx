@@ -10,14 +10,14 @@ export default function EncodingInspector() {
     initial_state: { input: "A ? ??" },
   });
 
-  if (!is_ready) return <p className="text-sm text-gray-600">Loading.</p>;
-
-  const { input } = state;
+  const input = state?.input ?? "";
   const bytes = useMemo(() => {
     const encoder = new TextEncoder();
     const encoded = encoder.encode(input || "");
     return Array.from(encoded);
   }, [input]);
+
+  if (!is_ready) return <p className="text-sm text-gray-600">Loading.</p>;
 
   return (
     <div className="space-y-4 text-sm">

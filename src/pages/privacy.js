@@ -1,88 +1,64 @@
-import Link from "next/link";
 import Layout from "@/components/Layout";
 
 export default function PrivacyPage() {
   return (
-    <Layout
-      title="Privacy - Ransford's Notes"
-      description="How your data is handled across the courses, labs, and newsletter."
-    >
-      <nav className="breadcrumb">
-        <Link href="/">Home</Link>
-        <span aria-hidden="true"> / </span>
-        <span>Privacy</span>
-      </nav>
+    <Layout title="Privacy" description="How Ransford's Notes handles your data and respects your privacy.">
+      <main className="page">
+        <header className="page-header">
+          <p className="eyebrow">Ransford&apos;s Notes</p>
+          <h1>Privacy</h1>
+          <p className="lead">
+            This page explains in plain language how this site collects and uses information. I want you to feel
+            comfortable using Ransford&apos;s Notes without surprises.
+          </p>
+        </header>
 
-      <header className="page-header">
-        <p className="eyebrow">Privacy</p>
-        <h1>Privacy Policy</h1>
-        <p className="lead">
-          I take privacy seriously. I collect as little information as possible while still providing a
-          useful service.
-        </p>
-      </header>
+        <section className="section">
+          <h2>What this site collects</h2>
+          <p>
+            The site collects the minimum information needed to deliver pages, run the interactive tools, and understand
+            how the site is used. Typical information includes technical details provided by your browser such as device
+            type and browser version, and any information you choose to provide if you sign up for an account or a
+            newsletter.
+          </p>
+        </section>
 
-      <section className="section">
-        <h2>What information I collect</h2>
-        <ol>
-          <li>
-            <strong>When you browse the site</strong>: basic technical information such as IP address,
-            browser type, approximate location, and pages visited may be collected via privacy-friendly
-            analytics. It does not include your name or direct identifiers.
-          </li>
-          <li>
-            <strong>When you subscribe</strong>: your email address and the time of subscription and consent.
-            Used only to send you updates.
-          </li>
-          <li>
-            <strong>When you contact me</strong>: whatever you choose to share in your message, used only to
-            respond and keep context.
-          </li>
-        </ol>
-      </section>
+        <section className="section">
+          <h2>How information is used</h2>
+          <p>
+            Information is used to keep the site running, improve the notes and tools, and keep your account working if
+            you choose to create one. I do not sell your data. If third party services are used for analytics or email,
+            they are chosen carefully and configured to use only what is necessary.
+          </p>
+        </section>
 
-      <section className="section">
-        <h2>How I use your information</h2>
-        <ul>
-          <li>Operate and improve the site.</li>
-          <li>Communicate with subscribers and respond to messages.</li>
-          <li>Understand which topics are most valuable to prioritise future content.</li>
-        </ul>
-        <p>I do not sell your data and I do not share it with advertisers.</p>
-      </section>
+        <section className="section">
+          <h2>Cookies and similar technologies</h2>
+          <p>
+            Cookies and similar technologies may be used to remember your preferences, keep you signed in, and measure
+            how the site is used. Where required, a simple cookie notice will be shown and you will have the option to
+            manage non essential cookies.
+          </p>
+        </section>
 
-      <section className="section">
-        <h2>Cookies and analytics</h2>
-        <p>
-          Cookies may be used to remember preferences, support essential functions, and enable anonymous
-          analytics. Analytics, when enabled, avoid tracking you across sites and collect only aggregated
-          statistics. Where required, the site will request consent.
-        </p>
-      </section>
+        <section className="section">
+          <h2>Your choices</h2>
+          <p>
+            You can use most of the site without creating an account. If you do create an account, you can ask for your
+            account to be removed. If you sign up for a newsletter you can unsubscribe at any time using the link in the
+            email.
+          </p>
+        </section>
 
-      <section className="section">
-        <h2>Third party services</h2>
-        <p>
-          Hosting, email, and payments (if you donate) are handled by third parties chosen for their security
-          and compliance. They process data only on my instructions and for the stated purpose.
-        </p>
-      </section>
-
-      <section className="section">
-        <h2>Your rights</h2>
-        <p>
-          Depending on your jurisdiction you may have rights to access, correct, delete, or object to certain
-          processing. Contact me with any request; I will respond in line with legal obligations.
-        </p>
-      </section>
-
-      <section className="section">
-        <h2>Changes to this policy</h2>
-        <p>
-          This policy may be updated when features or regulations change. The date will be updated and
-          significant changes may be highlighted.
-        </p>
-      </section>
+        <section className="section">
+          <h2>Contact</h2>
+          <p>
+            If you have questions about privacy or how your data is handled, please use the contact details in the
+            footer to get in touch.
+          </p>
+        </section>
+      </main>
     </Layout>
   );
 }
+

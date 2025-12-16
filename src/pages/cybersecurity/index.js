@@ -18,6 +18,11 @@ const pages = [
     summary: "Chapter 3: threats, defence in depth, humans, and response with labs.",
   },
   {
+    slug: "dashboards",
+    title: "Dashboards",
+    summary: "Interactive cybersecurity dashboards and labs that turn theory into intuition before the summary game.",
+  },
+  {
     slug: "summary",
     title: "Summary and game",
     summary: "A quick recap with an interactive game to test what you learned (publishing soon).",
@@ -28,14 +33,14 @@ export default function CybersecurityNotesHub() {
   return (
     <Layout
       title="Cybersecurity Notes"
-      description="Choose your level: beginner, intermediate, advanced, or summary with an interactive game."
+      description="Choose your level: beginner, intermediate, advanced, dashboards, or summary with an interactive game."
     >
       <header className="page-header">
         <p className="eyebrow">Cybersecurity Notes</p>
         <h1>Read, practise, and level up</h1>
         <p className="lead">
           Pick the stage that fits you. Beginner for fundamentals, intermediate for applied crypto, advanced for
-          forward-looking topics, and a summary page with a game to test yourself.
+          forward-looking topics, a dashboards page for hands-on labs, and a summary page with a game to test yourself.
         </p>
       </header>
 
@@ -54,6 +59,19 @@ export default function CybersecurityNotesHub() {
           </Link>
         ))}
       </div>
+
+      <section className="section">
+        <h2>References and further reading</h2>
+        <p className="muted">
+          These notes draw on a wide range of sources. A few starting points are listed here so that you can explore the
+          official material in more depth.
+        </p>
+        <ul className="list">
+          <li>Public guidance from national cybersecurity centres and regulators</li>
+          <li>Documentation and whitepapers from major cloud and security vendors</li>
+          <li>Textbooks and open course materials from recognised universities and professional bodies</li>
+        </ul>
+      </section>
     </Layout>
   );
 }

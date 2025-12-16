@@ -1,0 +1,173 @@
+---
+title: "Digitalisation Strategy Notes - Advanced"
+description: "Digitalisation at scale across ecosystems, regulation, risk, funding, and long-term stewardship."
+level: "Advanced"
+---
+
+import ProgressBar from "@/components/notes/ProgressBar"
+import PageNav from "@/components/notes/PageNav"
+import Callout from "@/components/notes/Callout"
+import GlossaryTip from "@/components/notes/GlossaryTip"
+import ToolCard from "@/components/notes/ToolCard"
+import QuizBlock from "@/components/notes/QuizBlock"
+
+import DigitalisationDashboard from "@/components/dashboards/DigitalisationDashboard"
+import EcosystemMapper from "@/components/notes/tools/digitalisation/advanced/EcosystemMapper"
+import RegulationExplorer from "@/components/notes/tools/digitalisation/advanced/RegulationExplorer"
+import RiskHeatmap from "@/components/notes/tools/digitalisation/advanced/RiskHeatmap"
+import FundingModelLab from "@/components/notes/tools/digitalisation/advanced/FundingModelLab"
+import ScenarioSimulator from "@/components/notes/tools/digitalisation/advanced/ScenarioSimulator"
+
+<ProgressBar mode="scroll" />
+
+# Digitalisation Strategy Notes - Advanced
+
+This page assumes the foundations from Beginner and the design mindset from Intermediate. At the advanced level, digitalisation moves from one organisation to ecosystems, regulation, shared platforms, and long-term stewardship.
+
+<PageNav prevHref="/digitalisation/intermediate" prevLabel="Intermediate" nextHref="/digitalisation/summary" nextLabel="Summary" showTop showBottom />
+
+---
+
+## From organisation to ecosystem
+
+At earlier levels, digitalisation work was mostly inside one organisation. At this level it sits in ecosystems: supply chains, regulators, partners, platforms, and competitors share the same data flows and standards. A weak link in one place can hurt many others.
+
+- How does our organisation fit into a wider digital ecosystem
+- Where do we rely on others, and where do others rely on us
+- Which standards, interfaces, and data flows are now shared infrastructure
+- What happens to others if we fail
+
+<Callout variant="concept">
+Advanced digitalisation is about shaping and surviving in a digital ecosystem, not just improving one organisation.
+</Callout>
+
+<ToolCard title="Ecosystem mapper" description="Visualise organisations, platforms, and data flows your strategy depends on.">
+<EcosystemMapper />
+</ToolCard>
+
+---
+
+## Regulation, policy, and trust
+
+Digitalisation at scale is shaped by regulation and policy. Regulation can enable change when guardrails are clear, or block it when rules are rigid or fragmented. Incentives can also push risk into the wrong places.
+
+<GlossaryTip term="Regulatory perimeter">
+Plain: The set of activities covered by a regulator or set of rules.  
+Formal: The boundary of services and data flows that fall under specific legal and supervisory obligations.
+</GlossaryTip>
+
+I look at three layers:
+
+1) Explicit rules: data protection, security, resilience, sector rules, audit duties.  
+2) Implicit rules: public expectations, reputational risk, norms about fairness, political sensitivity.  
+3) Trust model: who must trust whom, and on what basis (citizens, partners, regulators).
+
+<Callout variant="concept">
+If digitalisation reduces trust, it will eventually be stopped by politics, regulation, or public reaction.
+</Callout>
+
+<ToolCard title="Regulation and policy explorer" description="Adjust rules, obligations, and trust assumptions to see how they change enablement, drag, and stability.">
+<RegulationExplorer />
+</ToolCard>
+
+---
+
+## Interoperability and cross-border thinking
+
+As data, services, or platforms cross organisational or national boundaries, interoperability becomes central. It is not only technical; it involves shared meaning, process alignment, legal agreements, and operational coordination.
+
+<GlossaryTip term="Interoperability">
+Plain: Different systems or organisations working together and using shared information meaningfully.  
+Formal: The ability to exchange and correctly interpret information across systems, organisations, or jurisdictions.
+</GlossaryTip>
+
+Cross-border digitalisation adds data localisation rules, transfer mechanisms, conflicting legal duties, and the risk that one party changes standards unilaterally. Standards bodies, international agreements, and national strategies all matter.
+
+<ToolCard title="Interoperability scenario simulator" description="Model a service when partners use different standards, jurisdictions, or data policies.">
+<ScenarioSimulator mode="interoperability" />
+</ToolCard>
+
+---
+
+## Funding models and economic reality
+
+Ambitious digitalisation needs realistic funding. The funding model is an architectural choice: project funding versus product and platform funding, central versus distributed investment, and charging models for platforms and data.
+
+<GlossaryTip term="Funding model">
+Plain: How money flows to build, operate, and improve digital capabilities and services.  
+Formal: The pattern of investment, cost allocation, and recovery that sustains digital platforms and services over time.
+</GlossaryTip>
+
+If funding is entirely project based, platforms decay. If funding is entirely central, teams may disengage. Incentives matter: heavy chargeback can create shadow systems; no chargeback can create unplanned load.
+
+<ToolCard title="Funding model lab" description="Explore how funding choices affect platform sustainability, team behaviour, and adoption.">
+<FundingModelLab />
+</ToolCard>
+
+---
+
+## Risk, resilience, and learning from failure
+
+At this level we assume things will go wrong: systems fail, partners are compromised, regulations change, and some projects miss targets. The question is how we design for resilience and how we learn.
+
+<GlossaryTip term="Resilience">
+Plain: The ability to keep delivering critical outcomes under stress and recover gracefully.  
+Formal: The capacity of a system or ecosystem to absorb disruption and restore required service levels without catastrophic loss.
+</GlossaryTip>
+
+Incidents become data, not embarrassment: record and analyse them, share lessons where appropriate, and adjust design, governance, and funding in response. Resilience costs money; some services must be highly resilient, others can degrade gracefully.
+
+<ToolCard title="Risk heatmap and resilience explorer" description="Visualise risks, their likelihood and impact, and test how controls change the picture.">
+<RiskHeatmap />
+</ToolCard>
+
+---
+
+## Stewardship and long-term digital health
+
+Stewardship recognises that digital choices today shape options for years. Data, platforms, and standards can become de facto public infrastructure. Skills, culture, and trust take time to build and can be lost quickly.
+
+<Callout variant="concept">
+Stewardship is leaving the digital ecosystem healthier and more adaptable than you found it.
+</Callout>
+
+Stewardship thinks in decades, treats data and platforms as assets, builds leadership and skills in others, and is willing to say no when short-term gains damage long-term health. Observation and measurement close the loop.
+
+<DigitalisationDashboard />
+
+Dashboards like this become part of stewardship: they show patterns, slow decline in critical areas, and when to intervene early.
+
+---
+
+## Practice and reflection
+
+<ToolCard title="Ecosystem scenario simulator" description="Choose a digital ecosystem scenario, adjust regulation, funding, platform choices, and risk appetite, and see how outcomes change.">
+<ScenarioSimulator mode="ecosystem" />
+</ToolCard>
+
+<QuizBlock
+  questions={[
+    {
+      q: "Why is it not enough to think about digitalisation within a single organisation at the advanced level?",
+      a: "Because value, risk, and data flow across ecosystems, so a failure in one place can harm many others."
+    },
+    {
+      q: "How do regulation and policy shape digitalisation rather than simply constrain it?",
+      a: "They set guardrails, incentives, and trust conditions that determine which digital models are legitimate, sustainable, and scalable."
+    },
+    {
+      q: "Why is interoperability more than a technical problem?",
+      a: "Because it relies on shared meaning, process alignment, legal agreements, and operational coordination."
+    },
+    {
+      q: "What makes a funding model part of digital architecture?",
+      a: "Funding patterns influence which platforms survive, how teams behave, and whether shared capabilities can be sustained over time."
+    },
+    {
+      q: "What distinguishes stewardship from ordinary digital management?",
+      a: "Stewardship focuses on long-term health of data, platforms, skills, and trust, and trades short-term gains for sustainable outcomes."
+    }
+  ]}
+ />
+
+<PageNav prevHref="/digitalisation/intermediate" prevLabel="Intermediate" nextHref="/digitalisation/summary" nextLabel="Summary" showTop showBottom />

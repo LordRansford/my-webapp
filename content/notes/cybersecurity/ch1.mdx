@@ -1,290 +1,446 @@
 ---
-title: "Cybersecurity Notes - Chapter 1"
-description: "Foundations I built for myself: harm, risk, maths, and browser labs that make it real."
+title: "Cybersecurity Notes: Beginner"
+description: "My beginner notes. Calm, detailed, and practical. I start at what data is and build up to networks, trust, and the foundations of secure systems."
 level: "beginner"
 ---
 
-import ToolCard from "@/components/notes/ToolCard"
-import { Callout } from "@/components/notes/Callout"
-import { DeeperDive } from "@/components/notes/DeeperDive"
-import { MathBlock, MathInline } from "@/components/notes/Math"
-import { FlowDiagram, LayerDiagram, TimelineDiagram, BoundaryDiagram } from "@/components/notes/diagrams"
-import SecurityGoalsSorter from "@/components/notes/tools/cybersecurity/ch1/SecurityGoalsSorter"
-import RiskDial from "@/components/notes/tools/cybersecurity/ch1/RiskDial"
-import BitFlipVisualizer from "@/components/notes/tools/cybersecurity/ch1/BitFlipVisualizer"
-import BitPositionExplorer from "@/components/notes/tools/cybersecurity/ch1/BitPositionExplorer"
-import BinaryCarryTrainer from "@/components/notes/tools/cybersecurity/ch1/BinaryCarryTrainer"
-import EncodingInspector from "@/components/notes/tools/cybersecurity/ch1/EncodingInspector"
-import HashAvalancheVisualizer from "@/components/notes/tools/cybersecurity/ch1/HashAvalancheVisualizer"
-import EntropySimulator from "@/components/notes/tools/cybersecurity/ch1/EntropySimulator"
-import Quiz from "@/components/Quiz"
-import Recap from "@/components/notes/Recap"
+import ProgressBar from '@/components/notes/ProgressBar'
+import PageNav from '@/components/notes/PageNav'
+import ToolCard from '@/components/notes/ToolCard'
+import Callout from '@/components/notes/Callout'
+import GlossaryTip from '@/components/notes/GlossaryTip'
+import QuizBlock from '@/components/notes/QuizBlock'
 
-# Cybersecurity Notes
+import BitChangeTool from '@/components/notes/tools/cybersecurity/ch1/BitChangeTool'
+import EncodingExplorerTool from '@/components/notes/tools/cybersecurity/ch1/EncodingExplorerTool'
+import UnicodeBytesTool from '@/components/notes/tools/cybersecurity/ch1/UnicodeBytesTool'
+import CIAClassifierTool from '@/components/notes/tools/cybersecurity/ch1/CIAClassifierTool'
+import TrustBoundaryTool from '@/components/notes/tools/cybersecurity/ch1/TrustBoundaryTool'
+import IntegrityChainTool from '@/components/notes/tools/cybersecurity/ch1/IntegrityChainTool'
+import PacketJourneyTool from '@/components/notes/tools/cybersecurity/ch1/PacketJourneyTool'
+import MetadataLeakTool from '@/components/notes/tools/cybersecurity/ch1/MetadataLeakTool'
+import EncryptionPlacementTool from '@/components/notes/tools/cybersecurity/ch1/EncryptionPlacementTool'
+import PasswordEntropyTool from '@/components/notes/tools/cybersecurity/ch1/PasswordEntropyTool'
+import HashFingerprintTool from '@/components/notes/tools/cybersecurity/ch1/HashFingerprintTool'
 
-## Chapter 1 - Foundations
+<ProgressBar mode="scroll" />
 
-I wrote these notes because I was confused by security jargon. I wanted one page where I could reason slowly: why harm happens, how I measure risk, how bits become meaning, and how maths underpins trust. I learn by trying small experiments, so every abstraction here is paired with a tool and questions.
+# Cybersecurity Notes  
+## Beginner  
+### Page 1 of 4  Foundations that make everything else make sense
 
----
-
-## Why security exists at all
-
-Cybersecurity is harm reduction. Systems fail, people hurry, and attackers use that. If I understand how a harmless signal becomes a harmful outcome, I can break the chain early.
-
-<FlowDiagram
-  title="Harm chain"
-  steps={["Signal", "Interpretation", "Decision", "Action", "Outcome"]}
-/>
-
-<Callout type="memory" title="My anchor">
-Security is about reducing harm, not chasing perfection.
+<Callout variant="concept">
+Before I talk about hackers, tools, or encryption, I start with what data is. If I do not understand data and meaning, I cannot understand security.
 </Callout>
 
-<ToolCard title="Sort harms" description="Classify incidents by the main harm." lazy>
-  <SecurityGoalsSorter />
-</ToolCard>
-
-<Quiz
-  title="Harm and outcomes"
-  questions={[
-    { id: "h1", prompt: "What is cybersecurity protecting for me?", options: [ { id: "a", text: "Only secrets", correct: false, explanation: "Integrity and uptime are harm too." }, { id: "b", text: "Information and outcomes", correct: true, explanation: "Harm shows up when outcomes fail." } ] },
-    { id: "h2", prompt: "Why do I map incidents to harms?", options: [ { id: "a", text: "To pick controls that match harm", correct: true, explanation: "Wrong harm, wrong control." }, { id: "b", text: "To fill compliance forms", correct: false, explanation: "Forms are secondary; harm mapping guides action." } ] },
-    { id: "h3", prompt: "What happens if I ignore availability?", options: [ { id: "a", text: "Users lose service", correct: true, explanation: "Downtime is a harm." }, { id: "b", text: "No impact", correct: false, explanation: "Availability is part of security." } ] },
-    { id: "h4", prompt: "Why do attackers start with people?", options: [ { id: "a", text: "People make rushed decisions", correct: true, explanation: "Pressure and confusion are common." }, { id: "b", text: "People run faster code", correct: false, explanation: "Code speed is irrelevant here." } ] },
-    { id: "h5", prompt: "What is a secondary harm?", options: [ { id: "a", text: "A follow-on impact from the same event", correct: true, explanation: "One incident can hit multiple goals." }, { id: "b", text: "A harmless side effect", correct: false, explanation: "Secondary harms can be serious." } ] },
-  ]}
+<PageNav
+  prevHref="/notes/cybersecurity/roadmap"
+  prevLabel="Roadmap"
+  nextHref="/cybersecurity/intermediate"
+  nextLabel="Next page  Intermediate"
+  showTop
+  showBottom
 />
 
 ---
 
-## CIA triad in my own words
+## Section 1  What data really is and why security starts here
 
-The Study Notes anchor on confidentiality, integrity, and availability. I picture them as a balance I tune per system.
-
-<BoundaryDiagram
-  title="CIA triad"
-  inside={["Confidentiality", "Integrity", "Availability"]}
-  outside={["Pressure", "Noise", "Failure paths"]}
-  boundaryLabel="Balance"
-/>
-
-- **Confidentiality**: I keep data from the wrong eyes. Encryption and access control help, but logs, screenshots, and misconfigurations can leak.
-- **Integrity**: I need confidence that what I read is correct. Hashes, signatures, and well-defined processes help, but only if keys and pipelines are trusted.
-- **Availability**: A secure system that is down is still a failure. Redundancy, graceful degradation, and rate limits protect uptime.
-
-<DeeperDive title="Where I went wrong">
-I once encrypted backups without testing restore. I achieved confidentiality and broke availability. Balance matters.
-</DeeperDive>
-
-<Quiz
-  title="CIA depth"
-  questions={[
-    { id: "cia1", prompt: "What breaks confidentiality most often?", options: [ { id: "a", text: "Plaintext logs", correct: true, explanation: "Logs leak quietly." }, { id: "b", text: "Power outages", correct: false, explanation: "Outages hurt availability." } ] },
-    { id: "cia2", prompt: "What proves integrity for me?", options: [ { id: "a", text: "A hash from a trusted path", correct: true, explanation: "Hash plus trusted pipeline helps." }, { id: "b", text: "A checksum from an unknown source", correct: false, explanation: "Unknown sources cannot prove integrity." } ] },
-    { id: "cia3", prompt: "Why is availability a security goal?", options: [ { id: "a", text: "Because service loss is harm", correct: true, explanation: "Downtime is real harm." }, { id: "b", text: "Because users like speed", correct: false, explanation: "Speed and availability differ." } ] },
-    { id: "cia4", prompt: "Which control improves two goals at once?", options: [ { id: "a", text: "Rate limiting", correct: true, explanation: "It helps availability and can limit data abuse." }, { id: "b", text: "Turning off logging", correct: false, explanation: "That hurts integrity and accountability." } ] },
-    { id: "cia5", prompt: "What is the risk of over-focusing on confidentiality?", options: [ { id: "a", text: "I might block needed access", correct: true, explanation: "Over-locking can kill availability." }, { id: "b", text: "No risk", correct: false, explanation: "Balance is required." } ] },
-  ]}
-/>
-
----
-
-## Identity, authentication, and accountability
-
-The Study Notes use IAAA. I keep it as a simple flow so I do not mix steps.
-
-<FlowDiagram
-  title="IAAA flow"
-  steps={["Claim who I am", "Prove it", "Check what I can do", "Record what I did"]}
-/>
-
-- **Identification**: I state who I am (email, badge ID).
-- **Authentication**: I prove it (password, token, biometrics). MFA mixes factors I know, have, and am.
-- **Authorisation**: The system decides what I am allowed right now. Least privilege is the default: only what I need, only when I need it.
-- **Accountability**: Logs make actions traceable. Without them, disputes become opinions.
-
-<ToolCard title="Risk dial" description="See how likelihood and impact combine." lazy>
-  <RiskDial />
-</ToolCard>
-
-<Quiz
-  title="IAAA depth"
-  questions={[
-    { id: "iaaa1", prompt: "Where does MFA sit?", options: [ { id: "a", text: "Authentication", correct: true, explanation: "MFA strengthens proof." }, { id: "b", text: "Authorisation", correct: false, explanation: "Authorisation happens after login." } ] },
-    { id: "iaaa2", prompt: "What makes logs useful?", options: [ { id: "a", text: "Timestamps and identity", correct: true, explanation: "Who and when are key." }, { id: "b", text: "Random samples", correct: false, explanation: "Sampling without context loses accountability." } ] },
-    { id: "iaaa3", prompt: "Why do I time-limit privileges?", options: [ { id: "a", text: "To shrink the blast radius", correct: true, explanation: "Short windows reduce harm." }, { id: "b", text: "To annoy users", correct: false, explanation: "It is for safety." } ] },
-    { id: "iaaa4", prompt: "Which factor is NOT MFA?", options: [ { id: "a", text: "Something you forgot", correct: true, explanation: "Forgotten items are not factors." }, { id: "b", text: "Something you have", correct: false, explanation: "Possession is a factor." } ] },
-    { id: "iaaa5", prompt: "What happens if identification is weak?", options: [ { id: "a", text: "Impersonation risk grows", correct: true, explanation: "Weak claims invite spoofing." }, { id: "b", text: "No impact", correct: false, explanation: "Weak claims break trust." } ] },
-  ]}
-/>
-
----
-
-## Risk with numbers I trust
-
-I avoided formulas until I could tell the story. Now I use one simple equation:
-
-<MathBlock formula={"Risk = \\text{Likelihood} \times \\text{Impact}"} />
-
-<Callout type="note" title="How I read it">
-If either term approaches zero, risk drops sharply. I do not pretend the numbers are precise; they are a comparison tool.
+<Callout variant="concept">
+Data is not information. Data is a physical state that I choose to interpret as information.
 </Callout>
 
-Worked examples I use:
+### What I mean by physical state
+I do not see words, pictures, money, or passwords. A computer detects physical conditions.
 
-- Phishing that lands monthly with small cleanup: <MathInline formula={"0.5 \times 2 = 1"} />.
-- Ransomware once a year but catastrophic: <MathInline formula={"0.05 \times 50 = 2.5"} />.
+Examples of physical conditions:
+- electrical voltage being low or high
+- a tiny magnetic region pointing one way or another
+- a light pulse being present or absent
+- microscopic electrical charge being trapped or not trapped
 
-<TimelineDiagram
-  title="Harm story"
-  events={[
-    { label: "Probe", detail: "Scan or phish" },
-    { label: "Access", detail: "Credential or exploit" },
-    { label: "Impact", detail: "Encrypt, exfil, disrupt" },
-    { label: "Recovery", detail: "Restore and learn" }
-  ]}
-/>
+Computers are designed to treat these conditions as stable states so they can work reliably.
 
-<Quiz
-  title="Risk reasoning"
+<GlossaryTip term="Physical state">
+A physical state is the condition something is in. In computing it usually means a measurable signal such as voltage, charge, light, or magnetism.
+</GlossaryTip>
+
+### Bits  the smallest unit of data
+A bit is the smallest unit of data. It represents one of two possible states, which we write as 0 and 1.
+
+Mathematically:
+
+\[
+b \in \{0,1\}
+\]
+
+This means b can only be 0 or 1. This is not scary maths. It is simply describing a designed constraint.
+
+### Why computers use two states
+A common question is why computers use base 2 rather than base 10. The reason is reliability. Real physical signals get disturbed.
+
+That disturbance is called noise.
+
+<GlossaryTip term="Noise">
+Noise means any unwanted disturbance that changes a signal. Like trying to hear a whisper in a loud room, interference makes the message harder to interpret.
+</GlossaryTip>
+
+Noise matters because noise can flip bits. If a system does not detect that, integrity fails quietly.
+
+### Bytes and powers of two
+Bits become useful when grouped. 8 bits is a byte.
+
+A byte has:
+
+\[
+2^8 = 256
+\]
+
+possible patterns. Each extra bit doubles possibilities, which later becomes the heart of password strength and cryptographic key sizes.
+
+### Worked example  why doubling matters
+With 3 bits there are:
+
+\[
+2^3 = 8
+\]
+
+patterns:
+000 001 010 011 100 101 110 111
+
+Every time I add one bit, I double the patterns. That is exponential growth. Attackers fear exponential growth because it makes brute force guessing infeasible.
+
+### Practice tool  single bit change
+<ToolCard
+  title="See how one tiny bit change alters meaning"
+  description="Flip one bit and watch how interpretation changes. This is the simplest way to feel what integrity means."
+>
+  <BitChangeTool />
+</ToolCard>
+
+### Quiz and checks
+<QuizBlock
+  title="Check your understanding"
   questions={[
-    { id: "r1", prompt: "Why multiply likelihood and impact?", options: [ { id: "a", text: "Zero in one term zeros risk", correct: true, explanation: "Product captures that behaviour." }, { id: "b", text: "To make maths harder", correct: false, explanation: "It is about behaviour, not difficulty." } ] },
-    { id: "r2", prompt: "What changes first in fast-moving threats?", options: [ { id: "a", text: "Likelihood", correct: true, explanation: "Frequency often shifts before impact." }, { id: "b", text: "Colour of dashboards", correct: false, explanation: "Colours do not affect risk." } ] },
-    { id: "r3", prompt: "How do I reduce risk without changing impact?", options: [ { id: "a", text: "Lower likelihood", correct: true, explanation: "Prevention reduces events." }, { id: "b", text: "Change units", correct: false, explanation: "Units do not affect the product." } ] },
-    { id: "r4", prompt: "Why revisit risk regularly?", options: [ { id: "a", text: "Likelihood and impact move", correct: true, explanation: "Context changes." }, { id: "b", text: "Maths decays", correct: false, explanation: "The model holds; inputs change." } ] },
-    { id: "r5", prompt: "Which is harder to estimate?", options: [ { id: "a", text: "Likelihood", correct: true, explanation: "Frequency is often fuzzy." }, { id: "b", text: "Impact", correct: false, explanation: "Impact can be scoped with scenarios." } ] },
+    { q: "What is a physical state in computing", a: "A measurable condition such as voltage, charge, magnetism, or light, used to represent data." },
+    { q: "What is a bit", a: "The smallest unit of data, representing one of two states, usually written 0 or 1." },
+    { q: "What is noise", a: "Unwanted disturbance that changes a signal and can cause misinterpretation." },
+    { q: "Why do computers prefer two states", a: "Two states are easier to separate reliably under noise, heat, and imperfect hardware." },
+    { q: "What does 2^8 represent", a: "The number of unique patterns possible with 8 bits, which is 256." }
   ]}
 />
 
+<PageNav showTop showBottom />
+
 ---
 
-## Bits, bytes, and weight
+## Section 2  From raw data to meaning  encoding and interpretation
 
-I finally understood binary by flipping bits. A bit is a physical state (voltage high/low, magnetised/not). Each extra bit doubles possibilities.
+<Callout variant="concept">
+Encoding is representation. Encryption is secrecy. Confusing them causes real security failures.
+</Callout>
 
-<MathBlock formula={"2^8 = 256"} />
+### What encoding does
+Encoding is a shared agreement that maps bit patterns to symbols.
 
-<ToolCard title="Bit flip" description="See how bits affect value." lazy>
-  <BitFlipVisualizer />
+If I show you 01000001, it means nothing unless we agree on a scheme. Under ASCII, it maps to A.
+
+<GlossaryTip term="Encoding">
+Encoding is a rule for representing symbols using bits. It is designed for compatibility and representation, not secrecy.
+</GlossaryTip>
+
+### ASCII and positional notation
+ASCII assigns numbers to characters. For A, ASCII uses decimal 65.
+
+Binary is base 2 positional notation. Each position represents a power of two. 65 is 64 plus 1, so in binary it becomes 01000001.
+
+<Callout variant="explain">
+Positional notation means the position of a digit determines its value. In base 10, 345 means 3 hundreds, 4 tens, 5 ones. In base 2, each position is a power of two.
+</Callout>
+
+#### Common ASCII examples
+
+| Character | Decimal | Binary | Hex | Notes |
+|-----------|---------|--------|-----|-------|
+| A | 65 | 01000001 | 41 | Uppercase letter |
+| a | 97 | 01100001 | 61 | Lowercase letter |
+| 0 | 48 | 00110000 | 30 | Digit zero |
+| Space | 32 | 00100000 | 20 | Whitespace |
+| Newline | 10 | 00001010 | 0A | Line break |
+
+This table shows how the same bit pattern means different things depending on the encoding scheme. Security problems appear when systems assume one encoding but receive another.
+
+### Hex  how engineers read binary
+Binary is hard to read. Hex is base 16 and compresses binary safely. One hex digit represents 4 bits because 2^4 is 16. That is why bytes display as two hex digits, and why hashes are usually shown in hex.
+
+<GlossaryTip term="Hexadecimal">
+Hexadecimal is base 16 representation using digits 0 to 9 and letters A to F. It is a compact way to show bytes and cryptographic values.
+</GlossaryTip>
+
+#### Hex digit to binary mapping
+
+| Hex | Binary | Decimal | Notes |
+|-----|--------|---------|-------|
+| 0 | 0000 | 0 | Lowest value |
+| 1 | 0001 | 1 | |
+| 5 | 0101 | 5 | |
+| A | 1010 | 10 | First letter |
+| F | 1111 | 15 | Highest single hex digit |
+| FF | 11111111 | 255 | Full byte in hex |
+
+Notice how one hex digit covers exactly 4 bits. This makes hex perfect for displaying bytes, hashes, and keys compactly.
+
+### Unicode and UTF 8
+ASCII is too small for the world. Unicode assigns numbers to characters globally. UTF 8 is a way to encode Unicode values into bytes.
+
+Key idea:
+- some characters use 1 byte
+- others use 2, 3, or 4 bytes
+
+So character count is not always byte count. Attackers exploit this when validation counts characters but enforcement counts bytes. That is a canonicalisation problem.
+
+#### UTF 8 byte length examples
+
+| Character | Unicode code point | UTF 8 bytes | Hex representation | Notes |
+|-----------|-------------------|-------------|-------------------|-------|
+| A | U+0041 | 1 byte | 41 | ASCII compatible |
+| é | U+00E9 | 2 bytes | C3 A9 | Latin with accent |
+| 中 | U+4E2D | 3 bytes | E4 B8 AD | Chinese character |
+| 🚀 | U+1F680 | 4 bytes | F0 9F 9A 80 | Emoji |
+
+This variable length is why character limits and byte limits can differ. Security bugs appear when validation uses one but enforcement uses the other.
+
+<GlossaryTip term="Canonicalisation">
+Canonicalisation means converting data to a standard form. Security bugs appear when two parts of a system standardise differently and interpret the same input in different ways.
+</GlossaryTip>
+
+### Practice tools  encoding and Unicode
+<ToolCard
+  title="Explore how text becomes bytes, binary, and hex"
+  description="Type text and see its representation. This makes interpretation visible."
+>
+  <EncodingExplorerTool />
 </ToolCard>
 
-<ToolCard title="Bit position" description="Which bit moves the value most?" lazy>
-  <BitPositionExplorer />
+<ToolCard
+  title="See how Unicode can change byte length"
+  description="Compare characters that look similar but encode differently. This is where real parsing bugs begin."
+>
+  <UnicodeBytesTool />
 </ToolCard>
 
-<ToolCard title="Carry practice" description="Practice base-2 addition." lazy>
-  <BinaryCarryTrainer />
-</ToolCard>
-
-<Quiz
-  title="Binary depth"
+### Quiz
+<QuizBlock
+  title="Check your understanding"
   questions={[
-    { id: "b1", prompt: "What does the leftmost bit do in 8 bits?", options: [ { id: "a", text: "Adds 128", correct: true, explanation: "It is the most significant bit." }, { id: "b", text: "Adds 1", correct: false, explanation: "Rightmost bit adds 1." } ] },
-    { id: "b2", prompt: "Why is binary convenient for hardware?", options: [ { id: "a", text: "Two clear states", correct: true, explanation: "Noise tolerant." }, { id: "b", text: "Humans love base 2", correct: false, explanation: "We prefer base 10; hardware prefers 2." } ] },
-    { id: "b3", prompt: "What causes overflow?", options: [ { id: "a", text: "Result needs more bits than available", correct: true, explanation: "Overflow loses information." }, { id: "b", text: "Too many users", correct: false, explanation: "Users do not cause overflow." } ] },
-    { id: "b4", prompt: "Why pad binary numbers when adding?", options: [ { id: "a", text: "To align positions", correct: true, explanation: "Alignment keeps carries correct." }, { id: "b", text: "To make it pretty", correct: false, explanation: "It is functional, not cosmetic." } ] },
-    { id: "b5", prompt: "How many values in 16 bits?", options: [ { id: "a", text: "65,536", correct: true, explanation: "2^16." }, { id: "b", text: "256", correct: false, explanation: "That is 8 bits." } ] },
+    { q: "Why is encoding not security", a: "Because encoding is reversible with public rules. It does not hide information." },
+    { q: "What is the difference between Unicode and UTF 8", a: "Unicode defines characters and code points. UTF 8 defines how those code points become bytes." },
+    { q: "Why does hex matter in security", a: "It is a compact, precise way to display bytes, hashes, and keys." },
+    { q: "What is a canonicalisation problem", a: "When systems interpret the same input differently because they normalise or parse it differently." }
   ]}
 />
 
+<PageNav showTop showBottom />
+
 ---
 
-## Encoding and meaning
+## Section 3  Security properties and trust  what being secure actually means
 
-Bytes are just numbers until I choose an encoding. ASCII maps basic English to single bytes. UTF-8 keeps ASCII for the first 128 symbols and uses extra bytes for others.
+<Callout variant="concept">
+Security is about preserving properties, even when people make mistakes and attackers try to break things.
+</Callout>
 
-<LayerDiagram
-  title="Encoding stack"
-  layers={[{ label: "Idea" }, { label: "Characters" }, { label: "Bytes" }, { label: "Signals" }]}
-/>
+### Security properties
+A security property is something I want to remain true under stress.
 
-<ToolCard title="Encoding inspector" description="See how text becomes bytes." lazy>
-  <EncodingInspector />
+The beginner framework is CIA:
+- confidentiality  prevent unauthorised disclosure
+- integrity  prevent unauthorised or undetected modification
+- availability  keep systems usable when needed
+
+#### Security properties at a glance
+
+| Property | What it protects | Example failure | Common defence |
+|----------|----------------|-----------------|----------------|
+| Confidentiality | Secrecy of information | Password leaked in logs | Encryption, access controls |
+| Integrity | Correctness and authenticity | Data modified without detection | Hashes, signatures, checksums |
+| Availability | Usability when needed | System down due to attack | Redundancy, rate limiting |
+| Authenticity | Genuine origin | Fake email claiming to be from bank | Digital signatures, certificates |
+| Authorisation | Permission to act | User accessing admin functions | Access control lists, roles |
+
+This table helps you classify security failures. When something goes wrong, ask which property failed and why.
+
+<GlossaryTip term="Confidentiality">
+Confidentiality means keeping information secret from unauthorised people.
+</GlossaryTip>
+
+<GlossaryTip term="Integrity">
+Integrity means keeping information correct and detecting tampering. Silent integrity failures are especially dangerous.
+</GlossaryTip>
+
+<GlossaryTip term="Availability">
+Availability means systems are usable when needed. Outages and denial of service are security failures when they cause harm.
+</GlossaryTip>
+
+### CIA is not enough  add authenticity and authorisation
+Authenticity asks whether something is genuinely what it claims to be.
+
+Authentication is proving who you are. Authorisation is what you are allowed to do. Many failures happen when authentication is fine but authorisation is broken.
+
+<GlossaryTip term="Authentication">
+Authentication is proving identity. Examples include passwords, biometrics, and cryptographic proofs.
+</GlossaryTip>
+
+<GlossaryTip term="Authorisation">
+Authorisation is permission. It answers what actions are allowed after identity is known.
+</GlossaryTip>
+
+### Trust and trust boundaries
+Trust is an assumption. A trust boundary is where assumptions change. Any input crossing into a system is a trust boundary. Any network hop is a trust boundary. Attackers live at boundaries.
+
+<GlossaryTip term="Trust boundary">
+A place where data or control moves between components with different levels of trust. Validation and checks must occur here.
+</GlossaryTip>
+
+### Integrity chains
+Integrity is rarely protected once. Systems use layers like hashes, signatures, and logs. An integrity chain helps me understand how trust can be preserved or destroyed across time.
+
+### Practice tools  classify and explore trust
+<ToolCard
+  title="Classify security failures using CIA"
+  description="Pick the property that failed and explain why. This builds correct instincts."
+>
+  <CIAClassifierTool />
 </ToolCard>
 
-<Quiz
-  title="Encoding depth"
-  questions={[
-    { id: "e1", prompt: "Why do emojis use more bytes?", options: [ { id: "a", text: "UTF-8 uses multi-byte sequences", correct: true, explanation: "Beyond ASCII range." }, { id: "b", text: "They are compressed", correct: false, explanation: "Not compression; encoding." } ] },
-    { id: "e2", prompt: "What is a code point?", options: [ { id: "a", text: "A number assigned to a character", correct: true, explanation: "Unicode code point." }, { id: "b", text: "A network port", correct: false, explanation: "Different concept." } ] },
-    { id: "e3", prompt: "Why does encoding matter for security?", options: [ { id: "a", text: "Mismatched decoding causes bugs", correct: true, explanation: "Ambiguity can be exploited." }, { id: "b", text: "Encoding is encryption", correct: false, explanation: "Encoding is not secrecy." } ] },
-    { id: "e4", prompt: "How many ASCII characters?", options: [ { id: "a", text: "128", correct: true, explanation: "7-bit ASCII." }, { id: "b", text: "256", correct: false, explanation: "UTF-8 uses bytes, but ASCII is 128." } ] },
-    { id: "e5", prompt: "Why normalise input?", options: [ { id: "a", text: "To avoid visually identical different code points", correct: true, explanation: "Homoglyph attacks exist." }, { id: "b", text: "To shrink storage", correct: false, explanation: "Security first." } ] },
-  ]}
-/>
-
----
-
-## Hashes and integrity
-
-Hashes let me check if data changed. A tiny input change should flip many output bits (avalanche). I only trust hashes when the algorithm is sound and the path is trusted.
-
-<ToolCard title="Hash avalanche" description="See how tiny changes alter a hash." lazy>
-  <HashAvalancheVisualizer />
+<ToolCard
+  title="Find trust boundaries in a system"
+  description="See where assumptions change and where checks must exist."
+>
+  <TrustBoundaryTool />
 </ToolCard>
 
-<Quiz
-  title="Hash depth"
-  questions={[
-    { id: "hsh1", prompt: "Why are MD5 and SHA-1 unsafe?", options: [ { id: "a", text: "Collision attacks", correct: true, explanation: "Collisions weaken integrity." }, { id: "b", text: "They are too long", correct: false, explanation: "Length is not the issue." } ] },
-    { id: "hsh2", prompt: "What makes a hash one-way?", options: [ { id: "a", text: "No feasible inversion", correct: true, explanation: "You cannot retrieve the original." }, { id: "b", text: "Hidden key", correct: false, explanation: "Hashes do not rely on secret keys." } ] },
-    { id: "hsh3", prompt: "Why salt passwords?", options: [ { id: "a", text: "To stop rainbow tables", correct: true, explanation: "Salts make precomputation hard." }, { id: "b", text: "To shorten output", correct: false, explanation: "Salts do not shorten hashes." } ] },
-    { id: "hsh4", prompt: "What is avalanche effect?", options: [ { id: "a", text: "Small input change, large output change", correct: true, explanation: "Good hashes avalanche." }, { id: "b", text: "Output always grows", correct: false, explanation: "Output is fixed size." } ] },
-    { id: "hsh5", prompt: "Why use SHA-256 over SHA-1?", options: [ { id: "a", text: "Stronger collision resistance", correct: true, explanation: "Better integrity assurance." }, { id: "b", text: "Shorter output", correct: false, explanation: "SHA-256 is longer." } ] },
-  ]}
-/>
-
----
-
-## Entropy and guessing effort
-
-Entropy is how hard it is to guess. Length dominates clever substitutions. The simple model I use is:
-
-<MathBlock formula={"H = L \times \log_2(N)"} />
-
-where \(L\) is length and \(N\) is character set size. Example: a 4-digit PIN has <MathInline formula={"4 \times \log_2(10) \approx 13.3"} /> bits of effort.
-
-<ToolCard title="Entropy simulator" description="See how length and charset change effort." lazy>
-  <EntropySimulator />
+<ToolCard
+  title="See how integrity checks catch or miss tampering"
+  description="Modify data and observe what breaks. This prepares you for hashing and signatures later."
+>
+  <IntegrityChainTool />
 </ToolCard>
 
-<Quiz
-  title="Entropy depth"
+### Quiz
+<QuizBlock
+  title="Check your understanding"
   questions={[
-    { id: "en1", prompt: "What increases entropy fastest?", options: [ { id: "a", text: "Length", correct: true, explanation: "Length multiplies effort." }, { id: "b", text: "Swapping letters for numbers", correct: false, explanation: "Minor substitutions help less." } ] },
-    { id: "en2", prompt: "Why is reuse dangerous?", options: [ { id: "a", text: "A breach exposes all reused sites", correct: true, explanation: "Reuse removes entropy across sites." }, { id: "b", text: "It slows logins", correct: false, explanation: "Speed is not the concern." } ] },
-    { id: "en3", prompt: "What is log2 in the formula?", options: [ { id: "a", text: "Logarithm base 2", correct: true, explanation: "We measure bits." }, { id: "b", text: "A random constant", correct: false, explanation: "It is defined." } ] },
-    { id: "en4", prompt: "Why avoid predictable patterns?", options: [ { id: "a", text: "They shrink the real search space", correct: true, explanation: "Guessers skip patterns." }, { id: "b", text: "They break hashing", correct: false, explanation: "Hashing still works; guessing is easier." } ] },
-    { id: "en5", prompt: "Why is a long passphrase strong?", options: [ { id: "a", text: "More combinations to try", correct: true, explanation: "Length multiplies possibilities." }, { id: "b", text: "It confuses computers", correct: false, explanation: "Computers do not confuse; they brute force." } ] },
+    { q: "Why is availability a security issue", a: "Because unusable systems cause harm and can be exploited through denial of service or ransomware." },
+    { q: "What is the difference between authentication and authorisation", a: "Authentication proves identity. Authorisation controls permissions after identity is known." },
+    { q: "What is a trust boundary", a: "Where assumptions change, such as user input entering a server or one service calling another." },
+    { q: "Why are integrity failures dangerous", a: "Because systems and people keep trusting incorrect data, so damage accumulates silently." }
   ]}
 />
 
----
-
-## Practice studio
-
-- Use the sorter to explain each harm in one sentence.
-- Flip bits and predict values before checking.
-- Encode emoji and explain why byte length jumps.
-- Hash a sentence, change one character, and count differences.
-- Adjust the entropy slider until it feels strong; justify the choice.
+<PageNav showTop showBottom />
 
 ---
 
-<Recap
-  title="Chapter 1 recap"
-  points={[
-    "Security is harm reduction balanced across confidentiality, integrity, and availability.",
-    "Risk is a product; small shifts in either term can dominate decisions.",
-    "Bits are physical states; encoding gives meaning and hashing checks integrity.",
-    "Entropy favours length and variety; reuse erases effort.",
+## Section 4  Networks and data movement  where attacks live
+
+<Callout variant="concept">
+Most security failures happen while data is moving, not while it sits still.
+</Callout>
+
+### What a network is
+A network is a system that lets computers exchange data. At the lowest level it uses electricity, light, or radio waves to carry bits.
+
+### Packets  why data is split
+Large data is split into packets because:
+- errors can be detected and retransmitted
+- routing is possible
+- congestion can be managed
+
+A packet usually contains:
+- payload  the actual content
+- headers  addressing and control data
+
+<GlossaryTip term="Packet">
+A packet is a small chunk of data sent across a network with headers that help route and reassemble it.
+</GlossaryTip>
+
+### Layering and OSI
+Layering separates concerns. The OSI model is a teaching model with 7 layers. I do not memorise it to sound clever. I use it to locate problems and controls.
+
+### Metadata leakage
+Even if payload is encrypted, metadata can reveal behaviour:
+- who talks to whom
+- when and how often
+- message size patterns
+
+That supports traffic analysis and targeting.
+
+<GlossaryTip term="Metadata">
+Metadata is information about data, such as sender, timing, size, and routing headers. It often remains visible even when content is encrypted.
+</GlossaryTip>
+
+### Where encryption fits
+Encryption protects payload confidentiality, not everything. Encryption placement affects what observers can learn. This leads naturally into intermediate topics like TLS, VPNs, and zero trust.
+
+### Practice tools  packet journey and leakage
+<ToolCard
+  title="Follow a packet from sender to receiver"
+  description="Watch splitting, headers, routing, and reassembly. This makes networking real."
+>
+  <PacketJourneyTool />
+</ToolCard>
+
+<ToolCard
+  title="See what leaks even when content is encrypted"
+  description="Explore how metadata alone can reveal sensitive patterns."
+>
+  <MetadataLeakTool />
+</ToolCard>
+
+<ToolCard
+  title="Explore encryption placement through the layers"
+  description="Move encryption through layers and observe what it protects and what it does not."
+>
+  <EncryptionPlacementTool />
+</ToolCard>
+
+### Bonus practice  passwords and hashes  bridge to intermediate
+<ToolCard
+  title="Password strength and guessing time"
+  description="See how search space grows and why length wins. This leads into cryptographic key sizes later."
+>
+  <PasswordEntropyTool />
+</ToolCard>
+
+<ToolCard
+  title="Hash fingerprints and the avalanche effect"
+  description="Change one character and see the fingerprint change completely. This prepares you for integrity and signatures."
+>
+  <HashFingerprintTool />
+</ToolCard>
+
+### Final beginner quiz
+<QuizBlock
+  title="Beginner mastery check"
+  questions={[
+    { q: "Why are packets used", a: "To manage errors, routing, congestion, and efficiency rather than sending one huge block." },
+    { q: "What is the difference between payload and headers", a: "Payload is the content. Headers carry addressing and control data needed for delivery." },
+    { q: "What can metadata reveal", a: "Communication patterns such as who, when, how often, and approximate activity, even without content." },
+    { q: "Does encryption hide metadata", a: "Usually no. It mainly protects payload confidentiality. Headers and timing often remain visible." },
+    { q: "Why does understanding networks lead to zero trust", a: "Because internal networks cannot be assumed safe. Every hop is a boundary and must be verified." }
   ]}
-  terms={["Confidentiality", "Integrity", "Availability", "Entropy", "Hash", "Encoding", "Least privilege", "MFA"]}
-  actions={[
-    "Balance CIA for each system instead of chasing one goal.",
-    "Revisit likelihood and impact regularly; adjust controls.",
-    "Test backups and restores, not just encryption.",
-    "Use long, unique secrets stored in a manager; enable MFA.",
-  ]}
+/>
+
+<Callout variant="concept">
+Beginner complete. If I can explain these four sections clearly, I am ready to study how attackers exploit them and how defenders design controls.
+</Callout>
+
+<PageNav
+  prevHref="/notes/cybersecurity/roadmap"
+  prevLabel="Roadmap"
+  nextHref="/cybersecurity/intermediate"
+  nextLabel="Next page  Intermediate"
+  showTop
+  showBottom
 />

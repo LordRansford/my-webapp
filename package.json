@@ -7,11 +7,19 @@
     "build": "next build --webpack",
     "start": "next start --hostname 0.0.0.0 --port 3000",
     "lint": "eslint",
-    "lint:notes": "node scripts/lint-notes.mjs"
+    "lint:notes": "node scripts/notes_lint.mjs",
+    "notes:lint": "node scripts/notes_lint.mjs",
+    "quality:content:ai-beginner": "node scripts/content-quality.mjs content/notes/ai/beginner.mdx",
+    "quality:ui": "node scripts/ui-quality.mjs",
+    "quality:all": "npm run quality:ui && npm run quality:content:ai-beginner && npm run quality:content:ai-advanced",
+    "lint:dashboards": "node scripts/dashboard-quality.mjs && node scripts/dashboard-allowlist.mjs",
+    "lhci": "lhci autorun",
+    "quality:content:ai-advanced": "node scripts/content-quality-advanced.mjs src/pages/ai/advanced.js"
   },
   "dependencies": {
     "@runno/runtime": "^0.10.0",
     "@tensorflow/tfjs": "^4.22.0",
+    "framer-motion": "^11.0.3",
     "gray-matter": "^4.0.3",
     "katex": "^0.16.27",
     "lucide-react": "^0.469.0",
@@ -20,6 +28,7 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "reading-time": "^1.5.0",
+    "recharts": "^2.15.4",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-katex": "^7.0.1",
     "rehype-slug": "^6.0.0",
@@ -29,6 +38,7 @@
     "sql.js": "^1.13.0"
   },
   "devDependencies": {
+    "@lhci/cli": "^0.13.0",
     "@tailwindcss/postcss": "^4",
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",

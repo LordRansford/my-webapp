@@ -1,0 +1,142 @@
+---
+title: "Software Architecture Notes - Advanced"
+description: "Architecture at organisational scale, platforms, resilience, governance, and long-term stewardship."
+level: "Advanced"
+---
+
+import ProgressBar from "@/components/notes/ProgressBar"
+import PageNav from "@/components/notes/PageNav"
+import Callout from "@/components/notes/Callout"
+import GlossaryTip from "@/components/notes/GlossaryTip"
+import ToolCard from "@/components/notes/ToolCard"
+import QuizBlock from "@/components/notes/QuizBlock"
+
+import PlatformMap from "@/components/notes/tools/architecture/advanced/PlatformMap"
+import ResilienceSimulator from "@/components/notes/tools/architecture/advanced/ResilienceSimulator"
+import GovernanceDesigner from "@/components/notes/tools/architecture/advanced/GovernanceDesigner"
+import DigitalisationDashboard from "@/components/notes/tools/architecture/advanced/DigitalisationDashboard"
+
+<ProgressBar mode="scroll" />
+
+# Software Architecture Notes - Advanced
+
+Architecture at this level is about shaping organisations, platforms, and long-term resilience. It assumes the foundations from Beginner and the design skills from Intermediate are in place. The focus now is on portfolios, governance, platforms, and thinking in years rather than sprints.
+
+<PageNav prevHref="/software-architecture/intermediate" prevLabel="Intermediate" nextHref="/software-architecture/summary" nextLabel="Summary" showTop showBottom />
+
+---
+
+## Architecture beyond a single system
+
+<Callout variant="concept">
+At scale, architecture shapes organisations as much as it shapes software.
+</Callout>
+
+Advanced architecture deals with portfolios of systems, shared platforms, legacy coexistence, and long-term organisational impact. It is socio-technical: changing the system often requires changing team boundaries, incentives, and ownership. A diagram alone is never enough; organisational design is part of the architecture.
+
+---
+
+## Architecture and organisational structure
+
+<Callout variant="concept">
+Systems mirror communication paths.
+</Callout>
+
+Systems reflect the communication structures of the teams that build them. If teams are siloed, systems become siloed. If incentives reward speed without responsibility, coupling appears in the wrong places. Changing architecture often means adjusting teams, ownership, and coordination, not just code.
+
+<GlossaryTip term="Conway’s Law">
+Plain: Systems copy how teams talk to each other.  
+Formal: The design of a system mirrors the communication structure of the organisation that produced it.
+</GlossaryTip>
+
+---
+
+## Platforms, ecosystems, and digitalisation
+
+<Callout variant="concept">
+A platform is an architecture that enables others to build safely and quickly.
+</Callout>
+
+Modern organisations build platforms: identity, data, integration, observability. Platforms reduce duplication and speed delivery, but only when they have real users and clear value. Heavy governance or standards without utility cause abandonment. Platform success is measured by adoption, stability, and the safety it provides to dependent teams.
+
+<ToolCard title="Platform and ecosystem mapper">
+<PlatformMap />
+</ToolCard>
+
+---
+
+## Resilience, failure, and risk
+
+<Callout variant="concept">
+Design for failure because it is inevitable at scale.
+</Callout>
+
+Components fail, networks degrade, dependencies misbehave. Resilience is the capacity to absorb failure and recover without catastrophic loss. It uses redundancy, isolation, graceful degradation, and observability. Avoiding failure entirely is unrealistic; designing for failure is essential.
+
+<GlossaryTip term="Resilience">
+Plain: The system keeps delivering value when parts fail.  
+Formal: The ability of a system to absorb disruptions and continue operating within acceptable bounds.
+</GlossaryTip>
+
+<ToolCard title="Resilience and failure simulator">
+<ResilienceSimulator />
+</ToolCard>
+
+---
+
+## Governance without stagnation
+
+<Callout variant="concept">
+Too little governance creates chaos. Too much governance kills innovation.
+</Callout>
+
+Effective governance sets clear constraints, encourages autonomy within boundaries, and focuses on outcomes instead of compliance theatre. Lightweight standards, decision records, automated checks, and clear escalation paths keep delivery moving while limiting risk. Governance that ignores delivery reality will be bypassed.
+
+<ToolCard title="Architecture governance designer">
+<GovernanceDesigner />
+</ToolCard>
+
+---
+
+## Architecture as long-term stewardship
+
+<Callout variant="concept">
+Good architecture leaves the system healthier than you found it.
+</Callout>
+
+Advanced architects act as stewards. They think in years, focus on capability rather than features, and manage both technical and organisational debt. They know architecture is never finished; it evolves with purpose, constraints, and environment.
+
+---
+
+## Observing digitalisation in practice
+
+Architecture must be observable. Digitalisation is visible through delivery speed, stability, change failure rates, and operational cost trends. Without metrics, digitalisation is wishful thinking.
+
+<DigitalisationDashboard />
+
+---
+
+## Practice and reflection
+
+<QuizBlock
+  questions={[
+    {
+      q: "Why is architecture socio-technical at scale?",
+      a: "Because system design is constrained by team structure, communication, and incentives.",
+    },
+    {
+      q: "What distinguishes a platform from a shared service?",
+      a: "A platform enables others to build independently and safely by providing reusable capabilities.",
+    },
+    {
+      q: "Why is failure assumed in advanced architectures?",
+      a: "Complexity and scale make failure inevitable, so resilience must be designed in.",
+    },
+    {
+      q: "What is the role of governance?",
+      a: "To enable safe autonomy, maintain coherence, and prevent chaos without stalling delivery.",
+    },
+  ]}
+/>
+
+<PageNav prevHref="/software-architecture/intermediate" prevLabel="Intermediate" nextHref="/software-architecture/summary" nextLabel="Summary" showTop showBottom />
