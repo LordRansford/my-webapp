@@ -1,31 +1,137 @@
-import Link from "next/link";
+"use client";
+
+import { useState } from "react";
 import Layout from "@/components/Layout";
 
 export default function ContactPage() {
+  const [status, setStatus] = useState("idle");
+  const [form, setForm] = useState({ name: "", email: "", message: "", company: "", extra: "" });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setForm((current) => ({ ...current, [name]: value }));
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    
+    // Honeypot check
+    if (form.extra) {
+      return;
+    }
+    
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
+      setStatus("error");
+      return;
+    }
+    
+    // Simulated submit; real integration can connect to an email service or backend later.
+    setStatus("sent");
+    setForm({ name: "", email: "", message: "", company: "", extra: "" });
+  };
+
   return (
     <Layout
       title="Contact - Ransford's Notes"
       description="Get in touch with questions, feedback, or collaboration ideas."
     >
-      <nav className="breadcrumb">
-        <Link href="/">Home</Link>
-        <span aria-hidden="true"> / </span>
-        <span>Contact</span>
-      </nav>
-
       <header className="page-header">
         <p className="eyebrow">Contact</p>
         <h1>Get in touch</h1>
         <p className="lead">
-          I am happy to hear about collaborations, classroom use, speaking, corrections, or simply that an
-          explanation finally clicked.
+          I am happy to hear about collaborations, classroom use, speaking, corrections, or simply that an explanation finally clicked.
         </p>
       </header>
 
       <section className="section">
-        <h2>Preferred channels</h2>
-        <p>Email works best for anything detailed.</p>
-        <ul>
+        <div className="card">
+          <h2>Send a message</h2>
+          <form onSubmit={handleSubmit} noValidate>
+            <div className="form-grid">
+              <div className="form-field">
+                <label htmlFor="name">Name *</label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  autoComplete="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  required
+                  aria-required="true"
+                />
+              </div>
+              <div className="form-field">
+                <label htmlFor="email">Email *</label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  required
+                  aria-required="true"
+                />
+              </div>
+              <div className="form-field">
+                <label htmlFor="company">Organisation (optional)</label>
+                <input
+                  id="company"
+                  name="company"
+                  type="text"
+                  autoComplete="organization"
+                  value={form.company}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-field">
+                <label htmlFor="message">Message *</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows={5}
+                  value={form.message}
+                  onChange={handleChange}
+                  required
+                  aria-required="true"
+                />
+              </div>
+              <div className="form-field" aria-hidden="true" style={{ position: "absolute", left: "-9999px" }}>
+                <label htmlFor="extra">Leave this empty</label>
+                <input
+                  id="extra"
+                  name="extra"
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={form.extra}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-actions">
+                <button type="submit" className="button primary">
+                  Send message
+                </button>
+                {status === "error" && (
+                  <p className="text-rose-600 text-sm" role="alert">
+                    Please fill in all required fields.
+                  </p>
+                )}
+                {status === "sent" && (
+                  <p className="text-emerald-700 text-sm" role="alert">
+                    Thanks. Your message is noted; I will reply by email.
+                  </p>
+                )}
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section className="section">
+        <h2>Other ways to reach me</h2>
+        <ul className="list">
           <li>
             <strong>Email:</strong>{" "}
             <a className="text-link" href="mailto:ransford@ransfordsnotes.com">
@@ -33,25 +139,19 @@ export default function ContactPage() {
             </a>
           </li>
           <li>
-            <strong>LinkedIn:</strong>{" "}
-            <Link className="text-link" href="/contact">
-              Request my LinkedIn profile
-            </Link>
-          </li>
-          <li>
-            <strong>GitHub:</strong> For code and experiments.
-            <a className="text-link" href="https://github.com/LordRansford" target="_blank" rel="noreferrer">
+            <strong>GitHub:</strong>{" "}
+            <a
+              className="text-link"
+              href="https://github.com/LordRansford"
+              target="_blank"
+              rel="noreferrer"
+            >
               github.com/LordRansford
             </a>
           </li>
         </ul>
-        <p>
-          If you are writing about something specific, include who you are, why you are reaching out, and any
-          useful links. It helps me reply clearly and quickly.
-        </p>
         <p className="muted">
-          I aim to reply within a few working days. If I am slow, it is because I am juggling work and this
-          project, not because your note is unimportant.
+          I aim to reply within a few working days. If you are writing about something specific, include who you are, why you are reaching out, and any useful links. It helps me reply clearly and quickly.
         </p>
       </section>
     </Layout>

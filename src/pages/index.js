@@ -66,9 +66,6 @@ export default function Home() {
             <Link href="/tools" className="button primary">
               Open the labs
             </Link>
-            <Link href="/games" className="button secondary">
-              Try a game
-            </Link>
           </div>
         </div>
         <div className="hero__panel">

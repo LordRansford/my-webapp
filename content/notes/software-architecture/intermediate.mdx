@@ -1,0 +1,171 @@
+---
+title: "Software Architecture Notes - Intermediate"
+description: "Designing real software systems, architectural styles, decomposition, quality-driven design, and documentation."
+level: "Intermediate"
+order: 2
+---
+
+import ProgressBar from "@/components/notes/ProgressBar"
+import PageNav from "@/components/notes/PageNav"
+import Callout from "@/components/notes/Callout"
+import GlossaryTip from "@/components/notes/GlossaryTip"
+import ToolCard from "@/components/notes/ToolCard"
+import QuizBlock from "@/components/notes/QuizBlock"
+
+import StyleSelector from "@/components/notes/tools/architecture/intermediate/StyleSelector"
+import DecompositionLab from "@/components/notes/tools/architecture/intermediate/DecompositionLab"
+import DecisionRecordBuilder from "@/components/notes/tools/architecture/intermediate/DecisionRecordBuilder"
+
+<ProgressBar mode="scroll" />
+
+# Software Architecture Notes - Intermediate
+
+This page moves from understanding structure to designing real systems. The goal now is to turn quality goals and constraints into a structure that people can build and change safely. The rhythm stays the same as the beginner page: context first, definition second, practice and reflection always.
+
+<PageNav prevHref="/software-architecture/beginner" prevLabel="Beginner" nextHref="/software-architecture/advanced" nextLabel="Advanced" showTop showBottom />
+
+---
+
+## From understanding to design
+
+Designing architecture means:
+- Turning requirements into structure
+- Translating quality attributes into constraints
+- Making decisions with incomplete information
+- Accepting trade-offs explicitly
+
+Architecture design is not about finding the perfect answer. It is about finding a **good enough structure** that serves its purpose and can evolve.
+
+<Callout variant="concept">
+Architecture design is the act of making informed trade-offs under uncertainty.
+</Callout>
+
+---
+
+## Architectural styles and patterns
+
+An **architectural style** is a named way of organising a system that reflects common solutions to recurring problems.
+
+Styles are not rules. They are starting points. Some emphasise simplicity, others scalability, autonomy, or resilience. No style is universally correct.
+
+Common styles include layered systems, client-server systems, microservices, and event-driven systems.
+
+<GlossaryTip term="Architectural style">
+A recurring structural pattern that shapes how a system is organised and how components interact.
+</GlossaryTip>
+
+Choosing a style is architectural because it influences how the system evolves, how teams work, how failures propagate, and how easy the system is to reason about.
+
+<ToolCard
+  title="&#128736; Architecture Style Explorer"
+  description="Compare architectural styles and see how quality priorities change structure."
+>
+  <StyleSelector />
+</ToolCard>
+
+---
+
+## Decomposition and responsibility
+
+Decomposition is the process of breaking a system into parts. Good decomposition is the difference between a system that scales and one that collapses under its own weight.
+
+Focus on:
+- Grouping related responsibilities
+- Minimising unnecessary coupling
+- Aligning components with real-world concepts
+
+Poor decomposition often comes from technical convenience, copying existing systems blindly, or organisational pressure instead of design reasoning.
+
+<Callout variant="concept">
+Decomposition should follow responsibility, not technology.
+</Callout>
+
+A quick test: if a component has more than one reason to change, its boundary is probably wrong.
+
+<ToolCard
+  title="&#128200; System Decomposition Lab"
+  description="Break a real system into components and evaluate coupling and cohesion."
+>
+  <DecompositionLab />
+</ToolCard>
+
+---
+
+## Quality-driven architecture
+
+In real systems, architecture is driven by **quality attributes** more than features.
+
+Performance influences concurrency and caching. Security influences trust boundaries and data flow. Availability influences redundancy and failure handling.
+
+Architectural design maps quality attributes, constraints, and risks into structural decisions.
+
+<GlossaryTip term="Quality attribute">
+A measurable property describing how a system behaves under load, failure, or change.
+</GlossaryTip>
+
+Ignoring quality attributes early leads to expensive redesign later.
+
+---
+
+## Making and recording decisions
+
+Architecture is a decision-making discipline. Each decision has context, options, trade-offs, and consequences.
+
+Good architects do not try to remember everything. They **record** important choices.
+
+An Architectural Decision Record (ADR) captures the decision, why it was made, rejected alternatives, and consequences.
+
+<Callout variant="concept">
+Undocumented decisions become hidden assumptions.
+</Callout>
+
+<ToolCard
+  title="&#128221; Decision Record Builder"
+  description="Create a lightweight architectural decision record for a real choice."
+>
+  <DecisionRecordBuilder />
+</ToolCard>
+
+---
+
+## Documentation and architectural views
+
+Architecture must be communicated clearly. One diagram is never enough.
+
+Different stakeholders need different views:
+- Business stakeholders need context
+- Developers need structure
+- Operators need deployment and runtime views
+
+Effective documentation uses multiple views rather than one complex diagram. Show only what the reader needs, hide unnecessary detail, and make assumptions explicit.
+
+<Callout variant="concept">
+Architecture diagrams exist to support understanding, not decoration.
+</Callout>
+
+---
+
+## Practice and reflection
+
+<QuizBlock
+  questions={[
+    {
+      q: "Why is architectural design fundamentally about trade-offs?",
+      a: "Because improving one quality attribute usually degrades another."
+    },
+    {
+      q: "Why should decomposition follow responsibility rather than technology?",
+      a: "Because responsibilities change more slowly and align better with system intent."
+    },
+    {
+      q: "Why are architectural decisions recorded?",
+      a: "To preserve reasoning and prevent hidden assumptions."
+    },
+    {
+      q: "Why are multiple architectural views necessary?",
+      a: "Because different stakeholders need different levels of detail."
+    }
+  ]}
+/>
+
+<PageNav prevHref="/software-architecture/beginner" prevLabel="Beginner" nextHref="/software-architecture/advanced" nextLabel="Advanced" showTop showBottom />
