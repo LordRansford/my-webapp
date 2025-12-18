@@ -18,9 +18,26 @@ const pages = [
     summary: "Ecosystems, regulation, funding models, risk, and stewardship.",
   },
   {
+    slug: "dashboards",
+    title: "Further practice",
+    summary: "Dashboards and hands-on labs to make the strategy tangible before the summary.",
+  },
+  {
     slug: "summary",
     title: "Summary and games",
     summary: "Recap, games, and dashboards to test strategy thinking.",
+  },
+  {
+    slug: "capstone",
+    title: "BookTrack capstone journey",
+    summary: "An end to end journey that connects architecture, cybersecurity, digitalisation and AI using the BookTrack example.",
+    href: "/notes/capstone/booktrack",
+  },
+  {
+    slug: "capstone-gridlens",
+    title: "GridLens capstone journey",
+    summary: "An end to end journey that connects architecture, CIM based network data, cybersecurity, digitalisation and AI using the GridLens example.",
+    href: "/notes/capstone/gridlens",
   },
 ];
 
@@ -28,20 +45,21 @@ export default function DigitalisationHub() {
   return (
     <Layout
       title="Digitalisation Strategy Notes"
-      description="Choose your level: beginner, intermediate, advanced, or summary with games and dashboards."
+      description="Choose your level: beginner, intermediate, advanced, further practice, or summary with games."
     >
       <header className="page-header">
         <p className="eyebrow">Digitalisation Strategy</p>
         <h1>Read, design, and deliver</h1>
         <p className="lead">
           Pick the stage that fits you. Beginner for language and foundations, intermediate for operating models and
-          platforms, advanced for ecosystems and stewardship, plus a summary page with games and dashboards.
+          platforms, advanced for ecosystems and stewardship, a further practice page with dashboards and labs, plus a
+          summary page with games.
         </p>
       </header>
 
       <div className="course-grid">
         {pages.map((page) => (
-          <Link key={page.slug} href={`/digitalisation/${page.slug}`} className="course-card">
+          <Link key={page.slug} href={page.href || `/digitalisation/${page.slug}`} className="course-card">
             <div className="course-card__meta">
               <span className="chip chip--accent">{page.title}</span>
             </div>

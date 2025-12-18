@@ -1,9 +1,10 @@
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useMemo } from "react";
 import NotesLayout from "@/components/notes/Layout";
 import { MDXRenderer } from "@/components/notes/MDXRenderer";
 import { loadNote } from "@/lib/content/loadNote";
-import ToolCard from "@/components/learn/ToolCard";
+import ToolCard from "@/components/notes/ToolCard";
 import Callout from "@/components/notes/Callout";
 import { DeeperDive } from "@/components/notes/DeeperDive";
 import { MathInline, MathBlock } from "@/components/notes/Math";
@@ -64,15 +65,23 @@ export default function Page({ source, headings }) {
   return (
     <NotesLayout
       meta={{
-        title: "Cybersecurity Notes - Advanced",
+        title: "Cybersecurity Practice and Strategy",
         description: "Advanced systems, adversaries, and resilience",
-        level: "Advanced",
+        level: "Practice & Strategy",
         slug: "/cybersecurity/advanced",
         page: 3,
         totalPages: 4,
       }}
       headings={headings}
     >
+      <div className="mb-4">
+        <Link
+          href="/cybersecurity"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-900 focus:outline-none focus:ring focus:ring-blue-200"
+        >
+          ← Back to Cybersecurity overview
+        </Link>
+      </div>
       <MDXRenderer source={source} components={mdxComponents} />
     </NotesLayout>
   );

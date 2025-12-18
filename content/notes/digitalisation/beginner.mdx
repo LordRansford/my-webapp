@@ -10,6 +10,10 @@ import Callout from "@/components/notes/Callout"
 import GlossaryTip from "@/components/notes/GlossaryTip"
 import ToolCard from "@/components/notes/ToolCard"
 import QuizBlock from "@/components/notes/QuizBlock"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import { digitalisationSectionManifest } from "@/lib/digitalisationSections"
 
 import DigitalMaturityGauge from "@/components/notes/tools/digitalisation/beginner/DigitalMaturityGauge"
 import DataValueChain from "@/components/notes/tools/digitalisation/beginner/DataValueChain"
@@ -21,6 +25,10 @@ import DigitalisationDashboard from "@/components/dashboards/DigitalisationDashb
 
 # Digitalisation Strategy Notes - Beginner
 
+<LevelProgressBar courseId="digitalisation" levelId="foundations" sectionIds={digitalisationSectionManifest.foundations} />
+
+<CPDTracker courseId="digitalisation" levelId="foundations" estimatedHours={8} />
+
 These notes are calm and honest. Digitalisation is not magic. It is the deliberate redesign of how an organisation creates value using digital technology, data, and new ways of working. The focus here is value, not tools, and people, not buzzwords.
 
 <PageNav prevHref="/" prevLabel="Home" nextHref="/digitalisation/intermediate" nextLabel="Intermediate" showTop showBottom />
@@ -28,6 +36,8 @@ These notes are calm and honest. Digitalisation is not magic. It is the delibera
 ---
 
 ## What digitalisation really is
+
+<SectionProgressToggle courseId="digitalisation" levelId="foundations" sectionId="dig-foundations-what-is-digitalisation" />
 
 <Callout variant="concept">
 Digitalisation is the deliberate redesign of how an organisation creates value using digital technology, data, and new ways of working.
@@ -76,6 +86,8 @@ Digitisation without digitalisation gives the worst of both worlds. Digitalisati
 
 ## Data as a strategic asset
 
+<SectionProgressToggle courseId="digitalisation" levelId="foundations" sectionId="dig-foundations-data-and-processes" />
+
 Data becomes an asset when it is correct enough to trust, accessible enough to use, governed enough to protect, and connected enough to create insight. Treating data strategically means deciding who is responsible, how it is collected, stored, shared, measured, and used safely.
 
 <Callout variant="concept">
@@ -89,6 +101,8 @@ Digitalisation without data discipline is automation of confusion.
 ---
 
 ## People and culture
+
+<SectionProgressToggle courseId="digitalisation" levelId="foundations" sectionId="dig-foundations-people-and-change" />
 
 Culture is the hard part. Systems succeed only when people trust them, know how to use them, and are supported to change habits. A digital culture shows up in the questions people ask: do we use data to decide, do we share information, do we test ideas, do we treat security and privacy as design constraints.
 
@@ -104,6 +118,8 @@ Formal: Collective attitudes, norms, and practices that enable adoption of digit
 ---
 
 ## Processes and technology foundations
+
+<SectionProgressToggle courseId="digitalisation" levelId="foundations" sectionId="dig-foundations-digital-building-blocks" />
 
 <Callout variant="concept">
 If you automate a broken process, you get a faster broken process.

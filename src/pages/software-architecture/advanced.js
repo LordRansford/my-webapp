@@ -9,6 +9,9 @@ import GlossaryTip from "@/components/notes/GlossaryTip";
 import QuizBlock from "@/components/notes/QuizBlock";
 import ProgressBar from "@/components/notes/ProgressBar";
 import PageNav from "@/components/notes/PageNav";
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
+import LevelProgressBar from "@/components/course/LevelProgressBar";
+import CPDTracker from "@/components/CPDTracker";
 
 const PlatformMap = dynamic(() => import("@/components/notes/tools/architecture/advanced/PlatformMap"), { ssr: false });
 const ResilienceSimulator = dynamic(() => import("@/components/notes/tools/architecture/advanced/ResilienceSimulator"), { ssr: false });
@@ -24,6 +27,9 @@ export default function Page({ source, headings }) {
       QuizBlock,
       ProgressBar,
       PageNav,
+      SectionProgressToggle,
+      LevelProgressBar,
+      CPDTracker,
       PlatformMap,
       ResilienceSimulator,
       GovernanceDesigner,

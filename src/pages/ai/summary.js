@@ -1,3 +1,4 @@
+import Link from "next/link";
 import NotesLayout from "@/components/NotesLayout";
 import ToolCard from "@/components/notes/ToolCard";
 import ProgressBar from "@/components/notes/ProgressBar";
@@ -55,6 +56,27 @@ export default function AISummary() {
             { id: "monitoring", title: "Monitoring", body: "If you cannot see failure, you cannot manage it. Monitoring is the price of deployment, not a nice extra." },
           ]}
         />
+      </ToolCard>
+
+      <hr />
+
+      <h2 className="text-xl font-semibold text-gray-900 mt-8">Capstone</h2>
+      <ToolCard
+        title="BookTrack capstone journey"
+        description="An end to end journey that connects architecture, cybersecurity, digitalisation and AI using the BookTrack example."
+      >
+        <Link className="text-sm font-semibold text-blue-700 hover:underline" href="/notes/capstone/booktrack">
+          Open the BookTrack capstone journey
+        </Link>
+      </ToolCard>
+
+      <ToolCard
+        title="GridLens capstone journey"
+        description="An end to end journey that connects architecture, CIM based network data, cybersecurity, digitalisation and AI using the GridLens example."
+      >
+        <Link className="text-sm font-semibold text-blue-700 hover:underline" href="/notes/capstone/gridlens">
+          Open the GridLens capstone journey
+        </Link>
       </ToolCard>
 
       <PageNav prevHref="/ai/advanced" prevLabel="Advanced" nextHref="/cybersecurity/beginner" nextLabel="Cybersecurity Beginner" showTop showBottom />

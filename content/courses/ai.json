@@ -1,0 +1,59 @@
+{
+  "id": "ai",
+  "slug": "ai",
+  "title": "AI Notes",
+  "shortTitle": "AI",
+  "description": "From what data is and how simple models work through to deep learning, transformers, agents and real world AI systems.",
+  "totalEstimatedHours": 30,
+  "levels": [
+    {
+      "id": "foundations",
+      "slug": "beginner",
+      "title": "AI Foundations",
+      "estimatedHours": 8,
+      "summary": "Start from data, simple models, and how to read accuracy and bias without drowning in maths.",
+      "learningOutcomes": [
+        "Explain what data is and the difference between features, labels, inputs and outputs.",
+        "Describe in plain language what supervised and unsupervised learning are trying to do.",
+        "Understand basic ideas like training, validation and testing at a high level.",
+        "Recognise common data problems such as bias, noise and leakage."
+      ]
+    },
+    {
+      "id": "applied",
+      "slug": "intermediate",
+      "title": "Applied AI",
+      "estimatedHours": 10,
+      "summary": "Work with evaluation, features, embeddings, and practical model use without the buzzword fog.",
+      "learningOutcomes": [
+        "Describe how common model families such as linear models, trees and simple neural networks behave.",
+        "Explain important evaluation metrics in context, such as accuracy, precision, recall and F1, and when they are appropriate.",
+        "Connect data preparation, feature engineering and model training as one pipeline rather than isolated steps.",
+        "Relate model choices and trade offs to real business or policy questions."
+      ]
+    },
+    {
+      "id": "practice-strategy",
+      "slug": "advanced",
+      "title": "Modern AI Systems",
+      "estimatedHours": 12,
+      "summary": "Transformers, agents, diffusion models, and how real AI systems are designed, governed, and sometimes misused.",
+      "learningOutcomes": [
+        "Explain at a high level how transformer based models, agents and diffusion models work and where they fit.",
+        "Discuss AI risks such as bias, safety and misuse in concrete scenarios, not only in abstract terms.",
+        "Connect AI system design to governance, regulation and organisational guardrails.",
+        "Describe a realistic lifecycle for building, deploying, monitoring and improving AI systems in practice."
+      ]
+    }
+  ],
+  "summaryPage": {
+    "slug": "summary",
+    "title": "AI summary and games",
+    "description": "A recap and playful space to connect AI theory with small hands on challenges."
+  },
+  "targetAudience": [
+    "People from non technical backgrounds who want to understand AI properly.",
+    "Students and early career professionals who need to connect maths, models and real world use cases.",
+    "Teams and lecturers who want ready made explanations, diagrams and tools to use in classes."
+  ]
+}

@@ -1,0 +1,27 @@
+import { DataFlowMapperLab } from "@/components/tools/digitalisation/DataFlowMapperLab";
+import { DataQualityScorecardLab } from "@/components/tools/digitalisation/DataQualityScorecardLab";
+import { ProcessFrictionLab } from "@/components/tools/digitalisation/ProcessFrictionLab";
+
+export const meta = {
+  title: "Useful tools - Digitalisation",
+  description:
+    "Interactive labs to map data flows, score data quality and find high friction steps in processes.",
+  topic: "digitalisation",
+};
+
+# Useful tools - Digitalisation
+
+<div className="mt-2 rounded-3xl bg-gradient-to-br from-slate-50 via-sky-50/40 to-slate-50 border border-slate-100 px-4 py-4 sm:px-6 sm:py-5">
+  <p className="text-sm text-slate-700 max-w-2xl leading-relaxed">
+    These tools sit beside my digitalisation notes. They surface where data
+    flows, where quality holds you back and where manual steps create friction
+    for people. Use them when designing strategies, preparing business cases or
+    explaining to colleagues why data and process details matter.
+  </p>
+</div>
+
+<section className="space-y-8 mt-6 mb-16">
+  <DataFlowMapperLab />
+  <DataQualityScorecardLab />
+  <ProcessFrictionLab />
+</section>

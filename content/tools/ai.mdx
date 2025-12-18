@@ -1,0 +1,173 @@
+import { TabularModelLab } from "@/components/tools/ai/TabularModelLab";
+import { TextClassifierLab } from "@/components/tools/ai/TextClassifierLab";
+import { VectorSearchLab } from "@/components/tools/ai/VectorSearchLab";
+import { FairnessProbeLab } from "@/components/tools/ai/FairnessProbeLab";
+import { DriftMonitorLab } from "@/components/tools/ai/DriftMonitorLab";
+import { ThresholdEvaluationLab } from "@/components/tools/ai/ThresholdEvaluationLab";
+import { CalibrationLab } from "@/components/tools/ai/CalibrationLab";
+import { CounterfactualLab } from "@/components/tools/ai/CounterfactualLab";
+
+export const meta = {
+  title: "Useful tools - AI Lab",
+  description:
+    "Hands on AI labs where you can upload real data, train models in your browser and understand how they behave.",
+  topic: "ai",
+};
+
+# Useful tools - AI Lab
+
+<div className="mt-2 rounded-3xl bg-gradient-to-br from-slate-50 via-emerald-50/40 to-slate-50 border border-slate-100 px-4 py-4 sm:px-6 sm:py-5">
+  <p className="text-sm text-slate-700 max-w-2xl leading-relaxed">
+    This page is a working AI lab. You can upload real data, build small models
+    directly in your browser and see how changes in features, labels, prompts
+    and text collections affect behaviour. The goal is to give you an
+    engineer&apos;s intuition for how practical AI systems work, without hiding
+    everything behind a black box.
+  </p>
+</div>
+
+<div className="mt-4 grid gap-3 sm:grid-cols-2">
+  <a
+    href="/dashboards/ai"
+    className="block rounded-2xl bg-gradient-to-r from-sky-50 via-cyan-50 to-white ring-1 ring-slate-100/80 p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+  >
+    <p className="text-sm font-semibold text-slate-900">AI Dashboards</p>
+    <p className="text-xs text-slate-600 mt-1">
+      Quick charts for metrics, drift and fairness. Great for fast visual checks alongside these tools.
+    </p>
+  </a>
+  <a
+    href="/studios"
+    className="block rounded-2xl bg-gradient-to-r from-emerald-50 via-emerald-100/60 to-white ring-1 ring-slate-100/80 p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+  >
+    <p className="text-sm font-semibold text-slate-900">Ransford&apos;s AI Studios</p>
+    <p className="text-xs text-slate-600 mt-1">
+      Explore the full studios experience (Control Room, Model Forge, Vision, Speech, Agents, Governance) with the same privacy-first approach.
+    </p>
+  </a>
+</div>
+
+<section className="space-y-12 mt-6 mb-16">
+
+  <div className="space-y-3">
+    <h2 className="text-base sm:text-lg font-semibold text-slate-900">
+      Tabular model builder
+    </h2>
+    <p className="text-xs sm:text-sm text-slate-600 max-w-2xl">
+      Start here if you have a CSV file with numeric features and a target
+      column. You can train a small model in your browser and explore loss and
+      accuracy curves, plus a simple prediction playground.
+    </p>
+  </div>
+
+  <TabularModelLab />
+
+  <div className="h-px w-full bg-gradient-to-r from-transparent via-slate-200 to-transparent my-4" />
+
+  <div className="space-y-3">
+    <h2 className="text-base sm:text-lg font-semibold text-slate-900">
+      Text classification playground
+    </h2>
+    <p className="text-xs sm:text-sm text-slate-600 max-w-2xl">
+      Move on to text once you are comfortable with tabular data. Upload a CSV
+      with a text column and a label column, train a classifier in your browser
+      and see how performance changes as you adjust data splits and labels.
+    </p>
+  </div>
+
+  <TextClassifierLab />
+
+  <div className="h-px w-full bg-gradient-to-r from-transparent via-slate-200 to-transparent my-4" />
+
+  <div className="space-y-3">
+    <h2 className="text-base sm:text-lg font-semibold text-slate-900">
+      Vector search explorer
+    </h2>
+    <p className="text-xs sm:text-sm text-slate-600 max-w-2xl">
+      Experiment with vector search. Build a small collection of short
+      documents, ask natural language questions and see how cosine similarity
+      highlights the closest matches. This is a small but real example of how
+      retrieval systems and RAG pipelines behave.
+    </p>
+  </div>
+
+  <VectorSearchLab />
+
+  <div className="h-px w-full bg-gradient-to-r from-transparent via-slate-200 to-transparent my-4" />
+
+  <div className="space-y-3">
+    <h2 className="text-base sm:text-lg font-semibold text-slate-900">
+      Bias and fairness probe
+    </h2>
+    <p className="text-xs sm:text-sm text-slate-600 max-w-2xl">
+      Upload model outputs with a group column and see how positive prediction
+      rates and true positive rates vary between groups. This is a starting
+      point for practical fairness discussions, not a full audit.
+    </p>
+  </div>
+
+  <FairnessProbeLab />
+
+  <div className="h-px w-full bg-gradient-to-r from-transparent via-slate-200 to-transparent my-4" />
+
+  <div className="space-y-3">
+    <h2 className="text-base sm:text-lg font-semibold text-slate-900">
+      Data drift and monitoring explorer
+    </h2>
+    <p className="text-xs sm:text-sm text-slate-600 max-w-2xl">
+      Upload baseline and current datasets to see how feature distributions and
+      label frequencies have shifted over time. This helps you reason about
+      when a model may need retraining, recalibration or closer monitoring.
+    </p>
+  </div>
+
+  <DriftMonitorLab />
+
+  <div className="h-px w-full bg-gradient-to-r from-transparent via-slate-200 to-transparent my-4" />
+
+  <div className="space-y-3">
+    <h2 className="text-base sm:text-lg font-semibold text-slate-900">
+      Threshold and evaluation cockpit
+    </h2>
+    <p className="text-xs sm:text-sm text-slate-600 max-w-2xl">
+      Upload model outputs with true labels and scores, then move the threshold
+      to see how the confusion matrix, precision, recall, false positive rate
+      and F1 change. This is where model performance meets real decisions.
+    </p>
+  </div>
+
+  <ThresholdEvaluationLab />
+
+  <div className="h-px w-full bg-gradient-to-r from-transparent via-slate-200 to-transparent my-4" />
+
+  <div className="space-y-3">
+    <h2 className="text-base sm:text-lg font-semibold text-slate-900">
+      Calibration and reliability lab
+    </h2>
+    <p className="text-xs sm:text-sm text-slate-600 max-w-2xl">
+      Upload probabilities and true labels to see whether the model&apos;s
+      numbers line up with reality. The reliability diagram, bin table and
+      Brier score help you decide if the model is over confident, under
+      confident or well calibrated.
+    </p>
+  </div>
+
+  <CalibrationLab />
+
+  <div className="h-px w-full bg-gradient-to-r from-transparent via-slate-200 to-transparent my-4" />
+
+  <div className="space-y-3">
+    <h2 className="text-base sm:text-lg font-semibold text-slate-900">
+      Counterfactual and what if lab
+    </h2>
+    <p className="text-xs sm:text-sm text-slate-600 max-w-2xl">
+      Upload a dataset with numeric features, train a small model in your
+      browser and move sliders to see how the predicted probability changes.
+      This helps you build a practical feel for what the model reacts to and
+      what it mostly ignores.
+    </p>
+  </div>
+
+  <CounterfactualLab />
+
+</section>

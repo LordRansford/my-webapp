@@ -1,7 +1,5 @@
 import Head from "next/head";
 import Link from "next/link";
-import DashboardNav from "@/components/navigation/DashboardNav";
-
 export default function Layout({
   children,
   title = "Ransford's Notes",
@@ -54,12 +52,20 @@ export default function Layout({
               <span className="brand__text">Ransford&apos;s Notes</span>
             </Link>
             <nav className="nav-links" aria-label="Primary">
-              <Link href="/tools">Labs</Link>
-              <DashboardNav />
+              <Link href="/tools">Tools</Link>
+              <div className="nav-dropdown">
+                <button className="nav-dropdown__trigger" aria-haspopup="true" aria-expanded="false">
+                  Studios
+                </button>
+                <div className="nav-dropdown__menu">
+                  <Link href="/studios">Ransford&apos;s AI Studios</Link>
+                  <Link href="/dev-studios">Ransford&apos;s Software Development Studio</Link>
+                </div>
+              </div>
               <Link href="/ai">AI</Link>
               <Link href="/digitalisation">Digitalisation</Link>
               <Link href="/software-architecture">Architecture</Link>
-              <Link href="/cybersecurity">Cybersecurity</Link>
+              <Link href="/cybersecurity">Cybersecurity course</Link>
               <Link href="/about">About</Link>
               <Link href="/trust-and-about">Trust</Link>
               <Link href="/accreditation-and-alignment">Accreditation</Link>
@@ -84,8 +90,7 @@ export default function Layout({
               </p>
             </div>
             <div className="footer-links" aria-label="Footer">
-              <Link href="/tools">Labs</Link>
-              <Link href="/dashboards">Dashboards</Link>
+              <Link href="/tools">Tools</Link>
               <Link href="/about">About</Link>
               <Link href="/trust-and-about">Trust</Link>
               <Link href="/accreditation-and-alignment">Accreditation</Link>

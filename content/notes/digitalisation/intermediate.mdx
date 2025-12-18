@@ -10,6 +10,10 @@ import Callout from "@/components/notes/Callout"
 import GlossaryTip from "@/components/notes/GlossaryTip"
 import ToolCard from "@/components/notes/ToolCard"
 import QuizBlock from "@/components/notes/QuizBlock"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import { digitalisationSectionManifest } from "@/lib/digitalisationSections"
 
 import StrategyRoadmapCanvas from "@/components/notes/tools/digitalisation/beginner/StrategyRoadmapCanvas"
 import OperatingModelLab from "@/components/notes/tools/digitalisation/intermediate/OperatingModelLab"
@@ -21,6 +25,10 @@ import DigitalisationDashboard from "@/components/dashboards/DigitalisationDashb
 <ProgressBar mode="scroll" />
 
 # Digitalisation Strategy Notes - Intermediate
+
+<LevelProgressBar courseId="digitalisation" levelId="applied" sectionIds={digitalisationSectionManifest.applied} />
+
+<CPDTracker courseId="digitalisation" levelId="applied" estimatedHours={10} />
 
 These notes build on the beginner page. The language is now set. The aim here is to turn intent into design: vision into outcomes, operating models into capabilities, and realistic roadmaps instead of wish lists.
 
@@ -45,6 +53,8 @@ Digitalisation strategy at this level is about turning intent into an operating 
 
 ## Vision, outcomes, and value
 
+<SectionProgressToggle courseId="digitalisation" levelId="applied" sectionId="dig-intermediate-metrics-and-outcomes" />
+
 A lot of strategies fail because they start with technology. I start with a small set of clear outcomes that matter to real people.
 
 Examples include reducing time for a key journey, improving quality and speed of decisions, reducing the cost and risk of running core systems, or enabling a service that was not possible before.
@@ -63,6 +73,8 @@ A good vision is short, tied to real problems, measurable, and honest about what
 ---
 
 ## Operating model and capabilities
+
+<SectionProgressToggle courseId="digitalisation" levelId="applied" sectionId="dig-intermediate-journeys-and-services" />
 
 Digitalisation changes how the organisation runs. An operating model describes how people, process, technology, and governance work together to deliver value.
 
@@ -89,6 +101,8 @@ You cannot digitalise everything at once. Strengthen the capabilities that matte
 
 ## Platforms, data, and architecture for digitalisation
 
+<SectionProgressToggle courseId="digitalisation" levelId="applied" sectionId="dig-intermediate-platforms-and-integration" />
+
 Technology now becomes more concrete but remains strategy led. The question is which shared platforms support the capabilities and outcomes we need, how data moves safely, and what architectural approach keeps change easier rather than harder.
 
 <GlossaryTip term="Platform">
@@ -105,6 +119,8 @@ Platforms avoid rebuilding the same foundations in every service. Data and archi
 ---
 
 ## Governance, funding, and risk
+
+<SectionProgressToggle courseId="digitalisation" levelId="applied" sectionId="dig-intermediate-risk-and-regulation" />
 
 Digitalisation touches risk, money, and responsibility, so governance becomes central. Governance here is not long policy documents; it is clear answers to who owns the roadmap, who can approve platforms or major changes, how data and privacy decisions are made, and how security standards are enforced.
 

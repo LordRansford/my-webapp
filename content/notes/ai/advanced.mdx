@@ -10,6 +10,10 @@ import Callout from "@/components/notes/Callout"
 import GlossaryTip from "@/components/notes/GlossaryTip"
 import ToolCard from "@/components/notes/ToolCard"
 import QuizBlock from "@/components/notes/QuizBlock"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import { aiSectionManifest } from "@/lib/aiSections"
 import MathInline from "@/components/notes/MathInline"
 import MathBlock from "@/components/notes/MathBlock"
 
@@ -25,6 +29,10 @@ import IncidentTimelineTool from "@/components/notes/tools/ai/advanced/IncidentT
 
 # AI Notes - Advanced
 
+<LevelProgressBar courseId="ai" levelId="practice-strategy" sectionIds={aiSectionManifest["practice-strategy"]} />
+
+<CPDTracker courseId="ai" levelId="practice-strategy" estimatedHours={12} />
+
 Intermediate covered evaluation, failure classes, sessions, leakage, and representation. Advanced is where I treat AI systems as living systems with constraints, trade offs, and people. My goal is not to list features. My goal is to explain why these systems break and how to design them so failure is contained, visible, and recoverable.
 
 <PageNav prevHref="/ai/intermediate" prevLabel="Intermediate" nextHref="/ai/summary" nextLabel="Summary" showTop showBottom />
@@ -32,6 +40,8 @@ Intermediate covered evaluation, failure classes, sessions, leakage, and represe
 ---
 
 ## Transformers and attention as information routing
+
+<SectionProgressToggle courseId="ai" levelId="practice-strategy" sectionId="ai-advanced-transformers-and-agents" />
 
 <Callout variant="concept">
 Attention is weighted routing, not memory. The context window is a hard wall, not a soft suggestion.
@@ -73,6 +83,8 @@ After using the tool, notice how a single trusted edge changes blast radius. In 
 ---
 
 ## Large language models as probabilistic systems
+
+<SectionProgressToggle courseId="ai" levelId="practice-strategy" sectionId="ai-advanced-diffusion-and-generation" />
 
 <Callout variant="concept">
 LLMs optimise likelihood, not truth. Fluency is not reliability.
@@ -165,6 +177,8 @@ Example: An automated cleaner deleting resources faster after each “success”
 
 ## Detection and operations at scale
 
+<SectionProgressToggle courseId="ai" levelId="practice-strategy" sectionId="ai-advanced-production-and-monitoring" />
+
 <Callout variant="concept">
 Prevention fails. Detection and response decide whether failure becomes disaster.
 </Callout>
@@ -210,6 +224,8 @@ Modern AI stacks depend on packages, build systems, identity providers, and host
 ---
 
 ## Governance, safety, and limits
+
+<SectionProgressToggle courseId="ai" levelId="practice-strategy" sectionId="ai-advanced-governance-and-strategy" />
 
 <Callout variant="concept">
 Governance is not paperwork. It is how we make decisions under uncertainty and accept residual risk honestly.

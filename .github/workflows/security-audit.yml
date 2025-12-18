@@ -1,0 +1,34 @@
+name: Security Audit
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  schedule:
+    - cron: "0 5 * * 1" # weekly Monday 05:00 UTC
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: npm audit (high and above)
+        run: npm audit --audit-level=high
+
+      - name: OSV scanner (best effort)
+        run: npx osv-scanner --lock package-lock.json || true
+
+      - name: Guidance
+        run: |
+          echo "If audit finds high/critical issues: try 'npm audit fix' in a branch, rerun lint/tests, or open an issue if upgrades break things."

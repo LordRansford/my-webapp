@@ -10,6 +10,10 @@ import Callout from "@/components/notes/Callout"
 import GlossaryTip from "@/components/notes/GlossaryTip"
 import ToolCard from "@/components/notes/ToolCard"
 import QuizBlock from "@/components/notes/QuizBlock"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import { aiSectionManifest } from "@/lib/aiSections"
 
 import ConfusionMatrixExplorer from "@/components/notes/tools/ai/intermediate/ConfusionMatrixExplorer"
 import LeakageDetectionGame from "@/components/notes/tools/ai/intermediate/LeakageDetectionGame"
@@ -94,6 +98,8 @@ If you remember one thing from this section: metrics are stories about mistakes.
 
 ## Data leakage and broken experiments
 
+<SectionProgressToggle courseId="ai" levelId="applied" sectionId="ai-intermediate-feature-pipelines" />
+
 <Callout variant="concept">
 Leakage is the silent killer of experiments. It makes metrics glow and production crash.
 </Callout>
@@ -157,6 +163,8 @@ If you remember one thing from this section: never let the model see the future 
 
 ## Representations, embeddings, and meaning
 
+<SectionProgressToggle courseId="ai" levelId="applied" sectionId="ai-intermediate-model-choices" />
+
 <Callout variant="concept">
 Models do not understand. They organise the world into shapes that make prediction easier. Those shapes reflect the data, not truth.
 </Callout>
@@ -215,6 +223,8 @@ After the tool, notice that changing chunk size or freshness alters results more
 />
 
 If you remember one thing from this section: embeddings are opinions learned from data. Grounding helps, but retrieval quality and freshness matter more than model size for reliability.
+
+<SectionProgressToggle courseId="ai" levelId="applied" sectionId="ai-intermediate-error-analysis" />
 
 ---
 
