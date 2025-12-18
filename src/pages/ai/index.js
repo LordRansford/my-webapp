@@ -19,13 +19,25 @@ const pages = [
   },
   {
     slug: "dashboards",
-    title: "Dashboards",
-    summary: "Interactive labs and dashboards to make the concepts tangible before the summary and games.",
+    title: "Further practice",
+    summary: "Dashboards and hands-on labs to make the concepts tangible before the summary and games.",
   },
   {
     slug: "summary",
     title: "Summary and games",
     summary: "Recap, games, and dashboards to test your intuition.",
+  },
+  {
+    slug: "capstone",
+    title: "BookTrack capstone journey",
+    summary: "An end to end journey that connects architecture, cybersecurity, digitalisation and AI using the BookTrack example.",
+    href: "/notes/capstone/booktrack",
+  },
+  {
+    slug: "capstone-gridlens",
+    title: "GridLens capstone journey",
+    summary: "An end to end journey that connects architecture, CIM based network data, cybersecurity, digitalisation and AI using the GridLens example.",
+    href: "/notes/capstone/gridlens",
   },
 ];
 
@@ -46,7 +58,7 @@ export default function AIHub() {
 
       <div className="course-grid">
         {pages.map((page) => (
-          <Link key={page.slug} href={`/ai/${page.slug}`} className="course-card">
+          <Link key={page.slug} href={page.href || `/ai/${page.slug}`} className="course-card">
             <div className="course-card__meta">
               <span className="chip chip--accent">{page.title}</span>
             </div>

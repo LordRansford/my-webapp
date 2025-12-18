@@ -1,0 +1,274 @@
+---
+title: "GridLens capstone journey"
+description: "An end to end journey that connects architecture, CIM based network data, cybersecurity, digitalisation and AI using one realistic energy system."
+topic: "capstone"
+level: "capstone"
+---
+
+# GridLens capstone journey
+
+This capstone uses a fictional but realistic energy data platform called **GridLens**.
+
+GridLens is a shared data and analytics platform for network companies, the system operator, regulators and innovators. It ingests Long Term Development Statement (LTDS) models in CIM, validates and standardises them, and exposes safe and useful views through APIs and dashboards. Over time it adds AI models to support planning, flexibility and whole system decisions.
+
+This journey connects:
+
+- Software architecture  
+- Cybersecurity  
+- Digitalisation strategy  
+- AI and data science  
+- Ransford’s Software Development Studio  
+
+The aim is to think like a responsible architect and regulator. The goal is not a perfect design. The goal is a design that is understandable, explainable and defensible.
+
+> Tip: treat this as a rehearsal for real work. Write your notes as if you will show them to colleagues, network companies and a future auditor.
+
+---
+
+## 1. Frame GridLens as a system (Architecture)
+
+Open the **Software architecture notes and dashboards**.
+
+1. In the beginner and intermediate notes, revisit the core architecture ideas:
+   - layers and boundaries  
+   - components and services  
+   - coupling and cohesion  
+   - synchronous calls and messaging
+
+2. In the **System landscape canvas** dashboard, sketch GridLens at a high level:
+
+   - Data ingestion layer for LTDS CIM and other network datasets  
+   - Validation and transformation services (for example CIM to internal models, SHACL validation, enrichment)  
+   - A curated data store for clean network models and time series  
+   - API gateway or data access layer for DNOs, the system operator, innovators and internal teams  
+   - Analytics and AI services that sit on top of the curated data  
+   - Portals or dashboards for users
+
+3. Use the **Domain model sandbox** to capture key entities:
+
+   - NetworkElement, Busbar, Line, Transformer, Substation  
+   - Location, VoltageLevel, CustomerConnection  
+   - Scenario, Snapshot, Forecast, Constraint
+
+   Keep names close to CIM where it helps, but avoid copying the entire standard. Focus on concepts that matter for GridLens.
+
+4. Add at least three entries in the **Architecture decision log**:
+
+   - One decision about how GridLens will store network models (for example a graph store versus relational tables)  
+   - One decision about how to separate ingestion and publication so that noisy or invalid data does not leak to users  
+   - One decision about how external parties will access data (for example read only APIs versus file downloads)
+
+Write these decisions in plain language that would make sense to a smart non technical reader.
+
+> Reflection: If someone asked you to explain GridLens in five minutes, could you point to this landscape and these decisions and tell a coherent story?
+
+---
+
+## 2. Make security and data sensitivity explicit (Cybersecurity)
+
+Open the **Cybersecurity notes, dashboards and useful tools**.
+
+Treat GridLens as a powerful reconnaissance source. If it leaks, an attacker may gain a detailed map of the network.
+
+1. In the threat modelling section, treat GridLens as the target:
+
+   - Identify key assets:
+     - detailed network topology  
+     - connection capacities and thermal limits  
+     - customer connection information and locations  
+     - planned reinforcements and constraints
+   - Identify actors:
+     - internal staff and analysts  
+     - DNO and TSO users  
+     - innovators and solution providers  
+     - attackers, scrapers and curious parties
+
+2. Use the **Risk matrix builder** dashboard to capture at least three risks:
+
+   - One risk about unauthorised access to full resolution network models  
+   - One risk about misuse of exported files that still contain sensitive fields  
+   - One risk about integrity of models used for planning and investment signals
+
+   For each risk, record likelihood, impact and a brief mitigation that is realistic for GridLens.
+
+3. Use the **Access control matrix** and **Data classification** dashboards:
+
+   - Classify different views:
+     - internal engineering models  
+     - regulator facing views  
+     - open data extracts  
+     - research sandboxes
+   - For each view, capture:
+     - who should have access  
+     - what granularity is acceptable (for example full topology versus aggregated views)  
+     - whether data should be delayed or perturbed
+
+4. In the **Useful tools**:
+
+   - Run header and URL checks on example GridLens endpoints  
+   - Use the password and phishing tools to think about how GridLens accounts and alerts could be abused  
+   - Note any patterns that you would consider anti pattern for a regulated energy data platform
+
+Bring this back to architecture:
+
+- Do you need a strong separation of duties between ingestion, modelling and publication  
+- Do you need separate environments or tenants for open data and restricted data  
+
+> Reflection: If a network model from GridLens appeared on a public forum, what questions would the regulator ask you and what evidence would you want to have ready?
+
+---
+
+## 3. Treat digitalisation as a whole system strategy (Digitalisation)
+
+Open the **Digitalisation notes, dashboards and summary**.
+
+Think of GridLens as one asset in a wider digital system, not just a technical project.
+
+1. In the digitalisation notes:
+
+   - Map GridLens to strategic outcomes:
+     - better investment decisions  
+     - more transparent capacity information for connections and flexibility  
+     - faster and fairer innovation  
+     - reduced duplication of effort across organisations
+
+   - Identify key capabilities:
+     - good quality network data in CIM  
+     - shared standards and governance  
+     - skilled people across DNOs, the system operator and Ofgem  
+     - secure and well documented interfaces
+
+2. Use the **Digitalisation dashboards**:
+
+   - Roadmap tools to sketch a three stage journey:
+     - Stage one: get consistent LTDS and CIM models flowing  
+     - Stage two: offer shared analytics and basic dashboards  
+     - Stage three: enable near real time and AI enhanced insights
+
+   - Risk and benefit views to:
+     - weigh costs and risks of centralisation versus decentralisation  
+     - show where data sharing can unlock value for consumers
+
+3. Fill in a lightweight **digitalisation canvas** for GridLens:
+
+   - Vision: what changes for customers, networks, innovators and the regulator  
+   - Capabilities and enablers: data standards, APIs, platforms, skills, funding mechanisms  
+   - Constraints: licence conditions, data protection, cyber security, interoperability obligations
+
+Connect this to security and architecture:
+
+- Do some digitalisation moves require stronger governance before going live  
+- Are there places where simplicity is better than raw ambition for a first iteration  
+
+> Reflection: If you were presenting GridLens to a digitalisation and data steering group, what is the one slide you would insist on showing first?
+
+---
+
+## 4. Build and test intelligence responsibly (AI and data)
+
+Open the **AI notes, dashboards, labs and Ransford’s AI Studios**.
+
+Treat GridLens as a source of training data and as a system that hosts AI assisted tools.
+
+1. From the AI notes:
+
+   - Pick at least one supervised learning use case:
+     - forecast load or generation at key nodes  
+     - predict where constraints will bind  
+     - estimate the effect of new connections or flexibility services
+   - Pick one generative or LLM use case:
+     - explain network hosting capacity to non technical users  
+     - summarise reinforcement options  
+     - help engineers navigate CIM and other standards
+
+2. In **Ransford’s AI Studios**:
+
+   - Use the **Model Forge** or tabular lab with a sample dataset that mimics GridLens data:
+     - create features such as load, generation, asset age, weather or connection type  
+     - choose an appropriate target such as overload risk or curtailment likelihood  
+     - train a simple model and examine metrics and confusion matrix
+
+   - Ask whether the model would behave differently for:
+     - different regions  
+     - different customer types  
+     - different technology types
+
+3. In the **LLM and Agent labs**:
+
+   - Design a small agent to support a planner or analyst using GridLens:
+     - describe its tools, such as “query capacity for a given node” or “retrieve previous investment cases”  
+     - define strict limits, such as which data classes it can see and what it is not allowed to do  
+     - think about logging, oversight and fallbacks when the model is unsure
+
+4. In the AI dashboards:
+
+   - Use fairness and monitoring tools to:
+     - think about bias and distribution shifts when networks or policies change  
+     - decide how you would detect and respond to harmful or wrong model outputs
+
+Bring this back to governance:
+
+- Where do models sit in your architecture and who owns them  
+- How do you document model purpose, training data and limitations so that others can trust them  
+
+> Reflection: If GridLens shipped an AI feature that later turned out to be misleading or harmful, what documentation and logs would you want to have to explain what went wrong and what you did next?
+
+---
+
+## 5. Ship GridLens safely (Software development and dev studios)
+
+Open **Ransford’s Software Development Studio**.
+
+Use GridLens as the story across the four labs.
+
+1. In the **Architecture lab**:
+
+   - Align the GridLens landscape and domain model you have created with the BookTrack example patterns  
+   - Use the decision log to refine a few key points about source systems, processing and publication
+
+2. In the **Backend and API lab**:
+
+   - Design two or three example GridLens APIs:
+     - open capacity view for innovators  
+     - regulated view for Ofgem  
+     - restricted engineering view for DNOs
+
+   - Use the simulated auth and rate limiting to think about:
+     - different roles and entitlements  
+     - how to prevent scraping or misuse
+
+3. In the **Frontend lab**:
+
+   - Imagine a simple map based view of capacity and constraints  
+   - Use the component gallery to think about:
+     - how you would show uncertainty or data freshness  
+     - how you would indicate that a view is limited for privacy reasons
+
+4. In the **Delivery and Ops lab**:
+
+   - Sketch a pipeline for GridLens:
+     - validations and quality checks at ingestion  
+     - automated tests for APIs and dashboards  
+     - security scanning and configuration review  
+     - deployment strategy that respects environments and data sensitivity
+
+   - Treat cyber security tests and data quality checks as first class pipeline stages, not afterthoughts.
+
+> Reflection: If a DNO, an innovator and the regulator all depend on GridLens, what is the smallest possible platform you would be willing to put into production, and what disciplines must be in place before you do?
+
+---
+
+## 6. Capture evidence and plan iteration
+
+By the end of this journey you should have:
+
+- A clear, high level architecture for GridLens  
+- A small set of written architecture and security decisions  
+- A basic risk view and access model for CIM based data  
+- A digitalisation narrative that links GridLens to real outcomes  
+- At least one AI use case and a sketched approach to governance and monitoring  
+- A delivery and operations outline that treats data quality and security as non negotiable
+
+You can reuse this pattern for other energy projects, or adapt it to your real work on LTDS, DSI or other programmes.
+
+> Final reflection: How close is this GridLens journey to what you are actually doing today, and which part of your real work would benefit most from writing it down in this structured way?

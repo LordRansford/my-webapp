@@ -11,6 +11,10 @@ import Callout from "@/components/notes/Callout"
 import GlossaryTip from "@/components/notes/GlossaryTip"
 import ToolCard from "@/components/notes/ToolCard"
 import QuizBlock from "@/components/notes/QuizBlock"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import { softwareArchitectureSectionManifest } from "@/lib/softwareArchitectureSections"
 
 import ArchitectureCanvas from "@/components/notes/tools/architecture/beginner/ArchitectureCanvas"
 import BoundaryMapper from "@/components/notes/tools/architecture/beginner/BoundaryMapper"
@@ -21,6 +25,10 @@ import SystemDashboard from "@/components/notes/tools/architecture/beginner/Syst
 
 # Software Architecture Notes - Beginner
 
+<LevelProgressBar courseId="software-architecture" levelId="foundations" sectionIds={softwareArchitectureSectionManifest.foundations} />
+
+<CPDTracker courseId="software-architecture" levelId="foundations" estimatedHours={10} />
+
 I wrote these notes because most failures I have seen were not one bad function but unclear purpose, porous boundaries, and decisions that became too expensive to change. The goal here is to see systems as a whole, not just code.
 
 <PageNav prevHref="/" prevLabel="Home" nextHref="/software-architecture/intermediate" nextLabel="Intermediate" showTop showBottom />
@@ -28,6 +36,8 @@ I wrote these notes because most failures I have seen were not one bad function 
 ---
 
 ## Why software architecture exists
+
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="sa-foundations-what-is-architecture" />
 
 <Callout variant="concept">
 Architecture exists to manage complexity over time and keep change affordable.
@@ -49,6 +59,8 @@ If changing a choice would force many teams to rewrite code, it is almost always
 ---
 
 ## What is a system
+
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="sa-foundations-building-blocks" />
 
 <Callout variant="concept">
 A system is parts plus purpose plus constraints.
@@ -160,6 +172,8 @@ Formal: A decision where optimising one attribute degrades another due to shared
 ---
 
 ## Architecture as a living discipline
+
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="sa-foundations-diagrams-and-views" />
 
 <Callout variant="concept">
 Architecture evolves. Stasis is decay.

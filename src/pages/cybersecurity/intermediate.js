@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useMemo } from "react";
 import NotesLayout from "@/components/notes/Layout";
 import { MDXRenderer } from "@/components/notes/MDXRenderer";
@@ -56,15 +57,23 @@ export default function Page({ source, headings }) {
   return (
     <NotesLayout
       meta={{
-        title: "Cybersecurity Notes - Intermediate",
+        title: "Applied Cybersecurity",
         description: "How systems fail and how we defend them",
-        level: "Intermediate",
+        level: "Applied",
         slug: "/cybersecurity/intermediate",
         page: 2,
         totalPages: 4,
       }}
       headings={headings}
     >
+      <div className="mb-4">
+        <Link
+          href="/cybersecurity"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-900 focus:outline-none focus:ring focus:ring-blue-200"
+        >
+          ← Back to Cybersecurity overview
+        </Link>
+      </div>
       <MDXRenderer source={source} components={mdxComponents} />
     </NotesLayout>
   );

@@ -1,6 +1,12 @@
 import Link from "next/link";
 import Layout from "@/components/Layout";
-import Tools from "@/components/Tools";
+import dynamic from "next/dynamic";
+
+const Tools = dynamic(() => import("@/components/Tools"), {
+  ssr: false,
+  // Avoid hydration mismatches by rendering client-only
+  loading: () => null,
+});
 
 export default function ToolsPage() {
   return (

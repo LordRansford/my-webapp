@@ -1,0 +1,176 @@
+---
+title: "BookTrack capstone journey"
+description: "An end to end journey that connects architecture, cybersecurity, digitalisation and AI using one realistic system."
+topic: "capstone"
+level: "capstone"
+---
+
+# BookTrack capstone journey
+
+This is where everything joins up.
+
+BookTrack is our running example for a modern organisation that sells books, runs events and wants to use data and AI without breaking the law, the cloud bill or the trust of its customers.
+
+This journey walks through:
+
+- Software architecture  
+- Cybersecurity  
+- Digitalisation strategy  
+- AI and data science  
+
+The goal is not to build a perfect system. The goal is to think like a responsible engineer from idea to operations.
+
+> Tip: treat this like a lab, not an exam. Make decisions, write them down and change your mind when you learn something new.
+
+---
+
+## 1. Frame BookTrack as a system (Architecture)
+
+Open the **Software architecture notes and dashboards**.
+
+1. In the beginner and intermediate notes, skim the core ideas again: layers, components, domain models, coupling, cohesion.
+2. In the **System landscape canvas** dashboard, sketch BookTrack:
+   - Web app or apps  
+   - API gateway or backend  
+   - User service, catalogue, orders, payments, search, notifications  
+3. Use the **Domain model sandbox** to capture the key entities:
+   - Customer, Book, Order, Payment, Event, Recommendation
+4. Add at least three decisions in the **Architecture decision log**:
+   - One about data storage  
+   - One about integration style (for example synchronous calls versus messaging)  
+   - One about scale or resilience
+
+Write your decisions as if someone else will have to live with them.
+
+> Reflection: If BookTrack disappeared for one hour, what part of your design would you blame first and how could you make that part easier to fix?
+
+---
+
+## 2. Make security a first class concern (Cybersecurity)
+
+Open the **Cybersecurity notes, dashboards and useful tools**.
+
+1. In the threat modelling section, treat BookTrack as the target.
+   - Identify assets: customer accounts, payment details, order history, recommendation data.
+   - Identify actors: customers, staff, partners, attackers, bots.
+2. Use the **Risk matrix builder** dashboard to capture three real risks.
+   - At least one should be about account takeover.
+   - At least one should be about data leakage from logs, backups or analytics.
+3. Use the **Access control matrix** and **Data classification** dashboards to line up:
+   - Which roles can see which data  
+   - Which data needs the strongest protection
+4. In the **Useful tools** section:
+   - Run the password, header and URL checks on realistic examples from BookTrack.
+   - Note anything that would make you nervous if this was a real company.
+
+Connect this back to architecture:
+
+- Do any components need to be split or isolated to reduce blast radius  
+- Do any APIs need stronger auth or rate limiting  
+
+> Reflection: Imagine a security incident post mortem for BookTrack. What is the single sentence you want the report to say about your preparation?
+
+---
+
+## 3. Treat digitalisation as a strategy, not just IT
+
+Open the **Digitalisation notes, dashboards and summary**.
+
+Think of BookTrack as part of a wider organisation, not just an app.
+
+1. In the beginner and intermediate digitalisation notes:
+   - Map BookTrack to business outcomes: revenue, customer loyalty, regulatory compliance, staff productivity.
+2. Use the **Digitalisation dashboards**:
+   - Scenario and roadmap tools to plan a three step digitalisation journey for BookTrack.
+   - Risk and benefit views to decide what to do first and what to postpone.
+3. Fill in a lightweight **digitalisation canvas** for BookTrack:
+   - Vision: what changes for customers and staff  
+   - Capabilities: data, platforms, skills that are needed  
+   - Constraints: regulation, budgets, legacy systems
+
+Link this back to security and architecture:
+
+- Which digitalisation moves increase cyber risk and need stronger controls  
+- Which moves unlock better observability, automation or resilience  
+
+> Reflection: If BookTrack had to justify its digital investments to a board, which three numbers and which three stories would you show first?
+
+---
+
+## 4. Build and test intelligence responsibly (AI and data)
+
+Open the **AI notes, dashboards, labs and Ransford’s AI Studios**.
+
+Treat BookTrack as a data and AI product, not just a website.
+
+1. From the AI notes:
+   - Pick one supervised learning use case, for example churn prediction, recommendation ranking or fraud detection.
+   - Pick one generative or LLM use case, for example support assistant or content tagging.
+2. In **Ransford’s AI Studios**:
+   - Use the **Model Forge** or tabular lab to train a small model on the sample churn dataset.
+   - Walk through dataset selection, target definition, metric selection and basic training.
+   - Inspect precision, recall, F1 and confusion matrix and decide whether this model is safe to use even as a demo.
+3. In the **LLM and Agent labs**:
+   - Design a small agent for BookTrack: for example a support bot that can answer order questions using documentation.
+   - Write down its allowed tools, context, and hard safety limits.
+4. In the AI notes and dashboards:
+   - Use the bias, fairness and monitoring tools to think about drift, bad data and abuse.
+
+Tie this back to earlier work:
+
+- Where do models sit in your architecture  
+- How are they deployed, monitored and retrained  
+- How do you prevent them from undermining your security and digitalisation goals  
+
+> Reflection: If an AI model made a harmful decision in BookTrack, how would you detect it and what evidence would you have to explain what happened?
+
+---
+
+## 5. Ship BookTrack safely (Software development and dev studios)
+
+Open **Ransford’s Software Development Studio**.
+
+Now you connect everything and behave like a team preparing for a real release.
+
+1. In the dev studio **Architecture lab**:
+   - Align the BookTrack structure and decisions with what you have already written in the architecture course.
+2. In the **Backend and API lab**:
+   - Shape API behaviour, errors and rate limits in a way that respects your cybersecurity work.
+3. In the **Frontend lab**:
+   - Make sure user flows for login, orders and AI powered features handle errors and edge cases gracefully.
+4. In the **Delivery and Ops lab**:
+   - Design a pipeline for BookTrack with at least:
+     - Source control and branching strategy  
+     - Automated tests including security and performance checks  
+     - Staging and production environments  
+     - Rollback or canary plan
+
+Keep an eye on the safety banner and upload limits when you play with real files. This is still a teaching studio, not a production cloud.
+
+> Reflection: What parts of this pipeline are you already doing in your real work, and which parts would give you the biggest benefit if you started next month?
+
+---
+
+## 6. Capture evidence and next steps
+
+The capstone is most useful when it produces artefacts you can show.
+
+By the end of this journey you should have:
+
+- A system landscape sketch and domain model for BookTrack  
+- A small set of architecture decisions  
+- A risk register and access view from the cybersecurity tools  
+- A digitalisation narrative with a simple roadmap  
+- At least one trained model with metrics and a short written judgement about fitness for purpose  
+- A pipeline outline showing how you would build and deploy BookTrack
+
+You can keep this as a private learning portfolio or adapt the pattern for your real organisation.
+
+---
+
+## Also see: GridLens capstone
+
+If you want an energy data and CIM-focused version, read the **GridLens capstone journey** for a regulated energy platform example.  
+<a className="text-sm font-semibold text-blue-700 hover:underline" href="/notes/capstone/gridlens">Open GridLens capstone journey</a>
+
+> Final reflection: If you repeated this journey in six months, what would you expect to change first – the technology, the controls, or your judgement?

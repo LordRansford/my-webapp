@@ -10,6 +10,10 @@ import Callout from "@/components/notes/Callout"
 import GlossaryTip from "@/components/notes/GlossaryTip"
 import ToolCard from "@/components/notes/ToolCard"
 import QuizBlock from "@/components/notes/QuizBlock"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import { softwareArchitectureSectionManifest } from "@/lib/softwareArchitectureSections"
 
 import PlatformMap from "@/components/notes/tools/architecture/advanced/PlatformMap"
 import ResilienceSimulator from "@/components/notes/tools/architecture/advanced/ResilienceSimulator"
@@ -20,6 +24,10 @@ import DigitalisationDashboard from "@/components/notes/tools/architecture/advan
 
 # Software Architecture Notes - Advanced
 
+<LevelProgressBar courseId="software-architecture" levelId="practice-strategy" sectionIds={softwareArchitectureSectionManifest["practice-strategy"]} />
+
+<CPDTracker courseId="software-architecture" levelId="practice-strategy" estimatedHours={14} />
+
 Architecture at this level is about shaping organisations, platforms, and long-term resilience. It assumes the foundations from Beginner and the design skills from Intermediate are in place. The focus now is on portfolios, governance, platforms, and thinking in years rather than sprints.
 
 <PageNav prevHref="/software-architecture/intermediate" prevLabel="Intermediate" nextHref="/software-architecture/summary" nextLabel="Summary" showTop showBottom />
@@ -27,6 +35,8 @@ Architecture at this level is about shaping organisations, platforms, and long-t
 ---
 
 ## Architecture beyond a single system
+
+<SectionProgressToggle courseId="software-architecture" levelId="practice-strategy" sectionId="sa-advanced-digitalisation-context" />
 
 <Callout variant="concept">
 At scale, architecture shapes organisations as much as it shapes software.
@@ -86,6 +96,8 @@ Formal: The ability of a system to absorb disruptions and continue operating wit
 
 ## Governance without stagnation
 
+<SectionProgressToggle courseId="software-architecture" levelId="practice-strategy" sectionId="sa-advanced-architecture-governance" />
+
 <Callout variant="concept">
 Too little governance creates chaos. Too much governance kills innovation.
 </Callout>
@@ -100,6 +112,8 @@ Effective governance sets clear constraints, encourages autonomy within boundari
 
 ## Architecture as long-term stewardship
 
+<SectionProgressToggle courseId="software-architecture" levelId="practice-strategy" sectionId="sa-advanced-roadmaps-and-evolution" />
+
 <Callout variant="concept">
 Good architecture leaves the system healthier than you found it.
 </Callout>
@@ -109,6 +123,8 @@ Advanced architects act as stewards. They think in years, focus on capability ra
 ---
 
 ## Observing digitalisation in practice
+
+<SectionProgressToggle courseId="software-architecture" levelId="practice-strategy" sectionId="sa-advanced-architecture-in-practice" />
 
 Architecture must be observable. Digitalisation is visible through delivery speed, stability, change failure rates, and operational cost trends. Without metrics, digitalisation is wishful thinking.
 

@@ -31,6 +31,37 @@ const readDirIfExists = (dirPath) => {
   }
 };
 
+const listCourseJson = () =>
+  readDirIfExists(coursesDir).filter((entry) => entry.endsWith(".json"));
+
+const parseJsonCourse = (fileName) => {
+  const filePath = path.join(coursesDir, fileName);
+  try {
+    const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
+    const slug = data.slug || data.id || toSlug(fileName);
+    const totalHours = (data.levels || []).reduce(
+      (acc, lvl) => acc + (Number(lvl.estimatedHours) || 0),
+      0,
+    );
+    return {
+      slug,
+      meta: {
+        title: data.title || slug,
+        tagline: data.description || "",
+        description: data.description || "",
+        tags: (data.levels || []).map((lvl) => lvl.title).slice(0, 4),
+        level: data.levels ? `${data.levels.length} levels` : "",
+        duration: totalHours ? `≈${totalHours} hrs` : undefined,
+        lessonCount: (data.levels || []).length || 0,
+      },
+      lessons: [],
+      fromJson: true,
+    };
+  } catch {
+    return null;
+  }
+};
+
 const listCourseSlugs = () =>
   readDirIfExists(coursesDir).filter((entry) =>
     fs.statSync(path.join(coursesDir, entry)).isDirectory(),
@@ -76,8 +107,11 @@ export const getCourseLessons = (courseSlug) => {
 
 export const getCoursesIndex = () => {
   const courseSlugs = listCourseSlugs();
+  const jsonCourses = listCourseJson()
+    .map(parseJsonCourse)
+    .filter(Boolean);
 
-  return courseSlugs.map((slug) => {
+  const dirCourses = courseSlugs.map((slug) => {
     const lessons = getCourseLessons(slug);
     const primary = lessons.find((lesson) => lesson.slug === "course") || lessons[0];
     const meta = primary?.meta || normaliseMeta({}, slug);
@@ -91,6 +125,13 @@ export const getCoursesIndex = () => {
       lessons,
     };
   });
+
+  const combined = [...dirCourses];
+  jsonCourses.forEach((jsonCourse) => {
+    if (!combined.find((c) => c.slug === jsonCourse.slug)) combined.push(jsonCourse);
+  });
+
+  return combined;
 };
 
 export const getAllLessonPaths = () =>

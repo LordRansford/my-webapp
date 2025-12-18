@@ -8,10 +8,15 @@ export default function PageNav({ prevHref, prevLabel, nextHref, nextLabel, show
   };
 
   return (
-    <nav className="my-6 flex flex-wrap items-center justify-between gap-3" aria-label="Page navigation">
+    <nav className="my-6 flex flex-wrap items-center justify-between gap-3" aria-label="Page navigation between course pages">
       <div className="flex gap-2">
         {prevHref ? (
-          <a className="rounded-full border px-3 py-1 text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-blue-200" href={prevHref}>
+          <a
+            className="rounded-full border px-3 py-1 text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-blue-200"
+            href={prevHref}
+            rel="prev"
+            aria-label={`Previous: ${prevLabel || "Previous page"}`}
+          >
             ← {prevLabel || "Previous"}
           </a>
         ) : (
@@ -23,6 +28,7 @@ export default function PageNav({ prevHref, prevLabel, nextHref, nextLabel, show
           <button
             className="rounded-full border px-3 py-1 text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-blue-200"
             onClick={() => scrollTo("top")}
+            aria-label="Scroll to top"
           >
             Top
           </button>
@@ -31,6 +37,7 @@ export default function PageNav({ prevHref, prevLabel, nextHref, nextLabel, show
           <button
             className="rounded-full border px-3 py-1 text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-blue-200"
             onClick={() => scrollTo("bottom")}
+            aria-label="Scroll to bottom"
           >
             Bottom
           </button>
@@ -38,7 +45,12 @@ export default function PageNav({ prevHref, prevLabel, nextHref, nextLabel, show
       </div>
       <div className="flex gap-2">
         {nextHref ? (
-          <a className="rounded-full border px-3 py-1 text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-blue-200" href={nextHref}>
+          <a
+            className="rounded-full border px-3 py-1 text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-blue-200"
+            href={nextHref}
+            rel="next"
+            aria-label={`Next: ${nextLabel || "Next page"}`}
+          >
             {nextLabel || "Next"} →
           </a>
         ) : (

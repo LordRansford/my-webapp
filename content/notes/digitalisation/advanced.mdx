@@ -10,6 +10,10 @@ import Callout from "@/components/notes/Callout"
 import GlossaryTip from "@/components/notes/GlossaryTip"
 import ToolCard from "@/components/notes/ToolCard"
 import QuizBlock from "@/components/notes/QuizBlock"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import { digitalisationSectionManifest } from "@/lib/digitalisationSections"
 
 import DigitalisationDashboard from "@/components/dashboards/DigitalisationDashboard"
 import EcosystemMapper from "@/components/notes/tools/digitalisation/advanced/EcosystemMapper"
@@ -22,6 +26,10 @@ import ScenarioSimulator from "@/components/notes/tools/digitalisation/advanced/
 
 # Digitalisation Strategy Notes - Advanced
 
+<LevelProgressBar courseId="digitalisation" levelId="practice-strategy" sectionIds={digitalisationSectionManifest["practice-strategy"]} />
+
+<CPDTracker courseId="digitalisation" levelId="practice-strategy" estimatedHours={12} />
+
 This page assumes the foundations from Beginner and the design mindset from Intermediate. At the advanced level, digitalisation moves from one organisation to ecosystems, regulation, shared platforms, and long-term stewardship.
 
 <PageNav prevHref="/digitalisation/intermediate" prevLabel="Intermediate" nextHref="/digitalisation/summary" nextLabel="Summary" showTop showBottom />
@@ -29,6 +37,8 @@ This page assumes the foundations from Beginner and the design mindset from Inte
 ---
 
 ## From organisation to ecosystem
+
+<SectionProgressToggle courseId="digitalisation" levelId="practice-strategy" sectionId="dig-advanced-ecosystems-and-standards" />
 
 At earlier levels, digitalisation work was mostly inside one organisation. At this level it sits in ecosystems: supply chains, regulators, partners, platforms, and competitors share the same data flows and standards. A weak link in one place can hurt many others.
 
@@ -48,6 +58,8 @@ Advanced digitalisation is about shaping and surviving in a digital ecosystem, n
 ---
 
 ## Regulation, policy, and trust
+
+<SectionProgressToggle courseId="digitalisation" levelId="practice-strategy" sectionId="dig-advanced-governance-and-operating-models" />
 
 Digitalisation at scale is shaped by regulation and policy. Regulation can enable change when guardrails are clear, or block it when rules are rigid or fragmented. Incentives can also push risk into the wrong places.
 
@@ -73,6 +85,8 @@ If digitalisation reduces trust, it will eventually be stopped by politics, regu
 ---
 
 ## Interoperability and cross-border thinking
+
+<SectionProgressToggle courseId="digitalisation" levelId="practice-strategy" sectionId="dig-advanced-strategy-and-roadmaps" />
 
 As data, services, or platforms cross organisational or national boundaries, interoperability becomes central. It is not only technical; it involves shared meaning, process alignment, legal agreements, and operational coordination.
 
@@ -124,6 +138,8 @@ Incidents become data, not embarrassment: record and analyse them, share lessons
 ---
 
 ## Stewardship and long-term digital health
+
+<SectionProgressToggle courseId="digitalisation" levelId="practice-strategy" sectionId="dig-advanced-long-term-challenges" />
 
 Stewardship recognises that digital choices today shape options for years. Data, platforms, and standards can become de facto public infrastructure. Skills, culture, and trust take time to build and can be lost quickly.
 

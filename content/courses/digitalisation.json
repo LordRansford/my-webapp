@@ -1,0 +1,59 @@
+{
+  "id": "digitalisation",
+  "slug": "digitalisation",
+  "title": "Digitalisation Notes",
+  "shortTitle": "Digitalisation",
+  "description": "From basic concepts about data and processes through to digital operating models, platforms, governance and strategy.",
+  "totalEstimatedHours": 30,
+  "levels": [
+    {
+      "id": "foundations",
+      "title": "Digitalisation Foundations",
+      "slug": "beginner",
+      "estimatedHours": 8,
+      "summary": "Start with what digitalisation actually means, how data, people, processes and systems fit together, and how to read basic diagrams and operating models.",
+      "learningOutcomes": [
+        "Explain what digitalisation is in plain language and how it differs from simple digitisation and automation.",
+        "Describe how data, processes and people fit together in a digital operating model.",
+        "Recognise common digital building blocks such as APIs, platforms and self service portals.",
+        "Relate digitalisation to basic ideas like value, customer journeys and system outcomes."
+      ]
+    },
+    {
+      "id": "applied",
+      "title": "Applied Digitalisation",
+      "slug": "intermediate",
+      "estimatedHours": 10,
+      "summary": "Move into platforms, integration, data sharing, capabilities, and how organisations design digital journeys and services in practice.",
+      "learningOutcomes": [
+        "Describe how digitalisation changes the way organisations plan, build and operate services.",
+        "Explain the role of data platforms, integration patterns and standards in a digital ecosystem.",
+        "Discuss real trade offs between speed, quality, risk and regulatory duties in digital projects.",
+        "Map simple end to end journeys and identify where digital changes can improve outcomes."
+      ]
+    },
+    {
+      "id": "practice-strategy",
+      "title": "Digital Strategy and Enterprise Scale",
+      "slug": "advanced",
+      "estimatedHours": 12,
+      "summary": "Look at digital roadmaps, operating models, governance, regulation and how to align data, architecture and people at sector or enterprise scale.",
+      "learningOutcomes": [
+        "Connect digitalisation work to strategy, policy and long term investment decisions.",
+        "Explain how governance, architecture and product thinking support sustainable digital change.",
+        "Discuss how to measure digital outcomes using meaningful metrics rather than vanity numbers.",
+        "Describe real world challenges such as legacy systems, skills, regulation and vendor lock in, and how to work with them."
+      ]
+    }
+  ],
+  "summaryPage": {
+    "slug": "summary",
+    "title": "Digitalisation summary and games",
+    "description": "A recap and playful space to join up digital concepts, platforms and strategy with small applied challenges."
+  },
+  "targetAudience": [
+    "People who want to understand digitalisation beyond buzzwords.",
+    "Students and professionals moving into data, digital or transformation roles.",
+    "Teams, lecturers and leaders who want structured notes, diagrams and tools for digital thinking."
+  ]
+}

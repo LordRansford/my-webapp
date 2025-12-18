@@ -1,446 +1,224 @@
 ---
-title: "Cybersecurity Notes: Beginner"
-description: "My beginner notes. Calm, detailed, and practical. I start at what data is and build up to networks, trust, and the foundations of secure systems."
-level: "beginner"
+title: "Cybersecurity Foundations"
+description: "Level 1 of my cybersecurity course. Data, networks, attackers, and everyday defences with hands-on labs."
+level: "foundations"
 ---
 
-import ProgressBar from '@/components/notes/ProgressBar'
-import PageNav from '@/components/notes/PageNav'
-import ToolCard from '@/components/notes/ToolCard'
-import Callout from '@/components/notes/Callout'
-import GlossaryTip from '@/components/notes/GlossaryTip'
-import QuizBlock from '@/components/notes/QuizBlock'
-
-import BitChangeTool from '@/components/notes/tools/cybersecurity/ch1/BitChangeTool'
-import EncodingExplorerTool from '@/components/notes/tools/cybersecurity/ch1/EncodingExplorerTool'
-import UnicodeBytesTool from '@/components/notes/tools/cybersecurity/ch1/UnicodeBytesTool'
-import CIAClassifierTool from '@/components/notes/tools/cybersecurity/ch1/CIAClassifierTool'
-import TrustBoundaryTool from '@/components/notes/tools/cybersecurity/ch1/TrustBoundaryTool'
-import IntegrityChainTool from '@/components/notes/tools/cybersecurity/ch1/IntegrityChainTool'
-import PacketJourneyTool from '@/components/notes/tools/cybersecurity/ch1/PacketJourneyTool'
-import MetadataLeakTool from '@/components/notes/tools/cybersecurity/ch1/MetadataLeakTool'
-import EncryptionPlacementTool from '@/components/notes/tools/cybersecurity/ch1/EncryptionPlacementTool'
-import PasswordEntropyTool from '@/components/notes/tools/cybersecurity/ch1/PasswordEntropyTool'
-import HashFingerprintTool from '@/components/notes/tools/cybersecurity/ch1/HashFingerprintTool'
+import ProgressBar from "@/components/notes/ProgressBar"
+import PageNav from "@/components/notes/PageNav"
+import ToolCard from "@/components/notes/ToolCard"
+import GlossaryTip from "@/components/notes/GlossaryTip"
+import QuizBlock from "@/components/notes/QuizBlock"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import DiagramBlock from "@/components/DiagramBlock"
+import { cyberSectionManifest } from "@/lib/cyberSections"
 
 <ProgressBar mode="scroll" />
 
-# Cybersecurity Notes  
-## Beginner  
-### Page 1 of 4  Foundations that make everything else make sense
+# Cybersecurity Foundations
 
-<Callout variant="concept">
-Before I talk about hackers, tools, or encryption, I start with what data is. If I do not understand data and meaning, I cannot understand security.
-</Callout>
+<LevelProgressBar courseId="cybersecurity" levelId="foundations" sectionIds={cyberSectionManifest.foundations} />
+
+<CPDTracker courseId="cybersecurity" levelId="foundations" estimatedHours={8} />
+
+## Why cybersecurity matters in real life
+
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-why-cyber-matters" />
+
+Cybersecurity is about avoiding real harm. Bills go to the wrong person, hospital systems lock up, payroll fails, or private data leaks. The point is not perfect safety; it is making harm less likely and making mistakes visible and recoverable.
+
+Every system is a set of decisions about who should see what, who can change it, and how we recover when things break. This course starts with the smallest pieces so later topics feel grounded.
+
+<DiagramBlock
+  title="Everyday dependency chain"
+  description="One weak link can still hurt people even when the app looks fine."
+>
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>Person → Login → App → Data store → Backups</div>
+    <div className="text-gray-600">If login is weak, confidentiality fails. If data store is unchecked, integrity fails. If backups are missing, availability fails.</div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="risk-dial"
+  title="Risk dial"
+  subtitle="See how small choices change harm"
+  description="Move sliders for password strength, software updates, and monitoring to see how overall risk shifts."
+/>
+
+<QuizBlock
+  title="Why cyber matters"
+  questions={[
+    { q: "Why is cybersecurity about people as well as systems", a: "People build, use and are affected by systems; protecting them means reducing real harm." },
+    { q: "What is the goal of Foundations", a: "Give simple mental models for data, movement and trust so later ideas feel grounded." },
+    { q: "Why are broken assumptions dangerous", a: "They hide risk until it is too late, even if the tools look correct." },
+    { q: "How does cybersecurity reduce harm", a: "By controlling who can see or change data and making failure visible and recoverable." },
+    { q: "What three questions sit underneath most controls", a: "Who should see it, who can change it, and how do we recover if something breaks." },
+    { q: "Why is perfect security unrealistic", a: "We need to balance safety with getting work done; the aim is to reduce avoidable harm." },
+  ]}
+/>
+
+## Data, bits and how information lives in a computer
+
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-data-and-bits" />
+
+Everything a computer stores is built from bits. A bit is a single switch that is either off or on. Eight bits make a byte. A byte can represent numbers from 0 to 255 in decimal, which is why 255 appears in settings. Flip the leftmost bit and you change the number by 128; flip the rightmost and you change it by 1.
+
+To turn bytes into letters and symbols we use an encoding: a shared map from numbers to characters. ASCII maps 65 to the letter A. <GlossaryTip term="UTF 8">A modern encoding that uses one or more bytes per character so it can represent many languages.</GlossaryTip> Encoding mistakes create security bugs because the same bytes get read differently.
+
+If you want to see binary in practice, take decimal 13. In binary it is 1101 (8 + 4 + 1). Flip the leftmost 1 to 0 and the value drops by 8. That is all computers are doing at the base layer.
+
+<DiagramBlock
+  title="Bits → bytes → characters"
+  description="How a single switch becomes readable text."
+>
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>Bit: <span className="font-semibold">0</span> or <span className="font-semibold">1</span></div>
+    <div>8 bits → <span className="font-semibold">0100 0001</span> (decimal 65)</div>
+    <div>Encoding table → 65 = <span className="font-semibold">A</span> in ASCII</div>
+    <div>UTF 8 can use more than one byte when needed</div>
+  </div>
+</DiagramBlock>
+
+<GlossaryTip term="Bit">A single binary digit with value 0 or 1.</GlossaryTip>
+<GlossaryTip term="Byte">Eight bits together, able to represent numbers from 0 to 255.</GlossaryTip>
+<GlossaryTip term="Encoding">An agreed mapping between numbers and characters.</GlossaryTip>
+
+<ToolCard
+  id="bit-visualiser"
+  title="Play with bits and bytes"
+  subtitle="See how tiny changes change numbers and characters"
+  description="Toggle bits in a byte to see the decimal value update and which ASCII or UTF 8 character appears when printable."
+/>
+
+<QuizBlock
+  title="Data and bits quiz"
+  questions={[
+    { q: "What is a bit", a: "A single binary digit that can be 0 or 1." },
+    { q: "How many bits are in a byte", a: "Eight bits make one byte." },
+    { q: "Why do bytes often show the number 255", a: "A byte can represent 0 to 255 in decimal." },
+    { q: "How does ASCII map numbers to text", a: "It uses an agreed table where numbers like 65 mean capital A." },
+    { q: "How is UTF 8 different from ASCII", a: "UTF 8 can represent many languages using one or more bytes per character." },
+    { q: "What happens if you flip the rightmost bit in a byte", a: "You change the value by 1." },
+    { q: "Why do encoding mistakes cause security issues", a: "Different interpretations of the same bytes can break validation or create parsing bugs." },
+    { q: "Convert decimal 13 to binary", a: "1101 (8 + 4 + 1)." },
+    { q: "Why store text with bytes instead of single bits", a: "Single bits cannot represent enough symbols; bytes provide the range needed for characters." },
+  ]}
+/>
+
+## How data travels on networks
+
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-networks-and-packets" />
+
+When you send a message across the internet, you are not sending one blob. Your device chops data into packets. Each packet carries a header and a payload. The payload is the part we care about, such as part of your email. The header is the envelope telling the network where the packet is going and where it came from.
+
+Even when the payload is encrypted, metadata can still be revealing. Timing, destination and size help someone guess what you are doing. Protocols like HTTP and TLS sit on top of lower layers that move packets. Think of the OSI model as a map: lower layers move bits, middle layers move packets, upper layers handle applications. Security controls often live at specific layers, such as TLS for encryption or firewalls for filtering.
+
+<DiagramBlock
+  title="A packet’s short trip"
+  description="Payload stays hidden but the envelope still talks."
+>
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>Laptop → Home router → ISP → Internet → Server</div>
+    <div>Header: source, destination, port, length</div>
+    <div>Payload: the content (often encrypted)</div>
+    <div className="text-gray-600">Metadata like timing and size still leaks patterns.</div>
+  </div>
+</DiagramBlock>
+
+<GlossaryTip term="Packet">A small chunk of data with a header and payload used to move information across a network.</GlossaryTip>
+<GlossaryTip term="Metadata">Information about data such as source, destination, timing and size.</GlossaryTip>
+<GlossaryTip term="Port">A number that identifies which service or application should receive the traffic.</GlossaryTip>
+<GlossaryTip term="Protocol">An agreed set of rules that describe how data is formatted and transmitted.</GlossaryTip>
+
+<ToolCard
+  id="packet-journey-lab"
+  title="Follow a packet"
+  subtitle="Watch a simple message move through a fake network"
+  description="Choose a short message, press send, and watch it move through a simulated path showing layers, headers and payload."
+/>
+
+<ToolCard
+  id="metadata-leak-lab"
+  title="Metadata leak explorer"
+  subtitle="See what leaks even when content is encrypted"
+  description="Send example traffic and watch how timing, size and destination patterns still reveal behaviour."
+/>
+
+<QuizBlock
+  title="Networks and packets quiz"
+  questions={[
+    { q: "What is a packet", a: "A small piece of data with a header and payload used for network transport." },
+    { q: "What is the difference between a header and a payload", a: "The header is routing and control info; the payload is the content being delivered." },
+    { q: "Why is metadata still sensitive", a: "It can reveal who is talking to whom, when, and how much, even if content is encrypted." },
+    { q: "How do protocols like HTTP and TLS relate to lower layers", a: "They sit on top, using lower layers to move packets while adding meaning or encryption." },
+    { q: "What does the OSI model help you remember", a: "Different layers handle different concerns, from moving bits to handling applications." },
+    { q: "Why are packets used instead of one large blob", a: "Small packets are easier to route, resend on failure and share network capacity." },
+    { q: "Name one security control at a network layer", a: "TLS for encrypting traffic or a firewall filtering packets." },
+    { q: "How can timing of packets leak information", a: "Patterns in timing can hint at actions like page loads or logins." },
+  ]}
+/>
+
+## Confidentiality, integrity, availability and simple attacks
+
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-cia-and-simple-attacks" />
+
+Confidentiality means only the right people can see information. Integrity means information or systems are not changed silently. Availability means systems are up when people need them. Attacks often target weak assumptions: guessing weak passwords hits confidentiality, tampering in transit hits integrity, and denial of service hits availability.
+
+Trust is a decision, not a default. Each control should be tied to a clear trust choice: who can see data, who can change it, and what happens when something fails.
+
+<DiagramBlock
+  title="CIA in plain view"
+  description="Three qualities that work together."
+>
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>Confidentiality → only the right people can see it</div>
+    <div>Integrity → changes are correct and visible</div>
+    <div>Availability → systems are there when needed</div>
+    <div className="text-gray-600">Controls: strong auth, input checks, monitoring, backups, graceful degradation.</div>
+  </div>
+</DiagramBlock>
+
+<GlossaryTip term="Entropy">A measure of unpredictability; more entropy means harder to guess secrets like passwords.</GlossaryTip>
+<GlossaryTip term="Payload">The main content inside a packet or message.</GlossaryTip>
+
+<ToolCard
+  id="password-strength-lab"
+  title="Try building stronger passwords"
+  subtitle="See how small changes affect strength"
+  description="Type a pretend password and see feedback about length, variety and guessability. No real passwords are stored; this is a safe, local practice tool."
+/>
+
+<ToolCard
+  id="cia-tradeoff-lab"
+  title="CIA trade off explorer"
+  subtitle="Play with simple security decisions"
+  description="Pick everyday situations and choose options that trade off confidentiality, integrity and availability. See short explanations after each choice."
+/>
+
+<QuizBlock
+  title="Core ideas quiz"
+  questions={[
+    { q: "What is confidentiality", a: "Keeping data visible only to the right people or systems." },
+    { q: "What is integrity", a: "Keeping data and systems from being changed silently or incorrectly." },
+    { q: "What is availability", a: "Keeping systems usable when people need them." },
+    { q: "Give one example of an integrity failure", a: "Altering a bank balance or invoice without detection." },
+    { q: "Why are weak passwords a problem", a: "They make it easy to guess access and break confidentiality." },
+    { q: "How can a fake link hurt you", a: "It can steal credentials or deliver malware when clicked." },
+    { q: "Why is trust a decision", a: "Because each control should be tied to an explicit assumption about who or what is allowed." },
+    { q: "How does availability relate to incidents", a: "If systems go down at the wrong time, it causes harm even if data was protected." },
+  ]}
+/>
+
+This is Foundations. Move into Applied next once you can explain every term on this page to another person and show them how the tools work.
 
 <PageNav
-  prevHref="/notes/cybersecurity/roadmap"
-  prevLabel="Roadmap"
+  prevHref="/cybersecurity"
+  prevLabel="Course overview"
   nextHref="/cybersecurity/intermediate"
-  nextLabel="Next page  Intermediate"
-  showTop
-  showBottom
-/>
-
----
-
-## Section 1  What data really is and why security starts here
-
-<Callout variant="concept">
-Data is not information. Data is a physical state that I choose to interpret as information.
-</Callout>
-
-### What I mean by physical state
-I do not see words, pictures, money, or passwords. A computer detects physical conditions.
-
-Examples of physical conditions:
-- electrical voltage being low or high
-- a tiny magnetic region pointing one way or another
-- a light pulse being present or absent
-- microscopic electrical charge being trapped or not trapped
-
-Computers are designed to treat these conditions as stable states so they can work reliably.
-
-<GlossaryTip term="Physical state">
-A physical state is the condition something is in. In computing it usually means a measurable signal such as voltage, charge, light, or magnetism.
-</GlossaryTip>
-
-### Bits  the smallest unit of data
-A bit is the smallest unit of data. It represents one of two possible states, which we write as 0 and 1.
-
-Mathematically:
-
-\[
-b \in \{0,1\}
-\]
-
-This means b can only be 0 or 1. This is not scary maths. It is simply describing a designed constraint.
-
-### Why computers use two states
-A common question is why computers use base 2 rather than base 10. The reason is reliability. Real physical signals get disturbed.
-
-That disturbance is called noise.
-
-<GlossaryTip term="Noise">
-Noise means any unwanted disturbance that changes a signal. Like trying to hear a whisper in a loud room, interference makes the message harder to interpret.
-</GlossaryTip>
-
-Noise matters because noise can flip bits. If a system does not detect that, integrity fails quietly.
-
-### Bytes and powers of two
-Bits become useful when grouped. 8 bits is a byte.
-
-A byte has:
-
-\[
-2^8 = 256
-\]
-
-possible patterns. Each extra bit doubles possibilities, which later becomes the heart of password strength and cryptographic key sizes.
-
-### Worked example  why doubling matters
-With 3 bits there are:
-
-\[
-2^3 = 8
-\]
-
-patterns:
-000 001 010 011 100 101 110 111
-
-Every time I add one bit, I double the patterns. That is exponential growth. Attackers fear exponential growth because it makes brute force guessing infeasible.
-
-### Practice tool  single bit change
-<ToolCard
-  title="See how one tiny bit change alters meaning"
-  description="Flip one bit and watch how interpretation changes. This is the simplest way to feel what integrity means."
->
-  <BitChangeTool />
-</ToolCard>
-
-### Quiz and checks
-<QuizBlock
-  title="Check your understanding"
-  questions={[
-    { q: "What is a physical state in computing", a: "A measurable condition such as voltage, charge, magnetism, or light, used to represent data." },
-    { q: "What is a bit", a: "The smallest unit of data, representing one of two states, usually written 0 or 1." },
-    { q: "What is noise", a: "Unwanted disturbance that changes a signal and can cause misinterpretation." },
-    { q: "Why do computers prefer two states", a: "Two states are easier to separate reliably under noise, heat, and imperfect hardware." },
-    { q: "What does 2^8 represent", a: "The number of unique patterns possible with 8 bits, which is 256." }
-  ]}
-/>
-
-<PageNav showTop showBottom />
-
----
-
-## Section 2  From raw data to meaning  encoding and interpretation
-
-<Callout variant="concept">
-Encoding is representation. Encryption is secrecy. Confusing them causes real security failures.
-</Callout>
-
-### What encoding does
-Encoding is a shared agreement that maps bit patterns to symbols.
-
-If I show you 01000001, it means nothing unless we agree on a scheme. Under ASCII, it maps to A.
-
-<GlossaryTip term="Encoding">
-Encoding is a rule for representing symbols using bits. It is designed for compatibility and representation, not secrecy.
-</GlossaryTip>
-
-### ASCII and positional notation
-ASCII assigns numbers to characters. For A, ASCII uses decimal 65.
-
-Binary is base 2 positional notation. Each position represents a power of two. 65 is 64 plus 1, so in binary it becomes 01000001.
-
-<Callout variant="explain">
-Positional notation means the position of a digit determines its value. In base 10, 345 means 3 hundreds, 4 tens, 5 ones. In base 2, each position is a power of two.
-</Callout>
-
-#### Common ASCII examples
-
-| Character | Decimal | Binary | Hex | Notes |
-|-----------|---------|--------|-----|-------|
-| A | 65 | 01000001 | 41 | Uppercase letter |
-| a | 97 | 01100001 | 61 | Lowercase letter |
-| 0 | 48 | 00110000 | 30 | Digit zero |
-| Space | 32 | 00100000 | 20 | Whitespace |
-| Newline | 10 | 00001010 | 0A | Line break |
-
-This table shows how the same bit pattern means different things depending on the encoding scheme. Security problems appear when systems assume one encoding but receive another.
-
-### Hex  how engineers read binary
-Binary is hard to read. Hex is base 16 and compresses binary safely. One hex digit represents 4 bits because 2^4 is 16. That is why bytes display as two hex digits, and why hashes are usually shown in hex.
-
-<GlossaryTip term="Hexadecimal">
-Hexadecimal is base 16 representation using digits 0 to 9 and letters A to F. It is a compact way to show bytes and cryptographic values.
-</GlossaryTip>
-
-#### Hex digit to binary mapping
-
-| Hex | Binary | Decimal | Notes |
-|-----|--------|---------|-------|
-| 0 | 0000 | 0 | Lowest value |
-| 1 | 0001 | 1 | |
-| 5 | 0101 | 5 | |
-| A | 1010 | 10 | First letter |
-| F | 1111 | 15 | Highest single hex digit |
-| FF | 11111111 | 255 | Full byte in hex |
-
-Notice how one hex digit covers exactly 4 bits. This makes hex perfect for displaying bytes, hashes, and keys compactly.
-
-### Unicode and UTF 8
-ASCII is too small for the world. Unicode assigns numbers to characters globally. UTF 8 is a way to encode Unicode values into bytes.
-
-Key idea:
-- some characters use 1 byte
-- others use 2, 3, or 4 bytes
-
-So character count is not always byte count. Attackers exploit this when validation counts characters but enforcement counts bytes. That is a canonicalisation problem.
-
-#### UTF 8 byte length examples
-
-| Character | Unicode code point | UTF 8 bytes | Hex representation | Notes |
-|-----------|-------------------|-------------|-------------------|-------|
-| A | U+0041 | 1 byte | 41 | ASCII compatible |
-| é | U+00E9 | 2 bytes | C3 A9 | Latin with accent |
-| 中 | U+4E2D | 3 bytes | E4 B8 AD | Chinese character |
-| 🚀 | U+1F680 | 4 bytes | F0 9F 9A 80 | Emoji |
-
-This variable length is why character limits and byte limits can differ. Security bugs appear when validation uses one but enforcement uses the other.
-
-<GlossaryTip term="Canonicalisation">
-Canonicalisation means converting data to a standard form. Security bugs appear when two parts of a system standardise differently and interpret the same input in different ways.
-</GlossaryTip>
-
-### Practice tools  encoding and Unicode
-<ToolCard
-  title="Explore how text becomes bytes, binary, and hex"
-  description="Type text and see its representation. This makes interpretation visible."
->
-  <EncodingExplorerTool />
-</ToolCard>
-
-<ToolCard
-  title="See how Unicode can change byte length"
-  description="Compare characters that look similar but encode differently. This is where real parsing bugs begin."
->
-  <UnicodeBytesTool />
-</ToolCard>
-
-### Quiz
-<QuizBlock
-  title="Check your understanding"
-  questions={[
-    { q: "Why is encoding not security", a: "Because encoding is reversible with public rules. It does not hide information." },
-    { q: "What is the difference between Unicode and UTF 8", a: "Unicode defines characters and code points. UTF 8 defines how those code points become bytes." },
-    { q: "Why does hex matter in security", a: "It is a compact, precise way to display bytes, hashes, and keys." },
-    { q: "What is a canonicalisation problem", a: "When systems interpret the same input differently because they normalise or parse it differently." }
-  ]}
-/>
-
-<PageNav showTop showBottom />
-
----
-
-## Section 3  Security properties and trust  what being secure actually means
-
-<Callout variant="concept">
-Security is about preserving properties, even when people make mistakes and attackers try to break things.
-</Callout>
-
-### Security properties
-A security property is something I want to remain true under stress.
-
-The beginner framework is CIA:
-- confidentiality  prevent unauthorised disclosure
-- integrity  prevent unauthorised or undetected modification
-- availability  keep systems usable when needed
-
-#### Security properties at a glance
-
-| Property | What it protects | Example failure | Common defence |
-|----------|----------------|-----------------|----------------|
-| Confidentiality | Secrecy of information | Password leaked in logs | Encryption, access controls |
-| Integrity | Correctness and authenticity | Data modified without detection | Hashes, signatures, checksums |
-| Availability | Usability when needed | System down due to attack | Redundancy, rate limiting |
-| Authenticity | Genuine origin | Fake email claiming to be from bank | Digital signatures, certificates |
-| Authorisation | Permission to act | User accessing admin functions | Access control lists, roles |
-
-This table helps you classify security failures. When something goes wrong, ask which property failed and why.
-
-<GlossaryTip term="Confidentiality">
-Confidentiality means keeping information secret from unauthorised people.
-</GlossaryTip>
-
-<GlossaryTip term="Integrity">
-Integrity means keeping information correct and detecting tampering. Silent integrity failures are especially dangerous.
-</GlossaryTip>
-
-<GlossaryTip term="Availability">
-Availability means systems are usable when needed. Outages and denial of service are security failures when they cause harm.
-</GlossaryTip>
-
-### CIA is not enough  add authenticity and authorisation
-Authenticity asks whether something is genuinely what it claims to be.
-
-Authentication is proving who you are. Authorisation is what you are allowed to do. Many failures happen when authentication is fine but authorisation is broken.
-
-<GlossaryTip term="Authentication">
-Authentication is proving identity. Examples include passwords, biometrics, and cryptographic proofs.
-</GlossaryTip>
-
-<GlossaryTip term="Authorisation">
-Authorisation is permission. It answers what actions are allowed after identity is known.
-</GlossaryTip>
-
-### Trust and trust boundaries
-Trust is an assumption. A trust boundary is where assumptions change. Any input crossing into a system is a trust boundary. Any network hop is a trust boundary. Attackers live at boundaries.
-
-<GlossaryTip term="Trust boundary">
-A place where data or control moves between components with different levels of trust. Validation and checks must occur here.
-</GlossaryTip>
-
-### Integrity chains
-Integrity is rarely protected once. Systems use layers like hashes, signatures, and logs. An integrity chain helps me understand how trust can be preserved or destroyed across time.
-
-### Practice tools  classify and explore trust
-<ToolCard
-  title="Classify security failures using CIA"
-  description="Pick the property that failed and explain why. This builds correct instincts."
->
-  <CIAClassifierTool />
-</ToolCard>
-
-<ToolCard
-  title="Find trust boundaries in a system"
-  description="See where assumptions change and where checks must exist."
->
-  <TrustBoundaryTool />
-</ToolCard>
-
-<ToolCard
-  title="See how integrity checks catch or miss tampering"
-  description="Modify data and observe what breaks. This prepares you for hashing and signatures later."
->
-  <IntegrityChainTool />
-</ToolCard>
-
-### Quiz
-<QuizBlock
-  title="Check your understanding"
-  questions={[
-    { q: "Why is availability a security issue", a: "Because unusable systems cause harm and can be exploited through denial of service or ransomware." },
-    { q: "What is the difference between authentication and authorisation", a: "Authentication proves identity. Authorisation controls permissions after identity is known." },
-    { q: "What is a trust boundary", a: "Where assumptions change, such as user input entering a server or one service calling another." },
-    { q: "Why are integrity failures dangerous", a: "Because systems and people keep trusting incorrect data, so damage accumulates silently." }
-  ]}
-/>
-
-<PageNav showTop showBottom />
-
----
-
-## Section 4  Networks and data movement  where attacks live
-
-<Callout variant="concept">
-Most security failures happen while data is moving, not while it sits still.
-</Callout>
-
-### What a network is
-A network is a system that lets computers exchange data. At the lowest level it uses electricity, light, or radio waves to carry bits.
-
-### Packets  why data is split
-Large data is split into packets because:
-- errors can be detected and retransmitted
-- routing is possible
-- congestion can be managed
-
-A packet usually contains:
-- payload  the actual content
-- headers  addressing and control data
-
-<GlossaryTip term="Packet">
-A packet is a small chunk of data sent across a network with headers that help route and reassemble it.
-</GlossaryTip>
-
-### Layering and OSI
-Layering separates concerns. The OSI model is a teaching model with 7 layers. I do not memorise it to sound clever. I use it to locate problems and controls.
-
-### Metadata leakage
-Even if payload is encrypted, metadata can reveal behaviour:
-- who talks to whom
-- when and how often
-- message size patterns
-
-That supports traffic analysis and targeting.
-
-<GlossaryTip term="Metadata">
-Metadata is information about data, such as sender, timing, size, and routing headers. It often remains visible even when content is encrypted.
-</GlossaryTip>
-
-### Where encryption fits
-Encryption protects payload confidentiality, not everything. Encryption placement affects what observers can learn. This leads naturally into intermediate topics like TLS, VPNs, and zero trust.
-
-### Practice tools  packet journey and leakage
-<ToolCard
-  title="Follow a packet from sender to receiver"
-  description="Watch splitting, headers, routing, and reassembly. This makes networking real."
->
-  <PacketJourneyTool />
-</ToolCard>
-
-<ToolCard
-  title="See what leaks even when content is encrypted"
-  description="Explore how metadata alone can reveal sensitive patterns."
->
-  <MetadataLeakTool />
-</ToolCard>
-
-<ToolCard
-  title="Explore encryption placement through the layers"
-  description="Move encryption through layers and observe what it protects and what it does not."
->
-  <EncryptionPlacementTool />
-</ToolCard>
-
-### Bonus practice  passwords and hashes  bridge to intermediate
-<ToolCard
-  title="Password strength and guessing time"
-  description="See how search space grows and why length wins. This leads into cryptographic key sizes later."
->
-  <PasswordEntropyTool />
-</ToolCard>
-
-<ToolCard
-  title="Hash fingerprints and the avalanche effect"
-  description="Change one character and see the fingerprint change completely. This prepares you for integrity and signatures."
->
-  <HashFingerprintTool />
-</ToolCard>
-
-### Final beginner quiz
-<QuizBlock
-  title="Beginner mastery check"
-  questions={[
-    { q: "Why are packets used", a: "To manage errors, routing, congestion, and efficiency rather than sending one huge block." },
-    { q: "What is the difference between payload and headers", a: "Payload is the content. Headers carry addressing and control data needed for delivery." },
-    { q: "What can metadata reveal", a: "Communication patterns such as who, when, how often, and approximate activity, even without content." },
-    { q: "Does encryption hide metadata", a: "Usually no. It mainly protects payload confidentiality. Headers and timing often remain visible." },
-    { q: "Why does understanding networks lead to zero trust", a: "Because internal networks cannot be assumed safe. Every hop is a boundary and must be verified." }
-  ]}
-/>
-
-<Callout variant="concept">
-Beginner complete. If I can explain these four sections clearly, I am ready to study how attackers exploit them and how defenders design controls.
-</Callout>
-
-<PageNav
-  prevHref="/notes/cybersecurity/roadmap"
-  prevLabel="Roadmap"
-  nextHref="/cybersecurity/intermediate"
-  nextLabel="Next page  Intermediate"
+  nextLabel="Applied cybersecurity"
   showTop
   showBottom
 />

@@ -1,0 +1,42 @@
+import { CookieInspector } from "@/components/tools/cyber/CookieInspector";
+import { SecurityHeaderTool } from "@/components/tools/cyber/SecurityHeaderTool";
+import { UrlSafetyTool } from "@/components/tools/cyber/UrlSafetyTool";
+import { EmailAuthTool } from "@/components/tools/cyber/EmailAuthTool";
+import { BrowserStorageTool } from "@/components/tools/cyber/BrowserStorageTool";
+import { LogAnomalyTool } from "@/components/tools/cyber/LogAnomalyTool";
+import { RiskRegisterTool } from "@/components/tools/cyber/RiskRegisterTool";
+import { DnsQuickLensTool } from "@/components/tools/cyber/DnsQuickLensTool";
+import { JwtExplainerTool } from "@/components/tools/cyber/JwtExplainerTool";
+import { PasswordStrengthTool } from "@/components/tools/cyber/PasswordStrengthTool";
+import { EverydayChecklistTool } from "@/components/tools/cyber/EverydayChecklistTool";
+
+export const meta = {
+  title: "Useful tools - Cybersecurity",
+  description:
+    "Interactive tools that help you inspect cookies, headers, URLs, email authentication, browser storage and everyday risk without leaving your browser.",
+  topic: "cybersecurity",
+};
+
+# Useful tools - Cybersecurity
+
+<div className="mt-2 rounded-3xl bg-gradient-to-br from-slate-50 via-sky-50/40 to-slate-50 border border-slate-100 px-4 py-4 sm:px-6 sm:py-5">
+  <p className="text-sm text-slate-700 max-w-2xl leading-relaxed">
+    These tools sit beside my Cybersecurity Notes. You can paste real cookies, headers, URLs, email headers, JWTs and
+    log snippets to see how they behave and what risks they carry. Everything runs in your browser so you can safely
+    experiment and learn.
+  </p>
+</div>
+
+<section className="space-y-8 mt-6 mb-16">
+  <CookieInspector />
+  <SecurityHeaderTool />
+  <UrlSafetyTool />
+  <EmailAuthTool />
+  <BrowserStorageTool />
+  <LogAnomalyTool />
+  <RiskRegisterTool />
+  <DnsQuickLensTool />
+  <JwtExplainerTool />
+  <PasswordStrengthTool />
+  <EverydayChecklistTool />
+</section>

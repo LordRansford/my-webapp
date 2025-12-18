@@ -9,6 +9,9 @@ import GlossaryTip from "@/components/notes/GlossaryTip";
 import QuizBlock from "@/components/notes/QuizBlock";
 import ProgressBar from "@/components/notes/ProgressBar";
 import PageNav from "@/components/notes/PageNav";
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
+import LevelProgressBar from "@/components/course/LevelProgressBar";
+import CPDTracker from "@/components/CPDTracker";
 
 const StrategyRoadmapCanvas = dynamic(() => import("@/components/notes/tools/digitalisation/beginner/StrategyRoadmapCanvas"), { ssr: false });
 const OperatingModelLab = dynamic(() => import("@/components/notes/tools/digitalisation/intermediate/OperatingModelLab"), { ssr: false });
@@ -26,6 +29,9 @@ export default function Page({ source, headings }) {
       QuizBlock,
       ProgressBar,
       PageNav,
+      SectionProgressToggle,
+      LevelProgressBar,
+      CPDTracker,
       StrategyRoadmapCanvas,
       OperatingModelLab,
       CapabilityMapper,

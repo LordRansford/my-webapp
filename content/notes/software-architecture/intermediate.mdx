@@ -11,6 +11,10 @@ import Callout from "@/components/notes/Callout"
 import GlossaryTip from "@/components/notes/GlossaryTip"
 import ToolCard from "@/components/notes/ToolCard"
 import QuizBlock from "@/components/notes/QuizBlock"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import { softwareArchitectureSectionManifest } from "@/lib/softwareArchitectureSections"
 
 import StyleSelector from "@/components/notes/tools/architecture/intermediate/StyleSelector"
 import DecompositionLab from "@/components/notes/tools/architecture/intermediate/DecompositionLab"
@@ -19,6 +23,10 @@ import DecisionRecordBuilder from "@/components/notes/tools/architecture/interme
 <ProgressBar mode="scroll" />
 
 # Software Architecture Notes - Intermediate
+
+<LevelProgressBar courseId="software-architecture" levelId="applied" sectionIds={softwareArchitectureSectionManifest.applied} />
+
+<CPDTracker courseId="software-architecture" levelId="applied" estimatedHours={12} />
 
 This page moves from understanding structure to designing real systems. The goal now is to turn quality goals and constraints into a structure that people can build and change safely. The rhythm stays the same as the beginner page: context first, definition second, practice and reflection always.
 
@@ -44,6 +52,8 @@ Architecture design is the act of making informed trade-offs under uncertainty.
 
 ## Architectural styles and patterns
 
+<SectionProgressToggle courseId="software-architecture" levelId="applied" sectionId="sa-intermediate-architectural-styles" />
+
 An **architectural style** is a named way of organising a system that reflects common solutions to recurring problems.
 
 Styles are not rules. They are starting points. Some emphasise simplicity, others scalability, autonomy, or resilience. No style is universally correct.
@@ -66,6 +76,8 @@ Choosing a style is architectural because it influences how the system evolves, 
 ---
 
 ## Decomposition and responsibility
+
+<SectionProgressToggle courseId="software-architecture" levelId="applied" sectionId="sa-intermediate-microservices-and-integration" />
 
 Decomposition is the process of breaking a system into parts. Good decomposition is the difference between a system that scales and one that collapses under its own weight.
 
@@ -93,6 +105,8 @@ A quick test: if a component has more than one reason to change, its boundary is
 
 ## Quality-driven architecture
 
+<SectionProgressToggle courseId="software-architecture" levelId="applied" sectionId="sa-intermediate-runtime-tradeoffs" />
+
 In real systems, architecture is driven by **quality attributes** more than features.
 
 Performance influences concurrency and caching. Security influences trust boundaries and data flow. Availability influences redundancy and failure handling.
@@ -108,6 +122,8 @@ Ignoring quality attributes early leads to expensive redesign later.
 ---
 
 ## Making and recording decisions
+
+<SectionProgressToggle courseId="software-architecture" levelId="applied" sectionId="sa-intermediate-cqrs-event-sourcing" />
 
 Architecture is a decision-making discipline. Each decision has context, options, trade-offs, and consequences.
 

@@ -1,0 +1,59 @@
+{
+  "id": "software-architecture",
+  "slug": "software-architecture",
+  "title": "Software Architecture Notes",
+  "shortTitle": "Software Architecture",
+  "description": "From basic diagrams and responsibilities through to microservices, events, CQRS, cloud native systems and digitalisation architecture.",
+  "totalEstimatedHours": 36,
+  "levels": [
+    {
+      "id": "foundations",
+      "slug": "beginner",
+      "title": "Architecture Foundations",
+      "estimatedHours": 10,
+      "summary": "Start from what architecture is for, and how to think about components, boundaries and responsibilities in small systems.",
+      "learningOutcomes": [
+        "Explain in simple terms what software architecture is and why it matters.",
+        "Describe basic building blocks such as components, interfaces and data flows.",
+        "Read and sketch simple architecture diagrams such as layered and client server views.",
+        "Relate architecture decisions to non functional needs such as performance, security and reliability."
+      ]
+    },
+    {
+      "id": "applied",
+      "slug": "intermediate",
+      "title": "Applied Architecture",
+      "estimatedHours": 12,
+      "summary": "Layered patterns, microservices, events, data ownership and real trade offs between coupling, performance and changeability.",
+      "learningOutcomes": [
+        "Describe and compare common architectural styles such as layered systems, microservices and event driven designs.",
+        "Explain key runtime qualities such as scalability, resilience and maintainability with concrete examples.",
+        "Use simple patterns such as CQRS, event sourcing and message queues in realistic scenarios.",
+        "Discuss trade offs between different designs for a given problem."
+      ]
+    },
+    {
+      "id": "practice-strategy",
+      "slug": "advanced",
+      "title": "Digital and Cloud Scale Architecture",
+      "estimatedHours": 14,
+      "summary": "Event driven systems, CQRS, integration patterns, observability and digitalisation strategy across whole organisations.",
+      "learningOutcomes": [
+        "Connect architecture work to digitalisation strategy, organisational change and long term evolution of systems.",
+        "Explain how architecture governance, roadmaps and standards guide delivery teams without blocking them.",
+        "Reason about architecture in regulated and safety critical contexts in plain language.",
+        "Describe a realistic end to end path from idea to production for complex digital systems."
+      ]
+    }
+  ],
+  "summaryPage": {
+    "slug": "summary",
+    "title": "Software Architecture summary and games",
+    "description": "A recap and playful space to join up diagrams, patterns and digitalisation ideas with small applied challenges."
+  },
+  "targetAudience": [
+    "People who want to move from writing code to thinking like software architects.",
+    "Students and professionals working in digitalisation, data and integration.",
+    "Teams and lecturers who want ready made diagrams, tools and scenarios for teaching architecture."
+  ]
+}

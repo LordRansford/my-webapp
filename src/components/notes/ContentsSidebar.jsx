@@ -8,9 +8,11 @@ export default function ContentsSidebar({
   mobile = false,
   initialOpen = true,
   className = "",
+  onNavigate,
 }) {
   const [open, setOpen] = useState(initialOpen);
   const [expanded, setExpanded] = useState({});
+  const navId = mobile ? "contents-nav-mobile" : "contents-nav-desktop";
 
   // Build a simple section tree: h2 with following h3 children
   const sections = useMemo(() => {
@@ -37,6 +39,7 @@ export default function ContentsSidebar({
 
   return (
     <aside
+      aria-label="On-page contents"
       className={`${mobile ? "block" : "hidden lg:block"} sticky top-24 h-[calc(100vh-120px)] w-full max-w-[260px] max-w-64 overflow-auto ${className}`}
     >
       <div className="rounded-2xl border border-gray-200 bg-white/90 p-3 shadow-sm backdrop-blur">
@@ -45,41 +48,39 @@ export default function ContentsSidebar({
           <button
             onClick={() => setOpen((v) => !v)}
             className="rounded-full border px-3 py-1 text-[11px] text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-blue-200"
+            aria-expanded={open}
+            aria-controls={navId}
           >
             {open ? "Hide" : "Show"}
           </button>
         </div>
         {open ? (
-          <nav aria-label="Contents" className="mt-3">
+          <nav aria-label="Contents" id={navId} className="mt-3">
             <ul className="space-y-1 text-sm">
               {sections.map((section) => {
                 const isActive = activeId === section.id;
                 const isExpanded = expanded[section.id] ?? false;
                 return (
                   <li key={section.id}>
-                    <div
-                      className={`flex items-center justify-between rounded px-2 py-1 ${
-                        isActive ? "bg-blue-50 text-blue-800" : "text-gray-800"
-                      }`}
-                    >
-                      <button
-                        type="button"
+                    <div className={`flex items-center justify-between rounded px-2 py-1 ${isActive ? "bg-blue-50 text-blue-800" : "text-gray-800"}`}>
+                      <a
                         className="flex-1 text-left hover:underline focus:outline-none focus:ring focus:ring-blue-200"
-                        onClick={() => {
+                        href={`#${section.id}`}
+                        aria-current={isActive ? "location" : undefined}
+                        onClick={(event) => {
                           // expand to reveal children when navigating
                           setExpanded((prev) => ({ ...prev, [section.id]: true }));
-                          if (section.id) {
-                            const el = document.getElementById(section.id);
-                            if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-                          }
+                          if (mobile && typeof onNavigate === "function") onNavigate(event);
                         }}
                       >
                         {section.title}
-                      </button>
+                      </a>
                       <button
                         type="button"
                         className="ml-2 rounded-full border px-2 text-xs text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-blue-200"
-                        aria-label={isExpanded ? "Collapse section" : "Expand section"}
+                        aria-label={isExpanded ? `Collapse ${section.title}` : `Expand ${section.title}`}
+                        aria-expanded={isExpanded}
+                        aria-controls={`${section.id}-children`}
                         onClick={() =>
                           setExpanded((prev) => ({ ...prev, [section.id]: !isExpanded }))
                         }
@@ -88,7 +89,7 @@ export default function ContentsSidebar({
                       </button>
                     </div>
                     {isExpanded && section.children.length ? (
-                      <ul className="ml-2 mt-1 space-y-1 border-l border-gray-200 pl-2">
+                      <ul id={`${section.id}-children`} className="ml-2 mt-1 space-y-1 border-l border-gray-200 pl-2">
                         {section.children.map((c) => (
                           <li key={c.id}>
                             <a
@@ -96,6 +97,10 @@ export default function ContentsSidebar({
                                 activeId === c.id ? "bg-blue-50 text-blue-800" : "text-gray-700"
                               } hover:bg-gray-100 focus:outline-none focus:ring focus:ring-blue-200`}
                               href={`#${c.id}`}
+                              aria-current={activeId === c.id ? "location" : undefined}
+                              onClick={(event) => {
+                                if (mobile && typeof onNavigate === "function") onNavigate(event);
+                              }}
                             >
                               {c.title}
                             </a>

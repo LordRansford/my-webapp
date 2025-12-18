@@ -1,15 +1,20 @@
 ---
-title: "Cybersecurity Notes: Intermediate"
-description: "My intermediate notes. I move from foundations to attacker and defender thinking, threat modelling, identity, cryptography intuition, and detection."
-level: "intermediate"
+title: "Applied Cybersecurity"
+description: "Level 2 of my cybersecurity course. Applied threat modelling, attack surfaces, identity, detection and risk trade offs with hands-on labs."
+level: "applied"
 ---
 
 import ProgressBar from '@/components/notes/ProgressBar'
 import PageNav from '@/components/notes/PageNav'
 import Callout from '@/components/notes/Callout'
 import GlossaryTip from '@/components/notes/GlossaryTip'
-import ToolCard from '@/components/learn/ToolCard'
+import ToolCard from '@/components/notes/ToolCard'
 import QuizBlock from '@/components/notes/QuizBlock'
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import DiagramBlock from "@/components/DiagramBlock"
+import { cyberSectionManifest } from "@/lib/cyberSections"
 
 import ThreatScenarioMapper from "@/components/dashboards/cybersecurity/intermediate/ThreatScenarioMapper"
 import AttackSurfaceExplorer from "@/components/dashboards/cybersecurity/intermediate/AttackSurfaceExplorer"
@@ -17,430 +22,212 @@ import AuthSessionFlowLab from "@/components/dashboards/cybersecurity/intermedia
 import SessionHijackConceptDemo from "@/components/dashboards/cybersecurity/intermediate/SessionHijackConceptDemo"
 import LogSignalExplorer from "@/components/dashboards/cybersecurity/intermediate/LogSignalExplorer"
 import RiskTradeoffVisualizer from "@/components/dashboards/cybersecurity/intermediate/RiskTradeoffVisualizer"
-import IntermediateQuizBoard from "@/components/dashboards/cybersecurity/intermediate/IntermediateQuizBoard"
 
 <ProgressBar mode="scroll" />
 
-# Cybersecurity Notes  
-## Intermediate  
-### How systems fail and how we defend them
+# Applied Cybersecurity
 
-<Callout variant="concept">
-Beginner taught me what data is, how meaning is constructed, what CIA means, and why networks and trust boundaries matter. Intermediate is where I switch to real attacker and defender thinking. I stop asking what a system is and start asking what it can be made to do under pressure.
-</Callout>
+<LevelProgressBar courseId="cybersecurity" levelId="applied" sectionIds={cyberSectionManifest.applied} />
 
-<PageNav
-  prevHref="/cybersecurity/beginner"
-  prevLabel="Beginner"
-  nextHref="/cybersecurity/advanced"
-  nextLabel="Advanced"
-  showTop
-  showBottom
-/>
+<CPDTracker courseId="cybersecurity" levelId="applied" estimatedHours={10} />
+
+Applied is where we stop describing computers and start thinking like attackers and defenders. We keep the language human, but we anchor every idea to assets, entry points, and the controls that actually change outcomes.
 
 ---
 
-## 1. Threat modelling and attacker thinking
+## Threat modelling and attacker thinking
+
+<SectionProgressToggle courseId="cybersecurity" levelId="applied" sectionId="applied-threat-modelling" />
 
 <Callout variant="concept">
-Security improves fastest when I can answer one question clearly. What am I protecting, from whom, and how could it fail.
+Security improves fastest when I can answer one question clearly: what matters, who might attack it, and how it could fail.
 </Callout>
 
-### A simple story first
-Imagine a house. If I only buy stronger locks, but leave the back window open, I did not become safer. I became confident in the wrong place.
+A threat model is a simple story about risk. I list each <GlossaryTip term="asset">something that hurts if stolen, changed, or stopped</GlossaryTip>. I name the <GlossaryTip term="threat">who or what could cause harm</GlossaryTip>. I map <GlossaryTip term="attack surface">every way they can interact with the system</GlossaryTip> and the <GlossaryTip term="trust boundary">places where assumptions change</GlossaryTip>. This keeps me focused on reality instead of memorising exotic exploits.
 
-Systems are the same. Threat modelling is how I stop guessing.
+<DiagramBlock
+  title="Small threat model in one glance"
+  description="People and data cross boundaries; assumptions must be explicit."
+>
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>User → Web app → API → Database</div>
+    <div className="text-gray-700">Public internet to web app is a trust boundary. API credentials and personal data are assets.</div>
+    <div className="text-gray-700">Attacker pushes inputs at the web form and the API. Controls: validation, auth, logging.</div>
+  </div>
+</DiagramBlock>
 
-<GlossaryTip term="Threat modelling">
-Threat modelling is a structured way to describe assets, attackers, attack surfaces, trust boundaries, assumptions, and controls so security decisions are deliberate rather than emotional.
-</GlossaryTip>
-
-### What is an asset
-An asset is anything that matters if it is stolen, changed, or made unavailable.
-
-Beginner talked about CIA properties. In threat modelling I attach those properties to specific things.
-
-Examples:
-- user credentials and session tokens
-- personal data
-- money and payment workflows
-- system availability for critical services
-- reputation and integrity of published content
-
-<GlossaryTip term="Asset">
-An asset is anything valuable that requires protection, including data, functionality, availability, or trust.
-</GlossaryTip>
-
-### Who is the attacker
-People imagine a magical hacker. I prefer to think in attacker categories because each category has different capability.
-
-Examples:
-- curious user
-- disgruntled insider
-- opportunistic criminal
-- targeted attacker
-- automated scanning bots
-
-<GlossaryTip term="Threat actor">
-A threat actor is the person or group that may attack a system, including their motivation and capability.
-</GlossaryTip>
-
-### Attack surface, entry points, and trust boundaries
-Beginner introduced trust boundaries. In threat modelling, I use them deliberately.
-
-- an entry point is where data or control enters a system
-- an attack surface is the sum of all entry points
-- a trust boundary is where assumptions change
-
-<GlossaryTip term="Attack surface">
-Attack surface is the total set of ways an attacker can interact with a system, including inputs, interfaces, users, and dependencies.
-</GlossaryTip>
-
-<GlossaryTip term="Entry point">
-An entry point is a specific location where data or actions enter a component, such as a login form, API endpoint, file upload, or admin console.
-</GlossaryTip>
-
-### Why modelling matters more than memorising attacks
-A good threat model turns scary unknowns into checklists:
-- what can be abused
-- what data is exposed
-- what failure would be catastrophic
-- what controls reduce the probability or impact
-
-### Practice: map a threat scenario
 <ToolCard
-  title="Threat scenario mapper"
-  description="Map assets, attackers and entry points into a simple threat picture."
+  id="threat-model-canvas"
+  title="Sketch a simple threat model"
+  description="Pick a small system, list assets, actors and trust boundaries, then note where someone might realistically attack it."
 >
   <ThreatScenarioMapper />
 </ToolCard>
 
 <QuizBlock
-  title="Threat modelling understanding check"
+  title="Quick check: threat modelling"
   questions={[
-    { q: "What is the main purpose of threat modelling", a: "To make security decisions deliberate by identifying assets, attackers, attack surfaces, trust boundaries, and controls." },
-    { q: "What is an asset", a: "Anything valuable that needs protection, including data, functionality, availability, or trust." },
-    { q: "What is an entry point", a: "A specific interface where data or actions enter the system." },
-    { q: "What is an attack surface", a: "The sum of all entry points and ways to interact with the system." },
-    { q: "Why do I define attacker categories", a: "Because capability and motivation vary, which changes what controls matter most." },
-    { q: "How do Beginner trust boundaries connect to threat modelling", a: "Threat models identify where assumptions change and where validation and authentication must occur." }
+    { q: "Why start with assets before attacks", a: "Assets tell you what matters, so you focus on controls that protect real value." },
+    { q: "What is an attack surface", a: "All the ways an attacker can interact with the system including inputs, interfaces, and dependencies." },
+    { q: "What is a trust boundary", a: "A place where assumptions change and data must be validated before it crosses." },
+    { q: "Why list actors as well as threats", a: "Different actors have different motives and capabilities which change which controls work." },
+    { q: "How do entry points relate to controls", a: "Each entry point should have clear validation, authentication, and monitoring tied to it." },
+    { q: "What makes a threat model useful", a: "It guides where to test and where to place controls, not just a diagram for decoration." },
   ]}
 />
 
-<PageNav showTop showBottom />
-
 ---
 
-## 2. Attack surfaces and common failure classes
+## Attack surfaces and common failure classes
+
+<SectionProgressToggle courseId="cybersecurity" levelId="applied" sectionId="applied-attack-surfaces" />
 
 <Callout variant="concept">
-Most security failures are not fancy. They are predictable outcomes of unvalidated input, incorrect assumptions, and confusing identity with permission.
+Most breaches start with what is exposed, not with exotic zero days.
 </Callout>
 
-### Complexity is the hidden enemy
-A system becomes less secure as it becomes harder to reason about. More features means more entry points. More dependencies means more trust relationships. More integration means more assumptions.
+Operating systems run services, services open ports, and apps expose inputs. The attack surface grows with every feature and every default left unchanged. Common failure classes repeat: <GlossaryTip term="injection">untrusted input treated as instructions</GlossaryTip>, broken access control, unsafe defaults, and <GlossaryTip term="vulnerability">a weakness that can be exploited</GlossaryTip> through a reachable entry point.
 
-In practice, an attacker does not need to break everything. They only need one place where the system trusts the wrong thing.
+<DiagramBlock
+  title="Where exposure creeps in"
+  description="A simple web app and the inputs that expand attack surface."
+>
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>Browser → API → Database</div>
+    <div>Inputs: login form, file upload, query parameter, admin console</div>
+    <div className="text-gray-700">Each input crosses a trust boundary; validation and auth must match the risk.</div>
+  </div>
+</DiagramBlock>
 
-### Failure class  injection
-Injection happens when a system treats user input as instructions.
-
-Start with the simplest example. A search box should be data. If the system accidentally treats it as commands, the attacker controls behaviour.
-
-<GlossaryTip term="Injection">
-Injection is when untrusted input is interpreted as code or instructions inside another interpreter, such as SQL, HTML, shell commands, or templates.
-</GlossaryTip>
-
-The core beginner link is interpretation. Beginner taught that bit patterns are meaningless until interpreted. Injection is malicious interpretation.
-
-### Failure class  broken access control
-This is when a system lets a user do something they should not.
-
-It can happen even if authentication is perfect.
-
-<GlossaryTip term="Access control">
-Access control is the enforcement of who can do what to which resource under which conditions.
-</GlossaryTip>
-
-### Failure class  insecure defaults
-Default settings are often designed for convenience, not safety. If a system is safe only after perfect configuration, then the system is unsafe.
-
-<GlossaryTip term="Secure by default">
-Secure by default means the safest configuration is the starting configuration, not an optional extra.
-</GlossaryTip>
-
-### Practice tool  attack surface
 <ToolCard
-  title="Attack surface explorer"
-  description="Toggle features and see how complexity changes the attack surface."
+  id="attack-surface-explorer"
+  title="Explore attack surfaces"
+  description="Toggle features on and off and see how ports, metadata and assumptions expand or shrink your exposure."
 >
   <AttackSurfaceExplorer />
 </ToolCard>
 
 <QuizBlock
-  title="Attack surface and failures check"
+  title="Quick check: attack surface"
   questions={[
-    { q: "Why does complexity increase risk", a: "Because it increases entry points, dependencies, and assumptions, making reasoning and validation harder." },
-    { q: "What is injection in one sentence", a: "Injection is when untrusted input is interpreted as instructions rather than data." },
-    { q: "Why is injection linked to Beginner encoding and interpretation", a: "Because security failures occur when systems interpret the same data differently or treat it as commands." },
-    { q: "What is broken access control", a: "When the system allows actions that should be forbidden, even if identity is correct." },
-    { q: "Why do insecure defaults matter", a: "Because most people do not configure perfectly, so insecure defaults become real-world vulnerabilities." },
-    { q: "What is secure by default", a: "The system starts in the safest configuration without extra steps." }
+    { q: "What expands attack surface the fastest", a: "New features or services that add inputs, ports, or integrations without controls." },
+    { q: "Why is injection dangerous", a: "It turns untrusted input into commands understood by an interpreter." },
+    { q: "What is insecure default", a: "A setting that leaves access open, uses weak credentials, or exposes sensitive debug info." },
+    { q: "How does metadata leak", a: "Banners, headers and timing can reveal versions or behaviour even if content is encrypted." },
+    { q: "Where should validation live", a: "At every untrusted input, server side, before data reaches interpreters or storage." },
+    { q: "Why map trust boundaries when reviewing attack surface", a: "They show where assumptions change and where extra checks or isolation are needed." },
   ]}
 />
 
-<PageNav showTop showBottom />
-
 ---
 
-## 3. Authentication, sessions, and identity
+## Authentication, sessions and access control
+
+<SectionProgressToggle courseId="cybersecurity" levelId="applied" sectionId="applied-auth-sessions-access" />
 
 <Callout variant="concept">
-Authentication answers who you are. Authorisation answers what you are allowed to do. Sessions answer how the system remembers you between requests.
+Authentication answers who you are. Authorisation answers what you may do. Sessions remember you between requests. Mixing them up is why many breaches feel trivial.
 </Callout>
 
-### Why sessions exist
-On the web, many interactions are stateless. A server receives a request, returns a response, and forgets. But users expect continuity. Sessions provide continuity.
+A session is a bridge in a stateless world. Cookies or tokens are just carriers; their safety depends on creation, storage, expiry, rotation and server side checks. Common failures: predictable IDs, missing <GlossaryTip term="privilege escalation">checks that stop users gaining extra rights</GlossaryTip>, and replaying stolen <GlossaryTip term="token">credentials stored in cookies or headers</GlossaryTip>. Good hygiene: secure and HttpOnly cookies, short lifetimes, rotation, server side invalidation, and consistent authorisation on every request.
 
-<GlossaryTip term="Session">
-A session is a server side or token based mechanism that links multiple requests to the same user over time.
-</GlossaryTip>
+<DiagramBlock
+  title="Session flow at a glance"
+  description="Login creates a session token that rides with each request."
+>
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>Login → Server issues token → Browser stores cookie</div>
+    <div>Request with cookie → Server checks signature and role</div>
+    <div className="text-gray-700">Rotate token on privilege change, expire and invalidate on logout.</div>
+  </div>
+</DiagramBlock>
 
-### Cookies and tokens in plain terms
-A cookie is a small piece of data the browser stores and sends back automatically.
-
-A token is a proof the client presents to the server.
-
-These are not inherently secure or insecure. Security depends on how they are created, protected, expired, and validated.
-
-<GlossaryTip term="Token">
-A token is a piece of data used to prove identity or permission, often time limited and signed.
-</GlossaryTip>
-
-### How sessions fail in real life
-Common failure modes:
-- predictable session identifiers
-- tokens stored unsafely
-- long-lived tokens that never expire
-- missing checks for privilege changes
-- session fixation where attacker sets a session before login
-- session hijacking where attacker steals a session after login
-
-Beginner trust boundaries appear again. The browser is not trusted. The network is not trusted. Any stored credential must be treated as a target.
-
-### Practice tool  session flow
 <ToolCard
-  title="Authentication and session flow lab"
-  description="Walk through a login and session flow step by step."
+  id="session-flow-sandbox"
+  title="Follow a session through a web app"
+  description="Step through login, token or cookie creation and a couple of requests to see how state moves with the user."
 >
   <AuthSessionFlowLab />
 </ToolCard>
 
-### Practice tool  session hijack concept
 <ToolCard
-  title="Session hijack concept demo"
-  description="See how reusing a session identifier could let an attacker impersonate a user."
+  id="session-hijack-demo"
+  title="See session hijacking in action"
+  description="Replay a stolen session identifier and practice the controls that shut it down."
 >
   <SessionHijackConceptDemo />
 </ToolCard>
 
 <QuizBlock
-  title="Identity and sessions check"
+  title="Quick check: auth and sessions"
   questions={[
-    { q: "Why do sessions exist", a: "To provide continuity across multiple requests in systems that would otherwise be stateless." },
-    { q: "What is the difference between authentication and authorisation", a: "Authentication proves identity. Authorisation controls permissions after identity is known." },
-    { q: "What is a token", a: "A proof presented to a server to represent identity or permissions, often time limited and signed." },
-    { q: "What is session hijacking", a: "When an attacker steals a session identifier or token and uses it to impersonate a user." },
-    { q: "Why do long-lived tokens increase risk", a: "They enlarge the window of opportunity for attackers and make revocation harder." },
-    { q: "How does this connect to Beginner trust boundaries", a: "Tokens cross boundaries. If the boundary is not defended, tokens can be stolen or replayed." }
+    { q: "How do authentication and authorisation differ", a: "Authentication proves identity; authorisation decides what that identity may do." },
+    { q: "Why are secure and HttpOnly flags important", a: "They reduce theft by limiting script access and forcing transport security." },
+    { q: "What breaks when you skip authorisation", a: "Users can access data or actions they should not, even if they logged in correctly." },
+    { q: "How does session rotation help", a: "It invalidates old tokens so stolen tokens are less useful." },
+    { q: "Name one sign of privilege escalation", a: "A normal user invoking an admin-only action without being stopped." },
+    { q: "What should happen on logout", a: "Server side invalidation of the token or session so reuse fails." },
   ]}
 />
 
-<PageNav showTop showBottom />
-
 ---
 
-## 4. Cryptography foundations for defenders
+## Logging, monitoring and risk thinking
+
+<SectionProgressToggle courseId="cybersecurity" levelId="applied" sectionId="applied-logging-and-risk" />
 
 <Callout variant="concept">
-Cryptography is a toolbox for confidentiality, integrity, and authenticity. It is powerful, but it is not magic. It does not replace correct system design.
+Prevention is never perfect. Good detection shortens the time between a bad action and your response.
 </Callout>
 
-### Hashing versus encryption versus encoding
-Beginner warned against mixing these up. Here I make the separation sharper.
+I log what I fear: authentication, authorisation, sensitive access, privilege changes, unusual network patterns. A <GlossaryTip term="log">record of what happened</GlossaryTip> is only useful when it becomes a <GlossaryTip term="signal">something that indicates risk</GlossaryTip> that can turn into an <GlossaryTip term="alert">actionable notification to a human or system</GlossaryTip>. Risk thinking joins likelihood and impact; controls reduce one or both but add cost and friction.
 
-- Encoding changes representation for compatibility
-- Hashing produces a fixed-size fingerprint
-- Encryption transforms data so only key holders can recover it
+<DiagramBlock
+  title="From events to action"
+  description="Systems emit logs, you filter for signal, then alert a human or playbook."
+>
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>App + Infra → Log pipeline → Storage</div>
+    <div>Filters + rules → Alerts → On-call or dashboard</div>
+    <div className="text-gray-700">Measure false positives and detection time to tune quality.</div>
+  </div>
+</DiagramBlock>
 
-<GlossaryTip term="Hash">
-A hash is a one way function that maps input data to a fixed size fingerprint, designed so small input changes produce very different outputs.
-</GlossaryTip>
-
-<GlossaryTip term="Encryption">
-Encryption is a reversible transformation that hides content, so only those with the key can recover the original data.
-</GlossaryTip>
-
-### Why hashing exists
-Hashing is used for:
-- integrity checking
-- password storage, when combined with salt and slow hashing
-- digital signatures, where hashes represent large messages
-
-### Salt and why it matters
-A salt is random data added to passwords before hashing. It prevents precomputed attacks against many identical passwords.
-
-<GlossaryTip term="Salt">
-A salt is random data combined with a password before hashing to ensure the same password does not always produce the same hash.
-</GlossaryTip>
-
-### Symmetric and asymmetric intuition
-Symmetric encryption uses one key for encrypt and decrypt. Asymmetric uses a pair: public key and private key.
-
-At intermediate level, the core idea is what each is good for:
-- symmetric is fast for bulk data
-- asymmetric supports identity and key exchange
-
-<QuizBlock
-  title="Cryptography foundations check"
-  questions={[
-    { q: "What is the difference between hashing and encryption", a: "Hashing is one way and produces a fingerprint. Encryption is reversible with a key." },
-    { q: "Why is encoding not security", a: "Encoding is designed to be reversible using public rules, so it does not hide meaning from attackers." },
-    { q: "Why do we add salt to password hashing", a: "To prevent identical passwords producing identical hashes and to block precomputed attacks." },
-    { q: "What is symmetric encryption good for", a: "Fast encryption of large amounts of data." },
-    { q: "What is asymmetric cryptography good for", a: "Identity, signatures, and securely exchanging keys." },
-    { q: "Why does cryptography not fix poor design", a: "Because attackers can bypass cryptography through access control failures, session theft, or misuse of trust." }
-  ]}
-/>
-
-<PageNav showTop showBottom />
-
----
-
-## 5. Logging, monitoring, and detection
-
-<Callout variant="concept">
-If prevention was perfect, detection would not matter. Prevention is never perfect. Detection is how I shorten time to discovery.
-</Callout>
-
-### Logs are not just records
-Logs are signals. Signals must be:
-- reliable
-- contextual
-- actionable
-
-If a system logs everything, it logs nothing. I drown in noise.
-
-<GlossaryTip term="Signal to noise">
-Signal to noise describes how much useful information exists relative to irrelevant activity. Good detection maximises signal, not volume.
-</GlossaryTip>
-
-### What I log depends on what I fear
-Threat modelling returns here. If I do not know my likely failures, I cannot decide what to monitor.
-
-Good logs often include:
-- authentication events
-- authorisation decisions
-- privilege changes
-- sensitive data access
-- unusual network patterns
-
-### Practice tool  build detection signals
 <ToolCard
-  title="Log signal explorer"
-  description="Triage synthetic log lines and see how signal can hide in noise."
+  id="log-triage-lab"
+  title="Practice spotting important events in logs"
+  description="Scan a realistic log snippet, tag interesting events, and practice deciding what to investigate first."
 >
   <LogSignalExplorer />
 </ToolCard>
 
-<QuizBlock
-  title="Detection thinking check"
-  questions={[
-    { q: "Why is detection a first class control", a: "Because breaches can occur despite prevention, and detection reduces time to damage." },
-    { q: "Why is logging everything not always helpful", a: "It reduces signal to noise and creates alert fatigue." },
-    { q: "What is alert fatigue", a: "When too many low quality alerts cause real threats to be missed." },
-    { q: "How does threat modelling inform logging", a: "It identifies likely failure modes, which determines what signals matter." },
-    { q: "What is an actionable signal", a: "A signal with enough context that an engineer can respond decisively." },
-    { q: "What security events should be logged first", a: "Authentication, authorisation, privilege changes, and sensitive resource access." }
-  ]}
-/>
-
-<PageNav showTop showBottom />
-
----
-
-## 6. Risk thinking and trade-offs
-
-<Callout variant="concept">
-Security is not about removing all risk. It is about reducing risk to an acceptable level and being honest about what remains.
-</Callout>
-
-### Risk in simple terms
-Risk is a combination of:
-- how likely something is
-- how bad it would be if it happens
-
-A simple model is:
-
-\[
-Risk = Likelihood \times Impact
-\]
-
-This is not the only model, but it is a useful starter. It forces a basic discipline. If I cannot describe likelihood or impact, I cannot prioritise.
-
-<GlossaryTip term="Likelihood">
-Likelihood is how probable an event is, based on exposure, attacker incentives, and system weakness.
-</GlossaryTip>
-
-<GlossaryTip term="Impact">
-Impact is the severity of harm if an event occurs, including financial, operational, legal, safety, and reputational harm.
-</GlossaryTip>
-
-### Trade-offs are unavoidable
-Controls create cost:
-- developer time
-- latency and performance cost
-- user friction
-- operational complexity
-
-Some controls increase security while also increasing new failure modes. Intermediate security is learning to see both sides.
-
-### Practice tool  trade-off simulator
 <ToolCard
-  title="Risk and trade-off visualiser"
-  description="Adjust likelihood, impact and control strength to see how residual risk changes."
+  id="risk-tradeoff-lab"
+  title="Play with risk trade offs"
+  description="Adjust likelihood, impact and control strength to see residual risk change."
 >
   <RiskTradeoffVisualizer />
 </ToolCard>
 
 <QuizBlock
-  title="Risk and trade-offs check"
+  title="Quick check: logging and risk"
   questions={[
-    { q: "Why can I not remove all risk", a: "Because systems are complex, attackers adapt, and controls introduce cost and new failure modes." },
-    { q: "What does the formula Risk = Likelihood x Impact help with", a: "Prioritising by forcing explicit judgement about probability and severity." },
-    { q: "What is residual risk", a: "Risk that remains after controls are applied and must be accepted or mitigated further." },
-    { q: "Why can security controls increase risk", a: "They add complexity, dependencies, and new failure paths." },
-    { q: "What is an example of a trade-off", a: "More logging improves detection but can increase privacy risk and operational noise." },
-    { q: "How does this prepare for Advanced", a: "Advanced focuses on defensible architecture decisions and operational realism under constraints." }
+    { q: "Why log authentication and authorisation events", a: "They reveal misuse of accounts and changes to access." },
+    { q: "What makes a good signal", a: "It is reliable, contextual, and actionable without drowning people in noise." },
+    { q: "Why do too many alerts hurt", a: "Alert fatigue hides real incidents because people start to ignore them." },
+    { q: "How does likelihood differ from impact", a: "Likelihood is how often it may happen; impact is how bad it is when it does." },
+    { q: "What is residual risk", a: "The risk that remains after controls are applied." },
+    { q: "Who owns responding to alerts", a: "A named person or team so responsibility is clear." },
   ]}
 />
 
-<ToolCard
-  title="Intermediate recap quiz"
-  description="Test your understanding of threats, sessions, logs and risk."
->
-  <IntermediateQuizBoard />
-</ToolCard>
-
-<Callout variant="concept">
-Intermediate complete. If I can reason through these sections, I am ready for Advanced, where I focus on architecture, protocols, zero trust at scale, operations, and supply chain risk.
-</Callout>
+---
 
 <PageNav
   prevHref="/cybersecurity/beginner"
-  prevLabel="Beginner"
+  prevLabel="Foundations"
   nextHref="/cybersecurity/advanced"
-  nextLabel="Advanced"
+  nextLabel="Practice and strategy"
   showTop
   showBottom
 />

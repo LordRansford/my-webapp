@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import dynamic from "next/dynamic";
 import PythonPlayground from "@/components/PythonPlayground";
 import RsaPlayground from "@/components/RsaPlayground";
@@ -12,10 +13,53 @@ import LogicGateLab from "@/components/tools/LogicGateLab";
 
 const SqlPlayground = dynamic(() => import("@/components/tools/SqlPlayground"), {
   ssr: false,
-  loading: () => <p className="muted">Loading SQLite sandbox…</p>,
+  // Avoid hydration mismatch: render nothing on the server and during client boot
+  loading: () => null,
 });
 
 const categories = [
+  {
+    title: "Useful tool suites",
+    blurb: "Curated, browser-only labs with an Apple-like feel.",
+    tools: [
+      {
+        title: "AI tools",
+        context: "Prompt clarity, evaluation metrics, dataset splits.",
+        component: (
+          <Link className="button primary" href="/tools/ai">
+            Open AI labs
+          </Link>
+        ),
+      },
+      {
+        title: "Cybersecurity tools",
+        context: "Email header explainer, phishing simulator, link inspector.",
+        component: (
+          <Link className="button primary" href="/tools/cybersecurity">
+            Open Cyber labs
+          </Link>
+        ),
+      },
+      {
+        title: "Software architecture tools",
+        context: "Latency budgets, availability planning, C4 context sketch.",
+        component: (
+          <Link className="button primary" href="/tools/software-architecture">
+            Open Architecture labs
+          </Link>
+        ),
+      },
+      {
+        title: "Digitalisation tools",
+        context: "Data flows, quality scorecard, process friction heatmap.",
+        component: (
+          <Link className="button primary" href="/tools/digitalisation">
+            Open Digitalisation labs
+          </Link>
+        ),
+      },
+    ],
+  },
   {
     title: "Compute sandboxes",
     blurb: "Run code with no install. Everything executes in your browser.",

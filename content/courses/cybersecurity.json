@@ -1,0 +1,61 @@
+{
+  "id": "cybersecurity",
+  "slug": "cybersecurity",
+  "title": "Cybersecurity Notes",
+  "shortTitle": "Cybersecurity",
+  "description": "My three level cybersecurity course that takes learners from basic online safety to professional risk and security practice, using interactive tools and everyday examples.",
+  "totalEstimatedHours": 30,
+  "section": "cybersecurity",
+  "overview_route": "/cybersecurity",
+  "summary_route": "/cybersecurity/summary",
+  "levels": [
+    {
+      "id": "foundations",
+      "title": "Cybersecurity Foundations",
+      "label": "Foundations",
+      "route": "/cybersecurity/beginner",
+      "estimated_hours": 8,
+      "estimatedHours": 8,
+      "summary": "Friendly on-ramp for data, networks, passwords, phishing and everyday defences using in-browser labs.",
+      "learning_outcomes": [
+        "Explain what data is, how bits and bytes work and how text is encoded.",
+        "Describe at a high level how data moves across a network in packets.",
+        "Define confidentiality, integrity and availability in plain language.",
+        "Recognise simple everyday attacks such as weak passwords and phishing."
+      ],
+      "pages": ["/cybersecurity/beginner"]
+    },
+    {
+      "id": "applied",
+      "title": "Applied Cybersecurity",
+      "label": "Applied",
+      "route": "/cybersecurity/intermediate",
+      "estimated_hours": 10,
+      "estimatedHours": 10,
+      "summary": "Think like attackers and defenders with threat modelling, web auth flows, common vulns, logs, and risk trade-offs.",
+      "learning_outcomes": [
+        "Draw a simple threat model for a small system and talk through likely threats.",
+        "Explain attack surface and link common vulnerability types to broken assumptions.",
+        "Describe how authentication, sessions and access control work in a web style system.",
+        "Interpret simple logs and talk about basic risk trade offs in practice."
+      ],
+      "pages": ["/cybersecurity/intermediate"]
+    },
+    {
+      "id": "practice",
+      "title": "Cybersecurity Practice and Strategy",
+      "label": "Practice & Strategy",
+      "route": "/cybersecurity/advanced",
+      "estimated_hours": 12,
+      "estimatedHours": 12,
+      "summary": "Join up governance, secure design, DevSecOps, CVEs, incident response and business-focused risk thinking.",
+      "learning_outcomes": [
+        "Relate real systems work to major frameworks such as NIST CSF and Cyber Essentials in plain language.",
+        "Design simple defence in depth control stacks for common scenarios.",
+        "Walk through a basic incident story from preparation to learning.",
+        "Explain governance, culture and long term digital risk to non technical stakeholders."
+      ],
+      "pages": ["/cybersecurity/advanced"]
+    }
+  ]
+}

@@ -9,6 +9,10 @@ import Callout from '@/components/notes/Callout'
 import GlossaryTip from '@/components/notes/GlossaryTip'
 import QuizBlock from '@/components/notes/QuizBlock'
 import PageNav from '@/components/notes/PageNav'
+import SectionProgressToggle from '@/components/notes/SectionProgressToggle'
+import LevelProgressBar from '@/components/course/LevelProgressBar'
+import CPDTracker from '@/components/CPDTracker'
+import { aiSectionManifest } from '@/lib/aiSections'
 import { MathInline, MathBlock } from '@/components/notes/Math'
 import DataNoiseTool from '@/components/notes/tools/ai/beginner/DataNoiseTool'
 import FeatureLeakageTool from '@/components/notes/tools/ai/beginner/FeatureLeakageTool'
@@ -20,6 +24,10 @@ import ResponsibleAIPlannerTool from '@/components/notes/tools/ai/beginner/Respo
 
 # AI Notes - Beginner
 
+<LevelProgressBar courseId="ai" levelId="foundations" sectionIds={aiSectionManifest.foundations} />
+
+<CPDTracker courseId="ai" levelId="foundations" estimatedHours={8} />
+
 I wrote these notes because I wanted a calm, honest path into AI that starts with meaning, not buzzwords. I explain ideas the way I wish someone had explained them to me: intuition first, definitions second, numbers third, and practice always. Nothing here assumes you already know the jargon.
 
 <PageNav prevHref="/ai/summary" prevLabel="AI hub" nextHref="#section-1" nextLabel="Start learning" showTop showBottom />
@@ -27,6 +35,8 @@ I wrote these notes because I wanted a calm, honest path into AI that starts wit
 ---
 
 ## Section 1 - Data, information, and why signal beats noise
+
+<SectionProgressToggle courseId="ai" levelId="foundations" sectionId="ai-foundations-what-is-data" />
 
 <Callout variant="concept">
 I see data as a physical record of the world, not as magic numbers. Every record is part signal and part noise. My job is to keep the signal and tame the noise.
@@ -138,6 +148,8 @@ If you remember one thing from this section: name the signal, name the noise, an
 ---
 
 ## Section 2 - Features, labels, and how supervised learning actually works
+
+<SectionProgressToggle courseId="ai" levelId="foundations" sectionId="ai-foundations-types-of-learning" />
 
 <Callout variant="concept">
 I treat supervised learning as structured mimicry: the model watches examples, learns a mapping from features to labels, and tries to generalise without seeing the answer.
@@ -259,6 +271,8 @@ If you remember one thing from this section: a probability is not a decision unt
 
 ## Section 3 - Generalisation, evaluation, and the math you actually need
 
+<SectionProgressToggle courseId="ai" levelId="foundations" sectionId="ai-foundations-models-as-functions" />
+
 <Callout variant="concept">
 My goal is not to win on training data. My goal is a model that stays reliable when the world moves. Generalisation is the real prize.
 </Callout>
@@ -364,6 +378,8 @@ If you remember one thing from this section: honest evaluation beats clever mode
 ---
 
 ## Section 4 - Simple neural networks, failure modes, and responsible AI
+
+<SectionProgressToggle courseId="ai" levelId="foundations" sectionId="ai-foundations-ethics-and-limits" />
 
 <Callout variant="concept">
 A neural network is just many weighted sums plus nonlinear squashes, stacked so each layer can learn a richer view. The danger is not the maths; it is forgetting humans and safety.
