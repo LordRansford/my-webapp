@@ -13,6 +13,11 @@ import QuizBlock from "@/components/notes/QuizBlock";
 import { FlowDiagram, LayerDiagram, TimelineDiagram, BoundaryDiagram, ComparisonDiagram } from "@/components/notes/diagrams";
 import ProgressBar from "@/components/notes/ProgressBar";
 import PageNav from "@/components/notes/PageNav";
+import DiagramBlock from "@/components/DiagramBlock";
+import CPDTracker from "@/components/CPDTracker";
+import LevelProgressBar from "@/components/course/LevelProgressBar";
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
+import { cyberSections } from "@/lib/cyberSections";
 
 const ThreatScenarioMapper = dynamic(() => import("@/components/dashboards/cybersecurity/intermediate/ThreatScenarioMapper"), { ssr: false });
 const AttackSurfaceExplorer = dynamic(() => import("@/components/dashboards/cybersecurity/intermediate/AttackSurfaceExplorer"), { ssr: false });
@@ -35,11 +40,15 @@ export default function Page({ source, headings }) {
       GlossaryTip,
       QuizBlock,
       ProgressBar,
+      DiagramBlock,
       FlowDiagram,
       LayerDiagram,
       TimelineDiagram,
       BoundaryDiagram,
       ComparisonDiagram,
+      CPDTracker,
+      LevelProgressBar,
+      SectionProgressToggle,
       ThreatScenarioMapper,
       AttackSurfaceExplorer,
       AuthSessionFlowLab,
@@ -64,6 +73,7 @@ export default function Page({ source, headings }) {
         page: 2,
         totalPages: 4,
       }}
+      activeLevelId="applied"
       headings={headings}
     >
       <div className="mb-4">
@@ -71,7 +81,7 @@ export default function Page({ source, headings }) {
           href="/cybersecurity"
           className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-900 focus:outline-none focus:ring focus:ring-blue-200"
         >
-          ← Back to Cybersecurity overview
+          Back to Cybersecurity overview
         </Link>
       </div>
       <MDXRenderer source={source} components={mdxComponents} />
@@ -80,7 +90,7 @@ export default function Page({ source, headings }) {
 }
 
 export async function getStaticProps() {
-  const note = await loadNote("cybersecurity/intermediate.mdx");
+  const note = await loadNote("cybersecurity/intermediate.mdx", { cyberSections });
   return {
     props: {
       source: note.source,

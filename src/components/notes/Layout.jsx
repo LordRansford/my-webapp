@@ -7,7 +7,7 @@ import NotesStepper from "./summary/NotesStepper";
 import cybersecurityCourse from "../../../content/courses/cybersecurity.json";
 import { useEffect, useState } from "react";
 
-export default function NotesLayout({ meta = {}, headings = [], children }) {
+export default function NotesLayout({ meta = {}, headings = [], children, activeLevelId }) {
   const [activeId, setActiveId] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -43,14 +43,16 @@ export default function NotesLayout({ meta = {}, headings = [], children }) {
 
   if (cybersecurityCourse?.overview_route) {
     cybersecurityStepperItems.push({
+      id: "overview",
       label: "Overview",
       href: cybersecurityCourse.overview_route,
-      active: meta.slug?.startsWith(cybersecurityCourse.overview_route),
+      active: meta.slug === cybersecurityCourse.overview_route,
     });
   }
 
   (cybersecurityCourse?.levels || []).forEach((level) => {
     cybersecurityStepperItems.push({
+      id: level.id,
       label: level.label || level.title,
       href: level.route,
       active: meta.slug?.startsWith(level.route) || meta.slug?.includes(level.route),
@@ -59,7 +61,8 @@ export default function NotesLayout({ meta = {}, headings = [], children }) {
 
   if (cybersecurityCourse?.summary_route) {
     cybersecurityStepperItems.push({
-      label: "Summary & Games",
+      id: "summary",
+      label: "Summary and games",
       href: cybersecurityCourse.summary_route,
       active: meta.slug?.startsWith(cybersecurityCourse.summary_route) || meta.slug?.includes("/summary"),
     });
@@ -68,24 +71,24 @@ export default function NotesLayout({ meta = {}, headings = [], children }) {
   const stepperItems =
     resolvedSection === "ai"
       ? [
-          { label: "Beginner", href: "/ai/beginner", active: meta.slug?.includes("/ai/beginner") },
+          { label: "Foundations", href: "/ai/beginner", active: meta.slug?.includes("/ai/beginner") },
           { label: "Intermediate", href: "/ai/intermediate", active: meta.slug?.includes("/ai/intermediate") },
           { label: "Advanced", href: "/ai/advanced", active: meta.slug?.includes("/ai/advanced") },
-          { label: "Summary", href: "/ai/summary", active: meta.slug?.includes("/ai/summary") },
+          { label: "Summary and games", href: "/ai/summary", active: meta.slug?.includes("/ai/summary") },
         ]
       : resolvedSection === "digitalisation"
       ? [
           { label: "Beginner", href: "/digitalisation/beginner", active: meta.slug?.includes("/digitalisation/beginner") },
           { label: "Intermediate", href: "/digitalisation/intermediate", active: meta.slug?.includes("/digitalisation/intermediate") },
           { label: "Advanced", href: "/digitalisation/advanced", active: meta.slug?.includes("/digitalisation/advanced") },
-          { label: "Summary", href: "/digitalisation/summary", active: meta.slug?.includes("/digitalisation/summary") },
+          { label: "Summary and games", href: "/digitalisation/summary", active: meta.slug?.includes("/digitalisation/summary") },
         ]
       : resolvedSection === "architecture"
       ? [
-          { label: "Beginner", href: "/software-architecture/beginner", active: meta.slug?.includes("/software-architecture/beginner") },
+          { label: "Foundations", href: "/software-architecture/beginner", active: meta.slug?.includes("/software-architecture/beginner") },
           { label: "Intermediate", href: "/software-architecture/intermediate", active: meta.slug?.includes("/software-architecture/intermediate") },
           { label: "Advanced", href: "/software-architecture/advanced", active: meta.slug?.includes("/software-architecture/advanced") },
-          { label: "Summary", href: "/software-architecture/summary", active: meta.slug?.includes("/software-architecture/summary") },
+          { label: "Summary and games", href: "/software-architecture/summary", active: meta.slug?.includes("/software-architecture/summary") },
         ]
       : cybersecurityStepperItems;
 
@@ -118,7 +121,10 @@ export default function NotesLayout({ meta = {}, headings = [], children }) {
             ) : null}
             {meta.description ? <p className="mt-2 text-sm text-gray-700">{meta.description}</p> : null}
             <div className="mt-3">
-              <NotesStepper items={stepperItems} />
+              <NotesStepper
+                items={stepperItems}
+                activeLevelId={resolvedSection === "cybersecurity" ? activeLevelId : undefined}
+              />
             </div>
           </header>
           <article className="prose prose-neutral max-w-none rounded-3xl border border-gray-200 bg-white/85 p-5 shadow-sm backdrop-blur">

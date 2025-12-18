@@ -3,14 +3,21 @@ import { useMemo } from "react";
 import NotesLayout from "@/components/notes/Layout";
 import { MDXRenderer } from "@/components/notes/MDXRenderer";
 import { loadNote } from "@/lib/content/loadNote";
-import ToolCard from "@/components/learn/ToolCard";
+import ToolCard from "@/components/notes/ToolCard";
 import Callout from "@/components/notes/Callout";
 import GlossaryTip from "@/components/notes/GlossaryTip";
 import QuizBlock from "@/components/notes/QuizBlock";
-import ProgressBar from "@/components/notes/ProgressBar";
 import PageNav from "@/components/notes/PageNav";
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
+import LevelProgressBar from "@/components/course/LevelProgressBar";
+import CPDTracker from "@/components/CPDTracker";
+import DiagramBlock from "@/components/DiagramBlock";
+import { digitalisationSectionManifest } from "@/lib/digitalisationSections";
 
 const DigitalisationDashboard = dynamic(() => import("@/components/dashboards/DigitalisationDashboard"), { ssr: false });
+const SchemaMappingSandbox = dynamic(() => import("@/components/notes/tools/digitalisation/intermediate/SchemaMappingSandbox"), { ssr: false });
+const DigitalMaturityGauge = dynamic(() => import("@/components/notes/tools/digitalisation/beginner/DigitalMaturityGauge"), { ssr: false });
+const RiskRoadmapPlannerTool = dynamic(() => import("@/components/notes/tools/digitalisation/advanced/RiskRoadmapPlannerTool"), { ssr: false });
 const DigiConceptMatchGame = dynamic(() => import("@/components/games/digitalisation/DigiConceptMatchGame"), { ssr: false });
 const ValueChainBuilderGame = dynamic(() => import("@/components/games/digitalisation/ValueChainBuilderGame"), { ssr: false });
 const OperatingModelDesignerGame = dynamic(() => import("@/components/games/digitalisation/OperatingModelDesignerGame"), { ssr: false });
@@ -24,9 +31,15 @@ export default function Page({ source, headings }) {
       Callout,
       GlossaryTip,
       QuizBlock,
-      ProgressBar,
       PageNav,
+      SectionProgressToggle,
+      LevelProgressBar,
+      CPDTracker,
+      DiagramBlock,
       DigitalisationDashboard,
+      SchemaMappingSandbox,
+      DigitalMaturityGauge,
+      RiskRoadmapPlannerTool,
       DigiConceptMatchGame,
       ValueChainBuilderGame,
       OperatingModelDesignerGame,
@@ -39,8 +52,8 @@ export default function Page({ source, headings }) {
   return (
     <NotesLayout
       meta={{
-        title: "Digitalisation Strategy Notes - Summary",
-        description: "Consolidation of digitalisation strategy with interactive games, dashboards, and reflection.",
+        title: "Digitalisation summary and games",
+        description: "Quick recap, games and reflections to pull together your digitalisation understanding.",
         level: "Summary",
         slug: "/digitalisation/summary",
         section: "digitalisation",
@@ -55,7 +68,11 @@ export default function Page({ source, headings }) {
 }
 
 export async function getStaticProps() {
-  const { source, headings } = await loadNote("digitalisation/summary.mdx");
+  const { source, headings } = await loadNote(
+    "digitalisation/summary.mdx",
+    { digitalisationSectionManifest },
+    { contentRoot: "courses" }
+  );
   return {
     props: {
       source,

@@ -1,0 +1,297 @@
+---
+title: "Digitalisation summary and games"
+description: "Quick recap, games and reflections to pull together your digitalisation understanding."
+level: "summary"
+courseId: "digitalisation"
+levelId: "summary"
+summary: "Quick recap, games and reflections to pull together your digitalisation understanding."
+estimatedHours: 4
+stepIndex: 3
+---
+
+import ToolCard from "@/components/notes/ToolCard"
+import Callout from "@/components/notes/Callout"
+import GlossaryTip from "@/components/notes/GlossaryTip"
+import QuizBlock from "@/components/notes/QuizBlock"
+import PageNav from "@/components/notes/PageNav"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import DiagramBlock from "@/components/DiagramBlock"
+import { digitalisationSectionManifest } from "@/lib/digitalisationSections"
+import DigitalisationDashboard from "@/components/dashboards/DigitalisationDashboard"
+import SchemaMappingSandbox from "@/components/notes/tools/digitalisation/intermediate/SchemaMappingSandbox"
+import DigitalMaturityGauge from "@/components/notes/tools/digitalisation/beginner/DigitalMaturityGauge"
+import RiskRoadmapPlannerTool from "@/components/notes/tools/digitalisation/advanced/RiskRoadmapPlannerTool"
+import DigiConceptMatchGame from "@/components/games/digitalisation/DigiConceptMatchGame"
+import ValueChainBuilderGame from "@/components/games/digitalisation/ValueChainBuilderGame"
+import OperatingModelDesignerGame from "@/components/games/digitalisation/OperatingModelDesignerGame"
+import MaturityPathGame from "@/components/games/digitalisation/MaturityPathGame"
+import DigiQuickFireQuizGame from "@/components/games/digitalisation/DigiQuickFireQuizGame"
+
+# Digitalisation summary and games
+
+<LevelProgressBar courseId="digitalisation" levelId="summary" sectionIds={digitalisationSectionManifest.summary} />
+
+<CPDTracker courseId="digitalisation" levelId="summary" estimatedHours={4} />
+
+You made it to the recap. This page is here to tighten your mental model, test your instincts, and give you a few games to keep it practical.
+
+---
+
+## Big picture recap
+
+<SectionProgressToggle courseId="digitalisation" levelId="summary" sectionId="dig-summary-big-picture" />
+
+Digitalisation matters because it changes how value is created and trusted, not just which tools are used. It joins policy, data, platforms, and people into one system that must work together.
+
+<DiagramBlock title="Big picture map" subtitle="Policy, data and platforms shape outcomes together.">
+  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Policy and regulation</p>
+      <p className="mt-1">Targets, reporting duties, and trust rules.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Data and standards</p>
+      <p className="mt-1">Shared meaning, stable identifiers, clean lineage.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Platforms and tools</p>
+      <p className="mt-1">APIs, workflows, dashboards, and automation.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Outcomes and trust</p>
+      <p className="mt-1">Service quality, safety, and public confidence.</p>
+    </div>
+  </div>
+  <div className="mt-3 flex flex-wrap gap-2 text-xs text-slate-600">
+    <span className="rounded-full bg-sky-50 px-2 py-1 text-sky-700">Outcomes</span>
+    <span className="rounded-full bg-emerald-50 px-2 py-1 text-emerald-700">Signals</span>
+    <span className="rounded-full bg-amber-50 px-2 py-1 text-amber-700">Trust</span>
+  </div>
+</DiagramBlock>
+
+<Callout variant="concept" type="info">
+If you can explain digitalisation without naming a vendor, you understand the idea, not just the tools.
+</Callout>
+
+<QuizBlock
+  id="dig-summary-big-picture-quiz"
+  title="Quick check: the big picture"
+  questions={[
+    { q: "Why is digitalisation more than a tool rollout", a: "It changes how value is created through people, process, data, and technology together." },
+    { q: "What keeps digitalisation focused", a: "Clear outcomes and shared definitions of success." },
+    { q: "Why does trust matter in digital systems", a: "Without trust, adoption drops and regulation tightens." },
+    { q: "What links policy to delivery", a: "Data standards, platforms, and accountable governance." },
+    { q: "What is a simple sign of healthy digitalisation", a: "Better outcomes that are visible in shared metrics." },
+    { q: "Why do people matter in digital change", a: "They adopt the tools and own the decisions." },
+  ]}
+/>
+
+---
+
+## Key tools, standards and patterns
+
+<SectionProgressToggle courseId="digitalisation" levelId="summary" sectionId="dig-summary-key-tools-and-standards" />
+
+The hard work here is shared meaning. <GlossaryTip term="API">A defined way for systems to request and exchange data.</GlossaryTip> and a <GlossaryTip term="data catalogue">A documented inventory of datasets, owners, and quality rules.</GlossaryTip> make data usable. <GlossaryTip term="CIM">Common Information Model, a shared industry model for energy data.</GlossaryTip> keeps systems aligned across organisations.
+
+<DiagramBlock title="Scale journey" subtitle="How change moves from pilots to business as usual.">
+  <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm">
+    <div className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-700">Current state</div>
+    <span className="text-slate-400">-></span>
+    <div className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-700">Pilots</div>
+    <span className="text-slate-400">-></span>
+    <div className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-700">Shared platform</div>
+    <span className="text-slate-400">-></span>
+    <div className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-700">Business as usual</div>
+  </div>
+  <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-xs text-slate-700">
+    Keep a clear legend for data, platforms, and people so everyone reads the journey the same way.
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="dig-summary-standards-match"
+  title="Match data sets to standards"
+  description="Map a source schema into a shared model and check coverage."
+>
+  <SchemaMappingSandbox />
+</ToolCard>
+
+<ToolCard
+  id="dig-summary-dashboard-signals"
+  title="Signals you would actually track"
+  description="Use the dashboard to pick signals for adoption, quality, stability, and cost."
+>
+  <DigitalisationDashboard />
+</ToolCard>
+
+<QuizBlock
+  id="dig-summary-tools-quiz"
+  title="Quick check: tools and standards"
+  questions={[
+    { q: "Why are APIs central to digitalisation", a: "They make data and services usable across teams." },
+    { q: "What does a data catalogue solve", a: "It shows ownership, quality rules, and where data lives." },
+    { q: "Why use CIM style models", a: "They keep shared data meaning consistent across organisations." },
+    { q: "What is the risk of unmanaged standards", a: "Systems drift and integrations become fragile." },
+    { q: "Why track signals, not just outputs", a: "Signals reveal early risk before outcomes fail." },
+    { q: "What makes a platform reusable", a: "Clear APIs, stable data models, and governance." },
+  ]}
+/>
+
+---
+
+## Real world scenarios and games
+
+<SectionProgressToggle courseId="digitalisation" levelId="summary" sectionId="dig-summary-scenarios-and-games" />
+
+Use these as short practice rounds. Pick a scenario and decide the first two changes you would make.
+
+<DiagramBlock title="Scenario pack" subtitle="Each one tests a different instinct.">
+  <div className="grid gap-2 sm:grid-cols-2">
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Shared outage updates</p>
+      <p className="mt-1">Two operators publish outage data in different formats. Which standard do you choose and why.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Customer journey reset</p>
+      <p className="mt-1">A service journey has high drop off. Which signals prove the fix worked.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Platform overload</p>
+      <p className="mt-1">Everyone wants new features. Which platform capability should be funded first.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Data quality drift</p>
+      <p className="mt-1">Reports no longer match. Which owner and checks should be called first.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="dig-summary-concept-match"
+  title="Digitalisation concept match"
+  description="Match plain language descriptions to key digitalisation terms."
+>
+  <DigiConceptMatchGame />
+</ToolCard>
+
+<ToolCard
+  id="dig-summary-value-chain"
+  title="Digital value chain builder"
+  description="Arrange steps in a digital value chain and see where value is created or lost."
+>
+  <ValueChainBuilderGame />
+</ToolCard>
+
+<ToolCard
+  id="dig-summary-operating-model"
+  title="Operating model designer"
+  description="Choose how responsibility is shared and see the trade offs."
+>
+  <OperatingModelDesignerGame />
+</ToolCard>
+
+<ToolCard
+  id="dig-summary-maturity-path"
+  title="Digital maturity path game"
+  description="Step through a journey from basic capability to sector leading capability."
+>
+  <MaturityPathGame />
+</ToolCard>
+
+<QuizBlock
+  id="dig-summary-scenarios-quiz"
+  title="Quick check: scenarios and games"
+  questions={[
+    { q: "Why start with outcomes in a scenario", a: "It keeps the change focused on value rather than tools." },
+    { q: "What does a good standard decision consider", a: "Shared meaning, cost of change, and ecosystem impact." },
+    { q: "Why do journeys need signals", a: "Signals show whether the experience is actually improving." },
+    { q: "What is a common cause of platform overload", a: "Unclear prioritisation and missing shared capability roadmaps." },
+    { q: "Why call owners early in data quality issues", a: "They control the source and can stop bad data at the origin." },
+    { q: "What makes a game useful", a: "It forces explicit choices and makes trade offs visible." },
+  ]}
+/>
+
+---
+
+## Next steps, CPD and further learning
+
+<SectionProgressToggle courseId="digitalisation" levelId="summary" sectionId="dig-summary-next-steps-and-cpd" />
+
+Use the tools below to plan your next learning sprint and log the hours for CPD.
+
+<ToolCard
+  id="dig-summary-roadmap-game"
+  title="Build a digitalisation roadmap in five moves"
+  description="Pick KPIs and set a risk appetite to shape the next phase."
+>
+  <RiskRoadmapPlannerTool />
+</ToolCard>
+
+<ToolCard
+  id="dig-summary-governance-check"
+  title="Governance readiness check"
+  description="Place an organisation on a maturity scale and note the biggest risks."
+>
+  <DigitalMaturityGauge />
+</ToolCard>
+
+<DiagramBlock title="Mini strategy sprint" subtitle="Write once, reuse for any context.">
+  <div className="grid gap-2 sm:grid-cols-2">
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Focus and outcomes</p>
+      <p className="mt-1">Pick the first problem and the two outcomes you will measure after one year.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Capabilities and platforms</p>
+      <p className="mt-1">Name the two weakest capabilities and the shared platforms you will prioritise.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Governance and partners</p>
+      <p className="mt-1">List the decisions that need governance and the partners you must involve early.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Roadmap reality</p>
+      <p className="mt-1">Sketch a three year path where year one does not depend on year three.</p>
+    </div>
+  </div>
+  <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-xs text-slate-700">
+    If you can write this clearly once, you can adapt it and repeat for many contexts.
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="dig-summary-quick-fire"
+  title="Digitalisation quick fire quiz"
+  description="A mixed level quiz that revisits key digitalisation concepts."
+>
+  <DigiQuickFireQuizGame />
+</ToolCard>
+
+<ToolCard
+  id="dig-summary-booktrack"
+  title="BookTrack capstone journey"
+  description="Connect architecture, cybersecurity, digitalisation and AI using the BookTrack example."
+>
+  <a className="text-sm font-semibold text-blue-700 hover:underline" href="/notes/capstone/booktrack">
+    Open the BookTrack capstone journey
+  </a>
+</ToolCard>
+
+<ToolCard
+  id="dig-summary-gridlens"
+  title="GridLens capstone journey"
+  description="Connect CIM based network data, cybersecurity, digitalisation and AI using the GridLens example."
+>
+  <a className="text-sm font-semibold text-blue-700 hover:underline" href="/notes/capstone/gridlens">
+    Open the GridLens capstone journey
+  </a>
+</ToolCard>
+
+<Callout variant="concept" type="info">
+You do not need to know everything. You need to know how to decide when the stakes are unclear.
+</Callout>
+
+<PageNav prevHref="/digitalisation/advanced" prevLabel="Advanced" nextHref={null} showTop showBottom />

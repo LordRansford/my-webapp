@@ -1,465 +1,263 @@
 ---
-title: "AI Notes - Beginner"
-description: "My beginner AI notes with intuition, maths, tools, and responsible practice."
-level: "beginner"
+title: "AI Foundations"
+description: "A friendly but serious introduction to data, models and how AI systems work."
+level: "foundations"
+courseId: "ai"
+levelId: "foundations"
+summary: "A friendly but serious introduction to data, models and how AI systems work, written as my own notes."
+estimatedHours: 8
+stepIndex: 0
 ---
 
-import ToolCard from '@/components/notes/ToolCard'
-import Callout from '@/components/notes/Callout'
-import GlossaryTip from '@/components/notes/GlossaryTip'
-import QuizBlock from '@/components/notes/QuizBlock'
-import PageNav from '@/components/notes/PageNav'
-import SectionProgressToggle from '@/components/notes/SectionProgressToggle'
-import LevelProgressBar from '@/components/course/LevelProgressBar'
-import CPDTracker from '@/components/CPDTracker'
-import { aiSectionManifest } from '@/lib/aiSections'
-import { MathInline, MathBlock } from '@/components/notes/Math'
-import DataNoiseTool from '@/components/notes/tools/ai/beginner/DataNoiseTool'
-import FeatureLeakageTool from '@/components/notes/tools/ai/beginner/FeatureLeakageTool'
-import ThresholdPlaygroundTool from '@/components/notes/tools/ai/beginner/ThresholdPlaygroundTool'
-import ClusteringIntuitionTool from '@/components/notes/tools/ai/beginner/ClusteringIntuitionTool'
-import OverfitExplorerTool from '@/components/notes/tools/ai/beginner/OverfitExplorerTool'
-import GradientStepTool from '@/components/notes/tools/ai/beginner/GradientStepTool'
-import ResponsibleAIPlannerTool from '@/components/notes/tools/ai/beginner/ResponsibleAIPlannerTool'
+import ToolCard from "@/components/notes/ToolCard"
+import Callout from "@/components/notes/Callout"
+import GlossaryTip from "@/components/notes/GlossaryTip"
+import QuizBlock from "@/components/notes/QuizBlock"
+import PageNav from "@/components/notes/PageNav"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import DiagramBlock from "@/components/DiagramBlock"
+import { aiSectionManifest } from "@/lib/aiSections"
+import DataNoiseTool from "@/components/notes/tools/ai/beginner/DataNoiseTool"
+import FeatureLeakageTool from "@/components/notes/tools/ai/beginner/FeatureLeakageTool"
+import ThresholdPlaygroundTool from "@/components/notes/tools/ai/beginner/ThresholdPlaygroundTool"
+import ClusteringIntuitionTool from "@/components/notes/tools/ai/beginner/ClusteringIntuitionTool"
+import ResponsibleAIPlannerTool from "@/components/notes/tools/ai/beginner/ResponsibleAIPlannerTool"
+import AIExamplesExplorerTool from "@/components/notes/tools/ai/beginner/AIExamplesExplorerTool"
+import VectorVisualiserTool from "@/components/notes/tools/ai/beginner/VectorVisualiserTool"
 
-# AI Notes - Beginner
+# AI Foundations
 
 <LevelProgressBar courseId="ai" levelId="foundations" sectionIds={aiSectionManifest.foundations} />
 
 <CPDTracker courseId="ai" levelId="foundations" estimatedHours={8} />
 
-I wrote these notes because I wanted a calm, honest path into AI that starts with meaning, not buzzwords. I explain ideas the way I wish someone had explained them to me: intuition first, definitions second, numbers third, and practice always. Nothing here assumes you already know the jargon.
-
-<PageNav prevHref="/ai/summary" prevLabel="AI hub" nextHref="#section-1" nextLabel="Start learning" showTop showBottom />
+These notes are a calm path into AI. I focus on meaning first, numbers second, and practice always. The goal is not buzzwords. The goal is to build judgement you can use when you meet real systems.
 
 ---
 
-## Section 1 - Data, information, and why signal beats noise
+## What AI is and why it matters now
 
-<SectionProgressToggle courseId="ai" levelId="foundations" sectionId="ai-foundations-what-is-data" />
+<SectionProgressToggle courseId="ai" levelId="foundations" sectionId="ai-foundations-what-is-ai" />
 
 <Callout variant="concept">
-I see data as a physical record of the world, not as magic numbers. Every record is part signal and part noise. My job is to keep the signal and tame the noise.
+AI is a way of learning patterns from data so a system can make predictions, rank options, or automate decisions.
 </Callout>
 
-Imagine you are listening to a friend in a busy cafe. Their voice is the **signal**. The clatter of cups is the **noise**. AI models live in the same mess. They are trying to hear meaning inside measurements. If I pretend the noise does not exist, I will build a confident but fragile model.
+When people say AI, they often mean a system that takes input, applies a learned pattern, and produces an output. The learned pattern is the <GlossaryTip term="model">A function learned from data that maps inputs to outputs.</GlossaryTip>. The act of learning that pattern is <GlossaryTip term="training">The process of fitting a model to data so it can learn patterns.</GlossaryTip>. Using the trained model to produce results is <GlossaryTip term="inference">Running a trained model to produce predictions on new inputs.</GlossaryTip>.
 
-In a real clinic, a heart-rate monitor shows neat peaks when a patient rests and messy spikes when they roll over. The true pulse is the signal. The spikes are noise. If I treat the spikes as heart problems, I panic the care team and train a model to overreact.
+AI matters now because systems touch decisions that used to be manual. Hiring screens, fraud checks, support routing, and medical triage all use models to move faster. That speed is useful, but it can also amplify mistakes at scale. This is why foundations matter. I need to know what the model is doing before I trust it.
 
-Suppose I monitor turbines in a wind farm. A sudden gust looks like noise for predicting long term health, but a repeating vibration pattern is the signal that a bearing is failing. If I cannot tell them apart, I replace parts too early or too late. In finance, a one-off payment spike might look like fraud, but repeated small anomalies at odd hours are the signal of risk. Without context, I cannot tell.
+<DiagramBlock
+  title="Simple AI flow"
+  subtitle="Input goes into a model, output comes out."
+>
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>Input data -> Model -> Output</div>
+    <div>Input: text, images, sensor readings, clicks</div>
+    <div>Output: label, score, ranked list, or alert</div>
+  </div>
+</DiagramBlock>
 
-<GlossaryTip term="Signal">
-Plain: The part of data that carries the meaning I want.  
-Formal: The component of an observed variable that is systematically related to the true underlying process.  
-Example: In heart-rate data, the regular pulse pattern is signal.
-</GlossaryTip>
-
-<GlossaryTip term="Noise">
-Plain: The junk that rides along with signal.  
-Formal: Variability in measurements that is not explained by the underlying process.  
-Example: A step counter adding extra steps when I shake my phone.
-</GlossaryTip>
-
-<GlossaryTip term="Measurement error">
-Plain: The gap between the true value and what was recorded.  
-Formal: Random or systematic deviation <MathInline formula="\\epsilon" /> added during observation.  
-Example: A thermometer reading 1.5°C too high on every measurement.
-</GlossaryTip>
-
-<GlossaryTip term="Dataset bias">
-Plain: Systematic skew in who or what was recorded.  
-Formal: A mismatch between the sample distribution and the population distribution.  
-Example: A dataset built mostly from one hospital or one demographic group.
-</GlossaryTip>
-
-Every dataset is born from a measurement device or a process that can be wrong. A thermometer drifts. A survey respondent misclicks. A sensor saturates in bright light. That is measurement error. Bias creeps in too: who answered the survey, which clinics sent their data, which regions were digitised first. I must write these down; otherwise, I will not notice when the model happily learns the bias instead of the task.
-
-Data becomes information only when I decide what the bits mean. A CSV file does not know that column three is blood pressure. That meaning lives in my head and in the documentation. If I forget to tell the model which column is the label, I am giving it nonsense. That is why I separate features from labels immediately and never mix them.
-
-<GlossaryTip term="Feature">
-Plain: An input attribute the model uses to make a decision.  
-Formal: A measurable property or variable used as part of the input vector.  
-Example: In a loan model, income and repayment history are features.
-</GlossaryTip>
-
-<GlossaryTip term="Label">
-Plain: The answer I want the model to learn to predict.  
-Formal: The target variable representing ground truth for supervised learning.  
-Example: Whether a loan was repaid on time (yes/no).
-</GlossaryTip>
-
-Why this matters in the real world: If I let noise dominate, the model will chase random spikes and fail in production. If I let a feature leak the label, the model will look brilliant in training and collapse in the wild. Hospitals learn this the hard way when a column that indirectly encodes “was admitted to ICU” sneaks into training. The model “predicts” ICU admission because it secretly already knows. In fraud detection, device fingerprint or user segment might leak “already reviewed by human”, making the model look genius until it meets live traffic.
-
-Before I trust any dataset, I check its signal-to-noise ratio. If noise is high, I collect more data, clean aggressively, or simplify the goal. If signal is strong, I still keep an eye on bias and missingness. Real-world data is rarely pristine; good models are built with that honesty.
-
-**Definitions**
-
-* <MathInline formula="x" />: a feature value  
-* <MathInline formula="y" />: a label  
-* <MathInline formula="\\tilde{x}" />: measured feature with noise  
-* <MathInline formula="\\epsilon" />: noise term
-
-<MathBlock formula="\\tilde{x} = x + \\epsilon" />
-
-Worked numeric example: A true temperature <MathInline formula="x = 20^{\\circ}C" />. Noise <MathInline formula="\\epsilon = 1.5^{\\circ}C" />. Measured <MathInline formula="\\tilde{x} = 21.5^{\\circ}C" />. If I train on <MathInline formula="\\tilde{x}" /> without thinking about <MathInline formula="\\epsilon" />, my model learns a blurrier world than the one I care about.
-
-Conceptual read: The equation reminds me that every measurement is “truth plus fuzz”. My model must either tolerate the fuzz or reduce it.
-
-What to notice with the tool below: how raising noise lowers trust, and how a small change in signal alters the ratio quickly. When the ratio is weak, do not throw more model at it; improve the data first.
+<DiagramBlock
+  title="Rules based vs model based"
+  subtitle="Rules are explicit, models are learned from examples."
+>
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>Rules: if condition then action</div>
+    <div>Model: learn the pattern from data</div>
+    <div>Rules are easy to explain, models can adapt but need monitoring</div>
+  </div>
+</DiagramBlock>
 
 <ToolCard
-  title="Signal, noise, and measurement intuition"
+  id="ai-examples-explorer"
+  title="Explore simple AI examples"
+  description="Toggle between examples like spam filters, recommendation systems and chat assistants, and see what each one takes as input and gives as output."
+>
+  <AIExamplesExplorerTool />
+</ToolCard>
+
+<QuizBlock
+  id="ai-foundations-what-is-ai-quiz"
+  title="Quick check: what is AI"
+  questions={[
+    { q: "What is a model in AI", a: "A learned function that maps inputs to outputs." },
+    { q: "What is training", a: "Fitting a model to data so it learns patterns." },
+    { q: "What is inference", a: "Using a trained model to make predictions on new inputs." },
+    { q: "Give one everyday AI example", a: "Spam filtering, recommendations, or fraud detection." },
+    { q: "Why does AI matter now", a: "It scales decisions that used to be manual and can amplify impact." },
+    { q: "What is one risk of AI at scale", a: "Mistakes spread faster and affect more people." },
+    { q: "What does AI output usually look like", a: "A label, score, or ranked list." },
+  ]}
+/>
+
+---
+
+## Data and representation
+
+<SectionProgressToggle courseId="ai" levelId="foundations" sectionId="ai-foundations-data-and-representation" />
+
+AI systems learn from data, but data is not magic. Data is measurement plus context, and it often contains noise and bias. I start by naming the <GlossaryTip term="feature">An input attribute used by a model.</GlossaryTip> and the <GlossaryTip term="label">The target value the model should predict.</GlossaryTip>. Then I check if the data actually represents the world I care about.
+
+To make data usable, I clean it, choose features, and turn it into numbers. A numeric representation is how a model sees the world. For text and images, this often uses an <GlossaryTip term="embedding">A numeric vector that represents an item while keeping some of its meaning.</GlossaryTip>. The goal is to keep signal and reduce noise without losing the point of the task.
+
+<DiagramBlock
+  title="From raw data to vectors"
+  subtitle="Data becomes features, then numbers."
+>
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>Raw data -> Cleaned data -> Features -> Vector</div>
+    <div>Example: Email text -> tokens -> numeric vector</div>
+    <div>Example: Sensor readings -> derived features -> model input</div>
+  </div>
+</DiagramBlock>
+
+<DiagramBlock
+  title="Tiny numeric table"
+  subtitle="A simple view of features and labels."
+>
+  <div className="text-xs sm:text-sm leading-5 space-y-1">
+    <div>Feature: income = 42</div>
+    <div>Feature: missed payments = 1</div>
+    <div>Label: repay on time = yes</div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="vector-visualiser"
+  title="See how data becomes numbers"
+  description="Type in a few short phrases and see how they turn into numeric vectors, then compare how similar they are."
+>
+  <VectorVisualiserTool />
+</ToolCard>
+
+<ToolCard
+  id="signal-noise"
+  title="Signal and noise intuition"
   description="Adjust signal and noise to feel how quickly data quality changes."
 >
   <DataNoiseTool />
 </ToolCard>
 
-What to notice with the next tool: how some features quietly leak the answer. If a feature is recorded after the outcome, it is forbidden. If a feature is a proxy for sensitive traits, I need to rethink fairness and legality.
-
 <ToolCard
+  id="feature-leakage"
   title="Feature leakage check"
   description="Toggle features and see if you are accidentally handing the model the answer."
 >
   <FeatureLeakageTool />
 </ToolCard>
 
-**Key takeaway**: If you remember one thing from this section, remember that data is signal wrapped in noise and bias. You must name both before modelling.
-
 <QuizBlock
-  title="Check your understanding - Data and signal"
+  id="ai-foundations-data-quiz"
+  title="Quick check: data and representation"
   questions={[
-    { q: "What is the difference between signal and noise in data", a: "Signal is the meaningful part related to what I want to predict; noise is unrelated variability." },
-    { q: "Why does measurement error matter before modelling", a: "It can make the model chase random patterns and fail to generalise." },
-    { q: "What is a feature", a: "An input attribute the model uses to make a decision, part of the input vector." },
-    { q: "What is a label", a: "The target value the model should predict; the answer for supervised learning." },
-    { q: "Give one example of feature leakage", a: "Including a column recorded after the outcome, such as post-admission data when predicting admission." },
-    { q: "Why do proxies create fairness problems", a: "They can encode sensitive traits indirectly, causing biased predictions." },
-    { q: "What happens if noise is high and I add model complexity", a: "The model may memorise noise and still fail in production." },
-    { q: "How does the equation tilde x = x + epsilon help intuition", a: "It reminds me that every measurement is truth plus error; I must handle the error." },
-    { q: "Why separate features and labels early", a: "To avoid mixing inputs with answers and to document the modelling goal clearly." },
-    { q: "What is one practical action when signal-to-noise is low", a: "Collect more data, clean it better, or simplify the prediction goal." },
-    { q: "Why is bias different from noise", a: "Bias is systematic skew, not random variation; it can make models unfair and misleading." },
-    { q: "Why does documentation of meaning matter", a: "Files do not contain meaning; without clear meaning the model learns random associations." },
+    { q: "What is a feature", a: "An input attribute used by a model." },
+    { q: "What is a label", a: "The target value the model should learn to predict." },
+    { q: "Why do models need numbers", a: "Models operate on numeric vectors, not raw text or images." },
+    { q: "What is an embedding", a: "A numeric vector that represents an item while keeping some meaning." },
+    { q: "Why does data context matter", a: "It explains what the measurements mean and how they were collected." },
+    { q: "What is feature leakage", a: "When a feature reveals the answer and inflates performance." },
+    { q: "What happens if noise dominates", a: "The model learns unstable patterns and fails in production." },
+    { q: "Why is bias different from noise", a: "Bias is systematic skew, not random variation." },
   ]}
 />
 
-If you remember one thing from this section: name the signal, name the noise, and defend against leakage before touching algorithms. Next up: how models use features and labels to learn patterns on purpose.
-
 ---
 
-## Section 2 - Features, labels, and how supervised learning actually works
+## Supervised and unsupervised learning
 
-<SectionProgressToggle courseId="ai" levelId="foundations" sectionId="ai-foundations-types-of-learning" />
+<SectionProgressToggle courseId="ai" levelId="foundations" sectionId="ai-foundations-learning-paradigms" />
 
-<Callout variant="concept">
-I treat supervised learning as structured mimicry: the model watches examples, learns a mapping from features to labels, and tries to generalise without seeing the answer.
-</Callout>
+Supervised learning uses examples with labels. The model learns from pairs of input and answer. Unsupervised learning has no labels, so the model searches for structure and patterns without a known target. Both are useful but they answer different questions.
 
-Imagine teaching a child to recognise ripe mangoes. You point at mangoes, say “ripe” or “not ripe”, and after enough examples the child can guess without you speaking. That is supervised learning. The features are colour, softness, smell; the label is ripe/not ripe. The child is the model. The more varied the examples, the better the generalisation.
+In supervised learning, the model can do <GlossaryTip term="classification">Predicting a category or label.</GlossaryTip> or <GlossaryTip term="regression">Predicting a numeric value.</GlossaryTip>. The decision often depends on a threshold, which is a business choice about how much risk to accept.
 
-In a real fraud system, the features might be merchant, amount, location, device, and time. The label is fraud or not fraud, usually based on human review. If the labelled data mostly comes from one region, the model will generalise poorly elsewhere and either block too many good transactions or miss fraud entirely.
-
-In practice, in a medical triage tool, the features could be symptoms, vital signs, and brief history. The label is the urgency class set by a clinician. If the dataset under-represents older patients, the model will quietly underserve them. Supervised learning only learns what it sees.
-
-<GlossaryTip term="Supervised learning">
-Plain: Learning from examples where the answer is known.  
-Formal: Learning a function f(x) → y using labelled pairs (x, y).  
-Example: Training a spam filter with emails and spam/not-spam labels.
-</GlossaryTip>
-
-<GlossaryTip term="Classification">
-Plain: Predicting a category.  
-Formal: Mapping inputs to discrete labels.  
-Example: Spam vs not spam.
-</GlossaryTip>
-
-<GlossaryTip term="Regression">
-Plain: Predicting a number.  
-Formal: Mapping inputs to continuous outputs.  
-Example: Predicting house price.
-</GlossaryTip>
-
-The model produces a prediction. In classification it often produces a probability, then a threshold converts that probability into a decision. That threshold choice is where many real systems go wrong: set it too low and you drown in false positives; set it too high and you miss real events. The right threshold depends on cost, not on accuracy alone.
-
-**Definitions**
-
-* <MathInline formula="p(y=1\\mid x)" />: predicted probability of positive class  
-* <MathInline formula="t" />: decision threshold  
-* <MathInline formula="\\hat{y}" />: predicted class
-
-<MathBlock formula="\\hat{y} = \\mathbf{1}[\\,p(y=1\\mid x) \\ge t\\,]" />
-
-Worked numeric example: If the model predicts 0.78 spam probability and the threshold t = 0.6, the email is marked spam. If I raise t to 0.9, the same email passes through. Thresholds are business decisions.
-
-Conceptual read: The formula is a gate. I decide how strict the gate is. The model supplies a score; I choose the tolerance for risk.
-
-Use the tool below to see how changing thresholds shifts false positives and false negatives. Notice how precision and recall move in opposite directions.
+<DiagramBlock
+  title="Supervised vs unsupervised"
+  subtitle="Labels change what the model can learn."
+>
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>Supervised: inputs + labels -> predict known outcome</div>
+    <div>Unsupervised: inputs only -> group or compress</div>
+    <div>Supervised answers a question, unsupervised explores structure</div>
+  </div>
+</DiagramBlock>
 
 <ToolCard
-  title="Threshold and confusion explorer"
-  description="Move the threshold and watch true/false positives and precision/recall change."
+  id="tiny-classifier-lab"
+  title="Train a tiny classifier"
+  description="Upload or pick a tiny toy dataset and watch a small model learn to separate two classes, with a simple chart of how its guesses improve."
 >
   <ThresholdPlaygroundTool />
 </ToolCard>
 
-Unsupervised learning is different. There are no labels. I ask the model to reveal structure, like grouping similar points or compressing dimensions. The result is subjective because I choose the number of clusters or the distance metric. That is why I treat unsupervised output as a hypothesis, not truth.
-
-<GlossaryTip term="Probability score">
-Plain: A model’s belief between 0 and 1 about a positive outcome.  
-Formal: p(y=1|x) produced by the model before thresholding.  
-Example: A spam model outputting 0.82 for an email.
-</GlossaryTip>
-
-<GlossaryTip term="Confusion matrix">
-Plain: A table of true/false positives and negatives.  
-Formal: Matrix with counts of TP, FP, TN, FN for a classifier.  
-Example: Used to compute precision and recall.
-</GlossaryTip>
-
-<GlossaryTip term="Unsupervised learning">
-Plain: Learning patterns without labels.  
-Formal: Finding structure in x alone, such as clusters or lower-dimensional representations.  
-Example: Grouping customers by behaviour when no labels exist.
-</GlossaryTip>
-
-<GlossaryTip term="Clustering">
-Plain: Grouping similar items.  
-Formal: Partitioning data so items within a cluster are more similar than items across clusters.  
-Example: Grouping songs by listening patterns.
-</GlossaryTip>
-
-<GlossaryTip term="Dimensionality reduction">
-Plain: Compressing many features into fewer meaningful ones.  
-Formal: Mapping high-dimensional data to a lower-dimensional space while preserving important structure.  
-Example: Using PCA to reduce 300 features to 10.
-</GlossaryTip>
-
-Try the tool below to feel how the same points can be grouped differently depending on k. Different k tells different stories; choose k based on the decision you need to make.
-
 <ToolCard
+  id="clustering-intuition"
   title="Clustering intuition"
   description="Change the number of clusters and see how the same data is grouped."
 >
   <ClusteringIntuitionTool />
 </ToolCard>
 
-Why this matters: In production, the data drift, label quality, and threshold choice matter more than the fancy model name. I always write down who sets the threshold, how often it is reviewed, and what metric we optimise for (precision, recall, cost).
-
-**Key takeaway**: Supervised learning learns from answers; unsupervised suggests patterns without answers. Decisions hinge on thresholds and on the cost of being wrong.
-
 <QuizBlock
-  title="Check your understanding - Supervised vs unsupervised"
+  id="ai-foundations-learning-quiz"
+  title="Quick check: learning paradigms"
   questions={[
-    { q: "What makes learning supervised", a: "The presence of labelled pairs linking features to known answers." },
-    { q: "What is the difference between classification and regression", a: "Classification predicts categories; regression predicts numbers." },
-    { q: "Why is threshold selection a business decision", a: "Because it trades false positives against false negatives based on cost and risk." },
-    { q: "What is a common mistake with model probabilities", a: "Treating them as calibrated truth instead of scores that need thresholds and context." },
-    { q: "Why is unsupervised output subjective", a: "Because I choose k, distance metrics, and what similarity means for my context." },
-    { q: "Give one example of clustering use", a: "Grouping customers by behaviour when no labels are available." },
-    { q: "What happens if I raise the threshold", a: "Fewer positives are predicted; recall drops and precision may rise." },
-    { q: "What happens if labels are wrong", a: "The model learns the wrong mapping and fails in the real world." },
-    { q: "Why is dimensionality reduction useful", a: "It compresses information, reduces noise, and can make patterns clearer." },
-    { q: "How do I validate an unsupervised result", a: "Treat it as a hypothesis and check against domain knowledge or downstream performance." },
-    { q: "What should I document about thresholds", a: "Who chose it, why, the cost trade-off, and when it will be reviewed." },
-    { q: "Why is a spam model not just about accuracy", a: "Because false positives (lost emails) and false negatives (missed spam) have different costs." },
+    { q: "What makes learning supervised", a: "The model trains on examples with labels." },
+    { q: "What makes learning unsupervised", a: "The model searches for patterns without labels." },
+    { q: "What is classification", a: "Predicting a category or class." },
+    { q: "What is regression", a: "Predicting a numeric value." },
+    { q: "Why are thresholds important", a: "They control trade offs between false positives and false negatives." },
+    { q: "Give an example of unsupervised learning", a: "Grouping customers by behavior without labels." },
+    { q: "Why is unsupervised output subjective", a: "Choices like the number of clusters change the result." },
   ]}
 />
 
-If you remember one thing from this section: a probability is not a decision until you choose a threshold that reflects real-world cost. Next up: how models can look smart but fail to generalise.
-
 ---
 
-## Section 3 - Generalisation, evaluation, and the math you actually need
+## Responsible AI basics and limitations
 
-<SectionProgressToggle courseId="ai" levelId="foundations" sectionId="ai-foundations-models-as-functions" />
+<SectionProgressToggle courseId="ai" levelId="foundations" sectionId="ai-foundations-responsible-ai-basics" />
 
-<Callout variant="concept">
-My goal is not to win on training data. My goal is a model that stays reliable when the world moves. Generalisation is the real prize.
-</Callout>
+Responsible AI is about preventing harm and staying accountable. Models can be fast but wrong. They can also encode unfairness without anyone noticing. I watch for <GlossaryTip term="bias">Systematic skew that causes unfair or incorrect outcomes.</GlossaryTip> and for <GlossaryTip term="drift">Changes in data or behavior that reduce model accuracy over time.</GlossaryTip>. I also pay attention to privacy, transparency, and the ability to explain why a decision was made.
 
-I split data into training, validation, and test sets to simulate the future. Training teaches the model. Validation tunes choices. Test stays untouched until the end to check honesty. If I peek at test results repeatedly, I am gaming myself. In my experience, skipping a proper split is the fastest path to a model that looks great in a notebook and awful in production.
+AI systems live in a lifecycle: data collection, training, evaluation, deployment, and monitoring. If I skip monitoring, I miss drift and abuse. If I skip human review for high impact decisions, I place people at risk. I treat AI as part of a system, not a magic box.
 
-In a real lending model, I might train on last year’s applications, validate on the first quarter of this year, and hold out the second quarter as test. If economic conditions shift, the validation performance will diverge from test, warning me about distribution shift before I deploy.
-
-Suppose I build a model to predict server failures. I train on logs from one data centre and test on another. If the model wins on the first but fails on the second, I know environment differences matter. That is more valuable than any single accuracy score.
-
-In a real system that recommends credit limits, I also simulate a future quarter where regulations or customer behaviour change. If the model crumbles there, I know to retrain more often or redesign features before any user is harmed.
-
-<GlossaryTip term="Training set">
-Plain: Data the model learns from.  
-Formal: Subset used to fit parameters.  
-Example: 70% of historical examples used for learning.
-</GlossaryTip>
-
-<GlossaryTip term="Validation set">
-Plain: Data for tuning choices like thresholds or architectures.  
-Formal: Held-out subset used for model selection and hyperparameter tuning.  
-Example: 15% of data to decide early stopping.
-</GlossaryTip>
-
-<GlossaryTip term="Test set">
-Plain: Data kept untouched until the end.  
-Formal: Final evaluation subset to estimate generalisation.  
-Example: 15% held back and only used once.
-</GlossaryTip>
-
-<GlossaryTip term="Overfitting">
-Plain: Memorising training quirks instead of learning patterns.  
-Formal: When training loss decreases while validation loss increases.  
-Example: A model that perfectly fits noise and fails on new data.
-</GlossaryTip>
-
-<GlossaryTip term="Underfitting">
-Plain: Model too simple to capture real patterns.  
-Formal: High loss on both training and validation data.  
-Example: Linear model on a clearly curved relationship.
-</GlossaryTip>
-
-<GlossaryTip term="Distribution shift">
-Plain: The data in production looks different from training data.  
-Formal: p_train(x) ≠ p_prod(x).  
-Example: A retail model trained pre-holiday deployed during holiday rush.
-</GlossaryTip>
-
-I use loss functions to measure how wrong the model is. For binary classification, a simple loss is cross-entropy. But I rarely need the full derivation. I need to know that lower loss means better fit, that gradients push weights to reduce loss, and that learning rate controls how hard we push.
-
-**Definitions**
-
-* <MathInline formula="w" />: weight  
-* <MathInline formula="\\eta" />: learning rate  
-* <MathInline formula="g" />: gradient of loss with respect to <MathInline formula="w" />
-
-<MathBlock formula="w_{\\text{new}} = w - \\eta g" />
-
-Worked numeric example: If the weight <MathInline formula="w = 0.5" />, the learning rate <MathInline formula="\\eta = 0.1" />, and the gradient <MathInline formula="g = -0.2" />, then the new weight is <MathInline formula="w_{\\text{new}} = 0.52" />. The negative gradient makes the weight increase. That is one tiny step downhill on the loss surface.
-
-Conceptual read: Gradient descent is polite nudging. Large eta leaps; small eta tiptoes. Too large and I overshoot; too small and I crawl.
-
-Use the tools below to feel overfitting and a gradient step. Notice how more data or less complexity reduces overfitting risk, and how the sign of the gradient changes weight direction.
-
-<ToolCard
-  title="Overfitting risk explorer"
-  description="Balance data volume and model complexity to see overfit risk."
+<DiagramBlock
+  title="Responsible AI lifecycle"
+  subtitle="Build, deploy, and monitor with accountability."
 >
-  <OverfitExplorerTool />
-</ToolCard>
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>Data -> Training -> Evaluation -> Deployment -> Monitoring</div>
+    <div>Governance surrounds the loop with policies and audits</div>
+    <div>Human review protects high impact decisions</div>
+  </div>
+</DiagramBlock>
 
 <ToolCard
-  title="One gradient descent step"
-  description="Change weight, gradient, and learning rate to see the updated weight."
->
-  <GradientStepTool />
-</ToolCard>
-
-Evaluation is not just accuracy. I look at precision, recall, F1, calibration, and, when costs differ, expected cost. For imbalance, accuracy lies. A 99% accurate fraud model might miss all fraud if fraud is only 1%. I always tie metrics back to impact: what happens if the model is wrong?
-
-**Key takeaway**: Generalisation is earned by honest splits, watching validation loss, and keeping an eye on shift. Maths serves intuition: gradients nudge weights; evaluation ties results to cost.
-
-<QuizBlock
-  title="Check your understanding - Generalisation and maths"
-  questions={[
-    { q: "Why do we split data into train, validation, and test", a: "To learn, tune, and honestly evaluate future performance without leakage." },
-    { q: "What is overfitting in plain words", a: "Memorising training data instead of learning patterns that generalise." },
-    { q: "What is distribution shift", a: "When production data differs from training data, causing model performance to change." },
-    { q: "Why is accuracy misleading on imbalanced data", a: "Because predicting the majority class can look accurate while missing rare events." },
-    { q: "What controls the size of a gradient descent step", a: "The learning rate multiplied by the gradient magnitude." },
-    { q: "What happens if learning rate is too high", a: "Updates overshoot the minimum and training can diverge." },
-    { q: "Give one sign of underfitting", a: "High loss on both train and validation; model too simple." },
-    { q: "Give one sign of overfitting", a: "Training loss falls while validation loss rises." },
-    { q: "Why do we keep test data untouched", a: "To maintain an unbiased estimate of performance." },
-    { q: "How does gradient sign affect weight updates", a: "Negative gradient increases weight; positive decreases." },
-    { q: "Why tie metrics to cost", a: "Because the impact of false positives and negatives differs and should guide optimisation." },
-    { q: "What practical action reduces overfitting risk", a: "Collect more data, regularise, or simplify the model." },
-  ]}
-/>
-
-If you remember one thing from this section: honest evaluation beats clever models. Next up: the simplest neural networks, common failure modes, and responsible AI basics.
-
----
-
-## Section 4 - Simple neural networks, failure modes, and responsible AI
-
-<SectionProgressToggle courseId="ai" levelId="foundations" sectionId="ai-foundations-ethics-and-limits" />
-
-<Callout variant="concept">
-A neural network is just many weighted sums plus nonlinear squashes, stacked so each layer can learn a richer view. The danger is not the maths; it is forgetting humans and safety.
-</Callout>
-
-Think of a neuron as a weighted vote. Each input feature casts a vote, scaled by its weight, summed, and squashed through an activation. Stacking layers lets the network learn combinations of combinations. Depth matters because it can express shapes a single layer cannot, but depth also makes the model easier to overfit and harder to explain.
-
-<GlossaryTip term="Neuron">
-Plain: A tiny calculator that sums weighted inputs and passes them through a function.  
-Formal: <MathInline formula="a = \\sigma(w \\cdot x + b)" />.  
-Example: A neuron detecting edges in an image.
-</GlossaryTip>
-
-<GlossaryTip term="Activation function">
-Plain: The squashing step that introduces nonlinearity.  
-Formal: A nonlinear function such as ReLU or sigmoid applied to the weighted sum.  
-Example: ReLU outputs zero for negatives, identity for positives.
-</GlossaryTip>
-
-<GlossaryTip term="Bias term">
-Plain: A shift added before activation.  
-Formal: The scalar b added to the weighted sum w ⋅ x.  
-Example: Bias lets a neuron fire even when inputs are small.
-</GlossaryTip>
-
-**Definitions**
-
-* <MathInline formula="w \\cdot x" />: dot product, sum of elementwise products  
-* <MathInline formula="\\sigma" />: activation function  
-* <MathInline formula="b" />: bias
-
-<MathBlock formula="a = \\sigma\\!\\left( \\sum_{i=1}^{n} w_i x_i + b \\right)" />
-
-Worked numeric example: Inputs <MathInline formula="x = [2, 1]" />, weights <MathInline formula="w = [0.3, -0.1]" />, bias <MathInline formula="b = 0.2" />. Weighted sum = <MathInline formula="0.3\\times2 + (-0.1)\\times1 + 0.2 = 0.7" />. If the activation is ReLU, output <MathInline formula="a = 0.7" />. If the activation is sigmoid, <MathInline formula="a \\approx 0.67" />. The choice of activation changes the output shape.
-
-Conceptual read: The neuron is a tiny pattern detector. By stacking detectors, the network builds complex patterns. Depth is power and risk.
-
-In practice, a camera model might have early neurons detecting edges, later ones detecting shapes like wheels, and final ones deciding “bus” versus “van”. If early layers latch onto a watermark or lighting artefact, the whole decision chain is brittle.
-
-Suppose I build a document classifier for invoices. If training data mostly contains one vendor template, the network memorises that layout. When a new template arrives, the model fails in ways that look random. Depth gave it power but also more room to learn shortcuts.
-
-Real-world failure modes: models latch onto spurious cues (a hospital badge in chest x-rays), drift silently, overconfidently extrapolate, and can be abused (prompt injection, data poisoning). In my experience, the biggest failures are organisational: no monitoring, no rollback plan, and no accountable owner.
-
-In a real hiring workflow, a CV screener may learn to prefer candidates from a handful of universities because the training data reflects past bias. Unless I watch the distributions and add fairness checks, the model quietly amplifies that bias.
-
-In a customer-support chatbot, prompt injection can hijack replies or leak data. If I do not enforce guardrails, rate limits, and audit trails, I will not even know it happened until users complain.
-
-Responsible AI basics I insist on: human review for high-impact decisions, monitoring for drift and abuse, privacy-respecting logging, and clear accountability. I choose mitigations based on risk, not fashion.
-
-Use the tool below to plan mitigations and see which risks remain uncovered.
-
-<ToolCard
-  title="Responsible AI coverage planner"
-  description="Toggle mitigations and see which risks remain uncovered."
+  id="ai-risk-scenarios"
+  title="Practice spotting AI risks"
+  description="Read short AI stories and practice tagging where bias, privacy or safety issues might appear."
 >
   <ResponsibleAIPlannerTool />
 </ToolCard>
 
-**Key takeaway**: Neural networks are layered weighted sums with nonlinearities. They are powerful but brittle without monitoring, human oversight, and clear risk controls.
-
 <QuizBlock
-  title="Check your understanding - Networks and responsible AI"
+  id="ai-foundations-responsible-quiz"
+  title="Quick check: responsible AI basics"
   questions={[
-    { q: "What does an activation function do", a: "Introduces nonlinearity by squashing the weighted sum." },
-    { q: "Why does depth matter", a: "It lets the network represent more complex patterns but increases overfitting risk." },
-    { q: "What is a bias term", a: "A constant added before activation to shift the neuron’s firing threshold." },
-    { q: "Give one real-world failure mode", a: "Learning spurious cues like hospital badges instead of disease patterns." },
-    { q: "What is prompt injection", a: "A user-crafted input that manipulates a model into ignoring instructions." },
-    { q: "Why is monitoring essential after deployment", a: "Data drifts and abuse attempts change behaviour; monitoring catches it." },
-    { q: "Name one responsible AI mitigation", a: "Human review for high-impact outcomes." },
-    { q: "Why are organisational failures dangerous", a: "Without owners and rollback plans, issues persist unchecked." },
-    { q: "How does ReLU differ from sigmoid", a: "ReLU outputs zero for negative inputs; sigmoid outputs between 0 and 1 smoothly." },
-    { q: "Why is privacy relevant to responsible AI", a: "Models and logs can expose sensitive data if unmanaged." },
-    { q: "What is overconfidence in models", a: "High probability outputs that do not match true likelihood, causing bad decisions." },
-    { q: "Why tie mitigations to specific risks", a: "Generic controls may miss real issues; targeted mitigations close the right gaps." },
+    { q: "What is bias in AI", a: "Systematic skew that causes unfair or incorrect outcomes." },
+    { q: "What is drift", a: "Changes in data or behavior that reduce model accuracy over time." },
+    { q: "Why is monitoring required after deployment", a: "Models change behavior as data shifts and need oversight." },
+    { q: "Give one high impact scenario that needs human review", a: "Healthcare, hiring, or credit decisions." },
+    { q: "Why does privacy matter in AI", a: "Data and logs can expose sensitive information." },
+    { q: "What does governance add", a: "Clear accountability, policies, and evidence of compliance." },
+    { q: "What is a limitation of AI foundations", a: "Models can be confident but wrong and need oversight." },
   ]}
 />
 
-If you remember one thing from this section: neural networks are not magic; they are structured sums. They need the same discipline as any system: monitoring, controls, and human judgment.
-
 ---
 
-<PageNav prevHref="/ai/summary" prevLabel="AI hub" nextHref="/ai/intermediate" nextLabel="Intermediate" showTop showBottom />
+<PageNav prevHref="/ai" prevLabel="AI course overview" nextHref="/ai/intermediate" nextLabel="Intermediate" showTop showBottom />

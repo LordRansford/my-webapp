@@ -1,0 +1,253 @@
+---
+title: "Digitalisation Advanced"
+description: "We zoom out to strategy, governance and whole energy system data sharing, with lots of real world examples."
+level: "advanced"
+courseId: "digitalisation"
+levelId: "advanced"
+summary: "We zoom out to strategy, governance and whole energy system data sharing, with lots of real world examples."
+estimatedHours: 10
+stepIndex: 2
+---
+
+import ToolCard from "@/components/notes/ToolCard"
+import Callout from "@/components/notes/Callout"
+import GlossaryTip from "@/components/notes/GlossaryTip"
+import QuizBlock from "@/components/notes/QuizBlock"
+import PageNav from "@/components/notes/PageNav"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import DiagramBlock from "@/components/DiagramBlock"
+import { digitalisationSectionManifest } from "@/lib/digitalisationSections"
+import TargetStateCanvasTool from "@/components/notes/tools/digitalisation/advanced/TargetStateCanvasTool"
+import SchemaMappingSandbox from "@/components/notes/tools/digitalisation/intermediate/SchemaMappingSandbox"
+import EcosystemMapperTool from "@/components/notes/tools/digitalisation/advanced/EcosystemMapperTool"
+import RiskRoadmapPlannerTool from "@/components/notes/tools/digitalisation/advanced/RiskRoadmapPlannerTool"
+
+# Digitalisation Advanced
+
+<LevelProgressBar courseId="digitalisation" levelId="advanced" sectionIds={digitalisationSectionManifest.advanced} />
+
+<CPDTracker courseId="digitalisation" levelId="advanced" estimatedHours={10} />
+
+Advanced digitalisation is about scale, shared infrastructure, and long term stewardship. You are designing not just a programme, but the system the programme lives in.
+
+---
+
+## Strategy and target state architecture
+
+<SectionProgressToggle courseId="digitalisation" levelId="advanced" sectionId="dig-advanced-strategy-target-state" />
+
+A <GlossaryTip term="target state">The future view of how services, data, and operating models should work together.</GlossaryTip> keeps strategy concrete. A <GlossaryTip term="reference architecture">A shared blueprint that shows the major components and how they connect.</GlossaryTip> keeps teams aligned as they deliver in parallel.
+
+The hardest part is focus. You cannot improve every capability at once, so you choose the few that unlock the rest.
+
+<Callout variant="concept" type="info">
+Strategy is a sequence of hard choices, not a list of everything you want.
+</Callout>
+
+<DiagramBlock title="Target state view" subtitle="Move from today to a focused future design.">
+  <div className="grid gap-3 sm:grid-cols-2">
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Current state</p>
+      <ul className="mt-2 space-y-1 text-xs text-slate-600">
+        <li>Fragmented data models</li>
+        <li>Platform gaps and duplicated services</li>
+        <li>Mixed ownership and unclear accountability</li>
+      </ul>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Target state</p>
+      <ul className="mt-2 space-y-1 text-xs text-slate-600">
+        <li>Shared data platform and stable APIs</li>
+        <li>Clear capability ownership</li>
+        <li>Measured outcomes and risk controls</li>
+      </ul>
+    </div>
+  </div>
+  <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-xs text-slate-700">
+    Focus on the capabilities that unblock outcomes first, not the ones that are most fashionable.
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="dig-advanced-strategy-canvas"
+  title="Target state canvas"
+  description="Score key capabilities today versus the target and spot the largest gaps."
+>
+  <TargetStateCanvasTool />
+</ToolCard>
+
+<QuizBlock
+  id="dig-advanced-strategy-quiz"
+  title="Quick check: strategy and target state"
+  questions={[
+    { q: "Why is a target state useful", a: "It keeps strategy concrete and aligns teams on a shared future view." },
+    { q: "What does a reference architecture provide", a: "A shared blueprint for how major components connect." },
+    { q: "What is a common mistake in advanced strategy work", a: "Trying to improve every capability at once." },
+    { q: "What should guide capability choices", a: "Which changes unlock the most outcomes and reduce risk." },
+    { q: "Why is ownership part of the target state", a: "Unclear ownership makes delivery and governance fragile." },
+    { q: "What keeps a target state credible", a: "Clear priorities, phased delivery, and measurable outcomes." },
+  ]}
+/>
+
+---
+
+## Data sharing, models and standards
+
+<SectionProgressToggle courseId="digitalisation" levelId="advanced" sectionId="dig-advanced-data-sharing-and-standards" />
+
+At scale, digitalisation depends on shared meaning. A <GlossaryTip term="canonical model">A common structure that keeps core data definitions consistent.</GlossaryTip> reduces translation work. A <GlossaryTip term="data sharing agreement">A documented agreement that covers access, usage, and accountability.</GlossaryTip> keeps trust intact.
+
+Interoperability is not just a technical issue. It is legal, operational, and cultural. You need incentives for everyone to keep the model accurate over time.
+
+<DiagramBlock title="Shared data model" subtitle="Many systems, one shared meaning.">
+  <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm">
+    <div className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-700">Utility systems</div>
+    <span className="text-slate-400">-></span>
+    <div className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-700">Canonical model</div>
+    <span className="text-slate-400">-></span>
+    <div className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-700">Market services</div>
+  </div>
+  <div className="mt-3 grid gap-2 sm:grid-cols-3">
+    <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Shared IDs</p>
+      <p className="mt-1">Stable identifiers prevent mismatch errors.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Version control</p>
+      <p className="mt-1">Changes stay visible and reversible.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Data ownership</p>
+      <p className="mt-1">Every field has a steward and a rule.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="dig-advanced-cim-mapper"
+  title="Schema and CIM mapping"
+  description="Map a source schema into a canonical model and check coverage."
+>
+  <SchemaMappingSandbox />
+</ToolCard>
+
+<QuizBlock
+  id="dig-advanced-standards-quiz"
+  title="Quick check: data sharing and standards"
+  questions={[
+    { q: "Why use a canonical model", a: "It keeps core definitions consistent and reduces translation work." },
+    { q: "What makes interoperability hard", a: "It spans technical, legal, and operational choices." },
+    { q: "Why are data sharing agreements important", a: "They set access rules and accountability." },
+    { q: "What is the risk of unmanaged model changes", a: "Downstream systems drift and trust erodes." },
+    { q: "Why do shared IDs matter", a: "They prevent mismatches across systems." },
+    { q: "Who should own a shared field", a: "A named steward with authority to manage changes." },
+  ]}
+/>
+
+---
+
+## Platforms, ecosystems and governance
+
+<SectionProgressToggle courseId="digitalisation" levelId="advanced" sectionId="dig-advanced-platforms-and-ecosystems" />
+
+A <GlossaryTip term="platform">A shared set of services and data that multiple teams build on.</GlossaryTip> only works when governance is clear. An <GlossaryTip term="ecosystem">A network of organisations that exchange data and services.</GlossaryTip> needs balanced roles so trust stays high.
+
+This is where stewardship matters. If one actor abuses the system, everyone pays the cost.
+
+<DiagramBlock title="Ecosystem roles" subtitle="Balance publishers, consumers, and governors.">
+  <div className="grid gap-2 sm:grid-cols-3">
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Publishers</p>
+      <p className="mt-1">Provide authoritative data and updates.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Consumers</p>
+      <p className="mt-1">Use data to build services and insights.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Governors</p>
+      <p className="mt-1">Set rules and protect trust.</p>
+    </div>
+  </div>
+  <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-xs text-slate-700">
+    Healthy ecosystems make value easy to access and misuse hard to hide.
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="dig-advanced-ecosystem-mapper"
+  title="Ecosystem mapper"
+  description="Map actors, roles, and flows around the platform."
+>
+  <EcosystemMapperTool />
+</ToolCard>
+
+<QuizBlock
+  id="dig-advanced-ecosystem-quiz"
+  title="Quick check: platforms and ecosystems"
+  questions={[
+    { q: "What makes a platform different from a project", a: "It is shared infrastructure used by many teams." },
+    { q: "Why does governance matter for platforms", a: "It keeps shared services safe and trusted." },
+    { q: "Who are publishers in an ecosystem", a: "Actors who provide authoritative data or services." },
+    { q: "What happens when roles are unbalanced", a: "Trust falls and shared services degrade." },
+    { q: "Why is stewardship important", a: "It protects long term trust and system health." },
+    { q: "What is a common platform risk", a: "Hidden misuse that erodes confidence in shared data." },
+  ]}
+/>
+
+---
+
+## Measurement, risk and roadmaps
+
+<SectionProgressToggle courseId="digitalisation" levelId="advanced" sectionId="dig-advanced-measurement-risk-and-roadmaps" />
+
+Digitalisation is never complete, so you need a way to steer. A <GlossaryTip term="risk appetite">The level of risk an organisation is willing to accept.</GlossaryTip> guides how fast you move. A <GlossaryTip term="roadmap">A staged plan that sequences change over time.</GlossaryTip> keeps teams aligned.
+
+If you cannot measure adoption, quality, and stability together, you will eventually drift.
+
+<DiagramBlock title="Roadmap view" subtitle="Measure, learn, and adjust.">
+  <div className="grid gap-2 sm:grid-cols-3">
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Phase 1</p>
+      <p className="mt-1">Stabilise data quality and ownership.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Phase 2</p>
+      <p className="mt-1">Scale platforms and automate reporting.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Phase 3</p>
+      <p className="mt-1">Expand ecosystem services and analytics.</p>
+    </div>
+  </div>
+  <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-xs text-slate-700">
+    Roadmaps should change when evidence changes. Keep them honest with data.
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="dig-advanced-risk-roadmap-tool"
+  title="Risk and roadmap planner"
+  description="Pick KPIs and set risk appetite to shape the next phase."
+>
+  <RiskRoadmapPlannerTool />
+</ToolCard>
+
+<QuizBlock
+  id="dig-advanced-roadmap-quiz"
+  title="Quick check: measurement and roadmaps"
+  questions={[
+    { q: "Why define risk appetite", a: "It guides how fast you move and which controls you need." },
+    { q: "What should a roadmap include", a: "Phases, outcomes, and clear measures of progress." },
+    { q: "Why measure adoption and quality together", a: "So you do not trade speed for hidden failures." },
+    { q: "What happens when you cannot measure outcomes", a: "You drift and lose trust." },
+    { q: "Why revisit a roadmap often", a: "Evidence changes and the plan must adjust." },
+    { q: "What is a common mistake in measurement", a: "Tracking speed without stability or quality." },
+  ]}
+/>
+
+---
+
+<PageNav prevHref="/digitalisation/intermediate" prevLabel="Intermediate" nextHref="/digitalisation/summary" nextLabel="Summary" showTop showBottom />

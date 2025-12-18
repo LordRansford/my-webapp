@@ -8,16 +8,24 @@ import Callout from "@/components/notes/Callout";
 import PageNav from "@/components/notes/PageNav";
 import GlossaryTip from "@/components/notes/GlossaryTip";
 import QuizBlock from "@/components/notes/QuizBlock";
-import ProgressBar from "@/components/notes/ProgressBar";
-import { MathInline, MathBlock } from "@/components/notes/Math";
+import CPDTracker from "@/components/CPDTracker";
+import LevelProgressBar from "@/components/course/LevelProgressBar";
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
+import DiagramBlock from "@/components/DiagramBlock";
+import { aiSectionManifest } from "@/lib/aiSections";
 
-const TrustGraphTool = dynamic(() => import("@/components/notes/tools/ai/advanced/TrustGraphTool"), { ssr: false });
-const ProtocolAssumptionsTool = dynamic(() => import("@/components/notes/tools/ai/advanced/ProtocolAssumptionsTool"), { ssr: false });
-const CertificateChainTool = dynamic(() => import("@/components/notes/tools/ai/advanced/CertificateChainTool"), { ssr: false });
-const ZeroTrustPlannerTool = dynamic(() => import("@/components/notes/tools/ai/advanced/ZeroTrustPlannerTool"), { ssr: false });
-const DetectionCoverageTool = dynamic(() => import("@/components/notes/tools/ai/advanced/DetectionCoverageTool"), { ssr: false });
-const SupplyChainRiskTool = dynamic(() => import("@/components/notes/tools/ai/advanced/SupplyChainRiskTool"), { ssr: false });
-const IncidentTimelineTool = dynamic(() => import("@/components/notes/tools/ai/advanced/IncidentTimelineTool"), { ssr: false });
+const TransformerAttentionExplorerTool = dynamic(
+  () => import("@/components/notes/tools/ai/advanced/TransformerAttentionExplorerTool"),
+  { ssr: false }
+);
+const AgentLabTool = dynamic(() => import("@/components/notes/tools/ai/advanced/AgentLabTool"), { ssr: false });
+const GenerativeMultimodalLabTool = dynamic(
+  () => import("@/components/notes/tools/ai/advanced/GenerativeMultimodalLabTool"),
+  { ssr: false }
+);
+const SafetyEvalLabTool = dynamic(() => import("@/components/notes/tools/ai/advanced/SafetyEvalLabTool"), {
+  ssr: false,
+});
 
 export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
@@ -27,16 +35,14 @@ export default function Page({ source, headings }) {
       PageNav,
       GlossaryTip,
       QuizBlock,
-      ProgressBar,
-      MathInline,
-      MathBlock,
-      TrustGraphTool,
-      ProtocolAssumptionsTool,
-      CertificateChainTool,
-      ZeroTrustPlannerTool,
-      DetectionCoverageTool,
-      SupplyChainRiskTool,
-      IncidentTimelineTool,
+      CPDTracker,
+      LevelProgressBar,
+      SectionProgressToggle,
+      DiagramBlock,
+      TransformerAttentionExplorerTool,
+      AgentLabTool,
+      GenerativeMultimodalLabTool,
+      SafetyEvalLabTool,
     }),
     []
   );
@@ -44,8 +50,8 @@ export default function Page({ source, headings }) {
   return (
     <NotesLayout
       meta={{
-        title: "AI Notes - Advanced",
-        description: "Systems-level AI thinking: architecture, risk, governance, and operating at scale.",
+        title: "AI Advanced",
+        description: "We dive into transformers, agents, generative models and the reality of running AI safely.",
         level: "Advanced",
         slug: "/ai/advanced",
         section: "ai",
@@ -60,7 +66,7 @@ export default function Page({ source, headings }) {
 }
 
 export async function getStaticProps() {
-  const { source, headings } = await loadNote("ai/advanced.mdx");
+  const { source, headings } = await loadNote("ai/advanced.mdx", { aiSectionManifest }, { contentRoot: "courses" });
   return {
     props: {
       source,

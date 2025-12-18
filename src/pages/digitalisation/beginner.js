@@ -7,16 +7,16 @@ import ToolCard from "@/components/notes/ToolCard";
 import Callout from "@/components/notes/Callout";
 import GlossaryTip from "@/components/notes/GlossaryTip";
 import QuizBlock from "@/components/notes/QuizBlock";
-import ProgressBar from "@/components/notes/ProgressBar";
 import PageNav from "@/components/notes/PageNav";
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
 import LevelProgressBar from "@/components/course/LevelProgressBar";
 import CPDTracker from "@/components/CPDTracker";
+import DiagramBlock from "@/components/DiagramBlock";
+import { digitalisationSectionManifest } from "@/lib/digitalisationSections";
 
 const DigitalMaturityGauge = dynamic(() => import("@/components/notes/tools/digitalisation/beginner/DigitalMaturityGauge"), { ssr: false });
 const DataValueChain = dynamic(() => import("@/components/notes/tools/digitalisation/beginner/DataValueChain"), { ssr: false });
 const ChangeImpactSimulator = dynamic(() => import("@/components/notes/tools/digitalisation/beginner/ChangeImpactSimulator"), { ssr: false });
-const StrategyRoadmapCanvas = dynamic(() => import("@/components/notes/tools/digitalisation/beginner/StrategyRoadmapCanvas"), { ssr: false });
 const DigitalisationDashboard = dynamic(() => import("@/components/dashboards/DigitalisationDashboard"), { ssr: false });
 
 export default function Page({ source, headings }) {
@@ -26,15 +26,14 @@ export default function Page({ source, headings }) {
       Callout,
       GlossaryTip,
       QuizBlock,
-      ProgressBar,
       PageNav,
       SectionProgressToggle,
       LevelProgressBar,
       CPDTracker,
+      DiagramBlock,
       DigitalMaturityGauge,
       DataValueChain,
       ChangeImpactSimulator,
-      StrategyRoadmapCanvas,
       DigitalisationDashboard,
     }),
     []
@@ -43,9 +42,9 @@ export default function Page({ source, headings }) {
   return (
     <NotesLayout
       meta={{
-        title: "Digitalisation Strategy Notes - Beginner",
-        description: "Foundations of digitalisation, why it matters, and how data, people, process, and technology fit together.",
-        level: "Beginner",
+        title: "Digitalisation Foundations",
+        description: "A practical introduction to data, platforms and journeys in a digital energy world.",
+        level: "Foundations",
         slug: "/digitalisation/beginner",
         section: "digitalisation",
         page: 1,
@@ -59,7 +58,7 @@ export default function Page({ source, headings }) {
 }
 
 export async function getStaticProps() {
-  const { source, headings } = await loadNote("digitalisation/beginner.mdx");
+  const { source, headings } = await loadNote("digitalisation/foundations.mdx", { digitalisationSectionManifest }, { contentRoot: "courses" });
   return {
     props: {
       source,

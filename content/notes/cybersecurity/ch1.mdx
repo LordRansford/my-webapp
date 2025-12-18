@@ -12,14 +12,13 @@ import QuizBlock from "@/components/notes/QuizBlock"
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
-import DiagramBlock from "@/components/DiagramBlock"
-import { cyberSectionManifest } from "@/lib/cyberSections"
+import { cyberSections } from "@/lib/cyberSections"
 
 <ProgressBar mode="scroll" />
 
 # Cybersecurity Foundations
 
-<LevelProgressBar courseId="cybersecurity" levelId="foundations" sectionIds={cyberSectionManifest.foundations} />
+<LevelProgressBar courseId="cybersecurity" levelId="foundations" sectionIds={cyberSections.foundations} />
 
 <CPDTracker courseId="cybersecurity" levelId="foundations" estimatedHours={8} />
 
@@ -33,7 +32,7 @@ Every system is a set of decisions about who should see what, who can change it,
 
 <DiagramBlock
   title="Everyday dependency chain"
-  description="One weak link can still hurt people even when the app looks fine."
+  subtitle="One weak link can still hurt people even when the app looks fine."
 >
   <div className="text-xs sm:text-sm leading-5 space-y-2">
     <div>Person → Login → App → Data store → Backups</div>
@@ -46,7 +45,9 @@ Every system is a set of decisions about who should see what, who can change it,
   title="Risk dial"
   subtitle="See how small choices change harm"
   description="Move sliders for password strength, software updates, and monitoring to see how overall risk shifts."
-/>
+>
+  <RiskDial />
+</ToolCard>
 
 <QuizBlock
   title="Why cyber matters"
@@ -72,7 +73,7 @@ If you want to see binary in practice, take decimal 13. In binary it is 1101 (8 
 
 <DiagramBlock
   title="Bits → bytes → characters"
-  description="How a single switch becomes readable text."
+  subtitle="How a single switch becomes readable text."
 >
   <div className="text-xs sm:text-sm leading-5 space-y-2">
     <div>Bit: <span className="font-semibold">0</span> or <span className="font-semibold">1</span></div>
@@ -90,8 +91,10 @@ If you want to see binary in practice, take decimal 13. In binary it is 1101 (8 
   id="bit-visualiser"
   title="Play with bits and bytes"
   subtitle="See how tiny changes change numbers and characters"
-  description="Toggle bits in a byte to see the decimal value update and which ASCII or UTF 8 character appears when printable."
-/>
+  description="Toggle bits in a byte to see the decimal value update and why tiny changes matter."
+>
+  <BitChangeTool />
+</ToolCard>
 
 <QuizBlock
   title="Data and bits quiz"
@@ -118,7 +121,7 @@ Even when the payload is encrypted, metadata can still be revealing. Timing, des
 
 <DiagramBlock
   title="A packet’s short trip"
-  description="Payload stays hidden but the envelope still talks."
+  subtitle="Payload stays hidden but the envelope still talks."
 >
   <div className="text-xs sm:text-sm leading-5 space-y-2">
     <div>Laptop → Home router → ISP → Internet → Server</div>
@@ -138,14 +141,18 @@ Even when the payload is encrypted, metadata can still be revealing. Timing, des
   title="Follow a packet"
   subtitle="Watch a simple message move through a fake network"
   description="Choose a short message, press send, and watch it move through a simulated path showing layers, headers and payload."
-/>
+>
+  <PacketJourneyTool />
+</ToolCard>
 
 <ToolCard
   id="metadata-leak-lab"
   title="Metadata leak explorer"
   subtitle="See what leaks even when content is encrypted"
   description="Send example traffic and watch how timing, size and destination patterns still reveal behaviour."
-/>
+>
+  <MetadataLeakTool />
+</ToolCard>
 
 <QuizBlock
   title="Networks and packets quiz"
@@ -171,7 +178,7 @@ Trust is a decision, not a default. Each control should be tied to a clear trust
 
 <DiagramBlock
   title="CIA in plain view"
-  description="Three qualities that work together."
+  subtitle="Three qualities that work together."
 >
   <div className="text-xs sm:text-sm leading-5 space-y-2">
     <div>Confidentiality → only the right people can see it</div>
@@ -189,14 +196,18 @@ Trust is a decision, not a default. Each control should be tied to a clear trust
   title="Try building stronger passwords"
   subtitle="See how small changes affect strength"
   description="Type a pretend password and see feedback about length, variety and guessability. No real passwords are stored; this is a safe, local practice tool."
-/>
+>
+  <PasswordEntropyTool />
+</ToolCard>
 
 <ToolCard
   id="cia-tradeoff-lab"
   title="CIA trade off explorer"
   subtitle="Play with simple security decisions"
   description="Pick everyday situations and choose options that trade off confidentiality, integrity and availability. See short explanations after each choice."
-/>
+>
+  <CIAClassifierTool />
+</ToolCard>
 
 <QuizBlock
   title="Core ideas quiz"

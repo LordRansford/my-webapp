@@ -3,21 +3,37 @@ import { useMemo } from "react";
 import NotesLayout from "@/components/notes/Layout";
 import { MDXRenderer } from "@/components/notes/MDXRenderer";
 import { loadNote } from "@/lib/content/loadNote";
-import ToolCard from "@/components/learn/ToolCard";
+import ToolCard from "@/components/notes/ToolCard";
 import Callout from "@/components/notes/Callout";
 import GlossaryTip from "@/components/notes/GlossaryTip";
 import QuizBlock from "@/components/notes/QuizBlock";
-import ProgressBar from "@/components/notes/ProgressBar";
 import PageNav from "@/components/notes/PageNav";
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
+import LevelProgressBar from "@/components/course/LevelProgressBar";
+import CPDTracker from "@/components/CPDTracker";
+import DiagramBlock from "@/components/DiagramBlock";
+import { softwareArchitectureSectionManifest } from "@/lib/softwareArchitectureSections";
 
-const ArchitectureDashboard = dynamic(() => import("@/components/dashboards/ArchitectureDashboard"), { ssr: false });
-const DecisionDashboard = dynamic(() => import("@/components/dashboards/DecisionDashboard"), { ssr: false });
-const DigitalisationDashboard = dynamic(() => import("@/components/dashboards/DigitalisationDashboard"), { ssr: false });
-const ArchConceptMatchGame = dynamic(() => import("@/components/games/softwareArchitecture/ArchConceptMatchGame"), { ssr: false });
-const ArchStyleSorterGame = dynamic(() => import("@/components/games/softwareArchitecture/ArchStyleSorterGame"), { ssr: false });
-const QualityTradeoffGame = dynamic(() => import("@/components/games/softwareArchitecture/QualityTradeoffGame"), { ssr: false });
-const RequestFlowGame = dynamic(() => import("@/components/games/softwareArchitecture/RequestFlowGame"), { ssr: false });
-const ArchQuickFireQuizGame = dynamic(() => import("@/components/games/softwareArchitecture/ArchQuickFireQuizGame"), { ssr: false });
+const ArchitectureBingoTool = dynamic(
+  () => import("@/components/notes/tools/architecture/summary/ArchitectureBingoTool"),
+  { ssr: false }
+);
+const StyleMatcherTool = dynamic(
+  () => import("@/components/notes/tools/architecture/summary/StyleMatcherTool"),
+  { ssr: false }
+);
+const FailureStoryExplorer = dynamic(
+  () => import("@/components/notes/tools/architecture/summary/FailureStoryExplorer"),
+  { ssr: false }
+);
+const SequenceDiagramPuzzleTool = dynamic(
+  () => import("@/components/notes/tools/architecture/summary/SequenceDiagramPuzzleTool"),
+  { ssr: false }
+);
+const TradeoffSliderTool = dynamic(
+  () => import("@/components/notes/tools/architecture/summary/TradeoffSliderTool"),
+  { ssr: false }
+);
 
 export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
@@ -26,16 +42,16 @@ export default function Page({ source, headings }) {
       Callout,
       GlossaryTip,
       QuizBlock,
-      ProgressBar,
       PageNav,
-      ArchitectureDashboard,
-      DecisionDashboard,
-      DigitalisationDashboard,
-      ArchConceptMatchGame,
-      ArchStyleSorterGame,
-      QualityTradeoffGame,
-      RequestFlowGame,
-      ArchQuickFireQuizGame,
+      SectionProgressToggle,
+      LevelProgressBar,
+      CPDTracker,
+      DiagramBlock,
+      ArchitectureBingoTool,
+      StyleMatcherTool,
+      FailureStoryExplorer,
+      SequenceDiagramPuzzleTool,
+      TradeoffSliderTool,
     }),
     []
   );
@@ -43,8 +59,9 @@ export default function Page({ source, headings }) {
   return (
     <NotesLayout
       meta={{
-        title: "Software Architecture Notes - Summary",
-        description: "Consolidation of architecture concepts with games, dashboards, and reflection.",
+        title: "Software Development and Architecture: Summary and games",
+        description:
+          "A relaxed recap of the key ideas in software development and architecture, with games, labs, and extra practice.",
         level: "Summary",
         slug: "/software-architecture/summary",
         section: "architecture",
@@ -59,7 +76,11 @@ export default function Page({ source, headings }) {
 }
 
 export async function getStaticProps() {
-  const { source, headings } = await loadNote("software-architecture/summary.mdx");
+  const { source, headings } = await loadNote(
+    "software-architecture/summary.mdx",
+    { softwareArchitectureSectionManifest },
+    { contentRoot: "courses" }
+  );
   return {
     props: {
       source,

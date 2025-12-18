@@ -1,20 +1,33 @@
+const advancedSections = [
+  "ai-advanced-model-families-and-transformers",
+  "ai-advanced-agents-and-tool-use",
+  "ai-advanced-generative-and-multimodal",
+  "ai-advanced-evaluation-safety-governance",
+];
+
+const summarySections = [
+  "ai-summary-recap",
+  "ai-summary-foundations",
+  "ai-summary-intermediate",
+  "ai-summary-advanced",
+  "ai-summary-games",
+  "ai-summary-next-steps",
+];
+
 export const aiSectionManifest = {
   foundations: [
-    "ai-foundations-what-is-data",
-    "ai-foundations-types-of-learning",
-    "ai-foundations-models-as-functions",
-    "ai-foundations-ethics-and-limits",
+    "ai-foundations-what-is-ai",
+    "ai-foundations-data-and-representation",
+    "ai-foundations-learning-paradigms",
+    "ai-foundations-responsible-ai-basics",
   ],
-  applied: [
+  intermediate: [
+    "ai-intermediate-data-prep-and-feature-engineering",
+    "ai-intermediate-training-loop",
     "ai-intermediate-evaluation-metrics",
-    "ai-intermediate-model-choices",
-    "ai-intermediate-feature-pipelines",
-    "ai-intermediate-error-analysis",
+    "ai-intermediate-serving-and-monitoring",
   ],
-  "practice-strategy": [
-    "ai-advanced-transformers-and-agents",
-    "ai-advanced-diffusion-and-generation",
-    "ai-advanced-production-and-monitoring",
-    "ai-advanced-governance-and-strategy",
-  ],
+  advanced: advancedSections,
+  "practice-strategy": advancedSections,
+  summary: summarySections,
 };

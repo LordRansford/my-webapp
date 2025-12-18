@@ -7,17 +7,16 @@ import ToolCard from "@/components/notes/ToolCard";
 import Callout from "@/components/notes/Callout";
 import GlossaryTip from "@/components/notes/GlossaryTip";
 import QuizBlock from "@/components/notes/QuizBlock";
-import ProgressBar from "@/components/notes/ProgressBar";
 import PageNav from "@/components/notes/PageNav";
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
 import LevelProgressBar from "@/components/course/LevelProgressBar";
 import CPDTracker from "@/components/CPDTracker";
+import DiagramBlock from "@/components/DiagramBlock";
+import { digitalisationSectionManifest } from "@/lib/digitalisationSections";
 
-const StrategyRoadmapCanvas = dynamic(() => import("@/components/notes/tools/digitalisation/beginner/StrategyRoadmapCanvas"), { ssr: false });
-const OperatingModelLab = dynamic(() => import("@/components/notes/tools/digitalisation/intermediate/OperatingModelLab"), { ssr: false });
-const CapabilityMapper = dynamic(() => import("@/components/notes/tools/digitalisation/intermediate/CapabilityMapper"), { ssr: false });
-const PortfolioPrioritiser = dynamic(() => import("@/components/notes/tools/digitalisation/intermediate/PortfolioPrioritiser"), { ssr: false });
-const PolicyImpactSimulator = dynamic(() => import("@/components/notes/tools/digitalisation/intermediate/PolicyImpactSimulator"), { ssr: false });
+const DataFlowMapperLab = dynamic(() => import("@/components/tools/digitalisation/DataFlowMapperLab").then((mod) => mod.DataFlowMapperLab), { ssr: false });
+const ApiContractExplorer = dynamic(() => import("@/components/notes/tools/digitalisation/intermediate/ApiContractExplorer"), { ssr: false });
+const SchemaMappingSandbox = dynamic(() => import("@/components/notes/tools/digitalisation/intermediate/SchemaMappingSandbox"), { ssr: false });
 const DigitalisationDashboard = dynamic(() => import("@/components/dashboards/DigitalisationDashboard"), { ssr: false });
 
 export default function Page({ source, headings }) {
@@ -27,16 +26,14 @@ export default function Page({ source, headings }) {
       Callout,
       GlossaryTip,
       QuizBlock,
-      ProgressBar,
       PageNav,
       SectionProgressToggle,
       LevelProgressBar,
       CPDTracker,
-      StrategyRoadmapCanvas,
-      OperatingModelLab,
-      CapabilityMapper,
-      PortfolioPrioritiser,
-      PolicyImpactSimulator,
+      DiagramBlock,
+      DataFlowMapperLab,
+      ApiContractExplorer,
+      SchemaMappingSandbox,
       DigitalisationDashboard,
     }),
     []
@@ -45,8 +42,8 @@ export default function Page({ source, headings }) {
   return (
     <NotesLayout
       meta={{
-        title: "Digitalisation Strategy Notes - Intermediate",
-        description: "Designing and executing digitalisation strategy, from vision and operating models to platforms, governance, and roadmaps.",
+        title: "Digitalisation Intermediate",
+        description: "We go deeper into data models, APIs, platforms and real energy data flows.",
         level: "Intermediate",
         slug: "/digitalisation/intermediate",
         section: "digitalisation",
@@ -61,7 +58,7 @@ export default function Page({ source, headings }) {
 }
 
 export async function getStaticProps() {
-  const { source, headings } = await loadNote("digitalisation/intermediate.mdx");
+  const { source, headings } = await loadNote("digitalisation/intermediate.mdx", { digitalisationSectionManifest }, { contentRoot: "courses" });
   return {
     props: {
       source,

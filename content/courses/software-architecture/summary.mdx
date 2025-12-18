@@ -1,0 +1,159 @@
+---
+title: "Software Development and Architecture: Summary and games"
+description: "A relaxed recap of the key ideas in software development and architecture, with games, labs, and extra practice."
+level: "summary"
+courseId: "software-architecture"
+levelId: "summary"
+summary: "A relaxed recap of the key ideas in software development and architecture, with games, labs, and extra practice."
+estimatedHours: 4
+stepIndex: 3
+---
+
+import ToolCard from "@/components/notes/ToolCard"
+import Callout from "@/components/notes/Callout"
+import GlossaryTip from "@/components/notes/GlossaryTip"
+import QuizBlock from "@/components/notes/QuizBlock"
+import PageNav from "@/components/notes/PageNav"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import DiagramBlock from "@/components/DiagramBlock"
+import { softwareArchitectureSectionManifest } from "@/lib/softwareArchitectureSections"
+import ArchitectureBingoTool from "@/components/notes/tools/architecture/summary/ArchitectureBingoTool"
+import StyleMatcherTool from "@/components/notes/tools/architecture/summary/StyleMatcherTool"
+import FailureStoryExplorer from "@/components/notes/tools/architecture/summary/FailureStoryExplorer"
+import SequenceDiagramPuzzleTool from "@/components/notes/tools/architecture/summary/SequenceDiagramPuzzleTool"
+import TradeoffSliderTool from "@/components/notes/tools/architecture/summary/TradeoffSliderTool"
+
+# Software Development and Architecture: Summary and games
+
+<LevelProgressBar courseId="software-architecture" levelId="summary" sectionIds={softwareArchitectureSectionManifest.summary} />
+
+<CPDTracker courseId="software-architecture" levelId="summary" estimatedHours={4} />
+
+This page is a light recap and a play space. Use it to refresh the big ideas and test your instincts.
+
+---
+
+## You made it to the end
+
+<SectionProgressToggle courseId="software-architecture" levelId="summary" sectionId="soft-arch-summary-you-made-it" />
+
+You started with the basics of systems and roles. You moved through architecture styles and integration. You finished with domains, resilience, and evolution. That is real progress.
+
+- Foundations gave you clear mental models and shared language.
+- Intermediate showed how styles and integration patterns shape trade offs.
+- Advanced pushed into domains, distributed patterns, and long term governance.
+
+<Callout variant="explain" title="Nice work">
+You now have the core vocabulary to ask better questions and design safer systems.
+</Callout>
+
+---
+
+## One page recap of the big ideas
+
+<SectionProgressToggle courseId="software-architecture" levelId="summary" sectionId="soft-arch-summary-big-picture" />
+
+<DiagramBlock title="Software architecture at a glance" subtitle="How the levels fit together in one picture.">
+  <div className="grid gap-3 sm:grid-cols-3">
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Foundations</p>
+      <p className="mt-1">Components, interfaces, and clear roles.</p>
+      <p className="mt-2 text-[11px] text-slate-500">Goal: shared mental model.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Intermediate</p>
+      <p className="mt-1">Styles, APIs, quality attributes, and data.</p>
+      <p className="mt-2 text-[11px] text-slate-500">Goal: sensible trade offs.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Advanced</p>
+      <p className="mt-1">Domains, resilience, and evolution at scale.</p>
+      <p className="mt-2 text-[11px] text-slate-500">Goal: safe change over time.</p>
+    </div>
+  </div>
+  <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-xs text-slate-700">
+    Architecture stays healthy when boundaries are clear and decisions are visible.
+  </div>
+</DiagramBlock>
+
+We started with one system and grew to many. Quality attributes like performance and reliability shape every decision. <GlossaryTip term="bounded context">A boundary where terms have one clear meaning.</GlossaryTip> keeps large systems understandable. Patterns like <GlossaryTip term="CQRS">Command Query Responsibility Segregation, which separates reads and writes.</GlossaryTip> exist to handle complexity when you truly need them.
+
+---
+
+## Games and labs
+
+<SectionProgressToggle courseId="software-architecture" levelId="summary" sectionId="soft-arch-summary-games-labs" />
+
+These short activities are here to keep your intuition sharp. Treat them like warm up drills before real work.
+
+<ToolCard
+  id="soft-arch-summary-architecture-bingo"
+  title="Architecture bingo"
+  description="Tap the patterns you can explain from memory and spot the gaps."
+>
+  <ArchitectureBingoTool />
+</ToolCard>
+
+<ToolCard
+  id="soft-arch-summary-style-matcher"
+  title="Style matcher"
+  description="Match scenarios to architecture styles and get a quick nudge."
+>
+  <StyleMatcherTool />
+</ToolCard>
+
+<ToolCard
+  id="soft-arch-summary-failure-story"
+  title="Failure story explorer"
+  description="Pick a real world failure and trace it back to the root cause."
+>
+  <FailureStoryExplorer />
+</ToolCard>
+
+<ToolCard
+  id="soft-arch-summary-sequence-puzzle"
+  title="Sequence diagram puzzle"
+  description="Reorder a request flow so the diagram makes sense."
+>
+  <SequenceDiagramPuzzleTool />
+</ToolCard>
+
+<ToolCard
+  id="soft-arch-summary-tradeoff-slider"
+  title="Trade off slider"
+  description="Balance speed, safety, and cost to see how designs shift."
+>
+  <TradeoffSliderTool />
+</ToolCard>
+
+<QuizBlock
+  id="soft-arch-summary-quick-quiz"
+  title="Quick check: can you still think like an architect"
+  questions={[
+    { q: "When is a modular monolith a good choice", a: "When you need clear boundaries but not distributed deployment." },
+    { q: "Why do teams use message queues", a: "To decouple services and handle work asynchronously." },
+    { q: "What is one sign of architecture drift", a: "Teams bypass shared rules to ship quickly." },
+    { q: "Why do bounded contexts matter", a: "They keep meaning and ownership clear." },
+    { q: "What is a simple resilience tactic", a: "Use timeouts and circuit breakers on remote calls." },
+    { q: "Why are trade offs unavoidable", a: "Improving one quality often harms another." },
+    { q: "What is a safe default for APIs", a: "Versioned contracts with backward compatibility." },
+  ]}
+/>
+
+---
+
+## What next
+
+<SectionProgressToggle courseId="software-architecture" levelId="summary" sectionId="soft-arch-summary-next-steps" />
+
+If diagrams still feel fuzzy, revisit Foundations. If integration or data felt heavy, revisit Intermediate. If domains and distributed patterns need time, revisit Advanced and pick one topic to go deeper on.
+
+You can also keep practicing in the Software Development Studio, and log your learning in [My CPD](/cpd).
+
+<Callout variant="note" title="Be kind to yourself">
+Architecture is a team sport. You do not have to carry every detail in your head. Use notes, diagrams, and shared language.
+</Callout>
+
+<PageNav prevHref="/software-architecture/advanced" prevLabel="Advanced" nextHref="/courses" nextLabel="Courses overview" showTop showBottom />

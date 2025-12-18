@@ -1,6 +1,20 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 export default function PageNav({ prevHref, prevLabel, nextHref, nextLabel, showTop = false, showBottom = false }) {
+  const [nearBottom, setNearBottom] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPos = window.scrollY + window.innerHeight;
+      const threshold = 120;
+      setNearBottom(document.body.scrollHeight - scrollPos < threshold);
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   const scrollTo = (position) => {
     const opts = { behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" };
     if (position === "top") window.scrollTo({ top: 0, ...opts });
@@ -33,7 +47,7 @@ export default function PageNav({ prevHref, prevLabel, nextHref, nextLabel, show
             Top
           </button>
         ) : null}
-        {showBottom ? (
+        {showBottom && !nearBottom ? (
           <button
             className="rounded-full border px-3 py-1 text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-blue-200"
             onClick={() => scrollTo("bottom")}

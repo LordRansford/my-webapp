@@ -4,11 +4,32 @@ description: "How the three-level cybersecurity course works, why it exists, and
 level: "Overview"
 ---
 
-# Cybersecurity course – from foundations to practice
-
-I built this course because I wish I had something like it when I started working with data and digital topics.
-
-Most cybersecurity material either assumes a lot of background or jumps straight into jargon and frameworks. My aim here is different. I want to take you from “I am not technical at all” to “I can reason about security like a professional” by combining clear notes, simple maths, practical tools and realistic scenarios.
+<div className="not-prose rounded-3xl border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-emerald-50/40 p-5 shadow-sm">
+  <div className="flex flex-wrap items-center gap-3">
+    <span
+      className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-emerald-100 bg-emerald-50 text-emerald-700"
+      role="img"
+      aria-label="Cybersecurity shield"
+    >
+      <SafeIcon name="shield" size={20} color="currentColor" style={{ marginRight: 0 }} />
+    </span>
+    <div>
+      <p className="eyebrow m-0 text-slate-600">Cybersecurity course</p>
+      <h1 className="text-2xl font-semibold text-slate-900">From foundations to practice</h1>
+    </div>
+    <span className="chip chip--mint">CPD ready</span>
+  </div>
+  <p className="mt-3 text-base text-slate-700 leading-relaxed">
+    I built this course because I wanted a clear route from zero to confident. No hidden prerequisites, no secret handshake.
+  </p>
+  <p className="text-base text-slate-700 leading-relaxed">
+    We start with plain language and keep every idea tied to a real decision so you can explain security, not just repeat it.
+  </p>
+  <ul className="mt-4 grid gap-2 text-[0.98rem] text-slate-700 leading-relaxed">
+    <li className="flex items-center gap-2"><span className="chip chip--amber">Focus</span> Real systems and real habits, not theory alone.</li>
+    <li className="flex items-center gap-2"><span className="chip chip--accent">Tools</span> In browser labs you can reuse with a team.</li>
+  </ul>
+</div>
 
 <StartButton />
 
@@ -16,57 +37,57 @@ Most cybersecurity material either assumes a lot of background or jumps straight
 
 <CPDHoursTotal />
 
-The course is split into three levels. You can move through them at your own pace, and use the tools and labs as often as you like.
+The course has three core levels plus a summary and games page. Move through them at your own pace and revisit the labs whenever you need a reset.
 
 ## How the course is structured
 
-The Cybersecurity course has three levels.
+The three core levels look like this.
 
 <LevelCards />
 
-### Level 1 – Cybersecurity Foundations
+### Level 1 - Cybersecurity Foundations
 
-This level is for children, beginners and anyone who does not see themselves as “technical”. We start with the basics:
+This level is for children, beginners and anyone who does not see themselves as technical. We start with the basics:
 
-- What data is and how computers represent it.
-- Bits, bytes, encodings and why small changes matter.
-- The CIA triad of confidentiality, integrity and availability.
-- Simple ideas about devices, networks and the internet.
+- Data basics and how computers store it.
+- Bits, bytes and encodings, plus why tiny changes matter.
+- The CIA triad in plain language.
+- Devices, networks and the internet without the noise.
 - Everyday threats like phishing, weak passwords and unsafe Wi Fi.
-- Basic behaviours that make you a safer digital citizen.
+- Habits that make you a safer digital citizen.
 
 You will spend a lot of time in visual tools that live in the browser. For example, you can:
 
 - Flip bits and watch hashes change.
-- Try out different passwords and see how strong they are.
+- Try out different passwords and see how strength shifts.
 - Inspect sample links and emails to decide what looks suspicious.
-- Use a simple risk matrix to think about everyday choices.
+- Use a simple risk matrix to practise everyday choices.
 
 The goal is to build intuition and habits without assuming any prior knowledge. The tone is friendly. I explain acronyms the first time they appear and I use short sentences.
 
-### Level 2 – Applied Cybersecurity
+### Level 2 - Applied Cybersecurity
 
 This level is for people who want to understand how systems fail and how we defend them. We build on the Foundations and start to think like attackers and defenders.
 
 We cover topics such as:
 
 - Threat modelling: assets, actors, entry points and trust boundaries.
-- Networks and operating systems in more detail.
-- Vulnerability classes such as injection and broken authentication.
-- Authentication, authorisation, sessions and cookies in web apps.
-- Logging, monitoring and basic incident thinking.
-- Structured risk decisions and trade offs.
+- Networks and operating systems, with the boring bits made clear.
+- Vulnerability classes like injection and broken authentication.
+- Auth, sessions and cookies in real web flows.
+- Logging, monitoring and incident basics.
+- Risk decisions and trade offs you can defend.
 
 Here you will see more schematic diagrams and flow diagrams. You also get interactive labs such as:
 
-- Simple threat modelling exercises with drag and drop diagrams.
-- Safe, sandboxed examples of injection and how to fix it.
-- Log and alert viewers that let you practise spotting suspicious behaviour.
+- Drag and drop threat modelling exercises.
+- Safe, sandboxed injection examples with fixes.
+- Log and alert viewers that help you spot suspicious behaviour.
 - Risk and control dashboards to practise judgement calls.
 
-The idea is to move from “I know the words” to “I can apply the ideas to real systems”.
+The idea is to move from "I know the words" to "I can apply the ideas to real systems".
 
-### Level 3 – Cybersecurity Practice and Strategy
+### Level 3 - Cybersecurity Practice and Strategy
 
 This level is for people who want to think like security engineers, architects and leaders.
 
@@ -104,7 +125,7 @@ In the background I maintain a mapping between my learning outcomes and these fr
 - Applied Cybersecurity connects directly to domains such as Security Architecture, Network Security, Identity and Access Management and Security Operations.
 - Cybersecurity Practice and Strategy reflects more of the governance, risk, software security and operations thinking in CISSP and NIST CSF 2.0.
 
-When I say “aligned”, I mean that the knowledge areas broadly match. I still avoid exam specific lists and memorisation. The focus is on deep understanding and real world reasoning.
+When I say "aligned", I mean that the knowledge areas broadly match. I still avoid exam specific lists and memorisation. The focus is on deep understanding and real world reasoning.
 
 ## CPD and professional development
 

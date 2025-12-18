@@ -13,8 +13,7 @@ import QuizBlock from '@/components/notes/QuizBlock'
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
-import DiagramBlock from "@/components/DiagramBlock"
-import { cyberSectionManifest } from "@/lib/cyberSections"
+import { cyberSections } from "@/lib/cyberSections"
 
 import ThreatScenarioMapper from "@/components/dashboards/cybersecurity/intermediate/ThreatScenarioMapper"
 import AttackSurfaceExplorer from "@/components/dashboards/cybersecurity/intermediate/AttackSurfaceExplorer"
@@ -27,7 +26,7 @@ import RiskTradeoffVisualizer from "@/components/dashboards/cybersecurity/interm
 
 # Applied Cybersecurity
 
-<LevelProgressBar courseId="cybersecurity" levelId="applied" sectionIds={cyberSectionManifest.applied} />
+<LevelProgressBar courseId="cybersecurity" levelId="applied" sectionIds={cyberSections.applied} />
 
 <CPDTracker courseId="cybersecurity" levelId="applied" estimatedHours={10} />
 
@@ -47,7 +46,7 @@ A threat model is a simple story about risk. I list each <GlossaryTip term="asse
 
 <DiagramBlock
   title="Small threat model in one glance"
-  description="People and data cross boundaries; assumptions must be explicit."
+  subtitle="People and data cross boundaries; assumptions must be explicit."
 >
   <div className="text-xs sm:text-sm leading-5 space-y-2">
     <div>User → Web app → API → Database</div>
@@ -90,7 +89,7 @@ Operating systems run services, services open ports, and apps expose inputs. The
 
 <DiagramBlock
   title="Where exposure creeps in"
-  description="A simple web app and the inputs that expand attack surface."
+  subtitle="A simple web app and the inputs that expand attack surface."
 >
   <div className="text-xs sm:text-sm leading-5 space-y-2">
     <div>Browser → API → Database</div>
@@ -133,7 +132,7 @@ A session is a bridge in a stateless world. Cookies or tokens are just carriers;
 
 <DiagramBlock
   title="Session flow at a glance"
-  description="Login creates a session token that rides with each request."
+  subtitle="Login creates a session token that rides with each request."
 >
   <div className="text-xs sm:text-sm leading-5 space-y-2">
     <div>Login → Server issues token → Browser stores cookie</div>
@@ -184,7 +183,7 @@ I log what I fear: authentication, authorisation, sensitive access, privilege ch
 
 <DiagramBlock
   title="From events to action"
-  description="Systems emit logs, you filter for signal, then alert a human or playbook."
+  subtitle="Systems emit logs, you filter for signal, then alert a human or playbook."
 >
   <div className="text-xs sm:text-sm leading-5 space-y-2">
     <div>App + Infra → Log pipeline → Storage</div>
