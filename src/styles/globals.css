@@ -17,6 +17,8 @@
   --line: #dfe3ec;
   --accent: #007aff;
   --accent-2: #34c759;
+  --accent-mint: #14b8a6;
+  --accent-amber: #f59e0b;
   --shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
   --font-display: var(--font-display);
   --font-body: var(--font-body);
@@ -494,6 +496,18 @@ a {
   background: rgba(0, 122, 255, 0.12);
   color: var(--accent);
   border-color: rgba(0, 122, 255, 0.3);
+}
+
+.chip--mint {
+  background: rgba(20, 184, 166, 0.12);
+  color: #0f766e;
+  border-color: rgba(20, 184, 166, 0.3);
+}
+
+.chip--amber {
+  background: rgba(245, 158, 11, 0.14);
+  color: #b45309;
+  border-color: rgba(245, 158, 11, 0.32);
 }
 
 .chip--ghost {

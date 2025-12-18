@@ -1,0 +1,233 @@
+---
+title: "Software Development and Architecture Intermediate"
+description: "We move from simple boxes and arrows to real world architecture styles, integration patterns and trade offs."
+level: "intermediate"
+courseId: "software-architecture"
+levelId: "intermediate"
+summary: "We move from simple boxes and arrows to real world architecture styles, integration patterns and trade offs."
+estimatedHours: 12
+stepIndex: 1
+---
+
+import ToolCard from "@/components/notes/ToolCard"
+import Callout from "@/components/notes/Callout"
+import GlossaryTip from "@/components/notes/GlossaryTip"
+import QuizBlock from "@/components/notes/QuizBlock"
+import PageNav from "@/components/notes/PageNav"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import DiagramBlock from "@/components/DiagramBlock"
+import { softwareArchitectureSectionManifest } from "@/lib/softwareArchitectureSections"
+import ArchitectureStyleExplorer from "@/components/notes/tools/architecture/intermediate/ArchitectureStyleExplorer"
+import IntegrationFlowLab from "@/components/notes/tools/architecture/intermediate/IntegrationFlowLab"
+import QualityTradeoffExplorer from "@/components/notes/tools/architecture/intermediate/QualityTradeoffExplorer"
+import ConsistencySimulator from "@/components/notes/tools/architecture/intermediate/ConsistencySimulator"
+
+# Software Development and Architecture Intermediate
+
+<LevelProgressBar courseId="software-architecture" levelId="intermediate" sectionIds={softwareArchitectureSectionManifest.intermediate} />
+
+<CPDTracker courseId="software-architecture" levelId="intermediate" estimatedHours={12} />
+
+Intermediate architecture is about trade offs. We move past basic structure and focus on the choices that change how a system behaves in the real world.
+
+---
+
+## Architecture styles in the real world
+
+<SectionProgressToggle courseId="software-architecture" levelId="intermediate" sectionId="soft-arch-intermediate-architecture-styles" />
+
+The big styles are patterns, not rules. A <GlossaryTip term="monolith">A single deployed system where most responsibilities live together.</GlossaryTip> can be right for speed. A <GlossaryTip term="modular monolith">One deployable system with clear internal modules.</GlossaryTip> gives structure without operational sprawl.
+
+<GlossaryTip term="microservice">A small service that owns one clear job and deploys independently.</GlossaryTip> is great for team autonomy when you can manage the complexity. <GlossaryTip term="serverless">Functions that run on demand with managed infrastructure.</GlossaryTip> can be fast for spikes and small tasks.
+
+<Callout variant="concept" type="info">
+The best style is the one your team can operate safely, not the one that looks impressive on a slide.
+</Callout>
+
+<DiagramBlock title="Style comparison" subtitle="Each style trades simplicity for flexibility.">
+  <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Monolith</p>
+      <p className="mt-1">Single deploy, shared codebase.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Modular monolith</p>
+      <p className="mt-1">Clear modules, still one deploy.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Microservices</p>
+      <p className="mt-1">Independent services and teams.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Serverless</p>
+      <p className="mt-1">Event driven functions.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="soft-arch-architecture-style-explorer"
+  title="Architecture style explorer"
+  description="Toggle between styles and compare strengths and risks."
+>
+  <ArchitectureStyleExplorer />
+</ToolCard>
+
+<QuizBlock
+  id="soft-arch-intermediate-architecture-styles-quiz"
+  title="Quick check: architecture styles"
+  questions={[
+    { q: "Why choose a modular monolith", a: "It keeps deployment simple while still enforcing boundaries." },
+    { q: "What makes microservices difficult", a: "Operational complexity and distributed debugging." },
+    { q: "When is serverless useful", a: "For event driven tasks or spiky workloads." },
+    { q: "Why can a monolith be a good start", a: "It keeps coordination simple while learning the domain." },
+    { q: "What should guide style choice", a: "Team maturity, delivery needs, and risk tolerance." },
+    { q: "What is a common microservices failure", a: "Splitting too early without strong contracts." },
+  ]}
+/>
+
+---
+
+## Integration and APIs
+
+<SectionProgressToggle courseId="software-architecture" levelId="intermediate" sectionId="soft-arch-intermediate-integration-and-apis" />
+
+Systems talk in two main ways. A <GlossaryTip term="synchronous call">A request where the caller waits for a response.</GlossaryTip> feels simple but creates tight coupling. An <GlossaryTip term="asynchronous message">A message sent without waiting for an immediate response.</GlossaryTip> decouples systems but adds coordination work.
+
+Contracts matter. A <GlossaryTip term="contract">The agreed structure and behaviour of an API or message.</GlossaryTip> must be versioned so older clients keep working.
+
+<DiagramBlock title="Integration paths" subtitle="Calls and events solve different problems.">
+  <div className="grid gap-2 sm:grid-cols-2">
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">HTTP call</p>
+      <p className="mt-1">Service A calls Service B and waits.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Message bus</p>
+      <p className="mt-1">Services publish and subscribe to events.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="soft-arch-api-integrations-lab"
+  title="Integration and API lab"
+  description="Compare synchronous calls with asynchronous messages and see the trade offs."
+>
+  <IntegrationFlowLab />
+</ToolCard>
+
+<QuizBlock
+  id="soft-arch-intermediate-integration-quiz"
+  title="Quick check: integration and APIs"
+  questions={[
+    { q: "Why are synchronous calls risky", a: "They couple services and failures can cascade." },
+    { q: "Why use asynchronous messaging", a: "It decouples services and improves resilience." },
+    { q: "What is backward compatibility", a: "New versions do not break older clients." },
+    { q: "Why version an API contract", a: "So change can happen safely." },
+    { q: "What is a message queue for", a: "Buffering work when systems are slow or down." },
+    { q: "What should an API contract always define", a: "Inputs, outputs, and error behaviour." },
+  ]}
+/>
+
+---
+
+## Quality attributes and trade offs
+
+<SectionProgressToggle courseId="software-architecture" levelId="intermediate" sectionId="soft-arch-intermediate-quality-attributes" />
+
+<GlossaryTip term="latency">The time it takes for a request to receive a response.</GlossaryTip> and <GlossaryTip term="throughput">How many requests a system can handle in a period.</GlossaryTip> are easy to measure. <GlossaryTip term="availability">How often a system is able to serve requests.</GlossaryTip> is about reliability. We cannot maximise everything at once.
+
+Architects balance these qualities rather than chase perfection. A fast system that fails often is not success.
+
+<DiagramBlock title="Trade off map" subtitle="Quality is a balance, not a single score.">
+  <div className="grid gap-2 sm:grid-cols-3">
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Performance</p>
+      <p className="mt-1">Speed and throughput.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Reliability</p>
+      <p className="mt-1">Availability and recovery time.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Maintainability</p>
+      <p className="mt-1">Ease of change and clarity.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="soft-arch-quality-tradeoffs"
+  title="Quality trade off explorer"
+  description="Adjust priorities and see the balance shift."
+>
+  <QualityTradeoffExplorer />
+</ToolCard>
+
+<QuizBlock
+  id="soft-arch-intermediate-quality-quiz"
+  title="Quick check: quality attributes"
+  questions={[
+    { q: "Why are trade offs unavoidable", a: "Improving one quality often reduces another." },
+    { q: "What does availability measure", a: "How often the system can serve requests." },
+    { q: "Why does latency matter", a: "Slow responses reduce usability and trust." },
+    { q: "What is a common quality conflict", a: "Security checks can increase latency." },
+    { q: "Why measure maintainability", a: "Change becomes the main cost over time." },
+    { q: "What should guide trade off choices", a: "Business outcomes and risk appetite." },
+  ]}
+/>
+
+---
+
+## Data, state and consistency
+
+<SectionProgressToggle courseId="software-architecture" levelId="intermediate" sectionId="soft-arch-intermediate-data-and-state" />
+
+State hides everywhere. It lives in databases, caches, and message queues. <GlossaryTip term="consistency">How aligned different parts of the system are at the same time.</GlossaryTip> comes in two main flavours. <GlossaryTip term="eventual consistency">A style where parts may disagree for a short time, but they line up if we wait.</GlossaryTip> is common in distributed systems.
+
+Distributed systems are hard because the network is slow and things fail. You decide where you accept delay and where you need certainty.
+
+<DiagramBlock title="State flow" subtitle="Data moves through more than one store.">
+  <div className="grid gap-2 sm:grid-cols-3">
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Database</p>
+      <p className="mt-1">Durable record of truth.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Cache</p>
+      <p className="mt-1">Fast reads, can be stale.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Message queue</p>
+      <p className="mt-1">State travels as events.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="soft-arch-consistency-simulator"
+  title="Consistency and state simulator"
+  description="Toggle where state lives and watch it drift or align."
+>
+  <ConsistencySimulator />
+</ToolCard>
+
+<QuizBlock
+  id="soft-arch-intermediate-state-quiz"
+  title="Quick check: data and state"
+  questions={[
+    { q: "Where can state live", a: "Databases, caches, and message queues." },
+    { q: "What is eventual consistency", a: "Parts may disagree briefly but align over time." },
+    { q: "Why are distributed systems hard", a: "Networks are slow and failures happen." },
+    { q: "Why use caches", a: "To speed up reads and reduce load." },
+    { q: "What is the cost of strong consistency", a: "Potentially higher latency and lower availability." },
+    { q: "Why send events", a: "To share state changes across services." },
+  ]}
+/>
+
+---
+
+<PageNav prevHref="/software-architecture/beginner" prevLabel="Foundations" nextHref="/software-architecture/advanced" nextLabel="Advanced" showTop showBottom />

@@ -12,14 +12,13 @@ import GlossaryTip from "@/components/notes/GlossaryTip"
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
-import DiagramBlock from "@/components/DiagramBlock"
-import { cyberSectionManifest } from "@/lib/cyberSections"
+import { cyberSections } from "@/lib/cyberSections"
 
 <ProgressBar mode="scroll" />
 
 # Practice and strategy
 
-<LevelProgressBar courseId="cybersecurity" levelId="practice" sectionIds={cyberSectionManifest.practice} />
+<LevelProgressBar courseId="cybersecurity" levelId="practice" sectionIds={cyberSections.practice} />
 
 <CPDTracker courseId="cybersecurity" levelId="practice" estimatedHours={12} />
 
@@ -35,7 +34,7 @@ Crypto is only useful when it is applied correctly. TLS works because both sides
 
 <DiagramBlock
   title="High level TLS handshake"
-  description="Client and server agree how to talk securely, check identities with certificates, then switch to encrypted traffic."
+  subtitle="Client and server agree how to talk securely, check identities with certificates, then switch to encrypted traffic."
 >
   <div className="text-xs sm:text-sm leading-5 space-y-2">
     <div>Client → ClientHello (supported cipher suites, random)</div>
@@ -50,14 +49,18 @@ Common mistakes: outdated algorithms, self-signed certificates where trust is ne
 <ToolCard
   id="tls-handshake-lab"
   title="Explore a TLS handshake"
-  description="Step through a simplified TLS handshake and see how keys and certificates are used to protect traffic."
-/>
+  description="Toggle certificate chain trust and see when secure connections should fail."
+>
+  <PkiChainVisualizer />
+</ToolCard>
 
 <ToolCard
   id="crypto-misuse-checker"
   title="Spot bad crypto choices"
-  description="Review realistic configuration snippets and decide which ones are safe, risky or clearly broken."
-/>
+  description="Compare key sizes, signatures and key exchange choices to see how weak options show up in practice."
+>
+  <AdvancedCryptoPlayground />
+</ToolCard>
 
 <QuizBlock
   title="Quick check: crypto in practice"
@@ -82,7 +85,7 @@ Zero trust is simple: never assume the network is friendly, always verify access
 
 <DiagramBlock
   title="Layered, segmented view"
-  description="User access checked at every hop; segments limit lateral movement."
+  subtitle="User access checked at every hop; segments limit lateral movement."
 >
   <div className="text-xs sm:text-sm leading-5 space-y-2">
     <div>User → Web tier (auth + WAF) → API tier (mTLS + authZ) → Data tier (policy + encryption)</div>
@@ -96,14 +99,18 @@ Patterns that help: strong identity and device posture, least privilege, service
 <ToolCard
   id="zero-trust-map"
   title="Map trust boundaries in a simple system"
-  description="Drag and drop components and draw trust boundaries to see where you need stronger controls."
-/>
+  description="Pick a compromised node, connect trust edges, and watch the blast radius expand."
+>
+  <TrustGraphTool />
+</ToolCard>
 
 <ToolCard
   id="defence-in-depth-planner"
   title="Plan layered defences"
-  description="Take a simple web app and choose where to put network, identity and data controls to create layers of defence."
-/>
+  description="Compare design options and see how attack surface, blast radius and ops effort shift."
+>
+  <SecureDesignTradeoffLab />
+</ToolCard>
 
 <QuizBlock
   title="Quick check: secure architecture"
@@ -129,7 +136,7 @@ Threat hunting is proactive: forming a hypothesis and looking for weak signals b
 
 <DiagramBlock
   title="From events to action"
-  description="Systems emit events → SIEM rules → alerts → analyst follows a playbook."
+  subtitle="Systems emit events → SIEM rules → alerts → analyst follows a playbook."
 >
   <div className="text-xs sm:text-sm leading-5 space-y-2">
     <div>Systems + Apps → Log pipeline → SIEM</div>
@@ -142,13 +149,17 @@ Threat hunting is proactive: forming a hypothesis and looking for weak signals b
   id="incident-timeline-lab"
   title="Build an incident timeline"
   description="Arrange log events into a timeline and practice telling the story of what happened and when."
-/>
+>
+  <IncidentTimelineTool />
+</ToolCard>
 
 <ToolCard
   id="threat-hunting-sandbox"
   title="Practice a small threat hunt"
-  description="Look at example logs and alerts and practice which signals you would pivot on and why."
-/>
+  description="Adjust a detection rule threshold and see the trade off between noise and missed attacks."
+>
+  <DetectionRuleTuner />
+</ToolCard>
 
 <QuizBlock
   title="Quick check: detection and response"
@@ -174,7 +185,7 @@ Career paths stay wide: architecture, incident response, cloud, governance, or p
 
 <DiagramBlock
   title="From objectives to controls"
-  description="Business goals and risk appetite shape frameworks, which map to controls and evidence."
+  subtitle="Business goals and risk appetite shape frameworks, which map to controls and evidence."
 >
   <div className="text-xs sm:text-sm leading-5 space-y-2">
     <div>Business objectives → Risk appetite</div>
@@ -187,13 +198,17 @@ Career paths stay wide: architecture, incident response, cloud, governance, or p
   id="framework-mapper"
   title="Map controls to frameworks"
   description="Take simple controls and map them to NIST CSF and ISO 27001 categories to see how frameworks line up."
-/>
+>
+  <FrameworkMappingTool />
+</ToolCard>
 
 <ToolCard
   id="security-career-planner"
   title="Sketch your security learning path"
   description="Pick interests like cloud, incident response or architecture and see example skills and certifications to explore next."
-/>
+>
+  <SecurityCareerPlannerTool />
+</ToolCard>
 
 <QuizBlock
   title="Quick check: governance and career"

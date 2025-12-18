@@ -1,0 +1,249 @@
+---
+title: "Software Development and Architecture Foundations"
+description: "A practical tour of how we design and build software that is simple, secure and kind to future you."
+level: "foundations"
+courseId: "software-architecture"
+levelId: "foundations"
+summary: "A practical tour of how we design and build software that is simple, secure and kind to future you."
+estimatedHours: 10
+stepIndex: 0
+---
+
+import ToolCard from "@/components/notes/ToolCard"
+import Callout from "@/components/notes/Callout"
+import GlossaryTip from "@/components/notes/GlossaryTip"
+import QuizBlock from "@/components/notes/QuizBlock"
+import PageNav from "@/components/notes/PageNav"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import DiagramBlock from "@/components/DiagramBlock"
+import { softwareArchitectureSectionManifest } from "@/lib/softwareArchitectureSections"
+import ArchitectureCanvas from "@/components/notes/tools/architecture/beginner/ArchitectureCanvas"
+import RoleMapTool from "@/components/notes/tools/architecture/beginner/RoleMapTool"
+import DesignKataTool from "@/components/notes/tools/architecture/beginner/DesignKataTool"
+import DeploySafetySandbox from "@/components/notes/tools/architecture/beginner/DeploySafetySandbox"
+
+# Software Development and Architecture Foundations
+
+<LevelProgressBar courseId="software-architecture" levelId="foundations" sectionIds={softwareArchitectureSectionManifest.foundations} />
+
+<CPDTracker courseId="software-architecture" levelId="foundations" estimatedHours={10} />
+
+These foundations are about clear thinking. Software fails more often from unclear purpose and blurry boundaries than from one bad line of code.
+
+---
+
+## Mindset and roles
+
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-mindset-roles" />
+
+Software development is a team sport. The work is shared across developers, testers, product people, operations, and security. Everyone owns part of the outcome, even if their tools look different.
+
+<GlossaryTip term="architecture">
+The structure of a system, the responsibilities inside it, and the decisions that are costly to change later.
+</GlossaryTip>
+
+<Callout variant="concept" type="info">
+Good architecture makes teamwork easier by making decisions and boundaries visible.
+</Callout>
+
+<DiagramBlock title="Roles around a product" subtitle="Clear ownership beats heroic individual effort.">
+  <div className="grid gap-2 sm:grid-cols-2">
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Product and design</p>
+      <p className="mt-1">Define outcomes and user journeys.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Engineering and testing</p>
+      <p className="mt-1">Build safely and prove it works.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Operations and DevOps</p>
+      <p className="mt-1">Run the system and keep it stable.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Security and risk</p>
+      <p className="mt-1">Protect users, data, and trust.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="soft-arch-role-map"
+  title="Map your team"
+  description="Mark which roles are owned, shared, or missing for a typical product."
+>
+  <RoleMapTool />
+</ToolCard>
+
+<QuizBlock
+  id="soft-arch-foundations-mindset-quiz"
+  title="Quick check: mindset and roles"
+  questions={[
+    { q: "Why is software development a team sport", a: "Outcomes depend on many roles, not one person." },
+    { q: "What is architecture in one line", a: "The structure and decisions that are hard to change later." },
+    { q: "Why does clear ownership matter", a: "It reduces confusion and speeds up safe delivery." },
+    { q: "What happens when roles fight instead of cooperate", a: "Quality drops and delivery slows down." },
+    { q: "Why involve security early", a: "It is cheaper to design safety in than bolt it on later." },
+    { q: "What is the main goal of architecture", a: "Keep change affordable over time." },
+  ]}
+/>
+
+---
+
+## Architecture building blocks
+
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-building-blocks" />
+
+Systems are built from components and services. A <GlossaryTip term="component">A unit of responsibility such as a module, service, or external system.</GlossaryTip> owns data and behaviour. An <GlossaryTip term="API">A defined way for systems to request and exchange data.</GlossaryTip> is the contract between them.
+
+<GlossaryTip term="monolith">
+A single deployed system where most responsibilities live together.
+</GlossaryTip>
+
+<GlossaryTip term="microservice">
+A small service that owns one clear job and can be deployed on its own.
+</GlossaryTip>
+
+<DiagramBlock title="Layered system view" subtitle="Interfaces keep the layers honest.">
+  <div className="grid gap-2 sm:grid-cols-4">
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Presentation</p>
+      <p className="mt-1">Web and mobile interfaces.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Application</p>
+      <p className="mt-1">Use cases and workflows.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Domain</p>
+      <p className="mt-1">Rules and core logic.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Data</p>
+      <p className="mt-1">Storage, events, and reports.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="soft-arch-system-canvas"
+  title="System landscape canvas"
+  description="Sketch your system with layers, components, and key data flows."
+>
+  <ArchitectureCanvas />
+</ToolCard>
+
+<QuizBlock
+  id="soft-arch-foundations-building-quiz"
+  title="Quick check: building blocks"
+  questions={[
+    { q: "What does a component own", a: "A clear responsibility and its data." },
+    { q: "Why use APIs between components", a: "They make contracts explicit and reduce guessing." },
+    { q: "What is a monolith", a: "One deployed system with many responsibilities together." },
+    { q: "What is a microservice", a: "A small service with one clear job and independent deployment." },
+    { q: "Why use layers", a: "They separate concerns and control dependencies." },
+    { q: "What is the risk of blurry boundaries", a: "Changes ripple and make the system fragile." },
+  ]}
+/>
+
+---
+
+## Code design basics
+
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-code-design" />
+
+Clean code is about readability, not clever tricks. A <GlossaryTip term="dependency">A thing your code relies on to do its job.</GlossaryTip> should be obvious. Tests are the safety net. A <GlossaryTip term="test double">A fake or simplified version of a dependency used in tests.</GlossaryTip> keeps tests fast and focused.
+
+<Callout variant="concept" type="info">
+If the next person can explain your code in a sentence, you are doing it right.
+</Callout>
+
+<DiagramBlock title="Design and tests" subtitle="Dependencies should be easy to see.">
+  <div className="grid gap-2 sm:grid-cols-3">
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Feature logic</p>
+      <p className="mt-1">Small functions with clear names.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Dependencies</p>
+      <p className="mt-1">APIs, databases, and services.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Tests</p>
+      <p className="mt-1">Checks that guard behaviour.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="soft-arch-design-kata"
+  title="Design a tiny feature"
+  description="Walk from user story to functions and tests in four steps."
+>
+  <DesignKataTool />
+</ToolCard>
+
+<QuizBlock
+  id="soft-arch-foundations-code-quiz"
+  title="Quick check: code design"
+  questions={[
+    { q: "What is the goal of clean code", a: "Readable code that is easy to maintain." },
+    { q: "What is a dependency", a: "Something your code relies on to work." },
+    { q: "Why use a test double", a: "To test code without slow or fragile dependencies." },
+    { q: "Why are tests a safety net", a: "They catch regressions early." },
+    { q: "What should good names do", a: "Explain intent without extra comments." },
+    { q: "Why keep functions small", a: "Small units are easier to test and change." },
+  ]}
+/>
+
+---
+
+## Delivery, security and reliability basics
+
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-delivery-and-safety" />
+
+Software lives across environments like dev, test, staging, and production. <GlossaryTip term="continuous integration">A practice where changes are merged often and tested automatically.</GlossaryTip> keeps the codebase stable. <GlossaryTip term="least privilege">Only give access that is required, no more.</GlossaryTip> keeps risk low.
+
+<DiagramBlock title="Pipeline view" subtitle="Commit, build, test, deploy, then observe.">
+  <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm">
+    <div className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-700">Commit</div>
+    <span className="text-slate-400">-></span>
+    <div className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-700">Build</div>
+    <span className="text-slate-400">-></span>
+    <div className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-700">Tests</div>
+    <span className="text-slate-400">-></span>
+    <div className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-700">Deploy</div>
+    <span className="text-slate-400">-></span>
+    <div className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-700">Observe</div>
+  </div>
+  <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-xs text-slate-700">
+    Put safety checks in the pipeline so they happen every time.
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="soft-arch-deploy-sandbox"
+  title="Deployment and safety sandbox"
+  description="Toggle pipeline settings and see how delivery risk changes."
+>
+  <DeploySafetySandbox />
+</ToolCard>
+
+<QuizBlock
+  id="soft-arch-foundations-delivery-quiz"
+  title="Quick check: delivery and safety"
+  questions={[
+    { q: "Why use continuous integration", a: "To keep changes small and tested." },
+    { q: "What does least privilege mean", a: "Only give access needed for a task." },
+    { q: "Why separate environments", a: "To test safely before production." },
+    { q: "What is a simple sign of reliability", a: "The system recovers quickly from failures." },
+    { q: "Why add monitoring on deploy", a: "So you can spot issues early." },
+    { q: "What is the risk of skipping tests", a: "You ship hidden defects into production." },
+  ]}
+/>
+
+---
+
+<PageNav prevHref="/" prevLabel="Home" nextHref="/software-architecture/intermediate" nextLabel="Intermediate" showTop showBottom />

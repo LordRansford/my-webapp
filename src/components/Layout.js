@@ -52,6 +52,8 @@ export default function Layout({
               <span className="brand__text">Ransford&apos;s Notes</span>
             </Link>
             <nav className="nav-links" aria-label="Primary">
+              <Link href="/courses">Courses</Link>
+              <Link href="/cpd">My CPD</Link>
               <Link href="/tools">Tools</Link>
               <div className="nav-dropdown">
                 <button className="nav-dropdown__trigger" aria-haspopup="true" aria-expanded="false">

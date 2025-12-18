@@ -73,7 +73,7 @@ export default function CybersecurityCoursePage({ course }) {
         <h2 className="text-lg font-semibold text-slate-900">How to use this course</h2>
         <ul className="text-sm text-slate-800 space-y-1">
           <li>Start with Foundations to get the shared language for data, networks, attackers, and controls.</li>
-          <li>Apply the labs directly in your browser—no installs, no secrets, no telemetry.</li>
+          <li>Apply the labs directly in your browser, with no installs, no secrets, and no telemetry.</li>
           <li>Use Applied to practise threat modelling and logging; use Practice &amp; Strategy to map work to CISSP domains and NIST CSF.</li>
           <li>Remember: this mirrors recognised frameworks but is not an official exam prep course.</li>
         </ul>

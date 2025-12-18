@@ -1,0 +1,264 @@
+---
+title: "Digitalisation Foundations"
+description: "A practical introduction to data, platforms and journeys in a digital energy world, written as my own notes."
+level: "foundations"
+courseId: "digitalisation"
+levelId: "foundations"
+summary: "A practical introduction to data, platforms and journeys in a digital energy world, written as my own notes."
+estimatedHours: 8
+stepIndex: 0
+---
+
+import ToolCard from "@/components/notes/ToolCard"
+import Callout from "@/components/notes/Callout"
+import GlossaryTip from "@/components/notes/GlossaryTip"
+import QuizBlock from "@/components/notes/QuizBlock"
+import PageNav from "@/components/notes/PageNav"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import DiagramBlock from "@/components/DiagramBlock"
+import { digitalisationSectionManifest } from "@/lib/digitalisationSections"
+import ChangeImpactSimulator from "@/components/notes/tools/digitalisation/beginner/ChangeImpactSimulator"
+import DataValueChain from "@/components/notes/tools/digitalisation/beginner/DataValueChain"
+import DigitalMaturityGauge from "@/components/notes/tools/digitalisation/beginner/DigitalMaturityGauge"
+import DigitalisationDashboard from "@/components/dashboards/DigitalisationDashboard"
+
+# Digitalisation Foundations
+
+<LevelProgressBar courseId="digitalisation" levelId="foundations" sectionIds={digitalisationSectionManifest.foundations} />
+
+<CPDTracker courseId="digitalisation" levelId="foundations" estimatedHours={8} />
+
+Digitalisation is not a tool rollout. It is the deliberate redesign of how value is created using data, platforms, and better ways of working. These foundations focus on outcomes, not buzzwords.
+
+---
+
+## Why digitalisation matters
+
+<SectionProgressToggle courseId="digitalisation" levelId="foundations" sectionId="dig-foundations-context-and-drivers" />
+
+Digitalisation matters because expectations are higher, services are more complex, and regulation is tighter. In energy, the pressure is even greater: net zero targets, real time grid data, and consumer trust all depend on digital capability.
+
+<Callout variant="concept" type="info">
+If core services cannot be delivered securely and simply through digital channels, you have a digitalisation problem.
+</Callout>
+
+Digitalisation is also about focus. It forces clarity on what value looks like and who the change is for. When leaders treat it as a technology project, it usually stalls.
+
+<DiagramBlock title="Drivers and context" subtitle="Digitalisation sits between policy, operations, and people.">
+  <div className="grid gap-3 sm:grid-cols-3">
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Policy</p>
+      <p className="mt-1 text-sm font-semibold text-slate-900">Targets and rules</p>
+      <p className="mt-1 text-xs text-slate-600">Net zero, safety, and reporting duties shape priorities.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Operations</p>
+      <p className="mt-1 text-sm font-semibold text-slate-900">Services and flow</p>
+      <p className="mt-1 text-xs text-slate-600">Teams redesign journeys and data movement.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">People</p>
+      <p className="mt-1 text-sm font-semibold text-slate-900">Outcomes and trust</p>
+      <p className="mt-1 text-xs text-slate-600">Customers and operators feel the impact.</p>
+    </div>
+  </div>
+  <div className="mt-3 flex flex-wrap gap-2 text-xs text-slate-600">
+    <span className="rounded-full bg-sky-50 px-2 py-1 text-sky-700">Drivers</span>
+    <span className="rounded-full bg-emerald-50 px-2 py-1 text-emerald-700">Outcomes</span>
+    <span className="rounded-full bg-amber-50 px-2 py-1 text-amber-700">Trust</span>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="dig-value-map"
+  title="Digital value map"
+  description="Compare digitisation and digitalisation choices and see the impact on outcomes."
+>
+  <ChangeImpactSimulator mode="digitisation-vs-digitalisation" />
+</ToolCard>
+
+<QuizBlock
+  id="dig-foundations-context-quiz"
+  title="Quick check: why digitalisation matters"
+  questions={[
+    { q: "Why is digitalisation more than a tool rollout", a: "It redesigns how value is created, not just which tools are used." },
+    { q: "What is a common driver for digitalisation in energy", a: "Net zero targets and the need for real time data." },
+    { q: "What happens when digitalisation is treated as a tech project only", a: "It often stalls because outcomes and people are ignored." },
+    { q: "Why do customer outcomes matter", a: "They show whether the change actually improved services." },
+    { q: "What is digitisation in one line", a: "Turning analogue information into digital form without changing the process." },
+    { q: "Why do regulations influence digitalisation", a: "They set obligations for data, security, and service quality." },
+  ]}
+/>
+
+---
+
+## Data, standards and interoperability
+
+<SectionProgressToggle courseId="digitalisation" levelId="foundations" sectionId="dig-foundations-data-and-standards" />
+
+A <GlossaryTip term="dataset">A structured collection of related data used for analysis or operations.</GlossaryTip> is only useful when people trust it. A <GlossaryTip term="schema">The structure and meaning of fields in a dataset.</GlossaryTip> tells everyone what the data means. A <GlossaryTip term="data model">A shared representation of how data is organised and related.</GlossaryTip> keeps systems aligned.
+
+An <GlossaryTip term="API">A defined way for systems to request and exchange data.</GlossaryTip> is the bridge. <GlossaryTip term="interoperability">The ability for different systems to exchange and use data consistently.</GlossaryTip> is the goal.
+
+<DiagramBlock title="Standards and data flow" subtitle="Shared models make data reusable.">
+  <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm">
+    <div className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-700">Source systems</div>
+    <span className="text-slate-400">-></span>
+    <div className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-700">API layer</div>
+    <span className="text-slate-400">-></span>
+    <div className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-700">Common data model</div>
+    <span className="text-slate-400">-></span>
+    <div className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-700">Dashboards and services</div>
+  </div>
+  <div className="mt-3 grid gap-2 sm:grid-cols-3">
+    <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Shared definitions</p>
+      <p className="mt-1">Standard fields prevent translation errors.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Stable identifiers</p>
+      <p className="mt-1">Common IDs link records across systems.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Version control</p>
+      <p className="mt-1">Schema changes stay visible and safe.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="schema-sandbox"
+  title="Schema sandbox"
+  description="Map raw data into structured fields and see how meaning is preserved."
+>
+  <DataValueChain />
+</ToolCard>
+
+<QuizBlock
+  id="dig-foundations-data-quiz"
+  title="Quick check: data and standards"
+  questions={[
+    { q: "Why does a schema matter", a: "It defines what data means so systems interpret it consistently." },
+    { q: "What does interoperability enable", a: "Different systems can exchange and use data reliably." },
+    { q: "What is a data model used for", a: "To align how data is structured across systems." },
+    { q: "Why are APIs important", a: "They provide controlled access to data and services." },
+    { q: "What happens without shared standards", a: "Every integration becomes a custom translation." },
+    { q: "Why does data trust matter", a: "Untrusted data leads to poor decisions and wasted effort." },
+  ]}
+/>
+
+---
+
+## Platforms, journeys and dashboards
+
+<SectionProgressToggle courseId="digitalisation" levelId="foundations" sectionId="dig-foundations-platforms-and-journeys" />
+
+A <GlossaryTip term="platform">A shared set of capabilities and services used across teams.</GlossaryTip> keeps digital work consistent. A <GlossaryTip term="journey">The sequence of steps a user takes to achieve a goal.</GlossaryTip> shows where data and service design must line up. A <GlossaryTip term="user story">A short description of what a user needs and why.</GlossaryTip> keeps teams focused on real outcomes.
+
+Dashboards turn journeys into signals. They show where digital journeys break, where demand changes, and where teams need to respond.
+
+<DiagramBlock title="Journey and platform view" subtitle="Journeys run across systems, not inside them.">
+  <div className="grid gap-2 sm:grid-cols-4">
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Touchpoints</p>
+      <p className="mt-1">Web, app, contact centre, field teams.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Platform services</p>
+      <p className="mt-1">Identity, payments, notifications, case flow.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Data platform</p>
+      <p className="mt-1">Shared data models and analytics.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Insight loop</p>
+      <p className="mt-1">Dashboards guide improvements.</p>
+    </div>
+  </div>
+  <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-xs text-slate-700">
+    <p className="font-semibold text-slate-900">Evidence flow</p>
+    <p className="mt-1">Journeys improve when teams can see adoption, friction, and drop off together.</p>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="journey-dashboard-lab"
+  title="Journey dashboard lab"
+  description="Pick the signals you would track to prove a journey is improving."
+>
+  <DigitalisationDashboard />
+</ToolCard>
+
+<QuizBlock
+  id="dig-foundations-platforms-quiz"
+  title="Quick check: platforms and journeys"
+  questions={[
+    { q: "Why use a platform approach", a: "It reduces duplication and keeps services consistent." },
+    { q: "What is a journey", a: "The steps a user takes to reach a goal." },
+    { q: "Why are dashboards useful", a: "They show evidence of where journeys work or fail." },
+    { q: "What is the purpose of a user story", a: "It keeps teams focused on user outcomes." },
+    { q: "What happens when journeys are designed per system", a: "Users experience fragmented services and inconsistent data." },
+    { q: "Why link platforms to data", a: "Shared data keeps services aligned and measurable." },
+  ]}
+/>
+
+---
+
+## Risks, governance and people
+
+<SectionProgressToggle courseId="digitalisation" levelId="foundations" sectionId="dig-foundations-risks-governance" />
+
+Digitalisation creates new risks: data quality problems, weak ownership, and security gaps. Governance makes those risks visible and managed. People still do the work, so roles and responsibility must be clear.
+
+<Callout variant="concept" type="info">
+Digitalisation without governance is speed without control.
+</Callout>
+
+<DiagramBlock title="Governance view" subtitle="People, process, data and technology need checks.">
+  <div className="grid gap-2 sm:grid-cols-2">
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">People</p>
+      <p className="mt-1">Named owners, clear decision rights, real accountability.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Process</p>
+      <p className="mt-1">Approvals, reviews, and change control that match risk.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Data</p>
+      <p className="mt-1">Quality checks, retention rules, and access boundaries.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Technology</p>
+      <p className="mt-1">Security controls, logs, and audit trails.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="digitalisation-governance-lab"
+  title="Governance readiness check"
+  description="Place an organisation on a simple maturity scale and note the biggest risks."
+>
+  <DigitalMaturityGauge />
+</ToolCard>
+
+<QuizBlock
+  id="dig-foundations-governance-quiz"
+  title="Quick check: risks and governance"
+  questions={[
+    { q: "Why is governance part of digitalisation", a: "It makes risks visible and decisions accountable." },
+    { q: "What is a common risk in digital programmes", a: "Data quality issues and unclear ownership." },
+    { q: "Why does security matter for digitalisation", a: "Digital services increase exposure and trust depends on protection." },
+    { q: "What should be clear in a governance model", a: "Who owns data, approvals, and risk decisions." },
+    { q: "Why involve people early", a: "Adoption depends on trust and changed habits." },
+    { q: "What happens if you move fast without controls", a: "You scale failure and erode trust." },
+  ]}
+/>
+
+---
+
+<PageNav prevHref="/" prevLabel="Home" nextHref="/digitalisation/intermediate" nextLabel="Intermediate" showTop showBottom />

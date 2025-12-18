@@ -1,0 +1,269 @@
+---
+title: "Software Development and Architecture Advanced"
+description: "We move into big system thinking, advanced patterns and how to keep complex software fast, safe and changeable over time."
+level: "advanced"
+courseId: "software-architecture"
+levelId: "advanced"
+summary: "We move into big system thinking, advanced patterns and how to keep complex software fast, safe and changeable over time."
+estimatedHours: 14
+stepIndex: 2
+---
+
+import ToolCard from "@/components/notes/ToolCard"
+import Callout from "@/components/notes/Callout"
+import GlossaryTip from "@/components/notes/GlossaryTip"
+import QuizBlock from "@/components/notes/QuizBlock"
+import PageNav from "@/components/notes/PageNav"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import DiagramBlock from "@/components/DiagramBlock"
+import { softwareArchitectureSectionManifest } from "@/lib/softwareArchitectureSections"
+import DomainContextMapperTool from "@/components/notes/tools/architecture/advanced/DomainContextMapperTool"
+import CqrsEventLab from "@/components/notes/tools/architecture/advanced/CqrsEventLab"
+import ResilienceLatencySimulator from "@/components/notes/tools/architecture/advanced/ResilienceLatencySimulator"
+import AdrWorkbench from "@/components/notes/tools/architecture/advanced/AdrWorkbench"
+
+# Software Development and Architecture Advanced
+
+<LevelProgressBar courseId="software-architecture" levelId="advanced" sectionIds={softwareArchitectureSectionManifest.advanced} />
+
+<CPDTracker courseId="software-architecture" levelId="advanced" estimatedHours={14} />
+
+Advanced architecture is about running big systems across many teams. You design for change, failures, and the messy reality of long lived software.
+
+---
+
+## Domains and bounded contexts
+
+<SectionProgressToggle courseId="software-architecture" levelId="advanced" sectionId="soft-arch-advanced-domain-and-bounded-contexts" />
+
+Domain driven design starts with language. A <GlossaryTip term="domain">The core problem space your software is meant to solve.</GlossaryTip> is not the same as a UI screen. A <GlossaryTip term="bounded context">A boundary where terms have one clear meaning.</GlossaryTip> keeps teams aligned.
+
+<GlossaryTip term="ubiquitous language">
+Shared words that mean the same thing to developers, product, and domain experts.
+</GlossaryTip>
+
+When contexts blur, systems become expensive to change. Clear language and boundaries protect velocity.
+
+<DiagramBlock title="Bounded contexts" subtitle="Split the domain where language changes.">
+  <div className="grid gap-2 sm:grid-cols-3">
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Customer context</p>
+      <p className="mt-1">Profiles, consent, contact methods.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Billing context</p>
+      <p className="mt-1">Invoices, payment status, tariffs.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Operations context</p>
+      <p className="mt-1">Outages, assets, field updates.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="soft-arch-domain-mapper"
+  title="Domain and bounded context mapper"
+  description="Group features into contexts and spot overloaded boundaries."
+>
+  <DomainContextMapperTool />
+</ToolCard>
+
+Reflection: If you split your current system into contexts, where are the natural seams and why.
+
+<QuizBlock
+  id="soft-arch-advanced-domains-quiz"
+  title="Quick check: domains and bounded contexts"
+  questions={[
+    { q: "Why does language matter in architecture", a: "It keeps teams aligned on meaning and boundaries." },
+    { q: "What is a bounded context", a: "A boundary where terms and models have one clear meaning." },
+    { q: "Why do blurred contexts slow change", a: "Because responsibilities and data meaning drift." },
+    { q: "What should define a domain", a: "The core business problem the system serves." },
+    { q: "What is ubiquitous language", a: "Shared words used consistently by teams and domain experts." },
+    { q: "Why do contexts reduce coupling", a: "They limit how much one team must know about another." },
+    { q: "What is a sign of overloaded context", a: "Too many features or teams sharing one model." },
+    { q: "How does this connect to Intermediate styles", a: "Styles give structure, contexts give meaning and ownership." },
+  ]}
+/>
+
+---
+
+## Advanced patterns and distributed systems
+
+<SectionProgressToggle courseId="software-architecture" levelId="advanced" sectionId="soft-arch-advanced-patterns-and-distribution" />
+
+<GlossaryTip term="CQRS">
+Command Query Responsibility Segregation, where writes and reads use different models.
+</GlossaryTip>
+
+<GlossaryTip term="event sourcing">
+Store changes as a stream of events instead of overwriting records.
+</GlossaryTip>
+
+<GlossaryTip term="saga">
+A long business process split into steps with recovery paths if a step fails.
+</GlossaryTip>
+
+<GlossaryTip term="idempotent">
+Safe to run more than once without changing the final outcome.
+</GlossaryTip>
+
+These patterns help when you need scale and clarity, but they add complexity. Use them when the problem demands it.
+
+<DiagramBlock title="CQRS and events" subtitle="Commands change state, queries read from projections.">
+  <div className="grid gap-2 sm:grid-cols-3">
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Write model</p>
+      <p className="mt-1">Commands and validation.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Event stream</p>
+      <p className="mt-1">Immutable record of change.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Read model</p>
+      <p className="mt-1">Optimised for queries.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="soft-arch-cqrs-events-lab"
+  title="CQRS and events lab"
+  description="Run a command and watch events and read models update."
+>
+  <CqrsEventLab />
+</ToolCard>
+
+Reflection: Which parts of your system would truly benefit from CQRS, and which would suffer.
+
+<QuizBlock
+  id="soft-arch-advanced-patterns-quiz"
+  title="Quick check: patterns and distribution"
+  questions={[
+    { q: "Why use CQRS", a: "To scale reads and writes separately and keep models clear." },
+    { q: "What is event sourcing", a: "Storing changes as events instead of overwriting state." },
+    { q: "Why do sagas exist", a: "To coordinate long running work with recovery steps." },
+    { q: "What does idempotent mean", a: "Running the same action twice does not change the result." },
+    { q: "When should you avoid event sourcing", a: "When the system is simple and the extra complexity adds no value." },
+    { q: "What is the risk of these patterns", a: "They add operational and cognitive overhead." },
+    { q: "Why do distributed systems need ordering rules", a: "Out of order messages can corrupt state." },
+    { q: "What is a good signal to use CQRS", a: "High read load with stable write rules." },
+  ]}
+/>
+
+---
+
+## Resilience, performance and scale
+
+<SectionProgressToggle courseId="software-architecture" levelId="advanced" sectionId="soft-arch-advanced-resilience-performance" />
+
+Failures will happen. Resilience is about what you do when they do. <GlossaryTip term="circuit breaker">A safety switch that stops calls when a dependency is failing.</GlossaryTip> protects systems from cascades. <GlossaryTip term="backpressure">A way to slow or shed load so the system stays stable.</GlossaryTip> keeps things alive.
+
+Caching helps, but it creates new risks. Always decide where stale data is acceptable.
+
+<DiagramBlock title="Resilience mesh" subtitle="Protect the path between services.">
+  <div className="grid gap-2 sm:grid-cols-2">
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Service A</p>
+      <p className="mt-1">Timeouts and retries.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Service B</p>
+      <p className="mt-1">Circuit breaker and fallback path.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="soft-arch-resilience-simulator"
+  title="Resilience and latency simulator"
+  description="Adjust timeouts and retries to see the risk balance."
+>
+  <ResilienceLatencySimulator />
+</ToolCard>
+
+Reflection: Where do timeouts or retries make things worse in your current system.
+
+<QuizBlock
+  id="soft-arch-advanced-resilience-quiz"
+  title="Quick check: resilience and scale"
+  questions={[
+    { q: "Why use circuit breakers", a: "To stop failure cascades when dependencies are down." },
+    { q: "What is backpressure", a: "Slowing or shedding load to protect the system." },
+    { q: "Why can retries be dangerous", a: "They can multiply load during outages." },
+    { q: "Where should caches sit", a: "Close to reads that need speed but can accept staleness." },
+    { q: "What is graceful degradation", a: "Continuing with reduced features instead of total failure." },
+    { q: "Why plan for scale early", a: "Because traffic patterns rarely stay small." },
+    { q: "What is a simple scaling model", a: "Capacity equals throughput per node times number of nodes." },
+    { q: "What should you monitor in scale tests", a: "Latency, error rate, and saturation." },
+  ]}
+/>
+
+---
+
+## Architecture evolution and governance
+
+<SectionProgressToggle courseId="software-architecture" levelId="advanced" sectionId="soft-arch-advanced-evolution-and-governance" />
+
+<GlossaryTip term="fitness function">
+An automated check that ensures architecture rules stay true over time.
+</GlossaryTip>
+
+<GlossaryTip term="technical debt">
+Work you postpone now that will cost more to fix later.
+</GlossaryTip>
+
+Architects guide change with small decisions, not massive documents. ADRs make intent visible. Fitness checks catch drift early.
+
+<DiagramBlock title="ADR lifecycle" subtitle="Lightweight decisions with a clear trail.">
+  <div className="grid gap-2 sm:grid-cols-4">
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Propose</p>
+      <p className="mt-1">Write the decision and options.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Decide</p>
+      <p className="mt-1">Pick and document trade offs.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Review</p>
+      <p className="mt-1">Revisit when context changes.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
+      <p className="font-semibold text-slate-900">Evolve</p>
+      <p className="mt-1">Refactor and update the rules.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="soft-arch-adr-workbench"
+  title="Architecture decision workbench"
+  description="Capture decisions, status, and risk tags."
+>
+  <AdrWorkbench />
+</ToolCard>
+
+Reflection: Which decisions in your system should be recorded as ADRs this quarter.
+
+<QuizBlock
+  id="soft-arch-advanced-governance-quiz"
+  title="Quick check: evolution and governance"
+  questions={[
+    { q: "Why use ADRs", a: "They make architectural intent visible and reviewable." },
+    { q: "What is a fitness function", a: "An automated check that protects architecture rules." },
+    { q: "Why is technical debt risky", a: "It compounds and slows delivery over time." },
+    { q: "What keeps governance lightweight", a: "Small decisions, clear boundaries, and automation." },
+    { q: "Why revisit decisions", a: "Context and constraints change over time." },
+    { q: "What is a sign of architecture drift", a: "Teams bypass shared rules to deliver quickly." },
+    { q: "Why involve security and operations", a: "They protect reliability and trust in production." },
+    { q: "What makes refactoring safer", a: "Tests, clear boundaries, and staged rollout." },
+  ]}
+/>
+
+---
+
+<PageNav prevHref="/software-architecture/intermediate" prevLabel="Intermediate" nextHref="/software-architecture/summary" nextLabel="Summary and games" showTop showBottom />

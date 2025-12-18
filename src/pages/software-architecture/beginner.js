@@ -7,16 +7,17 @@ import ToolCard from "@/components/notes/ToolCard";
 import Callout from "@/components/notes/Callout";
 import GlossaryTip from "@/components/notes/GlossaryTip";
 import QuizBlock from "@/components/notes/QuizBlock";
-import ProgressBar from "@/components/notes/ProgressBar";
 import PageNav from "@/components/notes/PageNav";
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
 import LevelProgressBar from "@/components/course/LevelProgressBar";
 import CPDTracker from "@/components/CPDTracker";
+import DiagramBlock from "@/components/DiagramBlock";
+import { softwareArchitectureSectionManifest } from "@/lib/softwareArchitectureSections";
 
 const ArchitectureCanvas = dynamic(() => import("@/components/notes/tools/architecture/beginner/ArchitectureCanvas"), { ssr: false });
-const BoundaryMapper = dynamic(() => import("@/components/notes/tools/architecture/beginner/BoundaryMapper"), { ssr: false });
-const TradeoffExplorer = dynamic(() => import("@/components/notes/tools/architecture/beginner/TradeoffExplorer"), { ssr: false });
-const SystemDashboard = dynamic(() => import("@/components/notes/tools/architecture/beginner/SystemDashboard"), { ssr: false });
+const RoleMapTool = dynamic(() => import("@/components/notes/tools/architecture/beginner/RoleMapTool"), { ssr: false });
+const DesignKataTool = dynamic(() => import("@/components/notes/tools/architecture/beginner/DesignKataTool"), { ssr: false });
+const DeploySafetySandbox = dynamic(() => import("@/components/notes/tools/architecture/beginner/DeploySafetySandbox"), { ssr: false });
 
 export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
@@ -25,15 +26,15 @@ export default function Page({ source, headings }) {
       Callout,
       GlossaryTip,
       QuizBlock,
-      ProgressBar,
       PageNav,
       SectionProgressToggle,
       LevelProgressBar,
       CPDTracker,
+      DiagramBlock,
       ArchitectureCanvas,
-      BoundaryMapper,
-      TradeoffExplorer,
-      SystemDashboard,
+      RoleMapTool,
+      DesignKataTool,
+      DeploySafetySandbox,
     }),
     []
   );
@@ -41,9 +42,9 @@ export default function Page({ source, headings }) {
   return (
     <NotesLayout
       meta={{
-        title: "Software Architecture Notes - Beginner",
-        description: "Foundations of software architecture, structure, boundaries, and decision making.",
-        level: "Beginner",
+        title: "Software Development and Architecture Foundations",
+        description: "A practical tour of how we design and build software that is simple, secure and kind to future you.",
+        level: "Foundations",
         slug: "/software-architecture/beginner",
         section: "architecture",
         page: 1,
@@ -57,7 +58,11 @@ export default function Page({ source, headings }) {
 }
 
 export async function getStaticProps() {
-  const { source, headings } = await loadNote("software-architecture/beginner.mdx");
+  const { source, headings } = await loadNote(
+    "software-architecture/foundations.mdx",
+    { softwareArchitectureSectionManifest },
+    { contentRoot: "courses" }
+  );
   return {
     props: {
       source,

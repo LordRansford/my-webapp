@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import NotesLayout from "@/components/notes/Layout";
 import { MDXRenderer } from "@/components/notes/MDXRenderer";
 import { loadNote } from "@/lib/content/loadNote";
@@ -10,6 +10,7 @@ import { DeeperDive } from "@/components/notes/DeeperDive";
 import { MathInline, MathBlock } from "@/components/notes/Math";
 import { FlowDiagram, LayerDiagram, TimelineDiagram, BoundaryDiagram, ComparisonDiagram } from "@/components/notes/diagrams";
 import { Figure, Diagram, Icon, Table } from "@/components/content";
+import DiagramBlock from "@/components/DiagramBlock";
 import Recap from "@/components/notes/Recap";
 import PageNav from "@/components/notes/PageNav";
 import GlossaryTip from "@/components/notes/GlossaryTip";
@@ -18,7 +19,8 @@ import ProgressBar from "@/components/notes/ProgressBar";
 import CPDTracker from "@/components/CPDTracker";
 import LevelProgressBar from "@/components/course/LevelProgressBar";
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
-import { cyberSectionManifest } from "@/lib/cyberSections";
+import { cyberSections } from "@/lib/cyberSections";
+import { safeAgentLog } from "@/lib/safeAgentLog";
 
 const BitChangeTool = dynamic(() => import("@/components/notes/tools/cybersecurity/ch1/BitChangeTool"), { ssr: false });
 const EncodingExplorerTool = dynamic(() => import("@/components/notes/tools/cybersecurity/ch1/EncodingExplorerTool"), { ssr: false });
@@ -51,6 +53,7 @@ export default function Page({ source, headings }) {
       Diagram,
       Icon,
       Table,
+      DiagramBlock,
       BitChangeTool,
       EncodingExplorerTool,
       UnicodeBytesTool,
@@ -76,39 +79,15 @@ export default function Page({ source, headings }) {
     []
   );
 
-  // #region agent log
-  fetch("http://127.0.0.1:7242/ingest/912cc721-944f-4c31-a38a-92b015cfe804", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      sessionId: "debug-session",
-      runId: "pre-fix",
-      hypothesisId: "H1",
-      location: "pages/cybersecurity/beginner.js:mdxComponents",
+  useEffect(() => {
+    safeAgentLog({
+      page: "cybersecurity/beginner",
+      location: "pages/cybersecurity/beginner.js",
       message: "mdxComponents keys",
       data: { keys: Object.keys(mdxComponents) },
       timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion agent log
-
-  // #region agent log
-  if (typeof window === "undefined") {
-    try {
-      const fs = require("fs");
-      const logLine = JSON.stringify({
-        sessionId: "debug-session",
-        runId: "pre-fix",
-        hypothesisId: "H1",
-        location: "pages/cybersecurity/beginner.js:ssr",
-        message: "SSR mdxComponents keys",
-        data: { keys: Object.keys(mdxComponents) },
-        timestamp: Date.now(),
-      });
-      fs.appendFileSync("c:\\Users\\sager\\my-webapp\\.cursor\\debug.log", `${logLine}\n`);
-    } catch {}
-  }
-  // #endregion agent log
+    });
+  }, [mdxComponents]);
 
   return (
     <NotesLayout
@@ -120,6 +99,7 @@ export default function Page({ source, headings }) {
         page: 1,
         totalPages: 4,
       }}
+      activeLevelId="foundations"
       headings={headings}
     >
       <div className="mb-4">
@@ -127,7 +107,7 @@ export default function Page({ source, headings }) {
           href="/cybersecurity"
           className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-900 focus:outline-none focus:ring focus:ring-blue-200"
         >
-          ← Back to Cybersecurity overview
+          Back to Cybersecurity overview
         </Link>
       </div>
       <MDXRenderer source={source} components={mdxComponents} />
@@ -136,7 +116,7 @@ export default function Page({ source, headings }) {
 }
 
 export async function getStaticProps() {
-  const note = await loadNote("cybersecurity/ch1.mdx");
+  const note = await loadNote("cybersecurity/ch1.mdx", { cyberSections });
   return {
     props: {
       source: note.source,

@@ -1,231 +1,205 @@
 ---
-title: "AI Notes, Intermediate"
-description: "My notes on how AI systems behave, fail, and are evaluated in the real world."
-level: "Intermediate"
+title: "AI Intermediate"
+description: "Applied AI with real workflows, from prompts and embeddings to vector search and simple agents."
+level: "intermediate"
+courseId: "ai"
+levelId: "intermediate"
+summary: "Applied AI with real workflows, from prompts and embeddings to vector search and simple agents."
+estimatedHours: 10
+stepIndex: 1
 ---
 
-import ProgressBar from "@/components/notes/ProgressBar"
-import PageNav from "@/components/notes/PageNav"
+import ToolCard from "@/components/notes/ToolCard"
 import Callout from "@/components/notes/Callout"
 import GlossaryTip from "@/components/notes/GlossaryTip"
-import ToolCard from "@/components/notes/ToolCard"
 import QuizBlock from "@/components/notes/QuizBlock"
+import PageNav from "@/components/notes/PageNav"
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
+import DiagramBlock from "@/components/DiagramBlock"
 import { aiSectionManifest } from "@/lib/aiSections"
+import PromptPatternPlaygroundTool from "@/components/notes/tools/ai/intermediate/PromptPatternPlaygroundTool"
+import EmbeddingSearchLabTool from "@/components/notes/tools/ai/intermediate/EmbeddingSearchLabTool"
+import MiniRagLabTool from "@/components/notes/tools/ai/intermediate/MiniRagLabTool"
+import AgentToyLabTool from "@/components/notes/tools/ai/intermediate/AgentToyLabTool"
 
-import ConfusionMatrixExplorer from "@/components/notes/tools/ai/intermediate/ConfusionMatrixExplorer"
-import LeakageDetectionGame from "@/components/notes/tools/ai/intermediate/LeakageDetectionGame"
-import EmbeddingSpaceExplorer from "@/components/notes/tools/ai/intermediate/EmbeddingSpaceExplorer"
+# AI Intermediate
 
-<ProgressBar mode="scroll" />
+<LevelProgressBar courseId="ai" levelId="intermediate" sectionIds={aiSectionManifest.intermediate} />
 
-# AI Notes - Intermediate
+<CPDTracker courseId="ai" levelId="intermediate" estimatedHours={10} />
 
-Beginner taught me what data is, how meaning is constructed, why CIA properties matter, and how networks and trust boundaries shape risk. Intermediate is the bridge to reality: how models are evaluated, how experiments break, and how meaning is represented inside models. I keep the same tone: intuition first, definitions second, practice always.
-
-<PageNav prevHref="/ai/beginner" prevLabel="Beginner" nextHref="/ai/advanced" nextLabel="Advanced" showTop showBottom />
+This level is about working AI, not just knowing definitions. I focus on the everyday workflows people use to get useful results while keeping control over quality and risk.
 
 ---
 
-## Evaluation metrics and why accuracy lies
+## Prompts and patterns
 
-<Callout variant="concept">
-Accuracy sounds impressive and often means nothing. I pick metrics based on who pays for each kind of mistake.
-</Callout>
+<SectionProgressToggle courseId="ai" levelId="intermediate" sectionId="ai-intermediate-prompts-and-patterns" />
 
-Imagine a fraud team with ten thousand transactions and fifty fraud cases. A model that labels everything “not fraud” scores 99.5% accuracy and misses every fraud. That is why I start every evaluation conversation with class balance and cost, not accuracy.
+Prompts are not magic, they are instructions. A <GlossaryTip term="prompt">The instruction or input you give a model to get a response.</GlossaryTip> works best when it is clear about the task, the format, and the boundaries. A <GlossaryTip term="system prompt">A higher level instruction that sets the role, rules, and tone for the model.</GlossaryTip> should be stable and reviewed, not improvised in production.
 
-In practice, for spam filtering, a high threshold reduces false positives but lets some spam through. For medical alerts, a low threshold catches more events but can exhaust clinicians with false alarms. The right operating point is a business and safety decision, not a leaderboard choice.
+Few shot prompts work because they show the model examples of what you expect. If the examples are sloppy, the output will be sloppy. I keep prompts short, specific, and test them like any other interface.
 
-<GlossaryTip term="Precision">
-Plain: Of the items predicted positive, how many were correct.  
-Formal: TP / (TP + FP).  
-Example: If 10 emails were flagged as spam and 8 were truly spam, precision is 0.8.
-</GlossaryTip>
-
-<GlossaryTip term="Recall">
-Plain: Of the actual positives, how many were caught.  
-Formal: TP / (TP + FN).  
-Example: If 10 emails were spam and 8 were caught, recall is 0.8.
-</GlossaryTip>
-
-<GlossaryTip term="Calibration">
-Plain: When predicted probabilities match reality.  
-Formal: For all items predicted with 0.7 probability, about 70% are positive.  
-Example: A well-calibrated medical model that says “70% risk” and is right 7 out of 10 times.
-</GlossaryTip>
-
-<GlossaryTip term="Expected cost">
-Plain: The harm-weighted average of mistakes.  
-Formal: Sum of (error probability × error cost) across outcomes.  
-Example: Assigning higher cost to missed fraud than to a false alert.
-</GlossaryTip>
-
-Before the tool below, notice that changing threshold trades precision against recall. After the tool, write down who chooses the threshold and how often it is reviewed.
+<DiagramBlock
+  title="Prompt stack"
+  subtitle="System instruction sets the guardrails, user prompt sets the task."
+>
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>System prompt -> Model -> Output</div>
+    <div>User prompt -> Model -> Output</div>
+    <div>Few shot examples improve consistency and format</div>
+  </div>
+</DiagramBlock>
 
 <ToolCard
-  title="Confusion matrix and threshold explorer"
-  description="Adjust class balance, score, and threshold to see how TP, FP, FN, and TN change."
+  id="prompt-pattern-playground"
+  title="Prompt pattern playground"
+  description="Try out simple patterns like role, critique and formatting on safe practice prompts."
 >
-  <ConfusionMatrixExplorer />
+  <PromptPatternPlaygroundTool />
 </ToolCard>
 
-After the tool, notice how a small threshold change flips decisions. In real systems, that flip is the difference between user trust and churn.
-
 <QuizBlock
-  title="Metrics and thresholds"
+  id="ai-intermediate-prompts-quiz"
+  title="Check your prompt instincts"
   questions={[
-    { q: "Why is accuracy misleading on imbalanced data", a: "Because predicting the majority class can look accurate while missing rare events entirely." },
-    { q: "What does precision measure", a: "Of the predicted positives, how many were correct." },
-    { q: "What does recall measure", a: "Of the actual positives, how many were caught." },
-    { q: "Why tie thresholds to cost", a: "Because false positives and false negatives harm different stakeholders differently." },
-    { q: "Why is calibration important", a: "Because decisions based on probabilities need those probabilities to reflect reality." },
-    { q: "Give one metric better than accuracy for imbalance", a: "Precision, recall, F1, AUROC, or expected cost." },
-    { q: "Why does class balance matter", a: "It changes how many errors a metric can hide and how thresholds behave." },
-    { q: "What is expected cost used for", a: "To weight errors by harm and pick operating points that minimise real-world damage." },
-    { q: "Why should thresholds be revisited", a: "Because costs, behaviour, and data drift over time." },
-    { q: "Why does a spam filter differ from a medical alert in threshold choice", a: "The harm of false positives and negatives differs, so thresholds must match the domain." },
-    { q: "How does calibration failure show up", a: "Probabilities feel confident but do not match outcomes; decisions become risky." },
-    { q: "Why is one metric never enough", a: "Because metrics capture different aspects of performance and risk." },
+    { q: "What is a prompt", a: "The instruction or input given to a model to produce a response." },
+    { q: "Why use a system prompt", a: "To set stable rules and constraints for the model." },
+    { q: "What does few shot prompting provide", a: "Examples that guide output format and tone." },
+    { q: "What is a sign of a weak prompt", a: "Vague goals, missing format, or missing constraints." },
+    { q: "Why test prompts like interfaces", a: "Because small wording changes can change behavior." },
+    { q: "When should prompts be reviewed", a: "Before deployment and when tasks or data change." },
   ]}
 />
 
-If you remember one thing from this section: metrics are stories about mistakes. Choose the story that matches the harm you want to avoid.
-
 ---
 
-## Data leakage and broken experiments
+## Embeddings and vector search
 
-<SectionProgressToggle courseId="ai" levelId="applied" sectionId="ai-intermediate-feature-pipelines" />
+<SectionProgressToggle courseId="ai" levelId="intermediate" sectionId="ai-intermediate-embeddings-and-search" />
 
-<Callout variant="concept">
-Leakage is the silent killer of experiments. It makes metrics glow and production crash.
-</Callout>
+Embeddings turn text, images, or audio into numeric vectors. A <GlossaryTip term="embedding">A numeric representation that keeps some meaning so similar items are close together.</GlossaryTip> lets me compare ideas by distance. A <GlossaryTip term="vector store">A specialised database for storing vectors and searching them by similarity.</GlossaryTip> powers semantic search, recommendation, and clustering.
 
-One of the most dangerous parts of machine learning is that experiments can “work” even when they are fundamentally broken. Leakage happens when training sees information that would not exist at prediction time. It creates models that memorize shortcuts instead of patterns.
+Vector search is useful because it finds meaning, not just exact words. It also adds responsibility. Bad embeddings, bad data, or bad indexing will surface the wrong information with confidence.
 
-Analogy: studying with the answer key hidden in the textbook. You feel prepared; the exam exposes the trick. In ML, the “exam” is deployment, and it is always harder than the validation split.
-
-Real scenario: predicting readmission risk. Feature “number of follow-up visits” leaks future knowledge. The model learns that follow-ups predict readmission. In production, that feature is unknown at decision time, so performance collapses.
-
-<GlossaryTip term="Data leakage">
-Plain: Training or evaluation sees information unavailable at prediction time.  
-Formal: Use of target-dependent or future-derived signals during training or validation.  
-Example: Including a lab result that is only available after diagnosis when predicting the diagnosis.
-</GlossaryTip>
-
-<GlossaryTip term="Temporal leakage">
-Plain: Future influences past in your split.  
-Formal: Mixing time so that training sees later data than evaluation or deployment would.  
-Example: Random shuffling time series instead of respecting time order.
-</GlossaryTip>
-
-<GlossaryTip term="Proxy leakage">
-Plain: A feature that indirectly encodes the label.  
-Formal: A correlated variable that carries target information without causal relevance.  
-Example: A “was reviewed” flag when predicting whether something needs review.
-</GlossaryTip>
-
-Before the tool, assume every target-related feature is suspicious. After the tool, write a rule: “If this feature is only known after the label is decided, it cannot be used.”
+<DiagramBlock
+  title="Embedding and search flow"
+  subtitle="Text becomes vectors, then similarity search finds neighbors."
+>
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>Text -> Embedding model -> Vector</div>
+    <div>Vector store -> Nearest neighbors</div>
+    <div>Results ranked by similarity, not by keyword match</div>
+  </div>
+</DiagramBlock>
 
 <ToolCard
-  title="Leakage detection exercise"
-  description="Mark which features you think leak the answer. Then reveal the hidden leakage."
+  id="embedding-search-lab"
+  title="Embedding and search lab"
+  description="Search a tiny vector index and see which items are most similar to your query."
 >
-  <LeakageDetectionGame />
+  <EmbeddingSearchLabTool />
 </ToolCard>
 
-After the tool, notice how reasonable some leaked features looked. Leakage survives peer review because it looks helpful. That is why temporal splits, feature audits, and ruthless documentation are non negotiable.
-
 <QuizBlock
-  title="Leakage discipline"
+  id="ai-intermediate-embeddings-quiz"
+  title="Quick check: embeddings and search"
   questions={[
-    { q: "What is data leakage", a: "Using information in training that would not be available at prediction time." },
-    { q: "Why does leakage inflate metrics", a: "Because the model learns shortcuts tied to the target or future." },
-    { q: "What is temporal leakage", a: "When future data influences past predictions, often via time-agnostic splits." },
-    { q: "Give one fix for leakage", a: "Use temporal splits, remove post-outcome features, or document feature availability." },
-    { q: "Why do proxies cause leakage", a: "They indirectly encode the target, giving the model the answer." },
-    { q: "Why does deployment expose leakage", a: "Because the leaked signals are missing, so performance collapses." },
-    { q: "Why do reviewers miss leakage", a: "Because leaked features appear useful and are rarely challenged without strict process." },
-    { q: "How can you test for leakage", a: "Check feature availability timing, run ablations, and enforce time-respecting splits." },
-    { q: "Why does leakage differ from overfitting", a: "Leakage is about information bleed; overfitting is about memorising noise." },
-    { q: "What organisational habit reduces leakage", a: "Documenting feature sources, time of availability, and enforcing reviews." },
-    { q: "How does label quality relate to leakage", a: "Noisy labels can mask leakage effects until production, making fixes harder." },
-    { q: "Why is strict evaluation essential", a: "Because weak evaluation hides leakage and creates false confidence." },
+    { q: "What is an embedding", a: "A numeric vector that represents meaning so similar items are close." },
+    { q: "What is a vector store", a: "A database that stores vectors and supports similarity search." },
+    { q: "Why use vector search instead of keywords", a: "It finds semantic similarity beyond exact matches." },
+    { q: "What is one risk of embeddings", a: "They can encode bias or surface irrelevant results." },
+    { q: "What does nearest neighbor search do", a: "Finds vectors closest to a query vector." },
+    { q: "Why does data quality matter for embeddings", a: "Poor data produces poor vectors and poor retrieval." },
   ]}
 />
 
-If you remember one thing from this section: never let the model see the future during training. If you are unsure, treat the feature as forbidden until proven safe.
-
 ---
 
-## Representations, embeddings, and meaning
+## Retrieval with your own documents
 
-<SectionProgressToggle courseId="ai" levelId="applied" sectionId="ai-intermediate-model-choices" />
+<SectionProgressToggle courseId="ai" levelId="intermediate" sectionId="ai-intermediate-rag-with-docs" />
 
-<Callout variant="concept">
-Models do not understand. They organise the world into shapes that make prediction easier. Those shapes reflect the data, not truth.
-</Callout>
+Retrieval augmented generation, often called RAG, lets a model answer using your documents. It works by chunking documents, embedding the chunks, and retrieving the best matches for a query. The model then answers using the retrieved context.
 
-At the beginner level, data looked like tables, numbers, or text. Here, I confront how models “hold” meaning. They do not. They learn representations that compress patterns. An embedding is one such representation: a vector placing “similar” items close together.
+I watch the <GlossaryTip term="context window">The amount of text the model can consider in one response.</GlossaryTip>. If I overload it, answers degrade. I also check retrieval quality. A <GlossaryTip term="retrieval">Fetching the most relevant chunks for a query.</GlossaryTip> that is wrong leads to confident wrong answers.
 
-Analogy: a subway map. It distorts geography but preserves connectivity. It is useful for navigation, not for measuring distance. Embeddings are similar: they preserve task-relevant relationships and discard the rest.
-
-<GlossaryTip term="Representation">
-Plain: A way of encoding data so patterns are easier to spot.  
-Formal: A mapping from raw input space to a transformed space where structure is more linearly separable.  
-Example: Pixel intensities transformed into edge detectors in early CNN layers.
-</GlossaryTip>
-
-<GlossaryTip term="Embedding">
-Plain: A vector that places similar items closer together.  
-Formal: A learned vector representation where distance encodes task-defined similarity.  
-Example: Two sentences about booking flights are close in a language model embedding space.
-</GlossaryTip>
-
-<GlossaryTip term="Retrieval-augmented generation">
-Plain: Adding retrieved documents to the model prompt.  
-Formal: A system that fetches relevant context and feeds it to a generative model to ground responses.  
-Example: A chatbot that retrieves policy text before answering HR questions.
-</GlossaryTip>
-
-Why this matters: if embeddings are trained on biased or narrow data, the geometry encodes those biases. Distance is not truth; it is compressed history. Retrieval helps ground answers, but only if the index is fresh, precise, and chunked sensibly.
-
-Before the tool, think about what you expect to be close together and why. After the tool, note which assumptions were baked into the data that produced the embedding.
+<DiagramBlock
+  title="RAG with documents"
+  subtitle="Docs are chunked, indexed, retrieved, then used in the answer."
+>
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>Docs -> Chunking -> Vector index</div>
+    <div>Query -> Retrieval -> Top chunks</div>
+    <div>Model answers using retrieved context</div>
+  </div>
+</DiagramBlock>
 
 <ToolCard
-  title="Embedding space explorer"
-  description="Inspect how items cluster and how similarity changes when you tweak the space."
+  id="mini-rag-lab"
+  title="Mini RAG lab"
+  description="Compare answers with and without retrieval on a tiny document set."
 >
-  <EmbeddingSpaceExplorer />
+  <MiniRagLabTool />
 </ToolCard>
 
-After the tool, notice that changing chunk size or freshness alters results more than model size often does. Grounding reduces hallucination but does not remove it; garbage retrieval still yields garbage answers.
-
 <QuizBlock
-  title="Embeddings and grounding"
+  id="ai-intermediate-rag-quiz"
+  title="Quick check: retrieval workflows"
   questions={[
-    { q: "What is a representation", a: "A way of encoding data so patterns are easier to detect." },
-    { q: "Why is an embedding not objective", a: "Because it encodes similarity based on training data and task choices." },
-    { q: "What does distance mean in an embedding space", a: "Task-defined similarity, not universal truth." },
-    { q: "Why can two embeddings disagree", a: "Different data, objectives, or training choices create different geometries." },
-    { q: "How can bias appear in embeddings", a: "Biased training data bakes stereotypes into distances." },
-    { q: "Why are embeddings powerful for generalisation", a: "They capture structure that lets models apply patterns to new inputs." },
-    { q: "Why are embeddings dangerous when misunderstood", a: "People mistake distances for truth and amplify biases." },
-    { q: "How do embeddings relate to similarity search", a: "They enable nearest-neighbour lookup based on vector distance." },
-    { q: "Why does retrieval quality matter", a: "Bad retrieval feeds bad context; grounding only helps if context is good." },
-    { q: "What does RAG stand for", a: "Retrieval-augmented generation: fetching context before generation." },
-    { q: "Why is geometry a useful metaphor", a: "It makes similarity and clustering intuitive while reminding us it is a model, not reality." },
-    { q: "How can you reduce hallucination", a: "Improve retrieval precision, keep indexes fresh, and verify outputs instead of trusting fluency." },
+    { q: "What does RAG add to a model", a: "Relevant document context at answer time." },
+    { q: "Why chunk documents", a: "To retrieve focused pieces that fit the context window." },
+    { q: "What is retrieval quality", a: "How well the retrieved chunks match the question." },
+    { q: "What is a context window", a: "The maximum text the model can use in one response." },
+    { q: "What happens if retrieval is wrong", a: "The model answers confidently with bad context." },
+    { q: "Why keep sources with answers", a: "It helps verification and builds trust." },
   ]}
 />
 
-If you remember one thing from this section: embeddings are opinions learned from data. Grounding helps, but retrieval quality and freshness matter more than model size for reliability.
+---
 
-<SectionProgressToggle courseId="ai" levelId="applied" sectionId="ai-intermediate-error-analysis" />
+## Simple agents that use tools
+
+<SectionProgressToggle courseId="ai" levelId="intermediate" sectionId="ai-intermediate-simple-agents" />
+
+An <GlossaryTip term="agent">A model that plans a sequence of steps and can call tools to reach a goal.</GlossaryTip> is useful for multi step tasks, but it needs guardrails. A <GlossaryTip term="tool call">A request from the model to run a function or external action.</GlossaryTip> should be limited, logged, and reviewed when risk is high.
+
+I keep agents small and task focused. I avoid giving them wide permissions. If a task is simple, a single prompt is safer. Agents are most useful when they can use a few safe tools and stop when the goal is met.
+
+<DiagramBlock
+  title="Agent loop"
+  subtitle="Plan, call a tool, read result, then decide the next step."
+>
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>Goal -> Plan -> Tool call -> Result -> Next step</div>
+    <div>Guardrails: permissions, time limits, and audit logs</div>
+    <div>Stop when the goal is reached or risk is too high</div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="agent-toy-lab"
+  title="Tiny agent with tools"
+  description="Give an agent a small goal and watch the steps it takes with a few safe tools."
+>
+  <AgentToyLabTool />
+</ToolCard>
+
+<QuizBlock
+  id="ai-intermediate-agents-quiz"
+  title="Quick check: simple agents"
+  questions={[
+    { q: "What is an agent in AI", a: "A model that plans steps and can use tools to reach a goal." },
+    { q: "What is a tool call", a: "A request to run a function or external action." },
+    { q: "Why limit agent permissions", a: "Wide access increases risk and mistakes." },
+    { q: "When is an agent unnecessary", a: "When a single prompt can solve the task." },
+    { q: "What is one guardrail for agents", a: "Time limits, approved tools, or human review." },
+    { q: "Why log agent actions", a: "To audit decisions and debug failures." },
+  ]}
+/>
 
 ---
 
-<PageNav prevHref="/ai/beginner" prevLabel="Beginner" nextHref="/ai/advanced" nextLabel="Advanced" showTop showBottom />
+<PageNav prevHref="/ai/beginner" prevLabel="Foundations" nextHref="/ai/advanced" nextLabel="Advanced" showTop showBottom />

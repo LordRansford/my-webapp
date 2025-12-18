@@ -18,8 +18,13 @@ function slugify(text) {
     .replace(/\s+/g, "-");
 }
 
-export async function loadNote(relativePath) {
-  const fullPath = path.join(NOTES_ROOT, relativePath);
+export async function loadNote(relativePath, extraScope = {}, options = {}) {
+  const contentRoot = options.contentRoot
+    ? path.isAbsolute(options.contentRoot)
+      ? options.contentRoot
+      : path.join(process.cwd(), "content", options.contentRoot)
+    : NOTES_ROOT;
+  const fullPath = path.join(contentRoot, relativePath);
   const raw = fs.readFileSync(fullPath, "utf8");
   const { content, data } = matter(raw);
 
@@ -46,7 +51,7 @@ export async function loadNote(relativePath) {
       ],
       format: "mdx",
     },
-    scope: data,
+    scope: { ...data, ...extraScope },
   });
 
   return {

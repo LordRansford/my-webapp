@@ -1,0 +1,217 @@
+---
+title: "AI Summary and games"
+description: "A relaxed wrap up of the AI journey with quick recaps, games and labs to lock the learning in."
+level: "summary"
+courseId: "ai"
+levelId: "summary"
+summary: "A relaxed wrap up of the AI journey with quick recaps, games and labs to lock the learning in."
+estimatedHours: 3
+stepIndex: 3
+---
+
+import ToolCard from "@/components/notes/ToolCard"
+import Callout from "@/components/notes/Callout"
+import QuizBlock from "@/components/notes/QuizBlock"
+import PageNav from "@/components/notes/PageNav"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import DiagramBlock from "@/components/DiagramBlock"
+import GameHub from "@/components/GameHub"
+import { aiSectionManifest } from "@/lib/aiSections"
+import AIExamplesExplorerTool from "@/components/notes/tools/ai/beginner/AIExamplesExplorerTool"
+import TrainingLoopVisualizerTool from "@/components/notes/tools/ai/intermediate/TrainingLoopVisualizerTool"
+import TransformerAttentionExplorerTool from "@/components/notes/tools/ai/advanced/TransformerAttentionExplorerTool"
+import ConceptMatchGame from "@/components/notes/tools/ai/summary/ConceptMatchGame"
+import ScenarioClinicGame from "@/components/notes/tools/ai/summary/ScenarioClinicGame"
+import PipelineBuilderGame from "@/components/notes/tools/ai/summary/PipelineBuilderGame"
+import SafetyGuardianGame from "@/components/notes/tools/ai/summary/SafetyGuardianGame"
+
+# AI Summary and games
+
+<LevelProgressBar courseId="ai" levelId="summary" sectionIds={aiSectionManifest.summary} />
+
+<CPDTracker courseId="ai" levelId="summary" estimatedHours={3} />
+
+This is the victory lap. You did the hard work. Now you tighten the story and play with the ideas until they stick.
+
+---
+
+## AI recap
+
+Thanks for sticking with the AI journey. You moved from labels and data to training, evaluation, and real systems with safety around them. This page is your safe place to revise and play.
+
+<DiagramBlock title="AI journey on one page" subtitle="From data to models to real systems with safety around them.">
+  <div className="grid gap-2 sm:grid-cols-4 text-xs text-slate-700">
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Data</p>
+      <p className="mt-1">Signals, labels, and quality.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Models</p>
+      <p className="mt-1">Learning patterns from features.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Products</p>
+      <p className="mt-1">Serving, monitoring, and trust.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Safety</p>
+      <p className="mt-1">Governance and oversight.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+---
+
+## Foundations in one page
+
+Foundations taught the basics: AI is pattern matching, not magic. Data quality and representation shape everything. Supervised learning uses labels, unsupervised learning looks for structure without labels.
+
+<DiagramBlock title="Simple model loop" subtitle="Input to model to output.">
+  <div className="grid gap-2 sm:grid-cols-3 text-xs text-slate-700">
+    <div className="rounded-xl border border-slate-200 bg-white p-3">Input</div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">Model</div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">Output</div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="ai-summary-foundations-tool"
+  title="AI examples refresher"
+  description="Flip through simple AI examples like spam filters, recommenders and chat assistants."
+>
+  <AIExamplesExplorerTool />
+</ToolCard>
+
+<QuizBlock
+  id="ai-summary-foundations-quiz"
+  title="Quick check: foundations"
+  questions={[
+    { q: "What is AI in plain words", a: "Pattern matching using data." },
+    { q: "What does supervised learning need", a: "Labeled examples." },
+    { q: "Why does data quality matter", a: "Bad data teaches bad patterns." },
+    { q: "What is one AI example", a: "Spam filtering or recommendations." },
+  ]}
+/>
+
+---
+
+## Intermediate in one page
+
+Intermediate was about making models work. You clean data, build features, train a model, measure it properly, then serve it with monitoring so it stays honest.
+
+<DiagramBlock title="Applied pipeline" subtitle="Raw data to serving and monitoring.">
+  <div className="text-xs text-slate-700">
+    Raw data -> Clean data -> Features -> Training -> Evaluation -> Serving
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="ai-summary-intermediate-tool"
+  title="Training and metrics recap"
+  description="Watch a tiny model train and see loss change over a few epochs."
+>
+  <TrainingLoopVisualizerTool />
+</ToolCard>
+
+<QuizBlock
+  id="ai-summary-intermediate-quiz"
+  title="Quick check: intermediate"
+  questions={[
+    { q: "What is the loss function", a: "A measure of how wrong the model is." },
+    { q: "Why split data", a: "To train, tune, and test honestly." },
+    { q: "What does precision measure", a: "How many predicted positives were correct." },
+  ]}
+/>
+
+---
+
+## Advanced in one page
+
+Advanced pushed into modern models, agents, and multimodal systems. It also made safety and governance real, because production AI has real impact.
+
+<DiagramBlock title="Agent with guardrails" subtitle="Tools on the inside, safety on the outside.">
+  <div className="grid gap-2 sm:grid-cols-3 text-xs text-slate-700">
+    <div className="rounded-xl border border-slate-200 bg-white p-3">Agent</div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">Tools</div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">Safety layer</div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="ai-summary-advanced-tool"
+  title="Transformers, agents and safety"
+  description="See attention in a tiny transformer and remember why guardrails matter."
+>
+  <TransformerAttentionExplorerTool />
+</ToolCard>
+
+<QuizBlock
+  id="ai-summary-advanced-quiz"
+  title="Quick check: advanced"
+  questions={[
+    { q: "What does attention do", a: "It weighs which input parts matter most." },
+    { q: "What is an agent", a: "A model that plans steps and uses tools." },
+    { q: "Why add guardrails", a: "To reduce harm and misuse." },
+  ]}
+/>
+
+---
+
+## Games and labs
+
+<GameHub
+  storageKey="ai_summary_games"
+  title="AI games and labs"
+  subtitle="Short, safe drills that tighten your instincts."
+  games={[
+    {
+      id: "ai-game-concept-match",
+      title: "Concept match and memory",
+      level: "Core",
+      minutes: 5,
+      summary: "Match AI terms like feature, loss and drift to friendly explanations.",
+      component: <ConceptMatchGame />,
+    },
+    {
+      id: "ai-game-scenario-clinic",
+      title: "AI scenario clinic",
+      level: "Core",
+      minutes: 6,
+      summary: "Pick model type, data, and metric for short scenarios.",
+      component: <ScenarioClinicGame />,
+    },
+    {
+      id: "ai-game-pipeline-builder",
+      title: "Build a tiny pipeline",
+      level: "Stretch",
+      minutes: 6,
+      summary: "Put the pipeline steps in order and check the flow.",
+      component: <PipelineBuilderGame />,
+    },
+    {
+      id: "ai-game-safety-guardian",
+      title: "Safety guardian",
+      level: "Stretch",
+      minutes: 6,
+      summary: "Flag risky prompts and see how safety checks help.",
+      component: <SafetyGuardianGame />,
+    },
+  ]}
+/>
+
+---
+
+## Reflect and next steps
+
+AI is powerful, but it is still a tool. Think about where it would help in your work, and where it would be risky or unhelpful.
+
+<Callout variant="note" title="Your AI story">
+Write a few lines on where you might use AI in your own work or study. What would be helpful and what would feel uncomfortable or risky.
+</Callout>
+
+If any section felt fuzzy, revisit it. Foundations for clarity, Intermediate for hands on practice, Advanced for real world thinking. The AI Studio labs are always there when you want to go deeper.
+
+You will also find good links between AI and Cybersecurity and Software Architecture. Models are systems. Systems need safety and good design.
+
+<PageNav prevHref="/ai/advanced" prevLabel="Advanced" nextHref="/courses/ai" nextLabel="AI course overview" showTop showBottom />

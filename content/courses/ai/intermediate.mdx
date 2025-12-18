@@ -1,0 +1,255 @@
+---
+title: "AI Intermediate"
+description: "We go from friendly intuition to actually shaping data, training small models and judging if they are any good."
+level: "intermediate"
+courseId: "ai"
+levelId: "intermediate"
+summary: "We go from friendly intuition to actually shaping data, training small models and judging if they are any good."
+estimatedHours: 10
+stepIndex: 1
+---
+
+import ToolCard from "@/components/notes/ToolCard"
+import Callout from "@/components/notes/Callout"
+import GlossaryTip from "@/components/notes/GlossaryTip"
+import QuizBlock from "@/components/notes/QuizBlock"
+import PageNav from "@/components/notes/PageNav"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import DiagramBlock from "@/components/DiagramBlock"
+import { aiSectionManifest } from "@/lib/aiSections"
+import DataProfilerTool from "@/components/notes/tools/ai/intermediate/DataProfilerTool"
+import TrainingLoopVisualizerTool from "@/components/notes/tools/ai/intermediate/TrainingLoopVisualizerTool"
+import MetricsLabTool from "@/components/notes/tools/ai/intermediate/MetricsLabTool"
+import ServingMonitorSimulatorTool from "@/components/notes/tools/ai/intermediate/ServingMonitorSimulatorTool"
+
+# AI Intermediate
+
+<LevelProgressBar courseId="ai" levelId="intermediate" sectionIds={aiSectionManifest.intermediate} />
+
+<CPDTracker courseId="ai" levelId="intermediate" estimatedHours={10} />
+
+This level turns intuition into applied practice. We clean data, train small models, judge their quality, and think about what happens when they go live.
+
+---
+
+## Data preparation and feature engineering
+
+<SectionProgressToggle courseId="ai" levelId="intermediate" sectionId="ai-intermediate-data-prep-and-feature-engineering" />
+
+Real world data is messy. It arrives late, it arrives incomplete, and it often arrives in mixed formats. A <GlossaryTip term="feature">A measurable input used by a model.</GlossaryTip> is only useful if the raw data is reliable.
+
+Cleaning means fixing obvious errors, handling missing values, and keeping only what matters. <GlossaryTip term="feature engineering">Transforming raw data into useful signals the model can learn from.</GlossaryTip> is often more valuable than a fancy model. For text you might count keywords or use embeddings. For images you might resize and normalise. For tabular data you might encode categories and scale numeric ranges. For time series you might build rolling averages and lag features.
+
+<DiagramBlock title="Data preparation flow" subtitle="Turn raw data into model ready features.">
+  <div className="grid gap-2 sm:grid-cols-4 text-xs text-slate-700">
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Raw data</p>
+      <p className="mt-1">Missing values and mixed formats.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Cleaning</p>
+      <p className="mt-1">Fix, drop, or flag bad rows.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Features</p>
+      <p className="mt-1">Encode and scale signals.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Training set</p>
+      <p className="mt-1">Ready for the model.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="ai-intermediate-data-profiler"
+  title="Data profiler and cleaner"
+  description="Upload a tiny sample dataset and see missing values, strange values, and simple feature suggestions."
+>
+  <DataProfilerTool />
+</ToolCard>
+
+<QuizBlock
+  id="ai-intermediate-data-prep-quiz"
+  title="Quick check: data prep and features"
+  questions={[
+    { q: "Why is feature engineering important", a: "Good features often matter more than complex models." },
+    { q: "What is a feature", a: "A measurable input used by a model." },
+    { q: "What is one common data issue", a: "Missing values or inconsistent formats." },
+    { q: "Why clean data before training", a: "Errors can teach the model the wrong patterns." },
+    { q: "Give one example of a time series feature", a: "Rolling average or a lagged value." },
+    { q: "Why encode categories", a: "Models need numbers, not raw labels." },
+    { q: "What is a risk of too many features", a: "Noise increases and the model may overfit." },
+    { q: "How does this link to Foundations", a: "It turns representation ideas into real pipelines." },
+  ]}
+/>
+
+Reflection: Pick a small problem from your own work. What three features would you start with and why.
+
+---
+
+## The training loop
+
+<SectionProgressToggle courseId="ai" levelId="intermediate" sectionId="ai-intermediate-training-loop" />
+
+A model is a function with parameters. Training adjusts those numbers so the model makes better guesses. We split data into a <GlossaryTip term="training set">The data used to learn model parameters.</GlossaryTip>, a <GlossaryTip term="validation set">Data used to tune and compare models during training.</GlossaryTip>, and a <GlossaryTip term="test set">A final held out set for the honest check.</GlossaryTip>
+
+An <GlossaryTip term="epoch">One full pass through the training data.</GlossaryTip> is split into batches so the model can learn in small steps. The <GlossaryTip term="learning rate">How large each update step is during training.</GlossaryTip> controls how quickly the model changes. The <GlossaryTip term="loss function">A calculation that tells the model how wrong its guesses are.</GlossaryTip> is the signal we try to reduce.
+
+We avoid overfitting with early stopping, regularisation, and by keeping the validation set honest. If training loss drops but validation loss rises, the model is memorising instead of learning.
+
+<DiagramBlock title="Training loop" subtitle="Data in, loss out, parameters update.">
+  <div className="grid gap-2 sm:grid-cols-4 text-xs text-slate-700">
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Batch data</p>
+      <p className="mt-1">Small slice of training set.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Model</p>
+      <p className="mt-1">Parameters make a prediction.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Loss</p>
+      <p className="mt-1">How wrong the prediction was.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Update</p>
+      <p className="mt-1">Adjust parameters and repeat.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="ai-intermediate-training-loop-visualiser"
+  title="Training loop visualiser"
+  description="Watch a tiny model train over a few epochs and see the loss curve update."
+>
+  <TrainingLoopVisualizerTool />
+</ToolCard>
+
+<QuizBlock
+  id="ai-intermediate-training-loop-quiz"
+  title="Quick check: the training loop"
+  questions={[
+    { q: "Why split data into training and validation sets", a: "To tune the model without cheating on the test set." },
+    { q: "What is an epoch", a: "One full pass through the training data." },
+    { q: "Why use batches", a: "They make training stable and efficient." },
+    { q: "What does the learning rate control", a: "How big each parameter update is." },
+    { q: "What is the loss function", a: "A measure of how wrong the model is." },
+    { q: "What is overfitting", a: "When the model memorises training data and fails on new data." },
+    { q: "What is early stopping", a: "Stopping when validation loss stops improving." },
+    { q: "Why keep a test set", a: "To get an honest final performance check." },
+  ]}
+/>
+
+Reflection: Think of a model you have seen. How would you tell if it was overfitting.
+
+---
+
+## Evaluation and metrics
+
+<SectionProgressToggle courseId="ai" levelId="intermediate" sectionId="ai-intermediate-evaluation-metrics" />
+
+Accuracy alone can hide risk. In a fraud model, missing a fraud case is worse than one false alarm. A <GlossaryTip term="confusion matrix">A grid that counts true and false positives and negatives.</GlossaryTip> helps you see what the model is doing. <GlossaryTip term="precision">The share of predicted positives that were correct.</GlossaryTip> and <GlossaryTip term="recall">The share of actual positives you managed to catch.</GlossaryTip> show different trade offs. The <GlossaryTip term="F1 score">A balance of precision and recall.</GlossaryTip> is useful when classes are imbalanced.
+
+For regression, metrics like mean absolute error and root mean squared error tell you how far predictions are from reality. Always pick metrics that match the real world cost of being wrong.
+
+<DiagramBlock title="Evaluation view" subtitle="Different metrics answer different questions.">
+  <div className="grid gap-2 sm:grid-cols-2 text-xs text-slate-700">
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Confusion matrix</p>
+      <p className="mt-1">True and false counts at a glance.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Metric ladder</p>
+      <p className="mt-1">Accuracy, precision, recall, F1.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="ai-intermediate-metrics-lab"
+  title="Metrics explainer lab"
+  description="Play with a confusion matrix and see how precision, recall and F1 score change."
+>
+  <MetricsLabTool />
+</ToolCard>
+
+<QuizBlock
+  id="ai-intermediate-metrics-quiz"
+  title="Quick check: evaluation and metrics"
+  questions={[
+    { q: "Why is accuracy not always enough", a: "It can hide false negatives or false positives." },
+    { q: "What does precision tell you", a: "How many predicted positives were correct." },
+    { q: "What does recall tell you", a: "How many actual positives were caught." },
+    { q: "When is F1 useful", a: "When classes are imbalanced and you need a balance." },
+    { q: "What is a confusion matrix", a: "A table of true and false outcomes." },
+    { q: "Why use mean absolute error", a: "It shows average prediction error in real units." },
+    { q: "What is the cost of a false negative", a: "A real case missed by the model." },
+    { q: "How should metrics match risk", a: "Pick the metric that reflects the real cost of being wrong." },
+  ]}
+/>
+
+Reflection: Which metric would you trust most for a safety critical model and why.
+
+---
+
+## Serving models and basic monitoring
+
+<SectionProgressToggle courseId="ai" levelId="intermediate" sectionId="ai-intermediate-serving-and-monitoring" />
+
+A model is only useful when it is served. A <GlossaryTip term="endpoint">A network address that accepts inputs and returns predictions.</GlossaryTip> can handle online requests in real time or batch requests on a schedule. Online inference needs low latency. Batch inference needs reliable throughput.
+
+We log inputs and predictions to spot patterns over time. <GlossaryTip term="drift">When real world data changes so the model sees new patterns.</GlossaryTip> is common, not rare. A simple way to detect drift is to track input distributions and compare them to training data. Shadow testing and small roll outs reduce risk.
+
+<DiagramBlock title="Serving and monitoring" subtitle="Requests, predictions, logs, then learning.">
+  <div className="grid gap-2 sm:grid-cols-4 text-xs text-slate-700">
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Request</p>
+      <p className="mt-1">User or system calls the model.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Endpoint</p>
+      <p className="mt-1">Prediction returned in time.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Logs</p>
+      <p className="mt-1">Inputs, outputs, and latency.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Monitoring</p>
+      <p className="mt-1">Drift and quality checks.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="ai-intermediate-serving-simulator"
+  title="Serving and monitoring simulator"
+  description="Send fake requests to a model endpoint and see latency and drift warnings."
+>
+  <ServingMonitorSimulatorTool />
+</ToolCard>
+
+<QuizBlock
+  id="ai-intermediate-serving-monitoring-quiz"
+  title="Quick check: serving and monitoring"
+  questions={[
+    { q: "What is an endpoint", a: "A network address that returns model predictions." },
+    { q: "What is the difference between online and batch inference", a: "Online is real time, batch is scheduled." },
+    { q: "Why does latency matter", a: "Slow predictions break user experience." },
+    { q: "What is drift", a: "When data patterns change after training." },
+    { q: "Why log inputs and outputs", a: "To audit behavior and detect drift." },
+    { q: "What is shadow testing", a: "Running a new model silently to compare results." },
+    { q: "What is a safe rollout", a: "Gradual deployment with monitoring and rollback." },
+    { q: "Why monitor error rates", a: "They signal failures or bad data in production." },
+  ]}
+/>
+
+Reflection: If you launched a model today, what would you monitor first and why.
+
+---
+
+<PageNav prevHref="/ai/beginner" prevLabel="Foundations" nextHref="/ai/advanced" nextLabel="Advanced" showTop showBottom />

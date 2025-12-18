@@ -8,11 +8,16 @@ import Callout from "@/components/notes/Callout";
 import PageNav from "@/components/notes/PageNav";
 import GlossaryTip from "@/components/notes/GlossaryTip";
 import QuizBlock from "@/components/notes/QuizBlock";
-import ProgressBar from "@/components/notes/ProgressBar";
+import CPDTracker from "@/components/CPDTracker";
+import LevelProgressBar from "@/components/course/LevelProgressBar";
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
+import { aiSectionManifest } from "@/lib/aiSections";
+import DiagramBlock from "@/components/DiagramBlock";
 
-const ConfusionMatrixExplorer = dynamic(() => import("@/components/notes/tools/ai/intermediate/ConfusionMatrixExplorer"), { ssr: false });
-const LeakageDetectionGame = dynamic(() => import("@/components/notes/tools/ai/intermediate/LeakageDetectionGame"), { ssr: false });
-const EmbeddingSpaceExplorer = dynamic(() => import("@/components/notes/tools/ai/intermediate/EmbeddingSpaceExplorer"), { ssr: false });
+const DataProfilerTool = dynamic(() => import("@/components/notes/tools/ai/intermediate/DataProfilerTool"), { ssr: false });
+const TrainingLoopVisualizerTool = dynamic(() => import("@/components/notes/tools/ai/intermediate/TrainingLoopVisualizerTool"), { ssr: false });
+const MetricsLabTool = dynamic(() => import("@/components/notes/tools/ai/intermediate/MetricsLabTool"), { ssr: false });
+const ServingMonitorSimulatorTool = dynamic(() => import("@/components/notes/tools/ai/intermediate/ServingMonitorSimulatorTool"), { ssr: false });
 
 export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
@@ -22,10 +27,14 @@ export default function Page({ source, headings }) {
       PageNav,
       GlossaryTip,
       QuizBlock,
-      ProgressBar,
-      ConfusionMatrixExplorer,
-      LeakageDetectionGame,
-      EmbeddingSpaceExplorer,
+      CPDTracker,
+      LevelProgressBar,
+      SectionProgressToggle,
+      DiagramBlock,
+      DataProfilerTool,
+      TrainingLoopVisualizerTool,
+      MetricsLabTool,
+      ServingMonitorSimulatorTool,
     }),
     []
   );
@@ -33,8 +42,8 @@ export default function Page({ source, headings }) {
   return (
     <NotesLayout
       meta={{
-        title: "AI Notes - Intermediate",
-        description: "How real AI systems behave, fail, and are evaluated between beginner and advanced depth.",
+        title: "AI Intermediate",
+        description: "We go from friendly intuition to shaping data, training small models, and judging quality.",
         level: "Intermediate",
         slug: "/ai/intermediate",
         section: "ai",
@@ -49,7 +58,7 @@ export default function Page({ source, headings }) {
 }
 
 export async function getStaticProps() {
-  const { source, headings } = await loadNote("ai/intermediate.mdx");
+  const { source, headings } = await loadNote("ai/intermediate.mdx", { aiSectionManifest }, { contentRoot: "courses" });
   return {
     props: {
       source,

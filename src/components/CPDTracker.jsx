@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const STORAGE_KEY = "ransfordsnotes-cpd";
@@ -59,6 +60,12 @@ export default function CPDTracker({ courseId, levelId, estimatedHours }) {
           <p className="text-xs text-gray-700">
             Suggested guided hours: {estimatedHours || "not specified"}. This stays in your browser only and is for your own CPD notes.
           </p>
+          <Link
+            href="/cpd"
+            className="mt-2 inline-flex text-xs font-semibold text-sky-700 hover:text-sky-800 focus:outline-none focus:ring-2 focus:ring-sky-200"
+          >
+            View in My CPD
+          </Link>
         </div>
         <div className="flex items-center gap-2">
           <label className="text-xs font-semibold text-gray-800" htmlFor={`${courseId}-${levelId}-cpd`}>

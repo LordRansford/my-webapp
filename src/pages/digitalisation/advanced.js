@@ -7,18 +7,17 @@ import ToolCard from "@/components/notes/ToolCard";
 import Callout from "@/components/notes/Callout";
 import GlossaryTip from "@/components/notes/GlossaryTip";
 import QuizBlock from "@/components/notes/QuizBlock";
-import ProgressBar from "@/components/notes/ProgressBar";
 import PageNav from "@/components/notes/PageNav";
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
 import LevelProgressBar from "@/components/course/LevelProgressBar";
 import CPDTracker from "@/components/CPDTracker";
+import DiagramBlock from "@/components/DiagramBlock";
+import { digitalisationSectionManifest } from "@/lib/digitalisationSections";
 
-const DigitalisationDashboard = dynamic(() => import("@/components/dashboards/DigitalisationDashboard"), { ssr: false });
-const EcosystemMapper = dynamic(() => import("@/components/notes/tools/digitalisation/advanced/EcosystemMapper"), { ssr: false });
-const RegulationExplorer = dynamic(() => import("@/components/notes/tools/digitalisation/advanced/RegulationExplorer"), { ssr: false });
-const RiskHeatmap = dynamic(() => import("@/components/notes/tools/digitalisation/advanced/RiskHeatmap"), { ssr: false });
-const FundingModelLab = dynamic(() => import("@/components/notes/tools/digitalisation/advanced/FundingModelLab"), { ssr: false });
-const ScenarioSimulator = dynamic(() => import("@/components/notes/tools/digitalisation/advanced/ScenarioSimulator"), { ssr: false });
+const TargetStateCanvasTool = dynamic(() => import("@/components/notes/tools/digitalisation/advanced/TargetStateCanvasTool"), { ssr: false });
+const EcosystemMapperTool = dynamic(() => import("@/components/notes/tools/digitalisation/advanced/EcosystemMapperTool"), { ssr: false });
+const RiskRoadmapPlannerTool = dynamic(() => import("@/components/notes/tools/digitalisation/advanced/RiskRoadmapPlannerTool"), { ssr: false });
+const SchemaMappingSandbox = dynamic(() => import("@/components/notes/tools/digitalisation/intermediate/SchemaMappingSandbox"), { ssr: false });
 
 export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
@@ -27,17 +26,15 @@ export default function Page({ source, headings }) {
       Callout,
       GlossaryTip,
       QuizBlock,
-      ProgressBar,
       PageNav,
       SectionProgressToggle,
       LevelProgressBar,
       CPDTracker,
-      DigitalisationDashboard,
-      EcosystemMapper,
-      RegulationExplorer,
-      RiskHeatmap,
-      FundingModelLab,
-      ScenarioSimulator,
+      DiagramBlock,
+      TargetStateCanvasTool,
+      EcosystemMapperTool,
+      RiskRoadmapPlannerTool,
+      SchemaMappingSandbox,
     }),
     []
   );
@@ -45,8 +42,8 @@ export default function Page({ source, headings }) {
   return (
     <NotesLayout
       meta={{
-        title: "Digitalisation Strategy Notes - Advanced",
-        description: "Digitalisation at scale across ecosystems, regulation, risk, funding, and long-term stewardship.",
+        title: "Digitalisation Advanced",
+        description: "We zoom out to strategy, governance and whole energy system data sharing, with lots of real world examples.",
         level: "Advanced",
         slug: "/digitalisation/advanced",
         section: "digitalisation",
@@ -61,7 +58,7 @@ export default function Page({ source, headings }) {
 }
 
 export async function getStaticProps() {
-  const { source, headings } = await loadNote("digitalisation/advanced.mdx");
+  const { source, headings } = await loadNote("digitalisation/advanced.mdx", { digitalisationSectionManifest }, { contentRoot: "courses" });
   return {
     props: {
       source,

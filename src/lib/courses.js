@@ -6,6 +6,8 @@ import { serialize } from "next-mdx-remote/serialize";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import { aiSectionManifest } from "./aiSections";
+import { digitalisationSectionManifest } from "./digitalisationSections";
 
 const coursesDir = path.join(process.cwd(), "content", "courses");
 
@@ -151,8 +153,14 @@ export const getLesson = async (courseSlug, lessonSlug) => {
 
   const source = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(source);
+  const extraScope =
+    courseSlug === "ai"
+      ? { aiSectionManifest }
+      : courseSlug === "digitalisation"
+      ? { digitalisationSectionManifest }
+      : {};
   const serialised = await serialize(content, {
-    scope: data,
+    scope: { ...data, ...extraScope },
     mdxOptions,
   });
 
