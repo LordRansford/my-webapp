@@ -1,3 +1,24 @@
+// #region agent log
+fetch("http://127.0.0.1:7242/ingest/912cc721-944f-4c31-a38a-92b015cfe804", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    sessionId: "debug-session",
+    runId: "pre-fix",
+    hypothesisId: "H1",
+    location: "next.config.mjs:entry",
+    message: "next.config loaded",
+    data: {
+      nodeEnv: process.env.NODE_ENV || "unknown",
+      vercel: !!process.env.VERCEL,
+      stripeSecretPresent: !!process.env.STRIPE_SECRET_KEY,
+      stripePublishablePresent: !!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+    },
+    timestamp: Date.now(),
+  }),
+}).catch(() => {});
+// #endregion
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -6,6 +27,24 @@ const nextConfig = {
   turbopack: {},
 
   webpack: (config, { dev }) => {
+    // #region agent log
+    fetch("http://127.0.0.1:7242/ingest/912cc721-944f-4c31-a38a-92b015cfe804", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sessionId: "debug-session",
+        runId: "pre-fix",
+        hypothesisId: "H2",
+        location: "next.config.mjs:webpack",
+        message: "webpack config invoked",
+        data: {
+          dev,
+          cacheDisabled: dev ? false : config.cache === false,
+        },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {});
+    // #endregion
     config.resolve.fallback = {
       ...(config.resolve.fallback || {}),
       fs: false,
@@ -31,6 +70,25 @@ const nextConfig = {
   },
 
   async headers() {
+    // #region agent log
+    fetch("http://127.0.0.1:7242/ingest/912cc721-944f-4c31-a38a-92b015cfe804", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sessionId: "debug-session",
+        runId: "pre-fix",
+        hypothesisId: "H3",
+        location: "next.config.mjs:headers",
+        message: "headers config invoked",
+        data: {
+          headerCount: 1,
+          coop: "same-origin",
+          coep: "require-corp",
+        },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {});
+    // #endregion
     return [
       {
         source: "/(.*)",
