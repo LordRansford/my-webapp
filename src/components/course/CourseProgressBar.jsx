@@ -1,22 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getCourseCompletion } from "@/lib/progress";
+import { useMemo } from "react";
+import { useCPD } from "@/hooks/useCPD";
+import { getCompletionForCourse, resolveTrackId } from "@/lib/cpd";
 
 const courseTitles = {
   cybersecurity: "Cybersecurity",
   ai: "AI",
   "software-architecture": "Software Architecture",
   digitalisation: "Digitalisation",
+  data: "Data",
 };
 
 export default function CourseProgressBar({ courseId, manifest, courseTitle }) {
-  const [percent, setPercent] = useState(0);
+  const { state } = useCPD();
+  const trackId = resolveTrackId(courseId);
 
-  useEffect(() => {
-    const { percent } = getCourseCompletion(courseId, manifest);
-    setPercent(percent);
-  }, [courseId, manifest]);
+  const percent = useMemo(() => {
+    const result = getCompletionForCourse(state, trackId, manifest || {});
+    return result.percent;
+  }, [state, trackId, manifest]);
 
   const displayTitle = courseTitle || courseTitles[courseId] || "Course";
 

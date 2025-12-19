@@ -1,0 +1,436 @@
+---
+title: "Data Foundations"
+description: "Start with the language, formats, and habits that make data useful across teams."
+level: "foundations"
+slug: "foundations"
+courseId: "data"
+levelId: "foundations"
+summary: "Start with the language, formats, and habits that make data useful across teams."
+estimatedHours: 8
+stepIndex: 0
+---
+
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import PageNav from "@/components/notes/PageNav"
+import ToolCard from "@/components/notes/ToolCard"
+import DiagramBlock from "@/components/DiagramBlock"
+import QuizBlock from "@/components/notes/QuizBlock"
+import Callout from "@/components/Callout"
+import DataAroundYouTool from "@/components/notes/tools/data/foundations/DataAroundYouTool"
+import TextToBytesVisualizer from "@/components/notes/tools/data/foundations/TextToBytesVisualizer"
+import DataQualityCheckerTool from "@/components/notes/tools/data/foundations/DataQualityCheckerTool"
+import LifecycleMapperTool from "@/components/notes/tools/data/foundations/LifecycleMapperTool"
+import RoleMatcherTool from "@/components/notes/tools/data/foundations/RoleMatcherTool"
+import EthicsScenarioTool from "@/components/notes/tools/data/foundations/EthicsScenarioTool"
+import SharedDataInterpretationTool from "@/components/notes/tools/data/foundations/SharedDataInterpretationTool"
+import SharedLifecycleRisksTool from "@/components/notes/tools/data/foundations/SharedLifecycleRisksTool"
+import SharedDataToDecisionTool from "@/components/notes/tools/data/foundations/SharedDataToDecisionTool"
+import DataFormatExplorer from "@/components/notes/tools/data/foundations/DataFormatExplorer"
+import DataQualitySandbox from "@/components/notes/tools/data/foundations/DataQualitySandbox"
+import DataFlowVisualizer from "@/components/notes/tools/data/foundations/DataFlowVisualizer"
+import { dataSectionManifest } from "@/lib/dataSections"
+
+# Data Foundations
+
+<LevelProgressBar courseId="data" levelId="foundations" sectionIds={dataSectionManifest.foundations} />
+
+<CPDTracker courseId="data" levelId="foundations" estimatedHours={8} />
+
+This level sets out how data exists, moves, and creates value before any heavy analysis or security work. It keeps the language simple, introduces light maths, and shows how real systems depend on data discipline.
+
+---
+
+## What data is and why it matters
+
+<SectionProgressToggle courseId="data" levelId="foundations" sectionId="data-foundations-what-is-data" />
+
+Data starts as recorded observations: numbers on a meter, text in a form, or pixels in a photo. When we add structure it becomes information that people can read. When we apply it to decisions it becomes knowledge. Data existed long before computers: bank ledgers, census books, medical charts. Modern systems are data driven because every click, sensor, and transaction can be captured and turned into feedback.
+
+Banking relies on clean transaction data to spot fraud. Energy grids depend on meter readings to balance supply and demand. Healthcare teams use lab results and symptoms to guide care. AI systems learn from past data to make predictions, which means they also inherit any gaps or mistakes. Keeping the difference between raw data, information, and knowledge clear helps us avoid mixing facts with opinions.
+
+<DiagramBlock title="From event to decision" subtitle="Real world to recorded data to informed action">
+  <div className="grid gap-3 sm:grid-cols-4 text-xs text-slate-700">
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Real world event</p>
+      <p className="mt-1">A card payment or a patient temperature.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Recorded data</p>
+      <p className="mt-1">Numbers, text, or images captured at the time.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Information</p>
+      <p className="mt-1">Structured so people and systems can read it.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Decision</p>
+      <p className="mt-1">Approve a payment, adjust a turbine, triage a patient.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="data-foundations-data-around-you"
+  title="Data around you"
+  description="Classify everyday examples as data, information, or knowledge and see immediate feedback."
+>
+  <DataAroundYouTool />
+</ToolCard>
+
+<QuizBlock
+  id="data-foundations-what-is-data-quiz"
+  courseId="data"
+  levelId="foundations"
+  sectionId="data-foundations-what-is-data"
+  title="Quick check: what data is and why it matters"
+  questions={[
+    { q: "What is data", a: "Recorded observations such as numbers, text, or images." },
+    { q: "How does data become information", a: "When it is organised so people and systems can read it." },
+    { q: "How does information become knowledge", a: "When it is applied to decisions or actions." },
+    { q: "Why did data exist before computers", a: "People kept ledgers, charts, and records on paper." },
+    { q: "Why do modern systems rely on data", a: "To automate decisions, monitor behaviour, and learn patterns." },
+    { q: "Give one banking data example", a: "Transaction records used for fraud checks." },
+    { q: "Give one energy data example", a: "Meter readings used to balance supply and demand." },
+    { q: "Give one healthcare data example", a: "Lab results used to guide treatment choices." },
+    { q: "Why do AI models inherit data issues", a: "They learn from the data provided, including its gaps and biases." },
+  ]}
+/>
+
+## Data representation and formats
+
+<SectionProgressToggle courseId="data" levelId="foundations" sectionId="data-foundations-representation-and-formats" />
+
+Computers store everything using bits (binary digits) because hardware can reliably tell two states apart. A byte is eight bits, which can represent 256 distinct values. Encoding maps symbols to numbers, while a file format adds structure on top. CSV is plain text with commas, JSON wraps name value pairs, XML uses nested tags, images store grids of pixels, and audio stores wave samples. The wrong format or encoding breaks systems because the receiver cannot parse what was intended.
+
+A byte can represent 0 to 255. Powers of two help size things: $2^3 = 8$ means three binary places can represent eight values. Plain English: two multiplied by itself three times equals eight. Binary choices stack quickly.
+
+| Item | Meaning |
+| --- | --- |
+| Bit | Smallest unit, either 0 or 1 |
+| Byte | 8 bits, often one character in simple encodings |
+| $2^n$ | Number of combinations with n bits |
+
+<DiagramBlock title="Characters to numbers to bits" subtitle="Encoding then binary storage">
+  <div className="grid gap-3 sm:grid-cols-3 text-xs text-slate-700">
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Characters</p>
+      <p className="mt-1">"A", "7", "e"</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Numbers via encoding</p>
+      <p className="mt-1">"A" -> 65, "7" -> 55, "e" -> 101</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Bits in memory</p>
+      <p className="mt-1">65 -> 01000001</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="data-foundations-text-to-bytes"
+  title="Text to bytes visualiser"
+  description="Type text and see characters turn into numbers and bits."
+>
+  <TextToBytesVisualizer />
+</ToolCard>
+
+<QuizBlock
+  id="data-foundations-representation-quiz"
+  courseId="data"
+  levelId="foundations"
+  sectionId="data-foundations-representation-and-formats"
+  title="Quick check: representation and formats"
+  questions={[
+    { q: "What is a bit", a: "The smallest binary digit, 0 or 1." },
+    { q: "How many bits are in a byte", a: "Eight." },
+    { q: "What does $2^3$ equal", a: "Eight." },
+    { q: "What does encoding do", a: "Maps symbols to numbers." },
+    { q: "What is CSV", a: "Plain text data separated by commas." },
+    { q: "Why can wrong encodings break text", a: "The receiver reads numbers differently and shows the wrong characters." },
+    { q: "Give one structured format", a: "JSON or XML." },
+    { q: "Why does binary suit computers", a: "Hardware can reliably distinguish two states." },
+  ]}
+/>
+
+## Data quality and meaning
+
+<SectionProgressToggle courseId="data" levelId="foundations" sectionId="data-foundations-quality-and-meaning" />
+
+Quality means data is accurate (close to the truth), complete (not missing key pieces), and timely (fresh enough to be useful). A sensor reading of 21°C is useless if the timestamp is missing. Noise is random variation that hides patterns, while signal is the meaningful part. Bias creeps in when some groups are missing or when measurements are skewed. Models and dashboards inherit these flaws because they cannot tell if the input is wrong.
+
+Context and metadata preserve meaning: units, collection methods, and who collected the data. If a temperature has no unit, is it Celsius or Fahrenheit? Data without context invites bad decisions.
+
+<DiagramBlock title="Clean vs noisy data" subtitle="Quality affects every step">
+  <div className="grid gap-3 sm:grid-cols-2 text-xs text-slate-700">
+    <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3">
+      <p className="font-semibold text-emerald-900">Clean data</p>
+      <p className="mt-1">Complete timestamps, sensible ranges, clear units.</p>
+    </div>
+    <div className="rounded-xl border border-amber-200 bg-amber-50 p-3">
+      <p className="font-semibold text-amber-900">Noisy or biased data</p>
+      <p className="mt-1">Missing fields, extreme outliers, underrepresented groups.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="data-foundations-quality-checker"
+  title="Data quality checker"
+  description="Inspect a tiny dataset, add your notes, and reveal seeded issues."
+>
+  <DataQualityCheckerTool />
+</ToolCard>
+
+<QuizBlock
+  id="data-foundations-quality-quiz"
+  courseId="data"
+  levelId="foundations"
+  sectionId="data-foundations-quality-and-meaning"
+  title="Quick check: data quality and meaning"
+  questions={[
+    { q: "What is accuracy", a: "How close data is to the truth." },
+    { q: "What is completeness", a: "Having the needed fields present." },
+    { q: "What is timeliness", a: "Data is fresh enough to reflect reality." },
+    { q: "What is noise", a: "Random variation that hides signal." },
+    { q: "How does bias enter data", a: "Missing groups, skewed measurements, or flawed collection." },
+    { q: "Why do models inherit data problems", a: "They learn from the input given, including errors." },
+    { q: "Why is metadata important", a: "It explains units, source, and meaning so data is not misread." },
+  ]}
+/>
+
+## Data lifecycle and flow
+
+<SectionProgressToggle courseId="data" levelId="foundations" sectionId="data-foundations-lifecycle-and-flow" />
+
+Data starts at collection, gets stored, processed, shared, and eventually archived or deleted. Each step has design choices: where to store, how to process, how to secure, and when to retire. Software architecture cares about where components sit. Cybersecurity cares about protection at each hop. AI pipelines care about how raw data becomes features.
+
+Deletion matters because stale data can mislead, cost money, or breach privacy. A clear lifecycle stops random copies and reduces attack surface.
+
+<DiagramBlock title="End to end data lifecycle" subtitle="Loop with ownership at every step">
+  <div className="grid gap-3 sm:grid-cols-5 text-xs text-slate-700">
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Collect</p>
+      <p className="mt-1">Forms, sensors, logs.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Store</p>
+      <p className="mt-1">Databases, lakes, queues.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Process</p>
+      <p className="mt-1">Cleaning, joins, enrichment.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Share</p>
+      <p className="mt-1">APIs, files, dashboards.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Archive or delete</p>
+      <p className="mt-1">Retention, compliance, cost control.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="data-foundations-lifecycle-mapper"
+  title="Lifecycle mapper"
+  description="Order the lifecycle steps and see if the flow is healthy."
+>
+  <LifecycleMapperTool />
+</ToolCard>
+
+<QuizBlock
+  id="data-foundations-lifecycle-quiz"
+  courseId="data"
+  levelId="foundations"
+  sectionId="data-foundations-lifecycle-and-flow"
+  title="Quick check: lifecycle and flow"
+  questions={[
+    { q: "Name the first lifecycle step", a: "Collect." },
+    { q: "Why is processing needed", a: "To clean and combine data so it is usable." },
+    { q: "Why is sharing controlled", a: "To ensure the right people and systems access the right data." },
+    { q: "Why does deletion matter", a: "Old data can mislead and increase risk or cost." },
+    { q: "How does architecture connect", a: "It defines where and how data moves between components." },
+    { q: "How does cybersecurity connect", a: "It protects data at each storage and transfer step." },
+    { q: "How do AI pipelines fit", a: "They turn collected data into features for models." },
+  ]}
+/>
+
+## Data roles and responsibilities
+
+<SectionProgressToggle courseId="data" levelId="foundations" sectionId="data-foundations-roles-and-responsibilities" />
+
+Roles exist so someone is accountable for quality, access, and change. Data owners make decisions about purpose and access. Data stewards guard definitions, metadata, and policy. Data engineers build and maintain pipelines. Data analysts turn data into insights. Data consumers use the outputs responsibly. When roles blur, pipelines stall, privacy is ignored, or dashboards contradict each other.
+
+<DiagramBlock title="Role responsibility map" subtitle="Who does what and why it matters">
+  <div className="grid gap-3 sm:grid-cols-4 text-xs text-slate-700">
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Owner</p>
+      <p className="mt-1">Sets purpose, approves access.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Steward</p>
+      <p className="mt-1">Keeps definitions and metadata clean.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Engineer</p>
+      <p className="mt-1">Builds and operates pipelines safely.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Analyst and consumer</p>
+      <p className="mt-1">Uses outputs, shares insights, flags gaps.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="data-foundations-role-matcher"
+  title="Role matcher"
+  description="Pair scenarios with the role responsible for the next action."
+>
+  <RoleMatcherTool />
+</ToolCard>
+
+<QuizBlock
+  id="data-foundations-roles-quiz"
+  courseId="data"
+  levelId="foundations"
+  sectionId="data-foundations-roles-and-responsibilities"
+  title="Quick check: roles and responsibilities"
+  questions={[
+    { q: "What does a data owner decide", a: "Purpose and access." },
+    { q: "What does a data steward maintain", a: "Definitions, metadata, and policy alignment." },
+    { q: "What does a data engineer build", a: "Pipelines and storage that move and prepare data." },
+    { q: "What does a data analyst do", a: "Turns data into insights and stories." },
+    { q: "Who is a data consumer", a: "Anyone using the outputs responsibly." },
+    { q: "What happens when roles blur", a: "Confusion, stalled work, or risky decisions." },
+  ]}
+/>
+
+## Foundations of data ethics and trust
+
+<SectionProgressToggle courseId="data" levelId="foundations" sectionId="data-foundations-ethics-and-trust" />
+
+Ethics matters from the first data point. Consent means people know and agree to how their data is used. Privacy keeps personal details safe. Transparency builds trust because people can see what is collected and why. Misuse often starts with shortcuts: copying data to test faster or sharing beyond the agreed purpose. Trust erodes slowly and is hard to rebuild.
+
+<DiagramBlock title="Trust over time" subtitle="Small choices add up">
+  <div className="grid gap-3 sm:grid-cols-3 text-xs text-slate-700">
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Careful use</p>
+      <p className="mt-1">Purpose and consent checked.</p>
+    </div>
+    <div className="rounded-xl border border-amber-200 bg-amber-50 p-3">
+      <p className="font-semibold text-amber-900">Shortcuts</p>
+      <p className="mt-1">Copying data, unclear retention.</p>
+    </div>
+    <div className="rounded-xl border border-rose-200 bg-rose-50 p-3">
+      <p className="font-semibold text-rose-900">Trust erosion</p>
+      <p className="mt-1">People lose confidence and push back.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="data-foundations-ethics-scenarios"
+  title="Ethics scenario helper"
+  description="Pick the most responsible option for everyday data choices."
+>
+  <EthicsScenarioTool />
+</ToolCard>
+
+<QuizBlock
+  id="data-foundations-ethics-quiz"
+  courseId="data"
+  levelId="foundations"
+  sectionId="data-foundations-ethics-and-trust"
+  title="Quick check: ethics and trust"
+  questions={[
+    { q: "What is consent", a: "People agreeing to how their data is used." },
+    { q: "Why does privacy matter", a: "To keep personal data safe and respectful." },
+    { q: "How is trust built", a: "By being clear about collection, use, and safeguards." },
+    { q: "How does misuse often start", a: "With small shortcuts or sharing beyond purpose." },
+    { q: "Why mention ethics early", a: "Habits formed now prevent problems at scale." },
+    { q: "What is one way to prevent trust erosion", a: "Stick to stated purposes and limit copies of data." },
+  ]}
+/>
+
+{/* CPD alignment: data literacy fundamentals, governance and stewardship expectations, cross domain relevance to AI, cybersecurity, and software architecture. */}
+
+## How data connects everything you learn next
+
+Data is the common thread across the other courses. AI models are only as good as the data they learn from. Cybersecurity controls protect data wherever it sits or moves. Software systems are structured flows of data shaped by design choices. Digital transformation is largely about improving how data is collected, shared, and trusted across journeys. Think of this page as the root note; the other tracks are variations.
+
+### Shared practice exercises
+
+These exercises appear across courses so you build one habit: always question how data is used, protected, and interpreted.
+
+<ToolCard
+  id="shared-data-interpretation"
+  title="The same data, different meanings"
+  description="View one dataset through AI, cybersecurity, and business lenses to see how context shapes decisions."
+>
+  <SharedDataInterpretationTool />
+</ToolCard>
+
+<ToolCard
+  id="shared-lifecycle-risks"
+  title="Spot the data risks"
+  description="Step through the lifecycle and reveal where leaks, misuse, or corruption can creep in."
+>
+  <SharedLifecycleRisksTool />
+</ToolCard>
+
+<ToolCard
+  id="shared-data-to-decision"
+  title="From raw data to action"
+  description="Trace how data becomes a decision and where quality or trust can fail along the way."
+>
+  <SharedDataToDecisionTool />
+</ToolCard>
+
+## Data dashboards you will use throughout the site
+
+These starter dashboards will grow with you. They stay simple now so you can focus on concepts, then expand in Intermediate and Advanced levels.
+
+<ToolCard
+  id="data-format-explorer"
+  title="Explore data formats"
+  description="Toggle between CSV, JSON, images, and audio to see how structure changes usage."
+>
+  <DataFormatExplorer />
+</ToolCard>
+
+<ToolCard
+  id="data-quality-sandbox"
+  title="Test data quality"
+  description="Introduce missing values and noise to watch quality scores shift."
+>
+  <DataQualitySandbox />
+</ToolCard>
+
+<ToolCard
+  id="data-flow-visualiser"
+  title="Visualise how data moves"
+  description="Click through a small flow to see why boundaries and controls matter."
+>
+  <DataFlowVisualizer />
+</ToolCard>
+
+## Where this takes you next
+
+Data Intermediate digs into architecture, governance, and analytics that build on these habits. If you want to see how data powers other domains right away, jump to:
+
+- [Data Intermediate](/data/intermediate)
+- [AI Foundations](/ai/beginner)
+- [Cybersecurity Foundations](/cybersecurity/beginner)
+- [Software Architecture Foundations](/software-architecture/beginner)
+- [Digitalisation Foundations](/digitalisation/beginner)
+
+<Callout type="info" title="CPD ready">
+This Foundations level blends theory and practice in a structured way. Later levels increase complexity and applied depth so your CPD record shows progression, not just exposure.
+</Callout>
+
+<PageNav nextHref="/data/intermediate" nextLabel="Intermediate" showTop showBottom />

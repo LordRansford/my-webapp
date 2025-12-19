@@ -1,55 +1,47 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-
-const STORAGE_KEY = "ransfordsnotes-cpd";
-const isBrowser = typeof window !== "undefined";
-
-function readStore() {
-  if (!isBrowser) return {};
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return {};
-    const parsed = JSON.parse(raw);
-    return typeof parsed === "object" && parsed !== null ? parsed : {};
-  } catch {
-    return {};
-  }
-}
-
-function writeStore(state) {
-  if (!isBrowser) return;
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch {
-    // ignore
-  }
-}
+import { useEffect, useMemo, useState } from "react";
+import { getInitialCPDState, getTotalsForTrack, resolveTrackId } from "@/lib/cpd";
+import { useCPD } from "@/hooks/useCPD";
 
 export function getTotalCpdHours(courseId) {
-  const state = readStore();
-  const course = state[courseId] || {};
-  return Object.values(course).reduce((sum, val) => sum + (Number(val) || 0), 0);
+  const state = getInitialCPDState();
+  const trackId = resolveTrackId(courseId);
+  const totals = getTotalsForTrack(state, trackId);
+  return Math.round((totals.totalMinutes / 60) * 10) / 10;
 }
 
 export default function CPDTracker({ courseId, levelId, estimatedHours }) {
+  const { state, updateSection } = useCPD();
   const [hours, setHours] = useState(0);
+  const trackId = resolveTrackId(courseId);
+  const sectionId = "overall";
+
+  const currentMinutes = useMemo(() => {
+    const match = state.sections.find(
+      (section) =>
+        section.trackId === trackId &&
+        section.levelId === levelId &&
+        section.sectionId === sectionId
+    );
+    return match?.minutes || 0;
+  }, [state.sections, trackId, levelId]);
 
   useEffect(() => {
-    const state = readStore();
-    const course = state[courseId] || {};
-    const current = course[levelId] ?? 0;
-    setHours(Number(current) || 0);
-  }, [courseId, levelId]);
+    setHours(Math.round((currentMinutes / 60) * 10) / 10);
+  }, [currentMinutes]);
 
   const onChange = (e) => {
     const value = Number(e.target.value) || 0;
     setHours(value);
-    const state = readStore();
-    if (!state[courseId]) state[courseId] = {};
-    state[courseId][levelId] = value;
-    writeStore(state);
+    const nextMinutes = Math.max(0, value * 60);
+    updateSection({
+      trackId,
+      levelId,
+      sectionId,
+      minutesDelta: nextMinutes - currentMinutes,
+    });
   };
 
   return (
@@ -61,7 +53,7 @@ export default function CPDTracker({ courseId, levelId, estimatedHours }) {
             Suggested guided hours: {estimatedHours || "not specified"}. This stays in your browser only and is for your own CPD notes.
           </p>
           <Link
-            href="/cpd"
+            href="/my-cpd"
             className="mt-2 inline-flex text-xs font-semibold text-sky-700 hover:text-sky-800 focus:outline-none focus:ring-2 focus:ring-sky-200"
           >
             View in My CPD

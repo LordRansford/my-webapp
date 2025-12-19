@@ -1,0 +1,59 @@
+{
+  "id": "data",
+  "slug": "data",
+  "title": "Data Notes",
+  "shortTitle": "Data",
+  "description": "A practical and rigorous course on data, from formats and models to governance, architecture, and real-world use across AI, cybersecurity, and digital systems.",
+  "totalEstimatedHours": 32,
+  "levels": [
+    {
+      "id": "foundations",
+      "title": "Data Foundations",
+      "slug": "foundations",
+      "estimatedHours": 8,
+      "summary": "Start with the language, formats, and habits that make data useful across teams.",
+      "learningOutcomes": [
+        "Explain why data matters to outcomes and how roles collaborate.",
+        "Recognise common data formats and how they shape modelling choices.",
+        "Describe simple storage and querying approaches.",
+        "Discuss data quality, stewardship, and responsible use at a basic level."
+      ]
+    },
+    {
+      "id": "intermediate",
+      "title": "Applied Data",
+      "slug": "intermediate",
+      "estimatedHours": 10,
+      "summary": "Move into models, pipelines, and applied analytics while keeping reliability in view.",
+      "learningOutcomes": [
+        "Outline schemas that fit real questions and constraints.",
+        "Sketch pipeline steps from ingestion to integration.",
+        "Connect analytics and feature shaping to downstream uses like AI and reporting.",
+        "Plan for tests, monitoring, and trust signals in data flows."
+      ]
+    },
+    {
+      "id": "advanced",
+      "title": "Advanced Data Systems",
+      "slug": "advanced",
+      "estimatedHours": 10,
+      "summary": "Join up data architecture, streaming, governance, and product thinking for real systems.",
+      "learningOutcomes": [
+        "Compare warehouse and lakehouse approaches at a high level.",
+        "Describe how streaming and real time needs influence design.",
+        "Relate governance and stewardship models to scaling teams.",
+        "Explain how data products keep ownership and interfaces clear."
+      ]
+    }
+  ],
+  "summaryPage": {
+    "slug": "summary",
+    "title": "Data summary and games",
+    "description": "A recap and playful space to connect data practice with real scenarios and next steps."
+  },
+  "targetAudience": [
+    "People who want a grounded view of data without heavy theory.",
+    "Teams linking data work to AI, cybersecurity, or digital delivery.",
+    "Lecturers and leaders who want concise, reusable explanations and labs."
+  ]
+}

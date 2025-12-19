@@ -1,90 +1,179 @@
+import { useMemo } from "react";
 import Link from "next/link";
-import Layout from "@/components/Layout";
+import NotesLayout from "@/components/notes/Layout";
+import { MDXRenderer } from "@/components/notes/MDXRenderer";
+import { loadNote } from "@/lib/content/loadNote";
+import SafeIcon from "@/components/content/SafeIcon";
+import CPDHoursTotal from "@/components/course/CPDHoursTotal";
+import { aiSectionManifest } from "@/lib/aiSections";
+import { useCPD } from "@/hooks/useCPD";
+import { getCompletionForCourse, getCompletionForLevel } from "@/lib/cpd";
+import aiCourse from "../../../content/courses/ai.json";
 
-const pages = [
+const AI_LEVEL_ORDER = ["foundations", "intermediate", "advanced", "summary"];
+
+const getHours = (matchIds, fallback) => {
+  const entry = aiCourse.levels?.find((level) => matchIds.includes(level.id));
+  return Number(entry?.estimatedHours || entry?.estimated_hours) || fallback;
+};
+
+const aiLevels = [
   {
-    slug: "beginner",
-    title: "Beginner",
-    summary: "Foundations of AI in clear language with tools and practice questions.",
+    id: "foundations",
+    label: "Foundations",
+    title: "AI Foundations",
+    description: "Start with what AI is, how data is turned into numbers and why simple models matter.",
+    href: "/ai/beginner",
+    estimatedHours: getHours(["foundations"], 8),
   },
   {
-    slug: "intermediate",
-    title: "Intermediate",
-    summary: "Applied thinking: metrics, leakage, and how models behave in the real world.",
+    id: "intermediate",
+    label: "Intermediate",
+    title: "AI Intermediate",
+    description: "Work with evaluation, overfitting, simple pipelines and where models break in the real world.",
+    href: "/ai/intermediate",
+    estimatedHours: getHours(["intermediate", "applied"], 10),
   },
   {
-    slug: "advanced",
-    title: "Advanced",
-    summary: "Systems, grounding, agents, diffusion, and responsible AI at scale.",
+    id: "advanced",
+    label: "Advanced",
+    title: "AI Advanced",
+    description: "Dig into transformers, agents, diffusion and how to combine them into serious systems.",
+    href: "/ai/advanced",
+    estimatedHours: getHours(["advanced", "practice-strategy"], 12),
   },
   {
-    slug: "dashboards",
-    title: "Further practice",
-    summary: "Dashboards and hands-on labs to make the concepts tangible before the summary and games.",
-  },
-  {
-    slug: "summary",
+    id: "summary",
+    label: "Summary",
     title: "Summary and games",
-    summary: "Recap, games, and dashboards to test your intuition.",
-  },
-  {
-    slug: "capstone",
-    title: "BookTrack capstone journey",
-    summary: "An end to end journey that connects architecture, cybersecurity, digitalisation and AI using the BookTrack example.",
-    href: "/notes/capstone/booktrack",
-  },
-  {
-    slug: "capstone-gridlens",
-    title: "GridLens capstone journey",
-    summary: "An end to end journey that connects architecture, CIM based network data, cybersecurity, digitalisation and AI using the GridLens example.",
-    href: "/notes/capstone/gridlens",
+    description: "Test everything you know with games, scenarios and recap dashboards.",
+    href: "/ai/summary",
+    estimatedHours: Number(aiCourse.summaryPage?.estimatedHours) || 3,
   },
 ];
 
-export default function AIHub() {
+function StartButton() {
   return (
-    <Layout
-      title="AI Notes"
-      description="Choose your level: beginner, intermediate, advanced, dashboards, or summary with games."
-    >
-      <header className="page-header">
-        <p className="eyebrow">AI Notes</p>
-        <h1>Read, practise, and build judgement</h1>
-        <p className="lead">
-          Pick the stage that fits you. Beginner for the basics, intermediate for system behaviour, advanced for
-          architecture and responsible AI, a dashboards page for hands-on labs, and a summary page with games to make it stick.
-        </p>
-      </header>
-
-      <div className="course-grid">
-        {pages.map((page) => (
-          <Link key={page.slug} href={page.href || `/ai/${page.slug}`} className="course-card">
-            <div className="course-card__meta">
-              <span className="chip chip--accent">{page.title}</span>
-            </div>
-            <h3>{page.title}</h3>
-            <p className="muted">{page.summary}</p>
-            <div className="course-card__footer">
-              <span className="footnote">Open notes</span>
-              <span aria-hidden="true">{">"}</span>
-            </div>
-          </Link>
-        ))}
-      </div>
-
-      <section className="section">
-        <h2>References and further reading</h2>
-        <p className="muted">
-          These notes draw on a wide range of sources. A few starting points are listed here so that you can explore the
-          official material in more depth.
-        </p>
-        <ul className="list">
-          <li>Responsible AI guidance and documentation from major cloud and AI vendors</li>
-          <li>Research papers and textbooks from recognised universities and professional bodies</li>
-          <li>National and international guidance on AI governance, safety, and ethics</li>
-        </ul>
-      </section>
-    </Layout>
+    <div className="my-4">
+      <Link
+        href="/ai/beginner"
+        className="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-200"
+      >
+        <SafeIcon name="brain" size={16} color="currentColor" style={{ marginRight: 0 }} />
+        Start with Foundations
+        <span aria-hidden="true">-&gt;</span>
+      </Link>
+    </div>
   );
 }
 
+function TrackProgressSummary() {
+  const { state } = useCPD();
+  const completion = useMemo(
+    () => getCompletionForCourse(state, "ai", aiSectionManifest, AI_LEVEL_ORDER),
+    [state]
+  );
+  const percent = completion.percent;
+
+  return (
+    <div className="rounded-2xl border border-gray-200 bg-white/85 p-4 shadow-sm" role="group" aria-label="AI course progress">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm font-semibold text-gray-900">AI track progress</p>
+          <p className="text-xs text-gray-700">
+            {completion.completedCount} of {completion.totalCount || 0} sections complete
+          </p>
+        </div>
+        <span className="chip chip--accent">{percent}%</span>
+      </div>
+      <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-gray-100" aria-hidden="true">
+        <div className="h-full bg-gradient-to-r from-sky-500 via-indigo-500 to-purple-500" style={{ width: `${percent}%` }} />
+      </div>
+    </div>
+  );
+}
+
+function LevelCards() {
+  const { state } = useCPD();
+
+  return (
+    <div className="mt-4 grid gap-4 md:grid-cols-2">
+      {aiLevels.map((level) => {
+        const sectionIds = aiSectionManifest[level.id] || [];
+        const completion = getCompletionForLevel(state, "ai", level.id, sectionIds);
+        return (
+          <div
+            key={level.id}
+            className="flex h-full flex-col rounded-2xl border border-gray-200 bg-white/90 p-4 shadow-sm backdrop-blur"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="eyebrow mb-1 text-gray-700">{level.label}</p>
+                <h3 className="text-lg font-semibold text-gray-900">{level.title}</h3>
+                <p className="mt-1 text-sm text-gray-700">{level.description}</p>
+              </div>
+              <span className="chip chip--ghost">
+                {level.estimatedHours ? `${level.estimatedHours} hrs` : "Self paced"}
+              </span>
+            </div>
+            <div className="mt-3" role="group" aria-label={`${level.title} progress`}>
+              <div className="flex items-center justify-between text-xs font-semibold text-gray-800">
+                <span>Level progress</span>
+                <span aria-label={`${level.title} ${completion.percent}% complete`}>{completion.percent}%</span>
+              </div>
+              <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-gray-100" aria-hidden="true">
+                <div className="h-full bg-gradient-to-r from-sky-500 to-indigo-600" style={{ width: `${completion.percent}%` }} />
+              </div>
+            </div>
+            <div className="mt-auto pt-3">
+              <Link
+                href={level.href}
+                className="inline-flex items-center gap-2 text-sm font-semibold text-indigo-700 hover:text-indigo-900 focus:outline-none focus:ring focus:ring-indigo-200"
+              >
+                Go to {level.label} <span aria-hidden="true">-&gt;</span>
+              </Link>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+export default function AICourseOverviewPage({ source, headings }) {
+  const mdxComponents = useMemo(
+    () => ({
+      StartButton,
+      SafeIcon,
+      TrackProgressSummary,
+      CPDHoursTotal: () => <CPDHoursTotal courseId="ai" courseName="AI" />,
+      LevelCards: () => <LevelCards />,
+    }),
+    []
+  );
+
+  return (
+    <NotesLayout
+      meta={{
+        title: aiCourse.title || "AI course overview",
+        description: aiCourse.description || "From data and intuition through to modern AI systems with safe practice.",
+        level: "Overview",
+        slug: "/ai",
+        section: "ai",
+      }}
+      headings={headings}
+    >
+      <MDXRenderer source={source} components={mdxComponents} />
+    </NotesLayout>
+  );
+}
+
+export async function getStaticProps() {
+  const note = await loadNote("ai/overview.mdx");
+  return {
+    props: {
+      source: note.source,
+      headings: note.headings,
+    },
+  };
+}

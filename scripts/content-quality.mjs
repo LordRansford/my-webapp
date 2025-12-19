@@ -83,6 +83,10 @@ function hasDefinitionsBeforeKatex(sectionBody) {
 const raw = readFile(FILE);
 const sections = splitSections(raw);
 
+if (/\/(public|static)\/templates\/.+\.(pdf|docx|html)/i.test(raw)) {
+  fail("Direct template file URLs are not allowed in content. Use the download flow.");
+}
+
 if (sections.length < 4) fail(`Expected multiple sections. Found only ${sections.length}. Add more structure and content.`);
 
 const nonIntroCount = sections.filter((s) => s.title !== "Intro").length;

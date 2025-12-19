@@ -1,0 +1,62 @@
+# Template Standard (Internal)
+
+This document is the single source of truth for every premium template and dashboard. It exists for maintainers and Codex context only; end users never see this page.
+
+## Purpose of templates
+- Deliver reusable, real-world-grade assets that accelerate delivery across domains.
+- Stay legally safe: every asset must be authorised for reuse and clearly licensed.
+- Remain consistent: identical structure, metadata, accessibility, and export behaviour across all templates.
+
+## Legal and attribution rules
+- Default licence: attribution required for commercial use; internal or personal use may remove attribution.
+- Mandatory inclusions on commercial downloads: author name, brand, attribution notice. These must not be stripped in PDFs, docs, or dashboards.
+- Attribution removal for commercial use requires either an approved donation route or explicit written permission.
+- Include a standard attribution block component on every template page; gating logic must run at download/export time (placeholder for now).
+
+## Structural layout rules (cannot be bypassed)
+- All templates must render inside `src/components/templates/TemplateLayout.jsx`.
+- Required sections, in order:
+  1. Title and short description
+  2. Intended audience and use cases
+  3. Instructions on how to use the template
+  4. Editable form or dashboard area
+  5. Output and interpretation section
+  6. Licence and attribution notice
+- Shared building blocks live in `src/components/templates`: `TemplateHeader`, `TemplateInstructions`, `TemplateFormSection`, `TemplateOutput`, `TemplateLicenceNotice`.
+- No template may omit or reorder these sections. Placeholder copy is acceptable while the template is under construction.
+
+## Template taxonomy
+Top-level categories (non-negotiable). Each category must provide Planning, Design, Execution, and Monitoring/Reporting templates.
+- Cybersecurity
+- Artificial Intelligence
+- Data and Information
+- Software Architecture
+- Digitalisation and Strategy
+- Engineering Systems
+- Governance and Regulation
+- Risk and Assurance
+- Operations and Delivery
+
+## Metadata requirements (critical)
+- Author must be set to Ransford (or the designated owner) on every exported artifact.
+- Organisation name must be present; do not mention AI, generators, OpenAI, or automation anywhere in document properties.
+- Keep document properties minimal and clean (title, author, organisation, version, and category only).
+- Use `src/utils/templateMetadata.js` during export to inject compliant metadata.
+
+## Accessibility and inclusivity baseline
+- Minimum base font size: 16px for body, 18px+ for headings; avoid text set below 14px anywhere.
+- Colour contrast: WCAG AA or better; avoid colour-only distinctions.
+- Keyboard: all interactive elements in templates must be reachable and operable via keyboard (logical tab order, visible focus).
+- Screen readers: every form field requires an explicit label; provide aria-live regions for dynamic output where relevant.
+- Language: prefer short sentences, avoid jargon without definitions, include inline help where workflows may be unclear.
+
+## Export rules
+- Exports must carry licence and attribution per the legal rules above.
+- Metadata injection is mandatory for all exports (PDF, DOCX, CSV, dashboards). No automated/AI tool references permitted.
+- Gating for commercial attribution removal must trigger before download; until implemented, show a placeholder control and log intent.
+- Generated files must not include tracking pixels, external calls, or embedded secrets.
+
+## Implementation notes for Codex
+- Use the shared layout and components; do not invent per-template structures.
+- Add tests and linting for metadata handling once export logic exists.
+- Preserve this standard as authoritative; updates must keep backward compatibility with existing templates or document migration steps.

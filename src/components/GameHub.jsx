@@ -7,12 +7,16 @@ export default function GameHub({ storageKey, title, subtitle, games }) {
 
   const open = (id) => {
     setActive(id);
-    if (storageKey) {
-      const raw = localStorage.getItem(storageKey);
-      const parsed = raw ? JSON.parse(raw) : { events: [] };
-      parsed.events = Array.isArray(parsed.events) ? parsed.events : [];
-      parsed.events.push({ type: "game_opened", game: id, at: Date.now() });
-      localStorage.setItem(storageKey, JSON.stringify(parsed));
+    if (storageKey && typeof window !== "undefined") {
+      try {
+        const raw = window.localStorage.getItem(storageKey);
+        const parsed = raw ? JSON.parse(raw) : { events: [] };
+        parsed.events = Array.isArray(parsed.events) ? parsed.events : [];
+        parsed.events.push({ type: "game_opened", game: id, at: Date.now() });
+        window.localStorage.setItem(storageKey, JSON.stringify(parsed));
+      } catch {
+        // ignore storage errors so the UI keeps working
+      }
     }
   };
 
@@ -31,11 +35,14 @@ export default function GameHub({ storageKey, title, subtitle, games }) {
         {games.map((g) => (
           <button
             key={g.id}
-            className="rn-card rn-card-button"
+            type="button"
+            className="rn-card rn-card-button text-left break-words"
             onClick={() => open(g.id)}
             aria-pressed={active === g.id}
           >
-            <div className="rn-mini-title">{g.level} · {g.minutes} min</div>
+            <div className="rn-mini-title">
+              {g.level} · {g.minutes} min
+            </div>
             <div className="rn-card-title">{g.title}</div>
             <div className="rn-card-body">{g.summary}</div>
           </button>
@@ -49,9 +56,11 @@ export default function GameHub({ storageKey, title, subtitle, games }) {
               <div className="rn-mini-title">Now playing</div>
               <div className="rn-card-title">{activeGame.title}</div>
             </div>
-            <button className="rn-btn" onClick={close}>Close</button>
+            <button className="rn-btn" type="button" onClick={close}>
+              Close
+            </button>
           </div>
-          <div className="rn-card-body">{activeGame.component}</div>
+          <div className="rn-card-body break-words">{activeGame.component}</div>
         </div>
       )}
     </section>

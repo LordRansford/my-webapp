@@ -1,12 +1,13 @@
 ---
 title: "AI Advanced"
-description: "We dive into transformers, agents, generative models and the messy reality of running AI safely in the real world."
-level: "advanced"
+slug: "advanced"
 courseId: "ai"
 levelId: "advanced"
-summary: "We dive into transformers, agents, generative models and the messy reality of running AI safely in the real world."
+summary: "My notes on modern model families, agents and how to use them safely in serious systems."
 estimatedHours: 12
 stepIndex: 2
+level: "advanced"
+description: "We dive into transformers, generative media, agentic systems, and the checks that keep them safe."
 ---
 
 import ToolCard from "@/components/notes/ToolCard"
@@ -19,10 +20,10 @@ import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
 import DiagramBlock from "@/components/DiagramBlock"
 import { aiSectionManifest } from "@/lib/aiSections"
-import TransformerAttentionExplorerTool from "@/components/notes/tools/ai/advanced/TransformerAttentionExplorerTool"
-import AgentLabTool from "@/components/notes/tools/ai/advanced/AgentLabTool"
-import GenerativeMultimodalLabTool from "@/components/notes/tools/ai/advanced/GenerativeMultimodalLabTool"
-import SafetyEvalLabTool from "@/components/notes/tools/ai/advanced/SafetyEvalLabTool"
+import TokenContextLab from "@/components/notes/tools/ai/advanced/TokenContextLab"
+import MiniDiffusionLab from "@/components/notes/tools/ai/advanced/MiniDiffusionLab"
+import AgentFlowBuilder from "@/components/notes/tools/ai/advanced/AgentFlowBuilder"
+import GovernanceChecklistLab from "@/components/notes/tools/ai/advanced/GovernanceChecklistLab"
 
 # AI Advanced
 
@@ -30,228 +31,268 @@ import SafetyEvalLabTool from "@/components/notes/tools/ai/advanced/SafetyEvalLa
 
 <CPDTracker courseId="ai" levelId="advanced" estimatedHours={12} />
 
-This level is about modern AI systems and the reality of deploying them. We keep the tone practical and focus on what matters when models touch real users.
+This level sits after Foundations and Intermediate. We stay with the same calm tone, but we widen the lens to cover the modern model families and the system thinking you need when AI goes into serious products.
 
----
+## Transformers and large language models
 
-## Modern model families and transformers
+<SectionProgressToggle courseId="ai" levelId="advanced" sectionId="ai-advanced-transformers-and-llms" />
 
-<SectionProgressToggle courseId="ai" levelId="advanced" sectionId="ai-advanced-model-families-and-transformers" />
+Foundations explained that models learn patterns. Intermediate showed pipelines and metrics. Here we zoom into the architecture that scaled this field: the <GlossaryTip term="transformer">A neural network that uses attention to compare every token in a sequence.</GlossaryTip>.
 
-We have already met classic models in Intermediate. Advanced work now leans on deep learning. A <GlossaryTip term="transformer">A model architecture that uses attention to compare every part of an input.</GlossaryTip> scaled this work because it can handle long sequences efficiently.
+<GlossaryTip term="attention">A way for the model to decide which parts of the input matter most for the current output.</GlossaryTip> and <GlossaryTip term="self attention">Attention that compares tokens within the same sequence.</GlossaryTip> let the model focus on the right slices of context. Inputs become a stream of <GlossaryTip term="token">Small chunks of text like words or subwords.</GlossaryTip>. A <GlossaryTip term="context window">The maximum number of tokens the model can handle at once.</GlossaryTip> sets a hard limit on how much the model can see. <GlossaryTip term="positional encoding">Signals that mark where each token sits in the sequence.</GlossaryTip> stop the model from losing order.
 
-<GlossaryTip term="attention">A way for a model to decide which parts of the input matter most right now.</GlossaryTip> is the core idea. A <GlossaryTip term="token">A small chunk of text like a word or part of a word that the model processes.</GlossaryTip> becomes the unit of work. A <GlossaryTip term="large language model (LLM)">A transformer model trained on massive text so it can predict and generate language.</GlossaryTip> is the result of this scale.
-
-Transformers now power text, vision, and audio systems because they can focus on the right context. You do not need heavy maths here. The key is that scale and attention let these models learn patterns that older methods could not capture.
-
-<DiagramBlock title="Transformer intuition" subtitle="Tokens flow through attention to form an output.">
-  <div className="grid gap-2 sm:grid-cols-3 text-xs text-slate-700">
+<DiagramBlock
+  title="Transformer flow"
+  subtitle="Tokens in, attention blocks, tokens out"
+  description="A friendly view of how inputs move through a stack of attention layers before we sample the next tokens."
+>
+  <div className="grid gap-2 sm:grid-cols-5 text-xs text-slate-800">
     <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Input tokens</p>
-      <p className="mt-1">Split text into small chunks.</p>
+      <p className="font-semibold text-slate-900">Tokens</p>
+      <p className="mt-1">Chunk text into pieces.</p>
     </div>
     <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Attention</p>
-      <p className="mt-1">Weigh what matters most.</p>
+      <p className="font-semibold text-slate-900">Positional signals</p>
+      <p className="mt-1">Mark order and distance.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Attention blocks</p>
+      <p className="mt-1">Weigh what matters.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Feed forward</p>
+      <p className="mt-1">Transform and mix signals.</p>
     </div>
     <div className="rounded-xl border border-slate-200 bg-white p-3">
       <p className="font-semibold text-slate-900">Output tokens</p>
-      <p className="mt-1">Generate the next pieces.</p>
+      <p className="mt-1">Sample the next steps.</p>
     </div>
   </div>
 </DiagramBlock>
 
+Large language models are just very big transformers trained on huge datasets. They predict the next token again and again. That is powerful for text, code, and even images when we change how tokens are defined. The practice links back to Intermediate: good prompts, solid retrieval, and a sensible context window beat raw parameter counts.
+
 <ToolCard
-  id="ai-advanced-transformer-playground"
-  title="Transformer attention explorer"
-  description="Use a small text example and see how a tiny transformer assigns attention across the words."
+  id="ai-transformer-token-lab"
+  title="Explore tokens and context"
+  description="Paste a short paragraph and see how it turns into tokens, how long the context is and how truncation would affect it."
+  courseId="ai"
+  levelId="advanced"
+  sectionId="ai-advanced-transformers-and-llms"
+  cpdMinutesOnUse={10}
 >
-  <TransformerAttentionExplorerTool />
+  <TokenContextLab />
 </ToolCard>
 
 <QuizBlock
-  id="ai-advanced-transformer-quiz"
-  title="Quick check: transformer intuition"
+  id="ai-advanced-transformers-quiz"
+  title="Check your understanding of transformers"
+  courseId="ai"
+  levelId="advanced"
+  sectionId="ai-advanced-transformers-and-llms"
   questions={[
-    { q: "What does attention help a model decide", a: "Which parts of the input matter most for the current task." },
-    { q: "What is a token", a: "A small chunk of text the model processes." },
-    { q: "Why did transformers scale well", a: "They compare many parts of the input at once." },
-    { q: "What does an LLM learn", a: "Patterns in language across massive text data." },
-    { q: "Why do transformers work for vision and audio", a: "Attention can focus on relevant context across sequences." },
-    { q: "What is a high level benefit of scale", a: "Better pattern learning across complex data." },
-    { q: "What is one risk of bigger models", a: "Higher cost and harder governance." },
-    { q: "Why keep the explanation simple", a: "You can reason about behavior without heavy maths." },
+    { q: "What does attention decide", a: "Which tokens matter most for the current output." },
+    { q: "What is a token", a: "A small chunk of text such as a word or subword." },
+    { q: "Why does the context window matter", a: "It caps how much of the prompt and retrieved text the model can see." },
+    { q: "Why add positional encoding", a: "To keep track of token order." },
+    { q: "How do large language models generate text", a: "By predicting the next token repeatedly." },
+    { q: "What risk comes from long prompts", a: "Important context can be truncated." },
   ]}
 />
 
-Scenario task: Imagine you need a customer support assistant. Explain why a transformer model is a good fit and what data you would avoid.
+## Diffusion and generative media
 
----
+<SectionProgressToggle courseId="ai" levelId="advanced" sectionId="ai-advanced-diffusion-and-generative-media" />
 
-## Agents and tool use
+Generative models create new content instead of just labelling it. A <GlossaryTip term="diffusion">Method that adds noise step by step then learns to reverse it.</GlossaryTip> is behind many image and audio models. We work in a <GlossaryTip term="latent space">A compressed space where structure is easier to model.</GlossaryTip> and <GlossaryTip term="sampling">The process of stepping through the denoising path to create outputs.</GlossaryTip>.
 
-<SectionProgressToggle courseId="ai" levelId="advanced" sectionId="ai-advanced-agents-and-tool-use" />
+<GlossaryTip term="noise">Random values added to hide the original signal.</GlossaryTip> is added repeatedly during training. The model then learns <GlossaryTip term="denoising">How to remove that noise to get back to structure.</GlossaryTip>. Fewer steps make outputs faster. More steps can make them cleaner. You can guide the process with text, images, or both.
 
-An <GlossaryTip term="agent">A model that plans steps and uses tools to reach a goal.</GlossaryTip> works by combining goals, plans, and actions. A <GlossaryTip term="tool call">A request from the model to run a function or an external action.</GlossaryTip> lets the agent use search, calculators, or internal APIs.
-
-Agents need memory. Short term memory is the current <GlossaryTip term="context window">The amount of text a model can consider at once.</GlossaryTip>. Long term memory is stored outside the model and retrieved when needed. This is powerful but risky, so permissions and logging matter.
-
-This is where software architecture and cybersecurity join the story. If an agent can call tools, you must treat it like a service with strict access, rate limits, and audit trails.
-
-<DiagramBlock title="Agent loop" subtitle="Plan, call tools, observe, and decide.">
-  <div className="grid gap-2 sm:grid-cols-3 text-xs text-slate-700">
+<DiagramBlock
+  title="Diffusion arc"
+  subtitle="From noise to signal"
+  description="A tiny view of how an image is pushed into noise and then recovered."
+>
+  <div className="grid gap-2 sm:grid-cols-4 text-xs text-slate-800">
     <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Goal and plan</p>
-      <p className="mt-1">Break the task into steps.</p>
+      <p className="font-semibold text-slate-900">Start image</p>
+      <p className="mt-1">Simple shape in latent space.</p>
     </div>
     <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Tool calls</p>
-      <p className="mt-1">Search, calculate, or query.</p>
+      <p className="font-semibold text-slate-900">Add noise</p>
+      <p className="mt-1">Hide the structure over steps.</p>
     </div>
     <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Result and update</p>
-      <p className="mt-1">Adjust the plan based on evidence.</p>
+      <p className="font-semibold text-slate-900">Learn to reverse</p>
+      <p className="mt-1">Model predicts what to remove.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Sample output</p>
+      <p className="mt-1">Noise shrinks and image appears.</p>
     </div>
   </div>
 </DiagramBlock>
 
+Practice and risk meet here. Prompts steer the image, but so do safety filters and dataset choices. Generative media can create joy or deep fakes. Keep records of how you sample and what filters you apply. It matters when you need to defend the results.
+
 <ToolCard
-  id="ai-advanced-agent-lab"
-  title="Build a tiny agent"
-  description="Wire an agent to a couple of tools like search and a calculator and watch how it plans its steps."
+  id="ai-diffusion-visual-lab"
+  title="Watch a tiny diffusion process"
+  description="Step through a tiny example where noise is added and then removed so you can see how a picture slowly appears."
+  courseId="ai"
+  levelId="advanced"
+  sectionId="ai-advanced-diffusion-and-generative-media"
+  cpdMinutesOnUse={10}
 >
-  <AgentLabTool />
+  <MiniDiffusionLab />
 </ToolCard>
 
 <QuizBlock
-  id="ai-advanced-agent-quiz"
-  title="Quick check: agents and tools"
+  id="ai-advanced-diffusion-quiz"
+  title="Check your understanding of diffusion"
+  courseId="ai"
+  levelId="advanced"
+  sectionId="ai-advanced-diffusion-and-generative-media"
   questions={[
-    { q: "What makes an agent different from a single prompt", a: "It plans multiple steps and can call tools." },
-    { q: "Why limit tool access", a: "It reduces security risk and misuse." },
-    { q: "What is a tool call", a: "A request to run a function or external action." },
-    { q: "Why is logging important for agents", a: "It allows audit and debugging." },
-    { q: "What is the context window", a: "The amount of text the model can process at once." },
-    { q: "When should you avoid agents", a: "When a single prompt is enough." },
-    { q: "What does long term memory require", a: "Storage, retrieval rules, and privacy controls." },
-    { q: "Why connect this to cybersecurity", a: "Agents can trigger real actions and need guardrails." },
+    { q: "What does diffusion do during training", a: "Adds noise and learns how to reverse it." },
+    { q: "What is latent space", a: "A compressed space where structure is easier to model." },
+    { q: "What does sampling mean here", a: "Stepping through denoising to generate an output." },
+    { q: "Why add noise at all", a: "So the model can learn the path back to structure." },
+    { q: "How can prompts guide outputs", a: "They nudge the denoising path toward desired features." },
+    { q: "Name one risk of generative media", a: "It can create convincing but misleading content." },
   ]}
 />
 
-Scenario task: Design a safe agent for internal research. List three guardrails you would require.
+## Agentic AI and tool use
 
----
+<SectionProgressToggle courseId="ai" levelId="advanced" sectionId="ai-advanced-agentic-ai-and-tools" />
 
-## Generative and multimodal models
+Intermediate pipelines fed a single model. Agentic systems chain steps. A <GlossaryTip term="planner">Component that decides what to do next.</GlossaryTip> works with an <GlossaryTip term="executor">Component that runs actions.</GlossaryTip> and uses <GlossaryTip term="tool call">A function call that lets the model reach out to search, calculators, or APIs.</GlossaryTip>.
 
-<SectionProgressToggle courseId="ai" levelId="advanced" sectionId="ai-advanced-generative-and-multimodal" />
+Agents juggle memory. The active <GlossaryTip term="context window">The text the model sees right now.</GlossaryTip> holds the short term state. External <GlossaryTip term="memory">Stored facts pulled back in when needed.</GlossaryTip> keeps long running work moving. That power comes with risk, so we wrap every agent with access rules, logging, and rate limits.
 
-A <GlossaryTip term="generative model">A model that can create new content like text, images, or audio.</GlossaryTip> works by sampling from learned patterns. That is why temperature and randomness matter. A <GlossaryTip term="diffusion">A method that generates outputs by denoising step by step.</GlossaryTip> powers many modern image models.
-
-A <GlossaryTip term="multimodal">A model that works with more than one type of input or output.</GlossaryTip> can take text and images together, or mix audio and text. Everyday examples include image captioning, text to image generation, and voice assistants that can read and show images.
-
-<DiagramBlock title="Generative and multimodal" subtitle="Many inputs, one shared model.">
-  <div className="grid gap-2 sm:grid-cols-4 text-xs text-slate-700">
+<DiagramBlock
+  title="Agent loop"
+  subtitle="User to planner to tools to answer"
+  description="A simple path that shows where planning, tools, and safety sit."
+>
+  <div className="grid gap-2 sm:grid-cols-5 text-xs text-slate-800">
     <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Text</p>
-      <p className="mt-1">Prompts and context.</p>
+      <p className="font-semibold text-slate-900">User goal</p>
+      <p className="mt-1">Clear intent.</p>
     </div>
     <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Images</p>
-      <p className="mt-1">Visual inputs or outputs.</p>
+      <p className="font-semibold text-slate-900">Planner</p>
+      <p className="mt-1">Decides the next tool.</p>
     </div>
     <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Audio</p>
-      <p className="mt-1">Speech and sound.</p>
+      <p className="font-semibold text-slate-900">Tools</p>
+      <p className="mt-1">Search, code, or APIs.</p>
     </div>
     <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Model</p>
-      <p className="mt-1">Generates new content.</p>
+      <p className="font-semibold text-slate-900">Memory</p>
+      <p className="mt-1">Scratchpad and lookups.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Final answer</p>
+      <p className="mt-1">Grounded response.</p>
     </div>
   </div>
 </DiagramBlock>
 
+Keep agent flows boring and auditable. Limit the tools they can call, cap the number of steps, and keep humans involved for risky actions. The best agent still fails if you forget simple guardrails.
+
 <ToolCard
-  id="ai-advanced-generative-lab"
-  title="Generative and multimodal lab"
-  description="Try text prompts for text and images, and see how different settings change the output."
+  id="ai-agent-flow-lab"
+  title="Design an agent flow"
+  description="Pick planner, tools and memory to sketch an agent that could solve a real task."
+  courseId="ai"
+  levelId="advanced"
+  sectionId="ai-advanced-agentic-ai-and-tools"
+  cpdMinutesOnUse={10}
 >
-  <GenerativeMultimodalLabTool />
+  <AgentFlowBuilder />
 </ToolCard>
 
 <QuizBlock
-  id="ai-advanced-generative-quiz"
-  title="Quick check: generative and multimodal"
+  id="ai-advanced-agentic-quiz"
+  title="Check your understanding of agents"
+  courseId="ai"
+  levelId="advanced"
+  sectionId="ai-advanced-agentic-ai-and-tools"
   questions={[
-    { q: "What does a generative model do", a: "It creates new content based on learned patterns." },
-    { q: "Why does sampling matter", a: "It controls creativity versus stability." },
-    { q: "What is diffusion in simple terms", a: "Generating by denoising over many steps." },
-    { q: "What makes a model multimodal", a: "It works with multiple data types." },
-    { q: "Give an everyday multimodal example", a: "Image captioning or voice assistants with visuals." },
-    { q: "Why tune temperature", a: "It changes how varied the output is." },
-    { q: "What is a risk of generative systems", a: "They can produce convincing but wrong content." },
-    { q: "Why keep prompts clear", a: "Ambiguous prompts lead to unpredictable outputs." },
+    { q: "What does the planner do", a: "Chooses the next action based on the goal and evidence." },
+    { q: "What is a tool call", a: "A function call the model makes to an external action like search or code." },
+    { q: "Why add memory outside the model", a: "To keep context across steps without blowing the context window." },
+    { q: "Name one guardrail for agents", a: "Restrict tools, add approvals, or log every action." },
+    { q: "When do you not need an agent", a: "When one prompt and one response is enough." },
+    { q: "Why cap the number of steps", a: "To control cost and avoid loops." },
   ]}
 />
 
-Scenario task: Write a short note about where a multimodal model would add value in your work.
+## Evaluation and governance at scale
 
----
+<SectionProgressToggle courseId="ai" levelId="advanced" sectionId="ai-advanced-evaluation-and-governance" />
 
-## Evaluation, safety and governance in the real world
+Offline metrics from Intermediate stay useful, but live systems need more. <GlossaryTip term="alignment">Keeping model behavior consistent with goals and ethics.</GlossaryTip> and <GlossaryTip term="guardrail">A control that stops unsafe or off-policy outputs.</GlossaryTip> become part of the release checklist. <GlossaryTip term="red teaming">Probing the system with risky or adversarial prompts.</GlossaryTip> and a clear <GlossaryTip term="model card">A short document that states limits and evidence.</GlossaryTip> keep teams honest.
 
-<SectionProgressToggle courseId="ai" levelId="advanced" sectionId="ai-advanced-evaluation-safety-governance" />
-
-Offline metrics are not enough when users are involved. Online evaluation uses A and B tests and feedback loops to compare versions. Safety is about preventing harm, protecting privacy, and avoiding misuse. A <GlossaryTip term="guardrail">A rule or control that keeps model behavior within safe limits.</GlossaryTip> can be a filter, a policy, or a human review step.
-
-Governance means clear ownership, approvals, documentation, and audit trails. The goal is to make decisions visible and repeatable without slowing teams to a crawl.
-
-<DiagramBlock title="AI lifecycle with oversight" subtitle="Design, build, deploy, then keep checking.">
-  <div className="grid gap-2 sm:grid-cols-3 text-xs text-slate-700">
+<DiagramBlock
+  title="AI lifecycle with oversight"
+  subtitle="Design, evaluate, monitor, improve"
+  description="The loop that keeps systems safe after launch."
+>
+  <div className="grid gap-2 sm:grid-cols-4 text-xs text-slate-800">
     <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Build and test</p>
-      <p className="mt-1">Data, training, evaluation.</p>
+      <p className="font-semibold text-slate-900">Design</p>
+      <p className="mt-1">Goals, data rules, model card.</p>
     </div>
     <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Deploy and monitor</p>
-      <p className="mt-1">Logging, drift checks, feedback.</p>
+      <p className="font-semibold text-slate-900">Evaluate</p>
+      <p className="mt-1">Offline metrics and red teaming.</p>
     </div>
     <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Govern and improve</p>
-      <p className="mt-1">Policies, owners, and audits.</p>
+      <p className="font-semibold text-slate-900">Monitor</p>
+      <p className="mt-1">Logs, drift, alerts.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Govern</p>
+      <p className="mt-1">Owners, approvals, evidence.</p>
     </div>
   </div>
 </DiagramBlock>
 
+Treat AI as a system, not a feature. Keep owners for every control. Capture evidence when you run tests or respond to incidents. The calmer and clearer the process, the safer the outcomes.
+
 <ToolCard
-  id="ai-advanced-safety-eval-lab"
-  title="Safety and evaluation lab"
-  description="Send example prompts through a safety filter and see which ones are flagged and why."
+  id="ai-governance-checklist-lab"
+  title="Build an AI governance checklist"
+  description="Pick an AI use case and step through a checklist for risk, policy, testing and monitoring, then export a simple action plan."
+  courseId="ai"
+  levelId="advanced"
+  sectionId="ai-advanced-evaluation-and-governance"
+  cpdMinutesOnUse={10}
 >
-  <SafetyEvalLabTool />
+  <GovernanceChecklistLab />
 </ToolCard>
 
 <QuizBlock
-  id="ai-advanced-safety-quiz"
-  title="Quick check: safety and governance"
+  id="ai-advanced-governance-quiz"
+  title="Check your understanding of evaluation and governance"
+  courseId="ai"
+  levelId="advanced"
+  sectionId="ai-advanced-evaluation-and-governance"
   questions={[
-    { q: "Why are A and B tests useful", a: "They compare versions with real user behavior." },
-    { q: "What is a guardrail", a: "A control that keeps model behavior within safe limits." },
-    { q: "Why log inputs and outputs", a: "To investigate incidents and improve models." },
-    { q: "What is a common safety risk", a: "Misuse or exposure of sensitive data." },
-    { q: "Why use human review", a: "To catch edge cases that automation misses." },
-    { q: "What should governance define", a: "Owners, approvals, and audit trails." },
-    { q: "Why are offline metrics not enough", a: "User behavior and context change in production." },
-    { q: "What keeps governance lightweight", a: "Clear templates and automation where possible." },
+    { q: "What is alignment in practice", a: "Keeping model behavior in line with goals and ethics." },
+    { q: "Why run red teaming", a: "To find risky behavior before users do." },
+    { q: "What belongs in a model card", a: "Purpose, limits, data notes, and evaluation evidence." },
+    { q: "Name one runtime monitor", a: "Drift alerts, safety filters, or latency alarms." },
+    { q: "Who should own guardrails", a: "Named people with clear accountability." },
+    { q: "Why collect evidence", a: "So approvals and fixes are transparent and repeatable." },
   ]}
 />
 
-Scenario task: Imagine you are launching a customer assistant. Write two safety rules and one monitoring metric you would require.
-
----
-
-<Callout variant="explain" title="Keep it practical">
-The advanced move is simple. Treat AI as a system, not a feature. Design for change, monitor reality, and keep humans in the loop when risk is high.
+<Callout variant="explain" title="Final reminder">
+Advanced work is about joining the dots. Keep the simple mental models from Foundations, the pipelines from Intermediate, and layer on bigger models, agents, and governance with the same calm habits.
 </Callout>
 
 <PageNav prevHref="/ai/intermediate" prevLabel="Intermediate" nextHref="/ai/summary" nextLabel="Summary and games" showTop showBottom />

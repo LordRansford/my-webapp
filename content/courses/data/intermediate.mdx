@@ -1,0 +1,315 @@
+---
+title: "Data Intermediate"
+slug: "intermediate"
+courseId: "data"
+levelId: "intermediate"
+summary: "How data systems are designed, governed, trusted and analysed in real organisations."
+estimatedHours: 10
+stepIndex: 1
+---
+
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import PageNav from "@/components/notes/PageNav"
+import Callout from "@/components/Callout"
+import { dataSectionManifest } from "@/lib/dataSections"
+
+# Data Intermediate
+
+<LevelProgressBar courseId="data" levelId="intermediate" sectionIds={dataSectionManifest.intermediate} />
+
+<CPDTracker courseId="data" levelId="intermediate" estimatedHours={10} />
+
+This level moves from concepts to systems. The focus is on design, governance, interoperability, and analysis that fit real organisations. The notes are written as my own checklist so you start thinking like a data professional, not just a tool user.
+
+<Callout type="info" title="Progression state">
+Foundations complete. You are on Intermediate. Advanced and Summary stay locked until this level is delivered.
+</Callout>
+
+---
+
+## Data architectures and pipelines
+
+<SectionProgressToggle courseId="data" levelId="intermediate" sectionId="data-intermediate-architectures-and-pipelines" />
+
+Data architecture is how data is organised, moved, and protected across systems. It sets the lanes so teams can build without tripping over each other. Pipelines exist because raw data is messy and scattered. They pull from sources, clean and combine, and land it where people and products can use it.
+
+There are two broad ways data moves: batch means scheduled chunks, streaming means small events flowing continuously. Both need clear boundaries so one team's changes do not break another's work. If a pipeline fails, dashboards go blank, models drift, and trust drops.
+
+When you design a pipeline, think about ownership at each hop, the contracts between steps, and how to recover when something breaks. A simple diagram often exposes gaps before a single line of code is written.
+
+<DiagramBlock title="Simple data flow" subtitle="Sources to insight with clear boundaries">
+  <div className="grid gap-3 sm:grid-cols-5 text-xs text-slate-700">
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Sources</p>
+      <p className="mt-1">Apps, sensors, files.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Ingestion</p>
+      <p className="mt-1">Collect, queue, validate.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Storage</p>
+      <p className="mt-1">Databases, lakes, warehouse.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Processing</p>
+      <p className="mt-1">Clean, join, aggregate.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Consumption</p>
+      <p className="mt-1">Dashboards, models, APIs.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="data-pipeline-designer"
+  title="Design a simple data pipeline"
+  description="Drag and connect sources, processors, and consumers to see how data flows and where ownership sits."
+>
+  <DataPipelineDesignerTool />
+</ToolCard>
+
+<QuizBlock
+  id="data-intermediate-architectures-quiz"
+  courseId="data"
+  levelId="intermediate"
+  sectionId="data-intermediate-architectures-and-pipelines"
+  title="Quick check: architectures and pipelines"
+  questions={[
+    { q: "Why do pipelines exist", a: "To move, clean, and combine data so it can be used reliably." },
+    { q: "What happens when a pipeline breaks", a: "Dashboards, reports, and models get stale or wrong." },
+    { q: "What is batch movement", a: "Moving data in scheduled chunks." },
+    { q: "What is streaming movement", a: "Moving small events continuously as they happen." },
+    { q: "Why do boundaries matter", a: "They stop one change from silently breaking another system." },
+    { q: "Why start with a diagram", a: "It reveals missing steps and ownership before building." },
+  ]}
+/>
+
+## Data governance and stewardship
+
+<SectionProgressToggle courseId="data" levelId="intermediate" sectionId="data-intermediate-governance-and-stewardship" />
+
+Governance is agreeing how data is handled so people can work quickly without being reckless. Ownership is the person or team that decides purpose and access. Stewardship is the day to day care of definitions, quality, and metadata. Accountability means someone can explain how a change was made and why.
+
+Policies are not paperwork for their own sake. They are guardrails: who can see a column, how long data is kept, what checks run before sharing. Even a shared spreadsheet is governance in miniature: who edits, who reviews, what happens when something looks off.
+
+Trust grows when policies are clear, controls are enforced, and feedback loops exist. If a report is wrong and nobody owns it, confidence collapses quickly.
+
+<DiagramBlock title="Governance loop" subtitle="People, policies, data, decisions">
+  <div className="grid gap-3 sm:grid-cols-4 text-xs text-slate-700">
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">People</p>
+      <p className="mt-1">Owner, steward, users.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Policies</p>
+      <p className="mt-1">Access, retention, checks.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Data assets</p>
+      <p className="mt-1">Tables, files, dashboards.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Decision loop</p>
+      <p className="mt-1">Use, review, improve.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="governance-policy-simulator"
+  title="Try governing a dataset"
+  description="Choose policies and see how risk, access, and usability shift for a sample dataset."
+>
+  <GovernancePolicySimulatorTool />
+</ToolCard>
+
+<QuizBlock
+  id="data-intermediate-governance-quiz"
+  courseId="data"
+  levelId="intermediate"
+  sectionId="data-intermediate-governance-and-stewardship"
+  title="Quick check: governance and stewardship"
+  questions={[
+    { q: "Why does governance exist", a: "To balance safe data use with speed and clarity." },
+    { q: "What does ownership mean", a: "Deciding purpose and access." },
+    { q: "What does stewardship mean", a: "Caring for definitions, quality, and metadata." },
+    { q: "Why are policies useful", a: "They are guardrails that prevent accidental misuse." },
+    { q: "What happens without governance", a: "Confusion, rework, and falling trust in reports." },
+  ]}
+/>
+
+## Interoperability and standards
+
+<SectionProgressToggle courseId="data" levelId="intermediate" sectionId="data-intermediate-interoperability-and-standards" />
+
+Interoperability means systems understand each other. It is shared meaning, not just shared pipes. Standards help: common formats, schemas, and naming. A schema is the agreed structure and data types. When systems misalign, data lands in the wrong fields, numbers become strings, or meaning gets lost.
+
+Formats like JSON or CSV carry data, but standards and contracts explain what each field means. An API (application programming interface) without a contract is guesswork. A file without a schema requires detective work.
+
+Small mismatches cause big effects: dates in different orders, currencies missing, names split differently. Aligning schemas early saves hours of cleanup and prevents silent errors.
+
+<DiagramBlock title="Interoperability check" subtitle="Alignment vs mismatch">
+  <div className="grid gap-3 sm:grid-cols-2 text-xs text-slate-700">
+    <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3">
+      <p className="font-semibold text-emerald-900">Aligned</p>
+      <p className="mt-1">Fields match, types agree, meaning is clear.</p>
+    </div>
+    <div className="rounded-xl border border-amber-200 bg-amber-50 p-3">
+      <p className="font-semibold text-amber-900">Mismatch</p>
+      <p className="mt-1">Wrong types, missing fields, swapped meanings.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="schema-mapping-lab"
+  title="Map data between systems"
+  description="Align two simple schemas and see what breaks when fields do not match."
+>
+  <SchemaMappingLabTool />
+</ToolCard>
+
+<QuizBlock
+  id="data-intermediate-interoperability-quiz"
+  courseId="data"
+  levelId="intermediate"
+  sectionId="data-intermediate-interoperability-and-standards"
+  title="Quick check: interoperability and standards"
+  questions={[
+    { q: "What is interoperability", a: "Systems sharing data with the same meaning." },
+    { q: "What is a schema", a: "An agreed structure and types for data." },
+    { q: "How do standards help", a: "They reduce guesswork and make systems predictable." },
+    { q: "What happens when schemas mismatch", a: "Fields break, meaning is lost, and errors spread." },
+    { q: "Why do contracts matter for APIs", a: "They tell clients exactly what to send and expect." },
+  ]}
+/>
+
+## Data analysis and insight generation
+
+<SectionProgressToggle courseId="data" levelId="intermediate" sectionId="data-intermediate-analysis-and-insight" />
+
+Analysis is asking good questions of data and checking that the answers hold up. Descriptive thinking asks what happened. Diagnostic thinking asks why. Statistics exist to separate signal from noise: averages summarise, distributions show spread, trends show direction.
+
+Averages hide detail. A long tail or a split between groups can change the story. Trends can be seasonal or random. Always pair a number with context: when it was measured, who is included, what changed.
+
+Insight is not a chart; it is a statement backed by data and understanding. Decisions follow insight, and they should note assumptions so they can be revisited.
+
+<DiagramBlock title="From data to decision" subtitle="Question, summarise, decide">
+  <div className="grid gap-3 sm:grid-cols-4 text-xs text-slate-700">
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Raw data</p>
+      <p className="mt-1">Events, readings, logs.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Aggregation</p>
+      <p className="mt-1">Group, filter, summarise.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Insight</p>
+      <p className="mt-1">Statement linked to evidence.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Decision</p>
+      <p className="mt-1">Action, experiment, follow up.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="analysis-playground"
+  title="Explore patterns in data"
+  description="Adjust simple filters and aggregations and watch insights change."
+>
+  <AnalysisPlaygroundTool />
+</ToolCard>
+
+<QuizBlock
+  id="data-intermediate-analysis-quiz"
+  courseId="data"
+  levelId="intermediate"
+  sectionId="data-intermediate-analysis-and-insight"
+  title="Quick check: analysis and insight"
+  questions={[
+    { q: "What is descriptive thinking", a: "Explaining what happened." },
+    { q: "What is diagnostic thinking", a: "Explaining why something happened." },
+    { q: "Why do averages hide detail", a: "They flatten differences and long tails." },
+    { q: "Why does context matter", a: "Time, group, and change affect interpretation." },
+    { q: "What is an insight", a: "A statement backed by data and understanding." },
+  ]}
+/>
+
+## Risk, ethics and strategic value
+
+<SectionProgressToggle courseId="data" levelId="intermediate" sectionId="data-intermediate-risk-ethics-strategic-value" />
+
+Data risk is broader than security. Misuse, misinterpretation, and neglect can harm people and decisions. Ethics asks whether we should use data in a certain way, not just whether we can. Strategic value comes from using data to improve services, not just to collect more of it.
+
+Risk points appear along the lifecycle: collection without consent, processing without checks, sharing beyond purpose, keeping data forever. Controls and culture reduce these risks. A small habit, like logging changes or reviewing outliers, prevents large mistakes.
+
+Treat data as a long term asset. Good stewardship, clear value cases, and honest communication build trust that lasts beyond a single project.
+
+<DiagramBlock title="Risk and ethics view" subtitle="Lifecycle with careful choices">
+  <div className="grid gap-3 sm:grid-cols-4 text-xs text-slate-700">
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Collect</p>
+      <p className="mt-1">Consent and purpose confirmed.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Process</p>
+      <p className="mt-1">Checks for bias and errors.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Share</p>
+      <p className="mt-1">Controlled access and logs.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Archive or delete</p>
+      <p className="mt-1">Retention reviewed, data minimised.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="data-risk-scenarios"
+  title="Spot data risks"
+  description="Review short scenarios and identify the risks and consequences."
+>
+  <DataRiskScenariosTool />
+</ToolCard>
+
+<QuizBlock
+  id="data-intermediate-risk-quiz"
+  courseId="data"
+  levelId="intermediate"
+  sectionId="data-intermediate-risk-ethics-strategic-value"
+  title="Quick check: risk, ethics, and strategic value"
+  questions={[
+    { q: "What is data risk beyond security", a: "Misuse, misinterpretation, or harm from poor handling." },
+    { q: "Why do ethics matter", a: "To ensure data use respects people and purpose." },
+    { q: "Where do risks appear", a: "All along the lifecycle: collect, process, share, and retain." },
+    { q: "What builds long term value", a: "Clear purpose, stewardship, and honest communication." },
+    { q: "Why log changes and outliers", a: "Small habits catch issues before they spread." },
+  ]}
+/>
+
+
+---
+
+## Shared dashboards you already know
+
+Intermediate will reuse the data quality sandbox, the data flow visualiser, and the data interpretation exercises introduced in Foundations. They will gain more options, but the familiar interfaces stay so you can focus on thinking, not navigation.
+
+{/* CPD alignment: Intermediate must include applied learning, real scenarios, decision making, and professional judgement. No certification claims on this page. */}
+
+{/* CI quality gates for Data Intermediate:
+- Each section needs at least 3 explanatory paragraphs, 1 DiagramBlock, 1 ToolCard, and 1 QuizBlock.
+- No section may be shorter than its Foundations counterpart.
+- No bullet-only sections.
+- No unexplained acronyms.
+*/}
+
+<PageNav prevHref="/data/foundations" prevLabel="Foundations" nextHref="/data/advanced" nextLabel="Advanced" showTop showBottom />

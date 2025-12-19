@@ -5,12 +5,6 @@ export const softwareArchitectureSectionManifest = {
     "soft-arch-foundations-code-design",
     "soft-arch-foundations-delivery-and-safety",
   ],
-  applied: [
-    "sa-intermediate-architectural-styles",
-    "sa-intermediate-microservices-and-integration",
-    "sa-intermediate-cqrs-event-sourcing",
-    "sa-intermediate-runtime-tradeoffs",
-  ],
   intermediate: [
     "soft-arch-intermediate-architecture-styles",
     "soft-arch-intermediate-integration-and-apis",
@@ -28,11 +22,5 @@ export const softwareArchitectureSectionManifest = {
     "soft-arch-summary-big-picture",
     "soft-arch-summary-games-labs",
     "soft-arch-summary-next-steps",
-  ],
-  "practice-strategy": [
-    "sa-advanced-digitalisation-context",
-    "sa-advanced-architecture-governance",
-    "sa-advanced-roadmaps-and-evolution",
-    "sa-advanced-architecture-in-practice",
   ],
 };

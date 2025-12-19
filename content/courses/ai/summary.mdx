@@ -1,12 +1,13 @@
 ---
 title: "AI Summary and games"
-description: "A relaxed wrap up of the AI journey with quick recaps, games and labs to lock the learning in."
-level: "summary"
+slug: "summary"
 courseId: "ai"
 levelId: "summary"
-summary: "A relaxed wrap up of the AI journey with quick recaps, games and labs to lock the learning in."
-estimatedHours: 3
+summary: "A recap of the whole AI track with games, scenarios and labs to see what you really remember."
+estimatedHours: 4
 stepIndex: 3
+level: "summary"
+description: "Light, playful recap of the AI journey with games, labs and a master quiz."
 ---
 
 import ToolCard from "@/components/notes/ToolCard"
@@ -16,202 +17,155 @@ import PageNav from "@/components/notes/PageNav"
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
 import DiagramBlock from "@/components/DiagramBlock"
-import GameHub from "@/components/GameHub"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
 import { aiSectionManifest } from "@/lib/aiSections"
-import AIExamplesExplorerTool from "@/components/notes/tools/ai/beginner/AIExamplesExplorerTool"
-import TrainingLoopVisualizerTool from "@/components/notes/tools/ai/intermediate/TrainingLoopVisualizerTool"
-import TransformerAttentionExplorerTool from "@/components/notes/tools/ai/advanced/TransformerAttentionExplorerTool"
 import ConceptMatchGame from "@/components/notes/tools/ai/summary/ConceptMatchGame"
+import OddOneOutGame from "@/components/notes/tools/ai/summary/OddOneOutGame"
 import ScenarioClinicGame from "@/components/notes/tools/ai/summary/ScenarioClinicGame"
-import PipelineBuilderGame from "@/components/notes/tools/ai/summary/PipelineBuilderGame"
-import SafetyGuardianGame from "@/components/notes/tools/ai/summary/SafetyGuardianGame"
+import MiniProjectDesigner from "@/components/notes/tools/ai/summary/MiniProjectDesigner"
+import BuildYourOwnQuiz from "@/components/notes/tools/ai/summary/BuildYourOwnQuiz"
 
 # AI Summary and games
 
 <LevelProgressBar courseId="ai" levelId="summary" sectionIds={aiSectionManifest.summary} />
 
-<CPDTracker courseId="ai" levelId="summary" estimatedHours={3} />
+<CPDTracker courseId="ai" levelId="summary" estimatedHours={4} />
 
-This is the victory lap. You did the hard work. Now you tighten the story and play with the ideas until they stick.
+You made it through Foundations, Intermediate and Advanced. This page is a relaxed recap. Use it to test what stuck, spot gaps, and get playful with the ideas before you move on.
 
----
+## Quick recap
 
-## AI recap
+<SectionProgressToggle courseId="ai" levelId="summary" sectionId="ai-summary-concepts" />
 
-Thanks for sticking with the AI journey. You moved from labels and data to training, evaluation, and real systems with safety around them. This page is your safe place to revise and play.
+Across the track you saw how data turns into tokens and features, how models learn and overfit, and how agents and governance keep AI useful in the real world. This summary keeps the same short sentences and mixes in games so you can rehearse quickly.
 
-<DiagramBlock title="AI journey on one page" subtitle="From data to models to real systems with safety around them.">
-  <div className="grid gap-2 sm:grid-cols-4 text-xs text-slate-700">
+<DiagramBlock
+  title="The AI journey in one picture"
+  description="Data, models, and systems wrapped in safety."
+>
+  <div className="grid gap-2 sm:grid-cols-4 text-xs text-slate-800">
     <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Data</p>
-      <p className="mt-1">Signals, labels, and quality.</p>
+      <p className="font-semibold text-slate-900">Data and tokens</p>
+      <p className="mt-1">Collect, clean, and chunk.</p>
     </div>
     <div className="rounded-xl border border-slate-200 bg-white p-3">
       <p className="font-semibold text-slate-900">Models</p>
-      <p className="mt-1">Learning patterns from features.</p>
+      <p className="mt-1">Train, evaluate, avoid overfit.</p>
     </div>
     <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Products</p>
-      <p className="mt-1">Serving, monitoring, and trust.</p>
+      <p className="font-semibold text-slate-900">Systems</p>
+      <p className="mt-1">Serve, monitor, add tools.</p>
     </div>
     <div className="rounded-xl border border-slate-200 bg-white p-3">
       <p className="font-semibold text-slate-900">Safety</p>
-      <p className="mt-1">Governance and oversight.</p>
+      <p className="mt-1">Policies, guardrails, evidence.</p>
     </div>
   </div>
 </DiagramBlock>
 
----
+## Games and labs hub
 
-## Foundations in one page
+These drills are short. Set a timer, play a couple, and notice which ideas feel strong and which feel fuzzy. Everything is CPD aware so your tracker updates as you explore.
 
-Foundations taught the basics: AI is pattern matching, not magic. Data quality and representation shape everything. Supervised learning uses labels, unsupervised learning looks for structure without labels.
-
-<DiagramBlock title="Simple model loop" subtitle="Input to model to output.">
-  <div className="grid gap-2 sm:grid-cols-3 text-xs text-slate-700">
-    <div className="rounded-xl border border-slate-200 bg-white p-3">Input</div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">Model</div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">Output</div>
-  </div>
-</DiagramBlock>
+### Concept games
 
 <ToolCard
-  id="ai-summary-foundations-tool"
-  title="AI examples refresher"
-  description="Flip through simple AI examples like spam filters, recommenders and chat assistants."
+  id="ai-summary-flash-cards"
+  title="AI flash cards"
+  description="Flip through key AI concepts from all three levels and see if you can explain each one in your own words before revealing the answer."
+  courseId="ai"
+  levelId="summary"
+  sectionId="ai-summary-concepts"
+  cpdMinutesOnUse={10}
 >
-  <AIExamplesExplorerTool />
+  <ConceptMatchGame />
 </ToolCard>
-
-<QuizBlock
-  id="ai-summary-foundations-quiz"
-  title="Quick check: foundations"
-  questions={[
-    { q: "What is AI in plain words", a: "Pattern matching using data." },
-    { q: "What does supervised learning need", a: "Labeled examples." },
-    { q: "Why does data quality matter", a: "Bad data teaches bad patterns." },
-    { q: "What is one AI example", a: "Spam filtering or recommendations." },
-  ]}
-/>
-
----
-
-## Intermediate in one page
-
-Intermediate was about making models work. You clean data, build features, train a model, measure it properly, then serve it with monitoring so it stays honest.
-
-<DiagramBlock title="Applied pipeline" subtitle="Raw data to serving and monitoring.">
-  <div className="text-xs text-slate-700">
-    Raw data -> Clean data -> Features -> Training -> Evaluation -> Serving
-  </div>
-</DiagramBlock>
 
 <ToolCard
-  id="ai-summary-intermediate-tool"
-  title="Training and metrics recap"
-  description="Watch a tiny model train and see loss change over a few epochs."
+  id="ai-summary-odd-one-out"
+  title="Odd one out"
+  description="Look at tiny sets of terms or examples and pick the one that does not belong. Great for checking if ideas have clicked."
+  courseId="ai"
+  levelId="summary"
+  sectionId="ai-summary-concepts"
+  cpdMinutesOnUse={10}
 >
-  <TrainingLoopVisualizerTool />
+  <OddOneOutGame />
 </ToolCard>
 
-<QuizBlock
-  id="ai-summary-intermediate-quiz"
-  title="Quick check: intermediate"
-  questions={[
-    { q: "What is the loss function", a: "A measure of how wrong the model is." },
-    { q: "Why split data", a: "To train, tune, and test honestly." },
-    { q: "What does precision measure", a: "How many predicted positives were correct." },
-  ]}
-/>
+### Scenario labs
 
----
-
-## Advanced in one page
-
-Advanced pushed into modern models, agents, and multimodal systems. It also made safety and governance real, because production AI has real impact.
-
-<DiagramBlock title="Agent with guardrails" subtitle="Tools on the inside, safety on the outside.">
-  <div className="grid gap-2 sm:grid-cols-3 text-xs text-slate-700">
-    <div className="rounded-xl border border-slate-200 bg-white p-3">Agent</div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">Tools</div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">Safety layer</div>
-  </div>
-</DiagramBlock>
+<SectionProgressToggle courseId="ai" levelId="summary" sectionId="ai-summary-scenarios" />
 
 <ToolCard
-  id="ai-summary-advanced-tool"
-  title="Transformers, agents and safety"
-  description="See attention in a tiny transformer and remember why guardrails matter."
+  id="ai-summary-scenario-triage"
+  title="AI scenario triage"
+  description="Walk through short stories that mix data, models and people. Decide what is safe, what is risky and what you would change."
+  courseId="ai"
+  levelId="summary"
+  sectionId="ai-summary-scenarios"
+  cpdMinutesOnUse={10}
 >
-  <TransformerAttentionExplorerTool />
+  <ScenarioClinicGame />
 </ToolCard>
 
+<ToolCard
+  id="ai-summary-mini-project"
+  title="Design a tiny AI project"
+  description="Pick a problem, choose a data type, pick a model family and sketch a safe, simple system that could solve it."
+  courseId="ai"
+  levelId="summary"
+  sectionId="ai-summary-scenarios"
+  cpdMinutesOnUse={15}
+>
+  <MiniProjectDesigner />
+</ToolCard>
+
+### Build your own challenge
+
+<SectionProgressToggle courseId="ai" levelId="summary" sectionId="ai-summary-create" />
+
+<ToolCard
+  id="ai-summary-build-your-own-quiz"
+  title="Build your own AI quiz"
+  description="Write your own questions and answers for a friend or future you. Great way to test if you really understand something."
+  courseId="ai"
+  levelId="summary"
+  sectionId="ai-summary-create"
+  cpdMinutesOnUse={10}
+>
+  <BuildYourOwnQuiz />
+</ToolCard>
+
+## Final reflection and next steps
+
+<SectionProgressToggle courseId="ai" levelId="summary" sectionId="ai-summary-master" />
+
 <QuizBlock
-  id="ai-summary-advanced-quiz"
-  title="Quick check: advanced"
+  id="ai-summary-master-quiz"
+  title="AI track master quiz"
+  courseId="ai"
+  levelId="summary"
+  sectionId="ai-summary-master"
   questions={[
-    { q: "What does attention do", a: "It weighs which input parts matter most." },
-    { q: "What is an agent", a: "A model that plans steps and uses tools." },
-    { q: "Why add guardrails", a: "To reduce harm and misuse." },
+    { q: "Why split data into train, validation and test sets", a: "To tune models without cheating and to get an honest final check." },
+    { q: "What does attention do in a transformer", a: "It weighs which tokens matter most for the next output." },
+    { q: "Name one signal of overfitting", a: "Validation loss rises while training loss falls." },
+    { q: "Why add guardrails to an agent", a: "To control tool use, reduce misuse and keep audit trails." },
+    { q: "What is one metric for classification", a: "Precision, recall or F1 depending on the risk." },
+    { q: "How do you keep generative media safer", a: "Filter prompts, filter outputs, and keep evidence of the steps you took." },
+    { q: "What belongs in a model card", a: "Purpose, limits, data notes, metrics, and owners." },
   ]}
 />
 
----
+Use these reflection prompts to close the loop:
 
-## Games and labs
+- What part of AI feels most interesting to you?
+- What part still feels confusing?
+- What is one small thing you could try at work or at home?
 
-<GameHub
-  storageKey="ai_summary_games"
-  title="AI games and labs"
-  subtitle="Short, safe drills that tighten your instincts."
-  games={[
-    {
-      id: "ai-game-concept-match",
-      title: "Concept match and memory",
-      level: "Core",
-      minutes: 5,
-      summary: "Match AI terms like feature, loss and drift to friendly explanations.",
-      component: <ConceptMatchGame />,
-    },
-    {
-      id: "ai-game-scenario-clinic",
-      title: "AI scenario clinic",
-      level: "Core",
-      minutes: 6,
-      summary: "Pick model type, data, and metric for short scenarios.",
-      component: <ScenarioClinicGame />,
-    },
-    {
-      id: "ai-game-pipeline-builder",
-      title: "Build a tiny pipeline",
-      level: "Stretch",
-      minutes: 6,
-      summary: "Put the pipeline steps in order and check the flow.",
-      component: <PipelineBuilderGame />,
-    },
-    {
-      id: "ai-game-safety-guardian",
-      title: "Safety guardian",
-      level: "Stretch",
-      minutes: 6,
-      summary: "Flag risky prompts and see how safety checks help.",
-      component: <SafetyGuardianGame />,
-    },
-  ]}
-/>
-
----
-
-## Reflect and next steps
-
-AI is powerful, but it is still a tool. Think about where it would help in your work, and where it would be risky or unhelpful.
-
-<Callout variant="note" title="Your AI story">
-Write a few lines on where you might use AI in your own work or study. What would be helpful and what would feel uncomfortable or risky.
+<Callout variant="note" title="Next moves">
+Revisit any section that felt shaky, then head back to the AI overview or into your CPD dashboard to track the hours you want to invest next.
 </Callout>
 
-If any section felt fuzzy, revisit it. Foundations for clarity, Intermediate for hands on practice, Advanced for real world thinking. The AI Studio labs are always there when you want to go deeper.
-
-You will also find good links between AI and Cybersecurity and Software Architecture. Models are systems. Systems need safety and good design.
-
-<PageNav prevHref="/ai/advanced" prevLabel="Advanced" nextHref="/courses/ai" nextLabel="AI course overview" showTop showBottom />
+<PageNav prevHref="/ai/advanced" prevLabel="Advanced" nextHref="/ai" nextLabel="AI course overview" showTop showBottom />

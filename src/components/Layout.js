@@ -1,5 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
+import DonateButton from "@/components/donations/DonateButton";
+import Header from "@/components/Header";
 export default function Layout({
   children,
   title = "Ransford's Notes",
@@ -43,41 +45,7 @@ export default function Layout({
       </a>
 
       <div className="app-shell">
-        <header className="site-header">
-          <div className="site-header__inner">
-            <Link href="/" className="brand">
-              <span className="brand__mark" aria-hidden="true">
-                RN
-              </span>
-              <span className="brand__text">Ransford&apos;s Notes</span>
-            </Link>
-            <nav className="nav-links" aria-label="Primary">
-              <Link href="/courses">Courses</Link>
-              <Link href="/cpd">My CPD</Link>
-              <Link href="/tools">Tools</Link>
-              <div className="nav-dropdown">
-                <button className="nav-dropdown__trigger" aria-haspopup="true" aria-expanded="false">
-                  Studios
-                </button>
-                <div className="nav-dropdown__menu">
-                  <Link href="/studios">Ransford&apos;s AI Studios</Link>
-                  <Link href="/dev-studios">Ransford&apos;s Software Development Studio</Link>
-                </div>
-              </div>
-              <Link href="/ai">AI</Link>
-              <Link href="/digitalisation">Digitalisation</Link>
-              <Link href="/software-architecture">Architecture</Link>
-              <Link href="/cybersecurity">Cybersecurity course</Link>
-              <Link href="/about">About</Link>
-              <Link href="/trust-and-about">Trust</Link>
-              <Link href="/accreditation-and-alignment">Accreditation</Link>
-              <Link href="/subscribe">Subscribe</Link>
-              <Link href="/donate" className="pill pill--accent">
-                Support
-              </Link>
-            </nav>
-          </div>
-        </header>
+        <Header />
 
         <main id="main-content" className="page-shell" role="main">
           {children}
@@ -93,11 +61,12 @@ export default function Layout({
             </div>
             <div className="footer-links" aria-label="Footer">
               <Link href="/tools">Tools</Link>
+              <Link href="/templates">Templates</Link>
               <Link href="/about">About</Link>
               <Link href="/trust-and-about">Trust</Link>
               <Link href="/accreditation-and-alignment">Accreditation</Link>
               <Link href="/subscribe">Subscribe</Link>
-              <Link href="/donate">Donate</Link>
+              <DonateButton />
               <Link href="/contact">Contact</Link>
               <Link href="/accessibility">Accessibility</Link>
               <Link href="/privacy">Privacy</Link>

@@ -10,16 +10,14 @@ import PageNav from "@/components/notes/PageNav";
 import LevelProgressBar from "@/components/course/LevelProgressBar";
 import CPDTracker from "@/components/CPDTracker";
 import DiagramBlock from "@/components/DiagramBlock";
-import GameHub from "@/components/GameHub";
 import { aiSectionManifest } from "@/lib/aiSections";
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
 
-const AIExamplesExplorerTool = dynamic(() => import("@/components/notes/tools/ai/beginner/AIExamplesExplorerTool"), { ssr: false });
-const TrainingLoopVisualizerTool = dynamic(() => import("@/components/notes/tools/ai/intermediate/TrainingLoopVisualizerTool"), { ssr: false });
-const TransformerAttentionExplorerTool = dynamic(() => import("@/components/notes/tools/ai/advanced/TransformerAttentionExplorerTool"), { ssr: false });
 const ConceptMatchGame = dynamic(() => import("@/components/notes/tools/ai/summary/ConceptMatchGame"), { ssr: false });
+const OddOneOutGame = dynamic(() => import("@/components/notes/tools/ai/summary/OddOneOutGame"), { ssr: false });
 const ScenarioClinicGame = dynamic(() => import("@/components/notes/tools/ai/summary/ScenarioClinicGame"), { ssr: false });
-const PipelineBuilderGame = dynamic(() => import("@/components/notes/tools/ai/summary/PipelineBuilderGame"), { ssr: false });
-const SafetyGuardianGame = dynamic(() => import("@/components/notes/tools/ai/summary/SafetyGuardianGame"), { ssr: false });
+const MiniProjectDesigner = dynamic(() => import("@/components/notes/tools/ai/summary/MiniProjectDesigner"), { ssr: false });
+const BuildYourOwnQuiz = dynamic(() => import("@/components/notes/tools/ai/summary/BuildYourOwnQuiz"), { ssr: false });
 
 export default function AISummary({ source, headings }) {
   const mdxComponents = useMemo(
@@ -31,14 +29,12 @@ export default function AISummary({ source, headings }) {
       LevelProgressBar,
       CPDTracker,
       DiagramBlock,
-      GameHub,
-      AIExamplesExplorerTool,
-      TrainingLoopVisualizerTool,
-      TransformerAttentionExplorerTool,
+      SectionProgressToggle,
       ConceptMatchGame,
+      OddOneOutGame,
       ScenarioClinicGame,
-      PipelineBuilderGame,
-      SafetyGuardianGame,
+      MiniProjectDesigner,
+      BuildYourOwnQuiz,
     }),
     []
   );
@@ -47,7 +43,7 @@ export default function AISummary({ source, headings }) {
     <NotesLayout
       meta={{
         title: "AI Summary and games",
-        description: "A relaxed wrap up of the AI journey with quick recaps, games and labs to lock the learning in.",
+        description: "A recap of the whole AI track with games, scenarios and labs to see what you really remember.",
         level: "Summary",
         slug: "/ai/summary",
         section: "ai",
