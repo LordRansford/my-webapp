@@ -5,12 +5,28 @@ const nextConfig = {
   // Silence Next.js 16 Turbopack warning when a webpack config is present.
   turbopack: {},
 
-  webpack: (config) => {
+  webpack: (config, { dev }) => {
     config.resolve.fallback = {
       ...(config.resolve.fallback || {}),
       fs: false,
       path: false,
     };
+
+    // Windows watchpack + filesystem cache can be flaky and crash dev server.
+    // Disable webpack filesystem cache in dev to avoid missing pack.gz errors.
+    if (dev) {
+      config.cache = false;
+      config.watchOptions = {
+        ...(config.watchOptions || {}),
+        // Ignore Windows system files if a parent directory ever gets watched.
+        ignored: [
+          "**/DumpStack.log.tmp",
+          "**/pagefile.sys",
+          "**/swapfile.sys",
+          "**/hiberfil.sys",
+        ],
+      };
+    }
     return config;
   },
 

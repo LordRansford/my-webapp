@@ -57,6 +57,10 @@ import TransformerAttentionExplorerTool from "@/components/notes/tools/ai/advanc
 import AgentLabTool from "@/components/notes/tools/ai/advanced/AgentLabTool";
 import GenerativeMultimodalLabTool from "@/components/notes/tools/ai/advanced/GenerativeMultimodalLabTool";
 import SafetyEvalLabTool from "@/components/notes/tools/ai/advanced/SafetyEvalLabTool";
+import TokenContextLab from "@/components/notes/tools/ai/advanced/TokenContextLab";
+import MiniDiffusionLab from "@/components/notes/tools/ai/advanced/MiniDiffusionLab";
+import AgentFlowBuilder from "@/components/notes/tools/ai/advanced/AgentFlowBuilder";
+import GovernanceChecklistLab from "@/components/notes/tools/ai/advanced/GovernanceChecklistLab";
 import PipelineOrchestrator from "@/components/dashboards/ai/PipelineOrchestrator";
 import DriftMonitorSimulator from "@/components/dashboards/ai/DriftMonitorSimulator";
 import AgentWorkflowBuilder from "@/components/dashboards/ai/AgentWorkflowBuilder";
@@ -73,6 +77,8 @@ import DigitalMaturityGauge from "@/components/notes/tools/digitalisation/beginn
 import DigitalisationDashboard from "@/components/dashboards/DigitalisationDashboard";
 import ApiContractExplorer from "@/components/notes/tools/digitalisation/intermediate/ApiContractExplorer";
 import SchemaMappingSandbox from "@/components/notes/tools/digitalisation/intermediate/SchemaMappingSandbox";
+import TargetStateCanvasTool from "@/components/notes/tools/digitalisation/advanced/TargetStateCanvasTool";
+import EcosystemMapperTool from "@/components/notes/tools/digitalisation/advanced/EcosystemMapperTool";
 import RiskRoadmapPlannerTool from "@/components/notes/tools/digitalisation/advanced/RiskRoadmapPlannerTool";
 import DigiConceptMatchGame from "@/components/games/digitalisation/DigiConceptMatchGame";
 import ValueChainBuilderGame from "@/components/games/digitalisation/ValueChainBuilderGame";
@@ -100,6 +106,32 @@ import ConceptMatchGame from "@/components/notes/tools/ai/summary/ConceptMatchGa
 import ScenarioClinicGame from "@/components/notes/tools/ai/summary/ScenarioClinicGame";
 import PipelineBuilderGame from "@/components/notes/tools/ai/summary/PipelineBuilderGame";
 import SafetyGuardianGame from "@/components/notes/tools/ai/summary/SafetyGuardianGame";
+import OddOneOutGame from "@/components/notes/tools/ai/summary/OddOneOutGame";
+import MiniProjectDesigner from "@/components/notes/tools/ai/summary/MiniProjectDesigner";
+import BuildYourOwnQuiz from "@/components/notes/tools/ai/summary/BuildYourOwnQuiz";
+import DataAroundYouTool from "@/components/notes/tools/data/foundations/DataAroundYouTool";
+import TextToBytesVisualizer from "@/components/notes/tools/data/foundations/TextToBytesVisualizer";
+import DataQualityCheckerTool from "@/components/notes/tools/data/foundations/DataQualityCheckerTool";
+import LifecycleMapperTool from "@/components/notes/tools/data/foundations/LifecycleMapperTool";
+import RoleMatcherTool from "@/components/notes/tools/data/foundations/RoleMatcherTool";
+import EthicsScenarioTool from "@/components/notes/tools/data/foundations/EthicsScenarioTool";
+import SharedDataInterpretationTool from "@/components/notes/tools/data/foundations/SharedDataInterpretationTool";
+import SharedLifecycleRisksTool from "@/components/notes/tools/data/foundations/SharedLifecycleRisksTool";
+import SharedDataToDecisionTool from "@/components/notes/tools/data/foundations/SharedDataToDecisionTool";
+import DataFormatExplorer from "@/components/notes/tools/data/foundations/DataFormatExplorer";
+import DataQualitySandbox from "@/components/notes/tools/data/foundations/DataQualitySandbox";
+import DataFlowVisualizer from "@/components/notes/tools/data/foundations/DataFlowVisualizer";
+import DataPipelineDesignerTool from "@/components/notes/tools/data/intermediate/DataPipelineDesignerTool";
+import GovernancePolicySimulatorTool from "@/components/notes/tools/data/intermediate/GovernancePolicySimulatorTool";
+import SchemaMappingLabTool from "@/components/notes/tools/data/intermediate/SchemaMappingLabTool";
+import AnalysisPlaygroundTool from "@/components/notes/tools/data/intermediate/AnalysisPlaygroundTool";
+import DataRiskScenariosTool from "@/components/notes/tools/data/intermediate/DataRiskScenariosTool";
+import DistributionExplorerTool from "@/components/notes/tools/data/advanced/DistributionExplorerTool";
+import ModelAbstractionLabTool from "@/components/notes/tools/data/advanced/ModelAbstractionLabTool";
+import SamplingBiasSimulatorTool from "@/components/notes/tools/data/advanced/SamplingBiasSimulatorTool";
+import ReplicationConsistencyVisualizerTool from "@/components/notes/tools/data/advanced/ReplicationConsistencyVisualizerTool";
+import GovernanceDecisionSimulatorTool from "@/components/notes/tools/data/advanced/GovernanceDecisionSimulatorTool";
+import DataStrategySandboxTool from "@/components/notes/tools/data/advanced/DataStrategySandboxTool";
 
 const mdxComponents = {
   Callout,
@@ -164,6 +196,10 @@ const mdxComponents = {
   AgentLabTool,
   GenerativeMultimodalLabTool,
   SafetyEvalLabTool,
+  TokenContextLab,
+  MiniDiffusionLab,
+  AgentFlowBuilder,
+  GovernanceChecklistLab,
   PipelineOrchestrator,
   DriftMonitorSimulator,
   AgentWorkflowBuilder,
@@ -180,6 +216,8 @@ const mdxComponents = {
   ApiContractExplorer,
   SchemaMappingSandbox,
   DigitalMaturityGauge,
+  TargetStateCanvasTool,
+  EcosystemMapperTool,
   RiskRoadmapPlannerTool,
   DigiConceptMatchGame,
   ValueChainBuilderGame,
@@ -207,6 +245,32 @@ const mdxComponents = {
   ScenarioClinicGame,
   PipelineBuilderGame,
   SafetyGuardianGame,
+  OddOneOutGame,
+  MiniProjectDesigner,
+  BuildYourOwnQuiz,
+  DataAroundYouTool,
+  TextToBytesVisualizer,
+  DataQualityCheckerTool,
+  LifecycleMapperTool,
+  RoleMatcherTool,
+  EthicsScenarioTool,
+  SharedDataInterpretationTool,
+  SharedLifecycleRisksTool,
+  SharedDataToDecisionTool,
+  DataFormatExplorer,
+  DataQualitySandbox,
+  DataFlowVisualizer,
+  DataPipelineDesignerTool,
+  GovernancePolicySimulatorTool,
+  SchemaMappingLabTool,
+  AnalysisPlaygroundTool,
+  DataRiskScenariosTool,
+  DistributionExplorerTool,
+  ModelAbstractionLabTool,
+  SamplingBiasSimulatorTool,
+  ReplicationConsistencyVisualizerTool,
+  GovernanceDecisionSimulatorTool,
+  DataStrategySandboxTool,
 };
 
 export default mdxComponents;

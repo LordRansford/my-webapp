@@ -14,18 +14,22 @@ import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
 import DiagramBlock from "@/components/DiagramBlock";
 import { aiSectionManifest } from "@/lib/aiSections";
 
-const TransformerAttentionExplorerTool = dynamic(
-  () => import("@/components/notes/tools/ai/advanced/TransformerAttentionExplorerTool"),
+const TokenContextLab = dynamic(
+  () => import("@/components/notes/tools/ai/advanced/TokenContextLab"),
   { ssr: false }
 );
-const AgentLabTool = dynamic(() => import("@/components/notes/tools/ai/advanced/AgentLabTool"), { ssr: false });
-const GenerativeMultimodalLabTool = dynamic(
-  () => import("@/components/notes/tools/ai/advanced/GenerativeMultimodalLabTool"),
+const MiniDiffusionLab = dynamic(
+  () => import("@/components/notes/tools/ai/advanced/MiniDiffusionLab"),
   { ssr: false }
 );
-const SafetyEvalLabTool = dynamic(() => import("@/components/notes/tools/ai/advanced/SafetyEvalLabTool"), {
-  ssr: false,
-});
+const AgentFlowBuilder = dynamic(
+  () => import("@/components/notes/tools/ai/advanced/AgentFlowBuilder"),
+  { ssr: false }
+);
+const GovernanceChecklistLab = dynamic(
+  () => import("@/components/notes/tools/ai/advanced/GovernanceChecklistLab"),
+  { ssr: false }
+);
 
 export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
@@ -39,10 +43,10 @@ export default function Page({ source, headings }) {
       LevelProgressBar,
       SectionProgressToggle,
       DiagramBlock,
-      TransformerAttentionExplorerTool,
-      AgentLabTool,
-      GenerativeMultimodalLabTool,
-      SafetyEvalLabTool,
+      TokenContextLab,
+      MiniDiffusionLab,
+      AgentFlowBuilder,
+      GovernanceChecklistLab,
     }),
     []
   );

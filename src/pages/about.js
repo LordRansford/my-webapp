@@ -3,10 +3,7 @@ import Layout from "@/components/Layout";
 
 export default function AboutPage() {
   return (
-    <Layout
-      title="About - Ransford's Notes"
-      description="Why I created Ransford's Notes and how I hope it helps you learn."
-    >
+    <Layout title="About - Ransford's Notes" description="Who I am, why I build tools, and how this stays practitioner-first.">
       <nav className="breadcrumb">
         <Link href="/">Home</Link>
         <span aria-hidden="true"> / </span>
@@ -15,42 +12,38 @@ export default function AboutPage() {
 
       <header className="page-header">
         <p className="eyebrow">About</p>
-        <h1>Why I created Ransfords Notes</h1>
+        <h1>Ransford Chung Amponsah</h1>
         <p className="lead">
-          I moved from mechanical engineering into data and digitalisation. The jargon, diagrams, and layered
-          models were a shock. Writing my own explanations, sketches, and experiments helped. These notes are
-          that journey, cleaned up for anyone who wants a clearer path.
+          Engineer turned digital and data practitioner. I prefer building tools and runnable examples over slides. This site reflects that
+          mindset.
         </p>
       </header>
 
       <section className="section">
-        <h2>What I am trying to achieve</h2>
+        <h2>Background</h2>
+        <p>
+          I started in mechanical engineering and moved into digital, data, AI, and regulation work. The shift required patient explanations,
+          so I wrote my own and turned them into notes, labs, and templates. They are written to help people who need clear, practical
+          guidance without noise.
+        </p>
+      </section>
+
+      <section className="section">
+        <h2>Why tools instead of slides</h2>
+        <p>
+          Real understanding comes from doing. That is why courses pair with browser-based tools, sandboxes, and templates. You can try ideas
+          immediately, see outputs, and use them as CPD-aligned evidence.
+        </p>
+      </section>
+
+      <section className="section">
+        <h2>Practitioner mindset</h2>
         <ul>
-          <li>Demystify key ideas in cybersecurity, software architecture, AI, and engineering.</li>
-          <li>Provide a safe, practical place to experiment with browser sandboxes.</li>
-          <li>Help people pivot careers or move into digital roles without feeling lost.</li>
-          <li>Support educators who want learners to understand real systems, not just theory.</li>
-          <li>Keep practising and sharing openly, improving with feedback.</li>
+          <li>Explain like an engineer: precise, testable, and referenced.</li>
+          <li>Prioritise safety: browser-only labs, no sensitive data, clear limits.</li>
+          <li>Stay current: update when standards or guidance change.</li>
+          <li>Be honest: no inflated claims about accreditation or endorsements.</li>
         </ul>
-      </section>
-
-      <section className="section">
-        <h2>How the site is designed</h2>
-        <p>
-          Each lesson is written as if I am explaining the topic to my past self. I define terms, keep jargon
-          light, and show how ideas connect across disciplines. Notes are paired with exercises and
-          sandboxes, so you can apply ideas straight away. You can add pictures and videos with markdown
-          images (<code>![alt text](path)</code>) or embed video using standard HTML.
-        </p>
-      </section>
-
-      <section className="section">
-        <h2>How you can get involved</h2>
-        <p>
-          If you want to collaborate, suggest topics, or contribute material, I am open to it. I value
-          curiosity, integrity, and clarity over titles. If you share those values and want to help others
-          learn, there is room here for you.
-        </p>
       </section>
     </Layout>
   );

@@ -1,15 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getLevelCompletion } from "@/lib/progress";
+import { useMemo } from "react";
+import { useCPD } from "@/hooks/useCPD";
+import { getCompletionForLevel, resolveTrackId } from "@/lib/cpd";
 
-export default function LevelProgressBar({ courseId, levelId, sectionIds }) {
-  const [percent, setPercent] = useState(0);
+export default function LevelProgressBar({ courseId, levelId, sectionIds = [] }) {
+  const { state } = useCPD();
+  const trackId = resolveTrackId(courseId);
 
-  useEffect(() => {
-    const { percent } = getLevelCompletion(courseId, levelId, sectionIds);
-    setPercent(percent);
-  }, [courseId, levelId, sectionIds]);
+  const percent = useMemo(() => {
+    const result = getCompletionForLevel(state, trackId, levelId, sectionIds);
+    return result.percent;
+  }, [state, trackId, levelId, sectionIds]);
 
   return (
     <div className="mb-4 rounded-2xl border border-gray-200 bg-white/80 p-3 shadow-sm" role="group" aria-label="Level progress">

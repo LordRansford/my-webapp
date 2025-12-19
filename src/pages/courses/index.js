@@ -15,14 +15,14 @@ export default function CoursesPage({ courses }) {
   return (
     <Layout
       title="Courses - Ransford's Notes"
-      description="Notes with browser sandboxes for cyber, architecture, and AI."
+      description="Notes with browser sandboxes for cyber, data, architecture, and AI."
     >
       <div className="hero">
         <div className="hero__copy">
           <p className="eyebrow">Courses</p>
           <h1>Notes that build from beginner to advanced.</h1>
           <p className="lead">
-            Three focused tracks - Cybersecurity, Software Architecture, and AI Systems - each with clear
+            Four focused tracks - Cybersecurity, Data, Software Architecture, and AI Systems - each with clear
             notes and browser labs so you can test ideas straight away.
           </p>
           <div className="actions">
@@ -32,7 +32,13 @@ export default function CoursesPage({ courses }) {
             <Link href="/about" className="button ghost">
               Meet the author
             </Link>
+            <Link href="/my-cpd" className="button ghost">
+              Open My CPD
+            </Link>
           </div>
+          <Link href="/my-cpd/evidence" className="text-link">
+            Need evidence for work or accreditation? Open the CPD evidence view.
+          </Link>
         </div>
         <div className="hero__panel">
           <p className="eyebrow">Learning flow</p>

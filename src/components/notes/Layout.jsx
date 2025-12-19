@@ -4,8 +4,9 @@ import Layout from "@/components/Layout";
 import ContentsSidebar from "./ContentsSidebar";
 import ProgressBar from "./ProgressBar";
 import NotesStepper from "./summary/NotesStepper";
+import DonateButton from "@/components/donations/DonateButton";
 import cybersecurityCourse from "../../../content/courses/cybersecurity.json";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export default function NotesLayout({ meta = {}, headings = [], children, activeLevelId }) {
   const [activeId, setActiveId] = useState("");
@@ -29,11 +30,13 @@ export default function NotesLayout({ meta = {}, headings = [], children, active
     (meta.slug?.includes("/ai") && "ai") ||
     (meta.slug?.includes("/digitalisation") && "digitalisation") ||
     (meta.slug?.includes("/software-architecture") && "architecture") ||
+    (meta.slug?.includes("/data") && "data") ||
     (meta.slug?.includes("/cybersecurity") && "cybersecurity") ||
     "";
 
   const sectionLabelMap = {
     ai: "AI",
+    data: "Data",
     cybersecurity: "Cybersecurity",
     digitalisation: "Digitalisation strategy",
     architecture: "Software architecture",
@@ -76,6 +79,13 @@ export default function NotesLayout({ meta = {}, headings = [], children, active
           { label: "Advanced", href: "/ai/advanced", active: meta.slug?.includes("/ai/advanced") },
           { label: "Summary and games", href: "/ai/summary", active: meta.slug?.includes("/ai/summary") },
         ]
+      : resolvedSection === "data"
+      ? [
+          { label: "Foundations", href: "/data/foundations", active: meta.slug?.includes("/data/foundations") },
+          { label: "Intermediate", href: "/data/intermediate", active: meta.slug?.includes("/data/intermediate") },
+          { label: "Advanced", href: "/data/advanced", active: meta.slug?.includes("/data/advanced") },
+          { label: "Summary and games", href: "/data/summary", active: meta.slug?.includes("/data/summary") },
+        ]
       : resolvedSection === "digitalisation"
       ? [
           { label: "Beginner", href: "/digitalisation/beginner", active: meta.slug?.includes("/digitalisation/beginner") },
@@ -91,6 +101,11 @@ export default function NotesLayout({ meta = {}, headings = [], children, active
           { label: "Summary and games", href: "/software-architecture/summary", active: meta.slug?.includes("/software-architecture/summary") },
         ]
       : cybersecurityStepperItems;
+
+  const showDonate = useMemo(() => {
+    const level = (meta.level || "").toLowerCase();
+    return level.includes("summary") || (meta.slug || "").includes("summary");
+  }, [meta.level, meta.slug]);
 
   return (
     <Layout title={meta.title} description={meta.description}>
@@ -130,6 +145,17 @@ export default function NotesLayout({ meta = {}, headings = [], children, active
           <article className="prose prose-neutral max-w-none rounded-3xl border border-gray-200 bg-white/85 p-5 shadow-sm backdrop-blur">
             {children}
           </article>
+          {showDonate ? (
+            <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Support</p>
+                <p className="text-sm text-slate-700">
+                  If these notes or games help you, a small donation keeps the site independent and well tested.
+                </p>
+              </div>
+              <DonateButton />
+            </div>
+          ) : null}
         </main>
       </div>
 

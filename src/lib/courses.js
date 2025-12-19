@@ -8,6 +8,8 @@ import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import { aiSectionManifest } from "./aiSections";
 import { digitalisationSectionManifest } from "./digitalisationSections";
+import { softwareArchitectureSectionManifest } from "./softwareArchitectureSections";
+import { dataSectionManifest } from "./dataSections";
 
 const coursesDir = path.join(process.cwd(), "content", "courses");
 
@@ -158,6 +160,10 @@ export const getLesson = async (courseSlug, lessonSlug) => {
       ? { aiSectionManifest }
       : courseSlug === "digitalisation"
       ? { digitalisationSectionManifest }
+      : courseSlug === "software-architecture"
+      ? { softwareArchitectureSectionManifest }
+      : courseSlug === "data"
+      ? { dataSectionManifest }
       : {};
   const serialised = await serialize(content, {
     scope: { ...data, ...extraScope },

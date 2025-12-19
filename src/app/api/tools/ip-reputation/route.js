@@ -1,0 +1,57 @@
+import { NextResponse } from "next/server";
+import net from "net";
+import { z } from "zod";
+
+const limiter = new Map();
+const windowMs = 60 * 1000;
+const maxRequests = 20;
+
+const schema = z.object({ target: z.string().trim().min(1) });
+
+const isPrivate = (value) => {
+  const ip = net.isIP(value) ? value : null;
+  if (!ip) return false;
+  const segments = ip.split(".").map((n) => parseInt(n, 10));
+  if (segments[0] === 10) return true;
+  if (segments[0] === 172 && segments[1] >= 16 && segments[1] <= 31) return true;
+  if (segments[0] === 192 && segments[1] === 168) return true;
+  if (segments[0] === 127) return true;
+  return false;
+};
+
+const rateLimit = (ip) => {
+  const now = Date.now();
+  const entry = limiter.get(ip) || { count: 0, start: now };
+  if (now - entry.start > windowMs) {
+    limiter.set(ip, { count: 1, start: now });
+    return true;
+  }
+  if (entry.count >= maxRequests) return false;
+  entry.count += 1;
+  limiter.set(ip, entry);
+  return true;
+};
+
+export async function POST(req) {
+  const ip = req.headers.get("x-forwarded-for") || "anon";
+  if (!rateLimit(ip)) return NextResponse.json({ message: "Rate limit exceeded" }, { status: 429 });
+
+  let parsed;
+  try {
+    parsed = schema.parse(await req.json());
+  } catch {
+    return NextResponse.json({ message: "Invalid input" }, { status: 400 });
+  }
+
+  const target = parsed.target.trim();
+  if (!net.isIP(target) || isPrivate(target)) {
+    return NextResponse.json({ message: "Provide a valid public IP address" }, { status: 400 });
+  }
+
+  return NextResponse.json({
+    target,
+    fallback: true,
+    reputation: "No automated reputation feed configured. Check trusted threat intel sources.",
+    guidance: "Combine IP checks with context, logs, and behavioural indicators."
+  });
+}

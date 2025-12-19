@@ -1,17 +1,15 @@
 const advancedSections = [
-  "ai-advanced-model-families-and-transformers",
-  "ai-advanced-agents-and-tool-use",
-  "ai-advanced-generative-and-multimodal",
-  "ai-advanced-evaluation-safety-governance",
+  "ai-advanced-transformers-and-llms",
+  "ai-advanced-diffusion-and-generative-media",
+  "ai-advanced-agentic-ai-and-tools",
+  "ai-advanced-evaluation-and-governance",
 ];
 
 const summarySections = [
-  "ai-summary-recap",
-  "ai-summary-foundations",
-  "ai-summary-intermediate",
-  "ai-summary-advanced",
-  "ai-summary-games",
-  "ai-summary-next-steps",
+  "ai-summary-concepts",
+  "ai-summary-scenarios",
+  "ai-summary-create",
+  "ai-summary-master",
 ];
 
 export const aiSectionManifest = {
@@ -28,6 +26,5 @@ export const aiSectionManifest = {
     "ai-intermediate-serving-and-monitoring",
   ],
   advanced: advancedSections,
-  "practice-strategy": advancedSections,
   summary: summarySections,
 };
