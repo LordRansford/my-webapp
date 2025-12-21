@@ -1,21 +1,26 @@
 ---
 title: "AI Intermediate"
-description: "We go from friendly intuition to actually shaping data, training small models and judging if they are any good."
-level: "intermediate"
+slug: "intermediate"
 courseId: "ai"
 levelId: "intermediate"
-summary: "We go from friendly intuition to actually shaping data, training small models and judging if they are any good."
-estimatedHours: 10
+summary: "How modern AI systems are built, evaluated, deployed and monitored in the real world."
+estimatedHours: 12
 stepIndex: 1
-learningObjectives:
-  - "Apply a basic ML workflow from dataset to evaluation without skipping validation thinking."
-  - "Analyse metric trade offs (precision, recall, F1) and choose a metric that fits the problem."
-  - "Explain how features, training, and deployment constraints shape model behaviour."
-  - "Evaluate common failure modes such as drift, bias, and leakage using practical checks."
 ---
 
+{/* QUALITY CONTRACT (structure only, no content yet)
+Each module must later include:
+- At least one DiagramBlock
+- At least one ToolCard
+- One QuizBlock with 8 to 12 questions
+- Explanations must be paragraph based, not bullet dumps
+- No em dash allowed
+- Tone must match AI Foundations
+*/}
+
+import NotesLayout from "@/components/notes/Layout"
+import ContentsSidebar from "@/components/notes/ContentsSidebar"
 import ToolCard from "@/components/notes/ToolCard"
-import Callout from "@/components/notes/Callout"
 import GlossaryTip from "@/components/notes/GlossaryTip"
 import QuizBlock from "@/components/notes/QuizBlock"
 import PageNav from "@/components/notes/PageNav"
@@ -24,249 +29,331 @@ import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
 import DiagramBlock from "@/components/DiagramBlock"
 import { aiSectionManifest } from "@/lib/aiSections"
-import DataProfilerTool from "@/components/notes/tools/ai/intermediate/DataProfilerTool"
-import TrainingLoopVisualizerTool from "@/components/notes/tools/ai/intermediate/TrainingLoopVisualizerTool"
-import MetricsLabTool from "@/components/notes/tools/ai/intermediate/MetricsLabTool"
-import ServingMonitorSimulatorTool from "@/components/notes/tools/ai/intermediate/ServingMonitorSimulatorTool"
 
 # AI Intermediate
 
 <LevelProgressBar courseId="ai" levelId="intermediate" sectionIds={aiSectionManifest.intermediate} />
 
-<CPDTracker courseId="ai" levelId="intermediate" estimatedHours={10} />
+<CPDTracker courseId="ai" levelId="intermediate" estimatedHours={12} />
 
-This level turns intuition into applied practice. We clean data, train small models, judge their quality, and think about what happens when they go live.
+## Models, parameters and training dynamics
 
----
+<SectionProgressToggle
+  courseId="ai"
+  levelId="intermediate"
+  sectionId="ai-intermediate-models-and-training"
+/>
 
-## Data preparation and feature engineering
+A model is still a function that turns input into output. At Intermediate level, the useful question is what kind of function it is and what it can store. Modern models are flexible pattern machines. They are not a library of facts. They are a set of learned behaviours shaped by data and training.
 
-<SectionProgressToggle courseId="ai" levelId="intermediate" sectionId="ai-intermediate-data-prep-and-feature-engineering" />
+The behaviours live in parameters. You can think of them as tiny knobs inside the model. Training turns knobs until the model produces outputs that match the examples often enough.
 
-Real world data is messy. It arrives late, it arrives incomplete, and it often arrives in mixed formats. A <GlossaryTip term="feature">A measurable input used by a model.</GlossaryTip> is only useful if the raw data is reliable.
+<GlossaryTip term="parameter">
+A parameter is a learned number inside the model that controls how it responds to inputs.
+</GlossaryTip>
 
-Cleaning means fixing obvious errors, handling missing values, and keeping only what matters. <GlossaryTip term="feature engineering">Transforming raw data into useful signals the model can learn from.</GlossaryTip> is often more valuable than a fancy model. For text you might count keywords or use embeddings. For images you might resize and normalise. For tabular data you might encode categories and scale numeric ranges. For time series you might build rolling averages and lag features.
+More parameters gives the model more capacity. It can represent more subtle patterns. It can also memorise noise if you let it.
 
-<DiagramBlock title="Data preparation flow" subtitle="Turn raw data into model ready features.">
-  <div className="grid gap-2 sm:grid-cols-4 text-xs text-slate-700">
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Raw data</p>
-      <p className="mt-1">Missing values and mixed formats.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Cleaning</p>
-      <p className="mt-1">Fix, drop, or flag bad rows.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Features</p>
-      <p className="mt-1">Encode and scale signals.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Training set</p>
-      <p className="mt-1">Ready for the model.</p>
-    </div>
+Scale matters because the world is messy. If you want a model to handle more languages, more topics, or more edge cases, it usually needs more capacity and more data. Scale is not a free win. It increases cost, increases training time, and increases the number of ways training can go wrong.
+
+Training is a loop. You show examples, the model predicts, you measure how wrong it was, and you update the parameters to be a bit less wrong next time. The measure of wrongness is the loss.
+
+<GlossaryTip term="loss function">
+A loss function is a score that tells the model how wrong its prediction was so training can improve it.
+</GlossaryTip>
+
+Loss is not a moral judgement. It is a learning signal.
+
+Under the hood, the model uses a gradient to decide how to adjust parameters.
+
+<GlossaryTip term="gradient">
+A gradient is information about which direction to change the parameters to reduce the loss.
+</GlossaryTip>
+
+You do not need the equations yet. The intuition is enough. If the loss is high, the gradient points toward changes that should lower it. If the training setup is stable, repeating this process steadily improves performance.
+
+This is where overfitting shows up.
+
+<GlossaryTip term="overfitting">
+Overfitting is when a model learns quirks of the training data and fails on new data.
+</GlossaryTip>
+
+Underfitting is the opposite. The model is too simple or not trained enough, so it cannot learn the pattern even on the training data.
+
+The goal is generalisation.
+
+<GlossaryTip term="generalisation">
+Generalisation is when a model performs well on new data, not just the training set.
+</GlossaryTip>
+
+Training is expensive and brittle because small changes can have large effects. Data quality issues, hidden leakage, unstable learning rates, poor shuffling, or a mismatch between training and real inputs can collapse learning. Even when training works, the model can learn shortcuts. It might latch onto the background of an image instead of the object. It might learn the formatting of an email instead of the message. These failures are not rare. They are the default unless you design against them.
+
+<DiagramBlock title="Training loop intuition" subtitle="Predict, measure error, update, repeat.">
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>Input data -> Model -> Output</div>
+    <div>Compare output to expected result -> Loss calculation</div>
+    <div>Use gradient signal -> Parameter update</div>
+    <div>Repeat over many examples and many passes</div>
   </div>
 </DiagramBlock>
 
 <ToolCard
-  id="ai-intermediate-data-profiler"
-  title="Data profiler and cleaner"
-  description="Upload a tiny sample dataset and see missing values, strange values, and simple feature suggestions."
->
-  <DataProfilerTool />
-</ToolCard>
+  id="training-dynamics-simulator"
+  title="See how models learn"
+  description="Adjust learning rate, data size and noise to see how a simple model improves or collapses during training."
+/>
 
 <QuizBlock
-  id="ai-intermediate-data-prep-quiz"
+  id="ai-intermediate-training-dynamics-quiz"
   courseId="ai"
   levelId="intermediate"
-  sectionId="ai-intermediate-data-prep-and-feature-engineering"
-  title="Quick check: data prep and features"
+  sectionId="ai-intermediate-models-and-training"
+  title="Quick check: models and training dynamics"
   questions={[
-    { q: "Why is feature engineering important", a: "Good features often matter more than complex models." },
-    { q: "What is a feature", a: "A measurable input used by a model." },
-    { q: "What is one common data issue", a: "Missing values or inconsistent formats." },
-    { q: "Why clean data before training", a: "Errors can teach the model the wrong patterns." },
-    { q: "Give one example of a time series feature", a: "Rolling average or a lagged value." },
-    { q: "Why encode categories", a: "Models need numbers, not raw labels." },
-    { q: "What is a risk of too many features", a: "Noise increases and the model may overfit." },
-    { q: "How does this link to Foundations", a: "It turns representation ideas into real pipelines." },
+    { q: "What is a parameter", a: "A learned number inside the model that shapes how it responds to inputs." },
+    { q: "Why does scale matter", a: "More capacity can represent more complex patterns, but it also increases cost and failure modes." },
+    { q: "What happens in a training loop", a: "Predict, measure error with a loss, update parameters, then repeat." },
+    { q: "What is a loss function used for", a: "It turns wrongness into a signal the model can optimise during training." },
+    { q: "What is a gradient in plain terms", a: "A direction for how to change parameters to reduce loss." },
+    { q: "What is overfitting", a: "Learning training quirks and failing on new data." },
+    { q: "What is generalisation", a: "Performing well on new inputs, not just the training set." },
+    { q: "Why is training expensive", a: "It requires many passes over lots of data and many parameter updates." },
+    { q: "Give one reason training can fail", a: "Bad data, unstable learning rate, leakage, or mismatch with real inputs." },
   ]}
 />
 
-Reflection: Pick a small problem from your own work. What three features would you start with and why.
+## Data, features and representation
 
----
+<SectionProgressToggle
+  courseId="ai"
+  levelId="intermediate"
+  sectionId="ai-intermediate-data-features-representation"
+/>
 
-## The training loop
+Raw data is rarely ready for a model. Even when it looks clean to a human, it usually contains missing values, inconsistent formats, and little traps like duplicated records. A model does not understand intent. It only sees the numbers you give it, so messy inputs quietly become messy behaviour.
 
-<SectionProgressToggle courseId="ai" levelId="intermediate" sectionId="ai-intermediate-training-loop" />
+The first job is to decide what the model should pay attention to. A <GlossaryTip term="feature">
+A feature is a measurable input the model uses to make a prediction.
+</GlossaryTip> Features can be obvious, like the total price of a basket, or subtle, like the time since last login. Good features are stable, meaningful, and available at prediction time. Bad features leak information from the future or smuggle in an identifier that lets the model memorise.
 
-A model is a function with parameters. Training adjusts those numbers so the model makes better guesses. We split data into a <GlossaryTip term="training set">The data used to learn model parameters.</GlossaryTip>, a <GlossaryTip term="validation set">Data used to tune and compare models during training.</GlossaryTip>, and a <GlossaryTip term="test set">A final held out set for the honest check.</GlossaryTip>
+People call this feature engineering. In practice it is careful translation. You are turning a real world situation into signals a model can learn from. If you pick the wrong signals, the model can look accurate in testing and still fail in production because it learned the wrong shortcut.
 
-An <GlossaryTip term="epoch">One full pass through the training data.</GlossaryTip> is split into batches so the model can learn in small steps. The <GlossaryTip term="learning rate">How large each update step is during training.</GlossaryTip> controls how quickly the model changes. The <GlossaryTip term="loss function">A calculation that tells the model how wrong its guesses are.</GlossaryTip> is the signal we try to reduce.
+Representation is the bridge between raw input and features. A <GlossaryTip term="representation">
+A representation is the way you encode data so a model can use it.
+</GlossaryTip> Sometimes the simplest representation is the best one. A single number for "days since password reset" can beat a complicated text field that mostly contains noise.
 
-We avoid overfitting with early stopping, regularisation, and by keeping the validation set honest. If training loss drops but validation loss rises, the model is memorising instead of learning.
+Text, images, and time series all need different treatments. For text, you might start with simple counts or categories, then move to an <GlossaryTip term="embedding">
+An embedding is a numeric vector that places similar items near each other in a learned space.
+</GlossaryTip> Embeddings are powerful because they compress meaning into numbers, but they also hide failure modes. If your embedding model was trained on different language or different context, it can flatten important distinctions.
 
-<DiagramBlock title="Training loop" subtitle="Data in, loss out, parameters update.">
-  <div className="grid gap-2 sm:grid-cols-4 text-xs text-slate-700">
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Batch data</p>
-      <p className="mt-1">Small slice of training set.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Model</p>
-      <p className="mt-1">Parameters make a prediction.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Loss</p>
-      <p className="mt-1">How wrong the prediction was.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Update</p>
-      <p className="mt-1">Adjust parameters and repeat.</p>
-    </div>
+For images, raw pixels are numbers already, but not good ones by themselves. Lighting, cropping, and camera differences can dominate the signal. For time series, the shape over time matters. Averages can erase patterns, and misaligned timestamps can create fake trends that a model happily learns.
+
+All of this affects <GlossaryTip term="dimensionality">
+Dimensionality is how many numbers are in your feature vector.
+</GlossaryTip> More dimensions can capture richer detail, but it increases the chance of learning coincidences. It also increases the cost of training and the risk that your model learns a brittle rule that only holds in the training set.
+
+The hardest failures are silent. A <GlossaryTip term="noise">
+Noise is random or irrelevant variation that hides the real signal.
+</GlossaryTip> If your pipeline adds noise, a model can still reduce loss by fitting patterns that do not generalise. You see an improvement on a familiar dataset and assume the model is smarter. In reality, you changed the data in a way that made the benchmark easier or leaked a hint.
+
+When a model behaves strangely, look at representation before you blame the algorithm. Small encoding choices can flip what the model can and cannot learn. This is why data work is not "preprocessing". It is the main engineering work.
+
+<DiagramBlock title="From raw data to features" subtitle="How inputs become a feature vector the model can learn from.">
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>Raw inputs: text, images, events, timestamps</div>
+    <div>Cleaning and transformation: normalize, dedupe, handle missing, align time</div>
+    <div>Features: counts, rates, categories, embeddings</div>
+    <div>Feature vector -> Model input</div>
   </div>
 </DiagramBlock>
 
 <ToolCard
-  id="ai-intermediate-training-loop-visualiser"
-  title="Training loop visualiser"
-  description="Watch a tiny model train over a few epochs and see the loss curve update."
->
-  <TrainingLoopVisualizerTool />
-</ToolCard>
+  id="feature-representation-explorer"
+  title="Explore data representations"
+  description="Compare raw inputs to engineered features and embeddings to see how representation changes what a model can learn."
+/>
 
 <QuizBlock
-  id="ai-intermediate-training-loop-quiz"
+  id="ai-intermediate-representation-quiz"
   courseId="ai"
   levelId="intermediate"
-  sectionId="ai-intermediate-training-loop"
-  title="Quick check: the training loop"
+  sectionId="ai-intermediate-data-features-representation"
+  title="Quick check: features and representation"
   questions={[
-    { q: "Why split data into training and validation sets", a: "To tune the model without cheating on the test set." },
-    { q: "What is an epoch", a: "One full pass through the training data." },
-    { q: "Why use batches", a: "They make training stable and efficient." },
-    { q: "What does the learning rate control", a: "How big each parameter update is." },
-    { q: "What is the loss function", a: "A measure of how wrong the model is." },
-    { q: "What is overfitting", a: "When the model memorises training data and fails on new data." },
-    { q: "What is early stopping", a: "Stopping when validation loss stops improving." },
-    { q: "Why keep a test set", a: "To get an honest final performance check." },
+    { q: "Why is raw data rarely usable directly", a: "It is often messy, inconsistent, and not encoded in a stable way a model can learn from." },
+    { q: "What is a feature", a: "A measurable input the model uses to make a prediction." },
+    { q: "What is representation in this context", a: "The encoding choice that turns raw inputs into numbers the model can use." },
+    { q: "Give an example of a feature that could leak the future", a: "A field that includes an outcome label or post event status that is not available at prediction time." },
+    { q: "What is an embedding used for", a: "To encode items as vectors where similar items end up close together." },
+    { q: "Why can embeddings hide problems", a: "They compress information, so mismatched training context can erase important distinctions." },
+    { q: "What does dimensionality refer to", a: "How many numbers are in the feature vector." },
+    { q: "Why can high dimensional features lead to brittle models", a: "They make it easier to fit coincidences that do not generalise." },
+    { q: "What is noise and why does it matter", a: "Irrelevant variation that can drown out the real signal and mislead training." },
   ]}
 />
 
-Reflection: Think of a model you have seen. How would you tell if it was overfitting.
+## Evaluation, metrics and failure analysis
 
----
+<SectionProgressToggle
+  courseId="ai"
+  levelId="intermediate"
+  sectionId="ai-intermediate-evaluation"
+/>
 
-## Evaluation and metrics
+Accuracy is an easy number to like because it feels clean. The problem is that it hides what you actually care about. In a spam filter, you can get high accuracy by declaring "not spam" for almost everything, because most email is not spam. The model looks great on paper and useless in practice.
 
-<SectionProgressToggle courseId="ai" levelId="intermediate" sectionId="ai-intermediate-evaluation-metrics" />
+<GlossaryTip term="accuracy">
+Accuracy is the fraction of predictions that are correct overall.
+</GlossaryTip>
 
-Accuracy alone can hide risk. In a fraud model, missing a fraud case is worse than one false alarm. A <GlossaryTip term="confusion matrix">A grid that counts true and false positives and negatives.</GlossaryTip> helps you see what the model is doing. <GlossaryTip term="precision">The share of predicted positives that were correct.</GlossaryTip> and <GlossaryTip term="recall">The share of actual positives you managed to catch.</GlossaryTip> show different trade offs. The <GlossaryTip term="F1 score">A balance of precision and recall.</GlossaryTip> is useful when classes are imbalanced.
+What you want depends on the job. If you are blocking fraud, a false negative means you miss a bad transaction. If you are flagging innocent customers, a false positive means you cause real harm. Evaluation is choosing what kind of mistake is acceptable and proving the system is making the right trade.
 
-For regression, metrics like mean absolute error and root mean squared error tell you how far predictions are from reality. Always pick metrics that match the real world cost of being wrong.
+Two scores matter: how the model behaves on the data it learned from, and how it behaves on data it has never seen. Training performance is often optimistic because the model can memorise. Real world performance is harder because the inputs change and the environment changes. Good evaluation separates these on purpose.
 
-<DiagramBlock title="Evaluation view" subtitle="Different metrics answer different questions.">
-  <div className="grid gap-2 sm:grid-cols-2 text-xs text-slate-700">
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Confusion matrix</p>
-      <p className="mt-1">True and false counts at a glance.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Metric ladder</p>
-      <p className="mt-1">Accuracy, precision, recall, F1.</p>
-    </div>
+For classification problems, two practical metrics are precision and recall. Precision answers "when the model says positive, how often is it right". Recall answers "of the real positives, how many did it catch". A spam filter with high recall catches most spam, but it might also block legitimate email. A fraud detector with high precision avoids annoying customers, but it might miss attacks.
+
+<GlossaryTip term="precision">
+Precision is how often a predicted positive is truly positive.
+</GlossaryTip>
+
+<GlossaryTip term="recall">
+Recall is how many of the true positives the model successfully finds.
+</GlossaryTip>
+
+For regression problems, you are predicting a number, like delivery time or house price. Here the question becomes "how far off are we". Metrics like mean absolute error are popular because they map to a simple story: average miss distance. Even without the formula, the idea is to measure error in the same units your users experience.
+
+Evaluation also needs a sanity check for overfitting and underfitting. Overfitting is when training looks great and real performance drops. Underfitting is when both are poor because the model cannot learn the pattern. The fix is rarely "more metrics". It is usually better data, better representation, or a simpler model that is easier to trust.
+
+<GlossaryTip term="overfitting">
+Overfitting is when a model learns training quirks and performs worse on new data.
+</GlossaryTip>
+
+Finally, production systems fail quietly. You can ship a model that passes every offline test and still break in the real world because the input distribution shifts. A spam campaign changes writing style. A fraud ring adapts. A new product changes customer behaviour. The model is not wrong in a dramatic way. It is just slowly less useful.
+
+<GlossaryTip term="distribution shift">
+Distribution shift is when real inputs differ from the data the model was trained and tested on.
+</GlossaryTip>
+
+This is why evaluation is not a one time exam. It is a lifecycle. You validate before release, you test on untouched data, and you keep watching after deployment. If the system starts drifting, you want to notice early and know what to do next.
+
+<DiagramBlock title="Model evaluation in practice" subtitle="Separate data, test honestly, then monitor in the real world.">
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>Training data: learn patterns and fit parameters</div>
+    <div>Validation data: tune choices and catch overfitting early</div>
+    <div>Test data: final check on untouched examples</div>
+    <div>Deployment: real users and real consequences</div>
+    <div>Monitoring loop: watch metrics, drift, and failure cases</div>
   </div>
 </DiagramBlock>
 
 <ToolCard
-  id="ai-intermediate-metrics-lab"
-  title="Metrics explainer lab"
-  description="Play with a confusion matrix and see how precision, recall and F1 score change."
->
-  <MetricsLabTool />
-</ToolCard>
+  id="model-metrics-playground"
+  title="Explore model evaluation trade offs"
+  description="Adjust thresholds and see how accuracy, precision and recall change for the same model."
+/>
 
 <QuizBlock
-  id="ai-intermediate-metrics-quiz"
+  id="ai-intermediate-evaluation-quiz"
   courseId="ai"
   levelId="intermediate"
-  sectionId="ai-intermediate-evaluation-metrics"
+  sectionId="ai-intermediate-evaluation"
   title="Quick check: evaluation and metrics"
   questions={[
-    { q: "Why is accuracy not always enough", a: "It can hide false negatives or false positives." },
-    { q: "What does precision tell you", a: "How many predicted positives were correct." },
-    { q: "What does recall tell you", a: "How many actual positives were caught." },
-    { q: "When is F1 useful", a: "When classes are imbalanced and you need a balance." },
-    { q: "What is a confusion matrix", a: "A table of true and false outcomes." },
-    { q: "Why use mean absolute error", a: "It shows average prediction error in real units." },
-    { q: "What is the cost of a false negative", a: "A real case missed by the model." },
-    { q: "How should metrics match risk", a: "Pick the metric that reflects the real cost of being wrong." },
+    { q: "Why can accuracy be misleading in a spam filter", a: "Because most email is not spam, so a model can get high accuracy while missing the spam you care about." },
+    { q: "What does accuracy measure", a: "The fraction of predictions that are correct overall." },
+    { q: "What is precision in plain terms", a: "When the model flags something, how often it is truly a positive." },
+    { q: "What is recall in plain terms", a: "Of the real positives, how many the model successfully catches." },
+    { q: "Why can training performance look better than real world performance", a: "The model can memorise training data and real inputs can differ from what it saw." },
+    { q: "What is a common sign of overfitting", a: "Strong training results but worse results on new or held out data." },
+    { q: "What is distribution shift", a: "When real inputs differ from the training and test data the model was evaluated on." },
+    { q: "Why must evaluation match the real world use", a: "Because different mistakes have different costs, and the right metric depends on the job." },
+    { q: "Name one silent production failure mode", a: "Drift in inputs, changing user behaviour, or attackers adapting over time." },
   ]}
 />
 
-Reflection: Which metric would you trust most for a safety critical model and why.
+## Deployment, monitoring and drift
 
----
+<SectionProgressToggle
+  courseId="ai"
+  levelId="intermediate"
+  sectionId="ai-intermediate-deployment"
+/>
 
-## Serving models and basic monitoring
+{/* Explanation content goes here */}
+{/* DiagramBlock goes here */}
+{/* ToolCard goes here */}
+{/* QuizBlock goes here */}
 
-<SectionProgressToggle courseId="ai" levelId="intermediate" sectionId="ai-intermediate-serving-and-monitoring" />
+## Responsible AI, limits and deployment risks
 
-A model is only useful when it is served. A <GlossaryTip term="endpoint">A network address that accepts inputs and returns predictions.</GlossaryTip> can handle online requests in real time or batch requests on a schedule. Online inference needs low latency. Batch inference needs reliable throughput.
+<SectionProgressToggle
+  courseId="ai"
+  levelId="intermediate"
+  sectionId="ai-intermediate-governance"
+/>
 
-We log inputs and predictions to spot patterns over time. <GlossaryTip term="drift">When real world data changes so the model sees new patterns.</GlossaryTip> is common, not rare. A simple way to detect drift is to track input distributions and compare them to training data. Shadow testing and small roll outs reduce risk.
+AI systems do not understand intent or truth. They learn patterns that were useful in the data they saw. That can look like understanding because the outputs are fluent or confident. Underneath, the model is still guessing based on correlations. If the context changes, the guess changes.
 
-<DiagramBlock title="Serving and monitoring" subtitle="Requests, predictions, logs, then learning.">
-  <div className="grid gap-2 sm:grid-cols-4 text-xs text-slate-700">
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Request</p>
-      <p className="mt-1">User or system calls the model.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Endpoint</p>
-      <p className="mt-1">Prediction returned in time.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Logs</p>
-      <p className="mt-1">Inputs, outputs, and latency.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Monitoring</p>
-      <p className="mt-1">Drift and quality checks.</p>
-    </div>
+This creates two different kinds of failure. Capability limits are what the model cannot reliably do, even with good governance. A content moderation model might struggle with sarcasm or coded language. A hiring model might not detect that a job description itself is biased. A credit scoring model might be accurate on last year’s economy and wrong in a downturn.
+
+Governance failures are when the organisation deploys a system without clear goals, boundaries, or accountability. That includes using a model outside the environment it was tested for, copying a score into decisions without challenge, or treating automation as a way to avoid responsibility. These failures are common because they feel efficient right up until they become a public incident.
+
+One practical harm is <GlossaryTip term="bias">
+Bias is a systematic unfairness where errors or outcomes fall more heavily on some groups than others.
+</GlossaryTip> Bias can come from the data, from historical decisions you trained on, or from how you define success. A hiring tool can learn to prefer proxies for past hiring patterns. A moderation system can over flag certain dialects. A credit model can punish people who have less recorded history, even if they are good payers.
+
+Another harm is automation overreach. If a tool is good at ranking candidates, it is tempting to let it decide who gets screened out. If a score is produced, someone will use it as if it is precise. This is how misplaced trust appears. A model is not accountable. People are.
+
+Drift makes this worse because it is quiet. <GlossaryTip term="drift">
+Drift is when the data or behaviour in production changes so the model’s performance degrades over time.
+</GlossaryTip> A hiring pipeline changes the applicant pool. A new fraud tactic changes patterns. A policy change changes what "normal" looks like. Without monitoring, you keep shipping decisions based on yesterday’s reality.
+
+This is why <GlossaryTip term="human in the loop">
+Human in the loop means a person reviews, overrides, or escalates model outputs in the workflow.
+</GlossaryTip> It is not a checkbox. It has to be designed. The reviewer needs context, time, and authority. If humans are only asked to rubber stamp, you have automation with a delay, not oversight.
+
+Responsible deployment also needs explainability and accountability. <GlossaryTip term="explainability">
+Explainability is the ability to give a useful reason for an output that helps humans verify and challenge it.
+</GlossaryTip> This can be simple, like showing which signals mattered most, or which policy rule was triggered. <GlossaryTip term="accountability">
+Accountability is having a named owner who is responsible for outcomes, decisions, and fixes.
+</GlossaryTip> If nobody owns the harm, harm continues.
+
+Responsible AI is an engineering discipline. It is data work, evaluation work, monitoring work, and incident response work. Ethics matters, but the day to day work is building systems that fail safely, surface uncertainty, and keep humans responsible for decisions.
+
+<DiagramBlock title="AI system risk lifecycle" subtitle="Where risks appear and where human review and governance must apply.">
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>Data collection: consent, quality checks, bias review</div>
+    <div>Training: document assumptions, track versions, limit leakage</div>
+    <div>Evaluation: test for harms, stress cases, threshold choices</div>
+    <div>Deployment: workflow design, human review, safe fallbacks</div>
+    <div>Monitoring: drift checks, complaints, incident signals</div>
+    <div>Intervention points: pause, rollback, retrain, policy change</div>
   </div>
 </DiagramBlock>
 
 <ToolCard
-  id="ai-intermediate-serving-simulator"
-  title="Serving and monitoring simulator"
-  description="Send fake requests to a model endpoint and see latency and drift warnings."
->
-  <ServingMonitorSimulatorTool />
-</ToolCard>
-
-<QuizBlock
-  id="ai-intermediate-serving-monitoring-quiz"
-  courseId="ai"
-  levelId="intermediate"
-  sectionId="ai-intermediate-serving-and-monitoring"
-  title="Quick check: serving and monitoring"
-  questions={[
-    { q: "What is an endpoint", a: "A network address that returns model predictions." },
-    { q: "What is the difference between online and batch inference", a: "Online is real time, batch is scheduled." },
-    { q: "Why does latency matter", a: "Slow predictions break user experience." },
-    { q: "What is drift", a: "When data patterns change after training." },
-    { q: "Why log inputs and outputs", a: "To audit behavior and detect drift." },
-    { q: "What is shadow testing", a: "Running a new model silently to compare results." },
-    { q: "What is a safe rollout", a: "Gradual deployment with monitoring and rollback." },
-    { q: "Why monitor error rates", a: "They signal failures or bad data in production." },
-  ]}
+  id="ai-risk-scenario-simulator"
+  title="Spot AI risks before they ship"
+  description="Review short AI scenarios and identify where bias, drift or misuse could appear."
 />
 
-Reflection: If you launched a model today, what would you monitor first and why.
-
----
+<QuizBlock
+  id="ai-intermediate-responsible-ai-quiz"
+  courseId="ai"
+  levelId="intermediate"
+  sectionId="ai-intermediate-governance"
+  title="Quick check: responsible AI and deployment risks"
+  questions={[
+    { q: "Why do AI systems not understand intent or truth", a: "They learn correlations from data and produce patterns that can look like understanding without having goals or intent." },
+    { q: "What is the difference between a capability limit and a governance failure", a: "Capability limits are what the model cannot reliably do, governance failures are how people deploy or use it without boundaries or responsibility." },
+    { q: "Give one example of bias in a real system", a: "A hiring tool learning proxies for past hiring, or a moderation tool over flagging certain dialects." },
+    { q: "Why is automation overreach risky", a: "A tool that ranks or suggests can be treated as a decision maker, causing unchallenged errors at scale." },
+    { q: "What is drift and why is it dangerous", a: "Production data changes over time and performance degrades quietly unless you monitor it." },
+    { q: "What does human in the loop mean in practice", a: "A person can review, override, or escalate outputs with enough context and authority to act." },
+    { q: "Why does explainability matter", a: "It helps humans verify, challenge, and correct outputs rather than blindly trusting a score." },
+    { q: "What does accountability mean for an AI system", a: "A named owner is responsible for decisions, outcomes, and fixes." },
+    { q: "Why is responsible AI an engineering discipline", a: "It requires concrete work in data, evaluation, monitoring, and incident response, not just principles." },
+  ]}
+/>
 
 <PageNav prevHref="/ai/beginner" prevLabel="Foundations" nextHref="/ai/advanced" nextLabel="Advanced" showTop showBottom />

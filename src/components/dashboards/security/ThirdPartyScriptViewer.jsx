@@ -1,48 +1,37 @@
 "use client"
 
 import { useState } from "react"
+import { useToolRunner } from "@/hooks/useToolRunner"
+import { normaliseUrl } from "@/lib/tooling/validation"
+import { postJson } from "@/lib/tooling/http"
 
 export default function ThirdPartyScriptViewer() {
   const [url, setUrl] = useState("")
   const [result, setResult] = useState(null)
-  const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const runner = useToolRunner({ minIntervalMs: 900, toolId: "third-party-script-viewer" })
 
   const handleSubmit = async (event) => {
     event.preventDefault()
     setError("")
     setResult(null)
 
-    let parsed
-    try {
-      parsed = new URL(url)
-    } catch {
-      setError("Please enter a valid URL such as https://example.com")
+    runner.resetError()
+
+    const parsed = normaliseUrl(url)
+    if (!parsed.ok) {
+      setError(parsed.message)
       return
     }
 
-    setLoading(true)
-    try {
-      const response = await fetch("/api/dashboards/thirdparty-scripts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: parsed.href })
-      })
+    const data = await runner.run(async (signal) => {
+      const res = await postJson("/api/dashboards/thirdparty-scripts", { url: parsed.url }, { signal })
+      if (!res.ok) throw new Error("Request failed")
+      return res.data
+    })
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ error: "Request failed" }))
-        throw new Error(errorData.error || `HTTP ${response.status}`)
-      }
-
-      const data = await response.json()
-      setResult(data)
-    } catch (err) {
-      console.error("Third party scripts error:", err)
-      const errorMessage = err.message || "There was a problem reading scripts for this page. Please try again later."
-      setError(errorMessage)
-    } finally {
-      setLoading(false)
-    }
+    if (data) setResult(data)
+    if (!data && runner.errorMessage) setError(runner.errorMessage)
   }
 
   return (
@@ -65,18 +54,20 @@ export default function ThirdPartyScriptViewer() {
             }}
             value={url}
             onChange={(event) => setUrl(event.target.value)}
+            maxLength={2048}
+            aria-invalid={Boolean(error) || Boolean(runner.errorMessage)}
           />
         </div>
         <button
           type="submit"
-          disabled={loading}
+          disabled={runner.loading}
           className="inline-flex items-center justify-center rounded-xl bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:bg-slate-300"
         >
-          {loading ? "Scanning..." : "Scan scripts"}
+          {runner.loading ? "Scanning..." : "Scan scripts"}
         </button>
       </form>
 
-      {error && (
+      {(error || runner.errorMessage) && (
         <div 
           className="rounded-xl border border-rose-200 bg-rose-50/80 px-4 py-3"
           style={{
@@ -88,12 +79,12 @@ export default function ThirdPartyScriptViewer() {
           role="alert"
         >
           <p className="text-sm text-rose-700 font-medium" aria-live="polite">
-            {error}
+            {error || runner.errorMessage}
           </p>
         </div>
       )}
 
-      {!result && !loading && !error && (
+      {!result && !runner.loading && !(error || runner.errorMessage) && (
         <p className="text-sm text-slate-500">
           The backend fetches only the HTML and script tags for the page. It does not execute scripts. Results are for education, not a full supply chain audit.
         </p>

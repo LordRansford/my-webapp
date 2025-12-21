@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Plus, Trash2, AlertTriangle } from "lucide-react";
+import { Plus, Trash2, AlertTriangle, Info } from "lucide-react";
 
 const LIKELIHOODS = ["Low", "Medium", "High"];
 const IMPACTS = ["Low", "Medium", "High"];
@@ -23,6 +23,7 @@ export default function RiskMatrixBuilderDashboard() {
     { id: 1, name: "Data breach", likelihood: "Medium", impact: "High", score: 6 },
     { id: 2, name: "DDoS attack", likelihood: "Low", impact: "Medium", score: 2 },
   ]);
+  const [selectedCell, setSelectedCell] = useState(null);
 
   const addRisk = () => {
     setRisks([
@@ -49,6 +50,10 @@ export default function RiskMatrixBuilderDashboard() {
   const removeRisk = (id) => {
     setRisks(risks.filter((r) => r.id !== id));
   };
+
+  const selectedRisks = selectedCell
+    ? risks.filter((r) => r.likelihood === selectedCell.likelihood && r.impact === selectedCell.impact)
+    : [];
 
   return (
     <div className="flex flex-col gap-6 rounded-2xl bg-white p-4 text-slate-900 shadow-md ring-1 ring-slate-200 md:flex-row md:p-5">
@@ -78,44 +83,54 @@ export default function RiskMatrixBuilderDashboard() {
             {risks.map((risk) => (
               <div
                 key={risk.id}
-                className="grid grid-cols-4 gap-2 rounded-lg border border-slate-200 bg-white p-2 shadow-sm"
+                className="grid gap-2 rounded-lg border border-slate-200 bg-white p-2 shadow-sm sm:grid-cols-4"
               >
                 <input
                   type="text"
                   value={risk.name}
                   onChange={(e) => updateRisk(risk.id, "name", e.target.value)}
                   placeholder="Risk name..."
-                  className="rounded border border-slate-300 bg-white px-2 py-1 text-sm text-slate-900 placeholder:text-slate-400 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-300"
+                  className="rounded border border-slate-300 bg-white px-2 py-1 text-sm text-slate-900 placeholder:text-slate-400 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-300 sm:col-span-1"
+                  aria-label="Risk name"
                 />
-                <select
-                  value={risk.likelihood}
-                  onChange={(e) => updateRisk(risk.id, "likelihood", e.target.value)}
-                  className="rounded border border-slate-300 bg-white px-2 py-1 text-sm text-slate-900 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-300"
-                >
-                  {LIKELIHOODS.map((l) => (
-                    <option key={l} value={l}>
-                      {l}
-                    </option>
-                  ))}
-                </select>
-                <select
-                  value={risk.impact}
-                  onChange={(e) => updateRisk(risk.id, "impact", e.target.value)}
-                  className="rounded border border-slate-300 bg-white px-2 py-1 text-sm text-slate-900 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-300"
-                >
-                  {IMPACTS.map((i) => (
-                    <option key={i} value={i}>
-                      {i}
-                    </option>
-                  ))}
-                </select>
-                <div className="flex items-center gap-1">
+                <label className="text-xs text-slate-600">
+                  Likelihood
+                  <select
+                    value={risk.likelihood}
+                    onChange={(e) => updateRisk(risk.id, "likelihood", e.target.value)}
+                    className="mt-1 w-full rounded border border-slate-300 bg-white px-2 py-1 text-sm text-slate-900 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-300"
+                    aria-label="Likelihood"
+                  >
+                    {LIKELIHOODS.map((l) => (
+                      <option key={l} value={l}>
+                        {l}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="text-xs text-slate-600">
+                  Impact
+                  <select
+                    value={risk.impact}
+                    onChange={(e) => updateRisk(risk.id, "impact", e.target.value)}
+                    className="mt-1 w-full rounded border border-slate-300 bg-white px-2 py-1 text-sm text-slate-900 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-300"
+                    aria-label="Impact"
+                  >
+                    {IMPACTS.map((i) => (
+                      <option key={i} value={i}>
+                        {i}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <div className="flex items-end gap-1">
                   <span className={`flex-1 rounded px-2 py-1 text-center text-sm font-semibold ${getRiskColor(risk.score)}`}>
                     {risk.score}
                   </span>
                   <button
                     onClick={() => removeRisk(risk.id)}
                     className="rounded p-1 text-slate-500 transition hover:text-red-500 focus:outline-none focus:ring-2 focus:ring-sky-300"
+                    aria-label="Remove risk"
                   >
                     <Trash2 size={12} />
                   </button>
@@ -123,6 +138,10 @@ export default function RiskMatrixBuilderDashboard() {
               </div>
             ))}
           </div>
+          <p className="mt-3 flex items-start gap-2 text-xs text-slate-600">
+            <Info size={14} className="mt-0.5 text-slate-500" aria-hidden="true" />
+            Score is (likelihood × impact). The point is to prioritise conversations and mitigations, not to pretend precision.
+          </p>
         </div>
       </div>
 
@@ -145,15 +164,61 @@ export default function RiskMatrixBuilderDashboard() {
                   const risksInCell = risks.filter(
                     (r) => r.likelihood === likelihood && r.impact === impact
                   );
+                  const isSelected =
+                    selectedCell?.likelihood === likelihood && selectedCell?.impact === impact;
                   return (
-                    <div key={impact} className={`rounded border p-2 text-center text-sm font-semibold ${getRiskColor(score)}`}>
-                      {risksInCell.length > 0 && <div className="font-semibold">{risksInCell.length}</div>}
-                    </div>
+                    <button
+                      key={impact}
+                      type="button"
+                      onClick={() =>
+                        setSelectedCell((prev) =>
+                          prev?.likelihood === likelihood && prev?.impact === impact ? null : { likelihood, impact }
+                        )
+                      }
+                      className={`rounded border p-2 text-center text-sm font-semibold ${getRiskColor(score)} ${
+                        isSelected ? "ring-2 ring-sky-400" : ""
+                      }`}
+                      aria-pressed={isSelected}
+                      aria-label={`Matrix cell ${likelihood} likelihood and ${impact} impact`}
+                    >
+                      <div className="text-xs font-medium text-slate-700">{score}</div>
+                      {risksInCell.length > 0 ? (
+                        <div className="mt-1 font-semibold">{risksInCell.length} risks</div>
+                      ) : (
+                        <div className="mt-1 text-xs text-slate-500">0 risks</div>
+                      )}
+                    </button>
                   );
                 })}
               </React.Fragment>
             ))}
           </div>
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 shadow-sm">
+          <p className="text-sm font-semibold text-slate-900">What this teaches</p>
+          <p className="mt-1 text-xs text-slate-700">
+            The matrix helps you compare risks quickly. Click a cell to see which risks land there, then decide: reduce likelihood
+            (prevention), reduce impact (containment), or accept with monitoring.
+          </p>
+          {selectedCell ? (
+            <div className="mt-3 rounded-xl border border-slate-200 bg-white p-3">
+              <p className="text-xs font-semibold text-slate-900">
+                Selected: {selectedCell.likelihood} likelihood × {selectedCell.impact} impact
+              </p>
+              {selectedRisks.length ? (
+                <ul className="mt-2 list-disc space-y-1 pl-4 text-xs text-slate-700">
+                  {selectedRisks.map((r) => (
+                    <li key={r.id}>{r.name || "Unnamed risk"}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-2 text-xs text-slate-600">No risks in this cell yet.</p>
+              )}
+            </div>
+          ) : (
+            <p className="mt-3 text-xs text-slate-600">Tip: select a cell to drill into it.</p>
+          )}
         </div>
 
         {risks.filter((r) => r.score >= 7).length > 0 && (

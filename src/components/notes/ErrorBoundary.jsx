@@ -13,9 +13,7 @@ export class ErrorBoundary extends Component {
   }
 
   componentDidCatch(error, info) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.error('Tool error', error, info)
-    }
+    // Intentionally do not log tool errors to the console.
   }
 
   handleReset = () => {

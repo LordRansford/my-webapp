@@ -1,45 +1,36 @@
 "use client"
 
 import { useState } from "react"
+import { useToolRunner } from "@/hooks/useToolRunner"
+import { safeTrim } from "@/lib/tooling/validation"
+import { postJson } from "@/lib/tooling/http"
 
 export default function EmailHeaderPhishingLab() {
   const [headersText, setHeadersText] = useState("")
   const [result, setResult] = useState(null)
-  const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const runner = useToolRunner({ minIntervalMs: 900, toolId: "email-header-phishing-lab" })
 
   const handleSubmit = async (event) => {
     event.preventDefault()
     setError("")
     setResult(null)
+    runner.resetError()
 
-    if (!headersText.trim()) {
+    const cleaned = safeTrim(headersText, 12000)
+    if (!cleaned) {
       setError("Please paste raw email headers.")
       return
     }
 
-    setLoading(true)
-    try {
-      const response = await fetch("/api/dashboards/email-headers", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ headers: headersText })
-      })
+    const data = await runner.run(async (signal) => {
+      const res = await postJson("/api/dashboards/email-headers", { headers: cleaned }, { signal })
+      if (!res.ok) throw new Error("Request failed")
+      return res.data
+    })
 
-      if (!response.ok) {
-        throw new Error("Request failed")
-      }
-
-      const data = await response.json()
-      setResult(data)
-    } catch (err) {
-      console.error(err)
-      setError(
-        "There was a problem analysing these headers. Please check the format and try again."
-      )
-    } finally {
-      setLoading(false)
-    }
+    if (data) setResult(data)
+    if (!data && runner.errorMessage) setError(runner.errorMessage)
   }
 
   return (
@@ -61,6 +52,8 @@ Return-Path: <bounce@another-domain.com>
 ...`}
           value={headersText}
           onChange={(event) => setHeadersText(event.target.value)}
+          maxLength={12000}
+          aria-invalid={Boolean(error) || Boolean(runner.errorMessage)}
         />
         <div className="flex items-center justify-between gap-3">
           <p className="text-sm text-slate-500">
@@ -69,19 +62,19 @@ Return-Path: <bounce@another-domain.com>
           </p>
           <button
             type="submit"
-            disabled={loading}
+            disabled={runner.loading}
             className="inline-flex items-center justify-center rounded-xl bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:bg-slate-300"
           >
-            {loading ? "Analysing..." : "Analyse headers"}
+            {runner.loading ? "Analysing..." : "Analyse headers"}
           </button>
         </div>
       </form>
 
-      {error && (
-        <p className="text-sm text-rose-600" aria-live="polite">
-          {error}
+      {error || runner.errorMessage ? (
+        <p className="text-sm text-rose-600" role="alert" aria-live="polite">
+          {error || runner.errorMessage}
         </p>
-      )}
+      ) : null}
 
       {result && (
         <div className="space-y-4">

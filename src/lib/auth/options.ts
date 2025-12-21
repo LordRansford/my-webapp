@@ -5,10 +5,13 @@ import type { NextAuthOptions } from "next-auth";
 import { BetterSqlite3Adapter } from "@/lib/auth/adapter";
 import { upsertUser, getUserById } from "@/lib/auth/store";
 import { getUserPlan } from "@/lib/billing/access";
+import { upsertUserIdentity } from "@/services/progressService";
 
 export const authOptions: NextAuthOptions = {
   adapter: BetterSqlite3Adapter(),
-  session: { strategy: "database" },
+  // Phase 5: stateless JWT sessions (no server session table required).
+  // Tokens remain in httpOnly cookies; client JS never reads raw tokens.
+  session: { strategy: "jwt", maxAge: 60 * 60 * 24 * 14 },
   // Security: set NEXTAUTH_SECRET in env for consistent token/cookie encryption.
   // Keep secrets server-side only. NextAuth cookies are httpOnly by default and CSRF protection is enabled by default.
   secret: process.env.NEXTAUTH_SECRET,
@@ -50,7 +53,11 @@ export const authOptions: NextAuthOptions = {
     verifyRequest: "/signin?check=1",
   },
   events: {
-    async signIn({ user }) {
+    async signIn({ user, account }) {
+      // Identity model (passwordless by design):
+      // - User = email + provider id (providerAccountId)
+      // - Email is the primary identifier for humans; internal id is stable UUID
+      //
       // Store minimal identity metadata. Never store magic link tokens.
       try {
         const existing = user?.id ? getUserById(user.id) : null;
@@ -61,6 +68,15 @@ export const authOptions: NextAuthOptions = {
             // Tier is derived from server-side plan records/entitlements.
             tier: plan === "pro" ? "professional" : plan === "supporter" ? "supporter" : "registered",
             lastLoginAt: new Date().toISOString(),
+          });
+        }
+        // Mirror identity into the Prisma-backed progress store so progress persistence can scale.
+        if (user?.id && user?.email && account?.provider && account?.providerAccountId) {
+          await upsertUserIdentity({
+            userId: user.id,
+            email: user.email,
+            provider: account.provider,
+            providerAccountId: String(account.providerAccountId),
           });
         }
       } catch {

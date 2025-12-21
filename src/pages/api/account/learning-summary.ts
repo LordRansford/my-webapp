@@ -1,29 +1,32 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/options";
-import { listLearningRecordsForUser } from "@/lib/learning/records";
-import { listCertificatesForUser } from "@/lib/certificates/list";
+import { handlePagesApi, jsonPages } from "@/server/pagesApi";
+import { AppError } from "@/server/errors";
+import { getAccountLearningSummary } from "@/services/accountSummaryService";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== "GET") return res.status(405).json({ message: "Method not allowed" });
+  return handlePagesApi(req, res, { route: "GET /api/account/learning-summary" }, async ({ requestId }) => {
+    if (req.method !== "GET") {
+      throw new AppError({ code: "VALIDATION_ERROR", status: 405, message: "Method not allowed", exposeMessage: "Method not allowed" });
+    }
 
-  const session = await getServerSession(req, res, authOptions);
-  if (!session?.user?.id) return res.status(401).json({ message: "Unauthorized" });
+    const session = await getServerSession(req, res, authOptions);
+    if (!session?.user?.id) {
+      throw new AppError({ code: "UNAUTHORIZED", status: 401, message: "Unauthorized", exposeMessage: "Unauthorized" });
+    }
 
-  const records = listLearningRecordsForUser(session.user.id);
-  const certificates = listCertificatesForUser(session.user.id);
-
-  const coursesStarted = new Set(records.map((r) => r.courseId)).size;
-  const coursesCompleted = records.filter((r) => r.completionStatus === "completed").length;
-  const totalMinutes = records.reduce((sum, r) => sum + (Number(r.timeSpentMinutes) || 0), 0);
-
-  res.status(200).json({
-    email: session.user.email || null,
-    displayName: session.user.name || null,
-    coursesStarted,
-    coursesCompleted,
-    totalCpdHours: Math.round((totalMinutes / 60) * 10) / 10,
-    certificatesEarned: certificates.length,
+    const summary = getAccountLearningSummary(session.user.id);
+    return jsonPages(
+      res,
+      {
+        email: session.user.email || null,
+        displayName: session.user.name || null,
+        ...summary,
+      },
+      200,
+      requestId
+    );
   });
 }
 

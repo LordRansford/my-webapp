@@ -31,13 +31,31 @@ import { cyberSections } from "@/lib/cyberSections"
 
 <CPDTracker courseId="cybersecurity" levelId="foundations" estimatedHours={10} />
 
-## Why cybersecurity matters in real life
+## Foundations overview
 
 <SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-why-cyber-matters" />
 
-Cybersecurity is about avoiding real harm. Bills go to the wrong person, hospital systems lock up, payroll fails, or private data leaks. The point is not perfect safety; it is making harm less likely and making mistakes visible and recoverable.
+Cybersecurity is about reducing real harm. It protects people, not just computers. It protects money, time, safety, privacy, and trust. When it goes wrong, it often looks ordinary at first. A bank transfer goes to the wrong place. A delivery address changes. A clinic cannot open a record. A small mistake becomes a big mess.
 
-Every system is a set of decisions about who should see what, who can change it, and how we recover when things break. This course starts with the smallest pieces so later topics feel grounded.
+In plain language, my job in cyber is to stop normal mistakes from turning into expensive disasters. I am not trying to build an unbreakable fortress. I am trying to make the easy failures harder, make the hard failures visible, and make recovery faster.
+
+Attackers succeed in the real world because most systems are normal systems. They are busy, messy, and connected. They have legacy tools, shared inboxes, rushed changes, and staff who are trying to get work done. The attacker does not need perfect skill. They need one good moment. They need one person to trust the wrong thing, or one system to accept an unsafe assumption.
+
+In organisations, this is why security work is mostly about <GlossaryTip term="controls">Controls are the practical checks and safeguards that reduce risk, like MFA, approvals, logging, backups, and patching.</GlossaryTip> and decision making. You will see it in finance processes, HR systems, supplier access, and the boring bits like password resets and account cleanup. The glamorous hacker story is not the most common story.
+
+Here is a short story I have seen in some form more than once. A finance team gets an email that looks like a supplier. The invoice is correct. The tone is correct. The bank details are new. The team is under pressure. They pay. A week later the supplier calls to chase payment. Nobody was hacked in a dramatic way. It was a quiet identity failure plus weak process. The outcome was still real loss.
+
+Threats, vulnerabilities, and risk are not the same thing. A <GlossaryTip term="threat">A threat is something that could cause harm, like phishing, malware, or a dishonest insider.</GlossaryTip> is about what could happen. A <GlossaryTip term="vulnerability">A vulnerability is a weakness that makes a threat more likely to succeed, like reused passwords or missing patches.</GlossaryTip> is about what makes it easier. <GlossaryTip term="risk">Risk is likelihood and impact in your context. It is the decision about what you accept, what you reduce, and what you monitor.</GlossaryTip> A threat can exist with low risk if it cannot reach you. A vulnerability can exist with low risk if it has no meaningful impact. Context is the difference between a scary headline and a meaningful decision.
+
+Everyday example: if you leave your house key under a plant pot, the threat is someone trying doors, the vulnerability is the predictable hiding place, and the risk depends on your street, your neighbours, and what happens if someone gets inside.
+
+Common mistake: treating cyber as a list of bad things that might happen, instead of a set of assumptions you must test. Another common mistake is over focusing on rare, advanced attacks while ignoring easy ones that happen daily.
+
+Why it matters: when you separate threat, vulnerability, and risk, you stop guessing. You can choose the control that reduces harm most, and you can explain that choice to a manager without waving your hands.
+
+<Callout title="A common myth" type="info">
+Cybersecurity is not only about stopping hackers. It is also about preventing accidents, spotting mistakes early, and recovering fast when something breaks.
+</Callout>
 
 <DiagramBlock
   title="Everyday dependency chain"
@@ -74,15 +92,61 @@ Every system is a set of decisions about who should see what, who can change it,
   ]}
 />
 
-## Data, bits and how information lives in a computer
+### After this section you should be able to:
+
+- Explain what cybersecurity is protecting and why attackers often succeed
+- Explain the difference between threat, vulnerability, and risk in context
+- Explain what breaks when identity and process controls are treated as optional
+
+## Assets, threats, and risk
 
 <SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-data-and-bits" />
 
-Everything a computer stores is built from bits. A bit is a single switch that is either off or on. Eight bits make a byte. A byte can represent numbers from 0 to 255 in decimal, which is why 255 appears in settings. Flip the leftmost bit and you change the number by 128; flip the rightmost and you change it by 1.
+An <GlossaryTip term="asset">An asset is anything you care about enough to protect, like data, systems, people, time, and trust.</GlossaryTip> It includes obvious things like customer records and laptops, but also things like staff time, reputation, and the ability to keep operating. If payroll fails on Friday, that is an availability problem. If a patient record is wrong, that is an integrity problem. If a private email leaks, that is a confidentiality problem.
 
-To turn bytes into letters and symbols we use an encoding: a shared map from numbers to characters. ASCII maps 65 to the letter A. <GlossaryTip term="UTF 8">A modern encoding that uses one or more bytes per character so it can represent many languages.</GlossaryTip> Encoding mistakes create security bugs because the same bytes get read differently.
+Risk is contextual. The same control can be essential in one place and pointless in another. A strict password policy does not help if the real attack path is a shared admin account. A fancy monitoring tool does not help if nobody knows what to do when it alerts. Controls without context turn into theatre. They look reassuring and then fail at the worst time.
 
-If you want to see binary in practice, take decimal 13. In binary it is 1101 (8 + 4 + 1). Flip the leftmost 1 to 0 and the value drops by 8. That is all computers are doing at the base layer.
+This section aligns to CISSP Security and Risk Management and the NIST Cybersecurity Framework 2.0 Identify function. Identify is about understanding what you have, what matters, and what could go wrong. Without that, every other function becomes guesswork.
+
+We will use one simple example for the rest of Foundations. Imagine a small clinic with an online booking system. The key assets are the patient data, the appointment schedule, the staff time, and the clinic's ability to operate. The threats include phishing, stolen passwords, ransomware, and honest mistakes. The vulnerabilities include reused passwords, no multi-factor authentication (MFA), and missing backups. The risk is how those realities combine for this clinic, not a generic list from a template.
+
+In real organisations, this is how risk conversations should sound: "If this fails, who gets hurt, how quickly, and how would we know." This is why asset lists and data classification exist, even when they feel like paperwork. They make priorities explicit.
+
+Everyday example: your phone is an asset, but so is your ability to get into your bank account. If your phone is lost, the worst case is not "my phone is gone." The worst case is "my identity is used to reset accounts." The asset is not the device. The asset is what the device unlocks.
+
+Common mistake: starting with controls and tools instead of starting with assets and outcomes. People often buy a scanner, a dashboard, or an audit template before they can answer what they are protecting and why.
+
+Why it matters: when you get the asset and context right, you can spend effort where it reduces harm. You stop doing security theatre and start doing risk reduction.
+
+### After this section you should be able to:
+
+- Explain why risk is contextual and what breaks when controls are applied blindly
+- Explain how assets, threats, and vulnerabilities connect to real decisions
+- Explain why Identify work comes before tool buying
+
+## Identity, access, and trust
+
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-networks-and-packets" />
+
+Identity is now the security perimeter because work happens everywhere. Staff work from home. Phones are used for approvals. Vendors have access. Cloud services connect to other cloud services. The question is no longer only "is the network safe". The question is "who is this, and what should they be allowed to do".
+
+<GlossaryTip term="Authentication">Authentication is proving who you are, for example by a password plus a second factor.</GlossaryTip> <GlossaryTip term="Authorisation">Authorisation is deciding what you can do after you are authenticated, usually via roles and permissions.</GlossaryTip> People mix these up all the time, and systems do too. A login screen is authentication. Permissions and roles are authorisation. Weak authentication makes it easy to pretend. Weak authorisation makes it easy to abuse a real account.
+
+Passwords are not evil. They are just easy to get wrong. Long passwords are better than clever passwords. Password reuse is the real disaster. <GlossaryTip term="MFA">Multi factor authentication adds a second proof so a leaked password is not enough on its own.</GlossaryTip> It reduces the damage when a password leaks. <GlossaryTip term="Least privilege">Least privilege means giving only the access needed for a job and no more, so mistakes and compromise have a smaller blast radius.</GlossaryTip> It is boring. It is also one of the best risk controls we have.
+
+In real organisations, identity failures show up as: shared accounts, stale accounts, "temporary" exceptions that become permanent, and approvals done on the wrong channel. This is where audit findings come from, but it is also where incidents come from.
+
+Everyday example: handing someone your house keys is authorisation. Checking their ID at the door is authentication. If you give a spare key to a neighbour "just in case" and never take it back, you created a long lived trust decision without noticing.
+
+Common mistake: treating identity as a user experience detail instead of a safety system. Another common mistake is giving broad permissions because it is easier, then being surprised when something bad happens quickly.
+
+Why it matters: when identity is strong and access is narrow, a compromised account does not automatically become a full breach. It buys time. It limits harm. It makes detection and recovery possible.
+
+### After this section you should be able to:
+
+- Explain the difference between authentication and authorisation
+- Explain what breaks when identity is treated as a soft control
+- Explain why least privilege reduces blast radius during incidents
 
 <DiagramBlock
   title="Bits → bytes → characters"
@@ -128,13 +192,29 @@ If you want to see binary in practice, take decimal 13. In binary it is 1101 (8 
   ]}
 />
 
-## How data travels on networks
+### After this section you should be able to:
 
-<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-networks-and-packets" />
+- Explain why representation and parsing mistakes create security risk
+- Explain what breaks when systems disagree on how bytes should be interpreted
+- Explain why integrity controls depend on correct data handling
 
-When you send a message across the internet, you are not sending one blob. Your device chops data into packets. Each packet carries a header and a payload. The payload is the part we care about, such as part of your email. The header is the envelope telling the network where the packet is going and where it came from.
+## Defence, detection, response
 
-Even when the payload is encrypted, metadata can still be revealing. Timing, destination and size help someone guess what you are doing. Protocols like HTTP and TLS sit on top of lower layers that move packets. Think of the OSI model as a map: lower layers move bits, middle layers move packets, upper layers handle applications. Security controls often live at specific layers, such as TLS for encryption or firewalls for filtering.
+Prevention alone fails. Not because people are lazy, but because systems are complex. Something will slip. A password will leak. A laptop will go missing. A supplier will get compromised. Defence needs layers, and it needs feedback.
+
+This aligns to the NIST Cybersecurity Framework 2.0 Protect, Detect, and Respond functions. Protect reduces likelihood. Detect reduces time to notice. Respond reduces harm and recovery time. Cyber Essentials Plus focuses on practical technical controls that support this loop: secure configuration, access control, malware protection, patch management, and boundary protections.
+
+Logging matters before incidents. <GlossaryTip term="Logging">Logging is recording important events so you can reconstruct what happened, spot anomalies, and prove or disprove a theory.</GlossaryTip> If you do not collect basic logs, you cannot tell what happened. Then every incident becomes a guessing game. You end up with panic, broad resets, and lost time. A simple response plan beats a heroic late night. It tells people who decides, who communicates, and what evidence to preserve.
+
+In real organisations, this is the difference between "we think it was this account" and "we can show the exact sequence of actions." It is also why detection engineering is a real job. Good teams treat detection as a product: tuned, tested, and improved.
+
+Everyday example: if a fire alarm goes off but nobody knows which room triggered it, everyone wastes time. If the alarm logs the room and the time, you can respond quickly and avoid a full building panic.
+
+Common mistake: turning on every log and then drowning in noise, or logging nothing and then trying to do forensics with guesses. Another common mistake is writing an incident plan that nobody has rehearsed.
+
+Why it matters: detection and response are how you limit harm when prevention fails. You cannot undo a breach with wishful thinking. You need evidence, speed, and clear ownership.
+
+Under the hood, data still moves as packets. A packet has a header and a payload. The header is the envelope that tells the network where it is going. The payload is the content. Even when the payload is encrypted, metadata can still reveal behaviour. That is why monitoring often starts with patterns, not secrets.
 
 <DiagramBlock
   title="A packet’s short trip"
@@ -189,13 +269,29 @@ Even when the payload is encrypted, metadata can still be revealing. Timing, des
   ]}
 />
 
+### After this section you should be able to:
+
+- Explain why trust boundaries exist and what breaks when networks are assumed safe
+- Explain how metadata can leak behaviour even when content is encrypted
+- Explain why monitoring often starts with patterns, not secrets
+
 ## Confidentiality, integrity, availability and simple attacks
 
 <SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-cia-and-simple-attacks" />
 
-Confidentiality means only the right people can see information. Integrity means information or systems are not changed silently. Availability means systems are up when people need them. Attacks often target weak assumptions: guessing weak passwords hits confidentiality, tampering in transit hits integrity, and denial of service hits availability.
+To keep this practical, we will use one simple frame: confidentiality, integrity, and availability, often shortened to CIA. Confidentiality means only the right people can see information. Integrity means changes are correct and visible. Availability means systems are there when needed. The purpose is not to memorise three words. The purpose is to ask better questions.
 
-Trust is a decision, not a default. Each control should be tied to a clear trust choice: who can see data, who can change it, and what happens when something fails.
+In plain language: confidentiality is about privacy, integrity is about truth, and availability is about being able to function. Most incidents are one of these three, usually with a second one following close behind.
+
+When identity is weak, confidentiality fails. When changes are untracked, integrity fails. When backups are missing, availability fails. Good governance makes those failures less likely because it makes the decisions explicit and reviewed.
+
+In real organisations, CIA is how you explain impact to non security people. A leader might not care about a vulnerability ID, but they do care about "patients could not be seen" or "invoices were changed" or "private data leaked." CIA translates technical failures into outcomes.
+
+Everyday example: confidentiality is your bank statement being private, integrity is your balance being correct, and availability is being able to pay for groceries when you are at the checkout.
+
+Common mistake: thinking CIA is a checklist where you must maximise all three at once. In practice you trade. Tight security might reduce availability if you lock out staff too often. High availability might reduce confidentiality if you spread access too widely. The job is to choose wisely and explain the trade.
+
+Why it matters: CIA is a simple way to reason about controls and to spot what kind of harm you are actually preventing. It helps you avoid security theatre and focus on outcomes.
 
 <DiagramBlock
   title="CIA in plain view"
@@ -247,6 +343,34 @@ Trust is a decision, not a default. Each control should be tied to a clear trust
     { q: "How does availability relate to incidents", a: "If systems go down at the wrong time, it causes harm even if data was protected." },
   ]}
 />
+
+### After this section you should be able to:
+
+- Explain CIA as decision questions, not memorised words
+- Explain what breaks when identity is weak or integrity is not monitored
+- Explain why availability needs planning, not hope
+
+## Human factors and governance
+
+Humans are not the weakest link. Humans are the system. Most insecure behaviour is a rational response to a bad setup. If it takes five minutes to do the safe thing, people will do the fast thing. If approvals block urgent work, people will route around them. If security tools produce noise, people will ignore them.
+
+<GlossaryTip term="Governance">Governance is how decisions are made and owned, including who accepts risk, who funds controls, and who is accountable.</GlossaryTip> It is decision making, not paperwork. It is how an organisation decides what it will accept, what it will fix, and who owns the trade offs. CISSP governance principles focus on accountability, risk ownership, and clear policy that matches reality.
+
+Real organisational failures are often not technical. They are unclear ownership, unclear priorities, and no rehearsal for bad days. The paperwork shows up after the incident, usually with a new template and a tired team.
+
+In real organisations, governance shows up as: who is allowed to approve exceptions, how access is granted and removed, how incidents are escalated, and what gets funded. Good governance is boring in the best way. It makes security decisions repeatable instead of emotional.
+
+Everyday example: if nobody is clearly responsible for locking up at night, it eventually becomes "someone will do it." That is not a plan. Governance is deciding who locks up, how you check, and what happens if it is missed.
+
+Common mistake: blaming individuals for predictable system failures. Another common mistake is writing policies that describe an ideal world and then punishing people for living in the real one.
+
+Why it matters: human factors and governance are what make security sustainable. Without them, controls decay, exceptions pile up, and the organisation only gets serious after harm has happened.
+
+### After this section you should be able to:
+
+- Explain why humans are part of the system and what breaks when processes are unrealistic
+- Explain governance as ownership of trade offs, not documents
+- Explain why clear roles and rehearsed response reduce harm
 
 This is Foundations. Move into Applied next once you can explain every term on this page to another person and show them how the tools work.
 

@@ -19,16 +19,20 @@ export default function HashingPlaygroundDashboard() {
   const [hashPlain, setHashPlain] = useState("");
   const [hashSalted, setHashSalted] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const computeHashes = useCallback(async () => {
     setLoading(true);
+    setError("");
     try {
-      const plain = await hashText(text, algorithm);
-      const salted = await hashText(text + salt, algorithm);
+      const safeText = String(text || "").slice(0, 2000);
+      const safeSalt = String(salt || "").slice(0, 2000);
+      const plain = await hashText(safeText, algorithm);
+      const salted = await hashText(safeText + safeSalt, algorithm);
       setHashPlain(plain);
       setHashSalted(salted);
     } catch (err) {
-      console.error("Hash computation failed:", err);
+      setError("This input could not be hashed in this browser. Try a shorter value or a different algorithm.");
     } finally {
       setLoading(false);
     }
@@ -105,6 +109,10 @@ export default function HashingPlaygroundDashboard() {
           </div>
           {loading ? (
             <div className="text-xs text-slate-400">Computing...</div>
+          ) : error ? (
+            <div className="text-xs font-semibold text-rose-300" role="alert" aria-live="polite">
+              {error}
+            </div>
           ) : (
             <div className="space-y-4">
               <div>

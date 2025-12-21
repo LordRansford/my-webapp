@@ -19,6 +19,7 @@ import PlatformMap from "@/components/notes/tools/architecture/advanced/Platform
 import ResilienceSimulator from "@/components/notes/tools/architecture/advanced/ResilienceSimulator"
 import GovernanceDesigner from "@/components/notes/tools/architecture/advanced/GovernanceDesigner"
 import DigitalisationDashboard from "@/components/notes/tools/architecture/advanced/DigitalisationDashboard"
+import DashboardFrame from "@/components/dashboards/DashboardFrame"
 
 <ProgressBar mode="scroll" />
 
@@ -128,7 +129,9 @@ Advanced architects act as stewards. They think in years, focus on capability ra
 
 Architecture must be observable. Digitalisation is visible through delivery speed, stability, change failure rates, and operational cost trends. Without metrics, digitalisation is wishful thinking.
 
-<DigitalisationDashboard />
+<DashboardFrame title="Digitalisation and delivery dashboard">
+  <DigitalisationDashboard />
+</DashboardFrame>
 
 ---
 

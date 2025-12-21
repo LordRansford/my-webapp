@@ -4,6 +4,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import { Radar, Plus, Trash2 } from "lucide-react";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
 import { AiToolCard } from "./AiToolCard";
+import { clampInt, safeTrim } from "@/lib/tooling/validation";
 
 type Doc = {
   id: string;
@@ -132,6 +133,7 @@ export function VectorSearchLab() {
   const [lastQuery, setLastQuery] = useState("");
   const [vectorDimension, setVectorDimension] = useState(64);
   const [selectedDocId, setSelectedDocId] = useState<string | null>(DEFAULT_DOCS[0]?.id ?? null);
+  const [uiError, setUiError] = useState<string>("");
 
   const docEmbeddings = useMemo(() => {
     const dim = vectorDimension;
@@ -168,9 +170,17 @@ export function VectorSearchLab() {
   );
 
   const handleAddDoc = useCallback(() => {
-    const title = normaliseText(newTitle);
-    const text = normaliseText(newText);
-    if (!title || !text) return;
+    setUiError("");
+    const title = safeTrim(normaliseText(newTitle), 80);
+    const text = safeTrim(normaliseText(newText), 800);
+    if (!title || !text) {
+      setUiError("Add a title and some text before adding a document.");
+      return;
+    }
+    if (docs.length >= 12) {
+      setUiError("This collection is full. Remove a document to add another.");
+      return;
+    }
 
     const id = `doc-${Date.now()}-${Math.random().toString(36).slice(2)}`;
     const doc: Doc = { id, title, text };
@@ -178,26 +188,33 @@ export function VectorSearchLab() {
     setNewTitle("");
     setNewText("");
     setSelectedDocId(id);
-  }, [newTitle, newText]);
+  }, [newTitle, newText, docs.length]);
 
   const handleRemoveDoc = useCallback(
     (id: string) => {
-      setDocs((prev) => prev.filter((d) => d.id !== id));
-      setSelectedDocId((prev) => {
-        if (prev === id) {
-          const remaining = docs.filter((d) => d.id !== id);
-          return remaining.length ? remaining[0].id : null;
-        }
-        return prev;
+      setUiError("");
+      setDocs((prevDocs) => {
+        const nextDocs = prevDocs.filter((d) => d.id !== id);
+        setSelectedDocId((prevSelected) => {
+          if (prevSelected === id) return nextDocs.length ? nextDocs[0].id : null;
+          return prevSelected;
+        });
+        return nextDocs;
       });
     },
-    [docs]
+    []
   );
 
   const selectedDoc = useMemo(() => docs.find((d) => d.id === selectedDocId) ?? null, [docs, selectedDocId]);
 
   const handleRunSearch = useCallback(() => {
-    setLastQuery(query);
+    setUiError("");
+    const q = safeTrim(normaliseText(query), 240);
+    if (!q) {
+      setUiError("Enter a search query first.");
+      return;
+    }
+    setLastQuery(q);
   }, [query]);
 
   return (
@@ -207,6 +224,15 @@ export function VectorSearchLab() {
       icon={<Radar className="h-4 w-4" aria-hidden="true" />}
       description="Build a tiny search index in your browser, see how your texts become vectors and explore similarity using cosine distance."
     >
+      {uiError ? (
+        <p
+          className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-800"
+          role="alert"
+          aria-live="polite"
+        >
+          {uiError}
+        </p>
+      ) : null}
       <div className="grid gap-6 xl:grid-cols-3">
         <div className="space-y-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-4 xl:col-span-1">
           <p className="text-xs font-semibold text-slate-700">Step 1 - Build a small text collection</p>
@@ -226,6 +252,7 @@ export function VectorSearchLab() {
               onChange={(e) => setNewTitle(e.target.value)}
               className="w-full rounded-2xl border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200"
               placeholder="For example: Access control incident"
+              maxLength={80}
             />
           </div>
 
@@ -240,6 +267,7 @@ export function VectorSearchLab() {
               rows={4}
               className="w-full rounded-2xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200"
               placeholder="Write a short paragraph about a problem, scenario or requirement."
+              maxLength={800}
             />
           </div>
 
@@ -247,6 +275,7 @@ export function VectorSearchLab() {
             <button
               type="button"
               onClick={handleAddDoc}
+              disabled={!safeTrim(newTitle, 80) || !safeTrim(newText, 800)}
               className="inline-flex items-center gap-1.5 rounded-2xl bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-slate-800"
             >
               <Plus className="h-3.5 w-3.5" aria-hidden="true" />
@@ -256,7 +285,7 @@ export function VectorSearchLab() {
               <span>Vector dims</span>
               <select
                 value={vectorDimension}
-                onChange={(e) => setVectorDimension(Number(e.target.value))}
+                onChange={(e) => setVectorDimension(clampInt(e.target.value, 32, 128, 64))}
                 className="rounded-2xl border border-slate-200 bg-white px-2 py-1 text-sm text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-200"
               >
                 <option value={32}>32</option>
@@ -316,12 +345,14 @@ export function VectorSearchLab() {
               rows={3}
               className="w-full rounded-2xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200"
               placeholder="For example: show me anything about broken access control incidents"
+              maxLength={240}
             />
           </div>
 
           <button
             type="button"
             onClick={handleRunSearch}
+            disabled={!safeTrim(query, 240)}
             className="inline-flex items-center justify-center rounded-2xl bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-emerald-500"
           >
             Run similarity search

@@ -29,6 +29,10 @@ export async function getStaticProps({ params }) {
 }
 
 export default function LessonPage({ course, lesson, mdx, lessons }) {
+  const activeIndex = Array.isArray(lessons) ? lessons.findIndex((l) => l.slug === lesson.slug) : -1;
+  const prevLesson = activeIndex > 0 ? lessons[activeIndex - 1] : null;
+  const nextLesson = activeIndex >= 0 && activeIndex < lessons.length - 1 ? lessons[activeIndex + 1] : null;
+
   return (
     <Layout
       title={`${lesson.meta.title} · ${course.meta.title}`}
@@ -62,6 +66,23 @@ export default function LessonPage({ course, lesson, mdx, lessons }) {
           <article className="post-content">
             <MDXRemote {...mdx} components={mdxComponents} />
           </article>
+
+          <nav className="mt-8 flex flex-wrap items-center justify-between gap-3" aria-label="Lesson navigation">
+            {prevLesson ? (
+              <Link href={`/courses/${course.slug}/${prevLesson.slug}`} className="button ghost" rel="prev">
+                ← {prevLesson.meta.title || "Previous"}
+              </Link>
+            ) : (
+              <span />
+            )}
+            {nextLesson ? (
+              <Link href={`/courses/${course.slug}/${nextLesson.slug}`} className="button primary" rel="next">
+                {nextLesson.meta.title || "Next"} →
+              </Link>
+            ) : (
+              <span />
+            )}
+          </nav>
         </div>
 
         <LessonNavigation courseSlug={course.slug} lessons={lessons} active={lesson.slug} />

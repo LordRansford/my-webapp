@@ -35,6 +35,8 @@ export default function QuizBlock({
 
   const alreadyCompleted = Boolean(existingSection?.completed);
 
+  const hasQuestions = Array.isArray(questions) && questions.length > 0;
+
   useEffect(() => {
     if (typeof window === "undefined") return;
     const saved = window.localStorage.getItem(storageKey);
@@ -53,19 +55,19 @@ export default function QuizBlock({
   }, [answers, storageKey]);
 
   const allAnswered = useMemo(
-    () => questions.length > 0 && questions.every((_, idx) => answers[idx]?.open),
-    [questions, answers]
+    () => hasQuestions && questions.every((_, idx) => answers[idx]?.open),
+    [questions, answers, hasQuestions]
   );
 
   useEffect(() => {
     if (!attemptTracked && isAuthed && id) {
-      const anyOpened = questions.length > 0 && questions.some((_, idx) => Boolean(answers[idx]?.open));
+      const anyOpened = hasQuestions && questions.some((_, idx) => Boolean(answers[idx]?.open));
       if (anyOpened) {
         track({ type: "quiz_attempted", quizId: id, trackId: trackId || undefined, levelId, sectionId });
         setAttemptTracked(true);
       }
     }
-  }, [attemptTracked, answers, isAuthed, id, questions, track, trackId, levelId, sectionId]);
+  }, [attemptTracked, answers, isAuthed, id, questions, track, trackId, levelId, sectionId, hasQuestions]);
 
   useEffect(() => {
     if (!trackId || !levelId || !sectionId) return;
@@ -90,34 +92,41 @@ export default function QuizBlock({
   return (
     <section className="my-6 w-full rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
       <p className="text-sm font-semibold text-gray-900 break-words">{title}</p>
-      <div className="mt-3 space-y-3">
-        {questions.map((q, idx) => {
-          const isOpen = answers[idx]?.open;
-          const questionText = q?.q ?? q?.question ?? "";
-          const answerText = q?.a ?? q?.answer ?? "Answer not provided.";
-          return (
-            <div key={idx} className="rounded-xl border border-gray-100 bg-gray-50 p-3">
-              <p className="text-sm font-medium text-gray-900 break-words whitespace-pre-wrap">{questionText}</p>
-              <button
-                className="mt-2 rounded-full border px-3 py-1 text-xs text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-blue-200 w-full sm:w-auto text-center"
-                onClick={() =>
-                  setAnswers((prev) => ({
-                    ...prev,
-                    [idx]: { open: !isOpen },
-                  }))
-                }
-              >
-                {isOpen ? "Hide answer" : "Show answer"}
-              </button>
-              {isOpen ? (
-                <p className="mt-2 text-sm text-gray-800 break-words whitespace-pre-wrap">
-                  {answerText}
-                </p>
-              ) : null}
-            </div>
-          );
-        })}
-      </div>
+      {!hasQuestions ? (
+        <div className="mt-3 rounded-xl border border-gray-100 bg-gray-50 p-3">
+          <p className="text-sm text-gray-800">
+            Quiz coming soon. This block stays visible so the section doesn’t look empty.
+          </p>
+          {id ? <p className="mt-2 text-xs text-gray-500">Quiz id: {id}</p> : null}
+        </div>
+      ) : (
+        <div className="mt-3 space-y-3">
+          {questions.map((q, idx) => {
+            const isOpen = answers[idx]?.open;
+            const questionText = q?.q ?? q?.question ?? "Question not provided yet.";
+            const answerText = q?.a ?? q?.answer ?? "Answer not provided yet.";
+            return (
+              <div key={idx} className="rounded-xl border border-gray-100 bg-gray-50 p-3">
+                <p className="text-sm font-medium text-gray-900 break-words whitespace-pre-wrap">{questionText}</p>
+                <button
+                  className="mt-2 rounded-full border px-3 py-1 text-xs text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-blue-200 w-full sm:w-auto text-center"
+                  onClick={() =>
+                    setAnswers((prev) => ({
+                      ...prev,
+                      [idx]: { open: !isOpen },
+                    }))
+                  }
+                >
+                  {isOpen ? "Hide answer" : "Show answer"}
+                </button>
+                {isOpen ? (
+                  <p className="mt-2 text-sm text-gray-800 break-words whitespace-pre-wrap">{answerText}</p>
+                ) : null}
+              </div>
+            );
+          })}
+        </div>
+      )}
       {showSavePrompt && !isAuthed ? <SaveProgressPrompt /> : null}
     </section>
   );

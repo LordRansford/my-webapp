@@ -5,12 +5,14 @@ import { useEffect, useState } from "react";
 export default function CookieStorageInspector() {
   const [hostInfo, setHostInfo] = useState(null);
   const [mounted, setMounted] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     setMounted(true);
     
     const loadStorage = () => {
       if (typeof window === "undefined") return;
+      setError("");
 
       const cookies = document.cookie
         ? document.cookie.split(";").map((item) => {
@@ -34,7 +36,7 @@ export default function CookieStorageInspector() {
           }
         }
       } catch (err) {
-        console.error("Error reading localStorage:", err);
+        setError("Storage could not be read in this browser context.");
       }
 
       const sessionEntries = [];
@@ -49,7 +51,7 @@ export default function CookieStorageInspector() {
           }
         }
       } catch (err) {
-        console.error("Error reading sessionStorage:", err);
+        setError("Storage could not be read in this browser context.");
       }
 
       setHostInfo({
@@ -92,6 +94,12 @@ export default function CookieStorageInspector() {
 
   return (
     <div className="space-y-4 text-xs text-slate-700">
+      {error ? (
+        <div className="rounded-xl border border-rose-200 bg-rose-50/80 px-4 py-3" role="alert" aria-live="polite">
+          <p className="text-sm font-semibold text-rose-700">{error}</p>
+          <p className="mt-1 text-sm text-rose-700">Try refreshing the page or using a standard browser window.</p>
+        </div>
+      ) : null}
       <div className="flex items-center justify-between mb-2">
         <p className="text-sm text-slate-600">
           This inspector shows cookies and storage for <strong>{typeof window !== "undefined" ? window.location.hostname : "this site"}</strong>

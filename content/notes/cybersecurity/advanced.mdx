@@ -96,6 +96,10 @@ Common mistakes: outdated algorithms, self-signed certificates where trust is ne
 
 Zero trust is simple: never assume the network is friendly, always verify access, limit blast radius. <GlossaryTip term="zero trust">Design where no implicit trust is granted based on network location</GlossaryTip>. <GlossaryTip term="microsegment">Breaking systems into small zones with tight policy</GlossaryTip> reduces how far an attacker can move. Defence in depth still matters: identity, network, application, and data controls should stack.
 
+This is where cyber stops being an IT problem and becomes an organisational capability. Architecture is the translation layer between risk and reality. The board talks about impact. Engineers talk about systems. Architecture is where those meet. If you cannot explain your design to a non technical leader, you probably cannot defend it under pressure either.
+
+If you want an enterprise baseline, Cyber Essentials Plus is a good mental anchor. It is not perfect. Nothing is. But it forces useful basics: secure configuration, access control, malware protection, patch management, and boundary protections. In practice, these are the controls that keep your worst day from turning into a month.
+
 <DiagramBlock
   title="Layered, segmented view"
   subtitle="User access checked at every hop; segments limit lateral movement."
@@ -200,7 +204,53 @@ Threat hunting is proactive: forming a hypothesis and looking for weak signals b
 
 <SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="advanced-governance-career" />
 
-Governance sets who decides, how risk is measured, and how evidence is shown. <GlossaryTip term="NIST CSF">A framework organised around identify, protect, detect, respond and recover</GlossaryTip> maps well to real work. <GlossaryTip term="risk appetite">The amount of risk an organisation is willing to accept</GlossaryTip> guides control strength. <GlossaryTip term="control objective">The outcome a control should achieve, not just the control name</GlossaryTip> keeps audits meaningful.
+This section is the glue. It is temporary tooling in a way, because your first versions will be imperfect. That is normal. The point is to build a loop that makes the next version better.
+
+Governance is how decisions get made when nobody has time. It is not a document set. It is ownership, incentives, and the ability to say yes, no, or not yet with a straight face. CISSP Governance and Risk themes focus on accountability and risk ownership for a reason. Without those, security becomes a side quest.
+
+This aligns strongly to the NIST Cybersecurity Framework 2.0 Govern function. Govern is where you decide priorities, policy, roles, and how you will measure progress. It is also where security ownership usually fails. The failure mode is familiar: security is asked to own risk without the authority to change anything. That is like asking the fire alarm to stop the fire.
+
+### Security as an organisational capability
+
+Cyber is not only for the security team. Product decisions create attack surface. Procurement decisions create supply chain risk. HR decisions shape onboarding and offboarding. Finance decisions shape tooling and staffing. Operations decisions shape patch windows and incident response. In real organisations, the best security work looks like good coordination.
+
+At a high level, you can think in three layers:
+
+The board sets direction and risk appetite. Executives allocate budget and accept trade offs. Operations do the work and manage daily risk. When those layers are not aligned, the organisation drifts into security theatre. Everybody is busy, but the actual risk barely moves.
+
+### Policies, standards, and reality
+
+Policy, standard, procedure, and control are related but different.
+
+A policy is a statement of intent. It says what the organisation expects. A standard is a specific rule that makes policy measurable. A procedure is how people actually do the work. A control is the thing that reduces risk, which can be technical, human, or process based.
+
+Bad policy exists to tick boxes. It is vague, copied, and ignored. It creates shadow IT because people still have goals. They just route around the paperwork. Good policy supports humans. It is short, testable, and paired with an easy path to do the safe thing.
+
+### Incident response and learning loops
+
+Incidents are noisy and emotional. Good teams make them boring on purpose.
+
+During an incident, you usually move through detection, containment, recovery, and lessons learned. Detection is recognising that something is wrong. Containment is limiting blast radius. Recovery is getting back to safe operation. Lessons learned is where mature teams improve. It is also where immature teams assign blame and learn nothing.
+
+Blame destroys learning because it teaches people to hide mistakes. Most incidents involve humans, but that does not mean humans are the cause. It usually means the system made the unsafe action easy and the safe action hard.
+
+If you are reading a post incident report, look for evidence that the team understood the timeline, validated assumptions, and changed a system. If the report is only a list of actions, it is probably theatre. The learning is in the reasoning.
+
+### Measuring security without lying to yourself
+
+Most security metrics are theatre because they measure activity, not risk reduction. Counting completed training, scanned hosts, or patched tickets tells you effort. It does not tell you outcome.
+
+Leading indicators change before the bad thing happens. Lagging indicators measure after the bad thing happened. Both matter, but they answer different questions. At small scale, simple leading indicators can be powerful: time to patch a critical issue, percentage of admin actions logged, percentage of accounts with multi-factor authentication enabled, and time to revoke access for a leaver.
+
+When you can, measure control effectiveness. Did a control actually prevent an unsafe action. Did it detect a real issue with low noise. Did it reduce time to recover. If you cannot answer those, you are measuring comfort, not security.
+
+### Ethics, trust, and long term resilience
+
+Security decisions affect people. Privacy is not a feature. It is a power question. Consent matters because users rarely have equal bargaining power. A short term win that surprises users can become a long term trust loss. Trust is slow to earn and fast to burn.
+
+Responsible security practice treats the public interest as real. It respects privacy, minimises data, and avoids security work that harms people to make a dashboard look good. You can be technically correct and still be wrong for the organisation and its customers.
+
+Resilience is long term. It is honest risk discussion, clear ownership, and the habit of improving after failure. The best teams I have worked with were not perfect. They were curious, calm, and willing to change.
 
 Career paths stay wide: architecture, incident response, cloud, governance, or product security. Certs can help (CISSP, GSEC, cloud provider tracks) but practice and communication matter most.
 

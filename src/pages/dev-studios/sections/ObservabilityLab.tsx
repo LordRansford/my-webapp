@@ -101,7 +101,7 @@ export default function ObservabilityLab() {
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-2">
-                <div className="rounded-lg border border-slate-200 bg-white p-2 text-center">Dashboards</div>
+                <div className="rounded-lg border border-slate-200 bg-white p-2 text-center">Further practice</div>
                 <div className="rounded-lg border border-slate-200 bg-white p-2 text-center">Alerting</div>
               </div>
             </div>

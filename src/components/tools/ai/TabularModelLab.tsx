@@ -389,10 +389,9 @@ export function TabularModelLab() {
         summary: summaryParts.join(" "),
       });
     } catch (err: any) {
-      console.error(err);
       setModelState({
         status: "error",
-        message: err?.message || "Something went wrong during training. Try a smaller dataset or adjust the splits.",
+        message: "Something went wrong during training. Try a smaller dataset or adjust the splits.",
       });
     }
   }, [parsedData, canTrain, featureColumns, targetColumn, trainRatio, valRatio, problemType]);
@@ -455,8 +454,7 @@ export function TabularModelLab() {
       x.dispose();
       pred.dispose();
     } catch (err: any) {
-      console.error(err);
-      setPredictionOutput(err?.message || "Could not compute prediction for this input.");
+      setPredictionOutput("Could not compute prediction for this input. Check your values and try again.");
     }
   }, [trainedModel, parsedData, predictionInput, featureColumns, problemType, classNames]);
 

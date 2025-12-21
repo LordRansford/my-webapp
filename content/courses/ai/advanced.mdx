@@ -3,32 +3,19 @@ title: "AI Advanced"
 slug: "advanced"
 courseId: "ai"
 levelId: "advanced"
-summary: "My notes on modern model families, agents and how to use them safely in serious systems."
+summary: "Production AI systems, architecture decisions, and failure modes at scale."
 estimatedHours: 12
 stepIndex: 2
-level: "advanced"
-description: "We dive into transformers, generative media, agentic systems, and the checks that keep them safe."
-learningObjectives:
-  - "Explain how transformers, generative models, and agent patterns work at a system level."
-  - "Analyse where advanced models fail (hallucination, misuse, brittleness) and what signals reveal it."
-  - "Evaluate governance and safety controls that reduce real operational risk."
-  - "Apply a basic deployment and monitoring mindset to advanced AI features."
 ---
 
-import ToolCard from "@/components/notes/ToolCard"
-import Callout from "@/components/notes/Callout"
 import GlossaryTip from "@/components/notes/GlossaryTip"
+import ToolCard from "@/components/notes/ToolCard"
 import QuizBlock from "@/components/notes/QuizBlock"
-import PageNav from "@/components/notes/PageNav"
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
 import DiagramBlock from "@/components/DiagramBlock"
 import { aiSectionManifest } from "@/lib/aiSections"
-import TokenContextLab from "@/components/notes/tools/ai/advanced/TokenContextLab"
-import MiniDiffusionLab from "@/components/notes/tools/ai/advanced/MiniDiffusionLab"
-import AgentFlowBuilder from "@/components/notes/tools/ai/advanced/AgentFlowBuilder"
-import GovernanceChecklistLab from "@/components/notes/tools/ai/advanced/GovernanceChecklistLab"
 
 # AI Advanced
 
@@ -36,268 +23,252 @@ import GovernanceChecklistLab from "@/components/notes/tools/ai/advanced/Governa
 
 <CPDTracker courseId="ai" levelId="advanced" estimatedHours={12} />
 
-This level sits after Foundations and Intermediate. We stay with the same calm tone, but we widen the lens to cover the modern model families and the system thinking you need when AI goes into serious products.
+## AI systems and model architectures
 
-## Transformers and large language models
+<SectionProgressToggle
+  courseId="ai"
+  levelId="advanced"
+  sectionId="ai-advanced-systems-and-architectures"
+/>
 
-<SectionProgressToggle courseId="ai" levelId="advanced" sectionId="ai-advanced-transformers-and-llms" />
+A model is a component that maps inputs to outputs. An AI system is the full product around it: interfaces, data flow, guardrails, monitoring, and the operational process that keeps outputs useful. At scale, system design usually dominates the outcome. The same model can look brilliant or useless depending on how it is integrated.
 
-Foundations explained that models learn patterns. Intermediate showed pipelines and metrics. Here we zoom into the architecture that scaled this field: the <GlossaryTip term="transformer">A neural network that uses attention to compare every token in a sequence.</GlossaryTip>.
+Models rarely operate alone because real inputs are messy and real decisions have constraints. You need routing, caching, authentication, permissions, and careful handling of failures. You also need data sources the system can trust. Without that, the model becomes a confident narrator of whatever it last saw.
 
-<GlossaryTip term="attention">A way for the model to decide which parts of the input matter most for the current output.</GlossaryTip> and <GlossaryTip term="self attention">Attention that compares tokens within the same sequence.</GlossaryTip> let the model focus on the right slices of context. Inputs become a stream of <GlossaryTip term="token">Small chunks of text like words or subwords.</GlossaryTip>. A <GlossaryTip term="context window">The maximum number of tokens the model can handle at once.</GlossaryTip> sets a hard limit on how much the model can see. <GlossaryTip term="positional encoding">Signals that mark where each token sits in the sequence.</GlossaryTip> stop the model from losing order.
+The moment you put a model behind an API, you are doing inference.
 
-<DiagramBlock
-  title="Transformer flow"
-  subtitle="Tokens in, attention blocks, tokens out"
-  description="A friendly view of how inputs move through a stack of attention layers before we sample the next tokens."
->
-  <div className="grid gap-2 sm:grid-cols-5 text-xs text-slate-800">
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Tokens</p>
-      <p className="mt-1">Chunk text into pieces.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Positional signals</p>
-      <p className="mt-1">Mark order and distance.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Attention blocks</p>
-      <p className="mt-1">Weigh what matters.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Feed forward</p>
-      <p className="mt-1">Transform and mix signals.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Output tokens</p>
-      <p className="mt-1">Sample the next steps.</p>
-    </div>
+<GlossaryTip term="inference">
+Inference is running the model to produce outputs from inputs.
+</GlossaryTip>
+
+In production, inference has strict budgets. You have cost budgets, latency budgets, and reliability budgets. Those budgets shape architecture more than a training run does.
+
+One pattern is batch inference. You run predictions on a schedule, store results, and serve them fast later. This works well for things like nightly fraud scoring, content tagging, or pricing suggestions. The trade off is freshness. If the world changes at noon, your results might not catch up until tomorrow.
+
+Another pattern is real time inference. Requests hit an API, the system calls the model, and the result returns immediately. This is common in ranking, moderation, and interactive assistants. Here latency matters.
+
+<GlossaryTip term="latency">
+Latency is the time it takes to return a result after a request.
+</GlossaryTip>
+
+Latency is not just performance vanity. It changes user behaviour and it changes system load. A slow model can create backlogs, timeouts, and cascading failures.
+
+A third pattern is retrieval augmented systems. You keep a data store of documents, records, or snippets, retrieve relevant pieces at request time, then feed them into the model. This is often called retrieval augmented generation.
+
+<GlossaryTip term="retrieval augmented generation">
+Retrieval augmented generation is using retrieved external data as context so the model can respond with fresher, more grounded outputs.
+</GlossaryTip>
+
+The architecture shifts the problem from "make the model smarter" to "make the data pipeline reliable". Retrieval quality, permissions, and content freshness become the main levers.
+
+At scale, orchestration and data flow matter more than raw accuracy.
+
+<GlossaryTip term="orchestration">
+Orchestration is coordinating steps and services so the right data and tools are used at the right time.
+</GlossaryTip>
+
+If you cannot trace what data was used, what model version ran, and why a decision happened, you cannot operate the system safely. Good architecture makes failures visible, limits blast radius, and makes improvements repeatable.
+
+<DiagramBlock title="Typical production AI system" subtitle="Separation of concerns keeps systems operable.">
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>User input -> API layer (auth, routing, validation)</div>
+    <div>API layer -> Model inference (bounded compute)</div>
+    <div>API layer to and from Data store (retrieval, features, permissions)</div>
+    <div>Monitoring and logging (latency, errors, quality signals)</div>
   </div>
 </DiagramBlock>
 
-Large language models are just very big transformers trained on huge datasets. They predict the next token again and again. That is powerful for text, code, and even images when we change how tokens are defined. The practice links back to Intermediate: good prompts, solid retrieval, and a sensible context window beat raw parameter counts.
-
 <ToolCard
-  id="ai-transformer-token-lab"
-  title="Explore tokens and context"
-  description="Paste a short paragraph and see how it turns into tokens, how long the context is and how truncation would affect it."
-  courseId="ai"
-  levelId="advanced"
-  sectionId="ai-advanced-transformers-and-llms"
-  cpdMinutesOnUse={10}
->
-  <TokenContextLab />
-</ToolCard>
+  id="ai-architecture-explorer"
+  title="Explore AI system architectures"
+  description="Toggle between batch, real time and retrieval based AI systems to see how data and models interact."
+/>
 
 <QuizBlock
-  id="ai-advanced-transformers-quiz"
-  title="Check your understanding of transformers"
+  id="ai-advanced-systems-quiz"
+  title="Check your understanding of AI system architecture"
   courseId="ai"
   levelId="advanced"
-  sectionId="ai-advanced-transformers-and-llms"
+  sectionId="ai-advanced-systems-and-architectures"
   questions={[
-    { q: "What does attention decide", a: "Which tokens matter most for the current output." },
-    { q: "What is a token", a: "A small chunk of text such as a word or subword." },
-    { q: "Why does the context window matter", a: "It caps how much of the prompt and retrieved text the model can see." },
-    { q: "Why add positional encoding", a: "To keep track of token order." },
-    { q: "How do large language models generate text", a: "By predicting the next token repeatedly." },
-    { q: "What risk comes from long prompts", a: "Important context can be truncated." },
+    { q: "What is the difference between a model and an AI system", a: "A model maps inputs to outputs, an AI system includes the product around it like data flow, APIs, guardrails, and operations." },
+    { q: "Why do models rarely operate alone in production", a: "Real inputs and decisions need routing, permissions, caching, fallbacks, and trusted data sources." },
+    { q: "What does inference mean", a: "Running the model to produce outputs from inputs." },
+    { q: "Why is latency a design constraint", a: "It affects user experience and can cause timeouts, backlogs, and cascading failures." },
+    { q: "When is batch inference a good fit", a: "When predictions can be computed on a schedule and served later, like nightly scoring or tagging." },
+    { q: "What is a key trade off of batch inference", a: "Results can be stale when the world changes between runs." },
+    { q: "What does retrieval augmented generation add to a system", a: "It pulls relevant external data into context so outputs can be fresher and more grounded." },
+    { q: "Why does orchestration exist", a: "To coordinate steps and data so the right tools and context are used reliably and safely." },
+    { q: "Why can architecture matter more than accuracy at scale", a: "Because operability, traceability, permissions, and failure handling determine whether the system stays useful and safe." },
   ]}
 />
 
-## Diffusion and generative media
+## Scaling, cost and reliability in AI systems
 
-<SectionProgressToggle courseId="ai" levelId="advanced" sectionId="ai-advanced-diffusion-and-generative-media" />
+<SectionProgressToggle
+  courseId="ai"
+  levelId="advanced"
+  sectionId="ai-advanced-scaling-cost-reliability"
+/>
 
-Generative models create new content instead of just labelling it. A <GlossaryTip term="diffusion">Method that adds noise step by step then learns to reverse it.</GlossaryTip> is behind many image and audio models. We work in a <GlossaryTip term="latent space">A compressed space where structure is easier to model.</GlossaryTip> and <GlossaryTip term="sampling">The process of stepping through the denoising path to create outputs.</GlossaryTip>.
+Scaling is not a single knob. It is a set of constraints you discover when traffic hits. The first surprise is that models are only one part of the system. Data fetches, feature generation, retrieval calls, and post processing often become the bottleneck before the model does.
 
-<GlossaryTip term="noise">Random values added to hide the original signal.</GlossaryTip> is added repeatedly during training. The model then learns <GlossaryTip term="denoising">How to remove that noise to get back to structure.</GlossaryTip>. Fewer steps make outputs faster. More steps can make them cleaner. You can guide the process with text, images, or both.
+When people say scale, they usually mean capacity. <GlossaryTip term="horizontal scaling">
+Horizontal scaling is adding more instances of a service to handle more load.
+</GlossaryTip> Vertical scaling is making a single instance bigger, like more CPU, more GPU, or more memory. In AI systems, vertical scaling buys you headroom per request. Horizontal scaling buys you throughput and fault tolerance. You usually need both, but you should start by making the service stateless so scaling is possible.
 
-<DiagramBlock
-  title="Diffusion arc"
-  subtitle="From noise to signal"
-  description="A tiny view of how an image is pushed into noise and then recovered."
->
-  <div className="grid gap-2 sm:grid-cols-4 text-xs text-slate-800">
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Start image</p>
-      <p className="mt-1">Simple shape in latent space.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Add noise</p>
-      <p className="mt-1">Hide the structure over steps.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Learn to reverse</p>
-      <p className="mt-1">Model predicts what to remove.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Sample output</p>
-      <p className="mt-1">Noise shrinks and image appears.</p>
-    </div>
+<GlossaryTip term="stateless service">
+A stateless service does not store user or session state in memory between requests.
+</GlossaryTip>
+
+Stateless inference services are easier to deploy and easier to recover. You can restart a bad instance without losing user state. You can spread load across instances without sticky sessions. If you need state, push it to a data store with clear ownership and clear timeouts.
+
+Two levers help before you add more compute: caching and batching. Caching is serving repeated requests from memory or a fast store. Batching is grouping multiple requests into one model call so you use hardware more efficiently. Both reduce cost, but both can change behaviour. Caching can serve stale answers. Batching can increase latency for the first request in the batch. These are product decisions, not just infrastructure choices.
+
+Scaling data can hurt more than scaling models. Retrieval adds network calls, index lookups, and permission checks. Feature pipelines add joins, transformations, and schema drift. If your data path is slow, scaling the model will not fix it. You are just making the wrong part faster.
+
+Cost shows up as cost per request, and the hidden multiplier is how many steps your system takes per request. One model call is expensive. A model call plus retrieval, plus reranking, plus embeddings, plus retries can turn a single user action into a small workflow. The user sees one answer. You pay for the whole graph.
+
+Embeddings and retrieval have their own cost curve. Embeddings can be expensive to compute and expensive to store at scale. Retrieval can be cheap per query and still expensive overall because it runs for every request. The easiest way to lose money is to add a pipeline step that runs always, even when it only helps sometimes.
+
+Overprovisioning is the second way to lose money. Keeping GPUs warm for peak traffic feels safe, but it can make costs explode if the peak is rare. Autoscaling helps, but cold starts can hurt latency. This is why you trade off accuracy, latency, and cost as a trio. A slower model might be more accurate. A faster model might be cheaper. A cached answer might be good enough most of the time.
+
+Reliability is where the real lessons are. Models fail in boring ways. They time out. They return empty output. They return something plausible and wrong. They get slower under load. They hit rate limits from an upstream provider. Partial failures are normal in distributed systems, so assume they will happen.
+
+Retries are useful, but they are dangerous under load. If every request times out and you retry immediately, you double traffic into a system that is already struggling. This is why you need a retry policy.
+
+<GlossaryTip term="retry policy">
+A retry policy defines when to retry, how many times, and how long to wait between attempts.
+</GlossaryTip>
+
+A good retry policy uses backoff and caps. It retries only when it makes sense, like transient network issues, not when a model is overloaded. It also needs per request budgets, so retries do not turn a slow failure into an outage.
+
+The practical goal is graceful degradation.
+
+<GlossaryTip term="graceful degradation">
+Graceful degradation means the system still provides a safe, simpler experience when parts fail.
+</GlossaryTip>
+
+That can mean switching to a smaller model, skipping retrieval, returning a cached answer, or showing a clear fallback message. The key is that failure is expected, not exceptional. Your architecture should make the fallback path explicit and testable.
+
+<DiagramBlock title="Scaling and failure in AI systems" subtitle="Assume load and failure. Design the cache and fallback paths early.">
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>Load increases: more requests and longer queues</div>
+    <div>Cache layer absorbs traffic: repeats served fast</div>
+    <div>Model service scales out: more instances handle throughput</div>
+    <div>Failure happens: timeouts, rate limits, partial dependency loss</div>
+    <div>Fallback path activates: smaller model, cached answer, or safe message</div>
   </div>
 </DiagramBlock>
 
-Practice and risk meet here. Prompts steer the image, but so do safety filters and dataset choices. Generative media can create joy or deep fakes. Keep records of how you sample and what filters you apply. It matters when you need to defend the results.
-
 <ToolCard
-  id="ai-diffusion-visual-lab"
-  title="Watch a tiny diffusion process"
-  description="Step through a tiny example where noise is added and then removed so you can see how a picture slowly appears."
-  courseId="ai"
-  levelId="advanced"
-  sectionId="ai-advanced-diffusion-and-generative-media"
-  cpdMinutesOnUse={10}
->
-  <MiniDiffusionLab />
-</ToolCard>
+  id="ai-scaling-simulator"
+  title="Simulate AI system load"
+  description="Adjust traffic, latency and failure rates to see how cost and reliability change."
+/>
 
 <QuizBlock
-  id="ai-advanced-diffusion-quiz"
-  title="Check your understanding of diffusion"
+  id="ai-advanced-scaling-quiz"
+  title="Check your understanding of scaling and reliability"
   courseId="ai"
   levelId="advanced"
-  sectionId="ai-advanced-diffusion-and-generative-media"
+  sectionId="ai-advanced-scaling-cost-reliability"
   questions={[
-    { q: "What does diffusion do during training", a: "Adds noise and learns how to reverse it." },
-    { q: "What is latent space", a: "A compressed space where structure is easier to model." },
-    { q: "What does sampling mean here", a: "Stepping through denoising to generate an output." },
-    { q: "Why add noise at all", a: "So the model can learn the path back to structure." },
-    { q: "How can prompts guide outputs", a: "They nudge the denoising path toward desired features." },
-    { q: "Name one risk of generative media", a: "It can create convincing but misleading content." },
+    { q: "What is horizontal scaling", a: "Adding more service instances to handle more load." },
+    { q: "Why do stateless services scale more easily", a: "Because any instance can handle any request and instances can restart without losing user state." },
+    { q: "Name two levers that can reduce cost before adding more compute", a: "Caching and batching." },
+    { q: "Why can scaling data hurt more than scaling models", a: "Because retrieval and feature pipelines can add slow network and transformation work that becomes the real bottleneck." },
+    { q: "What is a common hidden cost driver in AI systems", a: "Extra per request steps like retrieval, embeddings, reranking, and retries." },
+    { q: "Why can retries be dangerous under load", a: "They add traffic to a system that is already struggling and can turn slowdowns into outages." },
+    { q: "What should a retry policy define", a: "When to retry, how many times, and how long to wait between attempts." },
+    { q: "What is graceful degradation", a: "Providing a safe, simpler experience when parts fail, such as a fallback model or cached answer." },
+    { q: "Why should failure be treated as expected in architecture", a: "Because distributed dependencies and model services fail in normal ways, so fallback paths must be explicit and testable." },
   ]}
 />
 
-## Agentic AI and tool use
+## Evaluation, monitoring and governance in production AI
 
-<SectionProgressToggle courseId="ai" levelId="advanced" sectionId="ai-advanced-agentic-ai-and-tools" />
+<SectionProgressToggle
+  courseId="ai"
+  levelId="advanced"
+  sectionId="ai-advanced-evaluation-monitoring-governance"
+/>
 
-Intermediate pipelines fed a single model. Agentic systems chain steps. A <GlossaryTip term="planner">Component that decides what to do next.</GlossaryTip> works with an <GlossaryTip term="executor">Component that runs actions.</GlossaryTip> and uses <GlossaryTip term="tool call">A function call that lets the model reach out to search, calculators, or APIs.</GlossaryTip>.
+Evaluation in production is not a single score. It is a series of checks that answer one question: does the system still help the business without creating unacceptable harm. That requires measurement before launch, after launch, and while the world changes.
 
-Agents juggle memory. The active <GlossaryTip term="context window">The text the model sees right now.</GlossaryTip> holds the short term state. External <GlossaryTip term="memory">Stored facts pulled back in when needed.</GlossaryTip> keeps long running work moving. That power comes with risk, so we wrap every agent with access rules, logging, and rate limits.
+Offline evaluation is what you do on datasets you control. It is useful for comparing versions and catching obvious regressions. It also has blind spots. Offline data is usually cleaner than reality, and it rarely contains the full cost of mistakes. Online evaluation is what you do in the live system, where users, latency, and edge cases are real. A model that looks strong offline can still fail online if it changes user behaviour or breaks workflows.
 
-<DiagramBlock
-  title="Agent loop"
-  subtitle="User to planner to tools to answer"
-  description="A simple path that shows where planning, tools, and safety sit."
->
-  <div className="grid gap-2 sm:grid-cols-5 text-xs text-slate-800">
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">User goal</p>
-      <p className="mt-1">Clear intent.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Planner</p>
-      <p className="mt-1">Decides the next tool.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Tools</p>
-      <p className="mt-1">Search, code, or APIs.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Memory</p>
-      <p className="mt-1">Scratchpad and lookups.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Final answer</p>
-      <p className="mt-1">Grounded response.</p>
-    </div>
+Accuracy alone is not enough because the cost of mistakes is not symmetric. A fraud system that misses fraud can be catastrophic. A moderation system that over blocks can silence legitimate users. In these cases you reach for precision and recall, then connect them to real outcomes like chargebacks, review workload, or user churn.
+
+<GlossaryTip term="precision">
+Precision is how often a predicted positive is truly positive.
+</GlossaryTip>
+
+<GlossaryTip term="recall">
+Recall is how many of the true positives the system successfully catches.
+</GlossaryTip>
+
+Even strong metrics are not stable. You need to monitor performance over time because production data is a moving target. The metric you track depends on the system, but the habit is the same: measure, investigate, and learn. If you cannot explain why a metric moved, you cannot fix it.
+
+Monitoring is the boring work that saves you. Start with inputs. Are you seeing new categories, missing fields, unusual ranges, or sudden format changes. Then monitor outputs. Are scores shifting, are confidence values drifting upward, are certain groups being flagged more often. Finally monitor system health: latency, error rate, and rate limiting. If the system is slow, it will change user behaviour and it will change your data.
+
+Alerting is where good teams become noisy teams. Too many alerts create alert fatigue, and then real problems are ignored. You want alerts that are actionable, tied to clear owners, and paired with a playbook. False positives in monitoring are not harmless. They burn trust and time.
+
+Drift is the quiet killer. Data drift is when inputs change. Concept drift is when the meaning of the target changes, even if inputs look similar. A credit scoring model can see stable features while repayment behaviour changes during a downturn. A moderation model can see similar text while norms and tactics change.
+
+<GlossaryTip term="data drift">
+Data drift is when the input data distribution changes over time.
+</GlossaryTip>
+
+<GlossaryTip term="concept drift">
+Concept drift is when the relationship between inputs and the correct outcome changes.
+</GlossaryTip>
+
+Retraining schedules matter because drift does not wait for your roadmap. Some systems need periodic retraining. Others need trigger based retraining when drift crosses a threshold. Either way, you should treat retraining like a release, with the same discipline: evaluation, rollout, rollback, and audit trails.
+
+This is where governance stops being paperwork and becomes operations. Someone must own the model and the system around it. Decisions about thresholds, fallbacks, and acceptable harm are product and risk decisions, not just ML decisions.
+
+<GlossaryTip term="model governance">
+Model governance is the process and ownership that controls how models are documented, deployed, monitored, and changed.
+</GlossaryTip>
+
+Good governance includes documentation and traceability. You want to know which data, which features, which model version, and which thresholds produced an outcome. Human oversight is part of the design. It needs authority, not just review. And you need a shutdown plan. If the system is causing harm or you cannot understand its behaviour, you stop it, switch to a safe fallback, and investigate.
+
+<DiagramBlock title="AI system lifecycle in production" subtitle="Governance surrounds the lifecycle, from data to retirement.">
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>Data collection: quality checks, access rules, consent</div>
+    <div>Training: versioning, documentation, repeatability</div>
+    <div>Deployment: rollout, fallbacks, human oversight</div>
+    <div>Monitoring: performance, drift, latency, error rates</div>
+    <div>Retraining or retirement: update safely or shut down</div>
+    <div>Governance: ownership, traceability, review, incident response</div>
   </div>
 </DiagramBlock>
 
-Keep agent flows boring and auditable. Limit the tools they can call, cap the number of steps, and keep humans involved for risky actions. The best agent still fails if you forget simple guardrails.
-
 <ToolCard
-  id="ai-agent-flow-lab"
-  title="Design an agent flow"
-  description="Pick planner, tools and memory to sketch an agent that could solve a real task."
-  courseId="ai"
-  levelId="advanced"
-  sectionId="ai-advanced-agentic-ai-and-tools"
-  cpdMinutesOnUse={10}
->
-  <AgentFlowBuilder />
-</ToolCard>
+  id="ai-monitoring-lab"
+  title="Explore model monitoring signals"
+  description="Inspect metrics like accuracy, drift and latency to decide when a model needs attention."
+/>
 
 <QuizBlock
-  id="ai-advanced-agentic-quiz"
-  title="Check your understanding of agents"
+  id="ai-advanced-monitoring-quiz"
+  title="Check your understanding of monitoring and governance"
   courseId="ai"
   levelId="advanced"
-  sectionId="ai-advanced-agentic-ai-and-tools"
+  sectionId="ai-advanced-evaluation-monitoring-governance"
   questions={[
-    { q: "What does the planner do", a: "Chooses the next action based on the goal and evidence." },
-    { q: "What is a tool call", a: "A function call the model makes to an external action like search or code." },
-    { q: "Why add memory outside the model", a: "To keep context across steps without blowing the context window." },
-    { q: "Name one guardrail for agents", a: "Restrict tools, add approvals, or log every action." },
-    { q: "When do you not need an agent", a: "When one prompt and one response is enough." },
-    { q: "Why cap the number of steps", a: "To control cost and avoid loops." },
+    { q: "What is the difference between offline and online evaluation", a: "Offline uses controlled datasets to compare versions, online measures behaviour in the live system with real users and constraints." },
+    { q: "Why is accuracy alone not enough in many systems", a: "Because different mistakes have different costs and accuracy can hide harmful trade offs." },
+    { q: "In plain terms, what does precision measure", a: "When the system flags something, how often it is truly a positive." },
+    { q: "In plain terms, what does recall measure", a: "Of the real positives, how many the system successfully catches." },
+    { q: "Name three monitoring areas in production AI", a: "Inputs, outputs, and system health like latency and error rates." },
+    { q: "What is alert fatigue and why is it dangerous", a: "Too many alerts cause people to ignore them, so real issues get missed." },
+    { q: "What is data drift", a: "Inputs change over time so the model sees a different distribution than before." },
+    { q: "What is concept drift", a: "The link between inputs and the correct outcome changes even if inputs look similar." },
+    { q: "Why do retraining schedules matter", a: "Because drift can degrade performance and retraining needs to be planned like a controlled release." },
+    { q: "When should a system be shut down", a: "When it is causing harm, behaving unpredictably, or you cannot operate it safely and explain what it is doing." },
   ]}
 />
 
-## Evaluation and governance at scale
 
-<SectionProgressToggle courseId="ai" levelId="advanced" sectionId="ai-advanced-evaluation-and-governance" />
-
-Offline metrics from Intermediate stay useful, but live systems need more. <GlossaryTip term="alignment">Keeping model behavior consistent with goals and ethics.</GlossaryTip> and <GlossaryTip term="guardrail">A control that stops unsafe or off-policy outputs.</GlossaryTip> become part of the release checklist. <GlossaryTip term="red teaming">Probing the system with risky or adversarial prompts.</GlossaryTip> and a clear <GlossaryTip term="model card">A short document that states limits and evidence.</GlossaryTip> keep teams honest.
-
-<DiagramBlock
-  title="AI lifecycle with oversight"
-  subtitle="Design, evaluate, monitor, improve"
-  description="The loop that keeps systems safe after launch."
->
-  <div className="grid gap-2 sm:grid-cols-4 text-xs text-slate-800">
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Design</p>
-      <p className="mt-1">Goals, data rules, model card.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Evaluate</p>
-      <p className="mt-1">Offline metrics and red teaming.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Monitor</p>
-      <p className="mt-1">Logs, drift, alerts.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Govern</p>
-      <p className="mt-1">Owners, approvals, evidence.</p>
-    </div>
-  </div>
-</DiagramBlock>
-
-Treat AI as a system, not a feature. Keep owners for every control. Capture evidence when you run tests or respond to incidents. The calmer and clearer the process, the safer the outcomes.
-
-<ToolCard
-  id="ai-governance-checklist-lab"
-  title="Build an AI governance checklist"
-  description="Pick an AI use case and step through a checklist for risk, policy, testing and monitoring, then export a simple action plan."
-  courseId="ai"
-  levelId="advanced"
-  sectionId="ai-advanced-evaluation-and-governance"
-  cpdMinutesOnUse={10}
->
-  <GovernanceChecklistLab />
-</ToolCard>
-
-<QuizBlock
-  id="ai-advanced-governance-quiz"
-  title="Check your understanding of evaluation and governance"
-  courseId="ai"
-  levelId="advanced"
-  sectionId="ai-advanced-evaluation-and-governance"
-  questions={[
-    { q: "What is alignment in practice", a: "Keeping model behavior in line with goals and ethics." },
-    { q: "Why run red teaming", a: "To find risky behavior before users do." },
-    { q: "What belongs in a model card", a: "Purpose, limits, data notes, and evaluation evidence." },
-    { q: "Name one runtime monitor", a: "Drift alerts, safety filters, or latency alarms." },
-    { q: "Who should own guardrails", a: "Named people with clear accountability." },
-    { q: "Why collect evidence", a: "So approvals and fixes are transparent and repeatable." },
-  ]}
-/>
-
-<Callout variant="explain" title="Final reminder">
-Advanced work is about joining the dots. Keep the simple mental models from Foundations, the pipelines from Intermediate, and layer on bigger models, agents, and governance with the same calm habits.
-</Callout>
-
-<PageNav prevHref="/ai/intermediate" prevLabel="Intermediate" nextHref="/ai/summary" nextLabel="Summary and games" showTop showBottom />

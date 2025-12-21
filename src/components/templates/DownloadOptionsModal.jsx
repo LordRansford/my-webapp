@@ -50,6 +50,7 @@ export function DownloadOptionsModal({ open, onClose, template }) {
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
   const dialogRef = useFocusTrap(open);
+  const previewEnabled = process.env.NEXT_PUBLIC_PREVIEW_MODE === "true";
 
   useEffect(() => {
     if (open) {
@@ -178,9 +179,11 @@ export function DownloadOptionsModal({ open, onClose, template }) {
           >
             Support this site
           </Link>
-          <Link className="text-sm font-semibold text-slate-700 underline" href="/admin/template-permissions">
-            I already have permission
-          </Link>
+          {previewEnabled ? (
+            <Link className="text-sm font-semibold text-slate-700 underline" href="/admin/template-permissions">
+              I already have permission
+            </Link>
+          ) : null}
         </div>
 
         {status ? (

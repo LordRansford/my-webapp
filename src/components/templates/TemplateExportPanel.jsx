@@ -78,8 +78,7 @@ export default function TemplateExportPanel({
       });
       setStatus(`Exported ${pendingFormat.toUpperCase()} for ${use} use`);
     } catch (error) {
-      console.error("Export failed", error);
-      setStatus(error.message || "Export failed. Please try again.");
+      setStatus("Export failed. Please try again.");
     } finally {
       setModalOpen(false);
       setPendingFormat(null);

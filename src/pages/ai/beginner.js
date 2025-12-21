@@ -26,6 +26,7 @@ const GradientStepTool = dynamic(() => import("@/components/notes/tools/ai/begin
 const ResponsibleAIPlannerTool = dynamic(() => import("@/components/notes/tools/ai/beginner/ResponsibleAIPlannerTool"), { ssr: false });
 const AIExamplesExplorerTool = dynamic(() => import("@/components/notes/tools/ai/beginner/AIExamplesExplorerTool"), { ssr: false });
 const VectorVisualiserTool = dynamic(() => import("@/components/notes/tools/ai/beginner/VectorVisualiserTool"), { ssr: false });
+const TinyClassifierLabTool = dynamic(() => import("@/components/notes/tools/ai/beginner/TinyClassifierLabTool"), { ssr: false });
 
 export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
@@ -52,6 +53,7 @@ export default function Page({ source, headings }) {
       ResponsibleAIPlannerTool,
       AIExamplesExplorerTool,
       VectorVisualiserTool,
+      TinyClassifierLabTool,
     }),
     []
   );

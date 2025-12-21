@@ -20,7 +20,7 @@ const pages = [
   {
     slug: "dashboards",
     title: "Further practice",
-    summary: "Dashboards and hands-on labs to make the strategy tangible before the summary.",
+    summary: "Further practice and hands-on labs to make the strategy tangible before the summary.",
   },
   {
     slug: "summary",
