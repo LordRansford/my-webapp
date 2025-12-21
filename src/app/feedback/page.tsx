@@ -1,102 +1,114 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import NotesLayout from "@/components/notes/Layout";
 
-const OPTIONS = ["Family", "Friend", "Work colleague", "Other"];
+const OPTIONS = ["Family or friend", "Professional network", "Online search", "Social media", "Other"] as const;
+
+function sanitizeText(input: unknown, maxLen: number) {
+  const raw = typeof input === "string" ? input : "";
+  // Trim + remove control characters (keep newlines/tabs), cap length.
+  const cleaned = raw
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "")
+    .trim()
+    .slice(0, maxLen);
+  return cleaned;
+}
 
 export default function FeedbackPage() {
-  // comment: this page is intentionally not linked in navigation; used for Phase 1 private feedback.
-  const [form, setForm] = useState({
-    name: "",
-    heardFrom: OPTIONS[0],
-    message: "",
-    rateClarity: "",
-    rateUsefulness: "",
-  });
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error" | "duplicate">("idle");
-  const [sessionId] = useState(() => crypto.randomUUID());
+  const [name, setName] = useState("");
+  const [heardFrom, setHeardFrom] = useState<(typeof OPTIONS)[number]>(OPTIONS[0]);
+  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  useEffect(() => {
-    const already = sessionStorage.getItem("feedback_submitted") === "true";
-    if (already) setStatus("duplicate");
-  }, []);
+  const canSubmit = useMemo(() => sanitizeText(message, 1500).length > 0, [message]);
 
   const submit = async () => {
-    if (status === "duplicate") return;
+    const cleanMessage = sanitizeText(message, 1500);
+    if (!cleanMessage) return;
+
     setStatus("loading");
+    setErrorMessage(null);
     try {
-      const res = await fetch("/api/feedback", {
+      // Server-side persistence (Prompt 1E). No client-side storage of submitted feedback.
+      const payload = {
+        name: sanitizeText(name, 80) || "Anonymous",
+        source: heardFrom,
+        message: cleanMessage,
+      };
+      const res = await fetch("/api/feedback/submit", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...form,
-          rateClarity: form.rateClarity ? Number(form.rateClarity) : undefined,
-          rateUsefulness: form.rateUsefulness ? Number(form.rateUsefulness) : undefined,
-          sessionId,
-          url: window.location.pathname,
-        }),
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
       });
-      if (res.status === 409) {
-        setStatus("duplicate");
-        sessionStorage.setItem("feedback_submitted", "true");
-        return;
-      }
+
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         setStatus("error");
-      } else {
-        setStatus("success");
-        sessionStorage.setItem("feedback_submitted", "true");
+        setErrorMessage(typeof data?.message === "string" ? data.message : "Could not send feedback.");
+        return;
       }
+      setStatus("success");
     } catch {
       setStatus("error");
+      setErrorMessage("Could not send feedback.");
     }
   };
 
   return (
     <NotesLayout
       meta={{
-        title: "Site Feedback Assistant",
-        description: "Private feedback for early reviewers.",
-        level: "Summary",
+        title: "Early feedback",
+        description:
+          "This site is in early preview. I am collecting feedback before formal accreditation and certification. Nothing is tracked beyond what you submit here.",
+        level: "Feedback",
         slug: "/feedback",
         section: "ai",
       }}
       activeLevelId="summary"
+      headings={[]}
+      showContentsSidebar={false}
+      showStepper={false}
     >
       <div className="space-y-6">
         <header className="space-y-2">
-          <p className="eyebrow">Private feedback for early reviewers</p>
-          <h1 className="text-3xl font-semibold text-slate-900">Site Feedback Assistant</h1>
-          <p className="text-slate-700">This feedback helps improve the site. Please be honest. No login, no analytics.</p>
+          <p className="eyebrow">Preview</p>
+          <h1 className="text-3xl font-semibold text-slate-900">Early feedback</h1>
+          <p className="text-slate-700">
+            This site is in early preview. I am collecting feedback before formal accreditation and certification. Nothing is tracked beyond
+            what you submit here.
+          </p>
         </header>
 
-        <section className="space-y-4 rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm">
-          {status === "success" || status === "duplicate" ? (
+        <section
+          id="feedback-form"
+          className="space-y-4 rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm"
+        >
+          {status === "success" ? (
             <div className="space-y-2">
-              <p className="text-sm font-semibold text-emerald-800">
-                {status === "duplicate" ? "Feedback already submitted in this session." : "Thanks for sharing. Your feedback is saved."}
-              </p>
-              <p className="text-sm text-slate-700">You can close this page now.</p>
+              <p className="text-sm font-semibold text-emerald-800">Thank you. Your feedback has been received.</p>
             </div>
           ) : (
             <>
               <div className="grid gap-3">
-                <label className="space-y-1">
+                <label className="space-y-1" htmlFor="feedback-name">
                   <span className="text-sm font-semibold text-slate-800">Name (optional)</span>
                   <input
-                    value={form.name}
-                    onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                    id="feedback-name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     className="w-full rounded-xl border border-slate-200 p-3 text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-400"
                     placeholder="Your name"
                   />
                 </label>
 
-                <label className="space-y-1">
+                <label className="space-y-1" htmlFor="feedback-heard">
                   <span className="text-sm font-semibold text-slate-800">How did you hear about this site?</span>
                   <select
-                    value={form.heardFrom}
-                    onChange={(e) => setForm((f) => ({ ...f, heardFrom: e.target.value }))}
+                    id="feedback-heard"
+                    value={heardFrom}
+                    onChange={(e) => setHeardFrom(e.target.value as any)}
                     className="w-full rounded-xl border border-slate-200 p-3 text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-400"
                   >
                     {OPTIONS.map((opt) => (
@@ -107,59 +119,36 @@ export default function FeedbackPage() {
                   </select>
                 </label>
 
-                <label className="space-y-1">
+                <label className="space-y-1" htmlFor="feedback-message">
                   <span className="text-sm font-semibold text-slate-800">Feedback</span>
                   <textarea
-                    value={form.message}
-                    onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
+                    id="feedback-message"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
                     rows={6}
                     maxLength={1500}
                     className="w-full rounded-xl border border-slate-200 p-3 text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-400"
-                    placeholder="What worked, what confused, what felt missing?"
+                    placeholder="Your feedback"
                     required
                   />
-                  <span className="text-xs text-slate-600">One submission per session. Max 1500 characters.</span>
+                  <span className="text-xs text-slate-600">Required.</span>
                 </label>
-
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <label className="space-y-1">
-                    <span className="text-sm font-semibold text-slate-800">Rate clarity (1-5, optional)</span>
-                    <input
-                      type="number"
-                      min="1"
-                      max="5"
-                      value={form.rateClarity}
-                      onChange={(e) => setForm((f) => ({ ...f, rateClarity: e.target.value }))}
-                      className="w-full rounded-xl border border-slate-200 p-3 text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-400"
-                    />
-                  </label>
-                  <label className="space-y-1">
-                    <span className="text-sm font-semibold text-slate-800">Rate usefulness (1-5, optional)</span>
-                    <input
-                      type="number"
-                      min="1"
-                      max="5"
-                      value={form.rateUsefulness}
-                      onChange={(e) => setForm((f) => ({ ...f, rateUsefulness: e.target.value }))}
-                      className="w-full rounded-xl border border-slate-200 p-3 text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-400"
-                    />
-                  </label>
-                </div>
               </div>
 
               <div className="flex flex-wrap items-center gap-2">
                 <button
                   type="button"
-                  className="button primary"
+                  className="button"
                   onClick={submit}
-                  disabled={status === "loading" || !form.message.trim()}
+                  disabled={!canSubmit || status === "loading"}
                 >
-                  {status === "loading" ? "Sending..." : "Submit feedback"}
+                  Send feedback
                 </button>
-                {status === "error" ? <span className="text-sm text-rose-700">Could not submit. Please try again.</span> : null}
+                {status === "loading" ? <span className="text-sm text-slate-700">Sending...</span> : null}
+                {status === "error" ? (
+                  <span className="text-sm text-rose-700">{errorMessage || "Could not send feedback."}</span>
+                ) : null}
               </div>
-              <p className="text-xs text-slate-600">No data is shown publicly. Stored server side for review only.</p>
-              <p className="text-xs text-slate-600">We do not collect email, do not track, and do not train on feedback.</p>
             </>
           )}
         </section>

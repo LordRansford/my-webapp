@@ -53,6 +53,14 @@ Security improves fastest when I can answer one question clearly: what matters, 
 
 A threat model is a simple story about risk. I list each <GlossaryTip term="asset">something that hurts if stolen, changed, or stopped</GlossaryTip>. I name the <GlossaryTip term="threat">who or what could cause harm</GlossaryTip>. I map <GlossaryTip term="attack surface">every way they can interact with the system</GlossaryTip> and the <GlossaryTip term="trust boundary">places where assumptions change</GlossaryTip>. This keeps me focused on reality instead of memorising exotic exploits.
 
+In simple terms: threat modelling is how I decide what to worry about first. It is not a perfect prediction. It is a structured way to turn "security feels scary" into "these three controls will reduce harm most for this system."
+
+In the real world, a cyber person does not sit around naming movie villains. We sit with engineers, product, and sometimes ops, and we ask annoying questions: where does data enter, where does it leave, who can change it, and what happens if it is wrong. We then write down the assumptions and test them.
+
+How it fails: teams either go too broad (a huge diagram nobody reads) or too narrow (only listing SQL injection because it is familiar). Another failure is skipping the human actors: support staff, vendors, and internal admins, which is where many realistic attack paths live.
+
+How to do it well: keep scope small, tie each threat to an entry point, and tie each entry point to a control you can actually implement or measure. Accept trade offs. If a control adds friction, decide where that friction is worth it and where it will be bypassed.
+
 <DiagramBlock
   title="Small threat model in one glance"
   subtitle="People and data cross boundaries; assumptions must be explicit."
@@ -64,6 +72,8 @@ A threat model is a simple story about risk. I list each <GlossaryTip term="asse
   </div>
 </DiagramBlock>
 
+Before you use the tool: the goal is not to produce a pretty canvas. The goal is to spot one or two high leverage failures. When you fill it in, focus on what would actually hurt and what someone could realistically do with the access they have.
+
 <ToolCard
   id="threat-model-canvas"
   title="Sketch a simple threat model"
@@ -71,6 +81,8 @@ A threat model is a simple story about risk. I list each <GlossaryTip term="asse
 >
   <ThreatScenarioMapper />
 </ToolCard>
+
+After you use the tool: sanity check your output. Do your threats connect to real entry points, or did you drift into generic fear. Also check whether your controls are specific. "Be secure" is not a control. "Require MFA for staff logins and alert on new device sign in" is closer to a control.
 
 <QuizBlock
   id="applied-threat-modelling"
@@ -98,7 +110,17 @@ A threat model is a simple story about risk. I list each <GlossaryTip term="asse
 Most breaches start with what is exposed, not with exotic zero days.
 </Callout>
 
-Operating systems run services, services open ports, and apps expose inputs. The attack surface grows with every feature and every default left unchanged. Common failure classes repeat: <GlossaryTip term="injection">untrusted input treated as instructions</GlossaryTip>, broken access control, unsafe defaults, and <GlossaryTip term="vulnerability">a weakness that can be exploited</GlossaryTip> through a reachable entry point.
+Operating systems run services, services open ports, and apps expose inputs. The attack surface grows with every feature and every default left unchanged.
+
+In simple terms: attack surface is everything someone can touch. If they can touch it, they can try to break it, confuse it, or use it in a way you did not plan for.
+
+In the real world, what I actually do is inventory exposure: endpoints, admin panels, file uploads, third party scripts, public buckets, test environments, and forgotten subdomains. Then I ask which of those touches sensitive data or powerful actions. That is where I look first.
+
+Common failure classes repeat: <GlossaryTip term="injection">untrusted input treated as instructions</GlossaryTip>, broken access control, unsafe defaults, and <GlossaryTip term="vulnerability">a weakness that can be exploited</GlossaryTip> through a reachable entry point. These are not rare. They are the same few mistakes showing up in different clothes.
+
+How it fails: a feature gets shipped behind a toggle, then the toggle is left on in production. A debug route leaks stack traces. An admin page is "temporary" and ends up indexed by a crawler. A dependency is added and nobody reviews what it loads in the browser.
+
+How to do it well: reduce what is exposed, secure what must be exposed, and make sure every exposed input has validation, authentication where appropriate, and monitoring. The trade off is speed. More exposure makes development easier until the day it makes incident response harder.
 
 <DiagramBlock
   title="Where exposure creeps in"
@@ -111,6 +133,8 @@ Operating systems run services, services open ports, and apps expose inputs. The
   </div>
 </DiagramBlock>
 
+Before you use the tool: treat each toggle as a real decision. When you turn something on, ask two questions: what new input did I create, and what new assumption did I just make.
+
 <ToolCard
   id="attack-surface-explorer"
   title="Explore attack surfaces"
@@ -118,6 +142,8 @@ Operating systems run services, services open ports, and apps expose inputs. The
 >
   <AttackSurfaceExplorer />
 </ToolCard>
+
+After you use the tool: look for the "quiet" exposure. A lot of damage comes from boring things like default ports, metadata, admin routes, and third party scripts. The common mistake is focusing only on big obvious inputs and missing the small ones that are easiest to probe.
 
 <QuizBlock
   id="applied-attack-surfaces"
@@ -145,7 +171,15 @@ Operating systems run services, services open ports, and apps expose inputs. The
 Authentication answers who you are. Authorisation answers what you may do. Sessions remember you between requests. Mixing them up is why many breaches feel trivial.
 </Callout>
 
-A session is a bridge in a stateless world. Cookies or tokens are just carriers; their safety depends on creation, storage, expiry, rotation and server side checks. Common failures: predictable IDs, missing <GlossaryTip term="privilege escalation">checks that stop users gaining extra rights</GlossaryTip>, and replaying stolen <GlossaryTip term="token">credentials stored in cookies or headers</GlossaryTip>. Good hygiene: secure and HttpOnly cookies, short lifetimes, rotation, server side invalidation, and consistent authorisation on every request.
+A session is a bridge in a stateless world. Cookies or tokens are just carriers. Their safety depends on creation, storage, expiry, rotation and server side checks.
+
+In simple terms: a session is the site remembering you between clicks. Without it, every request looks like a stranger. With it, every request is trusted as "you", which is powerful and therefore risky.
+
+In the real world, what I see is not magic crypto. I see teams choosing between cookies and tokens, setting expiries, deciding how logout works, and then finding out that one missing authorisation check exposed data. I also see incidents where a stolen session gets reused from a different device, and nobody notices because there is no monitoring on session anomalies.
+
+Common failures: predictable IDs, missing <GlossaryTip term="privilege escalation">checks that stop users gaining extra rights</GlossaryTip>, and replaying stolen <GlossaryTip term="token">credentials stored in cookies or headers</GlossaryTip>. Another failure is confusing authentication with authorisation: users log in correctly, but the app forgets to check what they are allowed to do.
+
+How to do it well: use secure and HttpOnly cookies where possible, set short lifetimes for high risk sessions, rotate tokens on sensitive events, and invalidate server side on logout. Also treat authorisation as a rule that must be enforced on every request, not just in the UI. The trade off is user convenience. Short sessions can annoy users, so you need to decide where you accept friction and where you compensate with better UX.
 
 <DiagramBlock
   title="Session flow at a glance"
@@ -158,6 +192,8 @@ A session is a bridge in a stateless world. Cookies or tokens are just carriers;
   </div>
 </DiagramBlock>
 
+Before you use the session flow tool: focus on what is stored where. The browser will happily send cookies back to the server. The question is whether the server should believe them, and under what conditions.
+
 <ToolCard
   id="session-flow-sandbox"
   title="Follow a session through a web app"
@@ -166,6 +202,10 @@ A session is a bridge in a stateless world. Cookies or tokens are just carriers;
   <AuthSessionFlowLab />
 </ToolCard>
 
+After you use it: check you can explain where the trust comes from. If your model is "the cookie proves it is me forever," you are missing expiry, rotation, and invalidation.
+
+Before you use the hijack demo: this is not teaching you to attack anyone. It is showing why session identifiers are sensitive. If someone gets one, they often do not need your password.
+
 <ToolCard
   id="session-hijack-demo"
   title="See session hijacking in action"
@@ -173,6 +213,8 @@ A session is a bridge in a stateless world. Cookies or tokens are just carriers;
 >
   <SessionHijackConceptDemo />
 </ToolCard>
+
+After you use it: focus on the controls that break the replay. Short lifetimes, rotation, binding sessions to device signals, and server side invalidation all reduce the window. A common mistake is assuming HTTPS alone prevents session theft. HTTPS protects transport, not your entire browser environment.
 
 <QuizBlock
   id="applied-auth-sessions-access"
@@ -200,7 +242,19 @@ A session is a bridge in a stateless world. Cookies or tokens are just carriers;
 Prevention is never perfect. Good detection shortens the time between a bad action and your response.
 </Callout>
 
-I log what I fear: authentication, authorisation, sensitive access, privilege changes, unusual network patterns. A <GlossaryTip term="log">record of what happened</GlossaryTip> is only useful when it becomes a <GlossaryTip term="signal">something that indicates risk</GlossaryTip> that can turn into an <GlossaryTip term="alert">actionable notification to a human or system</GlossaryTip>. Risk thinking joins likelihood and impact; controls reduce one or both but add cost and friction.
+I log what I fear: authentication, authorisation, sensitive access, privilege changes, unusual network patterns.
+
+In simple terms: logs are the footprints. Monitoring is deciding which footprints matter. Response is what you do when you see them.
+
+A <GlossaryTip term="log">record of what happened</GlossaryTip> is only useful when it becomes a <GlossaryTip term="signal">something that indicates risk</GlossaryTip> that can turn into an <GlossaryTip term="alert">actionable notification to a human or system</GlossaryTip>. A log line without context is trivia. A signal has enough context that a human can make a decision.
+
+In the real world, this is triage. You see a burst of failed logins, a login from a new country, an API key used at 3am, or a privilege change followed by data export. You decide what to investigate first, and you decide what evidence to preserve.
+
+How it fails: alert fatigue, missing context, and no owner. Teams create rules that fire constantly, then everyone ignores the channel. Or they log everything but cannot search it. Or the person who gets paged has no permission to do anything meaningful.
+
+How to do it well: start with a few high value signals tied to real harm, tune them, and write a short playbook. Decide your trade offs. More alerts can catch more badness but will also burn people out. A smaller set of reliable signals often beats a thousand noisy ones.
+
+Risk thinking joins likelihood and impact. Controls reduce one or both but add cost and friction. This is why a good risk decision is not "maximum security." It is "enough security for what we are protecting, given constraints."
 
 <DiagramBlock
   title="From events to action"
@@ -213,6 +267,8 @@ I log what I fear: authentication, authorisation, sensitive access, privilege ch
   </div>
 </DiagramBlock>
 
+Before you use the log triage tool: do not try to read every line. Try to spot the pattern and the story. Ask: what changed, who did it, and what is the plausible next step for an attacker.
+
 <ToolCard
   id="log-triage-lab"
   title="Practice spotting important events in logs"
@@ -221,6 +277,10 @@ I log what I fear: authentication, authorisation, sensitive access, privilege ch
   <LogSignalExplorer />
 </ToolCard>
 
+After you use it: check your priorities. A common mistake is chasing the weirdest looking event instead of the highest impact path. Another mistake is ignoring baseline behaviour. "Unusual" only makes sense when you know what normal looks like.
+
+Before you use the risk trade off tool: this is about making trade offs explicit. You are practising how to talk about risk without sounding like a robot or a fortune teller.
+
 <ToolCard
   id="risk-tradeoff-lab"
   title="Play with risk trade offs"
@@ -228,6 +288,8 @@ I log what I fear: authentication, authorisation, sensitive access, privilege ch
 >
   <RiskTradeoffVisualizer />
 </ToolCard>
+
+After you use it: focus on residual risk. The common mistake is assuming one control takes risk to zero. Another mistake is ignoring cost and usability until users bypass the control. Good controls reduce harm without breaking the business.
 
 <QuizBlock
   id="applied-logging-and-risk"

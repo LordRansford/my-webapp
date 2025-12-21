@@ -18,6 +18,23 @@ const ArchitectureCanvas = dynamic(() => import("@/components/notes/tools/archit
 const RoleMapTool = dynamic(() => import("@/components/notes/tools/architecture/beginner/RoleMapTool"), { ssr: false });
 const DesignKataTool = dynamic(() => import("@/components/notes/tools/architecture/beginner/DesignKataTool"), { ssr: false });
 const DeploySafetySandbox = dynamic(() => import("@/components/notes/tools/architecture/beginner/DeploySafetySandbox"), { ssr: false });
+const ArchitectureDecisionExplorerTool = dynamic(
+  () => import("@/components/notes/tools/architecture/beginner/ArchitectureDecisionExplorerTool"),
+  { ssr: false }
+);
+const QualityAttributeTradeoffSandboxTool = dynamic(
+  () => import("@/components/notes/tools/architecture/beginner/QualityAttributeTradeoffSandboxTool"),
+  { ssr: false }
+);
+const ComponentBoundaryMapperTool = dynamic(() => import("@/components/notes/tools/architecture/beginner/ComponentBoundaryMapperTool"), {
+  ssr: false,
+});
+const SystemFailureWalkthroughTool = dynamic(() => import("@/components/notes/tools/architecture/beginner/SystemFailureWalkthroughTool"), {
+  ssr: false,
+});
+const RealitySurvivalDesignTool = dynamic(() => import("@/components/notes/tools/architecture/beginner/RealitySurvivalDesignTool"), {
+  ssr: false,
+});
 
 export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
@@ -32,9 +49,14 @@ export default function Page({ source, headings }) {
       CPDTracker,
       DiagramBlock,
       ArchitectureCanvas,
+      ArchitectureDecisionExplorerTool,
+      QualityAttributeTradeoffSandboxTool,
+      ComponentBoundaryMapperTool,
       RoleMapTool,
       DesignKataTool,
       DeploySafetySandbox,
+      SystemFailureWalkthroughTool,
+      RealitySurvivalDesignTool,
     }),
     []
   );

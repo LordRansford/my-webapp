@@ -6,6 +6,9 @@
     "dev": "next dev --webpack",
     "build": "node -e \"const fs=require('fs');const p='.next/lock';if(fs.existsSync(p)) fs.rmSync(p,{force:true});\" && next build --webpack",
     "start": "next start --hostname 0.0.0.0 --port 3000",
+    "postinstall": "prisma generate",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
     "lint": "eslint && npm run lint:auth && npm run lint:monetization && npm run lint:stripe && npm run lint:access && npm run lint:cpd && npm run lint:templates",
     "lint:auth": "node scripts/auth-guards.mjs",
     "lint:monetization": "node scripts/monetization-guards.mjs",
@@ -41,6 +44,7 @@
     "lucide-react": "^0.469.0",
     "next": "16.0.10",
     "next-auth": "^4.24.13",
+    "@prisma/client": "^6.1.0",
     "next-mdx-remote": "^5.0.0",
     "papaparse": "^5.5.3",
     "pdf-lib": "^1.17.1",
@@ -70,6 +74,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.0.10",
     "tailwindcss": "^4",
+    "prisma": "^6.1.0",
     "typescript": "^5.9.3"
   }
 }

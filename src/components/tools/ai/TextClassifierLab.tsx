@@ -367,10 +367,9 @@ export function TextClassifierLab() {
         summary,
       });
     } catch (err: any) {
-      console.error(err);
       setModelState({
         status: "error",
-        message: err?.message || "Something went wrong during training. Try a smaller dataset or adjust your columns.",
+        message: "Something went wrong during training. Try a smaller dataset or adjust your columns.",
       });
     }
   }, [parsedData, canTrain, textColumn, labelColumn, trainRatio, valRatio]);
@@ -444,8 +443,7 @@ export function TextClassifierLab() {
       x.dispose();
       pred.dispose();
     } catch (err: any) {
-      console.error(err);
-      setPredictionOutput(err?.message || "Could not compute a prediction for this text.");
+      setPredictionOutput("Could not compute a prediction for this text. Try a shorter example.");
     }
   }, [trainedModel, vocab, classes, predictionText]);
 

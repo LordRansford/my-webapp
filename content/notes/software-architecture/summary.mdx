@@ -14,6 +14,7 @@ import QuizBlock from "@/components/notes/QuizBlock"
 import ArchitectureDashboard from "@/components/dashboards/ArchitectureDashboard"
 import DecisionDashboard from "@/components/dashboards/DecisionDashboard"
 import DigitalisationDashboard from "@/components/dashboards/DigitalisationDashboard"
+import DashboardFrame from "@/components/dashboards/DashboardFrame"
 import ArchConceptMatchGame from "@/components/games/softwareArchitecture/ArchConceptMatchGame"
 import ArchStyleSorterGame from "@/components/games/softwareArchitecture/ArchStyleSorterGame"
 import QualityTradeoffGame from "@/components/games/softwareArchitecture/QualityTradeoffGame"
@@ -83,21 +84,27 @@ Formal: A discipline of evaluating structure, qualities, and risk to guide susta
 
 ---
 
-## Dashboards and system signals
+## Further practice and system signals
 
 Architecture must be observable. These dashboards simulate how architects reason about live systems.
 
 ### Architecture health dashboard
 
-<ArchitectureDashboard />
+<DashboardFrame title="Architecture health dashboard">
+  <ArchitectureDashboard />
+</DashboardFrame>
 
 ### Decision and change dashboard
 
-<DecisionDashboard />
+<DashboardFrame title="Decision and change dashboard">
+  <DecisionDashboard />
+</DashboardFrame>
 
 ### Digitalisation and delivery dashboard
 
-<DigitalisationDashboard />
+<DashboardFrame title="Digitalisation and delivery dashboard">
+  <DigitalisationDashboard />
+</DashboardFrame>
 
 <Callout variant="concept">
 If you cannot see the system, you cannot steer it.

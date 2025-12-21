@@ -28,7 +28,6 @@ const dropdowns: Dropdown[] = [
     label: "Tools",
     items: [
       { label: "Labs", href: "/studios" },
-      { label: "Dashboards", href: "/dashboards" },
       { label: "Templates", href: "/templates" },
     ],
   },

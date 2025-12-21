@@ -1,18 +1,31 @@
 import { NextResponse } from "next/server";
-import { getOwnerAnalyticsSummary } from "@/lib/analytics/store";
+import { aggregateInternalToolEvents, windowToSinceMs, type TimeWindow } from "@/lib/analytics/aggregate";
+import { getInternalToolEventsSince } from "@/lib/analytics/internalStore";
+import { requireAdmin } from "@/lib/admin/requireAdmin";
 import { withRequestLogging } from "@/lib/security/requestLog";
 
-function isAllowed(req: Request) {
-  const expected = process.env.ADMIN_ANALYTICS_KEY || "";
-  if (!expected) return false;
-  const provided = req.headers.get("x-admin-analytics-key") || "";
-  return provided && expected && provided === expected;
+function parseWindow(req: Request): TimeWindow {
+  try {
+    const url = new URL(req.url);
+    const w = (url.searchParams.get("window") || "").toLowerCase();
+    if (w === "hour" || w === "day" || w === "7d") return w;
+  } catch {
+    // ignore
+  }
+  return "7d";
 }
 
 export async function GET(req: Request) {
   return withRequestLogging(req, { route: "GET /api/admin/analytics" }, async () => {
-    if (!isAllowed(req)) return NextResponse.json({ message: "Forbidden" }, { status: 403 });
-    return NextResponse.json(getOwnerAnalyticsSummary(), { status: 200 });
+    const blocked = requireAdmin(req);
+    if (blocked) return blocked;
+
+    const window = parseWindow(req);
+    const sinceMs = windowToSinceMs(window);
+    const events = getInternalToolEventsSince(sinceMs);
+    const agg = aggregateInternalToolEvents(events, window, sinceMs);
+
+    return NextResponse.json(agg, { status: 200 });
   });
 }
 

@@ -1,0 +1,58 @@
+// Phase 5 baseline schema
+// - SQLite for local development (DATABASE_URL="file:./data/dev.db")
+// - Structure is Postgres-compatible (Prisma will translate types)
+//
+// Identity model (passwordless):
+// - User = email + provider id (providerAccountId)
+// - Email is the primary identifier for humans; internal `id` is a stable UUID
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model UserIdentity {
+  // Use the same stable id as NextAuth's `user.id` (session.user.id).
+  // This keeps cross-device progress keyed to the auth identity without leaking tokens client-side.
+  id                String   @id
+  email             String   @unique
+  provider          String
+  providerAccountId String
+  createdAt         DateTime @default(now())
+  lastLoginAt       DateTime @default(now())
+
+  cpdState  CpdState?
+  progress  Progress[]
+
+  @@index([provider, providerAccountId])
+}
+
+model CpdState {
+  userId    String   @id
+  stateJson String
+  updatedAt DateTime @updatedAt
+
+  user UserIdentity @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Progress {
+  id        String   @id @default(cuid())
+  userId    String
+  courseId  String
+  levelId   String
+  sectionId String
+  completed Boolean  @default(false)
+  minutes   Int      @default(0)
+  updatedAt DateTime @updatedAt
+
+  user UserIdentity @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId, levelId, sectionId])
+  @@index([userId, courseId, levelId])
+}
+
+

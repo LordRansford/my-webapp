@@ -254,6 +254,13 @@ const CATEGORY_LABELS = {
   digitalisation: "Digitalisation",
 };
 
+const COURSE_LINKS = {
+  ai: "/ai",
+  architecture: "/software-architecture",
+  cybersecurity: "/cybersecurity",
+  digitalisation: "/digitalisation",
+};
+
 export default function ClientPage({ params }) {
   const category = params?.category;
   const tool = params?.tool;
@@ -266,8 +273,9 @@ export default function ClientPage({ params }) {
   }, [category, tool]);
 
   const title = entry?.title || "Dashboard tool";
-  const categoryLabel = CATEGORY_LABELS[category] || "Dashboards";
+  const categoryLabel = CATEGORY_LABELS[category] || "Further practice";
   const backHref = category ? `/dashboards/${category}` : "/dashboards";
+  const courseHref = COURSE_LINKS[category] || "/";
 
   useEffect(() => {
     if (reduce) {
@@ -282,11 +290,11 @@ export default function ClientPage({ params }) {
   return (
     <NotesLayout
       meta={{
-        title,
-        description: `${categoryLabel} dashboard tool`,
+        title: "Further practice",
+        description: `${categoryLabel} further practice`,
         section: category,
         slug: category && tool ? `/dashboards/${category}/${tool}` : "/dashboards",
-        level: "Dashboards",
+        level: "Further practice",
       }}
       headings={[]}
     >
@@ -296,26 +304,22 @@ export default function ClientPage({ params }) {
         </Link>
       </div>
 
-      {!entry ? (
-        <LazyMotion features={domAnimation}>
-          <m.div {...reducedMotionProps(reduce, motionPresets.fadeIn)} className="rn-card">
-            <div className="rn-card-title">Not found</div>
-            <div className="rn-card-body">This dashboard tool route does not match an existing tool.</div>
-          </m.div>
-        </LazyMotion>
-      ) : (
-        <div className="w-full max-w-full overflow-x-auto">
-          {!ready ? (
-            <LoadingState label="Preparing tool" hint="Initialising…" />
-          ) : (
-            <LazyMotion features={domAnimation}>
-              <m.div {...reducedMotionProps(reduce, motionPresets.scaleIn)}>
-                <entry.Component />
-              </m.div>
-            </LazyMotion>
-          )}
-        </div>
-      )}
+      <LazyMotion features={domAnimation}>
+        <m.div {...reducedMotionProps(reduce, motionPresets.fadeIn)} className="rn-card">
+          <div className="rn-card-title">Further practice</div>
+          <div className="rn-card-body">
+            Dashboards are shown inside the relevant course pages so they appear in the right learning flow.
+          </div>
+          <div className="rn-mt" style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+            <Link href={courseHref} className="rn-card-button">
+              Open course
+            </Link>
+            <Link href={backHref} className="rn-card-link">
+              Back to further practice hub
+            </Link>
+          </div>
+        </m.div>
+      </LazyMotion>
     </NotesLayout>
   );
 }

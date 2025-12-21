@@ -1,46 +1,36 @@
 "use client";
 
 import { useState } from "react";
+import { useToolRunner } from "@/hooks/useToolRunner";
+import { normaliseUrl } from "@/lib/tooling/validation";
+import { postJson } from "@/lib/tooling/http";
 
 export default function WebsiteSecurityLab() {
   const [url, setUrl] = useState("");
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const runner = useToolRunner({ minIntervalMs: 800, toolId: "website-security-lab" });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
     setResult(null);
+    runner.resetError();
 
-    let parsed;
-    try {
-      parsed = new URL(url);
-    } catch {
-      setError("Please enter a valid URL such as https://example.com");
+    const parsed = normaliseUrl(url);
+    if (!parsed.ok) {
+      setError(parsed.message);
       return;
     }
 
-    setLoading(true);
-    try {
-      const response = await fetch("/api/dashboards/website-security", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: parsed.href }),
-      });
+    const data = await runner.run(async (signal) => {
+      const res = await postJson("/api/dashboards/website-security", { url: parsed.url }, { signal });
+      if (!res.ok) throw new Error("Request failed");
+      return res.data;
+    });
 
-      if (!response.ok) {
-        throw new Error("Request failed");
-      }
-
-      const data = await response.json();
-      setResult(data);
-    } catch (err) {
-      console.error(err);
-      setError("There was a problem analysing this site. Please try again or use a different URL.");
-    } finally {
-      setLoading(false);
-    }
+    if (data) setResult(data);
+    if (!data && runner.errorMessage) setError(runner.errorMessage);
   };
 
   return (
@@ -80,23 +70,25 @@ export default function WebsiteSecurityLab() {
           className="flex-1 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 transition focus:border-sky-400 focus:ring-2 focus:ring-sky-100"
           value={url}
           onChange={(event) => setUrl(event.target.value)}
+          maxLength={2048}
+          aria-invalid={Boolean(error) || Boolean(runner.errorMessage)}
         />
         <button
           type="submit"
-          disabled={loading}
+          disabled={runner.loading}
           className="inline-flex items-center justify-center rounded-xl bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:bg-slate-300"
         >
-          {loading ? "Analysing..." : "Analyse"}
+          {runner.loading ? "Analysing..." : "Analyse"}
         </button>
       </form>
 
-      {error && (
-        <p className="text-sm text-rose-600" aria-live="polite">
-          {error}
+      {error || runner.errorMessage ? (
+        <p className="text-sm text-rose-600" role="alert" aria-live="polite">
+          {error || runner.errorMessage}
         </p>
-      )}
+      ) : null}
 
-      {!result && !loading && !error && (
+      {!result && !runner.loading && !(error || runner.errorMessage) && (
         <p className="text-xs text-slate-500">
           Only use this tool on sites you own or are allowed to test. Results are educational and do not replace a professional security audit.
         </p>

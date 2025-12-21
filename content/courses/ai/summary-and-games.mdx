@@ -1,0 +1,154 @@
+---
+title: "AI Summary and games"
+slug: "summary-and-games"
+courseId: "ai"
+levelId: "summary"
+summary: "A practical recap of AI concepts using games, challenges and reflection."
+estimatedHours: 3
+stepIndex: 3
+---
+
+import NotesLayout from "@/components/notes/Layout"
+import ContentsSidebar from "@/components/notes/ContentsSidebar"
+import ToolCard from "@/components/notes/ToolCard"
+import QuizBlock from "@/components/notes/QuizBlock"
+import DiagramBlock from "@/components/DiagramBlock"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import PageNav from "@/components/notes/PageNav"
+import { aiSectionManifest } from "@/lib/aiSections"
+
+# AI Summary and games
+
+<LevelProgressBar courseId="ai" levelId="summary" sectionIds={aiSectionManifest.summary} />
+
+<CPDTracker courseId="ai" levelId="summary" estimatedHours={3} />
+
+This page is a recap and a play space. It is not new teaching. It is where you test your judgement and turn the ideas into habits.
+
+---
+
+## Big ideas to remember
+
+<SectionProgressToggle courseId="ai" levelId="summary" sectionId="ai-summary-big-ideas" />
+
+AI is systems, not magic. A model is a component. The system is everything around it: data, interfaces, monitoring, fallbacks, and ownership. If the system is weak, a strong model just fails faster.
+
+Data quality often matters more than the model. If the data is wrong, missing, or biased, the model will faithfully learn the wrong thing. You can tune parameters for weeks and still be polishing a broken foundation.
+
+Deployment changes everything. Real users behave differently to test data. Latency changes workflows. Drift changes outcomes. In production, the work is observation, iteration, and controlled change.
+
+---
+
+## Common mistakes and myths
+
+<SectionProgressToggle courseId="ai" levelId="summary" sectionId="ai-summary-mistakes-myths" />
+
+Bigger models are not always better. Bigger can mean slower, more expensive, and harder to operate. Sometimes a smaller model with a better data path wins.
+
+Accuracy does not equal success. Accuracy can hide the cost of mistakes. In a spam filter or fraud detector, the trade offs are what matter, not the headline number.
+
+AI does not replace judgement. It can speed up work, but it can also speed up mistakes. If you remove human judgement, you usually remove accountability too.
+
+---
+
+## Mental models that actually help
+
+<SectionProgressToggle courseId="ai" levelId="summary" sectionId="ai-summary-mental-models" />
+
+If you are stuck, return to input, model, output. What inputs does the system really see. What does the model output. What happens next. Many failures are a mismatch between what the team thinks is happening and what is actually wired up.
+
+Think in feedback loops. Models change behaviour, and behaviour changes data. A recommender system shapes what people click. A fraud system changes what attackers try. That loop means yesterday’s evaluation is not a guarantee.
+
+Humans in the loop is a design decision. It only works if humans have context, time, and authority. If they are rushed or powerless, you have a rubber stamp, not oversight.
+
+<DiagramBlock title="A practical mental model" subtitle="Follow the data and the decisions.">
+  <div className="grid gap-3 sm:grid-cols-3 text-xs text-slate-700">
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Inputs</p>
+      <p className="mt-1">What the system actually receives.</p>
+      <p className="mt-2 text-slate-500">Data quality and context.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Model</p>
+      <p className="mt-1">A component that maps inputs to outputs.</p>
+      <p className="mt-2 text-slate-500">Limits and uncertainty.</p>
+    </div>
+    <div className="rounded-xl border border-slate-200 bg-white p-3">
+      <p className="font-semibold text-slate-900">Decisions</p>
+      <p className="mt-1">How outputs change actions.</p>
+      <p className="mt-2 text-slate-500">Guardrails and ownership.</p>
+    </div>
+  </div>
+</DiagramBlock>
+
+---
+
+## Games and challenges
+
+<SectionProgressToggle courseId="ai" levelId="summary" sectionId="ai-summary-games-challenges" />
+
+These are light practice prompts. The goal is to recognise patterns quickly and explain your reasoning in plain language.
+
+<ToolCard
+  id="ai-summary-identify-system"
+  title="Identify the AI system"
+  description="Given a short product description, name the model, the data path, and the monitoring you would expect."
+/>
+
+<ToolCard
+  id="ai-summary-spot-failure-mode"
+  title="Spot the failure mode"
+  description="Read a short incident story and decide if it was data quality, drift, misuse, or missing guardrails."
+/>
+
+<ToolCard
+  id="ai-summary-choose-metric"
+  title="Choose the right metric"
+  description="Pick a metric focus for a scenario like fraud, moderation, or recommendations, and explain the trade off."
+/>
+
+<QuizBlock
+  id="ai-summary-recap-quiz"
+  title="Recap quiz"
+  courseId="ai"
+  levelId="summary"
+  sectionId="ai-summary-games-challenges"
+  questions={[
+    { q: "Why does deployment change how a model behaves", a: "Real users, latency, and changing inputs create conditions that do not exist in offline testing." },
+    { q: "Why can accuracy hide problems", a: "It can mask uneven costs of mistakes and class imbalance." },
+    { q: "What is one sign a system is relying on magic thinking", a: "No monitoring, no fallbacks, and no clear owner for outcomes." },
+    { q: "What is one reason a smaller model can win", a: "It can be cheaper, faster, and more reliable with a better data path." },
+  ]}
+/>
+
+<QuizBlock
+  id="ai-summary-scenarios-quiz"
+  title="Scenario quiz"
+  courseId="ai"
+  levelId="summary"
+  sectionId="ai-summary-games-challenges"
+  questions={[
+    { q: "A spam filter is blocking important emails. What should you check first", a: "Precision and what types of false positives are being created, then adjust thresholds and review data." },
+    { q: "A fraud model was stable for months and then missed a new attack pattern. What likely changed", a: "The environment and attacker behaviour, so the concept the model learned no longer matches reality." },
+    { q: "A tool shows a risk score but nobody can explain it. What is the governance problem", a: "No traceability or ownership, so decisions cannot be challenged or corrected safely." },
+    { q: "A model is expensive and slow. What is one safe way to reduce cost without redesigning everything", a: "Add caching for repeated requests or use a smaller fallback model for low risk cases." },
+  ]}
+/>
+
+---
+
+## Final reflection
+
+<SectionProgressToggle courseId="ai" levelId="summary" sectionId="ai-summary-reflection" />
+
+What kind of AI would you trust. Be specific about context, constraints, and consequences.
+
+Where would you never deploy AI. Think about power, harm, and irreversible decisions.
+
+When should you not automate. Name the signals that tell you a human must stay in control.
+
+<PageNav prevHref="/ai/advanced" prevLabel="Advanced" nextHref={null} showTop={false} showBottom />
+
+

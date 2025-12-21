@@ -1,9 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import TemplateLayout from "@/components/templates/TemplateLayout";
 import TemplateExportPanel from "@/components/templates/TemplateExportPanel";
 import { useTemplateState } from "@/hooks/useTemplateState";
+import { useToolRunner } from "@/hooks/useToolRunner";
+import { isProbablyDomain, isProbablyHostname, isProbablyIp, safeTrim } from "@/lib/tooling/validation";
+import { postJson } from "@/lib/tooling/http";
 
 const attribution =
   "Created by Ransford for Ransfords Notes. Internal use allowed. Commercial use requires visible attribution. Exports are gated per policy.";
@@ -31,28 +34,59 @@ function useNetworkTool(storageKey, apiPath) {
     result: null,
     error: "",
   });
-  const [loading, setLoading] = useState(false);
+  const runner = useToolRunner({ minIntervalMs: 900, toolId: storageKey });
+
+  const validateTarget = useCallback((targetRaw) => {
+    const t = safeTrim(targetRaw, 253);
+    if (!t) return { ok: false, message: "Enter a target first." };
+
+    // dns-lookup + whois-summary expect domains. tls-inspect can accept hostname.
+    if (apiPath === "dns-lookup" || apiPath === "whois-summary") {
+      if (!isProbablyDomain(t)) return { ok: false, message: "This input does not look like a domain. Try example.com" };
+      return { ok: true, value: t.toLowerCase() };
+    }
+
+    if (apiPath === "tls-inspect") {
+      if (!isProbablyHostname(t)) return { ok: false, message: "This input does not look like a hostname. Try example.com" };
+      return { ok: true, value: t.toLowerCase() };
+    }
+
+    // ip-reputation supports IPs and hostnames in some setups.
+    if (apiPath === "ip-reputation") {
+      if (!isProbablyIp(t) && !isProbablyHostname(t)) {
+        return { ok: false, message: "This input does not look like an IP address or hostname." };
+      }
+      return { ok: true, value: t.toLowerCase() };
+    }
+
+    return { ok: true, value: t };
+  }, [apiPath]);
 
   const runLookup = async () => {
-    setLoading(true);
     updateState((prev) => ({ ...prev, error: "" }));
-    try {
-      const res = await fetch(`/api/tools/${apiPath}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ target: state.target }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Lookup failed");
-      updateState((prev) => ({ ...prev, result: data, error: "" }));
-    } catch (error) {
-      updateState((prev) => ({ ...prev, error: error.message || "Lookup failed" }));
-    } finally {
-      setLoading(false);
+
+    if (!state.consent) {
+      updateState((prev) => ({ ...prev, error: "Please confirm you have permission to inspect this target." }));
+      return;
     }
+
+    const check = validateTarget(state.target);
+    if (!check.ok) {
+      updateState((prev) => ({ ...prev, error: check.message }));
+      return;
+    }
+
+    const data = await runner.run(async (signal) => {
+      const res = await postJson(`/api/tools/${apiPath}`, { target: check.value }, { signal });
+      if (!res.ok) throw new Error("Lookup failed");
+      return res.data;
+    });
+
+    if (data) updateState((prev) => ({ ...prev, result: data, error: "" }));
+    if (!data && runner.errorMessage) updateState((prev) => ({ ...prev, error: runner.errorMessage }));
   };
 
-  return { state, updateState, resetState, lastUpdated, loading, runLookup };
+  return { state, updateState, resetState, lastUpdated, loading: runner.loading, runLookup };
 }
 
 function NetworkTemplate({
@@ -73,10 +107,13 @@ function NetworkTemplate({
   const tool = useNetworkTool(storageKey, apiPath);
   const outputSummary = tool.state.result ? "Result available" : summaryWhenEmpty;
 
-  const buildSections = () => [
-    { heading: "Target", body: tool.state.target },
-    { heading: "Result", body: JSON.stringify(tool.state.result || {}, null, 2) },
-  ];
+  const buildSections = useMemo(
+    () => () => [
+        { heading: "Target", body: tool.state.target },
+        { heading: "Result", body: "Result available. Review on-screen output for details." },
+      ],
+    [tool.state.target]
+  );
 
   return (
     <TemplateLayout
@@ -150,9 +187,17 @@ function NetworkTemplate({
         {tool.loading ? (
           <p className="text-sm text-slate-700">Loading...</p>
         ) : tool.state.error ? (
-          <p className="text-sm font-semibold text-rose-700">{tool.state.error}</p>
+          <p className="text-sm font-semibold text-rose-700" role="alert" aria-live="polite">
+            {tool.state.error}
+          </p>
         ) : tool.state.result ? (
-          <pre className="mt-2 whitespace-pre-wrap text-xs text-slate-800">{JSON.stringify(tool.state.result, null, 2)}</pre>
+          <div className="mt-2 space-y-2">
+            <p className="text-sm text-slate-700">Result received. Review the key fields below.</p>
+            <details className="rounded-xl border border-slate-200 bg-white p-3">
+              <summary className="cursor-pointer text-sm font-semibold text-slate-900">Show details</summary>
+              <pre className="mt-2 whitespace-pre-wrap text-xs text-slate-800">{JSON.stringify(tool.state.result, null, 2)}</pre>
+            </details>
+          </div>
         ) : (
           <p className="text-sm text-slate-700">Run a lookup to see details.</p>
         )}

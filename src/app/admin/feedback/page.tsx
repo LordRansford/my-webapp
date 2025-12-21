@@ -1,140 +1,114 @@
-import { notFound } from "next/navigation";
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import NotesLayout from "@/components/notes/Layout";
-import { listFeedback } from "@/lib/feedback/store";
-import { analyzeFeedback } from "@/lib/feedback/summary";
 
-export default function AdminFeedbackPage({ searchParams }: any) {
-  const enabled = process.env.ADMIN_FEEDBACK_ENABLED === "true";
-  const pass = process.env.ADMIN_FEEDBACK_KEY || "";
-  if (!enabled || (pass && searchParams?.key !== pass)) {
-    notFound();
+const FEEDBACK_LOCAL_KEY = "rn_feedback_entries_v1";
+// Enable preview mode locally by either:
+// - setting NEXT_PUBLIC_PREVIEW_MODE=true in your environment, OR
+// - adding ?preview=true to the URL.
+const PREVIEW_ENV_ENABLED = process.env.NEXT_PUBLIC_PREVIEW_MODE === "true";
+
+function safeReadLocalFeedback() {
+  try {
+    const raw = window.localStorage.getItem(FEEDBACK_LOCAL_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
   }
+}
 
-  const entries = listFeedback();
-  const summary = analyzeFeedback(entries);
-  const filter = typeof searchParams?.theme === "string" ? searchParams.theme.toLowerCase().trim() : "";
-  const filteredEntries = filter
-    ? entries.filter((e) => `${e.message} ${e.workedWell} ${e.confused} ${e.missing} ${e.other}`.toLowerCase().includes(filter))
-    : entries;
+export default function AdminFeedbackPage() {
+  const [entries, setEntries] = useState<any[]>([]);
+  const searchParams = useSearchParams();
+  const previewQuery = (searchParams?.get("preview") || "").toLowerCase();
+  const previewEnabled = PREVIEW_ENV_ENABLED || previewQuery === "true";
+
+  useEffect(() => {
+    setEntries(safeReadLocalFeedback());
+  }, []);
+
+  const cards = useMemo(() => {
+    return (entries || [])
+      .filter((e) => e && typeof e === "object")
+      .map((e) => ({
+        id: String((e as any).id || ""),
+        name: String((e as any).name || "").trim(),
+        heardFrom: String((e as any).heardFrom || "").trim(),
+        message: String((e as any).message || "").trim(),
+        createdAt: String((e as any).createdAt || "").trim(),
+      }))
+      .filter((e) => e.id && e.message);
+  }, [entries]);
 
   return (
     <NotesLayout
       meta={{
-        title: "Feedback analysis",
-        description: "Private feedback analysis.",
+        title: "Feedback (local)",
+        description: "Local preview feedback viewer.",
         level: "Summary",
         slug: "/admin/feedback",
         section: "ai",
       }}
       activeLevelId="summary"
+      headings={[]}
+      showContentsSidebar={false}
+      showStepper={false}
     >
       <div className="space-y-6">
-        <header className="space-y-2">
-          <p className="eyebrow">Private</p>
-          <h1 className="text-3xl font-semibold text-slate-900">Feedback analysis (private)</h1>
-          <p className="text-slate-700">Structured themes, not visible to users.</p>
-          <div className="flex flex-wrap gap-2 text-sm">
-            <a className="button" href="/api/feedback/summary">
-              Summary JSON
-            </a>
-            <a className="button" href="/api/feedback/export/markdown">
-              Export markdown
-            </a>
-            <a className="button" href="/api/feedback/export/csv">
-              Export CSV
-            </a>
+        {!previewEnabled ? (
+          <div className="rounded-3xl border border-slate-200 bg-white/90 p-5 text-sm text-slate-700 shadow-sm">
+            This page is only available in preview mode.
           </div>
-          <form method="get" className="flex flex-wrap gap-2 text-sm">
-            <label className="flex items-center gap-2">
-              <span>Filter by theme</span>
-              <input
-                name="theme"
-                defaultValue={filter}
-                className="rounded border border-slate-300 px-2 py-1"
-                placeholder="confusion, ux, gaps"
-              />
-            </label>
-            {filter ? (
-              <a className="button" href="/admin/feedback">
-                Clear
-              </a>
-            ) : null}
-          </form>
+        ) : (
+          <>
+        <div className="rounded-3xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 shadow-sm">
+          <p className="m-0 font-semibold">
+            Preview mode only. This page is not protected and will be secured later.
+          </p>
+        </div>
+
+        <header className="space-y-2">
+          <p className="eyebrow">Internal</p>
+          <div className="flex flex-wrap items-center gap-2">
+            <h1 className="text-3xl font-semibold text-slate-900">Feedback viewer (local)</h1>
+            <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">
+              PREVIEW
+            </span>
+          </div>
+          <p className="text-slate-700">Reads feedback submissions stored locally by the /feedback page.</p>
         </header>
 
-        <section className="space-y-3 rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm">
-          <h2 className="text-xl font-semibold text-slate-900">Summary</h2>
-          <p className="text-sm text-slate-700">Total submissions: {summary.total}</p>
-          <p className="text-sm text-slate-700">
-            Averages: clarity {summary.averages.clarity ?? "n/a"} | usefulness {summary.averages.usefulness ?? "n/a"}
-          </p>
-          <div className="grid gap-2 sm:grid-cols-2">
-            <div>
-              <h3 className="text-sm font-semibold text-slate-900">Key themes</h3>
-              <ul className="list-disc pl-5 text-sm text-slate-800">
-                {summary.keyThemes.map((t) => (
-                  <li key={t.theme}>
-                    {t.theme}: {t.count}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-sm font-semibold text-slate-900">Severity ranking</h3>
-              <ul className="list-disc pl-5 text-sm text-slate-800">
-                {summary.severityRanking.map((s) => (
-                  <li key={s.theme}>
-                    {s.theme}: {s.severity} ({s.count})
-                  </li>
-                ))}
-              </ul>
-            </div>
+        {cards.length === 0 ? (
+          <div className="rounded-3xl border border-slate-200 bg-white/90 p-5 text-sm text-slate-700 shadow-sm">
+            No feedback submitted yet.
           </div>
-          <div>
-            <h3 className="text-sm font-semibold text-slate-900">Suggested focus</h3>
-            <ul className="list-disc pl-5 text-sm text-slate-800">
-              {summary.suggestedFocus.map((s) => (
-                <li key={s}>{s}</li>
-              ))}
-            </ul>
+        ) : (
+          <div className="space-y-3">
+            {cards.map((e) => {
+              const who = e.name ? e.name : "Anonymous";
+              const when = e.createdAt ? new Date(e.createdAt).toLocaleString() : "";
+              return (
+                <article
+                  key={e.id}
+                  className="rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm"
+                  aria-label="Feedback entry"
+                >
+                  <div className="text-xs text-slate-600">
+                    {when} · {e.heardFrom || ""}
+                  </div>
+                  <div className="mt-1 text-sm font-semibold text-slate-900">{who}</div>
+                  <p className="mt-2 whitespace-pre-wrap text-sm text-slate-800">{e.message}</p>
+                </article>
+              );
+            })}
           </div>
-        </section>
-
-        <section className="space-y-3 rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm">
-          <h2 className="text-xl font-semibold text-slate-900">Praise signals</h2>
-          {summary.praiseSignals.length === 0 ? <p className="text-sm text-slate-700">No positive signals yet.</p> : null}
-          <ul className="list-disc pl-5 text-sm text-slate-800">
-            {summary.praiseSignals.slice(0, 10).map((p) => (
-              <li key={p}>{p}</li>
-            ))}
-          </ul>
-        </section>
-
-        <section className="space-y-3 rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm">
-          <h2 className="text-xl font-semibold text-slate-900">Repeated issues</h2>
-          {summary.repeatedIssues.length === 0 ? <p className="text-sm text-slate-700">No issues logged.</p> : null}
-          <ul className="list-disc pl-5 text-sm text-slate-800">
-            {summary.repeatedIssues.slice(0, 10).map((p) => (
-              <li key={p.theme}>{p.theme}: {p.count}</li>
-            ))}
-          </ul>
-        </section>
-
-        <section className="space-y-3 rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm">
-          <h2 className="text-xl font-semibold text-slate-900">Verbatim (filtered)</h2>
-          {filteredEntries.length === 0 ? <p className="text-sm text-slate-700">No feedback yet.</p> : null}
-          <ul className="space-y-2 text-sm text-slate-800">
-            {filteredEntries.map((e) => (
-              <li key={e.id} className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-                <div className="text-xs text-slate-600">
-                  {new Date(e.createdAt).toLocaleString()} · {e.heardFrom} {e.name ? `· ${e.name}` : ""}
-                  {e.rateClarity ? ` · clarity ${e.rateClarity}` : ""} {e.rateUsefulness ? ` · useful ${e.rateUsefulness}` : ""}
-                </div>
-                <div className="mt-1 text-slate-900">{e.message}</div>
-              </li>
-            ))}
-          </ul>
-        </section>
+        )}
+          </>
+        )}
       </div>
     </NotesLayout>
   );

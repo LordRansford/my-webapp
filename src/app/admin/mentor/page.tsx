@@ -1,11 +1,18 @@
 import { notFound } from "next/navigation";
 import NotesLayout from "@/components/notes/Layout";
 import { getUsage, resetUsage } from "@/lib/mentor/usage";
+import { getAdminProgressStats } from "@/services/progressService";
 
 export default async function AdminMentorPage() {
   const enabled = process.env.MENTOR_ADMIN_ENABLED === "true";
   if (!enabled) notFound();
   const usage = getUsage();
+  let progressStats: any = null;
+  try {
+    progressStats = await getAdminProgressStats();
+  } catch {
+    progressStats = null;
+  }
 
   async function reset() {
     "use server";
@@ -38,6 +45,21 @@ export default async function AdminMentorPage() {
               Reset usage
             </button>
           </form>
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm">
+          <p className="text-sm font-semibold text-slate-900">Identity + progress (read-only)</p>
+          {progressStats ? (
+            <div className="mt-2 space-y-1 text-sm text-slate-700">
+              <p>Total users: {progressStats.totalUsers}</p>
+              <p>Active users (last 7 days): {progressStats.activeUsersLast7Days}</p>
+              <p>Total progress records: {progressStats.totalProgressRecords}</p>
+            </div>
+          ) : (
+            <p className="mt-2 text-sm text-slate-700">
+              Stats unavailable (database not initialised in this environment).
+            </p>
+          )}
         </div>
       </div>
     </NotesLayout>

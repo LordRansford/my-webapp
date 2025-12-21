@@ -70,6 +70,10 @@ export default function PrivacyPage() {
             account to be removed. If you sign up for a newsletter you can unsubscribe at any time using the link in the
             email.
           </p>
+          <p>
+            <strong>Deletion:</strong> if you have an account, you can request deletion from the Account page. This removes your
+            stored identity and progress records.
+          </p>
         </section>
 
         <section className="section">

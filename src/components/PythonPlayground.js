@@ -17,6 +17,7 @@ print("Confidentiality check: input never leaves the browser.")`;
 
 export default function PythonPlayground() {
   const [ready, setReady] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     let isMounted = true;
@@ -26,8 +27,10 @@ export default function PythonPlayground() {
         if (isMounted) setReady(true);
       })
       .catch((error) => {
-        console.error("Unable to load Runno runtime", error);
-        if (isMounted) setReady(false);
+        if (isMounted) {
+          setReady(false);
+          setError("Python runtime could not load in this browser session. Please refresh and try again.");
+        }
       });
 
     return () => {
@@ -50,7 +53,9 @@ export default function PythonPlayground() {
           {defaultSnippet}
         </runno-run>
       ) : (
-        <p className="muted">Loading the Python runtime&hellip;</p>
+        <p className="muted" role={error ? "alert" : "status"} aria-live="polite">
+          {error ? error : "Loading the Python runtime…"}
+        </p>
       )}
     </section>
   );

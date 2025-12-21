@@ -21,6 +21,7 @@ import CapabilityMapper from "@/components/notes/tools/digitalisation/intermedia
 import PortfolioPrioritiser from "@/components/notes/tools/digitalisation/intermediate/PortfolioPrioritiser"
 import PolicyImpactSimulator from "@/components/notes/tools/digitalisation/intermediate/PolicyImpactSimulator"
 import DigitalisationDashboard from "@/components/dashboards/DigitalisationDashboard"
+import DashboardFrame from "@/components/dashboards/DashboardFrame"
 
 <ProgressBar mode="scroll" />
 
@@ -164,7 +165,9 @@ Formal: A time based view of initiatives, dependencies, and outcomes needed to d
 
 ## Practice and reflection
 
-<DigitalisationDashboard />
+<DashboardFrame title="Digitalisation dashboard">
+  <DigitalisationDashboard />
+</DashboardFrame>
 
 This dashboard gives a feel for the signals a digital leader might track: adoption of digital channels, use of core platforms, progress against roadmap milestones, and basic quality indicators. Strategy and measurement belong together.
 

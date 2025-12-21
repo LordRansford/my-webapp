@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { LazyMotion, domAnimation, m, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
@@ -10,6 +10,33 @@ import { resolveTrackId } from "@/lib/cpd";
 import { motionPresets, reducedMotionProps } from "@/lib/motion";
 import SaveProgressPrompt from "@/components/auth/SaveProgressPrompt";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { emitInternalToolEvent } from "@/lib/analytics/internalClient";
+
+class ToolErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch() {
+    // No console logging of tool contents.
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="rounded-xl border border-slate-100 bg-slate-50/80 p-4 w-full">
+          <p className="m-0 text-sm text-slate-700">This tool could not load. Please refresh the page.</p>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 export default function ToolCard({
   id,
@@ -23,6 +50,18 @@ export default function ToolCard({
   sectionId,
   cpdMinutesOnUse,
 }) {
+  const slugify = (text = "") =>
+    String(text)
+      .toLowerCase()
+      .replace(/&[#\w]+;?/g, "")
+      .replace(/[^\w\s-]/g, "")
+      .trim()
+      .replace(/\s+/g, "-")
+      .slice(0, 60);
+
+  // Guarantee a stable id for analytics/CPD notes even when MDX forgot to pass one.
+  const resolvedId = id || slugify(title) || undefined;
+
   const { updateSection, isAuthed } = useCPD();
   const { track } = useAnalytics();
   const [hasAwarded, setHasAwarded] = useState(false);
@@ -36,7 +75,7 @@ export default function ToolCard({
       setShowSavePrompt(true);
       return;
     }
-    if (id) track({ type: "tool_used", toolId: id, trackId: trackId || undefined, levelId, sectionId });
+    if (resolvedId) track({ type: "tool_used", toolId: resolvedId, trackId: trackId || undefined, levelId, sectionId });
     if (!trackId || !levelId || !sectionId) return;
     if (hasAwarded) return;
     updateSection({
@@ -44,13 +83,22 @@ export default function ToolCard({
       levelId,
       sectionId,
       minutesDelta: cpdMinutesOnUse ?? 5,
-      note: id ? `Used tool ${id}` : `Used tool ${title}`,
+      note: resolvedId ? `Used tool ${resolvedId}` : `Used tool ${title}`,
     });
     setHasAwarded(true);
   };
 
   const showCta = Boolean(href) && !children;
   const ResolvedIcon = Icon || ArrowRight;
+  const showPlaceholder = !children && !href;
+  const viewedRef = useRef(false);
+
+  useEffect(() => {
+    if (viewedRef.current) return;
+    if (!resolvedId) return;
+    viewedRef.current = true;
+    emitInternalToolEvent({ type: "tool_viewed", toolId: resolvedId });
+  }, [resolvedId]);
 
   const Inner = (
     <>
@@ -77,7 +125,16 @@ export default function ToolCard({
       </header>
       {children ? (
         <div className="rounded-xl border border-slate-100 bg-slate-50/80 p-4 transition-colors duration-200 w-full overflow-x-auto">
-          {children}
+          <ToolErrorBoundary>{children}</ToolErrorBoundary>
+        </div>
+      ) : showPlaceholder ? (
+        <div className="rounded-xl border border-slate-100 bg-slate-50/80 p-4 w-full">
+          <p className="m-0 text-sm text-slate-700">
+            Tool coming online. This card is intentionally visible so the section is not a blank gap.
+          </p>
+          <p className="mt-2 text-xs text-slate-500">
+            {resolvedId ? `Tool id: ${resolvedId}` : "Tool id not set."}
+          </p>
         </div>
       ) : null}
     </>

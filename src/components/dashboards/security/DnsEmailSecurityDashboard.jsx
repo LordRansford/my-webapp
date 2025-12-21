@@ -1,44 +1,36 @@
 "use client";
 
 import { useState } from "react";
+import { useToolRunner } from "@/hooks/useToolRunner";
+import { isProbablyDomain, safeTrim } from "@/lib/tooling/validation";
+import { postJson } from "@/lib/tooling/http";
 
 export default function DnsEmailSecurityDashboard() {
   const [domain, setDomain] = useState("");
   const [result, setResult] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const runner = useToolRunner({ minIntervalMs: 800, toolId: "dns-email-security-dashboard" });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
     setResult(null);
 
-    const trimmed = domain.trim();
-    if (!trimmed || !trimmed.includes(".")) {
-      setError("Please enter a valid domain such as example.com");
+    const trimmed = safeTrim(domain, 253).toLowerCase();
+    if (!isProbablyDomain(trimmed)) {
+      setError("This input does not look right. Try a domain like example.com");
       return;
     }
 
-    setLoading(true);
-    try {
-      const response = await fetch("/api/dashboards/dns-email-security", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ domain: trimmed }),
-      });
+    runner.resetError();
+    const data = await runner.run(async (signal) => {
+      const res = await postJson("/api/dashboards/dns-email-security", { domain: trimmed }, { signal });
+      if (!res.ok) throw new Error("Request failed");
+      return res.data;
+    });
 
-      if (!response.ok) {
-        throw new Error("Request failed");
-      }
-
-      const data = await response.json();
-      setResult(data);
-    } catch (err) {
-      console.error(err);
-      setError("There was a problem retrieving DNS information. Please try again later.");
-    } finally {
-      setLoading(false);
-    }
+    if (data) setResult(data);
+    if (!data && runner.errorMessage) setError(runner.errorMessage);
   };
 
   return (
@@ -60,18 +52,20 @@ export default function DnsEmailSecurityDashboard() {
             }}
             value={domain}
             onChange={(event) => setDomain(event.target.value)}
+            maxLength={253}
+            aria-invalid={Boolean(error) || Boolean(runner.errorMessage)}
           />
         </div>
         <button
           type="submit"
-          disabled={loading}
+          disabled={runner.loading}
           className="inline-flex items-center justify-center rounded-xl bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:bg-slate-300"
         >
-          {loading ? "Checking..." : "Check records"}
+          {runner.loading ? "Checking..." : "Check records"}
         </button>
       </form>
 
-      {error && (
+      {(error || runner.errorMessage) && (
         <div 
           className="rounded-xl border border-rose-200 bg-rose-50/80 px-4 py-3"
           style={{
@@ -83,12 +77,12 @@ export default function DnsEmailSecurityDashboard() {
           role="alert"
         >
           <p className="text-sm text-rose-700 font-medium" aria-live="polite">
-            {error}
+            {error || runner.errorMessage}
           </p>
         </div>
       )}
 
-      {!result && !loading && !error && (
+      {!result && !runner.loading && !(error || runner.errorMessage) && (
         <p className="text-xs text-slate-500">This uses only public DNS records. It does not send any mail or perform intrusive scanning.</p>
       )}
 

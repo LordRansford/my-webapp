@@ -27,6 +27,33 @@ import { DnsQuickLensTool } from "@/components/tools/cyber/DnsQuickLensTool";
 import { JwtExplainerTool } from "@/components/tools/cyber/JwtExplainerTool";
 import { PasswordStrengthTool } from "@/components/tools/cyber/PasswordStrengthTool";
 import { EverydayChecklistTool } from "@/components/tools/cyber/EverydayChecklistTool";
+import BitChangeTool from "@/components/notes/tools/cybersecurity/ch1/BitChangeTool";
+import CIAClassifierTool from "@/components/notes/tools/cybersecurity/ch1/CIAClassifierTool";
+import MetadataLeakTool from "@/components/notes/tools/cybersecurity/ch1/MetadataLeakTool";
+import PacketJourneyTool from "@/components/notes/tools/cybersecurity/ch1/PacketJourneyTool";
+import PasswordEntropyTool from "@/components/notes/tools/cybersecurity/ch1/PasswordEntropyTool";
+import RiskDial from "@/components/notes/tools/cybersecurity/ch1/RiskDial";
+import AttackChainTool from "@/components/notes/tools/cybersecurity/ch3/AttackChainTool";
+import BackupRansomwareRecoveryTool from "@/components/notes/tools/cybersecurity/ch3/BackupRansomwareRecoveryTool";
+import ControlMappingTool from "@/components/notes/tools/cybersecurity/ch3/ControlMappingTool";
+import IncidentTriageTool from "@/components/notes/tools/cybersecurity/ch3/IncidentTriageTool";
+import LogStoryTool from "@/components/notes/tools/cybersecurity/ch3/LogStoryTool";
+import ThreatModelCanvasTool from "@/components/notes/tools/cybersecurity/ch3/ThreatModelCanvasTool";
+import VulnerabilityLifecycleTool from "@/components/notes/tools/cybersecurity/ch3/VulnerabilityLifecycleTool";
+import ZeroTrustPolicyTool from "@/components/notes/tools/cybersecurity/ch3/ZeroTrustPolicyTool";
+import ControlSelectionTool from "@/components/notes/tools/cybersecurity/practitioner/ControlSelectionTool";
+import EvidenceChecklistTool from "@/components/notes/tools/cybersecurity/practitioner/EvidenceChecklistTool";
+import FrameworkMappingTool from "@/components/notes/tools/cybersecurity/advanced/FrameworkMappingTool";
+import SecurityCareerPlannerTool from "@/components/notes/tools/cybersecurity/advanced/SecurityCareerPlannerTool";
+import AdvancedCryptoPlayground from "@/components/dashboards/cybersecurity/advanced/AdvancedCryptoPlayground";
+import DetectionRuleTuner from "@/components/dashboards/cybersecurity/advanced/DetectionRuleTuner";
+import PkiChainVisualizer from "@/components/dashboards/cybersecurity/advanced/PkiChainVisualizer";
+import SecureDesignTradeoffLab from "@/components/dashboards/cybersecurity/advanced/SecureDesignTradeoffLab";
+import DetectionCoverageTool from "@/components/notes/tools/ai/advanced/DetectionCoverageTool";
+import IncidentTimelineTool from "@/components/notes/tools/ai/advanced/IncidentTimelineTool";
+import SupplyChainRiskTool from "@/components/notes/tools/ai/advanced/SupplyChainRiskTool";
+import TrustGraphTool from "@/components/notes/tools/ai/advanced/TrustGraphTool";
+import ZeroTrustPlannerTool from "@/components/notes/tools/ai/advanced/ZeroTrustPlannerTool";
 import { PromptClarityLab } from "@/components/tools/ai/PromptClarityLab";
 import { MetricsCalculatorLab } from "@/components/tools/ai/MetricsCalculatorLab";
 import { DatasetSplitLab } from "@/components/tools/ai/DatasetSplitLab";
@@ -88,9 +115,14 @@ import OperatingModelDesignerGame from "@/components/games/digitalisation/Operat
 import MaturityPathGame from "@/components/games/digitalisation/MaturityPathGame";
 import DigiQuickFireQuizGame from "@/components/games/digitalisation/DigiQuickFireQuizGame";
 import ArchitectureCanvas from "@/components/notes/tools/architecture/beginner/ArchitectureCanvas";
+import ArchitectureDecisionExplorerTool from "@/components/notes/tools/architecture/beginner/ArchitectureDecisionExplorerTool";
+import QualityAttributeTradeoffSandboxTool from "@/components/notes/tools/architecture/beginner/QualityAttributeTradeoffSandboxTool";
+import ComponentBoundaryMapperTool from "@/components/notes/tools/architecture/beginner/ComponentBoundaryMapperTool";
 import RoleMapTool from "@/components/notes/tools/architecture/beginner/RoleMapTool";
 import DesignKataTool from "@/components/notes/tools/architecture/beginner/DesignKataTool";
 import DeploySafetySandbox from "@/components/notes/tools/architecture/beginner/DeploySafetySandbox";
+import SystemFailureWalkthroughTool from "@/components/notes/tools/architecture/beginner/SystemFailureWalkthroughTool";
+import RealitySurvivalDesignTool from "@/components/notes/tools/architecture/beginner/RealitySurvivalDesignTool";
 import ArchitectureStyleExplorer from "@/components/notes/tools/architecture/intermediate/ArchitectureStyleExplorer";
 import IntegrationFlowLab from "@/components/notes/tools/architecture/intermediate/IntegrationFlowLab";
 import QualityTradeoffExplorer from "@/components/notes/tools/architecture/intermediate/QualityTradeoffExplorer";
@@ -174,6 +206,33 @@ const mdxComponents = {
   JwtExplainerTool,
   PasswordStrengthTool,
   EverydayChecklistTool,
+  BitChangeTool,
+  CIAClassifierTool,
+  MetadataLeakTool,
+  PacketJourneyTool,
+  PasswordEntropyTool,
+  RiskDial,
+  AttackChainTool,
+  BackupRansomwareRecoveryTool,
+  ControlMappingTool,
+  IncidentTriageTool,
+  LogStoryTool,
+  ThreatModelCanvasTool,
+  VulnerabilityLifecycleTool,
+  ZeroTrustPolicyTool,
+  ControlSelectionTool,
+  EvidenceChecklistTool,
+  FrameworkMappingTool,
+  SecurityCareerPlannerTool,
+  AdvancedCryptoPlayground,
+  DetectionRuleTuner,
+  PkiChainVisualizer,
+  SecureDesignTradeoffLab,
+  DetectionCoverageTool,
+  IncidentTimelineTool,
+  SupplyChainRiskTool,
+  TrustGraphTool,
+  ZeroTrustPlannerTool,
   PromptClarityLab,
   MetricsCalculatorLab,
   DatasetSplitLab,
@@ -235,9 +294,14 @@ const mdxComponents = {
   MaturityPathGame,
   DigiQuickFireQuizGame,
   ArchitectureCanvas,
+  ArchitectureDecisionExplorerTool,
+  QualityAttributeTradeoffSandboxTool,
+  ComponentBoundaryMapperTool,
   RoleMapTool,
   DesignKataTool,
   DeploySafetySandbox,
+  SystemFailureWalkthroughTool,
+  RealitySurvivalDesignTool,
   ArchitectureStyleExplorer,
   IntegrationFlowLab,
   QualityTradeoffExplorer,

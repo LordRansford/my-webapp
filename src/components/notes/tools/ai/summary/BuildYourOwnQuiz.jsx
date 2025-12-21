@@ -14,6 +14,7 @@ export default function BuildYourOwnQuiz() {
   const [answer, setAnswer] = useState("");
   const [cards, setCards] = useState([]);
   const [showAnswers, setShowAnswers] = useState({});
+  const [loadError, setLoadError] = useState("");
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -22,7 +23,8 @@ export default function BuildYourOwnQuiz() {
       try {
         setCards(JSON.parse(saved));
       } catch (error) {
-        console.error("Failed to parse saved quiz", error);
+        setLoadError("Saved quiz data could not be loaded. You can add new cards and they will save normally.");
+        setCards([]);
       }
     }
   }, []);
@@ -49,6 +51,11 @@ export default function BuildYourOwnQuiz() {
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm">
+      {loadError ? (
+        <div className="mb-3 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-800" role="alert" aria-live="polite">
+          {loadError}
+        </div>
+      ) : null}
       <div className="flex items-center gap-3">
         <span className="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-blue-50 text-blue-700 ring-1 ring-blue-100">
           <Save className="h-4 w-4" aria-hidden="true" />

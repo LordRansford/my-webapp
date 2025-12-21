@@ -20,7 +20,7 @@ const pages = [
   {
     slug: "dashboards",
     title: "Further practice",
-    summary: "Dashboards and labs to make latency, availability, and architecture trade-offs concrete.",
+    summary: "Further practice and labs to make latency, availability, and architecture trade-offs concrete.",
   },
   {
     slug: "summary",

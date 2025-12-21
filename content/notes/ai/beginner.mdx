@@ -24,13 +24,11 @@ import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
 import DiagramBlock from "@/components/DiagramBlock"
 import { aiSectionManifest } from "@/lib/aiSections"
-import DataNoiseTool from "@/components/notes/tools/ai/beginner/DataNoiseTool"
-import FeatureLeakageTool from "@/components/notes/tools/ai/beginner/FeatureLeakageTool"
-import ThresholdPlaygroundTool from "@/components/notes/tools/ai/beginner/ThresholdPlaygroundTool"
 import ClusteringIntuitionTool from "@/components/notes/tools/ai/beginner/ClusteringIntuitionTool"
 import ResponsibleAIPlannerTool from "@/components/notes/tools/ai/beginner/ResponsibleAIPlannerTool"
 import AIExamplesExplorerTool from "@/components/notes/tools/ai/beginner/AIExamplesExplorerTool"
 import VectorVisualiserTool from "@/components/notes/tools/ai/beginner/VectorVisualiserTool"
+import TinyClassifierLabTool from "@/components/notes/tools/ai/beginner/TinyClassifierLabTool"
 
 # AI Foundations
 
@@ -52,27 +50,23 @@ AI is a way of learning patterns from data so a system can make predictions, ran
 
 When people say AI, they often mean a system that takes input, applies a learned pattern, and produces an output. The learned pattern is the <GlossaryTip term="model">A function learned from data that maps inputs to outputs.</GlossaryTip>. The act of learning that pattern is <GlossaryTip term="training">The process of fitting a model to data so it can learn patterns.</GlossaryTip>. Using the trained model to produce results is <GlossaryTip term="inference">Running a trained model to produce predictions on new inputs.</GlossaryTip>.
 
+The difference between training and inference matters because the risks are different. Training is where you bake in assumptions from the <GlossaryTip term="dataset">A collection of examples used to train and evaluate a model.</GlossaryTip>. Inference is where the model meets reality. If reality changes, the model can behave badly even if training looked perfect.
+
+AI is powerful because it can learn patterns too complex to write as hand made rules. It is also fragile because it can learn the wrong pattern. A model can look clever while failing quietly. The skill is to ask what it is really using as evidence.
+
 AI matters now because systems touch decisions that used to be manual. Hiring screens, fraud checks, support routing, and medical triage all use models to move faster. That speed is useful, but it can also amplify mistakes at scale. This is why foundations matter. I need to know what the model is doing before I trust it.
 
-<DiagramBlock
-  title="Simple AI flow"
-  subtitle="Input goes into a model, output comes out."
->
-  <div className="text-xs sm:text-sm leading-5 space-y-2">
-    <div>Input data -> Model -> Output</div>
-    <div>Input: text, images, sensor readings, clicks</div>
-    <div>Output: label, score, ranked list, or alert</div>
-  </div>
-</DiagramBlock>
+My calm view on hype is this. AI is not magic. It is applied statistics plus engineering. It will keep changing how work is done, and it will keep producing failures that look silly in hindsight. If you learn the basics, you can use it well without believing the marketing.
 
 <DiagramBlock
-  title="Rules based vs model based"
-  subtitle="Rules are explicit, models are learned from examples."
+  title="Rules based software vs model based systems"
+  subtitle="Rules are explicit. Models are learned from data."
 >
   <div className="text-xs sm:text-sm leading-5 space-y-2">
     <div>Rules: if condition then action</div>
-    <div>Model: learn the pattern from data</div>
-    <div>Rules are easy to explain, models can adapt but need monitoring</div>
+    <div>Model: input -> model -> output</div>
+    <div>Training builds the model. Inference uses it.</div>
+    <div>Rules are easier to explain. Models need monitoring and care.</div>
   </div>
 </DiagramBlock>
 
@@ -98,8 +92,15 @@ AI matters now because systems touch decisions that used to be manual. Hiring sc
     { q: "Why does AI matter now", a: "It scales decisions that used to be manual and can amplify impact." },
     { q: "What is one risk of AI at scale", a: "Mistakes spread faster and affect more people." },
     { q: "What does AI output usually look like", a: "A label, score, or ranked list." },
+    { q: "What is generalisation", a: "When a model performs well on new data, not just the training data." },
   ]}
 />
+
+### After this section you should be able to:
+
+- Explain what a model is and why it exists in a system
+- Explain what breaks when training data and real inputs diverge
+- Explain the trade off between automation speed and human judgement
 
 ---
 
@@ -107,29 +108,41 @@ AI matters now because systems touch decisions that used to be manual. Hiring sc
 
 <SectionProgressToggle courseId="ai" levelId="foundations" sectionId="ai-foundations-data-and-representation" />
 
-AI systems learn from data, but data is not magic. Data is measurement plus context, and it often contains noise and bias. I start by naming the <GlossaryTip term="feature">An input attribute used by a model.</GlossaryTip> and the <GlossaryTip term="label">The target value the model should predict.</GlossaryTip>. Then I check if the data actually represents the world I care about.
+In AI, the word <GlossaryTip term="data">
+Data is recorded observations about the world. It is what the model learns from, not what we wish was true.
+</GlossaryTip> sounds fancy, but it is usually boring. It is clicks, purchases, support tickets, photos, sensor readings, and text. Data always comes with context. Where did it come from. Who produced it. What is missing. What was measured badly. If you ignore that, you build a confident model on shaky ground.
 
-To make data usable, I clean it, choose features, and turn it into numbers. A numeric representation is how a model sees the world. For text and images, this often uses an <GlossaryTip term="embedding">A numeric vector that represents an item while keeping some of its meaning.</GlossaryTip>. The goal is to keep signal and reduce noise without losing the point of the task.
+Some data is structured. That means it fits neatly into rows and columns. Think customer age, number of failed logins, or time since last password reset. Other data is unstructured. That means it looks like raw text, images, audio, or long logs. It still has structure, but you have to extract it.
 
-<DiagramBlock
-  title="From raw data to vectors"
-  subtitle="Data becomes features, then numbers."
->
+To train a model, we usually separate inputs from the answer we want. A <GlossaryTip term="feature">
+A feature is a measurable piece of information about something. For example the length of an email or the number of failed login attempts.
+</GlossaryTip> is an input signal. A <GlossaryTip term="label">
+A label is the correct answer for training. For example spam or not spam, or refund needed or not.
+</GlossaryTip> is the outcome we want the model to learn to predict.
+
+Models cannot understand raw text or images the way humans do. They do not see meaning. They see numbers. If you give a model a photo, it will be turned into numbers first. If you give it an email, it will be turned into numbers first. The model learns patterns in those numbers.
+
+The simplest numeric form is a <GlossaryTip term="vector">
+A vector is a list of numbers that represents an input. The numbers are chosen so the model can work with them.
+</GlossaryTip>. For text, we first break it into a <GlossaryTip term="token">
+A token is a small chunk of text used as the unit for language models. It might be a word or part of a word.
+</GlossaryTip>. Then we map those tokens into an <GlossaryTip term="embedding">
+An embedding is a numeric vector that tries to place similar items near each other in number space.
+</GlossaryTip>.
+
+The intuition is simple. If two pieces of text are used in similar ways, they often end up with similar numbers. A model can then treat closeness as a hint that the meaning is related. It is not perfect. It is a useful shortcut.
+
+Bad data creates bad models. If the labels are wrong, the model learns the wrong lesson. If the data is missing whole groups of people, the model will fail on those groups. If the data reflects old behaviour, the model will struggle when the world changes. This is why data work is not busywork. It is the foundation.
+
+Splitting data matters because we want honest feedback. Training data is what the model learns from. Validation data is what you use to make choices during building. Test data is the final check you keep separate until the end. If you test on the same data you trained on, you are grading your own homework with the answer sheet open.
+
+<DiagramBlock title="From raw data to numbers a model can learn from" subtitle="Turn messy inputs into numeric representation.">
   <div className="text-xs sm:text-sm leading-5 space-y-2">
-    <div>Raw data -> Cleaned data -> Features -> Vector</div>
-    <div>Example: Email text -> tokens -> numeric vector</div>
-    <div>Example: Sensor readings -> derived features -> model input</div>
-  </div>
-</DiagramBlock>
-
-<DiagramBlock
-  title="Tiny numeric table"
-  subtitle="A simple view of features and labels."
->
-  <div className="text-xs sm:text-sm leading-5 space-y-1">
-    <div>Feature: income = 42</div>
-    <div>Feature: missed payments = 1</div>
-    <div>Label: repay on time = yes</div>
+    <div>Raw text or images</div>
+    <div>Cleaning and preparation</div>
+    <div>Features chosen from the data</div>
+    <div>Numeric representation as vectors and embeddings</div>
+    <div>Model input</div>
   </div>
 </DiagramBlock>
 
@@ -141,22 +154,6 @@ To make data usable, I clean it, choose features, and turn it into numbers. A nu
   <VectorVisualiserTool />
 </ToolCard>
 
-<ToolCard
-  id="signal-noise"
-  title="Signal and noise intuition"
-  description="Adjust signal and noise to feel how quickly data quality changes."
->
-  <DataNoiseTool />
-</ToolCard>
-
-<ToolCard
-  id="feature-leakage"
-  title="Feature leakage check"
-  description="Toggle features and see if you are accidentally handing the model the answer."
->
-  <FeatureLeakageTool />
-</ToolCard>
-
 <QuizBlock
   id="ai-foundations-data-quiz"
   courseId="ai"
@@ -164,16 +161,24 @@ To make data usable, I clean it, choose features, and turn it into numbers. A nu
   sectionId="ai-foundations-data-and-representation"
   title="Quick check: data and representation"
   questions={[
-    { q: "What is a feature", a: "An input attribute used by a model." },
-    { q: "What is a label", a: "The target value the model should learn to predict." },
-    { q: "Why do models need numbers", a: "Models operate on numeric vectors, not raw text or images." },
-    { q: "What is an embedding", a: "A numeric vector that represents an item while keeping some meaning." },
-    { q: "Why does data context matter", a: "It explains what the measurements mean and how they were collected." },
-    { q: "What is feature leakage", a: "When a feature reveals the answer and inflates performance." },
-    { q: "What happens if noise dominates", a: "The model learns unstable patterns and fails in production." },
-    { q: "Why is bias different from noise", a: "Bias is systematic skew, not random variation." },
+    { q: "In AI, what does data mean", a: "Recorded observations about the world that the model learns from." },
+    { q: "What is the difference between structured and unstructured data", a: "Structured fits rows and columns, unstructured is text, images, audio, or logs that need processing." },
+    { q: "What is a feature", a: "A measurable input signal used by the model." },
+    { q: "What is a label", a: "The correct answer used for training." },
+    { q: "Why can models not understand raw text or images directly", a: "They operate on numbers, so inputs must be turned into numeric form." },
+    { q: "What is a vector in this context", a: "A list of numbers that represents an input." },
+    { q: "What is an embedding for", a: "To represent items as numbers so similar items end up near each other." },
+    { q: "Why do similar things often end up with similar numbers", a: "The representation is trained to capture patterns of use and meaning as closeness." },
+    { q: "Why do we split data into training, validation, and test sets", a: "To learn, tune choices, and then do an honest final check without cheating." },
+    { q: "Name one way bad data creates bad models", a: "Wrong labels, missing groups, or outdated data lead to confident but wrong behaviour." },
   ]}
 />
+
+### After this section you should be able to:
+
+- Explain why representation choices change what a model can learn
+- Explain what breaks when labels, groups, or context are missing from data
+- Explain the trade off between simple features and richer embeddings
 
 ---
 
@@ -181,35 +186,59 @@ To make data usable, I clean it, choose features, and turn it into numbers. A nu
 
 <SectionProgressToggle courseId="ai" levelId="foundations" sectionId="ai-foundations-learning-paradigms" />
 
-Supervised learning uses examples with labels. The model learns from pairs of input and answer. Unsupervised learning has no labels, so the model searches for structure and patterns without a known target. Both are useful but they answer different questions.
+When we say a model learns, we mean it changes its internal settings so it can make better guesses. It is not learning like a person learns. It is closer to practice. You show examples, it adjusts, and it gets less wrong over time.
 
-In supervised learning, the model can do <GlossaryTip term="classification">Predicting a category or label.</GlossaryTip> or <GlossaryTip term="regression">Predicting a numeric value.</GlossaryTip>. The decision often depends on a threshold, which is a business choice about how much risk to accept.
+<GlossaryTip term="training data">
+Training data is the set of examples you use to teach the model. It is the practice material, not the final exam.
+</GlossaryTip>
 
-<DiagramBlock
-  title="Supervised vs unsupervised"
-  subtitle="Labels change what the model can learn."
->
+<GlossaryTip term="supervised learning">
+Supervised learning is when a model learns using examples that already have the correct answer attached.
+</GlossaryTip>
+
+In supervised learning, you give the model an input and an answer. The model tries to guess the answer, then it is corrected. Over many examples, it learns a pattern that can generalise to new cases.
+
+Email spam filtering is a classic supervised example. You have emails, and you have labels like spam and not spam. Image classification is another. You have images, and you have labels like cat, dog, or receipt. House prices are supervised too, but the answer is a number. The same pattern applies. Inputs in, answer attached, model learns to predict.
+
+There are two common supervised shapes.
+
+<GlossaryTip term="classification">
+Classification is predicting a category. For example spam or not spam.
+</GlossaryTip>
+
+<GlossaryTip term="regression">
+Regression is predicting a number. For example a house price.
+</GlossaryTip>
+
+The difference matters because the mistakes feel different. A wrong category can block a real email. A wrong price can cost real money.
+
+<GlossaryTip term="unsupervised learning">
+Unsupervised learning is when a model looks for structure in data without being told the correct answers.
+</GlossaryTip>
+
+Instead of asking "what is the right label", you ask "what patterns exist". This is useful when labels are missing, expensive, or not even well defined.
+
+Grouping customers by behaviour is a common unsupervised example. You might discover that one group buys weekly and another group buys once a year. Topic discovery in documents is another. You might find clusters of themes in support tickets without anyone labelling them by hand. Anomaly detection is a third. You look for unusual behaviour that might signal fraud or intrusion.
+
+Unsupervised learning is harder to evaluate because there is no single correct answer waiting in a spreadsheet. If you change your settings, the groupings can change. Sometimes both results are reasonable. You have to judge usefulness, not just score points.
+
+Here are a few beginner misconceptions to avoid. First, more data is not always better data. If it is biased or messy, you scale the problem. Second, unsupervised learning is not a free shortcut. It still needs careful interpretation. Third, a model learning a pattern does not mean it understands a reason. It means it found a shortcut that worked on the training data.
+
+<DiagramBlock title="Two ways models learn from data" subtitle="Supervised has answers. Unsupervised searches for structure.">
   <div className="text-xs sm:text-sm leading-5 space-y-2">
-    <div>Supervised: inputs + labels -> predict known outcome</div>
-    <div>Unsupervised: inputs only -> group or compress</div>
-    <div>Supervised answers a question, unsupervised explores structure</div>
+    <div>Supervised: inputs + labels -> predict a known outcome</div>
+    <div>Unsupervised: inputs only -> group, compress, or flag unusual patterns</div>
+    <div>Supervised output: category or number</div>
+    <div>Unsupervised output: clusters, topics, or anomaly scores</div>
   </div>
 </DiagramBlock>
 
 <ToolCard
   id="tiny-classifier-lab"
   title="Train a tiny classifier"
-  description="Upload or pick a tiny toy dataset and watch a small model learn to separate two classes, with a simple chart of how its guesses improve."
+  description="Adjust how much training data you have and how noisy it is. Notice how it changes expected accuracy and stability."
 >
-  <ThresholdPlaygroundTool />
-</ToolCard>
-
-<ToolCard
-  id="clustering-intuition"
-  title="Clustering intuition"
-  description="Change the number of clusters and see how the same data is grouped."
->
-  <ClusteringIntuitionTool />
+  <TinyClassifierLabTool />
 </ToolCard>
 
 <QuizBlock
@@ -217,17 +246,26 @@ In supervised learning, the model can do <GlossaryTip term="classification">Pred
   courseId="ai"
   levelId="foundations"
   sectionId="ai-foundations-learning-paradigms"
-  title="Quick check: learning paradigms"
+  title="Quick check: supervised and unsupervised learning"
   questions={[
-    { q: "What makes learning supervised", a: "The model trains on examples with labels." },
-    { q: "What makes learning unsupervised", a: "The model searches for patterns without labels." },
-    { q: "What is classification", a: "Predicting a category or class." },
-    { q: "What is regression", a: "Predicting a numeric value." },
-    { q: "Why are thresholds important", a: "They control trade offs between false positives and false negatives." },
-    { q: "Give an example of unsupervised learning", a: "Grouping customers by behavior without labels." },
-    { q: "Why is unsupervised output subjective", a: "Choices like the number of clusters change the result." },
+    { q: "In plain language, what does learning mean for a model", a: "It adjusts its internal settings so it makes better guesses from examples." },
+    { q: "What is training data", a: "The examples used to teach the model, not the final test." },
+    { q: "What makes learning supervised", a: "Examples include the correct answer the model should learn to predict." },
+    { q: "What makes learning unsupervised", a: "Examples have no answers, so the model looks for patterns or structure." },
+    { q: "Give one supervised example", a: "Spam filtering, image classification, or house price prediction." },
+    { q: "Give one unsupervised example", a: "Grouping customers, topic discovery, or anomaly detection." },
+    { q: "What is classification", a: "Predicting a category like spam or not spam." },
+    { q: "What is regression", a: "Predicting a number like a house price." },
+    { q: "Why is unsupervised learning harder to evaluate", a: "There is no single correct answer, so usefulness is judged by interpretation and context." },
+    { q: "Name one common beginner misconception", a: "Thinking more data automatically means better results, or that unsupervised learning removes the need for judgement." },
   ]}
 />
+
+### After this section you should be able to:
+
+- Explain when supervised learning is appropriate and what it optimises for
+- Explain when unsupervised learning is useful and why evaluation is harder
+- Explain what breaks when people treat model outputs as understanding
 
 ---
 
@@ -235,25 +273,66 @@ In supervised learning, the model can do <GlossaryTip term="classification">Pred
 
 <SectionProgressToggle courseId="ai" levelId="foundations" sectionId="ai-foundations-responsible-ai-basics" />
 
-Responsible AI is about preventing harm and staying accountable. Models can be fast but wrong. They can also encode unfairness without anyone noticing. I watch for <GlossaryTip term="bias">Systematic skew that causes unfair or incorrect outcomes.</GlossaryTip> and for <GlossaryTip term="drift">Changes in data or behavior that reduce model accuracy over time.</GlossaryTip>. I also pay attention to privacy, transparency, and the ability to explain why a decision was made.
+AI systems can cause harm even when everybody is trying to do the right thing. The harm is not always dramatic. Sometimes it is quiet and personal. Someone is incorrectly flagged as suspicious. Someone does not get offered an opportunity. Someone is pushed into a bubble of content that makes them angrier and more certain.
 
-AI systems live in a lifecycle: data collection, training, evaluation, deployment, and monitoring. If I skip monitoring, I miss drift and abuse. If I skip human review for high impact decisions, I place people at risk. I treat AI as part of a system, not a magic box.
+The core reason is simple. Models learn patterns, not truth. They learn what tends to follow what in the data they were given. They do not know what is fair. They do not know what is lawful. They do not know what is kind. They only know what was rewarded during training.
 
-<DiagramBlock
-  title="Responsible AI lifecycle"
-  subtitle="Build, deploy, and monitor with accountability."
->
+<GlossaryTip term="bias">
+Bias is when a system consistently produces unfair or skewed outcomes because of the data or assumptions it was built on.
+</GlossaryTip>
+
+Bias can enter through the data, through the labels, and through the choices we make. If your training data under represents some faces, facial recognition errors show up first in those groups. If your labels reflect past human decisions, you teach the model those decisions as if they were objective truth. If you optimise only for speed, you often trade away care.
+
+<GlossaryTip term="fairness">
+Fairness is the practice of reducing avoidable harm across groups and being able to justify outcomes.
+</GlossaryTip>
+
+Fairness is not a single magic number. It is a set of decisions. What harm do we want to prevent. Which groups matter in this context. What trade offs are acceptable. It belongs with humans, not only with metrics.
+
+<GlossaryTip term="explainability">
+Explainability is the ability to give a clear, human understandable reason for why a model produced an output.
+</GlossaryTip>
+
+Explainability matters most when decisions affect real lives. An automated decision system that cannot explain itself becomes hard to challenge. People then learn to distrust the whole process, or worse, they stop trying to challenge it at all.
+
+Bigger models do not automatically mean better or safer. They can be more capable and still be more confusing. They can also be more expensive to run, which encourages shortcuts. If it costs too much to monitor and evaluate, teams quietly stop doing it.
+
+### What this optimises for
+
+- Automation speed and consistency for low risk tasks
+- Scaled assistance when humans have time and context
+
+### What this makes harder
+
+- Accountability if oversight is vague
+- Safe rollback when models drift or fail
+
+AI confidence is not the same as correctness. A model can be very confident and still be wrong. This shows up most painfully when people over trust AI answers. A model that sounds fluent can still invent details. It is good at sounding plausible. It is not automatically good at being true.
+
+<GlossaryTip term="hallucination">
+A hallucination is a confident answer that is not grounded in the input or reality.
+</GlossaryTip>
+
+This is why human judgement must stay in control. Use AI to help you think, draft, or explore. Do not let it quietly become the decision maker for high impact outcomes. If a system can deny a benefit, flag a person, or change a life, it needs clear oversight and a way to appeal.
+
+<GlossaryTip term="model drift">
+Model drift is when real world data changes over time so the model performs worse than it did during evaluation.
+</GlossaryTip>
+
+Drift is not rare. It is normal. People change behaviour. Fraud patterns adapt. Language evolves. Even a simple recommendation system can drift into a bubble because the system is changing the data it then learns from. You cannot evaluate once and declare victory.
+
+<DiagramBlock title="The AI lifecycle and where risks appear" subtitle="Risk shows up at every step. Oversight wraps the loop.">
   <div className="text-xs sm:text-sm leading-5 space-y-2">
-    <div>Data -> Training -> Evaluation -> Deployment -> Monitoring</div>
-    <div>Governance surrounds the loop with policies and audits</div>
-    <div>Human review protects high impact decisions</div>
+    <div>Data collection -> Training -> Evaluation</div>
+    <div>Deployment -> Monitoring -> Improvement</div>
+    <div className="text-slate-700">Human oversight wraps the lifecycle with review, policy, and clear accountability.</div>
   </div>
 </DiagramBlock>
 
 <ToolCard
   id="ai-risk-scenarios"
-  title="Practice spotting AI risks"
-  description="Read short AI stories and practice tagging where bias, privacy or safety issues might appear."
+  title="Spot AI risks in everyday scenarios"
+  description="Read short AI stories and practice identifying bias, safety risks and over trust in model outputs."
 >
   <ResponsibleAIPlannerTool />
 </ToolCard>
@@ -263,17 +342,28 @@ AI systems live in a lifecycle: data collection, training, evaluation, deploymen
   courseId="ai"
   levelId="foundations"
   sectionId="ai-foundations-responsible-ai-basics"
-  title="Quick check: responsible AI basics"
+  title="Quick check: responsible AI basics and limitations"
   questions={[
-    { q: "What is bias in AI", a: "Systematic skew that causes unfair or incorrect outcomes." },
-    { q: "What is drift", a: "Changes in data or behavior that reduce model accuracy over time." },
-    { q: "Why is monitoring required after deployment", a: "Models change behavior as data shifts and need oversight." },
-    { q: "Give one high impact scenario that needs human review", a: "Healthcare, hiring, or credit decisions." },
-    { q: "Why does privacy matter in AI", a: "Data and logs can expose sensitive information." },
-    { q: "What does governance add", a: "Clear accountability, policies, and evidence of compliance." },
-    { q: "What is a limitation of AI foundations", a: "Models can be confident but wrong and need oversight." },
+    { q: "Why can AI cause harm even when well intentioned", a: "Models learn patterns from data and can scale mistakes, bias, and bad assumptions." },
+    { q: "What does it mean that models learn patterns, not truth", a: "They learn statistical regularities, not what is correct, fair, or lawful." },
+    { q: "Name two places bias can enter an AI system", a: "Through data coverage, labels, or the assumptions and objectives chosen." },
+    { q: "Why are facial recognition errors a fairness issue", a: "Error rates can be higher for under represented groups, causing unequal harm." },
+    { q: "Why is bigger not automatically safer", a: "More capability can come with more opacity, cost, and operational shortcuts." },
+    { q: "Why is AI confidence not the same as correctness", a: "A model can be confident and still be wrong because confidence is not a truth check." },
+    { q: "What is a hallucination", a: "A confident output that is not grounded in the input or reality." },
+    { q: "Why is evaluation not a one time step", a: "Real world conditions change and models can drift, so performance must be monitored." },
+    { q: "What is model drift", a: "When data or behaviour changes over time so the model performs worse than before." },
+    { q: "When must humans stay in control", a: "When decisions are high impact and affect rights, safety, or access to opportunities." },
   ]}
 />
+
+### After this section you should be able to:
+
+- Explain why models do not understand intent or truth and what breaks if you trust them blindly
+- Explain why evaluation and monitoring are continuous, not a one time step
+- Explain the trade off between AI automation and human oversight in high impact decisions
+
+You now have the foundations to talk clearly about data, learning, and limits. Intermediate will build on this with evaluation, deployment, and system thinking. Foundations are about how you think, not which tool you use.
 
 ---
 

@@ -6,10 +6,19 @@ import ContentsSidebar from "./ContentsSidebar";
 import ProgressBar from "./ProgressBar";
 import NotesStepper from "./summary/NotesStepper";
 import DonateButton from "@/components/donations/DonateButton";
+import BetaBanner from "./BetaBanner";
+import PreviewBanner from "./PreviewBanner";
 import cybersecurityCourse from "../../../content/courses/cybersecurity.json";
 import { useEffect, useMemo, useState } from "react";
 
-export default function NotesLayout({ meta = {}, headings = [], children, activeLevelId }) {
+export default function NotesLayout({
+  meta = {},
+  headings = [],
+  children,
+  activeLevelId,
+  showContentsSidebar = true,
+  showStepper = true,
+}) {
   const [activeId, setActiveId] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -108,29 +117,37 @@ export default function NotesLayout({ meta = {}, headings = [], children, active
     return level.includes("summary") || (meta.slug || "").includes("summary");
   }, [meta.level, meta.slug]);
 
+  const showPreviewBanner = !(meta.slug || "").startsWith("/admin");
+
   return (
     <Layout title={meta.title} description={meta.description}>
+      {showPreviewBanner ? <PreviewBanner /> : null}
       <ProgressBar />
       <div className="flex flex-col lg:flex-row lg:gap-6">
-        <div className="mb-3 flex items-center justify-between lg:hidden">
-          <button
-            className="rounded-full border px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
-            onClick={() => setMobileOpen(true)}
-            aria-expanded={mobileOpen}
-            aria-controls="contents-nav-mobile"
-          >
-            Contents
-          </button>
-        </div>
+        {showContentsSidebar ? (
+          <div className="mb-3 flex items-center justify-between lg:hidden">
+            <button
+              className="rounded-full border px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+              onClick={() => setMobileOpen(true)}
+              aria-expanded={mobileOpen}
+              aria-controls="contents-nav-mobile"
+            >
+              Contents
+            </button>
+          </div>
+        ) : null}
 
-        <ContentsSidebar
-          headings={headings}
-          activeId={activeId}
-          mobileOpen={mobileOpen}
-          onNavigate={() => setMobileOpen(false)}
-          onClose={() => setMobileOpen(false)}
-        />
+        {showContentsSidebar ? (
+          <ContentsSidebar
+            headings={headings}
+            activeId={activeId}
+            mobileOpen={mobileOpen}
+            onNavigate={() => setMobileOpen(false)}
+            onClose={() => setMobileOpen(false)}
+          />
+        ) : null}
         <main className="w-full max-w-[1000px] flex-1">
+          <BetaBanner />
           <header className="mb-4 rounded-3xl border border-gray-200 bg-white/90 p-4 shadow-sm backdrop-blur">
             <p className="eyebrow m-0 text-gray-700">
               {sectionLabelMap[resolvedSection] || "Notes"} · {meta.level || "Notes"}
@@ -151,10 +168,12 @@ export default function NotesLayout({ meta = {}, headings = [], children, active
               </Link>
             </div>
             <div className="mt-4">
-              <NotesStepper
-                items={stepperItems}
-                activeLevelId={resolvedSection === "cybersecurity" ? activeLevelId : undefined}
-              />
+              {showStepper ? (
+                <NotesStepper
+                  items={stepperItems}
+                  activeLevelId={resolvedSection === "cybersecurity" ? activeLevelId : undefined}
+                />
+              ) : null}
             </div>
           </header>
           <article className="prose prose-neutral max-w-none rounded-3xl border border-gray-200 bg-white/90 p-5 shadow-sm backdrop-blur">

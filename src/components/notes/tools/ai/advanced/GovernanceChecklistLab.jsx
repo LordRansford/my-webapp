@@ -22,6 +22,7 @@ export default function GovernanceChecklistLab() {
   const [selected, setSelected] = useState(["data", "safety", "monitor"]);
   const [owner, setOwner] = useState("AI team");
   const [plan, setPlan] = useState("");
+  const [copyStatus, setCopyStatus] = useState("");
 
   const toggle = (id) => {
     setSelected((prev) => (prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]));
@@ -40,11 +41,16 @@ export default function GovernanceChecklistLab() {
   }, [planText]);
 
   const copyPlan = async () => {
-    if (!navigator?.clipboard?.writeText) return;
+    setCopyStatus("");
+    if (!navigator?.clipboard?.writeText) {
+      setCopyStatus("Copy is not available in this browser.");
+      return;
+    }
     try {
       await navigator.clipboard.writeText(planText);
+      setCopyStatus("Copied.");
     } catch (error) {
-      console.error("Clipboard copy failed", error);
+      setCopyStatus("Could not copy. Please select the text and copy it manually.");
     }
   };
 
@@ -114,6 +120,11 @@ export default function GovernanceChecklistLab() {
             rows={8}
             className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800"
           />
+          {copyStatus ? (
+            <p className="mt-2 text-sm font-semibold text-slate-700" role="status" aria-live="polite">
+              {copyStatus}
+            </p>
+          ) : null}
           <div className="mt-2 flex flex-wrap gap-2 text-sm text-slate-600">
             <span className="rounded-full bg-slate-100 px-2 py-0.5 font-semibold text-slate-700">Red teaming</span>
             <span className="rounded-full bg-slate-100 px-2 py-0.5 font-semibold text-slate-700">Approvals</span>
