@@ -155,7 +155,7 @@ export default function CookieStorageInspector() {
                 <p className="font-mono break-all text-xs">
                   <span className="font-semibold">{cookie.name}</span> = {cookie.value || "<empty>"}
                 </p>
-                <p className="mt-1 text-[11px] text-slate-500">
+                <p className="mt-1 text-sm text-slate-500">
                   This view cannot see flags such as HttpOnly or Secure, but you can treat long names that look random as likely technical cookies.
                 </p>
               </li>
@@ -174,7 +174,7 @@ export default function CookieStorageInspector() {
               <li key={entry.key} className="rounded-lg bg-white p-2 shadow-sm">
                 <p className="font-mono break-all text-xs font-semibold text-slate-900">{entry.key}</p>
                 <div className="mt-1 p-2 bg-slate-50 rounded border border-slate-100">
-                  <p className="break-all text-[11px] text-slate-600 font-mono whitespace-pre-wrap">{entry.value}</p>
+                  <p className="break-all text-sm text-slate-600 font-mono whitespace-pre-wrap">{entry.value}</p>
                 </div>
               </li>
             ))}
@@ -192,7 +192,7 @@ export default function CookieStorageInspector() {
               <li key={entry.key} className="rounded-lg bg-white p-2 shadow-sm">
                 <p className="font-mono break-all text-xs font-semibold text-slate-900">{entry.key}</p>
                 <div className="mt-1 p-2 bg-slate-50 rounded border border-slate-100">
-                  <p className="break-all text-[11px] text-slate-600 font-mono whitespace-pre-wrap">{entry.value}</p>
+                  <p className="break-all text-sm text-slate-600 font-mono whitespace-pre-wrap">{entry.value}</p>
                 </div>
               </li>
             ))}
@@ -200,7 +200,7 @@ export default function CookieStorageInspector() {
         )}
       </section>
 
-      <p className="text-[11px] text-slate-500">
+      <p className="text-sm text-slate-500">
         This tool never sends cookie or storage contents to the server. Everything happens in your browser. It is here to help you understand what this site remembers about you while you browse.
       </p>
     </div>

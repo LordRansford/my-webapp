@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Layout from "@/components/Layout";
+import NotesLayout from "@/components/NotesLayout";
 
 const pages = [
   {
@@ -42,49 +42,65 @@ const pages = [
 ];
 
 export default function ArchitectureHub() {
+  const headings = [
+    { id: "overview", title: "Overview", depth: 2 },
+    { id: "levels", title: "Levels", depth: 2 },
+    { id: "references", title: "References", depth: 2 },
+  ];
+
   return (
-    <Layout
-      title="Software Architecture Notes"
-      description="Choose your level: beginner, intermediate, advanced, further practice, or summary with games."
+    <NotesLayout
+      meta={{
+        title: "Software Architecture Notes",
+        description: "Choose your level: beginner, intermediate, advanced, further practice, or summary with games.",
+        slug: "/software-architecture",
+        section: "architecture",
+        level: "Overview",
+      }}
+      headings={headings}
+      activeLevelId="overview"
     >
-      <header className="page-header">
-        <p className="eyebrow">Software Architecture Notes</p>
-        <h1>Read, design, and steward systems</h1>
-        <p className="lead">
-          Pick the stage that fits you. Beginner for core structure, intermediate for design and decisions, advanced for
-          platforms and governance, a further practice page with dashboards and labs, and a summary page with games.
-        </p>
-      </header>
+      <div className="space-y-8">
+        <section id="overview" className="space-y-3">
+          <p className="eyebrow">Software Architecture Notes</p>
+          <h1>Read, design, and steward systems</h1>
+          <p className="lead">
+            Pick the stage that fits you. Beginner for core structure, intermediate for design and decisions, advanced for platforms and governance, a further practice page with dashboards and labs, and a summary page with games.
+          </p>
+        </section>
 
-      <div className="course-grid">
-        {pages.map((page) => (
-          <Link key={page.slug} href={page.href || `/software-architecture/${page.slug}`} className="course-card">
-            <div className="course-card__meta">
-              <span className="chip chip--accent">{page.title}</span>
-            </div>
-            <h3>{page.title}</h3>
-            <p className="muted">{page.summary}</p>
-            <div className="course-card__footer">
-              <span className="footnote">Open notes</span>
-              <span aria-hidden="true">{">"}</span>
-            </div>
-          </Link>
-        ))}
+        <section id="levels" className="space-y-4">
+          <h2>Levels</h2>
+          <div className="course-grid">
+            {pages.map((page) => (
+              <Link key={page.slug} href={page.href || `/software-architecture/${page.slug}`} className="course-card">
+                <div className="course-card__meta">
+                  <span className="chip chip--accent">{page.title}</span>
+                </div>
+                <h3 className="text-xl font-semibold text-slate-900">{page.title}</h3>
+                <p className="text-base text-slate-800">{page.summary}</p>
+                <div className="course-card__footer">
+                  <span className="text-sm text-slate-700">Open notes</span>
+                  <span aria-hidden="true">{">"}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section id="references" className="space-y-3">
+          <h2>References and further reading</h2>
+          <p className="muted">
+            These notes draw on a wide range of sources. A few starting points are listed here so that you can explore the official material in more depth.
+          </p>
+          <ul className="list-disc space-y-2 pl-5 text-base text-slate-800">
+            <li>Architecture handbooks and open course materials from recognised universities and industry leaders</li>
+            <li>Documentation and guidance on cloud architecture, reliability, and security from major vendors</li>
+            <li>Standards and playbooks on software design, observability, and operational excellence</li>
+          </ul>
+        </section>
       </div>
-
-      <section className="section">
-        <h2>References and further reading</h2>
-        <p className="muted">
-          These notes draw on a wide range of sources. A few starting points are listed here so that you can explore the
-          official material in more depth.
-        </p>
-        <ul className="list">
-          <li>Architecture handbooks and open course materials from recognised universities and industry leaders</li>
-          <li>Documentation and guidance on cloud architecture, reliability, and security from major vendors</li>
-          <li>Standards and playbooks on software design, observability, and operational excellence</li>
-        </ul>
-      </section>
-    </Layout>
+    </NotesLayout>
   );
 }
 

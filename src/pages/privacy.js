@@ -16,19 +16,41 @@ export default function PrivacyPage() {
         <section className="section">
           <h2>What this site collects</h2>
           <p>
-            The site collects the minimum information needed to deliver pages, run the interactive tools, and understand
-            how the site is used. Typical information includes technical details provided by your browser such as device
-            type and browser version, and any information you choose to provide if you sign up for an account or a
-            newsletter.
+            The site collects the minimum information needed to deliver pages, run the interactive tools, and support
+            learning progress if you choose to create an account.
           </p>
+          <ul className="list">
+            <li>If you create an account: your email address and basic account timestamps.</li>
+            <li>If you turn on CPD tracking consent: coarse learning signals tied to your account.</li>
+            <li>For site operation: standard server logs (route, status, timing) without storing magic link tokens.</li>
+          </ul>
         </section>
 
         <section className="section">
           <h2>How information is used</h2>
           <p>
-            Information is used to keep the site running, improve the notes and tools, and keep your account working if
-            you choose to create one. I do not sell your data. If third party services are used for analytics or email,
-            they are chosen carefully and configured to use only what is necessary.
+            Information is used to keep the site running, improve the notes and tools, and provide learning progress
+            features for signed-in learners. I do not sell your data.
+          </p>
+        </section>
+
+        <section className="section">
+          <h2>Learning analytics (if you consent)</h2>
+          <p>
+            Learning analytics are designed to help you understand your progress and help me improve course quality.
+            They are not used for behaviour manipulation.
+          </p>
+          <ul className="list">
+            <li>Sections started and completed</li>
+            <li>Coarse time tracking per section or level</li>
+            <li>Quiz attempts and completion</li>
+            <li>Tool usage count</li>
+          </ul>
+          <p>
+            We do not track keystrokes, detailed scroll behaviour, or the content you type into tools.
+          </p>
+          <p>
+            You can withdraw consent in your account settings. Collection stops immediately for future events.
           </p>
         </section>
 

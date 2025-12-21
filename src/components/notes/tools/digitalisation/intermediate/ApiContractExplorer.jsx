@@ -83,7 +83,7 @@ export default function ApiContractExplorer() {
               An API is a contract. The method says the action, the path says the resource, and the response says what data
               comes back. Good contracts are clear about auth, versions, and errors.
             </p>
-            <div className="mt-2 flex flex-wrap gap-2 text-[11px] text-slate-700">
+            <div className="mt-2 flex flex-wrap gap-2 text-sm text-slate-700">
               <span className="rounded-full bg-white px-2 py-1">Method and path</span>
               <span className="rounded-full bg-white px-2 py-1">Headers and body</span>
               <span className="rounded-full bg-white px-2 py-1">Status codes</span>
@@ -109,7 +109,7 @@ export default function ApiContractExplorer() {
                 }`}
               >
                 <span
-                  className={`inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold ${
+                  className={`inline-flex items-center rounded-full px-2 py-0.5 text-sm font-semibold ${
                     METHOD_STYLES[endpoint.method] || "bg-slate-100 text-slate-700"
                   }`}
                 >
@@ -123,7 +123,7 @@ export default function ApiContractExplorer() {
           <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-3 text-sm text-slate-700">
             <div className="flex flex-wrap items-center gap-2">
               <span
-                className={`inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold ${
+                className={`inline-flex items-center rounded-full px-2 py-0.5 text-sm font-semibold ${
                   METHOD_STYLES[selected.method] || "bg-slate-100 text-slate-700"
                 }`}
               >

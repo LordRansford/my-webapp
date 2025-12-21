@@ -69,13 +69,13 @@ export default function IntegrationFlowLab() {
 
       <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50/70 p-3 text-xs text-slate-700">
         <div className="flex items-center gap-2">
-          <span className="rounded-full bg-white px-2 py-1 text-[11px] font-semibold text-slate-600">Service A</span>
+          <span className="rounded-full bg-white px-2 py-1 text-sm font-semibold text-slate-600">Service A</span>
           <ArrowRight className="h-3 w-3 text-slate-400" aria-hidden="true" />
-          <span className="rounded-full bg-white px-2 py-1 text-[11px] font-semibold text-slate-600">
+          <span className="rounded-full bg-white px-2 py-1 text-sm font-semibold text-slate-600">
             {active.id === "sync" ? "HTTP call" : "Event message"}
           </span>
           <ArrowRight className="h-3 w-3 text-slate-400" aria-hidden="true" />
-          <span className="rounded-full bg-white px-2 py-1 text-[11px] font-semibold text-slate-600">Service B</span>
+          <span className="rounded-full bg-white px-2 py-1 text-sm font-semibold text-slate-600">Service B</span>
         </div>
         <div className="mt-3 grid gap-2 sm:grid-cols-2">
           <div className="rounded-xl border border-slate-200 bg-white p-3">

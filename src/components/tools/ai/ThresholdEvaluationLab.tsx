@@ -194,15 +194,15 @@ export function ThresholdEvaluationLab() {
 
       <div className="grid gap-6 xl:grid-cols-3">
         <div className="space-y-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-4 xl:col-span-1">
-          <p className="text-xs font-semibold text-slate-700">Step 1 – Upload model outputs</p>
-          <p className="text-[11px] text-slate-600">
+          <p className="text-xs font-semibold text-slate-700">Step 1 - Upload model outputs</p>
+          <p className="text-sm text-slate-600">
             Use a CSV file where each row is a prediction. Include a true label column and a model score column between 0 and 1. Only
             your browser sees this data.
           </p>
 
           <div className="space-y-3">
             <div className="space-y-2">
-              <label htmlFor="threshold-upload" className="block text-[11px] font-medium text-slate-700">
+              <label htmlFor="threshold-upload" className="block text-sm font-medium text-slate-700">
                 CSV file
               </label>
               <div className="flex items-center gap-3">
@@ -214,12 +214,12 @@ export function ThresholdEvaluationLab() {
                   <span>Choose file</span>
                 </label>
                 <input id="threshold-upload" type="file" accept=".csv,text/csv" className="hidden" onChange={handleFileChange} />
-              <span className="text-[11px] text-slate-500">CSV only, max 8MB. Stays in your browser.</span>
+              <span className="text-sm text-slate-500">CSV only, max 8MB. Stays in your browser.</span>
               </div>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="label-column" className="block text-[11px] font-medium text-slate-700">
+              <label htmlFor="label-column" className="block text-sm font-medium text-slate-700">
                 Label column
               </label>
               <select
@@ -238,7 +238,7 @@ export function ThresholdEvaluationLab() {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="score-column" className="block text-[11px] font-medium text-slate-700">
+              <label htmlFor="score-column" className="block text-sm font-medium text-slate-700">
                 Score or probability column
               </label>
               <select
@@ -254,11 +254,11 @@ export function ThresholdEvaluationLab() {
                   </option>
                 ))}
               </select>
-              <p className="text-[11px] text-slate-500">Scores should be between 0 and 1. They are treated as the model&apos;s confidence that a case is positive.</p>
+              <p className="text-sm text-slate-500">Scores should be between 0 and 1. They are treated as the model&apos;s confidence that a case is positive.</p>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="positive-label" className="block text-[11px] font-medium text-slate-700">
+              <label htmlFor="positive-label" className="block text-sm font-medium text-slate-700">
                 Positive label
               </label>
               <select
@@ -274,21 +274,21 @@ export function ThresholdEvaluationLab() {
                   </option>
                 ))}
               </select>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-sm text-slate-500">
                 This is the outcome you most care about catching. For example, fraud, unsafe, complaint or churn.
               </p>
             </div>
           </div>
 
-          <p className="text-[11px] text-slate-500">{statusMsg}</p>
+          <p className="text-sm text-slate-500">{statusMsg}</p>
         </div>
 
         <div className="space-y-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-4 xl:col-span-1">
-          <p className="text-xs font-semibold text-slate-700">Step 2 – Move the threshold and watch the confusion matrix</p>
-          <p className="text-[11px] text-slate-600">Use the slider or numeric box to change the decision threshold. The confusion matrix and metrics will update in real time.</p>
+          <p className="text-xs font-semibold text-slate-700">Step 2 - Move the threshold and watch the confusion matrix</p>
+          <p className="text-sm text-slate-600">Use the slider or numeric box to change the decision threshold. The confusion matrix and metrics will update in real time.</p>
 
           <div className="space-y-2">
-            <label htmlFor="threshold-input" className="block text-[11px] font-medium text-slate-700">
+            <label htmlFor="threshold-input" className="block text-sm font-medium text-slate-700">
               Decision threshold
             </label>
             <div className="flex items-center gap-3">
@@ -314,12 +314,12 @@ export function ThresholdEvaluationLab() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-3 text-[11px] text-slate-700">
-            <p className="mb-2 text-[11px] font-semibold text-slate-900">Confusion matrix</p>
+          <div className="rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-700">
+            <p className="mb-2 text-sm font-semibold text-slate-900">Confusion matrix</p>
             {currentMetrics ? (
               <div className="grid grid-cols-2 gap-2">
                 <div className="space-y-1">
-                  <p className="text-[11px] text-slate-500">Actual positive</p>
+                  <p className="text-sm text-slate-500">Actual positive</p>
                   <div className="grid grid-cols-2 gap-1 text-center">
                     <div className="rounded-xl bg-emerald-50 px-2 py-1">
                       <p className="text-[10px] text-slate-500">Predicted positive</p>
@@ -332,7 +332,7 @@ export function ThresholdEvaluationLab() {
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-[11px] text-slate-500">Actual negative</p>
+                  <p className="text-sm text-slate-500">Actual negative</p>
                   <div className="grid grid-cols-2 gap-1 text-center">
                     <div className="rounded-xl bg-amber-50 px-2 py-1">
                       <p className="text-[10px] text-slate-500">Predicted positive</p>
@@ -346,14 +346,14 @@ export function ThresholdEvaluationLab() {
                 </div>
               </div>
             ) : (
-              <p className="text-[11px] text-slate-500">
+              <p className="text-sm text-slate-500">
                 Once you upload data and choose the label, score and positive label, the confusion matrix will appear here.
               </p>
             )}
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-3 text-[11px] text-slate-700">
-            <p className="mb-1 text-[11px] font-semibold text-slate-900">Metrics</p>
+          <div className="rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-700">
+            <p className="mb-1 text-sm font-semibold text-slate-900">Metrics</p>
             {currentMetrics ? (
               <div className="grid grid-cols-2 gap-x-4 gap-y-1">
                 <p>
@@ -376,14 +376,14 @@ export function ThresholdEvaluationLab() {
                 </p>
               </div>
             ) : (
-              <p className="text-[11px] text-slate-500">Metrics will appear here once a dataset, positive label and threshold are set.</p>
+              <p className="text-sm text-slate-500">Metrics will appear here once a dataset, positive label and threshold are set.</p>
             )}
           </div>
         </div>
 
         <div className="space-y-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-4 xl:col-span-1">
-          <p className="text-xs font-semibold text-slate-700">Step 3 – ROC curve and trade offs</p>
-          <p className="text-[11px] text-slate-600">The ROC curve shows how the true positive rate and false positive rate move together as you scan thresholds from 0 to 1.</p>
+          <p className="text-xs font-semibold text-slate-700">Step 3 - ROC curve and trade offs</p>
+          <p className="text-sm text-slate-600">The ROC curve shows how the true positive rate and false positive rate move together as you scan thresholds from 0 to 1.</p>
 
           <div className="h-44 rounded-2xl border border-slate-200 bg-white px-3 py-2">
             {rocCurve.length > 0 ? (
@@ -411,14 +411,14 @@ export function ThresholdEvaluationLab() {
                 </LineChart>
               </ResponsiveContainer>
             ) : (
-              <p className="text-[11px] text-slate-500">
+              <p className="text-sm text-slate-500">
                 Once you have uploaded data and selected the positive label the ROC curve will appear here. Each point on the curve
                 corresponds to a threshold between 0 and 1.
               </p>
             )}
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-3 text-[11px] text-slate-700 space-y-1">
+          <div className="rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-700 space-y-1">
             <p className="font-semibold text-slate-900">What this means</p>
             <p>{narrative(currentMetrics)}</p>
             <p className="text-slate-500">

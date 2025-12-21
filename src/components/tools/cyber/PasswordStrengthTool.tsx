@@ -67,15 +67,15 @@ export function PasswordStrengthTool() {
             <p>
               Estimated entropy: <span className="font-semibold text-slate-900">{entropy.toFixed(1)} bits</span>
             </p>
-            <p className="text-[11px] text-slate-600">
+            <p className="text-sm text-slate-600">
               This is a simplified estimate. Real-world strength depends on randomness, reuse, breaches and MFA.
             </p>
           </div>
           <div className="rounded-2xl border border-slate-200 bg-white p-3 text-xs text-slate-700 space-y-1">
             <p className="font-semibold text-slate-900">Brute-force time (offline)</p>
-            <p className="text-[11px]">Fast GPU (~10^12 guesses/sec): {fastGpu}</p>
-            <p className="text-[11px]">Cloud rig (~10^10 guesses/sec): {cloud}</p>
-            <p className="text-[11px]">Desktop (~10^8 guesses/sec): {desktop}</p>
+            <p className="text-sm">Fast GPU (~10^12 guesses/sec): {fastGpu}</p>
+            <p className="text-sm">Cloud rig (~10^10 guesses/sec): {cloud}</p>
+            <p className="text-sm">Desktop (~10^8 guesses/sec): {desktop}</p>
           </div>
         </div>
       </div>

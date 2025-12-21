@@ -73,11 +73,11 @@ export default function TransformerAttentionExplorerTool() {
           const percent = clamp(Math.round((weight / maxWeight) * 100), 10, 100);
           return (
             <div key={`${token}-bar-${index}`} className="flex items-center gap-3 text-xs text-slate-700">
-              <span className="w-24 truncate text-[11px] text-slate-500">{token}</span>
+              <span className="w-24 truncate text-sm text-slate-500">{token}</span>
               <div className="h-2 flex-1 rounded-full bg-slate-200">
                 <div className="h-2 rounded-full bg-indigo-400" style={{ width: `${percent}%` }} />
               </div>
-              <span className="w-10 text-right text-[11px] text-slate-600">{percent}%</span>
+              <span className="w-10 text-right text-sm text-slate-600">{percent}%</span>
             </div>
           );
         })}

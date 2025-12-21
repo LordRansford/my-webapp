@@ -50,7 +50,7 @@ export default function TokenContextLab() {
             rows={5}
             className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800"
           />
-          <p className="mt-2 text-[11px] text-slate-500">
+          <p className="mt-2 text-sm text-slate-500">
             Tokens here are a simple split on whitespace to keep the idea clear.
           </p>
         </label>
@@ -66,23 +66,23 @@ export default function TokenContextLab() {
               onChange={(event) => setLimit(Number(event.target.value))}
               className="flex-1 accent-sky-500"
             />
-            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-slate-700">
+            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-sm font-semibold text-slate-700">
               {limit} tokens
             </span>
           </div>
-          <p className="mt-2 text-[11px] text-slate-500">
+          <p className="mt-2 text-sm text-slate-500">
             Total tokens: <span className="font-semibold text-slate-800">{tokens.length}</span>{" "}
             {overflow ? "(will be truncated)" : "(fits)"}
           </p>
           {overflow ? (
-            <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 p-2 text-[11px] text-amber-700">
+            <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 p-2 text-sm text-amber-700">
               <p className="font-semibold">Truncation</p>
               <p>The model only sees the first {limit} tokens. Long prompts or retrieved context can fall out.</p>
             </div>
           ) : null}
-          <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-2 text-[11px] text-slate-700">
+          <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-2 text-sm text-slate-700">
             <p className="font-semibold text-slate-800">Truncated view</p>
-            <p className="mt-1 text-[11px] leading-relaxed text-slate-600">{truncated.join(" ") || "Add some text above."}</p>
+            <p className="mt-1 text-sm leading-relaxed text-slate-600">{truncated.join(" ") || "Add some text above."}</p>
           </div>
         </div>
       </div>
@@ -90,7 +90,7 @@ export default function TokenContextLab() {
       <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-3">
         <div className="flex items-center justify-between text-xs text-slate-700">
           <span className="font-semibold text-slate-800">Token positions</span>
-          <div className="flex items-center gap-2 text-[11px] text-slate-600">
+          <div className="flex items-center gap-2 text-sm text-slate-600">
             <Scissors className="h-3.5 w-3.5" aria-hidden="true" />
             <span>Click a token to focus attention</span>
           </div>
@@ -105,7 +105,7 @@ export default function TokenContextLab() {
                 key={`${token}-${index}`}
                 type="button"
                 onClick={() => setFocusIndex(index)}
-                className={`flex flex-col rounded-xl border px-3 py-2 text-left text-[11px] transition ${
+                className={`flex flex-col rounded-xl border px-3 py-2 text-left text-sm transition ${
                   isActive ? "border-sky-400 bg-sky-50 text-sky-800" : "border-slate-200 bg-white text-slate-700"
                 }`}
                 style={{ boxShadow: `0 0 0 1px rgba(56, 189, 248, ${isActive ? 0.45 : 0})`, opacity }}
@@ -116,7 +116,7 @@ export default function TokenContextLab() {
             );
           })}
         </div>
-        <p className="mt-3 text-[11px] text-slate-600">
+        <p className="mt-3 text-sm text-slate-600">
           Positional encodings tell the model where each token sits. Attention then turns that into a soft focus across the window.
         </p>
       </div>

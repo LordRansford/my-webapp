@@ -100,7 +100,7 @@ export function TemplatePreview({
     if (appendices && appendices.length > 0) return appendices;
     return [
       {
-        title: "Appendix A — References",
+        title: "Appendix A - References",
         body: (
           <div className="space-y-1 text-sm">
             <p>Links to standards, runbooks, or prior decisions that inform this template.</p>

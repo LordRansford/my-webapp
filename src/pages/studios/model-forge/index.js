@@ -219,7 +219,7 @@ export default function ModelForgePage() {
       const jobId = `job-${Date.now()}`;
       addJob({
         id: jobId,
-        name: `Model Forge – ${algorithm} on ${dataset.name}`,
+        name: `Model Forge - ${algorithm} on ${dataset.name}`,
         studio: "model-forge",
         datasetId: dataset.id,
         status: "running",

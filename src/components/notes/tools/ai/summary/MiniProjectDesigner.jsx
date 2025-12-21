@@ -86,7 +86,7 @@ export default function MiniProjectDesigner() {
             onChange={(event) => setMetric(event.target.value)}
             className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800"
           />
-          <p className="mt-1 text-[11px] text-slate-500">Pick something that maps to real cost: F1, MAE, latency, or safety pass rate.</p>
+          <p className="mt-1 text-sm text-slate-500">Pick something that maps to real cost: F1, MAE, latency, or safety pass rate.</p>
         </label>
 
         <label className="rounded-2xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
@@ -106,7 +106,7 @@ export default function MiniProjectDesigner() {
           Plan summary
         </p>
         <p className="mt-1 text-slate-700">{summary}</p>
-        <div className="mt-2 grid gap-1 text-[11px] text-slate-600">
+        <div className="mt-2 grid gap-1 text-sm text-slate-600">
           {SAFETY.map((item) => (
             <span key={item} className="rounded-full bg-white px-2 py-1 font-semibold text-slate-700">
               {item}

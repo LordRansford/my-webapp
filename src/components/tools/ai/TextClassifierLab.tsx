@@ -140,6 +140,7 @@ export function TextClassifierLab() {
   const [labelColumn, setLabelColumn] = useState<string>("");
   const [trainRatio, setTrainRatio] = useState(0.7);
   const [valRatio, setValRatio] = useState(0.15);
+  const [advancedOpen, setAdvancedOpen] = useState(false);
   const [modelState, setModelState] = useState<ModelState>({ status: "idle" });
   const [history, setHistory] = useState<TrainingHistoryPoint[]>([]);
   const [evalSummary, setEvalSummary] = useState<string>("");
@@ -152,7 +153,10 @@ export function TextClassifierLab() {
 
   const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { safeFiles, errors } = validateUpload(e.target.files, { maxBytes: 8 * 1024 * 1024, allowedExtensions: [".csv"] });
-    if (errors.length) alert(errors.join("\n"));
+    if (errors.length) {
+      setModelState({ status: "error", message: errors.join(" ") });
+      return;
+    }
     const file = safeFiles[0];
     if (!file) return;
 
@@ -453,6 +457,18 @@ export function TextClassifierLab() {
       title="Text classification playground"
       icon={<MessageSquareText className="h-4 w-4" aria-hidden="true" />}
       description="Upload a CSV with text and labels, train a classifier in your browser and test how it behaves on new examples."
+      whatThisTellsYou={[
+        "How a simple bag-of-words text model behaves when you change the dataset, label balance, and split ratios.",
+        "Whether your labels are learnable from the text or whether you need better features or cleaner labeling.",
+      ]}
+      interpretationTips={[
+        "Accuracy can look good on imbalanced labels. Check whether minority classes get learned.",
+        "Use the prediction probabilities as a hint, not as certainty. Low confidence often means the model has not seen enough examples.",
+      ]}
+      limitations={[
+        "This is a small, in-browser model for learning. It is not a production classifier and it is not robust to adversarial inputs.",
+        "Random shuffling means results can vary slightly between runs. For reproducible benchmarking, fix a seed in a real training pipeline.",
+      ]}
     >
       <SecurityBanner />
 
@@ -471,7 +487,7 @@ export function TextClassifierLab() {
                 <span>Choose file</span>
               </label>
               <input id="text-csv-upload" type="file" accept=".csv,text/csv" className="hidden" onChange={handleFileChange} />
-              <span className="text-[11px] text-slate-500">CSV only, max 8MB. Include at least one text column and one label column.</span>
+              <span className="text-sm text-slate-500">CSV only, max 8MB. Include at least one text column and one label column.</span>
             </div>
           </div>
 
@@ -511,37 +527,44 @@ export function TextClassifierLab() {
                 </option>
               ))}
             </select>
-            <p className="text-[11px] text-slate-500">
+            <p className="text-sm text-slate-500">
               Labels can be things like spam or ham, positive or negative, bug, feature or question and similar categories.
             </p>
           </div>
 
-          <div className="space-y-2">
-            <p className="text-xs font-semibold text-slate-700">Data split ratios</p>
-            <div className="flex flex-wrap items-center gap-2 text-[11px] text-slate-600">
-              <span>Train</span>
-              <input
-                type="number"
-                min={0.5}
-                max={0.9}
-                step={0.05}
-                value={trainRatio}
-                onChange={(e) => setTrainRatio(Number(e.target.value))}
-                className="w-14 rounded-2xl border border-slate-200 bg-white px-1.5 py-0.5 text-[11px] text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-200"
-              />
-              <span>Validation</span>
-              <input
-                type="number"
-                min={0.05}
-                max={0.4}
-                step={0.05}
-                value={valRatio}
-                onChange={(e) => setValRatio(Number(e.target.value))}
-                className="w-14 rounded-2xl border border-slate-200 bg-white px-1.5 py-0.5 text-[11px] text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-200"
-              />
-              <span>Test auto set to {Math.max(0, 1 - trainRatio - valRatio).toFixed(2)}</span>
+          <details
+            className="rounded-2xl border border-slate-200 bg-white p-3"
+            open={advancedOpen}
+            onToggle={(e) => setAdvancedOpen((e.target as HTMLDetailsElement).open)}
+          >
+            <summary className="cursor-pointer text-xs font-semibold text-slate-900">Advanced settings</summary>
+            <div className="mt-3 space-y-2">
+              <p className="text-xs font-semibold text-slate-700">Data split ratios</p>
+              <div className="flex flex-wrap items-center gap-2 text-sm text-slate-600">
+                <span>Train</span>
+                <input
+                  type="number"
+                  min={0.5}
+                  max={0.9}
+                  step={0.05}
+                  value={trainRatio}
+                  onChange={(e) => setTrainRatio(Number(e.target.value))}
+                  className="w-14 rounded-2xl border border-slate-200 bg-white px-1.5 py-0.5 text-sm text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-200"
+                />
+                <span>Validation</span>
+                <input
+                  type="number"
+                  min={0.05}
+                  max={0.4}
+                  step={0.05}
+                  value={valRatio}
+                  onChange={(e) => setValRatio(Number(e.target.value))}
+                  className="w-14 rounded-2xl border border-slate-200 bg-white px-1.5 py-0.5 text-sm text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-200"
+                />
+                <span>Test auto set to {Math.max(0, 1 - trainRatio - valRatio).toFixed(2)}</span>
+              </div>
             </div>
-          </div>
+          </details>
 
           <button
             type="button"
@@ -552,14 +575,14 @@ export function TextClassifierLab() {
             {modelState.status === "training" ? "Training..." : "Train text classifier"}
           </button>
 
-          <p className="text-[11px] text-slate-500">{statusText}</p>
+          <p className="text-sm text-slate-500">{statusText}</p>
         </div>
 
         <div className="space-y-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-4 lg:col-span-1">
           <p className="text-xs font-semibold text-slate-700">Training progress</p>
           <div className="h-48 rounded-2xl border border-slate-200 bg-white px-3 py-2">
             {learningCurve.length === 0 ? (
-              <p className="text-[11px] text-slate-500">The learning curve will appear here once training begins.</p>
+              <p className="text-sm text-slate-500">The learning curve will appear here once training begins.</p>
             ) : (
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={learningCurve}>
@@ -582,7 +605,7 @@ export function TextClassifierLab() {
 
           <div className="space-y-2">
             <p className="text-xs font-semibold text-slate-700">Evaluation summary</p>
-            <div className="rounded-2xl border border-slate-200 bg-white p-3 text-[11px] text-slate-700 min-h-[64px] whitespace-pre-line">
+            <div className="rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-700 min-h-[64px] whitespace-pre-line">
               {evalSummary || "Metrics will appear here once the classifier has been trained."}
             </div>
           </div>
@@ -609,11 +632,11 @@ export function TextClassifierLab() {
           </div>
           <div className="space-y-1">
             <p className="text-xs font-semibold text-slate-700">Prediction output</p>
-            <div className="rounded-2xl border border-slate-200 bg-white p-3 text-[11px] text-slate-700 min-h-[64px] whitespace-pre-line">
+            <div className="rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-700 min-h-[64px] whitespace-pre-line">
               {predictionOutput ||
                 "Your classification result will appear here, including the predicted label and top class probabilities."}
             </div>
-            <p className="text-[11px] text-slate-500">
+            <p className="text-sm text-slate-500">
               This lab is for learning. It shows how text and labels become a real classifier and why evaluation metrics matter.
             </p>
           </div>

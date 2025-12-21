@@ -76,7 +76,7 @@ export default function RoleMapTool() {
                   </button>
                 ))}
               </div>
-              <p className={`mt-2 inline-flex rounded-full px-2 py-0.5 text-[11px] font-semibold ${statusTone}`}>
+              <p className={`mt-2 inline-flex rounded-full px-2 py-0.5 text-sm font-semibold ${statusTone}`}>
                 {role.status}
               </p>
             </div>

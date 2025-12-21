@@ -26,7 +26,7 @@ export function ProbabilityMeter({ label, value, subtitle }: ProbabilityMeterPro
         </div>
         <div className="text-right">
           <p className="text-lg font-semibold text-slate-900">{normalized}%</p>
-          <p className="text-[11px] text-slate-500">on this scenario</p>
+          <p className="text-sm text-slate-500">on this scenario</p>
         </div>
       </div>
       <div className="relative h-3 w-full rounded-full bg-slate-100" role="presentation" aria-hidden="true">
@@ -35,7 +35,7 @@ export function ProbabilityMeter({ label, value, subtitle }: ProbabilityMeterPro
           style={{ width: `${normalized}%` }}
         />
       </div>
-      <div className="flex justify-between text-[11px] font-medium text-slate-500">
+      <div className="flex justify-between text-sm font-medium text-slate-500">
         <span>Unlikely</span>
         <span>Likely</span>
       </div>

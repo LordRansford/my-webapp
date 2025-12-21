@@ -151,8 +151,8 @@ export function CookieInspector() {
                   className="rounded-2xl border border-slate-200 bg-white p-3 text-xs text-slate-700 space-y-1"
                 >
                   <p className="font-semibold text-slate-900">{cookie.name || "(unnamed cookie)"}</p>
-                  <p className="text-[11px] text-slate-500">Category: {category}</p>
-                  <p className="text-[11px] text-slate-500">
+                  <p className="text-sm text-slate-500">Category: {category}</p>
+                  <p className="text-sm text-slate-500">
                     Flags:{" "}
                     {Object.keys(cookie.attributes).length
                       ? Object.keys(cookie.attributes)
@@ -162,7 +162,7 @@ export function CookieInspector() {
                   </p>
                   <ul className="mt-1 space-y-1">
                     {risks.map((r, idx) => (
-                      <li key={idx} className="text-[11px] text-slate-700">
+                      <li key={idx} className="text-sm text-slate-700">
                         • {r}
                       </li>
                     ))}

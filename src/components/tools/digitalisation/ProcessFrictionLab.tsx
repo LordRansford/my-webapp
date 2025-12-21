@@ -126,7 +126,7 @@ export function ProcessFrictionLab() {
                   <button
                     type="button"
                     onClick={() => removeStep(s.id)}
-                    className="text-[11px] px-2 py-1 rounded-full text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+                    className="text-sm px-2 py-1 rounded-full text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
                     aria-label="Remove step"
                   >
                     ✕
@@ -142,12 +142,12 @@ export function ProcessFrictionLab() {
                       }
                       className="h-3.5 w-3.5 rounded border-slate-300 text-sky-600 focus:ring-sky-500"
                     />
-                    <span className="text-[11px] text-slate-700">
+                    <span className="text-sm text-slate-700">
                       Manual step
                     </span>
                   </label>
                   <div className="flex items-center gap-2">
-                    <span className="text-[11px] text-slate-600">
+                    <span className="text-sm text-slate-600">
                       Friction 0 to 5
                     </span>
                     <input

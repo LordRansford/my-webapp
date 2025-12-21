@@ -52,11 +52,11 @@ export function BrowserStorageTool() {
         <div className="space-y-2 rounded-2xl border border-slate-100 bg-slate-50/60 p-4">
           <p className="text-xs font-semibold text-slate-700">Cookies</p>
           <div className="space-y-1 max-h-56 overflow-y-auto pr-1">
-            {cookies.length === 0 && <p className="text-[11px] text-slate-500">No cookies detected for this site or cookies are disabled.</p>}
+            {cookies.length === 0 && <p className="text-sm text-slate-500">No cookies detected for this site or cookies are disabled.</p>}
             {cookies.map((c, idx) => (
               <p
                 key={idx}
-                className="rounded-xl border border-slate-200 bg-white px-2.5 py-1 text-[11px] text-slate-700 break-all"
+                className="rounded-xl border border-slate-200 bg-white px-2.5 py-1 text-sm text-slate-700 break-all"
               >
                 {c}
               </p>
@@ -67,11 +67,11 @@ export function BrowserStorageTool() {
         <div className="space-y-2 rounded-2xl border border-slate-100 bg-slate-50/60 p-4">
           <p className="text-xs font-semibold text-slate-700">localStorage entries</p>
           <div className="space-y-1 max-h-56 overflow-y-auto pr-1">
-            {localItems.length === 0 && <p className="text-[11px] text-slate-500">No localStorage entries found for this site.</p>}
+            {localItems.length === 0 && <p className="text-sm text-slate-500">No localStorage entries found for this site.</p>}
             {localItems.map((item) => (
               <div
                 key={item.key}
-                className="rounded-xl border border-slate-200 bg-white px-2.5 py-1.5 text-[11px] text-slate-700 space-y-1"
+                className="rounded-xl border border-slate-200 bg-white px-2.5 py-1.5 text-sm text-slate-700 space-y-1"
               >
                 <p className="font-semibold text-slate-900 break-all">{item.key}</p>
                 <p className="text-slate-600 break-all">
@@ -85,11 +85,11 @@ export function BrowserStorageTool() {
         <div className="space-y-2 rounded-2xl border border-slate-100 bg-slate-50/60 p-4">
           <p className="text-xs font-semibold text-slate-700">sessionStorage entries</p>
           <div className="space-y-1 max-h-56 overflow-y-auto pr-1">
-            {sessionItems.length === 0 && <p className="text-[11px] text-slate-500">No sessionStorage entries found for this site.</p>}
+            {sessionItems.length === 0 && <p className="text-sm text-slate-500">No sessionStorage entries found for this site.</p>}
             {sessionItems.map((item) => (
               <div
                 key={item.key}
-                className="rounded-xl border border-slate-200 bg-white px-2.5 py-1.5 text-[11px] text-slate-700 space-y-1"
+                className="rounded-xl border border-slate-200 bg-white px-2.5 py-1.5 text-sm text-slate-700 space-y-1"
               >
                 <p className="font-semibold text-slate-900 break-all">{item.key}</p>
                 <p className="text-slate-600 break-all">

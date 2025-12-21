@@ -44,7 +44,7 @@ export default function AgentWorkflowBuilder() {
             className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800"
           >
             <span>{s.name}</span>
-            <span className="text-[11px] uppercase tracking-wide text-slate-500">{s.type}</span>
+            <span className="text-sm uppercase tracking-wide text-slate-500">{s.type}</span>
           </div>
         ))}
       </div>

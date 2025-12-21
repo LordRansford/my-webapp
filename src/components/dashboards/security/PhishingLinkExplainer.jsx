@@ -72,7 +72,7 @@ export default function PhishingLinkExplainer() {
       )}
 
       {!result && !loading && !error && (
-        <p className="text-[11px] text-slate-500">
+        <p className="text-sm text-slate-500">
           This tool does not visit the URL. It only parses the text and looks for patterns that are common in phishing links.
         </p>
       )}
@@ -83,23 +83,23 @@ export default function PhishingLinkExplainer() {
             <h3 className="text-sm font-semibold text-slate-900">
               Domain and host
             </h3>
-            <p className="mt-1 text-[11px] text-slate-700">
+            <p className="mt-1 text-sm text-slate-700">
               Original host:{" "}
               <span className="font-mono break-all">{result.host}</span>
             </p>
-            <p className="mt-1 text-[11px] text-slate-700">
+            <p className="mt-1 text-sm text-slate-700">
               Normalised host:{" "}
               <span className="font-mono break-all">
                 {result.normalisedHost || result.host}
               </span>
             </p>
-            <p className="mt-1 text-[11px] text-slate-700">
+            <p className="mt-1 text-sm text-slate-700">
               Uses IP address:{" "}
               <span className="font-semibold">
                 {result.usesIp ? "Yes" : "No"}
               </span>
             </p>
-            <p className="mt-1 text-[11px] text-slate-700">
+            <p className="mt-1 text-sm text-slate-700">
               Top level domain:{" "}
               <span className="font-mono">{result.tld}</span>
             </p>
@@ -109,14 +109,14 @@ export default function PhishingLinkExplainer() {
             <h3 className="text-sm font-semibold text-slate-900">
               Path and query
             </h3>
-            <p className="mt-1 text-[11px] text-slate-700">
+            <p className="mt-1 text-sm text-slate-700">
               Path:{" "}
               <span className="font-mono break-all">
                 {result.path || "/"}
               </span>
             </p>
             {result.keywords?.length > 0 && (
-              <p className="mt-2 text-[11px] text-slate-700">
+              <p className="mt-2 text-sm text-slate-700">
                 Keywords detected:{" "}
                 <span className="font-mono">
                   {result.keywords.join(", ")}
@@ -130,18 +130,18 @@ export default function PhishingLinkExplainer() {
               Assessment
             </h3>
             {result.flags?.length > 0 ? (
-              <ul className="mt-2 space-y-1 text-[11px] text-slate-700">
+              <ul className="mt-2 space-y-1 text-sm text-slate-700">
                 {result.flags.map((flag, index) => (
                   <li key={index}>• {flag}</li>
                 ))}
               </ul>
             ) : (
-              <p className="mt-1 text-[11px] text-slate-700">
+              <p className="mt-1 text-sm text-slate-700">
                 No obvious phishing patterns were detected from the URL text alone.
               </p>
             )}
             {result.summary && (
-              <p className="mt-2 text-[11px] text-slate-700">
+              <p className="mt-2 text-sm text-slate-700">
                 {result.summary}
               </p>
             )}

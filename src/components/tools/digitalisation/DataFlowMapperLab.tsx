@@ -127,7 +127,7 @@ export function DataFlowMapperLab() {
                 <button
                   type="button"
                   onClick={() => removeItem(item.id)}
-                  className="text-[11px] px-2 py-1 rounded-full text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+                  className="text-sm px-2 py-1 rounded-full text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
                   aria-label="Remove item"
                 >
                   ✕

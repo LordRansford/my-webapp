@@ -24,7 +24,7 @@ export default function OutcomeKPIDashboard() {
                   <p className="text-sm font-semibold text-slate-900">{row.outcome}</p>
                   <p className="text-xs text-slate-600">{row.indicator}</p>
                 </div>
-                <span className={`rounded-full px-2 py-1 text-[11px] font-semibold ${tone}`}>{progress}%</span>
+                <span className={`rounded-full px-2 py-1 text-sm font-semibold ${tone}`}>{progress}%</span>
               </div>
               <div className="mt-2 grid grid-cols-2 gap-2 text-xs text-slate-700">
                 <label className="flex flex-col gap-1">

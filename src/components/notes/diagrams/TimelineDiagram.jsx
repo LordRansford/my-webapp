@@ -13,7 +13,7 @@ export function TimelineDiagram({ title, events = [], accent = '#2563eb', reduce
           return (
             <g key={idx} data-step={idx}>
               <circle cx={x} cy="60" r="10" fill="#eef2ff" stroke={accent} strokeWidth="2" />
-              <text x={x} y="40" textAnchor="middle" className="text-[11px] fill-gray-800">
+              <text x={x} y="40" textAnchor="middle" className="text-sm fill-gray-800">
                 {ev.label}
               </text>
               <text x={x} y="90" textAnchor="middle" className="text-[10px] fill-gray-600">

@@ -8,6 +8,8 @@ import { cyberSections } from "@/lib/cyberSections";
 import { getTotalCpdHours } from "@/components/CPDTracker";
 import cybersecurityCourse from "../../../content/courses/cybersecurity.json";
 import SafeIcon from "@/components/content/SafeIcon";
+import ToolCard from "@/components/notes/ToolCard";
+import QuizBlock from "@/components/notes/QuizBlock";
 
 function StartButton() {
   return (
@@ -84,12 +86,14 @@ export default function CybersecurityOverviewPage({ source, headings }) {
           <div className="rounded-2xl border border-gray-200 bg-white/85 p-4 shadow-sm">
             <p className="text-sm font-semibold text-gray-900">Your recorded CPD hours for Cybersecurity</p>
             <p className="text-base font-semibold text-gray-800">{total.toFixed(1)} hours</p>
-            <p className="text-xs text-gray-700">
+            <p className="text-sm text-gray-700">
               This stays in your browser only. If you need official CPD credit, log your time with your professional body as well.
             </p>
           </div>
         );
       },
+      ToolCard,
+      QuizBlock,
     }),
     []
   );

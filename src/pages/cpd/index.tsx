@@ -49,23 +49,26 @@ function CourseProgress({ courseId, levelIds }: { courseId: string; levelIds: st
 
 export default function CpdHubPage({ courses, totalHours }: CpdPageProps) {
   return (
-    <Layout title="My learning and CPD" description="Track course progress and plan your CPD hours.">
+    <Layout title="CPD" description="How to use these courses and tools as self-directed CPD, with defensible hours and evidence.">
       <section className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="eyebrow text-slate-500">Learning hub</p>
-            <h1 className="text-2xl font-semibold text-slate-900">My learning and CPD</h1>
+            <p className="eyebrow text-slate-500">CPD</p>
+            <h1 className="text-2xl font-semibold text-slate-900">Continuing professional development</h1>
             <p className="mt-2 text-sm text-slate-600">
-              This page keeps track of what we have studied together, how many hours it is worth and which bits you might want to do next.
+              This site is designed to support self-directed CPD: clear learning objectives, conservative hour estimates, hands-on practice, and evidence-friendly outputs.
+            </p>
+            <p className="mt-2 text-sm text-slate-600">
+              Certification is not claimed. If we submit to a CPD body, status will be described as submission in progress until a formal decision is published.
             </p>
           </div>
-          <button
-            type="button"
-            title="Export coming later. For now, take screenshots or copy notes."
+          <Link
+            href="/my-cpd/evidence"
+            title="Export is not automated. Use the evidence page to copy text or take screenshots for your own CPD record."
             className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-200"
           >
-            Export
-          </button>
+            Evidence and export
+          </Link>
         </div>
       </section>
 
@@ -104,21 +107,21 @@ export default function CpdHubPage({ courses, totalHours }: CpdPageProps) {
       </section>
 
       <section className="mt-8 rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
-        <h2 className="text-lg font-semibold text-slate-900">CPD summary</h2>
+        <h2 className="text-lg font-semibold text-slate-900">How hours and evidence work</h2>
         <p className="mt-1 text-sm text-slate-600">
-          Planned hours across all courses: <span className="font-semibold text-slate-800">{totalHours}</span>
+          Planned hours across all CPD courses: <span className="font-semibold text-slate-800">{totalHours}</span>
         </p>
         <div className="mt-4 grid gap-3 md:grid-cols-2">
           <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Recently studied</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Tracking</p>
             <ul className="mt-3 space-y-2 text-sm text-slate-700">
-              <li>Cybersecurity Foundations - Status: in progress</li>
-              <li>AI Intermediate - Status: planned</li>
-              <li>Digitalisation Advanced - Status: in progress</li>
+              <li>Time is recorded per level using the time tracker on course pages.</li>
+              <li>Section completion and quiz completion create activity signals for your evidence log.</li>
+              <li>You can use the evidence page to copy a summary into your CPD system.</li>
             </ul>
           </div>
           <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Next ideas</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Using this for CPD</p>
             <ul className="mt-3 space-y-2 text-sm text-slate-700">
               <li>Log 30 minutes after each study session.</li>
               <li>Pick one dashboard and reflect on one insight.</li>

@@ -2,6 +2,15 @@
 title: "Cybersecurity Foundations"
 description: "Level 1 of my cybersecurity course. Data, networks, attackers, and everyday defences with hands-on labs."
 level: "foundations"
+courseId: "cybersecurity"
+levelId: "foundations"
+summary: "Data, networks, attackers, and everyday defences with hands-on labs."
+estimatedHours: 10
+learningObjectives:
+  - "Explain the CIA triad (confidentiality, integrity, availability) with concrete everyday examples."
+  - "Explain how data representation (bits, bytes, encodings) affects security outcomes."
+  - "Apply simple checks to passwords, links, and basic account hygiene using the labs."
+  - "Analyse a small system to identify trust boundaries and obvious attack surface."
 ---
 
 import ProgressBar from "@/components/notes/ProgressBar"
@@ -20,7 +29,7 @@ import { cyberSections } from "@/lib/cyberSections"
 
 <LevelProgressBar courseId="cybersecurity" levelId="foundations" sectionIds={cyberSections.foundations} />
 
-<CPDTracker courseId="cybersecurity" levelId="foundations" estimatedHours={8} />
+<CPDTracker courseId="cybersecurity" levelId="foundations" estimatedHours={10} />
 
 ## Why cybersecurity matters in real life
 

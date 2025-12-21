@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote";
-import Layout from "@/components/Layout";
+import NotesLayout from "@/components/NotesLayout";
 import mdxComponents from "@/components/mdx-components";
 import { getAllToolPages, getToolPage } from "@/lib/tools-pages";
 
@@ -19,9 +19,14 @@ export async function getStaticProps({ params }) {
 
 export default function ToolPage({ page }) {
   return (
-    <Layout
-      title={`${page.meta.title} - Ransford's Notes`}
-      description={page.meta.description || "Browser-based labs and sandboxes."}
+    <NotesLayout
+      meta={{
+        title: page.meta.title,
+        description: page.meta.description || "Browser-based labs and sandboxes.",
+        level: "Tools",
+        slug: `/tools/${page.slug}`,
+      }}
+      headings={[]}
     >
       <nav className="breadcrumb">
         <Link href="/tools">Labs</Link>
@@ -37,6 +42,6 @@ export default function ToolPage({ page }) {
           <MDXRemote {...page.mdx} components={mdxComponents} />
         </div>
       </article>
-    </Layout>
+    </NotesLayout>
   );
 }

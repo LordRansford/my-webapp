@@ -10,6 +10,8 @@ import LevelProgressBar from "@/components/course/LevelProgressBar";
 import CPDTracker from "@/components/CPDTracker";
 import PageNav from "@/components/notes/PageNav";
 import ConceptMapExplorer from "@/components/ConceptMapExplorer";
+import { ConceptBlock, WhyItMatters, HowItWorks, KeyTakeaways } from "@/components/notes/TeachingBlocks";
+import { Definition, Warning, Example, CommonMistake } from "@/components/notes/CalloutBlocks";
 import { Figure, Diagram, Icon, Table } from "./content";
 import { EmailHeaderLab } from "@/components/tools/cybersecurity/EmailHeaderLab";
 import { PhishingStorySimulator } from "@/components/tools/cybersecurity/PhishingStorySimulator";
@@ -135,6 +137,14 @@ import DataStrategySandboxTool from "@/components/notes/tools/data/advanced/Data
 
 const mdxComponents = {
   Callout,
+  ConceptBlock,
+  WhyItMatters,
+  HowItWorks,
+  KeyTakeaways,
+  Definition,
+  Warning,
+  Example,
+  CommonMistake,
   PythonPlayground,
   RsaPlayground,
   DiagramBlock,

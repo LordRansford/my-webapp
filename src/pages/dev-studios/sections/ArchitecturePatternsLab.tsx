@@ -232,7 +232,7 @@ export default function ArchitecturePatternsLab() {
                 aria-label="Why we chose this"
                 value={decisionDraft.why}
                 onChange={(e) => setDecisionDraft((d) => ({ ...d, why: e.target.value }))}
-                placeholder="Why we chose this (1–2 lines)"
+                placeholder="Why we chose this (1-2 lines)"
                 className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-200"
                 rows={2}
               />

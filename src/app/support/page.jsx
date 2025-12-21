@@ -12,8 +12,12 @@ export default function SupportPage() {
         <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Support</p>
         <h1 className="text-3xl font-semibold text-slate-900">Support the templates and tools</h1>
         <p className="text-base text-slate-700">
-          Donations keep the premium templates updated, tested, and accessible. They are optional, and the core tools remain
-          available whether you donate or not.
+          Donations keep the templates updated, tested, and accessible. They are optional, and you can still learn here without
+          donating.
+        </p>
+        <p className="text-sm text-slate-700">
+          If you donate, Stripe handles the payment. I only receive the donation status and amount, plus your email if you are
+          signed in.
         </p>
         <p className="text-sm text-slate-700">
           These resources are educational and planning aids. They are not legal advice and do not replace professional security

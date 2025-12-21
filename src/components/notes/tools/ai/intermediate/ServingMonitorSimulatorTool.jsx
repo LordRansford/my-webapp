@@ -46,7 +46,7 @@ export default function ServingMonitorSimulatorTool() {
               onChange={(event) => setRequestRate(Number(event.target.value))}
               className="w-full accent-slate-900"
             />
-            <span className="text-[11px] text-slate-600">{requestRate} rpm</span>
+            <span className="text-sm text-slate-600">{requestRate} rpm</span>
           </div>
         </label>
 

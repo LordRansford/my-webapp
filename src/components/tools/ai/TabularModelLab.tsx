@@ -505,7 +505,7 @@ export function TabularModelLab() {
                 <span>Choose file</span>
               </label>
               <input id="csv-upload" type="file" accept=".csv,text/csv" className="hidden" onChange={handleFileChange} />
-              <span className="text-[11px] text-slate-500">CSV only, max 8MB. Data stays in your browser.</span>
+              <span className="text-sm text-slate-500">CSV only, max 8MB. Data stays in your browser.</span>
             </div>
           </div>
 
@@ -531,7 +531,7 @@ export function TabularModelLab() {
                 Regression
               </button>
             </div>
-            <p className="text-[11px] text-slate-500">
+            <p className="text-sm text-slate-500">
               Classification predicts labels, regression predicts continuous numeric values. If you are unsure, classification
               usually applies to categories like Yes or No and regression to quantities like price.
             </p>
@@ -570,7 +570,7 @@ export function TabularModelLab() {
                     onClick={() => {
                       setFeatureColumns((prev) => (selected ? prev.filter((c) => c !== col) : [...prev, col]));
                     }}
-                    className={`rounded-full border px-2 py-0.5 text-[11px] ${
+                    className={`rounded-full border px-2 py-0.5 text-sm ${
                       isTarget
                         ? "border-slate-200 bg-slate-100 text-slate-400 cursor-not-allowed"
                         : selected
@@ -583,12 +583,12 @@ export function TabularModelLab() {
                 );
               })}
             </div>
-            <p className="text-[11px] text-slate-500">Click to toggle features. The target column is excluded automatically.</p>
+            <p className="text-sm text-slate-500">Click to toggle features. The target column is excluded automatically.</p>
           </div>
 
           <div className="space-y-2">
             <p className="text-xs font-semibold text-slate-700">Data split ratios</p>
-            <div className="flex items-center gap-2 text-[11px] text-slate-600">
+            <div className="flex items-center gap-2 text-sm text-slate-600">
               <span>Train</span>
               <input
                 type="number"
@@ -597,7 +597,7 @@ export function TabularModelLab() {
                 step={0.05}
                 value={trainRatio}
                 onChange={(e) => setTrainRatio(Number(e.target.value))}
-                className="w-14 rounded-2xl border border-slate-200 bg-white px-1.5 py-0.5 text-[11px] text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-200"
+                className="w-14 rounded-2xl border border-slate-200 bg-white px-1.5 py-0.5 text-sm text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-200"
               />
               <span>Validation</span>
               <input
@@ -607,7 +607,7 @@ export function TabularModelLab() {
                 step={0.05}
                 value={valRatio}
                 onChange={(e) => setValRatio(Number(e.target.value))}
-                className="w-14 rounded-2xl border border-slate-200 bg-white px-1.5 py-0.5 text-[11px] text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-200"
+                className="w-14 rounded-2xl border border-slate-200 bg-white px-1.5 py-0.5 text-sm text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-200"
               />
               <span>Test auto set to {Math.max(0, 1 - trainRatio - valRatio).toFixed(2)}</span>
             </div>
@@ -622,14 +622,14 @@ export function TabularModelLab() {
             {modelState.status === "training" ? "Training..." : "Train model"}
           </button>
 
-          <p className="text-[11px] text-slate-500">{statusText}</p>
+          <p className="text-sm text-slate-500">{statusText}</p>
         </div>
 
         <div className="space-y-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-4 lg:col-span-1">
           <p className="text-xs font-semibold text-slate-700">Training progress</p>
           <div className="h-48 rounded-2xl border border-slate-200 bg-white px-3 py-2">
             {learningCurve.length === 0 ? (
-              <p className="text-[11px] text-slate-500">The learning curve will appear here once training begins.</p>
+              <p className="text-sm text-slate-500">The learning curve will appear here once training begins.</p>
             ) : (
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={learningCurve}>
@@ -664,7 +664,7 @@ export function TabularModelLab() {
 
           <div className="space-y-2">
             <p className="text-xs font-semibold text-slate-700">Evaluation summary</p>
-            <div className="rounded-2xl border border-slate-200 bg-white p-3 text-[11px] text-slate-700 min-h-[64px]">
+            <div className="rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-700 min-h-[64px]">
               {evalSummary || "Metrics will appear here once the model is trained."}
             </div>
           </div>
@@ -674,14 +674,14 @@ export function TabularModelLab() {
           <p className="text-xs font-semibold text-slate-700">Try a prediction</p>
           <div className="space-y-2">
             {featureColumns.length === 0 ? (
-              <p className="text-[11px] text-slate-500">
+              <p className="text-sm text-slate-500">
                 After training, you can enter feature values here to see how your model responds.
               </p>
             ) : (
               <>
                 {featureColumns.map((col) => (
                   <div key={col} className="space-y-1">
-                    <label htmlFor={`pred-${col}`} className="block text-[11px] font-medium text-slate-700">
+                    <label htmlFor={`pred-${col}`} className="block text-sm font-medium text-slate-700">
                       {col}
                     </label>
                     <input
@@ -689,7 +689,7 @@ export function TabularModelLab() {
                       type="text"
                       value={predictionInput[col] ?? ""}
                       onChange={(e) => handlePredictionInputChange(col, e.target.value)}
-                      className="w-full rounded-2xl border border-slate-200 bg-white px-2 py-1 text-[11px] text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-200"
+                      className="w-full rounded-2xl border border-slate-200 bg-white px-2 py-1 text-sm text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-200"
                       placeholder="Enter a numeric value"
                     />
                   </div>
@@ -707,10 +707,10 @@ export function TabularModelLab() {
           </div>
           <div className="space-y-1">
             <p className="text-xs font-semibold text-slate-700">Prediction output</p>
-            <div className="rounded-2xl border border-slate-200 bg-white p-3 text-[11px] text-slate-700 min-h-[48px]">
+            <div className="rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-700 min-h-[48px]">
               {predictionOutput || "Your prediction result will appear here."}
             </div>
-            <p className="text-[11px] text-slate-500">
+            <p className="text-sm text-slate-500">
               This is not a production grade model. It is an educational lab to help you see how data, model choices and
               metrics connect.
             </p>

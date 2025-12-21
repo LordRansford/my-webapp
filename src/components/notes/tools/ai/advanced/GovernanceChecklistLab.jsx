@@ -62,7 +62,7 @@ export default function GovernanceChecklistLab() {
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-3 text-xs text-slate-700">
-          <label className="text-[11px] font-semibold text-slate-800">Use case</label>
+          <label className="text-sm font-semibold text-slate-800">Use case</label>
           <select
             value={useCase}
             onChange={(event) => setUseCase(event.target.value)}
@@ -75,7 +75,7 @@ export default function GovernanceChecklistLab() {
             ))}
           </select>
 
-          <label className="mt-3 block text-[11px] font-semibold text-slate-800">Owner</label>
+          <label className="mt-3 block text-sm font-semibold text-slate-800">Owner</label>
           <input
             value={owner}
             onChange={(event) => setOwner(event.target.value)}
@@ -95,7 +95,7 @@ export default function GovernanceChecklistLab() {
                   onChange={() => toggle(item.id)}
                   className="accent-emerald-600"
                 />
-                <span className="text-[11px] font-semibold text-slate-800">{item.label}</span>
+                <span className="text-sm font-semibold text-slate-800">{item.label}</span>
               </label>
             ))}
           </div>
@@ -114,14 +114,14 @@ export default function GovernanceChecklistLab() {
             rows={8}
             className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800"
           />
-          <div className="mt-2 flex flex-wrap gap-2 text-[11px] text-slate-600">
+          <div className="mt-2 flex flex-wrap gap-2 text-sm text-slate-600">
             <span className="rounded-full bg-slate-100 px-2 py-0.5 font-semibold text-slate-700">Red teaming</span>
             <span className="rounded-full bg-slate-100 px-2 py-0.5 font-semibold text-slate-700">Approvals</span>
             <span className="rounded-full bg-slate-100 px-2 py-0.5 font-semibold text-slate-700">Model card</span>
           </div>
         </div>
 
-        <div className="space-y-2 rounded-2xl border border-emerald-200 bg-emerald-50 p-3 text-[11px] text-emerald-800">
+        <div className="space-y-2 rounded-2xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">
           <p className="font-semibold">Tips</p>
           <ul className="list-disc pl-4">
             <li>Make one person accountable for each control.</li>
@@ -131,7 +131,7 @@ export default function GovernanceChecklistLab() {
           <button
             type="button"
             onClick={copyPlan}
-            className="mt-2 inline-flex items-center justify-center rounded-full bg-emerald-600 px-3 py-1 text-[11px] font-semibold text-white hover:bg-emerald-700"
+            className="mt-2 inline-flex items-center justify-center rounded-full bg-emerald-600 px-3 py-1 text-sm font-semibold text-white hover:bg-emerald-700"
           >
             Copy plan
           </button>

@@ -120,7 +120,7 @@ export function ModelCardBuilderLab() {
                   placeholder={field.placeholder}
                   className="w-full rounded-xl border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs sm:text-sm text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200 resize-none min-h-[60px]"
                 />
-                <p className="text-[11px] text-slate-500">{field.helper}</p>
+                <p className="text-sm text-slate-500">{field.helper}</p>
               </div>
             ))}
           </div>
@@ -133,7 +133,7 @@ export function ModelCardBuilderLab() {
               You can copy this into a repository, wiki or learning material to help others understand what this model
               is and how it should be used.
             </p>
-            <div className="rounded-2xl border border-slate-200 bg-slate-900/95 text-[11px] sm:text-xs text-slate-100 font-mono p-3 max-h-72 overflow-y-auto">
+            <div className="rounded-2xl border border-slate-200 bg-slate-900/95 text-sm sm:text-xs text-slate-100 font-mono p-3 max-h-72 overflow-y-auto">
               <pre className="whitespace-pre-wrap">{markdown}</pre>
             </div>
           </div>

@@ -69,7 +69,7 @@ export default function InteroperabilityStandardsMapDashboard() {
                 <p className="font-semibold text-slate-900">{row.name}</p>
                 <p className="text-xs text-slate-600">{row.systems}</p>
               </div>
-              <span className="rounded-full bg-white/70 px-2 py-1 text-[11px] font-semibold text-slate-800">{row.standard}</span>
+              <span className="rounded-full bg-white/70 px-2 py-1 text-sm font-semibold text-slate-800">{row.standard}</span>
             </div>
           ))}
 

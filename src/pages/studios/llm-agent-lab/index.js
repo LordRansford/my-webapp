@@ -28,7 +28,7 @@ function runLocalModel({ model, prompt, temperature, maxTokens }) {
 }
 
 function formatMs(ms) {
-  if (!ms && ms !== 0) return "–";
+  if (!ms && ms !== 0) return "-";
   return `${ms.toFixed(0)} ms`;
 }
 
@@ -105,7 +105,7 @@ export default function LlmAgentLabPage() {
     setPromptOutput(res.text);
     setPromptMetrics({ ...res, latencyMs });
     const jobId = `llm-prompt-${Date.now()}`;
-    addJob({ id: jobId, name: "LLM Lab – prompt bench", studio: "llm-agent-lab", status: "running" });
+    addJob({ id: jobId, name: "LLM Lab - prompt bench", studio: "llm-agent-lab", status: "running" });
     updateJob(jobId, {
       status: "completed",
       finishedAt: new Date().toISOString(),
@@ -116,7 +116,7 @@ export default function LlmAgentLabPage() {
   const runToolSandbox = () => {
     const steps = [];
     const jobId = `llm-tools-${Date.now()}`;
-    addJob({ id: jobId, name: "LLM Lab – tools", studio: "llm-agent-lab", status: "running" });
+    addJob({ id: jobId, name: "LLM Lab - tools", studio: "llm-agent-lab", status: "running" });
 
     const text = toolPrompt.toLowerCase();
     steps.push({ role: "model", text: "Received prompt and checking for tools." });
@@ -165,7 +165,7 @@ export default function LlmAgentLabPage() {
     const path = [];
     let steps = 1;
     const jobId = `llm-agent-${Date.now()}`;
-    addJob({ id: jobId, name: "LLM Lab – agent", studio: "llm-agent-lab", status: "running" });
+    addJob({ id: jobId, name: "LLM Lab - agent", studio: "llm-agent-lab", status: "running" });
 
     path.push("User input");
     const lower = agentPrompt.toLowerCase();
@@ -227,7 +227,7 @@ export default function LlmAgentLabPage() {
 
   const runGrounded = () => {
     const jobId = `llm-ground-${Date.now()}`;
-    addJob({ id: jobId, name: "LLM Lab – grounding", studio: "llm-agent-lab", status: "running" });
+    addJob({ id: jobId, name: "LLM Lab - grounding", studio: "llm-agent-lab", status: "running" });
     const retrieved = simpleDocsSearch(groundingSource, groundQuery);
     const context = retrieved.map((c) => c.text).join(" | ");
     const res = runLocalModel({
@@ -333,8 +333,8 @@ export default function LlmAgentLabPage() {
             {promptOutput && (
               <div className="space-y-2 rounded-2xl border border-slate-100 bg-slate-50/60 p-3 text-sm text-slate-800">
                 <div className="flex flex-wrap gap-3 text-xs text-slate-700">
-                  <span className="rounded-full bg-white px-2 py-1 ring-1 ring-slate-200">Tokens in: {promptMetrics?.tokensIn ?? "–"}</span>
-                  <span className="rounded-full bg-white px-2 py-1 ring-1 ring-slate-200">Tokens out: {promptMetrics?.tokensOut ?? "–"}</span>
+                  <span className="rounded-full bg-white px-2 py-1 ring-1 ring-slate-200">Tokens in: {promptMetrics?.tokensIn ?? "-"}</span>
+                  <span className="rounded-full bg-white px-2 py-1 ring-1 ring-slate-200">Tokens out: {promptMetrics?.tokensOut ?? "-"}</span>
                   <span className="rounded-full bg-white px-2 py-1 ring-1 ring-slate-200">Latency: {formatMs(promptMetrics?.latencyMs)}</span>
                 </div>
                 <div className="whitespace-pre-wrap">{promptOutput}</div>

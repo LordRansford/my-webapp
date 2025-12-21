@@ -64,7 +64,7 @@ export default function DetectionTimelineChallenge({ onComplete }) {
               <tr key={sig.id} className="border-t">
                 <td className="px-3 py-2 font-semibold text-gray-900">
                   {sig.label}
-                  <div className="text-[11px] text-gray-500">Cost {sig.cost} · Noise {sig.noise}</div>
+                  <div className="text-sm text-gray-500">Cost {sig.cost} · Noise {sig.noise}</div>
                 </td>
                 {stages.map((stage) => {
                   const key = `${sig.id}-${stage}`;

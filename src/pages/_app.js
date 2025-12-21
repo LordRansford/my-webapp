@@ -3,6 +3,7 @@ import "katex/dist/katex.min.css";
 import { Manrope, Space_Grotesk, JetBrains_Mono, Inter } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { NotesProvider } from "@/components/notes/NotesProvider";
+import AuthSessionProvider from "@/components/auth/SessionProvider";
 
 const display = Space_Grotesk({
   subsets: ["latin"],
@@ -39,9 +40,11 @@ const inter = Inter({
 export default function App({ Component, pageProps }) {
   return (
     <div className={`${display.variable} ${body.variable} ${mono.variable} ${inter.variable}`}>
-      <NotesProvider>
-        <Component {...pageProps} />
-      </NotesProvider>
+      <AuthSessionProvider>
+        <NotesProvider>
+          <Component {...pageProps} />
+        </NotesProvider>
+      </AuthSessionProvider>
       <SpeedInsights />
     </div>
   );

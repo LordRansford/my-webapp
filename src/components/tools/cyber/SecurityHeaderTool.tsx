@@ -92,6 +92,18 @@ export function SecurityHeaderTool() {
       title="Security header and CSP explainer"
       icon={<Shield className="h-4 w-4" aria-hidden="true" />}
       description="Paste HTTP response headers and see how Content Security Policy, HSTS and other headers contribute to your defence layers."
+      whatThisTellsYou={[
+        "Whether the header set looks aligned with a modern baseline (CSP, HSTS, clickjacking protection, nosniff, referrer policy).",
+        "Where values are empty or unusually permissive and worth a second look.",
+      ]}
+      interpretationTips={[
+        "Treat CSP as an allowlist. If you need a broad exception, isolate it to a narrow route or use nonces or hashes.",
+        "HSTS only helps after the first HTTPS visit unless you preload. Do not preload until you are confident.",
+      ]}
+      limitations={[
+        "This tool only parses the text you paste. It does not verify what your server actually sends on every route.",
+        "Some headers are best enforced via CSP (frame-ancestors) rather than legacy headers. Your standard should be consistent.",
+      ]}
     >
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-3 rounded-2xl border border-slate-100 bg-slate-50/60 p-4">
@@ -123,13 +135,13 @@ export function SecurityHeaderTool() {
             {interesting.map((h) => (
               <div key={h.name} className="rounded-2xl border border-slate-200 bg-white p-3 text-xs text-slate-700 space-y-1">
                 <p className="font-semibold text-slate-900">{h.name}</p>
-                <p className="text-[11px] text-slate-500 break-all">{h.value}</p>
-                <p className="text-[11px] text-slate-700">{describeHeader(h)}</p>
+                <p className="text-sm text-slate-500 break-all">{h.value}</p>
+                <p className="text-sm text-slate-700">{describeHeader(h)}</p>
               </div>
             ))}
           </div>
           {others.length > 0 && (
-            <div className="rounded-2xl border border-slate-200 bg-white p-3 text-[11px] text-slate-600 space-y-1">
+            <div className="rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-600 space-y-1">
               <p className="font-semibold text-slate-900">Other headers detected</p>
               <p>These may also play a role in security or privacy, but they are not analysed in detail here.</p>
             </div>

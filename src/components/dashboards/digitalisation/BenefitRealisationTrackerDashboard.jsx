@@ -23,7 +23,7 @@ export default function BenefitRealisationTrackerDashboard() {
                 <p className="text-xs text-slate-600">Indicator: {b.indicator}</p>
               </div>
               <span
-                className={`rounded-full px-2 py-1 text-[11px] font-semibold ${
+                className={`rounded-full px-2 py-1 text-sm font-semibold ${
                   b.status === "Realised" ? "bg-emerald-100 text-emerald-800" : b.status === "At risk" ? "bg-rose-100 text-rose-800" : "bg-amber-100 text-amber-800"
                 }`}
               >

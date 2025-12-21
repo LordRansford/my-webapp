@@ -1,0 +1,32 @@
+{
+  "courseId": "cybersecurity",
+  "status": "Ready",
+  "levels": [
+    {
+      "levelId": "foundations",
+      "estimatedHours": 10,
+      "sections": [],
+      "quizzes": [],
+      "tools": []
+    },
+    {
+      "levelId": "applied",
+      "estimatedHours": 12,
+      "sections": [],
+      "quizzes": [],
+      "tools": []
+    },
+    {
+      "levelId": "practice",
+      "estimatedHours": 14,
+      "sections": [],
+      "quizzes": [],
+      "tools": []
+    }
+  ],
+  "evidence": {
+    "progressTracking": "Server CPD state + analytics",
+    "certificates": "Issued with UUID and verification page"
+  }
+}
+

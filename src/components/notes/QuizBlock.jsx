@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useCPD } from "@/hooks/useCPD";
 import { resolveTrackId } from "@/lib/cpd";
+import SaveProgressPrompt from "@/components/auth/SaveProgressPrompt";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 export default function QuizBlock({
   id,
@@ -15,8 +17,11 @@ export default function QuizBlock({
   const storageKey = id ? `quiz-block-${id}` : "quiz-block";
   const [answers, setAnswers] = useState({});
   const [hasAwarded, setHasAwarded] = useState(false);
-  const { state, updateSection } = useCPD();
+  const { state, updateSection, isAuthed } = useCPD();
+  const { track } = useAnalytics();
   const trackId = courseId ? resolveTrackId(courseId) : null;
+  const [showSavePrompt, setShowSavePrompt] = useState(false);
+  const [attemptTracked, setAttemptTracked] = useState(false);
 
   const existingSection = useMemo(() => {
     if (!trackId || !levelId || !sectionId) return null;
@@ -53,9 +58,24 @@ export default function QuizBlock({
   );
 
   useEffect(() => {
+    if (!attemptTracked && isAuthed && id) {
+      const anyOpened = questions.length > 0 && questions.some((_, idx) => Boolean(answers[idx]?.open));
+      if (anyOpened) {
+        track({ type: "quiz_attempted", quizId: id, trackId: trackId || undefined, levelId, sectionId });
+        setAttemptTracked(true);
+      }
+    }
+  }, [attemptTracked, answers, isAuthed, id, questions, track, trackId, levelId, sectionId]);
+
+  useEffect(() => {
     if (!trackId || !levelId || !sectionId) return;
     if (!allAnswered || alreadyCompleted || hasAwarded) return;
+    if (!isAuthed) {
+      setShowSavePrompt(true);
+      return;
+    }
 
+    if (id) track({ type: "quiz_completed", quizId: id, trackId: trackId || undefined, levelId, sectionId, success: true });
     updateSection({
       trackId,
       levelId,
@@ -65,7 +85,7 @@ export default function QuizBlock({
       note: id ? `Completed quiz ${id}` : "Completed quiz",
     });
     setHasAwarded(true);
-  }, [allAnswered, alreadyCompleted, hasAwarded, trackId, levelId, sectionId, updateSection, id]);
+  }, [allAnswered, alreadyCompleted, hasAwarded, trackId, levelId, sectionId, updateSection, id, isAuthed, track]);
 
   return (
     <section className="my-6 w-full rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
@@ -98,6 +118,7 @@ export default function QuizBlock({
           );
         })}
       </div>
+      {showSavePrompt && !isAuthed ? <SaveProgressPrompt /> : null}
     </section>
   );
 }

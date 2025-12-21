@@ -266,14 +266,14 @@ export function FairnessProbeLab() {
 
       <div className="grid gap-6 xl:grid-cols-3">
         <div className="space-y-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-4 xl:col-span-1">
-          <p className="text-xs font-semibold text-slate-700">Step 1 – Upload model outputs</p>
-          <p className="text-[11px] text-slate-600">
+          <p className="text-xs font-semibold text-slate-700">Step 1 - Upload model outputs</p>
+          <p className="text-sm text-slate-600">
             Use a CSV with one row per prediction. Include the true label, a model score between 0 and 1 and at least one group
             column such as gender, region or customer segment.
           </p>
 
           <div className="space-y-2">
-            <label htmlFor="fairness-upload" className="block text-[11px] font-medium text-slate-700">
+            <label htmlFor="fairness-upload" className="block text-sm font-medium text-slate-700">
               CSV file
             </label>
             <div className="flex items-center gap-3">
@@ -285,13 +285,13 @@ export function FairnessProbeLab() {
                 <span>Choose file</span>
               </label>
               <input id="fairness-upload" type="file" accept=".csv,text/csv" className="hidden" onChange={handleFileChange} />
-              <span className="text-[11px] text-slate-500">CSV only, max 8MB. Processed locally in your browser.</span>
+              <span className="text-sm text-slate-500">CSV only, max 8MB. Processed locally in your browser.</span>
             </div>
           </div>
 
           <div className="space-y-3 pt-2">
             <div className="space-y-2">
-              <label htmlFor="label-column" className="block text-[11px] font-medium text-slate-700">
+              <label htmlFor="label-column" className="block text-sm font-medium text-slate-700">
                 True label column
               </label>
               <select
@@ -310,7 +310,7 @@ export function FairnessProbeLab() {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="score-column" className="block text-[11px] font-medium text-slate-700">
+              <label htmlFor="score-column" className="block text-sm font-medium text-slate-700">
                 Score or probability column
               </label>
               <select
@@ -326,13 +326,13 @@ export function FairnessProbeLab() {
                   </option>
                 ))}
               </select>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-sm text-slate-500">
                 Scores should be between 0 and 1. They are treated as the model&apos;s confidence in the positive class.
               </p>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="group-column" className="block text-[11px] font-medium text-slate-700">
+              <label htmlFor="group-column" className="block text-sm font-medium text-slate-700">
                 Group column
               </label>
               <select
@@ -348,25 +348,25 @@ export function FairnessProbeLab() {
                   </option>
                 ))}
               </select>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-sm text-slate-500">
                 Use a column like gender, country, customer segment, tariff type or any other group that you wish to analyse.
               </p>
             </div>
           </div>
 
-          <p className="text-[11px] text-slate-500">{statusMsg}</p>
+          <p className="text-sm text-slate-500">{statusMsg}</p>
         </div>
 
         <div className="space-y-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-4 xl:col-span-1">
-          <p className="text-xs font-semibold text-slate-700">Step 2 – Choose positive class and threshold</p>
-          <p className="text-[11px] text-slate-600">
+          <p className="text-xs font-semibold text-slate-700">Step 2 - Choose positive class and threshold</p>
+          <p className="text-sm text-slate-600">
             The positive label is the outcome you are most concerned about. For example, in a fraud model it might be fraud, in a
             safety model it might be unsafe.
           </p>
 
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="space-y-2">
-              <label htmlFor="positive-label" className="block text-[11px] font-medium text-slate-700">
+              <label htmlFor="positive-label" className="block text-sm font-medium text-slate-700">
                 Positive label
               </label>
               <select
@@ -385,7 +385,7 @@ export function FairnessProbeLab() {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="threshold" className="block text-[11px] font-medium text-slate-700">
+              <label htmlFor="threshold" className="block text-sm font-medium text-slate-700">
                 Decision threshold
               </label>
               <input
@@ -398,14 +398,14 @@ export function FairnessProbeLab() {
                 onChange={(e) => setThreshold(Math.min(1, Math.max(0, Number(e.target.value))))}
                 className="w-full rounded-2xl border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200"
               />
-              <p className="text-[11px] text-slate-500">
+              <p className="text-sm text-slate-500">
                 Scores greater than or equal to this value are treated as positive predictions.
               </p>
             </div>
           </div>
 
           <div className="space-y-3">
-            <p className="text-[11px] font-medium text-slate-700">Positive prediction rate by group</p>
+            <p className="text-sm font-medium text-slate-700">Positive prediction rate by group</p>
             <div className="h-44 rounded-2xl border border-slate-200 bg-white px-3 py-2">
               {canCompute ? (
                 <ResponsiveContainer width="100%" height="100%">
@@ -421,7 +421,7 @@ export function FairnessProbeLab() {
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
-                <p className="text-[11px] text-slate-500">
+                <p className="text-sm text-slate-500">
                   Once you have selected a positive label and threshold the chart will show how often each group is predicted as
                   positive.
                 </p>
@@ -430,7 +430,7 @@ export function FairnessProbeLab() {
           </div>
 
           <div className="space-y-3">
-            <p className="text-[11px] font-medium text-slate-700">True positive rate by group</p>
+            <p className="text-sm font-medium text-slate-700">True positive rate by group</p>
             <div className="h-44 rounded-2xl border border-slate-200 bg-white px-3 py-2">
               {canCompute ? (
                 <ResponsiveContainer width="100%" height="100%">
@@ -446,7 +446,7 @@ export function FairnessProbeLab() {
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
-                <p className="text-[11px] text-slate-500">
+                <p className="text-sm text-slate-500">
                   Once a positive label is chosen the chart will show how frequently the model correctly identifies positive cases
                   for each group.
                 </p>
@@ -456,14 +456,14 @@ export function FairnessProbeLab() {
         </div>
 
         <div className="space-y-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-4 xl:col-span-1">
-          <p className="text-xs font-semibold text-slate-700">Step 3 – Inspect group metrics and ratios</p>
-          <p className="text-[11px] text-slate-600">
+          <p className="text-xs font-semibold text-slate-700">Step 3 - Inspect group metrics and ratios</p>
+          <p className="text-sm text-slate-600">
             Use this view to reason about whether the model treats groups consistently. You can adjust the threshold to see how
             trade offs change.
           </p>
 
           <div className="max-h-56 overflow-auto rounded-2xl border border-slate-200 bg-white">
-            <table className="min-w-full table-fixed border-collapse text-[11px] text-slate-700">
+            <table className="min-w-full table-fixed border-collapse text-sm text-slate-700">
               <thead className="bg-slate-50">
                 <tr>
                   <th className="px-2 py-1 text-left font-semibold">Group</th>
@@ -476,7 +476,7 @@ export function FairnessProbeLab() {
               <tbody>
                 {groupMetrics.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-2 py-2 text-center text-[11px] text-slate-500">
+                    <td colSpan={5} className="px-2 py-2 text-center text-sm text-slate-500">
                       Metrics will appear here after you upload data and choose columns.
                     </td>
                   </tr>
@@ -495,7 +495,7 @@ export function FairnessProbeLab() {
             </table>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-3 text-[11px] text-slate-700 space-y-1">
+          <div className="rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-700 space-y-1">
             {summary && canCompute ? (
               <>
                 <p className="font-semibold text-slate-900">Quick fairness summary</p>

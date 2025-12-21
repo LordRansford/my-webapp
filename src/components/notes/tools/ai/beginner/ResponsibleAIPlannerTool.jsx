@@ -46,7 +46,7 @@ export default function ResponsibleAIPlannerTool() {
               <span className="text-xs">{selected.includes(m.key) ? "On" : "Off"}</span>
             </div>
             <div className="mt-1 text-xs opacity-80">{m.note}</div>
-            <div className="mt-1 text-[11px] opacity-70">Covers: {m.risk.join(", ")}</div>
+            <div className="mt-1 text-sm opacity-70">Covers: {m.risk.join(", ")}</div>
           </button>
         ))}
       </div>

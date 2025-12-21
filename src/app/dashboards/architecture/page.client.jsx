@@ -1,52 +1,29 @@
 "use client";
 
 import NotesLayout from "@/components/NotesLayout";
-import ProgressBar from "@/components/notes/ProgressBar";
 import ToolCard from "@/components/learn/ToolCard";
-import {
-  SystemLandscapeCanvas,
-  DomainModelSandbox,
-  CouplingCohesionVisualizer,
-  MicroserviceBoundaryDesigner,
-  DataStoragePlanner,
-  RequestJourneyExplorer,
-  CQRSPlanner,
-  EventFlowModeler,
-  ResiliencePatternSandbox,
-  CapacityScalingPlanner,
-  CachingEffectSimulator,
-  DeploymentTopologyMapper,
-  LatencyBudgetExplorer,
-  AvailabilitySLOPlanner,
-  ChangeRiskSimulator,
-  SecurityZoneDesigner,
-  ObservabilityCoveragePlanner,
-  MultiTenancyPlanner,
-  TechDebtRadar,
-  ADRBoard,
-} from "@/components/dashboards/architecture";
 
 const tools = [
-  { title: "System landscape canvas", anchor: "system-landscape", Component: SystemLandscapeCanvas },
-  { title: "Domain model sandbox", anchor: "domain-model", Component: DomainModelSandbox },
-  { title: "Coupling and cohesion visualiser", anchor: "coupling-cohesion", Component: CouplingCohesionVisualizer },
-  { title: "Microservice boundary designer", anchor: "microservice-boundaries", Component: MicroserviceBoundaryDesigner },
-  { title: "Data storage planner", anchor: "data-storage-planner", Component: DataStoragePlanner },
-  { title: "Request journey explorer", anchor: "request-journey", Component: RequestJourneyExplorer },
-  { title: "CQRS planner", anchor: "cqrs-planner", Component: CQRSPlanner },
-  { title: "Event flow modeller", anchor: "event-flow-model", Component: EventFlowModeler },
-  { title: "Resilience pattern sandbox", anchor: "resilience-sandbox", Component: ResiliencePatternSandbox },
-  { title: "Capacity and scaling planner", anchor: "capacity-scaling", Component: CapacityScalingPlanner },
-  { title: "Caching effect simulator", anchor: "cache-effect", Component: CachingEffectSimulator },
-  { title: "Deployment topology mapper", anchor: "deployment-topology", Component: DeploymentTopologyMapper },
-  { title: "Latency budget explorer", anchor: "latency-budget", Component: LatencyBudgetExplorer },
-  { title: "Availability and SLO planner", anchor: "availability-slo", Component: AvailabilitySLOPlanner },
-  { title: "Change risk simulator", anchor: "change-risk", Component: ChangeRiskSimulator },
-  { title: "Security zone designer", anchor: "security-zones", Component: SecurityZoneDesigner },
-  { title: "Observability coverage planner", anchor: "observability-coverage", Component: ObservabilityCoveragePlanner },
-  { title: "Multi tenancy planner", anchor: "multitenancy", Component: MultiTenancyPlanner },
-  { title: "Tech debt radar", anchor: "tech-debt", Component: TechDebtRadar },
-  { title: "ADR board", anchor: "adr-board", Component: ADRBoard },
+  { title: "System landscape canvas", slug: "system-landscape", description: "Sketch systems and boundaries in a simple landscape view." },
+  { title: "Domain model sandbox", slug: "domain-model", description: "Explore bounded context concepts with a lightweight model canvas." },
+  { title: "Coupling and cohesion visualiser", slug: "coupling-cohesion", description: "See how component choices affect coupling and cohesion signals." },
+  { title: "Microservice boundary designer", slug: "microservice-boundaries", description: "Practise slicing boundaries and spot cross-cutting concerns early." },
+  { title: "Data storage planner", slug: "data-storage-planner", description: "Compare storage options by access patterns, consistency, and scale." },
+  { title: "Request journey explorer", slug: "request-journey", description: "Trace a request path and highlight latency and dependency risks." },
+  { title: "CQRS planner", slug: "cqrs-planner", description: "Separate reads/writes and understand where CQRS helps or hurts." },
+  { title: "Event flow modeller", slug: "event-flow-model", description: "Model event sequences and identify critical ordering points." },
+  { title: "Resilience pattern sandbox", slug: "resilience-sandbox", description: "Try patterns like retries, circuit breakers, and bulkheads safely." },
+  { title: "Capacity and scaling planner", slug: "capacity-scaling", description: "Estimate load, bottlenecks, and scaling levers for a service." },
+  { title: "Caching effect simulator", slug: "cache-effect", description: "Explore hit rates and how caching changes latency and load." },
+  { title: "Deployment topology mapper", slug: "deployment-topology", description: "Map services to environments and understand blast radius." },
+  { title: "Latency budget explorer", slug: "latency-budget", description: "Allocate latency budgets across dependencies and see where it breaks." },
+  { title: "Availability and SLO planner", slug: "availability-slo", description: "Set SLOs and reason about error budgets and user impact." },
+  { title: "Change risk simulator", slug: "change-risk", description: "Assess change risk by surface area, dependencies, and rollout safety." },
+  { title: "Security zone designer", slug: "security-zones", description: "Design network zones and allowed flows in a simple map." },
+  { title: "Observability coverage planner", slug: "observability-coverage", description: "Check logs, metrics, traces coverage and identify gaps." },
+  { title: "Multi tenancy planner", slug: "multitenancy", description: "Reason about tenant isolation patterns and operational complexity." },
+  { title: "Tech debt radar", slug: "tech-debt", description: "Capture and visualise debt signals so trade-offs stay visible." },
+  { title: "ADR board", slug: "adr-board", description: "Track architecture decisions and see where context is missing." },
 ];
 
 export default function ClientPage() {
@@ -59,10 +36,9 @@ export default function ClientPage() {
         slug: "/dashboards/architecture",
         level: "Dashboards",
       }}
-      headings={tools.map((tool) => ({ id: tool.anchor, title: tool.title, depth: 2 }))}
+      headings={[]}
     >
       <main className="relative flex-1 space-y-10">
-        <ProgressBar />
         <header className="rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm backdrop-blur">
           <p className="eyebrow m-0 text-gray-600">Dashboards · Architecture</p>
           <h1 className="mb-2 text-2xl font-semibold tracking-tight text-slate-900">Software architecture dashboards</h1>
@@ -73,20 +49,15 @@ export default function ClientPage() {
         </header>
 
         <article className="prose prose-slate max-w-none dark:prose-invert">
-          <section className="rn-section" style={{ marginTop: 0 }}>
-            <p className="rn-body">
-              Everything runs in the browser - no calls to a server. Adjust inputs, see how the picture responds, and use that to
-              refine your own architecture decisions.
-            </p>
-          </section>
-
-          <div className="flex flex-col gap-6 max-w-5xl mx-auto">
-            {tools.map(({ title, anchor, Component }) => (
-              <section key={anchor} id={anchor} className="rn-section w-full">
-                <ToolCard title={title} description="">
-                  <Component />
-                </ToolCard>
-              </section>
+          <p>Pick a dashboard tool below. Each opens on its own page to keep tool pages focused and mobile-safe.</p>
+          <div className="not-prose">
+            {tools.map((tool) => (
+              <ToolCard
+                key={tool.slug}
+                title={tool.title}
+                description={tool.description}
+                href={`/dashboards/architecture/${tool.slug}`}
+              />
             ))}
           </div>
         </article>

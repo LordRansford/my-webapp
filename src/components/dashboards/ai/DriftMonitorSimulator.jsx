@@ -29,7 +29,7 @@ export default function DriftMonitorSimulator() {
               <div className="h-2 rounded-full bg-blue-600" style={{ width: `${t.accuracy * 100}%` }} />
             </div>
             <span className="w-12 text-right">{Math.round(t.accuracy * 100)}%</span>
-            {t.detected && <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[11px] font-semibold text-amber-800">Alert</span>}
+            {t.detected && <span className="rounded-full bg-amber-100 px-2 py-0.5 text-sm font-semibold text-amber-800">Alert</span>}
           </div>
         ))}
       </div>

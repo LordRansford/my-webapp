@@ -70,7 +70,7 @@ export default function ScenarioClinicGame() {
             <p className="text-xs font-semibold text-slate-900">{scenario.title}</p>
             <div className="mt-3 grid gap-2 sm:grid-cols-3">
               {["model", "data", "metric"].map((key) => (
-                <label key={`${scenario.id}-${key}`} className="text-[11px] font-semibold text-slate-600">
+                <label key={`${scenario.id}-${key}`} className="text-sm font-semibold text-slate-600">
                   {key}
                   <select
                     value={answers[scenario.id]?.[key] || ""}
@@ -87,7 +87,7 @@ export default function ScenarioClinicGame() {
                 </label>
               ))}
             </div>
-            <p className="mt-2 text-[11px] text-slate-500">
+            <p className="mt-2 text-sm text-slate-500">
               Suggested: {scenario.model} | {scenario.data} | {scenario.metric}
             </p>
           </div>

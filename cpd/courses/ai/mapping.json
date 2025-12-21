@@ -1,0 +1,10 @@
+{
+  "courseId": "ai",
+  "status": "InProgress",
+  "levels": [],
+  "evidence": {
+    "progressTracking": "Server CPD state + analytics",
+    "certificates": "UUID verification, issuance pending Ready status"
+  }
+}
+

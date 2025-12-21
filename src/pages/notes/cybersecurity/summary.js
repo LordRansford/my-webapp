@@ -1,9 +1,7 @@
 import dynamic from "next/dynamic";
 import NotesLayout from "@/components/notes/Layout";
-import ProgressBar from "@/components/notes/ProgressBar";
 import PageNav from "@/components/notes/PageNav";
 import SummaryHero from "@/components/notes/summary/SummaryHero";
-import NotesStepper from "@/components/notes/summary/NotesStepper";
 import RecapPanel from "@/components/notes/summary/RecapPanel";
 import NextSteps from "@/components/notes/summary/NextSteps";
 import ToolCard from "@/components/learn/ToolCard";
@@ -28,20 +26,15 @@ export default function CybersecuritySummaryPage() {
     totalPages: 4,
   };
 
+  const headings = [
+    { id: "games-title", title: "Practice games", depth: 2 },
+    { id: "quiz-title", title: "Recap challenge", depth: 2 },
+    { id: "reflection-and-next-steps", title: "Reflection and next steps", depth: 2 },
+  ];
+
   return (
-    <NotesLayout meta={meta}>
-      <ProgressBar mode="static" value={100} label="Summary" />
-
+    <NotesLayout meta={meta} headings={headings}>
       <SummaryHero title="Cybersecurity Notes" subtitle="A quick recap with prompts to make the ideas stick." />
-
-      <NotesStepper
-        items={[
-          { label: "Beginner", href: "/cybersecurity/beginner" },
-          { label: "Intermediate", href: "/cybersecurity/intermediate" },
-          { label: "Advanced", href: "/cybersecurity/advanced" },
-          { label: "Summary", href: "/notes/cybersecurity/summary", active: true },
-        ]}
-      />
 
       <RecapPanel />
 

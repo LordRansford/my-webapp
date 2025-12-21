@@ -36,14 +36,14 @@ export default async function TemplateDownloadsAdminPage() {
   return (
     <main className="mx-auto max-w-5xl p-6 space-y-4">
       <header className="space-y-1">
-        <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Admin</p>
+        <p className="text-sm font-semibold uppercase tracking-wide text-slate-600">Admin</p>
         <h1 className="text-2xl font-semibold text-slate-900">Template downloads</h1>
         <p className="text-sm text-slate-700">Latest download attempts for templates.</p>
       </header>
 
       <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
         <table className="min-w-full text-sm text-left text-slate-800">
-          <thead className="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-600">
+          <thead className="bg-slate-50 text-sm font-semibold uppercase tracking-wide text-slate-600">
             <tr>
               <th className="px-4 py-2">When</th>
               <th className="px-4 py-2">Template</th>
@@ -61,7 +61,7 @@ export default async function TemplateDownloadsAdminPage() {
                 <td className="px-4 py-2">{d.requestedUse}</td>
                 <td className="px-4 py-2">{d.supportMethod}</td>
                 <td className="px-4 py-2">{d.signaturePolicyApplied}</td>
-                <td className="px-4 py-2 text-xs text-slate-600">{d.userId || d.anonymousUserId || "anon"}</td>
+                <td className="px-4 py-2 text-sm text-slate-600">{d.userId || d.anonymousUserId || "anon"}</td>
               </tr>
             ))}
             {!downloads.length && (

@@ -94,7 +94,7 @@ export default function ThirdPartyScriptViewer() {
       )}
 
       {!result && !loading && !error && (
-        <p className="text-[11px] text-slate-500">
+        <p className="text-sm text-slate-500">
           The backend fetches only the HTML and script tags for the page. It does not execute scripts. Results are for education, not a full supply chain audit.
         </p>
       )}
@@ -103,7 +103,7 @@ export default function ThirdPartyScriptViewer() {
         <div className="space-y-3">
           <section className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
             <h3 className="text-sm font-semibold text-slate-900">Summary</h3>
-            <p className="mt-1 text-[11px] text-slate-700">
+            <p className="mt-1 text-sm text-slate-700">
               {result.summary || "No summary provided by API."}
             </p>
           </section>
@@ -117,16 +117,16 @@ export default function ThirdPartyScriptViewer() {
                     key={script.src}
                     className="rounded-xl bg-white p-2 shadow-sm"
                   >
-                    <p className="font-mono break-all text-[11px]">
+                    <p className="font-mono break-all text-sm">
                       {script.src || "<inline script>"}
                     </p>
-                    <p className="mt-1 text-[11px] text-slate-600">
+                    <p className="mt-1 text-sm text-slate-600">
                       Origin type:{" "}
                       <span className="font-semibold">
                         {script.thirdParty ? "Third party" : "First party"}
                       </span>
                     </p>
-                    <p className="mt-1 text-[11px] text-slate-600">
+                    <p className="mt-1 text-sm text-slate-600">
                       SRI present:{" "}
                       <span className="font-semibold">
                         {script.hasIntegrity ? "Yes" : "No"}
@@ -136,7 +136,7 @@ export default function ThirdPartyScriptViewer() {
                 ))}
               </ul>
             ) : (
-              <p className="mt-1 text-[11px] text-slate-600">
+              <p className="mt-1 text-sm text-slate-600">
                 No script tags were found for this page.
               </p>
             )}

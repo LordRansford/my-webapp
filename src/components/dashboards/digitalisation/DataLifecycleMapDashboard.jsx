@@ -32,7 +32,7 @@ export default function DataLifecycleMapDashboard() {
               <div key={step} className="flex items-center gap-2">
                 <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-800 shadow-sm">
                   <p className="font-semibold text-slate-900">{step}</p>
-                  <p className="text-[11px] text-slate-700">{data[step] || "Add details"}</p>
+                  <p className="text-sm text-slate-700">{data[step] || "Add details"}</p>
                 </div>
                 {idx < steps.length - 1 && <span className="text-slate-400">→</span>}
               </div>

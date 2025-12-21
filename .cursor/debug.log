@@ -1,5 +1,0 @@
-{"sessionId":"debug-session","runId":"pre-fix","hypothesisId":"H1","location":"next.config.mjs:entry","message":"next.config loaded","data":{"nodeEnv":"production","vercel":false,"stripeSecretPresent":false,"stripePublishablePresent":false},"timestamp":1766180866178}
-{"sessionId":"debug-session","runId":"pre-fix","hypothesisId":"H3","location":"next.config.mjs:headers","message":"headers config invoked","data":{"headerCount":1,"coop":"same-origin","coep":"require-corp"},"timestamp":1766180866206}
-{"sessionId":"debug-session","runId":"pre-fix","hypothesisId":"H2","location":"next.config.mjs:webpack","message":"webpack config invoked","data":{"dev":false,"cacheDisabled":false},"timestamp":1766180867814}
-{"sessionId":"debug-session","runId":"pre-fix","hypothesisId":"H2","location":"next.config.mjs:webpack","message":"webpack config invoked","data":{"dev":false,"cacheDisabled":false},"timestamp":1766180867816}
-{"sessionId":"debug-session","runId":"pre-fix","hypothesisId":"H2","location":"next.config.mjs:webpack","message":"webpack config invoked","data":{"dev":false,"cacheDisabled":false},"timestamp":1766180867820}

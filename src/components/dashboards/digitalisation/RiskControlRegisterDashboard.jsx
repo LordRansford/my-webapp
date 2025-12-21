@@ -21,7 +21,7 @@ export default function RiskControlRegisterDashboard() {
           <div key={row.risk} className="rounded-xl border border-slate-200 bg-slate-50 p-3 shadow-sm">
             <div className="flex items-center justify-between gap-2">
               <p className="text-sm font-semibold text-slate-900">{row.risk}</p>
-              <span className={`rounded-full px-2 py-1 text-[11px] font-semibold ${score(row) >= 12 ? "bg-rose-100 text-rose-800" : "bg-amber-100 text-amber-800"}`}>
+              <span className={`rounded-full px-2 py-1 text-sm font-semibold ${score(row) >= 12 ? "bg-rose-100 text-rose-800" : "bg-amber-100 text-amber-800"}`}>
                 Score {score(row)}
               </span>
             </div>

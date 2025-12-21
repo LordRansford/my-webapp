@@ -120,8 +120,8 @@ export function RiskRegisterTool() {
                 className="rounded-2xl border border-slate-200 bg-white p-3 text-xs text-slate-700 space-y-1"
               >
                 <p className="font-semibold text-slate-900">{item.asset}</p>
-                <p className="text-[11px] text-slate-600">Threat: {item.threat}</p>
-                <p className="text-[11px] text-slate-600">
+                <p className="text-sm text-slate-600">Threat: {item.threat}</p>
+                <p className="text-sm text-slate-600">
                   Likelihood: <span className="font-semibold text-slate-900">{item.likelihood}</span> · Impact:{" "}
                   <span className="font-semibold text-slate-900">{item.impact}</span> · Level:{" "}
                   <span className="font-semibold text-slate-900">{scoreLevel(item.likelihood, item.impact)}</span>
@@ -130,7 +130,7 @@ export function RiskRegisterTool() {
                   type="button"
                   onClick={() => removeRisk(item.id)}
                   aria-label="Remove risk"
-                  className="text-[11px] px-2 py-1 rounded-full text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+                  className="text-sm px-2 py-1 rounded-full text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
                 >
                   ✕
                 </button>
@@ -143,7 +143,7 @@ export function RiskRegisterTool() {
               <span className="font-semibold text-slate-900">{summary.Medium}</span> · Low:{" "}
               <span className="font-semibold text-slate-900">{summary.Low}</span>
             </p>
-            <p className="text-[11px] text-slate-600">Focus first on the high items, then medium. Decide if any low risks can be accepted.</p>
+            <p className="text-sm text-slate-600">Focus first on the high items, then medium. Decide if any low risks can be accepted.</p>
           </div>
         </div>
       </div>

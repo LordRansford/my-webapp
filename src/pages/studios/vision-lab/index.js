@@ -159,7 +159,7 @@ export default function VisionLabPage() {
     }
     setTrainState((s) => ({ ...s, training: true, error: "" }));
     const jobId = `vision-${Date.now()}`;
-    const jobName = `Vision Lab – custom clf (${labeledImages.length} imgs)`;
+    const jobName = `Vision Lab - custom clf (${labeledImages.length} imgs)`;
     addJob({ id: jobId, name: jobName, studio: "vision-lab", status: "running" });
     try {
       // Build centroids per class
@@ -339,7 +339,7 @@ export default function VisionLabPage() {
 
         <div className="grid gap-4 lg:grid-cols-3">
           <div className="space-y-3 rounded-2xl border border-slate-100 bg-slate-50/60 p-4">
-            <p className="text-xs font-semibold text-slate-900">Step 1 – Labels</p>
+            <p className="text-xs font-semibold text-slate-900">Step 1 - Labels</p>
             {classLabels.map((lab, idx) => (
               <input
                 key={idx}
@@ -360,7 +360,7 @@ export default function VisionLabPage() {
           </div>
 
           <div className="space-y-3 rounded-2xl border border-slate-100 bg-slate-50/60 p-4">
-            <p className="text-xs font-semibold text-slate-900">Step 2 – Upload & assign</p>
+            <p className="text-xs font-semibold text-slate-900">Step 2 - Upload & assign</p>
             <select
               className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200"
               value={uploadLabel}
@@ -387,7 +387,7 @@ export default function VisionLabPage() {
           </div>
 
           <div className="space-y-3 rounded-2xl border border-slate-100 bg-slate-50/60 p-4">
-            <p className="text-xs font-semibold text-slate-900">Step 3 – Train</p>
+            <p className="text-xs font-semibold text-slate-900">Step 3 - Train</p>
             <p className="text-xs text-slate-700">
               Training runs in your browser using a frozen backbone and a tiny head. Good for intuition, not production.
             </p>

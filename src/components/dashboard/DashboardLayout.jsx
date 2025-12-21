@@ -3,21 +3,31 @@
 import { useEffect, useMemo, useState } from "react";
 import DashboardTabs from "./DashboardTabs";
 import DashboardHero from "./DashboardHero";
+import { useSession } from "next-auth/react";
 
 function useScrollProgress() {
   const [p, setP] = useState(0);
   useEffect(() => {
+    let raf = 0;
     const onScroll = () => {
-      const el = document.documentElement;
-      const scrollTop = el.scrollTop || document.body.scrollTop;
-      const scrollHeight = el.scrollHeight || document.body.scrollHeight;
-      const clientHeight = el.clientHeight || window.innerHeight;
-      const denom = Math.max(1, scrollHeight - clientHeight);
-      setP(Math.min(1, Math.max(0, scrollTop / denom)));
+      if (raf) return;
+      raf = window.requestAnimationFrame(() => {
+        raf = 0;
+        const el = document.documentElement;
+        const scrollTop = el.scrollTop || document.body.scrollTop;
+        const scrollHeight = el.scrollHeight || document.body.scrollHeight;
+        const clientHeight = el.clientHeight || window.innerHeight;
+        const denom = Math.max(1, scrollHeight - clientHeight);
+        const next = Math.min(1, Math.max(0, scrollTop / denom));
+        setP((prev) => (Math.abs(prev - next) < 0.01 ? prev : next));
+      });
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      if (raf) window.cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
   return p;
 }
@@ -25,6 +35,16 @@ function useScrollProgress() {
 export default function DashboardLayout({ title, subtitle, tabs, children }) {
   const progress = useScrollProgress();
   const [activeTab, setActiveTab] = useState(tabs?.[0]?.id || "overview");
+  const { data: session } = useSession();
+  const [plan, setPlan] = useState("free");
+
+  useEffect(() => {
+    if (!session?.user?.id) return;
+    fetch("/api/billing/summary")
+      .then((r) => r.json())
+      .then((d) => setPlan(d?.plan || "free"))
+      .catch(() => setPlan("free"));
+  }, [session?.user?.id]);
 
   const jump = (id) => {
     setActiveTab(id);
@@ -44,6 +64,7 @@ export default function DashboardLayout({ title, subtitle, tabs, children }) {
         title={title}
         subtitle={subtitle}
         note="Tip: Use the query panel to test a specific idea. If the chart surprises you, that is usually the learning edge."
+        badge={plan === "supporter" ? "Supporter" : plan === "pro" ? "Professional" : null}
       />
 
       <DashboardTabs tabs={tabs} activeId={activeTab} onJump={jump} />

@@ -33,7 +33,7 @@ export function RiskMatrix({ placement }: MatrixProps) {
                 return (
                   <div
                     key={c}
-                    className={`h-10 rounded ${active ? "bg-amber-200 border-2 border-amber-500" : "bg-slate-100"} flex items-center justify-center text-[11px] text-slate-700`}
+                    className={`h-10 rounded ${active ? "bg-amber-200 border-2 border-amber-500" : "bg-slate-100"} flex items-center justify-center text-sm text-slate-700`}
                     aria-label={`${r} x ${c}`}
                   >
                     {active ? "Current" : ""}

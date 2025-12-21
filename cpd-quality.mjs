@@ -1,185 +1,123 @@
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import matter from "gray-matter";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const root = __dirname;
 
-const projectRoot = __dirname;
-
-const tracks = [
-  {
-    trackId: "cyber",
-    courseIds: ["cybersecurity", "cyber"],
-    manifestPath: path.join(projectRoot, "src", "lib", "cyberSections.js"),
-    contentGlobs: [
-      path.join(projectRoot, "content", "notes", "cybersecurity"),
-    ],
-  },
-  {
-    trackId: "ai",
-    courseIds: ["ai"],
-    manifestPath: path.join(projectRoot, "src", "lib", "aiSections.js"),
-    contentGlobs: [
-      path.join(projectRoot, "content", "notes", "ai", "beginner.mdx"),
-      path.join(projectRoot, "content", "courses", "ai"),
-    ],
-  },
-  {
-    trackId: "software-architecture",
-    courseIds: ["software-architecture", "architecture"],
-    manifestPath: path.join(projectRoot, "src", "lib", "softwareArchitectureSections.js"),
-    contentGlobs: [
-      path.join(projectRoot, "content", "courses", "software-architecture"),
-    ],
-  },
+const requiredFrontmatter = ["title", "courseId", "levelId", "estimatedHours"];
+const packFiles = [
+  "cpd-pack.md",
+  "mapping.json",
+  "mapping.md",
+  "quality-and-review.md",
+  "assessment.md",
+  "provider-and-instructor.md",
+  "policies.md",
+  "evidence-checklist.md",
 ];
 
-const readDirRecursive = (dir) => {
-  const entries = [];
-  if (!fs.existsSync(dir)) return entries;
-  const statRoot = fs.statSync(dir);
-  if (statRoot.isFile()) {
-    if (dir.endsWith(".mdx") || dir.endsWith(".jsx") || dir.endsWith(".js")) entries.push(dir);
-    return entries;
-  }
+function walk(dir) {
+  const out = [];
+  if (!fs.existsSync(dir)) return out;
+  const stat = fs.statSync(dir);
+  if (stat.isFile() && dir.endsWith(".mdx")) return [dir];
+  if (!stat.isDirectory()) return out;
   for (const entry of fs.readdirSync(dir)) {
     const full = path.join(dir, entry);
-    const stat = fs.statSync(full);
-    if (stat.isDirectory()) {
-      entries.push(...readDirRecursive(full));
-    } else if (full.endsWith(".mdx") || full.endsWith(".jsx") || full.endsWith(".js")) {
-      entries.push(full);
-    }
+    const s = fs.statSync(full);
+    if (s.isDirectory()) out.push(...walk(full));
+    else if (full.endsWith(".mdx")) out.push(full);
   }
-  return entries;
-};
+  return out;
+}
 
-const loadManifest = (filePath, exportName) => {
-  const raw = fs.readFileSync(filePath, "utf8");
-  const transformed = raw.replace(/export const\s+/g, "exports.");
-  const moduleShim = { exports: {} };
-  const func = new Function("exports", "module", transformed);
-  func(moduleShim.exports, moduleShim);
-  return moduleShim.exports[exportName];
-};
+async function runGenerator() {
+  const mod = await import(pathToFileURL(path.join(root, "scripts", "generate-cpd-packs.mjs")));
+  if (typeof mod.generate !== "function") throw new Error("generate-cpd-packs missing generate()");
+  await mod.generate();
+}
 
-const getManifest = (trackId, manifestPath) => {
-  if (trackId === "cyber") return loadManifest(manifestPath, "cyberSections");
-  if (trackId === "ai") return loadManifest(manifestPath, "aiSectionManifest");
-  return loadManifest(manifestPath, "softwareArchitectureSectionManifest");
-};
-
-const getAttr = (str, name) => {
-  const quoted = new RegExp(`${name}\\s*=\\s*["']([^"']+)["']`).exec(str);
-  if (quoted) return quoted[1];
-  const braced = new RegExp(`${name}\\s*=\\s*{([^}]+)}`).exec(str);
-  if (braced) return braced[1].trim();
-  return null;
-};
-
-const errors = [];
-
-tracks.forEach((track) => {
-  const manifest = getManifest(track.trackId, track.manifestPath) || {};
-  const levelKeys = Object.keys(manifest);
-  const foundSections = new Set();
-
-  const files = track.contentGlobs.flatMap((dir) => readDirRecursive(dir));
-
+function checkFrontmatter(files, errors) {
   files.forEach((filePath) => {
-    const content = fs.readFileSync(filePath, "utf8");
-
-    const toggleRegex = /<SectionProgressToggle[\s\S]*?>/g;
-    let toggleMatch;
-    while ((toggleMatch = toggleRegex.exec(content))) {
-      const snippet = toggleMatch[0];
-      const courseId = getAttr(snippet, "courseId");
-      const levelId = getAttr(snippet, "levelId");
-      const sectionId = getAttr(snippet, "sectionId");
-      if (!courseId || !levelId || !sectionId) {
-        errors.push(`CPD error: Missing attrs on SectionProgressToggle in ${filePath}`);
-        continue;
-      }
-      if (!track.courseIds.includes(courseId)) continue;
-      if (!manifest[levelId]) {
-        errors.push(`CPD error: Level ${levelId} not in manifest for ${track.trackId} (${filePath})`);
-        continue;
-      }
-      if (!manifest[levelId].includes(sectionId)) {
-        errors.push(`CPD error: section ${sectionId} not in manifest level ${levelId} (${filePath})`);
-        continue;
-      }
-      foundSections.add(sectionId);
-    }
-
-    const quizRegex = /<QuizBlock[\s\S]*?>/g;
-    let quizMatch;
-    while ((quizMatch = quizRegex.exec(content))) {
-      const snippet = quizMatch[0];
-      const courseId = getAttr(snippet, "courseId");
-      const levelId = getAttr(snippet, "levelId");
-      const sectionId = getAttr(snippet, "sectionId");
-      if (!courseId && !levelId && !sectionId) continue;
-      if (!courseId || !levelId || !sectionId) {
-        errors.push(`CPD error: QuizBlock missing CPD props in ${filePath}`);
-        continue;
-      }
-      if (!track.courseIds.includes(courseId)) continue;
-      if (!manifest[levelId]) {
-        errors.push(`CPD error: QuizBlock level ${levelId} not in manifest for ${track.trackId} (${filePath})`);
-        continue;
-      }
-      if (!manifest[levelId].includes(sectionId)) {
-        errors.push(`CPD error: QuizBlock section ${sectionId} not in manifest (${filePath})`);
-        continue;
-      }
-      foundSections.add(sectionId);
-    }
-
-    const toolRegex = /<ToolCard[\s\S]*?>/g;
-    let toolMatch;
-    while ((toolMatch = toolRegex.exec(content))) {
-      const snippet = toolMatch[0];
-      const courseId = getAttr(snippet, "courseId");
-      const levelId = getAttr(snippet, "levelId");
-      const sectionId = getAttr(snippet, "sectionId");
-      const hasAnyCpdProp = courseId || levelId || sectionId;
-      if (!hasAnyCpdProp) continue;
-
-      const minutes = getAttr(snippet, "cpdMinutesOnUse");
-      if (!courseId || !levelId || !sectionId) {
-        errors.push(`CPD error: ToolCard missing CPD props in ${filePath}`);
-        continue;
-      }
-      if (!track.courseIds.includes(courseId)) continue;
-      if (!manifest[levelId]) {
-        errors.push(`CPD error: ToolCard level ${levelId} not in manifest for ${track.trackId} (${filePath})`);
-        continue;
-      }
-      if (!manifest[levelId].includes(sectionId)) {
-        errors.push(`CPD error: ToolCard section ${sectionId} not in manifest (${filePath})`);
-        continue;
-      }
-      if (!minutes) {
-        errors.push(`CPD error: ToolCard ${sectionId} missing cpdMinutesOnUse (${filePath})`);
-      }
-      foundSections.add(sectionId);
+    const raw = fs.readFileSync(filePath, "utf8");
+    const parsed = matter(raw);
+    const fm = parsed.data || {};
+    if (!fm.courseId) return; // skip non-course pages
+    const missing = requiredFrontmatter.filter((k) => fm[k] === undefined || fm[k] === null || fm[k] === "");
+    if (missing.length) {
+      errors.push(`CPD error: missing ${missing.join(", ")} in ${filePath}`);
     }
   });
+}
 
-  levelKeys.forEach((levelId) => {
-    (manifest[levelId] || []).forEach((sectionId) => {
-      if (!foundSections.has(sectionId)) {
-        errors.push(`CPD error: section ${sectionId} is defined for ${track.trackId} ${levelId} but not referenced in content.`);
+function loadStatus() {
+  const p = path.join(root, "cpd", "courses", "course-status.json");
+  if (!fs.existsSync(p)) return {};
+  return JSON.parse(fs.readFileSync(p, "utf8"));
+}
+
+function checkReadyPacks(statusMap, errors) {
+  Object.entries(statusMap).forEach(([courseId, status]) => {
+    if (status !== "Ready") return;
+    const folder = path.join(root, "cpd", "courses", courseId);
+    packFiles.forEach((file) => {
+      const p = path.join(folder, file);
+      if (!fs.existsSync(p)) {
+        errors.push(`CPD error: missing pack file ${file} for course ${courseId}`);
       }
     });
   });
-});
-
-if (errors.length) {
-  errors.forEach((msg) => console.error(msg));
-  process.exit(1);
 }
 
-console.log("CPD quality check passed.");
+function checkQuizAndTool(parsedFiles, statusMap, errors) {
+  const readyCourses = Object.entries(statusMap)
+    .filter(([, status]) => status === "Ready")
+    .map(([course]) => course);
+  parsedFiles.forEach((f) => {
+    if (!f.courseId) return;
+    if (!readyCourses.includes(f.courseId)) return;
+    if (!f.hasQuiz) errors.push(`CPD error: no QuizBlock in ${f.filePath}`);
+    if (!f.hasTool) errors.push(`CPD error: no ToolCard in ${f.filePath}`);
+  });
+}
+
+async function main() {
+  const errors = [];
+  const files = walk(path.join(root, "content"));
+  checkFrontmatter(files, errors);
+
+  // run generator (will set exitCode on failures)
+  try {
+    await runGenerator();
+  } catch (e) {
+    errors.push(`CPD error: generator failed (${e.message || e})`);
+  }
+
+  const status = loadStatus();
+  checkReadyPacks(status, errors);
+
+  // Re-parse to reuse quiz/tool flags from generator outputs (mapping.json)
+  const parsed = files.map((filePath) => {
+    const raw = fs.readFileSync(filePath, "utf8");
+    const { data, content } = matter(raw);
+    return {
+      filePath,
+      courseId: data.courseId,
+      levelId: data.levelId,
+      hasQuiz: content.includes("<QuizBlock"),
+      hasTool: content.includes("<ToolCard"),
+    };
+  });
+  checkQuizAndTool(parsed, status, errors);
+
+  if (errors.length) {
+    errors.forEach((e) => console.error(e));
+    process.exit(1);
+  }
+  console.log("CPD quality check passed.");
+}
+
+main();

@@ -253,7 +253,7 @@ export default function StudiosPage() {
             </Link>
           </div>
         </div>
-        <div className="flex flex-wrap gap-2 text-[11px] text-slate-600">
+        <div className="flex flex-wrap gap-2 text-sm text-slate-600">
           {["Vision Lab", "Speech & Sound Lab", "Docs & Data Lab", "LLM & Agent Lab", "Evaluation & Governance Lab"].map((lab) => (
             <span key={lab} className="rounded-full bg-slate-50 px-3 py-1 ring-1 ring-slate-200">
               {lab}

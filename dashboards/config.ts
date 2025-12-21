@@ -47,15 +47,4 @@ export const dashboards: DashboardConfig[] = [
     licensingSummary: "Educational tools and visualisations generated locally.",
     lastUpdatedNote: "Updated with the initial set of six architecture dashboards.",
   },
-  {
-    id: "cim",
-    title: "CIM and schema dashboard",
-    description: "Schema exploration, validation summaries, and example mappings. Coming later.",
-    href: "/dashboards/cim",
-    tags: ["CIM", "Schema", "Validation"],
-    mode: "static",
-    dataSummary: "Planned as locally rendered schema summaries and user provided files.",
-    licensingSummary: "No official endorsement implied.",
-    lastUpdatedNote: "Planned.",
-  },
 ];

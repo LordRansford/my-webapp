@@ -73,13 +73,13 @@ export function JwtExplainerTool() {
         <div className="space-y-3 rounded-2xl border border-slate-100 bg-slate-50/60 p-4">
           <div className="rounded-2xl border border-slate-200 bg-white p-3 text-xs text-slate-700 space-y-2">
             <p className="font-semibold text-slate-900">Decoded header</p>
-            <pre className="text-[11px] whitespace-pre-wrap break-all text-slate-700">
+            <pre className="text-sm whitespace-pre-wrap break-all text-slate-700">
               {header ? JSON.stringify(header, null, 2) : "Could not decode header"}
             </pre>
           </div>
           <div className="rounded-2xl border border-slate-200 bg-white p-3 text-xs text-slate-700 space-y-2">
             <p className="font-semibold text-slate-900">Decoded payload</p>
-            <pre className="text-[11px] whitespace-pre-wrap break-all text-slate-700">
+            <pre className="text-sm whitespace-pre-wrap break-all text-slate-700">
               {payload ? JSON.stringify(payload, null, 2) : "Could not decode payload"}
             </pre>
           </div>
@@ -87,7 +87,7 @@ export function JwtExplainerTool() {
             <p className="font-semibold text-slate-900">Quick checks</p>
             <ul className="space-y-1">
               {hints.map((h, idx) => (
-                <li key={idx} className="text-[11px] text-slate-800">
+                <li key={idx} className="text-sm text-slate-800">
                   • {h}
                 </li>
               ))}

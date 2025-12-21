@@ -64,7 +64,7 @@ export default function ConsistencySimulator() {
                 )}
                 {step.label}
               </div>
-              <p className="mt-1 text-[11px] font-normal">
+              <p className="mt-1 text-sm font-normal">
                 {active ? "Active" : "Skipped"}
               </p>
             </button>

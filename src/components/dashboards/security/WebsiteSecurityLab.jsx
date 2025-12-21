@@ -45,6 +45,29 @@ export default function WebsiteSecurityLab() {
 
   return (
     <div className="space-y-4">
+      <div className="grid gap-3 md:grid-cols-3">
+        <div className="rounded-2xl border border-slate-200 bg-white/80 p-4">
+          <p className="text-xs font-semibold text-slate-800">What this tells you</p>
+          <p className="mt-2 text-sm text-slate-700">
+            A quick read of HTTPS posture, basic headers, and certificate metadata. Use it to spot obvious gaps, then verify
+            with your own baseline.
+          </p>
+        </div>
+        <div className="rounded-2xl border border-slate-200 bg-white/80 p-4">
+          <p className="text-xs font-semibold text-slate-800">Interpretation tips</p>
+          <ul className="mt-2 space-y-1 text-sm text-slate-700">
+            <li>• Redirect chains can hide where users end up. Confirm the final destination.</li>
+            <li>• A CSP string is not enough. It must be tight enough to block unexpected script sources.</li>
+          </ul>
+        </div>
+        <div className="rounded-2xl border border-slate-200 bg-white/80 p-4">
+          <p className="text-xs font-semibold text-slate-800">Limitations</p>
+          <ul className="mt-2 space-y-1 text-sm text-slate-700">
+            <li>• Results depend on what the server returns at the exact URL you test.</li>
+            <li>• This does not replace a full security review or testing of authenticated routes.</li>
+          </ul>
+        </div>
+      </div>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:flex-row">
         <label className="sr-only" htmlFor="website-url">
           Website URL

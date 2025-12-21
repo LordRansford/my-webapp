@@ -4,6 +4,8 @@ import crypto from "crypto";
 import { evaluateTemplateAccess, RequestedUse, SupportMethod } from "@/lib/templates/permissions";
 import { getActivePermissionTokens, saveDownload } from "@/lib/templates/store";
 import { qualifyDonation } from "@/lib/donations/qualify";
+import { rateLimit } from "@/lib/security/rateLimit";
+import { requireSameOrigin } from "@/lib/security/origin";
 
 type Body = {
   templateId?: string;
@@ -29,6 +31,11 @@ function buildSignedUrl(templateId: string, variant: string) {
 }
 
 export async function POST(request: Request) {
+  const originBlock = requireSameOrigin(request);
+  if (originBlock) return originBlock;
+  const limited = rateLimit(request, { keyPrefix: "templates-request-download", limit: 30, windowMs: 60_000 });
+  if (limited) return limited;
+
   const body = (await request.json().catch(() => null)) as Body | null;
 
   if (!body?.templateId || !body?.requestedUse) {

@@ -23,7 +23,7 @@ export default function DigitalServiceJourneyMapDashboard() {
                   Channel: {step.channel} · System: {step.system}
                 </p>
               </div>
-              <span className={`rounded-full px-2 py-1 text-[11px] font-semibold ${step.pain >= 6 ? "bg-rose-100 text-rose-800" : "bg-emerald-100 text-emerald-800"}`}>
+              <span className={`rounded-full px-2 py-1 text-sm font-semibold ${step.pain >= 6 ? "bg-rose-100 text-rose-800" : "bg-emerald-100 text-emerald-800"}`}>
                 Pain {step.pain}/10
               </span>
             </div>

@@ -227,13 +227,13 @@ export function DatasetPlanningLab() {
                     type="button"
                     onClick={() => removeClass(c.id)}
                     aria-label="Remove class"
-                    className="text-[11px] px-2 py-1 rounded-full text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+                    className="text-sm px-2 py-1 rounded-full text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
                   >
                     ✕
                   </button>
                 </div>
                 {classTotal > 0 && (
-                  <p className="text-[11px] text-slate-500">
+                  <p className="text-sm text-slate-500">
                     This class is approximately{" "}
                     <span className="font-semibold">{((clampCount(c.count) / classTotal) * 100).toFixed(1)} percent</span>{" "}
                     of your dataset.

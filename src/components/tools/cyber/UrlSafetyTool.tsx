@@ -92,6 +92,18 @@ export function UrlSafetyTool() {
       title="URL safety workbench"
       icon={<Link2 className="h-4 w-4" aria-hidden="true" />}
       description="Paste a URL and see structural hints that may indicate phishing or suspicious behaviour, such as IP hosts, punycode or strange query strings."
+      whatThisTellsYou={[
+        "A quick structural read of a URL that often catches common phishing tricks.",
+        "Which parts of the URL deserve human verification before you click or sign in.",
+      ]}
+      interpretationTips={[
+        "A clean-looking URL can still be malicious. Check context, sender, and whether you expected the link.",
+        "Look for the registrable domain, not the first subdomain label. Attackers rely on quick scanning.",
+      ]}
+      limitations={[
+        "This tool does not fetch the URL or check reputation feeds. It only inspects structure.",
+        "Punycode and long queries can be legitimate. Treat these as prompts to verify, not proof of abuse.",
+      ]}
     >
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-3 rounded-2xl border border-slate-100 bg-slate-50/60 p-4">
@@ -125,7 +137,7 @@ export function UrlSafetyTool() {
             <p className="font-semibold text-slate-900">Risk hints and questions</p>
             <ul className="mt-1 space-y-1">
               {riskNotes.map((note, idx) => (
-                <li key={idx} className="text-[11px] text-slate-700">
+                <li key={idx} className="text-sm text-slate-700">
                   • {note}
                 </li>
               ))}

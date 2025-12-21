@@ -1,6 +1,8 @@
 import React from "react";
 import { CategoryGrid } from "@/components/templates/CategoryGrid";
 import { TEMPLATE_CATEGORIES } from "@/data/templates/categories";
+import SupportBanner from "@/components/SupportBanner";
+import Link from "next/link";
 
 export const metadata = {
   title: "Templates",
@@ -22,7 +24,7 @@ export default function TemplatesLandingPage() {
         <div className="grid gap-3 sm:grid-cols-3">
           <div className="flex items-center gap-3 rounded-2xl bg-white/80 p-4 text-sm text-slate-800 shadow-sm ring-1 ring-slate-100">
             <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800">Preview only</span>
-            Text-only stubs—no downloads or payments.
+            Text-only stubs-no downloads or payments.
           </div>
           <div className="flex items-center gap-3 rounded-2xl bg-white/80 p-4 text-sm text-slate-800 shadow-sm ring-1 ring-slate-100">
             <span aria-hidden="true">🎛️</span>
@@ -50,6 +52,24 @@ export default function TemplatesLandingPage() {
         </div>
 
         <CategoryGrid categories={TEMPLATE_CATEGORIES} />
+      </section>
+
+      <section className="mt-10" aria-label="Support this work">
+        <SupportBanner />
+      </section>
+
+      <section className="mt-6 rounded-2xl border border-slate-200 bg-white/90 p-4 text-sm text-slate-700 shadow-sm">
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Policy (placeholder)</p>
+        <p className="mt-1">
+          Commercial users must keep author credit. Internal use may remove branding. Donation or permission required for
+          commercial redistribution. Not enforced automatically yet.
+        </p>
+        <Link
+          href="/template-licence"
+          className="mt-2 inline-flex text-sm font-semibold text-slate-900 underline decoration-slate-300 decoration-2 underline-offset-4"
+        >
+          Read the template licence placeholder
+        </Link>
       </section>
 
       <section className="space-y-3 rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm">

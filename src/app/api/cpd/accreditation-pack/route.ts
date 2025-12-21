@@ -1,17 +1,19 @@
 import { NextResponse } from "next/server";
-import { ACCREDITATION_MAP } from "@/lib/cpd/accreditation-map";
+import { listAccreditationMappings } from "@/lib/accreditation/mapping";
 import { getAuditLog } from "@/lib/cpd/audit-log";
+import { getCourseLevelMeta } from "@/lib/cpd/courseEvidence";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
     const auditLog = await getAuditLog();
+    const mappings = listAccreditationMappings();
 
     const packManifest = {
       generated: new Date().toISOString(),
       version: "1.0.0",
-      courses: ACCREDITATION_MAP.map((m) => ({
+      courses: mappings.map((m) => ({
         courseId: m.courseId,
         cpdHours: m.cpdHours,
         learningOutcomes: m.learningOutcomes.length,
@@ -53,7 +55,7 @@ Content Ownership:
 - Clear usage terms for templates and tools
 `;
 
-    const courseSummaries = ACCREDITATION_MAP.map((mapping) => {
+    const courseSummaries = mappings.map((mapping) => {
       return `Course: ${mapping.courseId}
 CPD Hours: ${mapping.cpdHours}
 Version: ${mapping.version}
@@ -70,7 +72,38 @@ ${mapping.applicableBodies.map((b) => `  - ${b}`).join("\n")}
 
     const pack = {
       manifest: packManifest,
-      accreditationMap: ACCREDITATION_MAP,
+      accreditationMap: mappings,
+      courseMetadata: {
+        ai: {
+          foundations: getCourseLevelMeta("ai", "foundations"),
+          intermediate: getCourseLevelMeta("ai", "intermediate"),
+          advanced: getCourseLevelMeta("ai", "advanced"),
+          summary: getCourseLevelMeta("ai", "summary"),
+        },
+        cybersecurity: {
+          foundations: getCourseLevelMeta("cybersecurity", "foundations"),
+          applied: getCourseLevelMeta("cybersecurity", "applied"),
+          practice: getCourseLevelMeta("cybersecurity", "practice"),
+        },
+        "software-architecture": {
+          foundations: getCourseLevelMeta("software-architecture", "foundations"),
+          intermediate: getCourseLevelMeta("software-architecture", "intermediate"),
+          advanced: getCourseLevelMeta("software-architecture", "advanced"),
+          summary: getCourseLevelMeta("software-architecture", "summary"),
+        },
+        data: {
+          foundations: getCourseLevelMeta("data", "foundations"),
+          intermediate: getCourseLevelMeta("data", "intermediate"),
+          advanced: getCourseLevelMeta("data", "advanced"),
+          summary: getCourseLevelMeta("data", "summary"),
+        },
+        digitalisation: {
+          foundations: getCourseLevelMeta("digitalisation", "foundations"),
+          intermediate: getCourseLevelMeta("digitalisation", "intermediate"),
+          advanced: getCourseLevelMeta("digitalisation", "advanced"),
+          summary: getCourseLevelMeta("digitalisation", "summary"),
+        },
+      },
       auditLogSample: auditLog.slice(0, 100),
       qualityStatement,
       courseSummaries,

@@ -50,7 +50,7 @@ export default function SafetyEvalLabTool() {
           onChange={(event) => setThreshold(Number(event.target.value))}
           className="mt-2 w-full accent-slate-900"
         />
-        <p className="mt-2 text-[11px] text-slate-500">
+        <p className="mt-2 text-sm text-slate-500">
           Lower thresholds flag more content. Higher thresholds allow more content through.
         </p>
       </div>
@@ -67,7 +67,7 @@ export default function SafetyEvalLabTool() {
           >
             <div className="space-y-1">
               <p className="font-semibold">{item.text}</p>
-              <div className="flex flex-wrap gap-2 text-[11px] text-slate-600">
+              <div className="flex flex-wrap gap-2 text-sm text-slate-600">
                 {item.tags.map((tag) => (
                   <span key={tag} className="rounded-full bg-slate-100 px-2 py-0.5">
                     {tag}

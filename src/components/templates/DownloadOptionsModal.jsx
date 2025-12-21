@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import AccessGate from "@/components/AccessGate";
 
 const OPTIONS = [
   { value: "internal_use", label: "Internal use", helper: "Personal or team use. You may remove the signature." },
@@ -63,16 +65,27 @@ export function DownloadOptionsModal({ open, onClose, template }) {
     setLoading(true);
     setStatus(null);
     try {
-      const res = await fetch("/api/templates/request-download", {
+      const licenseChoice = requestedUse === "internal_use" ? "internal_use" : "commercial_use";
+      const keepSignature = requestedUse === "commercial_use_keep_signature";
+      const res = await fetch("/api/templates/download", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ templateId: template.id, requestedUse }),
+        body: JSON.stringify({ templateId: template.id, licenseChoice, keepSignature }),
       });
-      const data = await res.json();
       if (!res.ok) {
-        setStatus({ type: "error", message: data?.message || "Download not allowed yet." });
+        const data = await res.json().catch(() => ({}));
+        setStatus({ type: "error", message: data?.message || "Download not available." });
       } else {
-        setStatus({ type: "success", message: data?.message || "Download ready. Signature rules noted." });
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+        setStatus({ type: "success", message: "Download started." });
       }
     } catch (error) {
       setStatus({ type: "error", message: "Something went wrong. Please try again." });
@@ -135,24 +148,39 @@ export function DownloadOptionsModal({ open, onClose, template }) {
         </div>
 
         <div className="mt-4 flex flex-wrap gap-3">
-          <button
-            type="button"
-            onClick={submit}
-            className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
-            disabled={loading}
-          >
-            {loading ? "Checking..." : "Continue to download"}
-          </button>
-          <a
+          {template?.gatingLevel && template.gatingLevel !== "none" ? (
+            <AccessGate
+              requiredLevel="supporter"
+              fallbackMessage="Supporters can download templates. Browsing stays open for everyone."
+            >
+              <button
+                type="button"
+                onClick={submit}
+                className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
+                disabled={loading}
+              >
+                {loading ? "Preparing..." : "Download"}
+              </button>
+            </AccessGate>
+          ) : (
+            <button
+              type="button"
+              onClick={submit}
+              className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
+              disabled={loading}
+            >
+              {loading ? "Preparing..." : "Download"}
+            </button>
+          )}
+          <Link
             className="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
             href="/support"
           >
             Support this site
-          </a>
-          <a className="text-sm font-semibold text-slate-700 underline" href="/admin/template-permissions">
+          </Link>
+          <Link className="text-sm font-semibold text-slate-700 underline" href="/admin/template-permissions">
             I already have permission
-          </a>
-          <span className="text-sm text-slate-600">Reminder: internal use is free.</span>
+          </Link>
         </div>
 
         {status ? (

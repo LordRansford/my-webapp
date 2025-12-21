@@ -6,6 +6,8 @@ import { loadNote } from "@/lib/content/loadNote";
 import Callout from "@/components/notes/Callout";
 import ProgressBar from "@/components/notes/ProgressBar";
 import PageNav from "@/components/notes/PageNav";
+import ToolCard from "@/components/notes/ToolCard";
+import QuizBlock from "@/components/notes/QuizBlock";
 
 export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
@@ -13,6 +15,8 @@ export default function Page({ source, headings }) {
       Callout,
       ProgressBar,
       PageNav,
+      ToolCard,
+      QuizBlock,
     }),
     []
   );

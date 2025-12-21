@@ -21,7 +21,7 @@ export function FlowDiagram({ title, steps = [], accent = '#2563eb', reducedMoti
                 stroke={active ? accent : '#cbd5e1'}
                 strokeWidth={active ? 2 : 1}
               />
-              <text x={x + 30} y={75} textAnchor="middle" className={`text-[12px] ${active ? 'fill-gray-900 font-semibold' : 'fill-gray-800'}`}>
+              <text x={x + 30} y={75} textAnchor="middle" className={`text-sm ${active ? 'fill-gray-900 font-semibold' : 'fill-gray-800'}`}>
                 {step}
               </text>
               {idx < steps.length - 1 ? (

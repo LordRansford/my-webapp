@@ -276,7 +276,7 @@ export default function EvalGovernanceLabPage() {
     <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
       <p className="text-xs font-semibold text-slate-700">{label}</p>
       <p className="text-xl font-semibold text-slate-900">
-        {value ?? "—"}
+        {value ?? "-"}
         {suffix}
       </p>
       {helper && <p className="text-xs text-slate-600 mt-1">{helper}</p>}
@@ -343,37 +343,37 @@ export default function EvalGovernanceLabPage() {
         <div className="grid gap-3 lg:grid-cols-3">
           {renderMetricCard(
             "Avg accuracy (cls)",
-            stats.classification.length ? average(stats.classification.map((m) => Number(m.accuracy) || 0)).toFixed(2) : "—"
+            stats.classification.length ? average(stats.classification.map((m) => Number(m.accuracy) || 0)).toFixed(2) : "-"
           )}
           {renderMetricCard(
             "Avg F1 (cls)",
-            stats.classification.length ? average(stats.classification.map((m) => Number(m.f1) || 0)).toFixed(2) : "—"
+            stats.classification.length ? average(stats.classification.map((m) => Number(m.f1) || 0)).toFixed(2) : "-"
           )}
           {renderMetricCard(
             "Worst F1",
             stats.classification.length
               ? Math.min(...stats.classification.map((m) => Number(m.f1) || Number.POSITIVE_INFINITY)).toFixed(2)
-              : "—"
+              : "-"
           )}
           {renderMetricCard(
             "Avg R² (reg)",
-            stats.regression.length ? average(stats.regression.map((m) => Number(m.r2) || 0)).toFixed(2) : "—"
+            stats.regression.length ? average(stats.regression.map((m) => Number(m.r2) || 0)).toFixed(2) : "-"
           )}
           {renderMetricCard(
             "Avg RMSE (reg)",
-            stats.regression.length ? average(stats.regression.map((m) => Number(m.rmse) || 0)).toFixed(3) : "—"
+            stats.regression.length ? average(stats.regression.map((m) => Number(m.rmse) || 0)).toFixed(3) : "-"
           )}
           {renderMetricCard(
             "Avg tokens in (LLM)",
-            stats.llm.length ? average(stats.llm.map((m) => Number(m.tokensIn) || 0)).toFixed(0) : "—"
+            stats.llm.length ? average(stats.llm.map((m) => Number(m.tokensIn) || 0)).toFixed(0) : "-"
           )}
           {renderMetricCard(
             "Avg tokens out (LLM)",
-            stats.llm.length ? average(stats.llm.map((m) => Number(m.tokensOut) || 0)).toFixed(0) : "—"
+            stats.llm.length ? average(stats.llm.map((m) => Number(m.tokensOut) || 0)).toFixed(0) : "-"
           )}
           {renderMetricCard(
             "Avg tool calls",
-            stats.llm.length ? average(stats.llm.map((m) => Number(m.toolCallCount) || 0)).toFixed(2) : "—"
+            stats.llm.length ? average(stats.llm.map((m) => Number(m.toolCallCount) || 0)).toFixed(2) : "-"
           )}
         </div>
         <div className="rounded-2xl border border-slate-100 bg-white p-3">
@@ -502,8 +502,8 @@ export default function EvalGovernanceLabPage() {
           ))}
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {renderMetricCard("Accuracy", currentDrift ? `${(currentDrift.accuracy * 100).toFixed(1)}%` : "—")}
-          {renderMetricCard("RMSE", currentDrift ? currentDrift.rmse.toFixed(2) : "—")}
+          {renderMetricCard("Accuracy", currentDrift ? `${(currentDrift.accuracy * 100).toFixed(1)}%` : "-")}
+          {renderMetricCard("RMSE", currentDrift ? currentDrift.rmse.toFixed(2) : "-")}
           {renderMetricCard(
             "Shift intensity",
             `${Math.round((currentDrift?.shift ?? 0) * 100)}%`,
@@ -630,7 +630,7 @@ export default function EvalGovernanceLabPage() {
               </div>
               <div>
                 <p className="text-xs font-semibold text-slate-700">Dataset</p>
-                <p>{selectedInspectionJob.datasetId || "—"}</p>
+                <p>{selectedInspectionJob.datasetId || "-"}</p>
               </div>
             </div>
             <div className="rounded-2xl border border-slate-100 bg-slate-50/70 p-3">

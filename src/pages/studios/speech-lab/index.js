@@ -130,7 +130,7 @@ export default function SpeechLabPage() {
     const jobId = `speech-${Date.now()}`;
     addJob({
       id: jobId,
-      name: "Speech Lab – transcript",
+      name: "Speech Lab - transcript",
       studio: "speech-lab",
       status: "running",
     });
