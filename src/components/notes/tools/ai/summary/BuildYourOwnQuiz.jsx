@@ -89,7 +89,7 @@ export default function BuildYourOwnQuiz() {
           <Plus className="h-3.5 w-3.5" aria-hidden="true" />
           Add card
         </button>
-        <p className="text-[11px] text-slate-600">Cards stay in your browser only.</p>
+        <p className="text-sm text-slate-600">Cards stay in your browser only.</p>
       </div>
 
       <div className="mt-4 space-y-2">
@@ -107,21 +107,21 @@ export default function BuildYourOwnQuiz() {
                   {showAnswers[card.id] ? (
                     <p className="mt-1 text-slate-700">{card.answer}</p>
                   ) : (
-                    <p className="mt-1 text-[11px] text-slate-500">Answer hidden</p>
+                    <p className="mt-1 text-sm text-slate-500">Answer hidden</p>
                   )}
                 </div>
                 <div className="flex gap-1">
                   <button
                     type="button"
                     onClick={() => toggleAnswer(card.id)}
-                    className="rounded-full border border-slate-200 bg-white px-2 py-1 text-[11px] font-semibold text-slate-700 hover:border-slate-300"
+                    className="rounded-full border border-slate-200 bg-white px-2 py-1 text-sm font-semibold text-slate-700 hover:border-slate-300"
                   >
                     {showAnswers[card.id] ? "Hide" : "Reveal"}
                   </button>
                   <button
                     type="button"
                     onClick={() => removeCard(card.id)}
-                    className="rounded-full border border-slate-200 bg-white px-2 py-1 text-[11px] text-slate-600 hover:border-slate-300"
+                    className="rounded-full border border-slate-200 bg-white px-2 py-1 text-sm text-slate-600 hover:border-slate-300"
                     aria-label="Delete card"
                   >
                     <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />

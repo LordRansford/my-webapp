@@ -131,7 +131,7 @@ export function TechDebtRadar() {
               </p>
             ))}
             <p className="mt-2 text-xs text-slate-700">
-              Overall risk: <span className="font-semibold">{stats.overallRisk} points</span> – {scoreLabel(stats.overallRisk)}
+              Overall risk: <span className="font-semibold">{stats.overallRisk} points</span> - {scoreLabel(stats.overallRisk)}
             </p>
           </div>
 

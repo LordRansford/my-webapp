@@ -31,7 +31,7 @@ export default function BiasFairnessDashboard() {
         onChange={(e) => onChange(Number(e.target.value))}
         className="mt-1 w-full accent-blue-600"
       />
-      <span className="text-[11px] text-slate-600">{value.toFixed(2)}</span>
+      <span className="text-sm text-slate-600">{value.toFixed(2)}</span>
     </label>
   );
 

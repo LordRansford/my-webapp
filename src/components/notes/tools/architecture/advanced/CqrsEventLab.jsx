@@ -62,7 +62,7 @@ export default function CqrsEventLab() {
           <button
             type="button"
             onClick={() => setRan(true)}
-            className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1 text-[11px] font-semibold text-slate-700 hover:bg-slate-50"
+            className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1 text-sm font-semibold text-slate-700 hover:bg-slate-50"
           >
             <Play className="h-3 w-3" aria-hidden="true" />
             Run command

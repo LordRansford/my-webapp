@@ -2,9 +2,16 @@
 
 import Link from "next/link";
 import { useMemo } from "react";
+import AccessGate from "@/components/AccessGate";
 
 export function TemplateCard({ template, isFavorite, onToggleFavorite, onDownload }) {
   const timeLabel = useMemo(() => `${template.estimatedMinutes} min`, [template.estimatedMinutes]);
+  const tierLabel =
+    template.gatingLevel === "permission"
+      ? "Commercial use"
+      : template.gatingLevel === "donation"
+      ? "Supporter"
+      : "Free";
 
   return (
     <article
@@ -62,8 +69,8 @@ export function TemplateCard({ template, isFavorite, onToggleFavorite, onDownloa
         <span className="pill" aria-label={`Safety class ${template.safetyClass}`}>
           {template.safetyClass}
         </span>
-        <span className="pill" aria-label={`Gating level ${template.gatingLevel}`}>
-          {template.gatingLevel}
+        <span className="pill" aria-label={`Access tier ${tierLabel}`}>
+          {tierLabel}
         </span>
         {template.tags?.slice(0, 4).map((tag) => (
           <span key={tag} className="badge" style={{ background: "#f1f5f9", color: "#0f172a" }}>
@@ -76,14 +83,30 @@ export function TemplateCard({ template, isFavorite, onToggleFavorite, onDownloa
         <Link className="button primary" href={template.route}>
           Open tool
         </Link>
-        <button
-          type="button"
-          onClick={() => onDownload?.(template)}
-          className="button"
-          style={{ borderRadius: "14px", border: "1px solid #e2e8f0", padding: "0.45rem 0.9rem", fontWeight: 600 }}
-        >
-          Download options
-        </button>
+        {template.gatingLevel && template.gatingLevel !== "none" ? (
+          <AccessGate
+            requiredLevel="supporter"
+            fallbackMessage="Supporters can download templates and keep them for planning."
+          >
+            <button
+              type="button"
+              onClick={() => onDownload?.(template)}
+              className="button"
+              style={{ borderRadius: "14px", border: "1px solid #e2e8f0", padding: "0.45rem 0.9rem", fontWeight: 600 }}
+            >
+              Download options
+            </button>
+          </AccessGate>
+        ) : (
+          <button
+            type="button"
+            onClick={() => onDownload?.(template)}
+            className="button"
+            style={{ borderRadius: "14px", border: "1px solid #e2e8f0", padding: "0.45rem 0.9rem", fontWeight: 600 }}
+          >
+            Download options
+          </button>
+        )}
         <div aria-label="Export formats" className="muted" style={{ display: "flex", gap: "0.35rem", alignItems: "center" }}>
           <strong>Exports:</strong>
           <span>{template.exportFormatsSupported?.join(", ")}</span>

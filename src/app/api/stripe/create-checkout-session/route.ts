@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getStripeClient } from "@/lib/stripe";
+import { rateLimit } from "@/lib/security/rateLimit";
 
 type Body = {
   amount?: number;
@@ -13,6 +14,15 @@ const MIN_AMOUNT_PENCE = 100;
 const MAX_AMOUNT_PENCE = 50000;
 
 export async function POST(req: Request) {
+  // Stage 7: Stripe is wired but disabled by default.
+  // Payments must not be possible until explicitly enabled.
+  if (process.env.STRIPE_ENABLED !== "true") {
+    return NextResponse.json({ error: "Donations are not enabled yet." }, { status: 503 });
+  }
+
+  const limited = rateLimit(req, { keyPrefix: "stripe-checkout", limit: 10, windowMs: 60_000 });
+  if (limited) return limited;
+
   try {
     const body = (await req.json()) as Body;
     const amount = Number(body.amount);

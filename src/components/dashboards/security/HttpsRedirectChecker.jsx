@@ -87,7 +87,7 @@ export default function HttpsRedirectChecker() {
                 </span>
                 <div>
                   <p className="font-mono break-all">{hop.url}</p>
-                  <p className="mt-1 text-[11px] text-slate-600">
+                  <p className="mt-1 text-sm text-slate-600">
                     Scheme: {hop.scheme} Status: {hop.status}
                   </p>
                 </div>

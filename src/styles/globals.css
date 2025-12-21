@@ -12,8 +12,12 @@
   --surface: #ffffff;
   --surface-2: #eef1f7;
   --card: #ffffff;
-  --text: #1c1c1e;
-  --muted: #6e6e73;
+  --text-body: #0f172a;
+  --text-muted: #475569;
+  --text-heading: #0b1221;
+  --text-callout: #0f172a;
+  --text: var(--text-body);
+  --muted: var(--text-muted);
   --line: #dfe3ec;
   --accent: #007aff;
   --accent-2: #34c759;
@@ -25,14 +29,14 @@
   --font-mono: var(--font-mono);
   --font-inter: var(--font-inter);
   background: var(--bg);
-  color: var(--text);
+  color: var(--text-body);
 }
 
 body {
   margin: 0;
   min-height: 100vh;
   background: linear-gradient(180deg, #fbfbfd 0%, #f5f5f7 100%);
-  color: var(--text);
+  color: var(--text-body);
   font-family: var(--font-body), var(--font-inter), "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
   line-height: 1.75;
   -webkit-font-smoothing: antialiased;
@@ -42,6 +46,9 @@ body {
   letter-spacing: -0.01em;
 }
 
+.text-xs {
+  font-size: 0.875rem !important;
+}
 h1,
 h2,
 h3,
@@ -53,7 +60,7 @@ h6 {
   line-height: 1.2;
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: #1e293b;
+  color: var(--text-heading);
 }
 
 h1 {
@@ -88,7 +95,7 @@ p {
   margin: 0 0 1.25rem;
   font-size: 1.05rem;
   line-height: 1.8;
-  color: #334155;
+  color: var(--text-body);
 }
 
 code,
@@ -193,7 +200,7 @@ a {
 }
 
 .nav-links__chevron {
-  font-size: 0.7em;
+  font-size: 0.85em;
   opacity: 0.7;
   transition: transform 150ms ease;
 }
@@ -247,7 +254,7 @@ a {
 }
 
 .eyebrow {
-  font-size: 0.78rem;
+  font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
   color: var(--muted);
@@ -542,6 +549,15 @@ a {
   margin-top: 1rem;
 }
 
+@media (max-width: 768px) {
+  .tool-grid,
+  .summary-grid,
+  .card-grid,
+  .course-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .key-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -717,6 +733,17 @@ textarea:focus {
   border-radius: 0.35rem;
 }
 
+/* NotesLayout prose: keep code blocks readable and consistent without changing palette */
+.prose pre {
+  border-radius: 12px;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+}
+
+.prose code {
+  font-size: 0.92em;
+}
+
 .post-content img {
   max-width: 100%;
   height: auto;
@@ -740,6 +767,7 @@ textarea:focus {
 .callout__title {
   font-weight: 700;
   margin: 0;
+  color: var(--text-callout);
 }
 
 .callout__body {
@@ -1172,7 +1200,7 @@ textarea:focus {
 @media (max-width: 640px) {
   .thin-table,
   .note-article table {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
   }
   
   .thin-table th,
@@ -1195,7 +1223,8 @@ textarea:focus {
   box-shadow: 0 4px 20px rgba(102, 126, 234, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.5);
   position: relative;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   font-family: var(--font-mono), "KaTeX_Math", "Computer Modern", serif;
 }
 
@@ -1309,7 +1338,7 @@ textarea:focus {
 }
 
 .notes-nav .outcome {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: var(--muted);
 }
 
@@ -1375,6 +1404,35 @@ textarea:focus {
   gap: 0.35rem;
 }
 
+.quiz-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.quiz-summary__label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+
+.quiz-summary__value {
+  font-weight: 800;
+  color: var(--text);
+}
+
+.quiz-summary__hint {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
 .quiz-option {
   display: flex;
   gap: 0.5rem;
@@ -1394,6 +1452,16 @@ textarea:focus {
   background: rgba(0, 122, 255, 0.08);
 }
 
+.quiz-option.is-correct {
+  border-color: rgba(0, 122, 255, 0.4);
+  background: rgba(0, 122, 255, 0.06);
+}
+
+.quiz-option.is-incorrect {
+  border-color: rgba(255, 149, 0, 0.4);
+  background: rgba(255, 149, 0, 0.06);
+}
+
 .quiz-feedback {
   margin: 0;
   padding: 0.35rem 0.5rem;
@@ -1409,6 +1477,10 @@ textarea:focus {
 .quiz-feedback.warn {
   border-color: rgba(255, 149, 0, 0.4);
   color: #ff9500;
+}
+
+.quiz-feedback__answer {
+  color: var(--text);
 }
 
 .cert-grid {
@@ -1460,6 +1532,7 @@ textarea:focus {
   font-size: 0.92rem;
   font-weight: 600;
   margin-bottom: 0.25rem;
+  color: var(--text-callout);
 }
 
 .note-callout__body {
@@ -1530,7 +1603,7 @@ textarea:focus {
 }
 
 .notes-nav .outcome {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: var(--muted);
 }
 
@@ -1542,7 +1615,7 @@ textarea:focus {
   font-size: 18px;
   line-height: 1.85;
   font-family: var(--font-body), var(--font-inter);
-  color: #334155;
+  color: var(--text-body);
   letter-spacing: -0.01em;
 }
 
@@ -1603,7 +1676,7 @@ textarea:focus {
   font-weight: 600;
   margin: 2.5rem 0 1rem;
   line-height: 1.3;
-  color: #1e293b;
+  color: var(--text-heading);
   letter-spacing: -0.01em;
 }
 
@@ -1611,7 +1684,7 @@ textarea:focus {
   margin: 0 0 1.5rem;
   font-size: 1.05rem;
   line-height: 1.85;
-  color: #334155;
+  color: var(--text-body);
 }
 
 .note-article ul,
@@ -1625,7 +1698,7 @@ textarea:focus {
 .note-article ul li,
 .note-article ol li {
   margin: 0.5rem 0;
-  color: #334155;
+  color: var(--text-body);
   padding-left: 0.5rem;
 }
 
@@ -1769,6 +1842,11 @@ article {
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.06);
 }
 
+.prose > :first-child,
+article > :first-child {
+  margin-top: 0;
+}
+
 /* Notes section classes */
 .rn-section {
   margin: 2.5rem 0;
@@ -1836,7 +1914,7 @@ article {
   margin: 0 0 1.5rem;
   font-size: 1.05rem;
   line-height: 1.85;
-  color: #334155;
+  color: var(--text-body);
 }
 
 /* Smooth scroll behavior */

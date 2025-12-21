@@ -73,7 +73,7 @@ export function PhishingStorySimulator() {
               <span>From: Payments team &lt;billing@example-payments.com&gt;</span>
               <button
                 type="button"
-                className={`rounded-full px-2 py-0.5 text-[11px] font-medium border ${
+                className={`rounded-full px-2 py-0.5 text-sm font-medium border ${
                   allFound
                     ? "border-emerald-300 text-emerald-700 bg-emerald-50"
                     : "border-slate-300 text-slate-700 bg-white"
@@ -124,7 +124,7 @@ export function PhishingStorySimulator() {
                 key={spot.id}
                 type="button"
                 onClick={() => toggle(spot.id)}
-                className={`rounded-full border px-2.5 py-1 text-[11px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 ${
+                className={`rounded-full border px-2.5 py-1 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 ${
                   selected.includes(spot.id)
                     ? "border-emerald-300 bg-emerald-50 text-emerald-700"
                     : "border-slate-300 bg-white text-slate-700"

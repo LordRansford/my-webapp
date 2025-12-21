@@ -57,27 +57,27 @@ export default function MiniDiffusionLab() {
       <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-2 text-xs text-slate-700">
           <span className="font-semibold text-slate-900">Step {step}</span>
-          <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] text-slate-700">{caption}</span>
+          <span className="rounded-full bg-slate-100 px-2 py-0.5 text-sm text-slate-700">{caption}</span>
         </div>
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
             onClick={() => setStep((prev) => Math.max(0, prev - 1))}
-            className="rounded-full border border-slate-200 bg-white px-3 py-1 text-[11px] font-semibold text-slate-700 hover:border-slate-300"
+            className="rounded-full border border-slate-200 bg-white px-3 py-1 text-sm font-semibold text-slate-700 hover:border-slate-300"
           >
             Denoise
           </button>
           <button
             type="button"
             onClick={() => setStep((prev) => Math.min(STEPS, prev + 1))}
-            className="rounded-full border border-slate-200 bg-white px-3 py-1 text-[11px] font-semibold text-slate-700 hover:border-slate-300"
+            className="rounded-full border border-slate-200 bg-white px-3 py-1 text-sm font-semibold text-slate-700 hover:border-slate-300"
           >
             Add noise
           </button>
           <button
             type="button"
             onClick={() => setStep(0)}
-            className="inline-flex items-center gap-1 rounded-full bg-slate-900 px-3 py-1 text-[11px] font-semibold text-white hover:bg-slate-800"
+            className="inline-flex items-center gap-1 rounded-full bg-slate-900 px-3 py-1 text-sm font-semibold text-white hover:bg-slate-800"
           >
             <Eraser className="h-3.5 w-3.5" aria-hidden="true" />
             Reset
@@ -103,19 +103,19 @@ export default function MiniDiffusionLab() {
               );
             })}
           </div>
-          <p className="mt-2 text-[11px] text-slate-600">
+          <p className="mt-2 text-sm text-slate-600">
             Each step moves between latent structure and random noise. Sampling walks this path until a clean picture appears.
           </p>
         </div>
 
-        <div className="space-y-2 rounded-2xl border border-slate-200 bg-white p-3 text-[11px] text-slate-700">
+        <div className="space-y-2 rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-700">
           <p className="text-xs font-semibold text-slate-900">How to read this</p>
-          <ul className="list-disc pl-4 text-[11px] text-slate-700">
+          <ul className="list-disc pl-4 text-sm text-slate-700">
             <li>Noise pushes the grid toward gray static.</li>
             <li>Denoising leans back toward the latent shape.</li>
             <li>Sampling is the set of tiny steps that travel this curve.</li>
           </ul>
-          <p className="text-[11px] text-slate-600">
+          <p className="text-sm text-slate-600">
             Try adding noise until the pattern hides, then denoise to see how structure can return.
           </p>
         </div>

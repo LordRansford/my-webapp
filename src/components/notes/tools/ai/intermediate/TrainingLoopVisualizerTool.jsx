@@ -63,14 +63,14 @@ export default function TrainingLoopVisualizerTool() {
       <div className="mt-4 space-y-2">
         {losses.map((loss, index) => (
           <div key={`${loss}-${index}`} className="flex items-center gap-3 text-xs text-slate-700">
-            <span className="w-12 text-[11px] text-slate-500">Epoch {index + 1}</span>
+            <span className="w-12 text-sm text-slate-500">Epoch {index + 1}</span>
             <div className="h-2 flex-1 rounded-full bg-slate-200">
               <div
                 className="h-2 rounded-full bg-emerald-400"
                 style={{ width: `${Math.max(5, Math.round((1 - loss) * 100))}%` }}
               />
             </div>
-            <span className="w-12 text-right text-[11px] text-slate-600">{loss}</span>
+            <span className="w-12 text-right text-sm text-slate-600">{loss}</span>
           </div>
         ))}
       </div>

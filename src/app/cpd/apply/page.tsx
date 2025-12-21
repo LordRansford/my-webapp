@@ -7,32 +7,8 @@ export default function ApplyPage() {
     {
       id: "cpd_certification_service",
       name: "CPD Certification Service",
-      status: "ready",
-      notes: "Evidence pack ready. Application can proceed.",
-    },
-    {
-      id: "bcs",
-      name: "BCS, The Chartered Institute for IT",
-      status: "ready",
-      notes: "Evidence pack ready. Application can proceed.",
-    },
-    {
-      id: "iet",
-      name: "Institution of Engineering and Technology (IET)",
-      status: "ready",
-      notes: "Evidence pack ready. Application can proceed.",
-    },
-    {
-      id: "engineering_council",
-      name: "Engineering Council",
       status: "pending",
-      notes: "Requires additional mapping to UK-SPEC competencies.",
-    },
-    {
-      id: "ico_aligned",
-      name: "ICO Aligned Learning",
-      status: "ready",
-      notes: "Evidence pack ready for data protection and privacy courses.",
+      notes: "Submission preparation in progress. No approval is claimed.",
     },
   ];
 
@@ -40,7 +16,6 @@ export default function ApplyPage() {
     "Course syllabi with learning objectives",
     "Assessment methods documentation",
     "Evidence capture mechanisms",
-    "Sample certificates",
     "CPD hour calculation logic",
     "Quality assurance processes",
     "Audit log system",
@@ -59,18 +34,17 @@ export default function ApplyPage() {
       <main className="page">
         <header className="page-header">
           <p className="eyebrow">Ransford&apos;s Notes</p>
-          <h1>Accreditor Application Checklist</h1>
+          <h1>CPD submission preparation checklist</h1>
           <p className="lead">
-            This page tracks what evidence is ready and what still needs manual submission for CPD accreditation
-            applications.
+            This page tracks evidence preparation for a potential CPD submission. It does not imply accreditation, endorsement, or approval.
           </p>
         </header>
 
         <CPDDisclaimer className="mb-8" />
 
         <section className="section">
-          <h2>Evidence Ready</h2>
-          <p>The following evidence is prepared and available for download:</p>
+          <h2>Evidence prepared</h2>
+          <p>The following evidence is prepared and can be shared with assessors as part of a submission:</p>
           <ul className="list">
             {evidenceReady.map((item, i) => (
               <li key={i}>{item}</li>
@@ -78,13 +52,13 @@ export default function ApplyPage() {
           </ul>
           <p className="mt-4">
             <a href="/api/cpd/accreditation-pack" className="link" download>
-              Download accreditation evidence pack
+              Download CPD evidence pack
             </a>
           </p>
         </section>
 
         <section className="section">
-          <h2>Manual Submission Required</h2>
+          <h2>Manual steps</h2>
           <p>The following steps require manual action:</p>
           <ul className="list">
             {manualSubmission.map((item, i) => (
@@ -94,7 +68,7 @@ export default function ApplyPage() {
         </section>
 
         <section className="section">
-          <h2>Accreditor Status</h2>
+          <h2>Submission status</h2>
           <div className="space-y-4">
             {bodies.map((body) => (
               <div key={body.id} className="rounded-lg border border-slate-200 bg-white p-4">
@@ -110,7 +84,7 @@ export default function ApplyPage() {
                         : "bg-amber-100 text-amber-800"
                     }`}
                   >
-                    {body.status === "ready" ? "Ready" : "Pending"}
+                    {body.status === "ready" ? "Prepared" : "Preparing"}
                   </span>
                 </div>
               </div>

@@ -81,10 +81,10 @@ selector1._domainkey.example.com. 300 IN TXT "v=DKIM1; k=rsa; p=MIIBIjANBgkqh...
                 key={idx}
                 className="rounded-2xl border border-slate-200 bg-white p-3 text-xs text-slate-700 space-y-1"
               >
-                <p className="text-[11px] text-slate-500 break-all">{insight.line}</p>
+                <p className="text-sm text-slate-500 break-all">{insight.line}</p>
                 <ul className="space-y-1">
                   {insight.notes.map((n, i) => (
-                    <li key={i} className="text-[11px] text-slate-800">
+                    <li key={i} className="text-sm text-slate-800">
                       • {n}
                     </li>
                   ))}

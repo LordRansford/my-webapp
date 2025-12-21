@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import net from "net";
 import { z } from "zod";
 import tls from "tls";
+import { assertToolRunAllowed } from "@/lib/billing/toolUsage";
 
 const limiter = new Map();
 const windowMs = 60 * 1000;
@@ -52,6 +53,11 @@ const inspectTls = (host) =>
 export async function POST(req) {
   const ip = req.headers.get("x-forwarded-for") || "anon";
   if (!rateLimit(ip)) return NextResponse.json({ message: "Rate limit exceeded" }, { status: 429 });
+  try {
+    await assertToolRunAllowed("tls-inspect");
+  } catch (e) {
+    return NextResponse.json({ message: e.message || "Limit reached" }, { status: e.status || 429 });
+  }
 
   let parsed;
   try {

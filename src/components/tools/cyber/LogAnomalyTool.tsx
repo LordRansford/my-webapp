@@ -92,8 +92,8 @@ export function LogAnomalyTool() {
             {findings.length === 0 && <p className="text-xs text-slate-500">No obvious anomalies detected in these lines.</p>}
             {findings.map((f, idx) => (
               <div key={idx} className="rounded-2xl border border-slate-200 bg-white p-3 text-xs text-slate-700 space-y-1">
-                <p className="text-[11px] text-slate-500 break-all">{f.line}</p>
-                <p className="text-[11px] text-slate-800">• {f.note}</p>
+                <p className="text-sm text-slate-500 break-all">{f.line}</p>
+                <p className="text-sm text-slate-800">• {f.note}</p>
               </div>
             ))}
           </div>

@@ -15,7 +15,7 @@ function read(relativePath) {
 const registryPath = "content/templates/registry.json";
 const registryRaw = read(registryPath);
 
-if (/—/.test(registryRaw)) {
+if (/-/.test(registryRaw)) {
   fail("Registry contains an em dash. Replace with a hyphen.");
 }
 

@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react";
 
-const ADMIN_KEY = process.env.ADMIN_DASHBOARD_TOKEN;
-
 type Token = {
   tokenId: string;
   userId?: string | null;
@@ -19,14 +17,26 @@ export default function TemplatePermissionsAdminPage() {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ userId: "", templateId: "", expiresAt: "", notes: "" });
   const [error, setError] = useState<string | null>(null);
+  const [configError, setConfigError] = useState<string | null>(null);
 
   const loadTokens = async () => {
     setLoading(true);
     setError(null);
+    setConfigError(null);
     try {
       const res = await fetch("/api/admin/permission-tokens");
       const data = await res.json();
-      if (!res.ok) throw new Error(data?.message || "Forbidden");
+      if (!res.ok) {
+        if (res.status === 401 || res.status === 403) {
+          setConfigError(data?.message || "Admin access requires a valid admin_token cookie.");
+          return;
+        }
+        if (res.status === 500 && data?.message) {
+          setConfigError(data.message);
+          return;
+        }
+        throw new Error(data?.message || "Forbidden");
+      }
       setTokens(data.tokens || []);
     } catch (err: any) {
       setError(err.message || "Could not load tokens");
@@ -40,6 +50,10 @@ export default function TemplatePermissionsAdminPage() {
   }, []);
 
   const createToken = async () => {
+    if (configError) {
+      setError(configError);
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
@@ -79,11 +93,14 @@ export default function TemplatePermissionsAdminPage() {
     }
   };
 
-  if (!ADMIN_KEY) {
+  if (configError) {
     return (
       <main className="mx-auto max-w-4xl p-6">
-        <h1 className="text-2xl font-semibold text-slate-900">Admin not configured</h1>
-        <p className="text-sm text-slate-700">Set ADMIN_DASHBOARD_TOKEN and admin_token cookie to view this page.</p>
+        <h1 className="text-2xl font-semibold text-slate-900">Admin access unavailable</h1>
+        <p className="text-sm text-slate-800">{configError}</p>
+        <p className="text-sm text-slate-700">
+          Set ADMIN_DASHBOARD_TOKEN server side and present the admin_token cookie. All validation stays on the server.
+        </p>
       </main>
     );
   }
@@ -91,7 +108,7 @@ export default function TemplatePermissionsAdminPage() {
   return (
     <main className="mx-auto max-w-5xl p-6 space-y-4">
       <header className="space-y-1">
-        <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Admin</p>
+        <p className="text-sm font-semibold uppercase tracking-wide text-slate-600">Admin</p>
         <h1 className="text-2xl font-semibold text-slate-900">Template permissions</h1>
         <p className="text-sm text-slate-700">Issue and revoke permission tokens.</p>
       </header>
@@ -158,7 +175,7 @@ export default function TemplatePermissionsAdminPage() {
 
       <section className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
         <table className="min-w-full text-left text-sm text-slate-800">
-          <thead className="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-600">
+          <thead className="bg-slate-50 text-sm font-semibold uppercase tracking-wide text-slate-600">
             <tr>
               <th className="px-4 py-2">Token</th>
               <th className="px-4 py-2">User / anon</th>
@@ -172,14 +189,16 @@ export default function TemplatePermissionsAdminPage() {
           <tbody>
             {tokens.map((t) => (
               <tr key={t.tokenId} className="border-t border-slate-100">
-                <td className="px-4 py-2 font-mono text-xs text-slate-700">{t.tokenId}</td>
-                <td className="px-4 py-2 text-xs text-slate-700">
+                <td className="px-4 py-2 font-mono text-sm text-slate-800 break-all">{t.tokenId}</td>
+                <td className="px-4 py-2 text-sm text-slate-800">
                   {t.userId || "-"} / {t.anonymousUserId || "-"}
                 </td>
                 <td className="px-4 py-2">{t.templateId || "Any"}</td>
-                <td className="px-4 py-2 text-xs text-slate-700">{new Date(t.issuedAt).toLocaleString()}</td>
-                <td className="px-4 py-2 text-xs text-slate-700">{t.expiresAt ? new Date(t.expiresAt).toLocaleString() : "No expiry"}</td>
-                <td className="px-4 py-2 text-xs text-slate-700">{t.notes || ""}</td>
+                <td className="px-4 py-2 text-sm text-slate-800">{new Date(t.issuedAt).toLocaleString()}</td>
+                <td className="px-4 py-2 text-sm text-slate-800">
+                  {t.expiresAt ? new Date(t.expiresAt).toLocaleString() : "No expiry"}
+                </td>
+                <td className="px-4 py-2 text-sm text-slate-800">{t.notes || ""}</td>
                 <td className="px-4 py-2">
                   <button
                     type="button"

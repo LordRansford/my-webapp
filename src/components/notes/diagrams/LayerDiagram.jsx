@@ -29,13 +29,13 @@ export function LayerDiagram({
                 stroke={active ? accent : '#cbd5e1'}
                 strokeWidth={active ? 2 : 1}
               />
-              <text x="100" y={y + 20} textAnchor="middle" className={`text-[12px] ${active ? 'fill-gray-900 font-semibold' : 'fill-gray-800'}`}>
+              <text x="100" y={y + 20} textAnchor="middle" className={`text-sm ${active ? 'fill-gray-900 font-semibold' : 'fill-gray-800'}`}>
                 {layer.label}
               </text>
               {showMapping && layer.mapTo ? (
                 <>
                   <rect x="200" y={y} width="80" height="32" rx="8" fill="#eef2ff" stroke={accent} />
-                  <text x="240" y={y + 20} textAnchor="middle" className="text-[11px] fill-gray-800">
+                  <text x="240" y={y + 20} textAnchor="middle" className="text-sm fill-gray-800">
                     {layer.mapTo}
                   </text>
                   <line

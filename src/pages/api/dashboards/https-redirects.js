@@ -1,4 +1,5 @@
 import { assertAllowedRequest } from "@/lib/dashboard/allowlist";
+import { validateOutboundUrl } from "@/lib/security/ssrf";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -20,14 +21,9 @@ export default async function handler(req, res) {
 
   let parsedUrl;
   try {
-    parsedUrl = new URL(url);
-  } catch {
-    return res.status(400).json({ error: "Invalid URL format" });
-  }
-
-  // Only allow HTTP/HTTPS
-  if (!["http:", "https:"].includes(parsedUrl.protocol)) {
-    return res.status(400).json({ error: "Only HTTP and HTTPS URLs are allowed" });
+    parsedUrl = await validateOutboundUrl(url);
+  } catch (err) {
+    return res.status(400).json({ error: err.message || "Invalid URL" });
   }
 
   try {

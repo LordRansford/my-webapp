@@ -1,4 +1,4 @@
-# Applied Cybersecurity – course specification
+# Applied Cybersecurity - course specification
 
 ## Overview
 
@@ -63,13 +63,13 @@ Each lab has:
 
 Applied Cybersecurity aligns at a deeper level with several CISSP knowledge areas, including:
 
-- Domain 1: Security and Risk Management – practical risk thinking and control choices.
-- Domain 2: Asset Security – understanding what needs protection in simple systems.
-- Domain 3: Security Architecture and Engineering – threat modelling and design implications.
-- Domain 4: Communication and Network Security – more detailed thinking about network and OSI layers.
-- Domain 5: Identity and Access Management – practical session and access control considerations.
-- Domain 7: Security Operations – logging, monitoring and basic incident thinking.
-- Domain 8: Software Development Security – common vulnerability classes and secure coding basics.
+- Domain 1: Security and Risk Management - practical risk thinking and control choices.
+- Domain 2: Asset Security - understanding what needs protection in simple systems.
+- Domain 3: Security Architecture and Engineering - threat modelling and design implications.
+- Domain 4: Communication and Network Security - more detailed thinking about network and OSI layers.
+- Domain 5: Identity and Access Management - practical session and access control considerations.
+- Domain 7: Security Operations - logging, monitoring and basic incident thinking.
+- Domain 8: Software Development Security - common vulnerability classes and secure coding basics.
 
 This mapping is conceptual rather than exam specific. The focus remains on understanding and practice.
 
@@ -88,11 +88,11 @@ The Govern function is introduced through discussion of decision making and trad
 
 This level deepens understanding and practice of the five Cyber Essentials control themes:
 
-- Firewalls and internet gateways – in the context of network design and attack surfaces.
-- Secure configuration – in operating systems, services and applications.
-- User access control – more realistic examples of accounts, roles and permissions.
-- Malware protection – simple scenarios where poor configuration leads to exposure.
-- Patch management – basic examples of outdated software and associated risks.
+- Firewalls and internet gateways - in the context of network design and attack surfaces.
+- Secure configuration - in operating systems, services and applications.
+- User access control - more realistic examples of accounts, roles and permissions.
+- Malware protection - simple scenarios where poor configuration leads to exposure.
+- Patch management - basic examples of outdated software and associated risks.
 
 Cyber Essentials Plus testing concepts are introduced via structured scenarios and labs, without directly simulating official testing.
 

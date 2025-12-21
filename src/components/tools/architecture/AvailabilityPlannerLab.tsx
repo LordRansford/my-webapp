@@ -133,11 +133,11 @@ export function AvailabilityPlannerLab() {
                   onChange={(e) => updateAvailability(c.id, e.target.value)}
                   className="w-20 rounded-xl border border-slate-200 bg-white px-2 py-1 text-xs text-right text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200"
                 />
-                <span className="text-[11px] text-slate-500">percent</span>
+                <span className="text-sm text-slate-500">percent</span>
                 <button
                   type="button"
                   onClick={() => removeComponent(c.id)}
-                  className="text-[11px] px-2 py-1 rounded-full text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+                  className="text-sm px-2 py-1 rounded-full text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
                   aria-label="Remove component"
                 >
                   ✕

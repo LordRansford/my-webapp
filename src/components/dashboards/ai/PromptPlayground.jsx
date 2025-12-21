@@ -46,7 +46,7 @@ export default function PromptPlayground() {
         <div className="mt-2 flex flex-wrap gap-2">
           {tags.length ? (
             tags.map((t) => (
-              <span key={t} className="rounded-full bg-emerald-100 px-2 py-1 text-[11px] font-semibold text-emerald-800">
+              <span key={t} className="rounded-full bg-emerald-100 px-2 py-1 text-sm font-semibold text-emerald-800">
                 {t}
               </span>
             ))

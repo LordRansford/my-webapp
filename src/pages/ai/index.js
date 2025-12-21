@@ -9,6 +9,8 @@ import { aiSectionManifest } from "@/lib/aiSections";
 import { useCPD } from "@/hooks/useCPD";
 import { getCompletionForCourse, getCompletionForLevel } from "@/lib/cpd";
 import aiCourse from "../../../content/courses/ai.json";
+import ToolCard from "@/components/notes/ToolCard";
+import QuizBlock from "@/components/notes/QuizBlock";
 
 const AI_LEVEL_ORDER = ["foundations", "intermediate", "advanced", "summary"];
 
@@ -80,7 +82,7 @@ function TrackProgressSummary() {
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-semibold text-gray-900">AI track progress</p>
-          <p className="text-xs text-gray-700">
+          <p className="text-sm text-gray-700">
             {completion.completedCount} of {completion.totalCount || 0} sections complete
           </p>
         </div>
@@ -117,7 +119,7 @@ function LevelCards() {
               </span>
             </div>
             <div className="mt-3" role="group" aria-label={`${level.title} progress`}>
-              <div className="flex items-center justify-between text-xs font-semibold text-gray-800">
+              <div className="flex items-center justify-between text-sm font-semibold text-gray-800">
                 <span>Level progress</span>
                 <span aria-label={`${level.title} ${completion.percent}% complete`}>{completion.percent}%</span>
               </div>
@@ -148,6 +150,8 @@ export default function AICourseOverviewPage({ source, headings }) {
       TrackProgressSummary,
       CPDHoursTotal: () => <CPDHoursTotal courseId="ai" courseName="AI" />,
       LevelCards: () => <LevelCards />,
+      ToolCard,
+      QuizBlock,
     }),
     []
   );

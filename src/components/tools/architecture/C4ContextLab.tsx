@@ -173,7 +173,7 @@ export function C4ContextLab() {
               >
                 <div className="flex items-center gap-2">
                   <span
-                    className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-semibold ${
+                    className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-sm font-semibold ${
                       node.type === "person"
                         ? "bg-amber-100 text-amber-800"
                         : "bg-indigo-100 text-indigo-800"
@@ -183,7 +183,7 @@ export function C4ContextLab() {
                   </span>
                   <span className="truncate">{node.name}</span>
                 </div>
-                <span className="text-[11px] text-slate-500" aria-hidden="true">
+                <span className="text-sm text-slate-500" aria-hidden="true">
                   ✎
                 </span>
               </button>
@@ -313,7 +313,7 @@ export function C4ContextLab() {
                     <button
                       type="button"
                       onClick={() => removeRelation(r.id)}
-                      className="text-[11px] px-2 py-1 rounded-full text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+                      className="text-sm px-2 py-1 rounded-full text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
                       aria-label="Remove relation"
                     >
                       ✕

@@ -209,14 +209,14 @@ export function VectorSearchLab() {
     >
       <div className="grid gap-6 xl:grid-cols-3">
         <div className="space-y-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-4 xl:col-span-1">
-          <p className="text-xs font-semibold text-slate-700">Step 1 – Build a small text collection</p>
-          <p className="text-[11px] text-slate-600">
+          <p className="text-xs font-semibold text-slate-700">Step 1 - Build a small text collection</p>
+          <p className="text-sm text-slate-600">
             Add short notes, incidents, requirements or FAQs that you want to search over. Try to mix different themes to make
             similarity more interesting.
           </p>
 
           <div className="space-y-2">
-            <label htmlFor="new-doc-title" className="block text-[11px] font-medium text-slate-700">
+            <label htmlFor="new-doc-title" className="block text-sm font-medium text-slate-700">
               New document title
             </label>
             <input
@@ -230,7 +230,7 @@ export function VectorSearchLab() {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="new-doc-text" className="block text-[11px] font-medium text-slate-700">
+            <label htmlFor="new-doc-text" className="block text-sm font-medium text-slate-700">
               New document text
             </label>
             <textarea
@@ -252,12 +252,12 @@ export function VectorSearchLab() {
               <Plus className="h-3.5 w-3.5" aria-hidden="true" />
               <span>Add document</span>
             </button>
-            <div className="flex items-center gap-2 text-[11px] text-slate-500">
+            <div className="flex items-center gap-2 text-sm text-slate-500">
               <span>Vector dims</span>
               <select
                 value={vectorDimension}
                 onChange={(e) => setVectorDimension(Number(e.target.value))}
-                className="rounded-2xl border border-slate-200 bg-white px-2 py-1 text-[11px] text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-200"
+                className="rounded-2xl border border-slate-200 bg-white px-2 py-1 text-sm text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-200"
               >
                 <option value={32}>32</option>
                 <option value={64}>64</option>
@@ -267,9 +267,9 @@ export function VectorSearchLab() {
           </div>
 
           <div className="space-y-2">
-            <p className="text-[11px] font-medium text-slate-700">Collection overview</p>
+            <p className="text-sm font-medium text-slate-700">Collection overview</p>
             {docs.length === 0 ? (
-              <p className="text-[11px] text-slate-500">Add a few short documents to start building your search space.</p>
+              <p className="text-sm text-slate-500">Add a few short documents to start building your search space.</p>
             ) : (
               <ul className="max-h-40 space-y-1 overflow-auto pr-1">
                 {docs.map((doc) => (
@@ -280,7 +280,7 @@ export function VectorSearchLab() {
                     }`}
                   >
                     <button type="button" onClick={() => setSelectedDocId(doc.id)} className="flex-1 text-left">
-                      <p className="truncate text-[11px] font-medium text-slate-800">{doc.title || "Untitled document"}</p>
+                      <p className="truncate text-sm font-medium text-slate-800">{doc.title || "Untitled document"}</p>
                       <p className="truncate text-[10px] text-slate-500">{doc.text}</p>
                     </button>
                     <button
@@ -299,14 +299,14 @@ export function VectorSearchLab() {
         </div>
 
         <div className="space-y-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-4 xl:col-span-1">
-          <p className="text-xs font-semibold text-slate-700">Step 2 – Ask a question or describe what you need</p>
-          <p className="text-[11px] text-slate-600">
+          <p className="text-xs font-semibold text-slate-700">Step 2 - Ask a question or describe what you need</p>
+          <p className="text-sm text-slate-600">
             Type a natural language query. For example, ask for incidents about access control, notes about data strategy or
             examples of supervised learning. The lab will compute cosine similarity between your query and each document.
           </p>
 
           <div className="space-y-2">
-            <label htmlFor="vector-search-query" className="block text-[11px] font-medium text-slate-700">
+            <label htmlFor="vector-search-query" className="block text-sm font-medium text-slate-700">
               Search query
             </label>
             <textarea
@@ -328,10 +328,10 @@ export function VectorSearchLab() {
           </button>
 
           <div className="space-y-2">
-            <p className="text-[11px] font-medium text-slate-700">Similarity scores</p>
+            <p className="text-sm font-medium text-slate-700">Similarity scores</p>
             <div className="h-44 rounded-2xl border border-slate-200 bg-white px-3 py-2">
               {scores.length === 0 ? (
-                <p className="text-[11px] text-slate-500">Add at least one document to see similarity scores.</p>
+                <p className="text-sm text-slate-500">Add at least one document to see similarity scores.</p>
               ) : (
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={chartData}>
@@ -347,13 +347,13 @@ export function VectorSearchLab() {
                 </ResponsiveContainer>
               )}
             </div>
-            <p className="text-[11px] text-slate-500">
+            <p className="text-sm text-slate-500">
               Scores close to 1 indicate strong similarity. Scores near 0 mean the query and document share few tokens in common
               after basic cleaning and normalisation.
             </p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white px-3 py-2 text-[11px] text-slate-700">
+          <div className="rounded-2xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700">
             {lastQuery ? (
               <p>
                 You just searched for{" "}
@@ -368,24 +368,24 @@ export function VectorSearchLab() {
         </div>
 
         <div className="space-y-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-4 xl:col-span-1">
-          <p className="text-xs font-semibold text-slate-700">Step 3 – Inspect one document in context</p>
-          <p className="text-[11px] text-slate-600">
+          <p className="text-xs font-semibold text-slate-700">Step 3 - Inspect one document in context</p>
+          <p className="text-sm text-slate-600">
             Click a document in the list to focus on it. You can compare its wording with your query and think about why the
             similarity score is high or low.
           </p>
 
           {selectedDoc ? (
             <div className="space-y-2 rounded-2xl border border-slate-200 bg-white p-3">
-              <p className="text-[11px] font-semibold text-slate-900">{selectedDoc.title || "Untitled document"}</p>
-              <p className="text-[11px] text-slate-700 leading-relaxed">{selectedDoc.text}</p>
-              <p className="mt-2 text-[11px] text-slate-500">
+              <p className="text-sm font-semibold text-slate-900">{selectedDoc.title || "Untitled document"}</p>
+              <p className="text-sm text-slate-700 leading-relaxed">{selectedDoc.text}</p>
+              <p className="mt-2 text-sm text-slate-500">
                 Try editing this text in the collection and running the same query again. You will see how small changes in wording
                 can change the similarity score, which is helpful when you design prompts or knowledge snippets for real retrieval
                 systems.
               </p>
             </div>
           ) : (
-            <p className="text-[11px] text-slate-500">Select a document from the collection on the left to inspect it here.</p>
+            <p className="text-sm text-slate-500">Select a document from the collection on the left to inspect it here.</p>
           )}
         </div>
       </div>

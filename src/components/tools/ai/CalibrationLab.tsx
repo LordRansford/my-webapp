@@ -225,15 +225,15 @@ export function CalibrationLab() {
 
       <div className="grid gap-6 xl:grid-cols-3">
         <div className="space-y-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-4 xl:col-span-1">
-          <p className="text-xs font-semibold text-slate-700">Step 1 – Upload model probabilities</p>
-          <p className="text-[11px] text-slate-600">
+          <p className="text-xs font-semibold text-slate-700">Step 1 - Upload model probabilities</p>
+          <p className="text-sm text-slate-600">
             Use a CSV where each row is a prediction. Include a true label column and a probability column between 0 and 1. Only
             your browser sees this data.
           </p>
 
           <div className="space-y-3">
             <div className="space-y-2">
-              <label htmlFor="calibration-upload" className="block text-[11px] font-medium text-slate-700">
+              <label htmlFor="calibration-upload" className="block text-sm font-medium text-slate-700">
                 CSV file
               </label>
               <div className="flex items-center gap-3">
@@ -245,12 +245,12 @@ export function CalibrationLab() {
                   <span>Choose file</span>
                 </label>
                 <input id="calibration-upload" type="file" accept=".csv,text/csv" className="hidden" onChange={handleFileChange} />
-              <span className="text-[11px] text-slate-500">CSV only, max 8MB. Processed locally.</span>
+              <span className="text-sm text-slate-500">CSV only, max 8MB. Processed locally.</span>
               </div>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="calib-label-column" className="block text-[11px] font-medium text-slate-700">
+              <label htmlFor="calib-label-column" className="block text-sm font-medium text-slate-700">
                 Label column
               </label>
               <select
@@ -269,7 +269,7 @@ export function CalibrationLab() {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="calib-score-column" className="block text-[11px] font-medium text-slate-700">
+              <label htmlFor="calib-score-column" className="block text-sm font-medium text-slate-700">
                 Probability column
               </label>
               <select
@@ -285,11 +285,11 @@ export function CalibrationLab() {
                   </option>
                 ))}
               </select>
-              <p className="text-[11px] text-slate-500">These are the model&apos;s predicted probabilities that a case is positive. Values should be between 0 and 1.</p>
+              <p className="text-sm text-slate-500">These are the model&apos;s predicted probabilities that a case is positive. Values should be between 0 and 1.</p>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="calib-positive-label" className="block text-[11px] font-medium text-slate-700">
+              <label htmlFor="calib-positive-label" className="block text-sm font-medium text-slate-700">
                 Positive label
               </label>
               <select
@@ -305,11 +305,11 @@ export function CalibrationLab() {
                   </option>
                 ))}
               </select>
-              <p className="text-[11px] text-slate-500">This is the outcome you are treating as positive. For example, fraud, unsafe, complaint or churn.</p>
+              <p className="text-sm text-slate-500">This is the outcome you are treating as positive. For example, fraud, unsafe, complaint or churn.</p>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="calib-bin-count" className="block text-[11px] font-medium text-slate-700">
+              <label htmlFor="calib-bin-count" className="block text-sm font-medium text-slate-700">
                 Number of bins
               </label>
               <select
@@ -322,16 +322,16 @@ export function CalibrationLab() {
                 <option value={10}>10 bins</option>
                 <option value={20}>20 bins</option>
               </select>
-              <p className="text-[11px] text-slate-500">More bins show more detail but need more data. Fewer bins are smoother.</p>
+              <p className="text-sm text-slate-500">More bins show more detail but need more data. Fewer bins are smoother.</p>
             </div>
           </div>
 
-          <p className="text-[11px] text-slate-500">{statusMsg}</p>
+          <p className="text-sm text-slate-500">{statusMsg}</p>
         </div>
 
         <div className="space-y-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-4 xl:col-span-1">
-          <p className="text-xs font-semibold text-slate-700">Step 2 – Reliability diagram</p>
-          <p className="text-[11px] text-slate-600">
+          <p className="text-xs font-semibold text-slate-700">Step 2 - Reliability diagram</p>
+          <p className="text-sm text-slate-600">
             The reliability diagram compares what the model says to what actually happens. If the model is perfectly calibrated, the
             points will sit close to the diagonal line.
           </p>
@@ -369,15 +369,15 @@ export function CalibrationLab() {
                 </LineChart>
               </ResponsiveContainer>
             ) : (
-              <p className="text-[11px] text-slate-500">Once you upload data and choose the positive label the reliability diagram will appear here.</p>
+              <p className="text-sm text-slate-500">Once you upload data and choose the positive label the reliability diagram will appear here.</p>
             )}
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-3 text-[11px] text-slate-700">
-            <p className="mb-1 text-[11px] font-semibold text-slate-900">Bin summary</p>
+          <div className="rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-700">
+            <p className="mb-1 text-sm font-semibold text-slate-900">Bin summary</p>
             {canCompute && bins.length > 0 ? (
               <div className="max-h-32 overflow-auto pr-1">
-                <table className="w-full border-collapse text-[11px]">
+                <table className="w-full border-collapse text-sm">
                   <thead>
                     <tr className="text-slate-500">
                       <th className="pb-1 pr-2 text-left font-medium">Bin center</th>
@@ -399,7 +399,7 @@ export function CalibrationLab() {
                 </table>
               </div>
             ) : (
-              <p className="text-[11px] text-slate-500">
+              <p className="text-sm text-slate-500">
                 Each row will show a bin such as all cases with predicted probability between 0.4 and 0.5, the average prediction in
                 that bin and the fraction of positives that actually occurred.
               </p>
@@ -408,8 +408,8 @@ export function CalibrationLab() {
         </div>
 
         <div className="space-y-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-4 xl:col-span-1">
-          <p className="text-xs font-semibold text-slate-700">Step 3 – Score distribution and interpretation</p>
-          <p className="text-[11px] text-slate-600">
+          <p className="text-xs font-semibold text-slate-700">Step 3 - Score distribution and interpretation</p>
+          <p className="text-sm text-slate-600">
             The histogram shows how many examples fall into each probability region. This helps you see whether the model uses the
             full range from 0 to 1 or clusters around certain values.
           </p>
@@ -429,11 +429,11 @@ export function CalibrationLab() {
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <p className="text-[11px] text-slate-500">Once data is loaded this chart will show how many predictions land in each probability bin.</p>
+              <p className="text-sm text-slate-500">Once data is loaded this chart will show how many predictions land in each probability bin.</p>
             )}
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-3 text-[11px] text-slate-700 space-y-1">
+          <div className="rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-700 space-y-1">
             <p className="font-semibold text-slate-900">How well calibrated is the model</p>
             <p>{calibrationNarrative()}</p>
             {brierScore !== null && canCompute && (

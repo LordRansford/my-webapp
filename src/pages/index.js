@@ -52,15 +52,19 @@ export default function Home() {
   return (
     <Layout
       title="Ransford's Notes · Labs first"
-      description="Browser-first labs for security, architecture, and AI. No servers, no installs, just open source tools."
+      description="Browser-first labs for security, architecture, and AI. Practical, calm, and built for learning by doing."
     >
       <div className="hero">
         <div className="hero__copy">
-          <p className="eyebrow">Demystify, experiment, and deliver</p>
-          <h1>Welcome to Ransfords Notes</h1>
+          <p className="eyebrow">Hands-on learning, not hype</p>
+          <h1>Ransford’s Notes</h1>
           <p className="lead">
-            This space is focused on browser labs. Everything runs client side so you can explore security,
-            architecture, and AI ideas without setup.
+            I build small labs that let you test an idea in minutes. This is for practitioners who prefer a concrete
+            example over a long lecture.
+          </p>
+          <p className="muted">
+            What this is: learning tools and notes you can reuse at work. What it is not: a certification provider, a
+            penetration test service, or a promise of professional advice.
           </p>
           <div className="actions">
             <Link href="/tools" className="button primary">
@@ -73,11 +77,11 @@ export default function Home() {
           <ul className="hero-list">
             <li>
               <span className="dot dot--accent" />
-              Open source runtimes only (Pyodide, WebCrypto, client-only React)
+              Open source runtimes and browser APIs (Pyodide, WebCrypto, client-only React)
             </li>
             <li>
               <span className="dot dot--accent" />
-              Nothing runs on my servers; inputs stay in your browser
+              Most tools run client-side; your inputs stay in your browser unless a page clearly says otherwise
             </li>
             <li>
               <span className="dot dot--accent" />
@@ -85,15 +89,15 @@ export default function Home() {
             </li>
           </ul>
           <p className="muted">
-            If something is unclear, assume I need to explain it better and tell me so I can improve it.
+            If something is unclear or feels off, assume I need to explain it better and tell me so I can improve it.
           </p>
         </div>
       </div>
 
       <section className="section">
         <div className="section-heading">
-          <h2>Browser labs you can trust</h2>
-          <span className="hint">Open source tools with examples and trade-offs</span>
+          <h2>Labs with clear boundaries</h2>
+          <span className="hint">Examples, trade-offs, and a clear statement of what the tool does</span>
         </div>
         <div className="card-grid">
           {labs.map((lab) => (

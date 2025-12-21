@@ -15,7 +15,7 @@ export default function StakeholderPersonaMapDashboard() {
           <div key={idx} className="rounded-xl border border-slate-200 bg-slate-50 p-3 shadow-sm">
             <div className="flex items-center justify-between">
               <p className="text-sm font-semibold text-slate-900">{p.role}</p>
-              <span className="rounded-full bg-white px-2 py-1 text-[11px] font-semibold text-slate-700">{p.type}</span>
+              <span className="rounded-full bg-white px-2 py-1 text-sm font-semibold text-slate-700">{p.type}</span>
             </div>
             <p className="mt-2 text-xs text-slate-700">
               <span className="font-semibold text-slate-900">Goals:</span> {p.goals}

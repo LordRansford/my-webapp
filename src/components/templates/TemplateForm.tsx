@@ -115,7 +115,7 @@ function TemplateForm({ schema, onChange }: TemplateFormProps) {
       <div className="space-y-1">
         {field.description && <p className="text-sm text-slate-700">{field.description}</p>}
         {field.helperText && <p className={helperTextClass}>{field.helperText}</p>}
-        {field.example && <p className="text-[11px] text-slate-500">Example: {field.example}</p>}
+        {field.example && <p className="text-sm text-slate-500">Example: {field.example}</p>}
       </div>
     );
 

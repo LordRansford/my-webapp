@@ -29,7 +29,7 @@ export function ConfidenceIndicator({ completionRatio, validationErrors }: Confi
         <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ring-1 ${tone}`}>
           {label}
         </span>
-        <p className="text-[11px] text-slate-500 mt-1">{percent}% complete</p>
+        <p className="text-sm text-slate-500 mt-1">{percent}% complete</p>
       </div>
     </div>
   );

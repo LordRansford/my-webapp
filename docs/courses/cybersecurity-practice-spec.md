@@ -1,4 +1,4 @@
-# Cybersecurity Practice and Strategy – course specification
+# Cybersecurity Practice and Strategy - course specification
 
 ## Overview
 
@@ -63,13 +63,13 @@ Each lab has:
 
 Cybersecurity Practice and Strategy has the strongest mapping to CISSP knowledge areas, including:
 
-- Domain 1: Security and Risk Management – real world risk and governance practice.
-- Domain 2: Asset Security – understanding data and system ownership and handling.
-- Domain 3: Security Architecture and Engineering – secure patterns and design choices.
-- Domain 4: Communication and Network Security – practical secure network design.
-- Domain 5: Identity and Access Management – identity patterns across systems.
-- Domain 7: Security Operations – monitoring, incident handling and operational security.
-- Domain 8: Software Development Security – secure lifecycle and DevSecOps practice.
+- Domain 1: Security and Risk Management - real world risk and governance practice.
+- Domain 2: Asset Security - understanding data and system ownership and handling.
+- Domain 3: Security Architecture and Engineering - secure patterns and design choices.
+- Domain 4: Communication and Network Security - practical secure network design.
+- Domain 5: Identity and Access Management - identity patterns across systems.
+- Domain 7: Security Operations - monitoring, incident handling and operational security.
+- Domain 8: Software Development Security - secure lifecycle and DevSecOps practice.
 
 The mapping remains conceptual rather than exam specific. The purpose is deep understanding and practice, not memorisation.
 
@@ -77,12 +77,12 @@ The mapping remains conceptual rather than exam specific. The purpose is deep un
 
 This level reinforces all NIST CSF 2.0 functions:
 
-- Identify – relating systems, assets, roles and dependencies.
-- Protect – selecting and tuning appropriate controls.
-- Detect – designing and interpreting monitoring and alerting.
-- Respond – walking through simple incident response scenarios.
-- Recover – thinking about continuity and learning loops.
-- Govern – emphasising roles, responsibilities, policy and assurance.
+- Identify - relating systems, assets, roles and dependencies.
+- Protect - selecting and tuning appropriate controls.
+- Detect - designing and interpreting monitoring and alerting.
+- Respond - walking through simple incident response scenarios.
+- Recover - thinking about continuity and learning loops.
+- Govern - emphasising roles, responsibilities, policy and assurance.
 
 ## Alignment with Cyber Essentials and Cyber Essentials Plus
 

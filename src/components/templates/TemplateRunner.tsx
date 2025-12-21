@@ -273,7 +273,7 @@ export function TemplateRunner({ slug }: RunnerProps) {
             <RiskBadge band={riskBand} />
           </div>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <ScoreCard title="Primary score" value={scores.risk ?? "—"} />
+            <ScoreCard title="Primary score" value={scores.risk ?? "-"} />
             <ScoreCard title="Estimated time" value={`${definition.estimatedMinutes} mins`} />
           </div>
           <ExplanationBlock text={resultSummary || "Adjust inputs to see results update live."} />
@@ -352,7 +352,7 @@ export function TemplateRunner({ slug }: RunnerProps) {
                       </div>
                       <p className="mt-1 text-xs text-slate-700">{run.summary}</p>
                       {updatedVersion ? (
-                        <p className="text-[11px] font-semibold text-amber-700">This run used version {run.templateVersion}. Current version is {definition.version}.</p>
+                        <p className="text-sm font-semibold text-amber-700">This run used version {run.templateVersion}. Current version is {definition.version}.</p>
                       ) : null}
                     </li>
                   );

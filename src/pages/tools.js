@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Layout from "@/components/Layout";
+import NotesLayout from "@/components/NotesLayout";
 import dynamic from "next/dynamic";
 
 const Tools = dynamic(() => import("@/components/Tools"), {
@@ -10,9 +10,14 @@ const Tools = dynamic(() => import("@/components/Tools"), {
 
 export default function ToolsPage() {
   return (
-    <Layout
-      title="Tools - Ransford's Notes"
-      description="Browser-based sandboxes for Python, cryptography, and AI with guided prompts."
+    <NotesLayout
+      meta={{
+        title: "Tools",
+        description: "Browser-based sandboxes for Python, cryptography, and AI with guided prompts.",
+        level: "Tools",
+        slug: "/tools",
+      }}
+      headings={[]}
     >
       <nav className="breadcrumb">
         <Link href="/">Home</Link>
@@ -24,8 +29,8 @@ export default function ToolsPage() {
         <p className="eyebrow">Interactive tools</p>
         <h1>Try the ideas in your browser</h1>
         <p className="lead">
-          Reading is helpful. Trying it yourself makes it stick. Each tool pairs with notes so you can run
-          small experiments without installing anything.
+          Reading is helpful. Trying it yourself makes it stick. Each tool pairs with notes so you can run small experiments
+          without installing anything.
         </p>
       </header>
 
@@ -37,13 +42,10 @@ export default function ToolsPage() {
           <li>Make one change at a time and predict the outcome.</li>
           <li>Note anything surprising and revisit the explanation.</li>
         </ol>
-        <p>
-          Everything runs locally in your browser. No code you type is sent to my servers. Data stays on your
-          device.
-        </p>
+        <p>Everything runs locally in your browser. No code you type is sent to my servers. Data stays on your device.</p>
       </section>
 
       <Tools />
-    </Layout>
+    </NotesLayout>
   );
 }

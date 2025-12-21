@@ -3,6 +3,7 @@ import Layout from "@/components/Layout";
 import { useCPD } from "@/hooks/useCPD";
 import { buildEvidenceText } from "@/lib/cpdEvidence";
 import { CPDTrackId, getCompletionForCourse, getTotalsForTrack } from "@/lib/cpd";
+import { minutesToHours } from "@/lib/cpd/calculations";
 import { aiSectionManifest } from "@/lib/aiSections";
 import { cyberSections } from "@/lib/cyberSections";
 import { softwareArchitectureSectionManifest } from "@/lib/softwareArchitectureSections";
@@ -47,7 +48,7 @@ const trackConfigs: Array<{
   },
 ];
 
-const toHours = (minutes: number) => Math.round((minutes / 60) * 10) / 10;
+const toHours = (minutes: number) => minutesToHours(minutes);
 const titleCase = (value: string) =>
   value
     .split("-")

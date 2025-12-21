@@ -1,6 +1,7 @@
 "use client";
 
 import Layout from "@/components/Layout";
+import Link from "next/link";
 import ContentsSidebar from "./ContentsSidebar";
 import ProgressBar from "./ProgressBar";
 import NotesStepper from "./summary/NotesStepper";
@@ -111,9 +112,9 @@ export default function NotesLayout({ meta = {}, headings = [], children, active
     <Layout title={meta.title} description={meta.description}>
       <ProgressBar />
       <div className="flex flex-col lg:flex-row lg:gap-6">
-        <div className="mb-3 lg:hidden">
+        <div className="mb-3 flex items-center justify-between lg:hidden">
           <button
-            className="rounded-full border px-3 py-1 text-sm text-gray-800 shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+            className="rounded-full border px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
             onClick={() => setMobileOpen(true)}
             aria-expanded={mobileOpen}
             aria-controls="contents-nav-mobile"
@@ -122,34 +123,48 @@ export default function NotesLayout({ meta = {}, headings = [], children, active
           </button>
         </div>
 
-        <ContentsSidebar headings={headings} activeId={activeId} />
+        <ContentsSidebar
+          headings={headings}
+          activeId={activeId}
+          mobileOpen={mobileOpen}
+          onNavigate={() => setMobileOpen(false)}
+          onClose={() => setMobileOpen(false)}
+        />
         <main className="w-full max-w-[1000px] flex-1">
           <header className="mb-4 rounded-3xl border border-gray-200 bg-white/90 p-4 shadow-sm backdrop-blur">
-            <p className="eyebrow m-0 text-gray-600">
-              {sectionLabelMap[resolvedSection] || "Notes"} - {meta.level || "Notes"}
+            <p className="eyebrow m-0 text-gray-700">
+              {sectionLabelMap[resolvedSection] || "Notes"} · {meta.level || "Notes"}
             </p>
-            <h1 className="text-2xl font-semibold leading-tight text-gray-900">{meta.title}</h1>
+            <h1 className="text-3xl font-semibold leading-tight text-gray-900">{meta.title}</h1>
             {meta.page ? (
-              <p className="text-sm text-gray-700">
+              <p className="text-sm text-gray-800">
                 Page {meta.page} of {meta.totalPages || "?"}
               </p>
             ) : null}
-            {meta.description ? <p className="mt-2 text-sm text-gray-700">{meta.description}</p> : null}
-            <div className="mt-3">
+            {meta.description ? <p className="mt-2 text-base text-gray-800">{meta.description}</p> : null}
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Link
+                href="/mentor"
+                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600"
+              >
+                Ask the mentor
+              </Link>
+            </div>
+            <div className="mt-4">
               <NotesStepper
                 items={stepperItems}
                 activeLevelId={resolvedSection === "cybersecurity" ? activeLevelId : undefined}
               />
             </div>
           </header>
-          <article className="prose prose-neutral max-w-none rounded-3xl border border-gray-200 bg-white/85 p-5 shadow-sm backdrop-blur">
+          <article className="prose prose-neutral max-w-none rounded-3xl border border-gray-200 bg-white/90 p-5 shadow-sm backdrop-blur">
             {children}
           </article>
           {showDonate ? (
-            <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm">
+            <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-sm">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Support</p>
-                <p className="text-sm text-slate-700">
+                <p className="text-sm font-semibold uppercase tracking-wide text-slate-700">Support</p>
+                <p className="text-sm text-slate-800">
                   If these notes or games help you, a small donation keeps the site independent and well tested.
                 </p>
               </div>
@@ -158,28 +173,6 @@ export default function NotesLayout({ meta = {}, headings = [], children, active
           ) : null}
         </main>
       </div>
-
-      {mobileOpen ? (
-        <div className="fixed inset-0 z-40 bg-black/40 lg:hidden" role="dialog" aria-modal="true">
-          <div className="absolute inset-y-0 left-0 w-[80%] max-w-[320px] bg-white p-4 shadow-xl">
-            <div className="mb-3 flex items-center justify-between gap-2">
-              <span className="text-sm font-semibold text-gray-800">Contents</span>
-              <button
-                onClick={() => setMobileOpen(false)}
-                className="rounded-full border px-3 py-1 text-xs text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-blue-200"
-              >
-                Close
-              </button>
-            </div>
-            <ContentsSidebar
-              headings={headings}
-              activeId={activeId}
-              mobile
-              onNavigate={() => setMobileOpen(false)}
-            />
-          </div>
-        </div>
-      ) : null}
     </Layout>
   );
 }

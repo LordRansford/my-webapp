@@ -2,6 +2,15 @@
 title: "Applied Cybersecurity"
 description: "Level 2 of my cybersecurity course. Applied threat modelling, attack surfaces, identity, detection and risk trade offs with hands-on labs."
 level: "applied"
+courseId: "cybersecurity"
+levelId: "applied"
+summary: "Applied threat modelling, attack surfaces, identity, detection and risk trade offs with hands-on labs."
+estimatedHours: 12
+learningObjectives:
+  - "Apply basic threat modelling to a small system, identifying assets, actors, and likely threats."
+  - "Explain how authentication, authorisation, sessions, and cookies interact in common web flows."
+  - "Analyse simple log signals and relate them to likely misuse or attack paths."
+  - "Evaluate trade offs between controls when constraints (cost, usability, risk) conflict."
 ---
 
 import ProgressBar from '@/components/notes/ProgressBar'
@@ -28,7 +37,7 @@ import RiskTradeoffVisualizer from "@/components/dashboards/cybersecurity/interm
 
 <LevelProgressBar courseId="cybersecurity" levelId="applied" sectionIds={cyberSections.applied} />
 
-<CPDTracker courseId="cybersecurity" levelId="applied" estimatedHours={10} />
+<CPDTracker courseId="cybersecurity" levelId="applied" estimatedHours={12} />
 
 Applied is where we stop describing computers and start thinking like attackers and defenders. We keep the language human, but we anchor every idea to assets, entry points, and the controls that actually change outcomes.
 

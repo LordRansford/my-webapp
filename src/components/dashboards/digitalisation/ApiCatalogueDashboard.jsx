@@ -58,7 +58,7 @@ export default function ApiCatalogueDashboard() {
               </p>
             </div>
             <span
-              className={`rounded-full px-2 py-1 text-[11px] font-semibold ${
+              className={`rounded-full px-2 py-1 text-sm font-semibold ${
                 api.stability === "Stable" ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"
               }`}
             >

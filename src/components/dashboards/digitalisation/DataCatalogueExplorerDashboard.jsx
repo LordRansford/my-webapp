@@ -54,7 +54,7 @@ export default function DataCatalogueExplorerDashboard() {
                 <p className="text-xs text-slate-600">{item.domain} · Owner: {item.owner}</p>
               </div>
               <span
-                className={`rounded-full px-2 py-1 text-[11px] font-semibold ${
+                className={`rounded-full px-2 py-1 text-sm font-semibold ${
                   item.quality === "High"
                     ? "bg-emerald-100 text-emerald-700"
                     : item.quality === "Medium"

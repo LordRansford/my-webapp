@@ -30,13 +30,17 @@ export async function loadNote(relativePath, extraScope = {}, options = {}) {
 
   // Extract h2/h3 headings for sidebar (lightweight parse)
   const headings = [];
+  const seen = new Map();
   const lines = content.split("\n");
   lines.forEach((line) => {
     const match = /^(#{2,3})\s+(.*)/.exec(line);
     if (match) {
       const depth = match[1].length;
       const title = match[2].trim();
-      const id = slugify(title);
+      const base = slugify(title);
+      const count = (seen.get(base) || 0) + 1;
+      seen.set(base, count);
+      const id = count === 1 ? base : `${base}-${count}`;
       headings.push({ id, title, depth });
     }
   });

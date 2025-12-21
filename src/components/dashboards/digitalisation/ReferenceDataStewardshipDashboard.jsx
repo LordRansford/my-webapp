@@ -24,7 +24,7 @@ export default function ReferenceDataStewardshipDashboard() {
                   Owner: {row.owner} · Update: {row.frequency}
                 </p>
               </div>
-              <span className={`rounded-full px-2 py-1 text-[11px] font-semibold ${row.health < 75 ? "bg-amber-100 text-amber-800" : "bg-emerald-100 text-emerald-800"}`}>
+              <span className={`rounded-full px-2 py-1 text-sm font-semibold ${row.health < 75 ? "bg-amber-100 text-amber-800" : "bg-emerald-100 text-emerald-800"}`}>
                 Health {row.health}%
               </span>
             </div>

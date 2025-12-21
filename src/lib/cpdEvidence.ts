@@ -1,4 +1,5 @@
 import { CPDState, CPDTrackId, getTotalsForTrack } from "@/lib/cpd";
+import { minutesToHours } from "@/lib/cpd/calculations";
 
 const trackLabels: Record<CPDTrackId, string> = {
   cyber: "Cybersecurity",
@@ -8,7 +9,7 @@ const trackLabels: Record<CPDTrackId, string> = {
   data: "Data",
 };
 
-const toHours = (minutes: number) => Math.round((minutes / 60) * 10) / 10;
+const toHours = (minutes: number) => minutesToHours(minutes);
 
 const titleCase = (value: string) =>
   value

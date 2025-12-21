@@ -76,7 +76,7 @@ export default function AdrWorkbench() {
         {decisions.map((decision) => (
           <div key={decision.id} className="rounded-2xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
             <p className="text-sm font-semibold text-slate-900">{decision.title}</p>
-            <div className="mt-2 flex flex-wrap gap-2 text-[11px] text-slate-600">
+            <div className="mt-2 flex flex-wrap gap-2 text-sm text-slate-600">
               <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-1">
                 <Tag className="h-3 w-3" aria-hidden="true" />
                 {decision.status}

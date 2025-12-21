@@ -23,6 +23,12 @@ const COURSE_LEVEL_MAP: Record<
   string,
   { id: string; title: string; sourceId?: string; slug: string }[]
 > = {
+  data: [
+    { id: "foundations", title: "Foundations", sourceId: "foundations", slug: "foundations" },
+    { id: "intermediate", title: "Intermediate", sourceId: "intermediate", slug: "intermediate" },
+    { id: "advanced", title: "Advanced", sourceId: "advanced", slug: "advanced" },
+    { id: "summary", title: "Summary and games", slug: "summary" },
+  ],
   ai: [
     { id: "foundations", title: "Foundations", sourceId: "foundations", slug: "foundations" },
     { id: "intermediate", title: "Intermediate", sourceId: "applied", slug: "intermediate" },
@@ -36,6 +42,12 @@ const COURSE_LEVEL_MAP: Record<
     { id: "summary", title: "Summary and games", slug: "summary" },
   ],
   digitalisation: [
+    { id: "foundations", title: "Foundations", sourceId: "foundations", slug: "foundations" },
+    { id: "intermediate", title: "Intermediate", sourceId: "applied", slug: "intermediate" },
+    { id: "advanced", title: "Advanced", sourceId: "practice-strategy", slug: "advanced" },
+    { id: "summary", title: "Summary and games", slug: "summary" },
+  ],
+  "software-architecture": [
     { id: "foundations", title: "Foundations", sourceId: "foundations", slug: "foundations" },
     { id: "intermediate", title: "Intermediate", sourceId: "applied", slug: "intermediate" },
     { id: "advanced", title: "Advanced", sourceId: "practice-strategy", slug: "advanced" },

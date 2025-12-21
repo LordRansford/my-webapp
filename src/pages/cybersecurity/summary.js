@@ -121,6 +121,18 @@ export default function CyberSummary() {
     >
       <ProgressBar mode="scroll" />
 
+      <div className="mb-4 rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Warm up</p>
+            <p className="text-sm text-slate-800">Try the Thinking Gym for a quick logic puzzle before you recap.</p>
+          </div>
+          <Link className="button" href="/thinking-gym">
+            Thinking Gym
+          </Link>
+        </div>
+      </div>
+
       <header className="mb-6 space-y-4">
         <Link
           href="/cybersecurity"
@@ -159,7 +171,7 @@ export default function CyberSummary() {
       >
         <div className="grid gap-3 md:grid-cols-4">
           {courseMap.map((step) => (
-            <div key={step.title} className="rounded-xl border border-slate-200 bg-white p-3 text-xs sm:text-sm">
+            <div key={step.title} className="rounded-xl border border-slate-200 bg-white p-3 text-sm">
               <div className="flex items-start gap-2">
                 <span
                   className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-700"
@@ -170,7 +182,7 @@ export default function CyberSummary() {
                 </span>
                 <div>
                   <div className={`chip ${step.chip}`}>{step.title}</div>
-                  <p className="mt-2 text-xs text-slate-700">{step.summary}</p>
+                  <p className="mt-2 text-sm text-slate-700">{step.summary}</p>
                 </div>
               </div>
             </div>
@@ -230,7 +242,7 @@ export default function CyberSummary() {
                 className="flex flex-col gap-2 rounded-xl border border-gray-100 bg-white/90 p-3 shadow-xs transition hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring focus:ring-blue-200"
               >
                 <div className="text-sm font-semibold text-gray-900">{seg.label}</div>
-                <div className={`inline-flex w-fit items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ${seg.tone}`}>
+                <div className={`inline-flex w-fit items-center gap-2 rounded-full px-3 py-1 text-sm font-semibold ${seg.tone}`}>
                   {seg.state}
                 </div>
                 <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100">

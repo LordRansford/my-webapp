@@ -56,7 +56,7 @@ export default function OddOneOutGame() {
                     key={item}
                     type="button"
                     onClick={() => setAnswers((prev) => ({ ...prev, [set.id]: item }))}
-                    className={`rounded-xl border px-3 py-2 text-[11px] transition ${
+                    className={`rounded-xl border px-3 py-2 text-sm transition ${
                       active ? "border-purple-300 bg-white text-purple-800" : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
                     }`}
                   >
@@ -73,7 +73,7 @@ export default function OddOneOutGame() {
         <p className="text-xs font-semibold text-slate-900">
           Score: {score} of {SETS.length}
         </p>
-        <p className="mt-1 text-[11px] text-slate-600">If you miss one, check which concept set you mixed up.</p>
+        <p className="mt-1 text-sm text-slate-600">If you miss one, check which concept set you mixed up.</p>
       </div>
     </div>
   );

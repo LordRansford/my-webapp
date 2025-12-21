@@ -1,4 +1,4 @@
-# Cybersecurity Foundations – course specification
+# Cybersecurity Foundations - course specification
 
 ## Overview
 
@@ -73,11 +73,11 @@ This assessment structure is suitable for CPD credit. More formal summative asse
 
 Cybersecurity Foundations is aligned at a high level with the following CISSP knowledge areas:
 
-- Domain 1: Security and Risk Management – basic concepts such as CIA, risk, controls and ethics.
-- Domain 3: Security Architecture and Engineering – introductory ideas about secure design and trust boundaries.
-- Domain 4: Communication and Network Security – high level understanding of how data moves between devices and networks.
-- Domain 5: Identity and Access Management – basic authentication and password concepts.
-- Domain 7: Security Operations – introductory ideas about logging, monitoring and incident thinking.
+- Domain 1: Security and Risk Management - basic concepts such as CIA, risk, controls and ethics.
+- Domain 3: Security Architecture and Engineering - introductory ideas about secure design and trust boundaries.
+- Domain 4: Communication and Network Security - high level understanding of how data moves between devices and networks.
+- Domain 5: Identity and Access Management - basic authentication and password concepts.
+- Domain 7: Security Operations - introductory ideas about logging, monitoring and incident thinking.
 
 This level does not attempt to cover the full CISSP body of knowledge. It aims to build the underlying understanding that later maps into formal exam preparation.
 
@@ -95,11 +95,11 @@ The Govern function is introduced in very light form by encouraging responsible 
 
 Cybersecurity Foundations introduces the five Cyber Essentials control themes at a basic level:
 
-- Firewalls and internet gateways – explained via simple network and device analogies.
-- Secure configuration – simple examples of changing default settings.
-- User access control – basic account and password practices.
-- Malware protection – high level view of antivirus and safe software behaviour.
-- Patch management – the idea of keeping devices and apps updated.
+- Firewalls and internet gateways - explained via simple network and device analogies.
+- Secure configuration - simple examples of changing default settings.
+- User access control - basic account and password practices.
+- Malware protection - high level view of antivirus and safe software behaviour.
+- Patch management - the idea of keeping devices and apps updated.
 
 Cyber Essentials Plus aspects, such as testing and verification, are not addressed directly at this level but are set up conceptually for later levels.
 
@@ -114,6 +114,8 @@ The content and tools are designed to be accessible:
 - Captions and transcripts for audio or video material.
 
 This supports a wide range of learners, including those with low digital confidence.
+
+
 
 
 

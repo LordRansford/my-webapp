@@ -1,64 +1,81 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getExportHistory } from "@/lib/history/exportHistory";
+import Link from "next/link";
 
 export default function ExportHistoryPage() {
-  const [history, setHistory] = useState([]);
+  const [data, setData] = useState(null);
 
   useEffect(() => {
-    setHistory(getExportHistory());
+    fetch("/api/account/history")
+      .then((r) => r.json())
+      .then((json) => setData(json))
+      .catch(() => setData({ authenticated: false, recentToolRuns: [], recentDownloads: [] }));
   }, []);
+
+  const recentToolRuns = data?.recentToolRuns || [];
+  const recentDownloads = data?.recentDownloads || [];
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-12 md:px-6 lg:px-8">
       <section className="space-y-3 rounded-3xl border border-slate-200 bg-white/90 p-8 shadow-sm backdrop-blur">
         <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Account</p>
-        <h1 className="text-3xl font-semibold text-slate-900">My downloads and exports</h1>
+        <h1 className="text-3xl font-semibold text-slate-900">My history</h1>
         <p className="text-base text-slate-700">
-          This history is stored in your browser profile. It lists the exports you performed, the intended use, and whether
-          attribution was included.
+          This page shows recent downloads and tool runs tied to your account. CPD summary will sit here later.
         </p>
-        <p className="text-sm text-slate-700">
-          These resources are educational and planning aids. They are not legal advice and do not replace professional security
-          testing. Only use them on systems and data where you have permission.
-        </p>
+        {!data ? (
+          <p className="text-sm text-slate-700">Loading your history...</p>
+        ) : data.authenticated ? null : (
+          <p className="text-sm text-slate-700">
+            You are not signed in. You can still browse everything. Sign in if you want history saved across devices.
+          </p>
+        )}
+        <div className="flex flex-wrap gap-2">
+          <Link href="/signin" className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">
+            Sign in
+          </Link>
+          <Link href="/pricing" className="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50">
+            See plans
+          </Link>
+        </div>
       </section>
 
-      <section className="mt-8 rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
-        {history.length === 0 ? (
-          <p className="text-sm text-slate-700">No exports recorded yet.</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full border-separate border-spacing-y-2 text-sm text-slate-800">
-              <thead>
-                <tr>
-                  <th className="rounded-l-lg bg-slate-100 px-3 py-2 text-left font-semibold text-slate-900">Template</th>
-                  <th className="bg-slate-100 px-3 py-2 text-left font-semibold text-slate-900">Format</th>
-                  <th className="bg-slate-100 px-3 py-2 text-left font-semibold text-slate-900">Use</th>
-                  <th className="bg-slate-100 px-3 py-2 text-left font-semibold text-slate-900">Attribution</th>
-                  <th className="rounded-r-lg bg-slate-100 px-3 py-2 text-left font-semibold text-slate-900">Timestamp</th>
-                </tr>
-              </thead>
-              <tbody>
-                {history
-                  .slice()
-                  .reverse()
-                  .map((item, index) => (
-                    <tr key={`${item.templateId}-${index}`} className="rounded-lg">
-                      <td className="rounded-l-lg bg-white px-3 py-2">{item.templateId}</td>
-                      <td className="bg-white px-3 py-2 uppercase">{item.format}</td>
-                      <td className="bg-white px-3 py-2 capitalize">{item.intendedUse}</td>
-                      <td className="bg-white px-3 py-2">{item.includeAttribution ? "Included" : "Removed"}</td>
-                      <td className="rounded-r-lg bg-white px-3 py-2">
-                        {new Date(item.exportedAt).toLocaleString()}
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+      <section className="mt-8 grid gap-6 md:grid-cols-2">
+        <div className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-slate-900">Recent template downloads</h2>
+          {recentDownloads.length === 0 ? (
+            <p className="mt-3 text-sm text-slate-700">No downloads yet.</p>
+          ) : (
+            <ul className="mt-3 space-y-2 text-sm text-slate-800">
+              {recentDownloads.map((d) => (
+                <li key={d.id} className="rounded-2xl bg-slate-50 px-3 py-2">
+                  <div className="font-semibold text-slate-900">{d.templateId}</div>
+                  <div className="text-xs text-slate-700">
+                    {d.licenseChoice === "internal_use" ? "Internal use" : "Commercial use"} · Attribution{" "}
+                    {d.signaturePolicyApplied === "kept" ? "kept" : "removed"} · {new Date(d.timestamp).toLocaleString()}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-slate-900">Recent tool runs</h2>
+          {recentToolRuns.length === 0 ? (
+            <p className="mt-3 text-sm text-slate-700">No tool runs yet.</p>
+          ) : (
+            <ul className="mt-3 space-y-2 text-sm text-slate-800">
+              {recentToolRuns.map((r) => (
+                <li key={r.id} className="rounded-2xl bg-slate-50 px-3 py-2">
+                  <div className="font-semibold text-slate-900">{r.toolId}</div>
+                  <div className="text-xs text-slate-700">{new Date(r.timestamp).toLocaleString()}</div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </section>
     </main>
   );

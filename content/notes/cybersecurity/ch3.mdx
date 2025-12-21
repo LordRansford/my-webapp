@@ -484,3 +484,20 @@ Explain why recovery is part of security
 - Cloud provider security best practices (AWS, Azure, GCP) - practical identity and logging patterns.
 
 I read them, then rewrite the key moves in my own words inside these notes so they stay personal and applicable.
+
+## Quick practice
+
+<ToolCard title="Incident dry run" description="Run a 5-minute tabletop on a small breach scenario.">
+  <ul>
+    <li>Pick one scenario (e.g., session token stolen or MFA fatigue).</li>
+    <li>List the first two containment moves and one log you would need to prove what happened.</li>
+  </ul>
+</ToolCard>
+
+<QuizBlock
+  title="Checkpoint"
+  questions={[
+    { q: "What is the point of threat modelling here", a: "To prioritise harm and focus controls on realistic attacker paths, not to list every threat." },
+    { q: "Why rehearse incident response", a: "So decisions are faster under pressure and evidence collection is reliable." },
+  ]}
+/>

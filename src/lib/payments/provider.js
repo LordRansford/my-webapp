@@ -1,7 +1,8 @@
 import { startStripeDonation } from "./stripe";
 
 export function isStripeConfigured() {
-  return Boolean(process.env.NEXT_PUBLIC_STRIPE_KEY || process.env.STRIPE_SECRET_KEY);
+  // Stage 7: Stripe is wired but disabled by default. Keys alone must not enable payments.
+  return process.env.STRIPE_ENABLED === "true";
 }
 
 export async function processDonation({ amount, currency = "USD", recurring = false }) {

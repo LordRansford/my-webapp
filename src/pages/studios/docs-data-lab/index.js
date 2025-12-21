@@ -461,7 +461,7 @@ export default function DocsDataLabPage() {
                   {["people", "organisations", "locations"].map((type) => (
                     <div key={type} className="text-xs text-slate-700">
                       <span className="font-semibold capitalize">{type}:</span>{" "}
-                      {selectedStats.entities[type].length ? selectedStats.entities[type].join(", ") : "—"}
+                      {selectedStats.entities[type].length ? selectedStats.entities[type].join(", ") : "-"}
                     </div>
                   ))}
                 </div>

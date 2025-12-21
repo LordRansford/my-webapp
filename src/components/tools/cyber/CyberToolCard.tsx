@@ -1,16 +1,29 @@
 "use client";
 
 import React from "react";
+import { ToolOutputNotes } from "@/components/tools/ToolOutputNotes";
 
 interface CyberToolCardProps {
   id: string;
   title: string;
   icon: React.ReactNode;
   description: string;
+  whatThisTellsYou?: string[];
+  interpretationTips?: string[];
+  limitations?: string[];
   children: React.ReactNode;
 }
 
-export function CyberToolCard({ id, title, icon, description, children }: CyberToolCardProps) {
+export function CyberToolCard({
+  id,
+  title,
+  icon,
+  description,
+  whatThisTellsYou,
+  interpretationTips,
+  limitations,
+  children,
+}: CyberToolCardProps) {
   return (
     <section
       aria-labelledby={id}
@@ -31,6 +44,18 @@ export function CyberToolCard({ id, title, icon, description, children }: CyberT
       </header>
 
       {children}
+
+      <ToolOutputNotes
+        whatThisTellsYou={
+          whatThisTellsYou ?? ["A quick, client-side interpretation of what you pasted or selected."]
+        }
+        interpretationTips={
+          interpretationTips ?? ["Use this as a starting point, then confirm against your own standards and threat model."]
+        }
+        limitations={
+          limitations ?? ["This is educational. It does not fetch live data or confirm server-side behaviour."]
+        }
+      />
     </section>
   );
 }

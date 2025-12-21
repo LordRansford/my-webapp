@@ -52,7 +52,7 @@ export default function EvaluationMetricsExplorer() {
       <div className="mt-4 grid gap-2 md:grid-cols-2">
         {Object.entries(metrics).map(([k, v]) => (
           <div key={k} className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-800">
-            <p className="font-semibold text-slate-900 uppercase tracking-wide text-[11px]">{k}</p>
+            <p className="font-semibold text-slate-900 uppercase tracking-wide text-sm">{k}</p>
             <p>{v}%</p>
           </div>
         ))}

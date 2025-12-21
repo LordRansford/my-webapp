@@ -16,8 +16,10 @@ export default function NextSteps() {
     <section className="mt-8 rounded-2xl border bg-white/70 p-5 shadow-sm">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-semibold text-gray-900">Reflection and next steps</h2>
-          <p className="text-sm text-gray-700 mt-1">If you can do these, you have the core foundations.</p>
+          <h2 id="reflection-and-next-steps" className="text-lg font-semibold text-gray-900">
+            Reflection and next steps
+          </h2>
+          <p className="mt-1 text-sm text-gray-700">If you can do these, you have the core foundations.</p>
         </div>
         <Link
           href="/subscribe"

@@ -207,7 +207,7 @@ export function DriftMonitorLab() {
       const binStart = min + i * binSize;
       const binEnd = binStart + binSize;
       rows.push({
-        bin: `${binStart.toFixed(1)} – ${binEnd.toFixed(1)}`,
+        bin: `${binStart.toFixed(1)} - ${binEnd.toFixed(1)}`,
         baseline: baselineBins[i],
         current: currentBins[i],
       });
@@ -266,15 +266,15 @@ export function DriftMonitorLab() {
 
       <div className="grid gap-6 xl:grid-cols-3">
         <div className="space-y-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-4 xl:col-span-1">
-          <p className="text-xs font-semibold text-slate-700">Step 1 – Upload baseline and current data</p>
-          <p className="text-[11px] text-slate-600">
+          <p className="text-xs font-semibold text-slate-700">Step 1 - Upload baseline and current data</p>
+          <p className="text-sm text-slate-600">
             Use two CSV files with the same structure. Baseline could be a previous time period, current is the time you want to
             check for drift. Only your browser sees this data.
           </p>
 
           <div className="space-y-3">
             <div className="space-y-2">
-              <label htmlFor="baseline-upload" className="block text-[11px] font-medium text-slate-700">
+              <label htmlFor="baseline-upload" className="block text-sm font-medium text-slate-700">
                 Baseline CSV
               </label>
               <div className="flex items-center gap-3">
@@ -286,12 +286,12 @@ export function DriftMonitorLab() {
                   <span>Choose file</span>
                 </label>
                 <input id="baseline-upload" type="file" accept=".csv,text/csv" className="hidden" onChange={handleBaselineFileChange} />
-                <span className="text-[11px] text-slate-500">CSV only, max 8MB. Processed in-browser.</span>
+                <span className="text-sm text-slate-500">CSV only, max 8MB. Processed in-browser.</span>
               </div>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="current-upload" className="block text-[11px] font-medium text-slate-700">
+              <label htmlFor="current-upload" className="block text-sm font-medium text-slate-700">
                 Current CSV
               </label>
               <div className="flex items-center gap-3">
@@ -303,14 +303,14 @@ export function DriftMonitorLab() {
                   <span>Choose file</span>
                 </label>
                 <input id="current-upload" type="file" accept=".csv,text/csv" className="hidden" onChange={handleCurrentFileChange} />
-                <span className="text-[11px] text-slate-500">Use the same schema as baseline. Max 8MB.</span>
+                <span className="text-sm text-slate-500">Use the same schema as baseline. Max 8MB.</span>
               </div>
             </div>
           </div>
 
           <div className="space-y-3 pt-2">
             <div className="space-y-2">
-              <label htmlFor="feature-column" className="block text-[11px] font-medium text-slate-700">
+              <label htmlFor="feature-column" className="block text-sm font-medium text-slate-700">
                 Numeric feature to compare
               </label>
               <select
@@ -329,7 +329,7 @@ export function DriftMonitorLab() {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="label-column" className="block text-[11px] font-medium text-slate-700">
+              <label htmlFor="label-column" className="block text-sm font-medium text-slate-700">
                 Optional label column
               </label>
               <select
@@ -345,27 +345,27 @@ export function DriftMonitorLab() {
                   </option>
                 ))}
               </select>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-sm text-slate-500">
                 If you pick a label column, the lab will also compare how label frequencies have shifted between baseline and
                 current.
               </p>
             </div>
           </div>
 
-          <p className="text-[11px] text-slate-500">{statusMsg}</p>
+          <p className="text-sm text-slate-500">{statusMsg}</p>
         </div>
 
         <div className="space-y-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-4 xl:col-span-1">
-          <p className="text-xs font-semibold text-slate-700">Step 2 – Inspect feature drift</p>
-          <p className="text-[11px] text-slate-600">
+          <p className="text-xs font-semibold text-slate-700">Step 2 - Inspect feature drift</p>
+          <p className="text-sm text-slate-600">
             Compare how the distribution of the chosen feature has changed between baseline and current. This is often one of the
             first signs that a model may be receiving different inputs than it was trained on.
           </p>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-3 text-[11px] text-slate-700">
+          <div className="rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-700">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <p className="text-[11px] font-semibold text-slate-900">Baseline</p>
+                <p className="text-sm font-semibold text-slate-900">Baseline</p>
                 <p>Count: {baselineStats.count}</p>
                 <p>Mean: {baselineStats.mean.toFixed(3)}</p>
                 <p>Std dev: {baselineStats.std.toFixed(3)}</p>
@@ -373,7 +373,7 @@ export function DriftMonitorLab() {
                 <p>Max: {baselineStats.max.toFixed(3)}</p>
               </div>
               <div>
-                <p className="text-[11px] font-semibold text-slate-900">Current</p>
+                <p className="text-sm font-semibold text-slate-900">Current</p>
                 <p>Count: {currentStats.count}</p>
                 <p>Mean: {currentStats.mean.toFixed(3)}</p>
                 <p>Std dev: {currentStats.std.toFixed(3)}</p>
@@ -381,7 +381,7 @@ export function DriftMonitorLab() {
                 <p>Max: {currentStats.max.toFixed(3)}</p>
               </div>
             </div>
-            <div className="mt-2 text-[11px] text-slate-600">
+            <div className="mt-2 text-sm text-slate-600">
               <p>
                 Drift score is calculated as the absolute difference in means divided by the baseline standard deviation. This is
                 similar to a simple effect size measure and gives a rough sense of how large the shift is relative to baseline
@@ -398,7 +398,7 @@ export function DriftMonitorLab() {
           </div>
 
           <div className="space-y-2">
-            <p className="text-[11px] font-medium text-slate-700">Distribution comparison</p>
+            <p className="text-sm font-medium text-slate-700">Distribution comparison</p>
             <div className="h-44 rounded-2xl border border-slate-200 bg-white px-3 py-2">
               {canCompare && histogramData.length > 0 && hasFeatureData ? (
                 <ResponsiveContainer width="100%" height="100%">
@@ -411,7 +411,7 @@ export function DriftMonitorLab() {
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
-                <p className="text-[11px] text-slate-500">
+                <p className="text-sm text-slate-500">
                   Once both datasets are loaded and a numeric feature is selected the chart will show how the feature distribution
                   has changed across ten bins.
                 </p>
@@ -421,8 +421,8 @@ export function DriftMonitorLab() {
         </div>
 
         <div className="space-y-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-4 xl:col-span-1">
-          <p className="text-xs font-semibold text-slate-700">Step 3 – Optional label drift</p>
-          <p className="text-[11px] text-slate-600">
+          <p className="text-xs font-semibold text-slate-700">Step 3 - Optional label drift</p>
+          <p className="text-sm text-slate-600">
             If you have a label column such as fraud, churn, complaint type or incident severity you can see how the distribution
             of labels has changed between baseline and current periods.
           </p>
@@ -444,14 +444,14 @@ export function DriftMonitorLab() {
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <p className="text-[11px] text-slate-500">
+              <p className="text-sm text-slate-500">
                 Select a label column to see how label frequencies have shifted. This is useful for spotting changes in the
                 underlying population, such as more fraud cases or more high risk customers.
               </p>
             )}
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-3 text-[11px] text-slate-700 space-y-1">
+          <div className="rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-700 space-y-1">
             <p className="font-semibold text-slate-900">Reasoning about drift</p>
             <p>
               Use the feature stats and histograms to decide whether the model is seeing meaningfully different inputs than when it

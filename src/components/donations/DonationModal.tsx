@@ -96,27 +96,8 @@ export default function DonationModal({
     try {
       setLoading(true);
       setError("");
-      const payload = {
-        amount: Math.round(amountToSend * 100),
-        tierId: selectedTier?.id || "custom",
-        intentId: selectedIntent?.id || "maintain",
-        successPath,
-        cancelPath,
-      };
-      const response = await fetch("/api/stripe/create-checkout-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!response.ok) {
-        throw new Error("Could not start checkout. Please try again.");
-      }
-      const data = await response.json();
-      if (data?.url) {
-        window.location.href = data.url;
-        return;
-      }
-      throw new Error("Checkout link missing. Please try again.");
+      // Stage 7: monetisation scaffolding only. No payments enabled.
+      throw new Error("Donations are not enabled in this build yet.");
     } catch (err: any) {
       setError(err.message || "Something went wrong.");
     } finally {
@@ -240,7 +221,7 @@ export default function DonationModal({
               className="rounded-full bg-slate-900 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-slate-400"
               disabled={loading}
             >
-              {loading ? "Starting checkout..." : "Continue to checkout"}
+              {loading ? "Preparing..." : "Donations coming soon"}
             </button>
           </div>
         </div>

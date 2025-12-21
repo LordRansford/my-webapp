@@ -1,4 +1,6 @@
-import { getDb } from "@/lib/db/sqlite";
+import { readJsonFile, writeJsonFile } from "@/lib/storage/jsonFile";
+
+const TEMPLATE_STORE_PATH = process.env.TEMPLATE_STORE_PATH || "data/templates-store.json";
 
 export type PermissionScope = "commercial_remove_signature";
 
@@ -38,63 +40,61 @@ export type DonationRecord = {
   donatedAt: string;
 };
 
+type TemplateStore = {
+  permissionTokens: PermissionToken[];
+  downloads: DownloadRecord[];
+  donations: DonationRecord[];
+};
+
+const empty: TemplateStore = { permissionTokens: [], downloads: [], donations: [] };
+
+function load() {
+  return readJsonFile<TemplateStore>(TEMPLATE_STORE_PATH, empty);
+}
+
+function save(store: TemplateStore) {
+  writeJsonFile(TEMPLATE_STORE_PATH, store);
+}
+
 export function savePermissionToken(token: PermissionToken) {
-  const db = getDb();
-  const stmt = db.prepare(`
-    INSERT OR REPLACE INTO permission_tokens
-    (tokenId, userId, anonymousUserId, templateId, scope, issuedAt, expiresAt, issuedBy, notes)
-    VALUES (@tokenId, @userId, @anonymousUserId, @templateId, @scope, @issuedAt, @expiresAt, @issuedBy, @notes)
-  `);
-  stmt.run({
+  const s = load();
+  const normalized = {
     ...token,
     userId: token.userId || null,
     anonymousUserId: token.anonymousUserId || null,
     templateId: token.templateId || null,
     expiresAt: token.expiresAt || null,
     notes: token.notes || null,
-  });
+  };
+  s.permissionTokens = s.permissionTokens.filter((t) => t.tokenId !== token.tokenId);
+  s.permissionTokens.push(normalized);
+  save(s);
 }
 
 export function getActivePermissionTokens(params: { userId?: string | null; anonymousUserId?: string | null; templateId?: string | null }) {
   const { userId, anonymousUserId, templateId } = params;
-  const db = getDb();
   const nowIso = new Date().toISOString();
-  const stmt = db.prepare(`
-    SELECT * FROM permission_tokens
-    WHERE (userId = @userId OR anonymousUserId = @anonymousUserId)
-      AND (templateId IS NULL OR templateId = @templateId)
-      AND (expiresAt IS NULL OR expiresAt > @nowIso)
-  `);
-  return stmt
-    .all({
-      userId: userId || null,
-      anonymousUserId: anonymousUserId || null,
-      templateId: templateId || null,
-      nowIso,
-    })
-    .map((row) => row as PermissionToken);
+  const s = load();
+  return s.permissionTokens
+    .filter((t) => (t.userId && t.userId === (userId || null)) || (t.anonymousUserId && t.anonymousUserId === (anonymousUserId || null)))
+    .filter((t) => !t.templateId || t.templateId === (templateId || null))
+    .filter((t) => !t.expiresAt || t.expiresAt > nowIso);
 }
 
 export function listPermissionTokens(limit = 200) {
-  const db = getDb();
-  const stmt = db.prepare(`SELECT * FROM permission_tokens ORDER BY issuedAt DESC LIMIT ?`);
-  return stmt.all(limit) as PermissionToken[];
+  const s = load();
+  return [...s.permissionTokens].sort((a, b) => (b.issuedAt || "").localeCompare(a.issuedAt || "")).slice(0, limit);
 }
 
 export function deletePermissionToken(tokenId: string) {
-  const db = getDb();
-  const stmt = db.prepare(`DELETE FROM permission_tokens WHERE tokenId = ?`);
-  stmt.run(tokenId);
+  const s = load();
+  s.permissionTokens = s.permissionTokens.filter((t) => t.tokenId !== tokenId);
+  save(s);
 }
 
 export function saveDownload(record: DownloadRecord) {
-  const db = getDb();
-  const stmt = db.prepare(`
-    INSERT INTO template_downloads
-    (downloadId, templateId, fileVariantId, userId, anonymousUserId, requestedUse, supportMethod, donationId, permissionTokenId, issuedAt, signaturePolicyApplied)
-    VALUES (@downloadId, @templateId, @fileVariantId, @userId, @anonymousUserId, @requestedUse, @supportMethod, @donationId, @permissionTokenId, @issuedAt, @signaturePolicyApplied)
-  `);
-  stmt.run({
+  const s = load();
+  s.downloads.push({
     ...record,
     fileVariantId: record.fileVariantId || null,
     userId: record.userId || null,
@@ -102,48 +102,32 @@ export function saveDownload(record: DownloadRecord) {
     donationId: record.donationId || null,
     permissionTokenId: record.permissionTokenId || null,
   });
+  save(s);
 }
 
 export function listDownloads(filters: { templateId?: string; requestedUse?: string } = {}, limit = 200) {
-  const db = getDb();
-  const conditions: string[] = [];
-  const params: Record<string, unknown> = { limit };
-  if (filters.templateId) {
-    conditions.push("templateId = @templateId");
-    params.templateId = filters.templateId;
-  }
-  if (filters.requestedUse) {
-    conditions.push("requestedUse = @requestedUse");
-    params.requestedUse = filters.requestedUse;
-  }
-  const where = conditions.length ? `WHERE ${conditions.join(" AND ")}` : "";
-  const stmt = db.prepare(`SELECT * FROM template_downloads ${where} ORDER BY issuedAt DESC LIMIT @limit`);
-  return stmt.all(params) as DownloadRecord[];
+  const s = load();
+  return [...s.downloads]
+    .filter((d) => (filters.templateId ? d.templateId === filters.templateId : true))
+    .filter((d) => (filters.requestedUse ? d.requestedUse === filters.requestedUse : true))
+    .sort((a, b) => (b.issuedAt || "").localeCompare(a.issuedAt || ""))
+    .slice(0, limit);
 }
 
 export function saveDonation(record: DonationRecord) {
-  const db = getDb();
-  const stmt = db.prepare(`
-    INSERT OR REPLACE INTO donations
-    (donationId, userId, anonymousUserId, amount, currency, status, donatedAt)
-    VALUES (@donationId, @userId, @anonymousUserId, @amount, @currency, @status, @donatedAt)
-  `);
-  stmt.run({
-    ...record,
-    userId: record.userId || null,
-    anonymousUserId: record.anonymousUserId || null,
-  });
+  const s = load();
+  const normalized = { ...record, userId: record.userId || null, anonymousUserId: record.anonymousUserId || null };
+  s.donations = s.donations.filter((d) => d.donationId !== record.donationId);
+  s.donations.push(normalized);
+  save(s);
 }
 
 export function getLatestCompletedDonation(params: { userId?: string | null; anonymousUserId?: string | null }) {
-  const db = getDb();
-  const stmt = db.prepare(`
-    SELECT * FROM donations
-    WHERE status = 'completed'
-      AND (userId = @userId OR anonymousUserId = @anonymousUserId)
-    ORDER BY donatedAt DESC
-    LIMIT 1
-  `);
-  const row = stmt.get({ userId: params.userId || null, anonymousUserId: params.anonymousUserId || null });
-  return row ? (row as DonationRecord) : null;
+  const s = load();
+  return (
+    [...s.donations]
+      .filter((d) => d.status === "completed")
+      .filter((d) => (d.userId && d.userId === (params.userId || null)) || (d.anonymousUserId && d.anonymousUserId === (params.anonymousUserId || null)))
+      .sort((a, b) => (b.donatedAt || "").localeCompare(a.donatedAt || ""))[0] || null
+  );
 }

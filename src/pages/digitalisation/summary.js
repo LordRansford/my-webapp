@@ -62,6 +62,17 @@ export default function Page({ source, headings }) {
       }}
       headings={headings}
     >
+      <div className="mb-4 rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Warm up</p>
+            <p className="text-sm text-slate-800">Visit the Thinking Gym for a short logic puzzle before the summary.</p>
+          </div>
+          <a className="button" href="/thinking-gym">
+            Thinking Gym
+          </a>
+        </div>
+      </div>
       <MDXRenderer source={source} components={mdxComponents} />
     </NotesLayout>
   );

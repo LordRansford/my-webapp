@@ -1,16 +1,29 @@
 "use client";
 
 import React from "react";
+import { ToolOutputNotes } from "@/components/tools/ToolOutputNotes";
 
 interface AiToolCardProps {
   id: string;
   title: string;
   icon: React.ReactNode;
   description: string;
+  whatThisTellsYou?: string[];
+  interpretationTips?: string[];
+  limitations?: string[];
   children: React.ReactNode;
 }
 
-export function AiToolCard({ id, title, icon, description, children }: AiToolCardProps) {
+export function AiToolCard({
+  id,
+  title,
+  icon,
+  description,
+  whatThisTellsYou,
+  interpretationTips,
+  limitations,
+  children,
+}: AiToolCardProps) {
   return (
     <section
       aria-labelledby={id}
@@ -31,6 +44,18 @@ export function AiToolCard({ id, title, icon, description, children }: AiToolCar
       </header>
 
       {children}
+
+      <ToolOutputNotes
+        whatThisTellsYou={
+          whatThisTellsYou ?? ["A compact experiment that helps you reason about a model or dataset change."]
+        }
+        interpretationTips={
+          interpretationTips ?? ["Change one input at a time and predict the outcome before you run it."]
+        }
+        limitations={
+          limitations ?? ["This is a small, in-browser lab. Results may not match production scale behaviour."]
+        }
+      />
     </section>
   );
 }

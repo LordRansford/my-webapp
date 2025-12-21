@@ -84,20 +84,20 @@ export function EmailAuthTool() {
         <div className="space-y-3 rounded-2xl border border-slate-100 bg-slate-50/60 p-4">
           <div className="rounded-2xl border border-slate-200 bg-white p-3 text-xs text-slate-700 space-y-1">
             <p className="font-semibold text-slate-900">Authentication results</p>
-            <p className="text-[11px]">
+            <p className="text-sm">
               SPF: <span className="font-semibold text-slate-900">{auth.spf ?? "not found"}</span>
             </p>
-            <p className="text-[11px]">
+            <p className="text-sm">
               DKIM: <span className="font-semibold text-slate-900">{auth.dkim ?? "not found"}</span>
             </p>
-            <p className="text-[11px]">
+            <p className="text-sm">
               DMARC: <span className="font-semibold text-slate-900">{auth.dmarc ?? "not found"}</span>
             </p>
           </div>
           <div className="rounded-2xl border border-slate-200 bg-white p-3 text-xs text-slate-700 space-y-1">
             <p className="font-semibold text-slate-900">What this means in practice</p>
-            <p className="text-[11px] text-slate-700">{verdict}</p>
-            <p className="text-[11px] text-slate-500">
+            <p className="text-sm text-slate-700">{verdict}</p>
+            <p className="text-sm text-slate-500">
               Even with passes, you should still be careful with links, attachments and requests for money or credentials.
             </p>
           </div>

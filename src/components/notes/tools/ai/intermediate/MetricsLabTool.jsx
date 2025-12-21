@@ -44,7 +44,7 @@ export default function MetricsLabTool() {
           <p className="text-xs font-semibold text-slate-600">Confusion matrix</p>
           <div className="mt-3 grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-2 text-xs text-slate-700">
             <label className="rounded-xl border border-slate-200 bg-white p-2">
-              <span className="text-[11px] font-semibold text-slate-500">True positives</span>
+              <span className="text-sm font-semibold text-slate-500">True positives</span>
               <input
                 type="number"
                 min={0}
@@ -54,7 +54,7 @@ export default function MetricsLabTool() {
               />
             </label>
             <label className="rounded-xl border border-slate-200 bg-white p-2">
-              <span className="text-[11px] font-semibold text-slate-500">False positives</span>
+              <span className="text-sm font-semibold text-slate-500">False positives</span>
               <input
                 type="number"
                 min={0}
@@ -64,7 +64,7 @@ export default function MetricsLabTool() {
               />
             </label>
             <label className="rounded-xl border border-slate-200 bg-white p-2">
-              <span className="text-[11px] font-semibold text-slate-500">True negatives</span>
+              <span className="text-sm font-semibold text-slate-500">True negatives</span>
               <input
                 type="number"
                 min={0}
@@ -74,7 +74,7 @@ export default function MetricsLabTool() {
               />
             </label>
             <label className="rounded-xl border border-slate-200 bg-white p-2">
-              <span className="text-[11px] font-semibold text-slate-500">False negatives</span>
+              <span className="text-sm font-semibold text-slate-500">False negatives</span>
               <input
                 type="number"
                 min={0}

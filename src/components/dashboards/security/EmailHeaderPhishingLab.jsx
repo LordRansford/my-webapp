@@ -47,7 +47,7 @@ export default function EmailHeaderPhishingLab() {
       <form onSubmit={handleSubmit} className="space-y-3">
         <label
           htmlFor="email-headers"
-          className="block text-[11px] font-medium text-slate-700"
+          className="block text-sm font-medium text-slate-700"
         >
           Paste raw email headers
         </label>
@@ -63,7 +63,7 @@ Return-Path: <bounce@another-domain.com>
           onChange={(event) => setHeadersText(event.target.value)}
         />
         <div className="flex items-center justify-between gap-3">
-          <p className="text-[11px] text-slate-500">
+          <p className="text-sm text-slate-500">
             Do not paste sensitive message content. Headers are usually safe
             because they contain routing data, not the body.
           </p>
@@ -99,10 +99,10 @@ Return-Path: <bounce@another-domain.com>
                     {index + 1}
                   </span>
                   <div>
-                    <p className="font-mono break-all text-[11px]">
+                    <p className="font-mono break-all text-sm">
                       {hop.server}
                     </p>
-                    <p className="mt-1 text-[11px] text-slate-600">
+                    <p className="mt-1 text-sm text-slate-600">
                       {hop.info}
                     </p>
                   </div>
@@ -114,39 +114,39 @@ Return-Path: <bounce@another-domain.com>
           <section className="grid gap-4 md:grid-cols-3">
             <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
               <h3 className="text-sm font-semibold text-slate-900">SPF</h3>
-              <p className="mt-1 text-[11px] text-slate-600">
+              <p className="mt-1 text-sm text-slate-600">
                 Result:{" "}
                 <span className="font-semibold">
                   {result.spf?.result || "Unknown"}
                 </span>
               </p>
-              <p className="mt-1 text-[11px] text-slate-600">
+              <p className="mt-1 text-sm text-slate-600">
                 Detail: {result.spf?.detail || "Not provided."}
               </p>
             </div>
 
             <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
               <h3 className="text-sm font-semibold text-slate-900">DKIM</h3>
-              <p className="mt-1 text-[11px] text-slate-600">
+              <p className="mt-1 text-sm text-slate-600">
                 Result:{" "}
                 <span className="font-semibold">
                   {result.dkim?.result || "Unknown"}
                 </span>
               </p>
-              <p className="mt-1 text-[11px] text-slate-600">
+              <p className="mt-1 text-sm text-slate-600">
                 Detail: {result.dkim?.detail || "Not provided."}
               </p>
             </div>
 
             <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
               <h3 className="text-sm font-semibold text-slate-900">DMARC</h3>
-              <p className="mt-1 text-[11px] text-slate-600">
+              <p className="mt-1 text-sm text-slate-600">
                 Result:{" "}
                 <span className="font-semibold">
                   {result.dmarc?.result || "Unknown"}
                 </span>
               </p>
-              <p className="mt-1 text-[11px] text-slate-600">
+              <p className="mt-1 text-sm text-slate-600">
                 Policy: {result.dmarc?.policy || "Not visible in headers."}
               </p>
             </div>
@@ -156,20 +156,20 @@ Return-Path: <bounce@another-domain.com>
             <h3 className="text-sm font-semibold text-slate-900">
               Alignment and risk
             </h3>
-            <p className="mt-1 text-[11px] text-slate-700">
+            <p className="mt-1 text-sm text-slate-700">
               From:{" "}
               <span className="font-mono break-all">
                 {result.fromAddress || "Unknown"}
               </span>
             </p>
-            <p className="mt-1 text-[11px] text-slate-700">
+            <p className="mt-1 text-sm text-slate-700">
               Return Path:{" "}
               <span className="font-mono break-all">
                 {result.returnPath || "Unknown"}
               </span>
             </p>
             {result.summary && (
-              <p className="mt-2 text-[11px] text-slate-700">
+              <p className="mt-2 text-sm text-slate-700">
                 {result.summary}
               </p>
             )}

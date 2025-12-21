@@ -155,7 +155,7 @@ export function PromptComparatorLab() {
                 <p className="text-slate-600">{criterion.description}</p>
                 <div className="grid grid-cols-2 gap-2 items-center">
                   <div className="space-y-1">
-                    <p className="text-[11px] text-slate-500">Prompt A</p>
+                    <p className="text-sm text-slate-500">Prompt A</p>
                     <input
                       type="number"
                       min={0}
@@ -163,11 +163,11 @@ export function PromptComparatorLab() {
                       step={0.5}
                       value={scoresA[criterion.id] ?? ""}
                       onChange={(e) => handleScoreChange("A", criterion.id, e.target.value)}
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-2 py-1 text-[11px] text-right text-slate-800 focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-200"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-2 py-1 text-sm text-right text-slate-800 focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-200"
                     />
                   </div>
                   <div className="space-y-1">
-                    <p className="text-[11px] text-slate-500">Prompt B</p>
+                    <p className="text-sm text-slate-500">Prompt B</p>
                     <input
                       type="number"
                       min={0}
@@ -175,7 +175,7 @@ export function PromptComparatorLab() {
                       step={0.5}
                       value={scoresB[criterion.id] ?? ""}
                       onChange={(e) => handleScoreChange("B", criterion.id, e.target.value)}
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-2 py-1 text-[11px] text-right text-slate-800 focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-200"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-2 py-1 text-sm text-right text-slate-800 focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-200"
                     />
                   </div>
                 </div>

@@ -59,7 +59,7 @@ export default function DeploySafetySandbox() {
               <span>{control.label}</span>
               <span className="text-[10px] uppercase">{active[control.id] ? "On" : "Off"}</span>
             </div>
-            <p className="mt-1 text-[11px] font-normal">{control.hint}</p>
+            <p className="mt-1 text-sm font-normal">{control.hint}</p>
           </button>
         ))}
       </div>

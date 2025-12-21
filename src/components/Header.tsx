@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Logo from "@/components/Logo";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 type Dropdown = {
   id: string;
@@ -54,6 +55,8 @@ const utilityLinks = [
   { label: "Trust", href: "/trust" },
   { label: "Accreditation", href: "/accreditation" },
   { label: "About", href: "/about" },
+  { label: "Mentor", href: "/mentor" },
+  { label: "Play", href: "/play" },
 ];
 
 const utilityActions = [
@@ -64,11 +67,29 @@ const utilityActions = [
 export default function Header() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { data: session } = useSession();
+  const user = session?.user;
+  const [plan, setPlan] = useState<string | null>(null);
+
+  const initials = (() => {
+    const src = user?.name || user?.email || "";
+    const parts = String(src).trim().split(/\s+/).filter(Boolean);
+    if (parts.length === 0) return "U";
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  })();
 
   useEffect(() => {
     const close = () => setOpenDropdown(null);
     window.addEventListener("resize", close);
     return () => window.removeEventListener("resize", close);
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/billing/summary")
+      .then((r) => r.json())
+      .then((d) => setPlan(d?.plan || "free"))
+      .catch(() => setPlan("free"));
   }, []);
 
   const focusStyle =
@@ -195,6 +216,41 @@ export default function Header() {
             >
               Open Labs
             </Link>
+            {user?.id ? (
+              <div className="flex items-center gap-2">
+                {plan === "supporter" ? (
+                  <span className="rounded-full bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-800">Supporter</span>
+                ) : null}
+                <Link
+                  href="/account"
+                  className={`rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-900 hover:border-slate-400 ${focusStyle}`}
+                >
+                  Account
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => signOut()}
+                  className={`rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-900 hover:border-slate-400 ${focusStyle}`}
+                >
+                  Sign out
+                </button>
+                <span
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-sm font-semibold text-slate-900"
+                  aria-label={user?.name || user?.email || "Signed in user"}
+                  title={user?.email || undefined}
+                >
+                  {initials}
+                </span>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => signIn()}
+                className={`rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-900 hover:border-slate-400 ${focusStyle}`}
+              >
+                Sign in
+              </button>
+            )}
           </div>
         </div>
 
@@ -270,6 +326,38 @@ export default function Header() {
               >
                 Open Labs
               </Link>
+              {user?.id ? (
+                <>
+                  <Link
+                    href="/account"
+                    className={`rounded-full border border-slate-300 px-4 py-2 text-center text-sm font-semibold text-slate-900 hover:border-slate-400 ${focusStyle}`}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Account
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileOpen(false);
+                      signOut();
+                    }}
+                    className={`rounded-full border border-slate-300 px-4 py-2 text-center text-sm font-semibold text-slate-900 hover:border-slate-400 ${focusStyle}`}
+                  >
+                    Sign out
+                  </button>
+                </>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileOpen(false);
+                    signIn();
+                  }}
+                  className={`rounded-full border border-slate-300 px-4 py-2 text-center text-sm font-semibold text-slate-900 hover:border-slate-400 ${focusStyle}`}
+                >
+                  Sign in
+                </button>
+              )}
             </div>
           </div>
         )}

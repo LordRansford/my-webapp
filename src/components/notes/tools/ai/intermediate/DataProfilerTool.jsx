@@ -125,7 +125,7 @@ export default function DataProfilerTool() {
             {stats.columnStats.map((col) => (
               <div key={col.header} className="rounded-xl border border-slate-200 bg-slate-50/70 p-2">
                 <p className="text-xs font-semibold text-slate-900">{col.header}</p>
-                <p className="mt-1 text-[11px] text-slate-600">
+                <p className="mt-1 text-sm text-slate-600">
                   Missing: {col.missing} | Unique: {col.unique}
                 </p>
               </div>
