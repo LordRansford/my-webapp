@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Lock, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
+import { getTestingOverrideDecision } from "@/lib/testingMode";
 
 function IconBadge() {
   return (
@@ -14,9 +15,17 @@ function IconBadge() {
 
 export default function AccessGate({ feature, title, reason, children }) {
   const [summary, setSummary] = useState(null);
+  const testing = getTestingOverrideDecision().allowed;
 
   useEffect(() => {
     let cancelled = false;
+    if (testing) {
+      // Temporary QA override: do not show paywalls and do not block content when testing mode is enabled.
+      setSummary({ plan: "pro", features: ["*"] });
+      return () => {
+        cancelled = true;
+      };
+    }
     fetch("/api/billing/summary")
       .then((r) => r.json())
       .then((data) => {
@@ -28,9 +37,9 @@ export default function AccessGate({ feature, title, reason, children }) {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [testing]);
 
-  const hasAccess = summary?.features?.includes?.(feature);
+  const hasAccess = testing || summary?.features?.includes?.(feature);
   // While loading the plan summary, render children. Server routes still enforce access.
   if (!summary) return children;
   if (hasAccess) return children;
