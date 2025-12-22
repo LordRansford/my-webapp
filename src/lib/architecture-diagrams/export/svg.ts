@@ -17,7 +17,6 @@ const SAFE_SVG_TAGS = [
   "tspan",
   "defs",
   "marker",
-  "style",
   "title",
   "desc",
 ];
