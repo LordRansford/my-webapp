@@ -29,6 +29,7 @@ model UserIdentity {
   progress  Progress[]
   credits   Credits?
   creditUsage CreditUsageEvent[]
+  creditLots CreditLot[]
 
   @@index([provider, providerAccountId])
 }
@@ -57,6 +58,29 @@ model CreditUsageEvent {
 
   @@index([userId, occurredAt])
   @@index([toolId, occurredAt])
+}
+
+model CreditLot {
+  id            String   @id @default(cuid())
+  userId        String
+  credits       Int
+  source        String
+  stripeEventId String?
+  stripePriceId String?
+  expiresAt     DateTime?
+  createdAt     DateTime @default(now())
+
+  user UserIdentity @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([stripeEventId])
+}
+
+model StripeWebhookEvent {
+  // Stripe event id (evt_...) as primary key for idempotency.
+  id         String   @id
+  type       String
+  processedAt DateTime @default(now())
 }
 
 model FeedbackSubmission {
