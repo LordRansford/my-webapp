@@ -17,10 +17,8 @@ export default function ContentsSidebar({
   const [expanded, setExpanded] = useState({});
   const navId = mobileOpen ? "contents-nav-mobile" : "contents-nav-desktop";
   const reduce = useReducedMotion();
-  const [isDesktop, setIsDesktop] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return window.matchMedia("(min-width: 1024px)").matches;
-  });
+  // Avoid hydration mismatch: server render cannot know matchMedia, so start false and update on mount.
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 1024px)");
