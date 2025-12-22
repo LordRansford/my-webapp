@@ -35,7 +35,7 @@ export default function DiagramPackViewer({ pack }) {
           Switch variants to change emphasis. Switch tabs to view each diagram type.
         </p>
         <div className="mt-4">
-          <VariantPicker variants={pack.variants} selectedId={variantId} onSelect={setVariantId} />
+            <VariantPicker variants={pack.variants} selectedId={variantId} onSelect={setVariantId} audience={pack.input.audience} />
         </div>
       </div>
 

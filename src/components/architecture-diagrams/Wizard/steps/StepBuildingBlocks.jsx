@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { wizardCopy } from "@/lib/architecture-diagrams/copy/audience";
 
 const containerTypes = [
   { value: "ui", label: "UI" },
@@ -31,7 +32,8 @@ function RowActions({ onRemove, removeLabel = "Remove" }) {
   );
 }
 
-export default function StepBuildingBlocks({ users, externalSystems, containers, onChange, errors = [] }) {
+export default function StepBuildingBlocks({ audience = "students", users, externalSystems, containers, onChange, errors = [] }) {
+  const copy = wizardCopy(audience);
   const hasNothing = useMemo(() => users.length === 0 && externalSystems.length === 0 && containers.length === 0, [containers.length, externalSystems.length, users.length]);
 
   return (
@@ -39,6 +41,7 @@ export default function StepBuildingBlocks({ users, externalSystems, containers,
       <div>
         <h2 className="text-xl font-semibold text-slate-900">Building blocks 🧩</h2>
         <p className="mt-1 text-sm text-slate-700">Capture the main people, systems, and containers. Keep it high level.</p>
+        <p className="mt-2 text-xs text-slate-600">{copy.containersHelp}</p>
       </div>
 
       {hasNothing ? <SoftWarning>Add at least one user, external system, or container to make the diagrams useful.</SoftWarning> : null}

@@ -120,6 +120,7 @@ export default function WizardPageClient() {
     if (activeStep === "system") {
       return (
         <StepSystem
+          audience={state.audience}
           systemName={state.systemName}
           systemDescription={state.systemDescription}
           onChange={(patch) => updateState((prev) => ({ ...prev, ...patch }))}
@@ -130,6 +131,7 @@ export default function WizardPageClient() {
     if (activeStep === "blocks") {
       return (
         <StepBuildingBlocks
+          audience={state.audience}
           users={state.users}
           externalSystems={state.externalSystems}
           containers={state.containers}
@@ -141,6 +143,7 @@ export default function WizardPageClient() {
     if (activeStep === "flows") {
       return (
         <StepFlows
+          audience={state.audience}
           flows={state.flows}
           options={flowOptions}
           onChange={(patch) => updateState((prev) => ({ ...prev, ...patch }))}
@@ -151,6 +154,7 @@ export default function WizardPageClient() {
     if (activeStep === "security") {
       return (
         <StepSecurity
+          audience={state.audience}
           security={state.security}
           dataTypes={state.dataTypes}
           onChange={(patch) =>

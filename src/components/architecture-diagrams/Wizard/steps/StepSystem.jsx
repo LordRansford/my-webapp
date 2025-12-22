@@ -1,6 +1,9 @@
 "use client";
 
-export default function StepSystem({ systemName, systemDescription, onChange, errors = [] }) {
+import { wizardCopy } from "@/lib/architecture-diagrams/copy/audience";
+
+export default function StepSystem({ audience = "students", systemName, systemDescription, onChange, errors = [] }) {
+  const copy = wizardCopy(audience);
   return (
     <div className="space-y-4">
       <div>
@@ -9,24 +12,24 @@ export default function StepSystem({ systemName, systemDescription, onChange, er
       </div>
 
       <label className="block text-sm font-semibold text-slate-900">
-        System name
+        {copy.systemNameLabel}
         <input
           value={systemName}
           onChange={(e) => onChange({ systemName: e.target.value })}
           className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200"
-          placeholder="Online toy shop"
+          placeholder={copy.systemNameExample}
         />
-        <p className="mt-2 text-xs text-slate-600">Example: Online toy shop, Customer support platform, Appointment booking system</p>
+        <p className="mt-2 text-xs text-slate-600">Example: {copy.systemNameExample}</p>
       </label>
 
       <label className="block text-sm font-semibold text-slate-900">
-        Short description
+        {copy.systemDescriptionLabel}
         <textarea
           value={systemDescription}
           onChange={(e) => onChange({ systemDescription: e.target.value })}
           rows={4}
           className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200"
-          placeholder="Customers browse products, sign in, and pay. Admins manage products and orders."
+          placeholder={copy.systemDescriptionExample}
         />
         <p className="mt-2 text-xs text-slate-600">Keep it factual. Mention main users and what they do.</p>
       </label>
