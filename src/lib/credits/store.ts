@@ -1,6 +1,11 @@
 import { prisma } from "@/lib/db/prisma";
 
-const CREDIT_EXPIRY_DAYS = 30;
+const DEFAULT_CREDIT_EXPIRY_DAYS = 365 * 2; // 24 months (recommended default)
+const CREDIT_EXPIRY_DAYS = (() => {
+  const raw = process.env.CREDITS_EXPIRY_DAYS;
+  const n = raw ? Number(raw) : NaN;
+  return Number.isFinite(n) && n > 0 ? Math.floor(n) : DEFAULT_CREDIT_EXPIRY_DAYS;
+})();
 
 function addDays(date: Date, days: number) {
   const d = new Date(date);
@@ -63,6 +68,74 @@ export async function listCreditUsage(userId: string, limit = 50) {
 
 export function computeNewExpiry(from = new Date()) {
   return addDays(from, CREDIT_EXPIRY_DAYS);
+}
+
+export async function createCreditLot(input: {
+  userId: string;
+  credits: number;
+  source: string;
+  stripeEventId?: string | null;
+  stripePriceId?: string | null;
+  expiresAt?: Date | null;
+}) {
+  return prisma.creditLot.create({
+    data: {
+      userId: input.userId,
+      credits: Math.max(0, Math.round(Number(input.credits) || 0)),
+      source: input.source,
+      stripeEventId: input.stripeEventId || null,
+      stripePriceId: input.stripePriceId || null,
+      expiresAt: input.expiresAt || null,
+    },
+  });
+}
+
+export async function grantCredits(input: {
+  userId: string;
+  credits: number;
+  source: string;
+  stripeEventId?: string | null;
+  stripePriceId?: string | null;
+}) {
+  const creditsToAdd = Math.max(0, Math.round(Number(input.credits) || 0));
+  if (!creditsToAdd) return { ok: false as const, balance: null as number | null };
+
+  const expiresAt = computeNewExpiry(new Date());
+
+  const result = await prisma.$transaction(async (tx) => {
+    const current = await tx.credits.findUnique({ where: { userId: input.userId } });
+    const currentBalance = current?.balance ?? 0;
+    const nextBalance = currentBalance + creditsToAdd;
+
+    const updated = await tx.credits.upsert({
+      where: { userId: input.userId },
+      update: {
+        balance: nextBalance,
+        // Keep the furthest expiry (simple model; lots are for audit trail).
+        expiresAt: current?.expiresAt && current.expiresAt > expiresAt ? current.expiresAt : expiresAt,
+      },
+      create: {
+        userId: input.userId,
+        balance: nextBalance,
+        expiresAt,
+      },
+    });
+
+    await tx.creditLot.create({
+      data: {
+        userId: input.userId,
+        credits: creditsToAdd,
+        source: input.source,
+        stripeEventId: input.stripeEventId || null,
+        stripePriceId: input.stripePriceId || null,
+        expiresAt,
+      },
+    });
+
+    return { ok: true as const, balance: updated.balance };
+  });
+
+  return result;
 }
 
 
