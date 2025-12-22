@@ -5,10 +5,12 @@ import VariantPicker from "./VariantPicker";
 import MermaidRenderer from "./MermaidRenderer";
 import AssumptionsPanel from "./AssumptionsPanel";
 import { DiagramTabs } from "./DiagramTabs";
+import ExportPanel from "../Export/ExportPanel";
 
 export default function DiagramPackViewer({ pack }) {
   const [variantId, setVariantId] = useState(pack?.variants?.[0]?.id || "minimal");
   const [diagramId, setDiagramId] = useState("context");
+  const [lastSvg, setLastSvg] = useState("");
 
   const variant = useMemo(() => {
     const found = (pack?.variants || []).find((v) => v.id === variantId);
@@ -42,7 +44,17 @@ export default function DiagramPackViewer({ pack }) {
           <div className="rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm">
             <DiagramTabs activeId={diagramId} onChange={setDiagramId} />
           </div>
-          <MermaidRenderer mermaidText={mermaidText} ariaLabel={`${variant.label} ${diagramId} diagram`} />
+          <ExportPanel
+            svgText={lastSvg}
+            systemName={pack.input.systemName}
+            diagramType={diagramId}
+            variantLabel={variant.label}
+          />
+          <MermaidRenderer
+            mermaidText={mermaidText}
+            ariaLabel={`${variant.label} ${diagramId} diagram`}
+            onRenderedSvg={setLastSvg}
+          />
         </div>
         <aside className="lg:col-span-4 xl:col-span-3">
           <AssumptionsPanel assumptions={variant.assumptions} omissions={variant.omissions} />
