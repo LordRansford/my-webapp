@@ -9,6 +9,7 @@ import { StudioCard } from "@/components/studios/StudioCard";
 
 const navChips = [
   { label: "Control Room", href: "/studios" },
+  { label: "Architecture Diagram Studio", href: "/studios/architecture-diagram-studio" },
   { label: "Responsible AI Studio", href: "/ai-studios" },
   { label: "Model Forge", href: "/studios/model-forge" },
   { label: "Vision Lab", href: "/studios/vision-lab" },
