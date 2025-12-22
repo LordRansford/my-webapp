@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { AccessOrder, meetsAccess, type AccessLevel } from "@/lib/accessLevels";
 import AccessHint from "./AccessHint";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { getTestingOverrideDecision } from "@/lib/testingMode";
 
 type Props = {
   requiredLevel: AccessLevel;
@@ -18,11 +19,16 @@ export default function AccessGate({ requiredLevel, fallbackMessage, showUpgrade
   const { data: session } = useSession();
   const [plan, setPlan] = useState<AccessLevel>("public");
   const analytics = useAnalytics();
+  const testing = getTestingOverrideDecision().allowed;
 
   useEffect(() => {
     let cancelled = false;
     async function load() {
       try {
+        if (testing) {
+          if (!cancelled) setPlan("professional");
+          return;
+        }
         const res = await fetch("/api/billing/summary");
         if (!res.ok) throw new Error("summary");
         const data = await res.json();
@@ -43,9 +49,9 @@ export default function AccessGate({ requiredLevel, fallbackMessage, showUpgrade
     return () => {
       cancelled = true;
     };
-  }, [session?.user?.id]);
+  }, [session?.user?.id, testing]);
 
-  const allowed = useMemo(() => meetsAccess(requiredLevel, plan), [requiredLevel, plan]);
+  const allowed = useMemo(() => testing || meetsAccess(requiredLevel, plan), [requiredLevel, plan, testing]);
 
   useEffect(() => {
     if (!allowed) {

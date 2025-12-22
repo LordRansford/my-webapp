@@ -2,6 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import DonateButton from "@/components/donations/DonateButton";
 import Header from "@/components/Header";
+import TestingModeBanner from "@/components/TestingModeBanner";
 export default function Layout({
   children,
   title = "Ransford's Notes",
@@ -45,6 +46,7 @@ export default function Layout({
       </a>
 
       <div className="app-shell">
+        <TestingModeBanner />
         <Header />
 
         <main id="main-content" className="page-shell" role="main">
@@ -72,18 +74,22 @@ export default function Layout({
               </p>
             </div>
             <div className="footer-links" aria-label="Footer">
+              <Link href="/courses">Start learning</Link>
+              <Link href="/tools">Explore the platform</Link>
               <Link href="/tools">Tools</Link>
               <Link href="/templates">Templates</Link>
+              <Link href="/studios">Studios</Link>
+              <Link href="/dashboards">Dashboards</Link>
               <Link href="/cpd">CPD</Link>
               <Link href="/play">Play</Link>
               <Link href="/support">Support</Link>
               <Link href="/about">About</Link>
-              <Link href="/trust-and-about">Trust</Link>
+              <Link href="/trust-and-about">Trust and credibility</Link>
               <Link href="/accreditation-and-alignment">Accreditation</Link>
               <Link href="/subscribe">Subscribe</Link>
               <DonateButton />
               <Link href="/contact">Contact</Link>
-              <a href="mailto:accreditation@<domain>">Accreditation queries</a>
+              <a href="mailto:hello@ransfordsnotes.example">hello@ransfordsnotes.example</a>
               <Link href="/accessibility">Accessibility</Link>
               <Link href="/privacy">Privacy</Link>
               <Link href="/terms">Terms</Link>

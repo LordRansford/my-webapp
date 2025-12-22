@@ -3,6 +3,7 @@ import { authOptions } from "@/lib/auth/options";
 import { PLANS, type FeatureKey, type PlanKey } from "@/lib/billing/plans";
 import { getUserById } from "@/lib/auth/store";
 import { getUserPlanRecord } from "@/lib/billing/store";
+import { getTestingOverrideDecision, TESTING_MODE_ENABLED } from "@/lib/testingMode";
 
 export type SafePlanSummary = {
   plan: PlanKey;
@@ -11,6 +12,9 @@ export type SafePlanSummary = {
 };
 
 export async function getUserPlan(userId: string): Promise<PlanKey> {
+  // Temporary QA override: treat all users as pro so everything is reachable for testing.
+  if (getTestingOverrideDecision().allowed || TESTING_MODE_ENABLED) return "pro";
+
   const explicit = getUserPlanRecord(userId);
   if (explicit?.plan) return explicit.plan;
 
@@ -22,10 +26,14 @@ export async function getUserPlan(userId: string): Promise<PlanKey> {
 }
 
 export function hasFeature(plan: PlanKey, feature: FeatureKey) {
+  if (getTestingOverrideDecision().allowed || TESTING_MODE_ENABLED) return true;
   return PLANS[plan].features.includes(feature);
 }
 
 export async function getSafePlanSummaryForRequest() {
+  if (getTestingOverrideDecision().allowed || TESTING_MODE_ENABLED) {
+    return { plan: "pro", features: PLANS.pro.features, limits: PLANS.pro.limits } satisfies SafePlanSummary;
+  }
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) return { plan: "free", features: [], limits: PLANS.free.limits } satisfies SafePlanSummary;
   const plan = await getUserPlan(session.user.id);
@@ -33,6 +41,10 @@ export async function getSafePlanSummaryForRequest() {
 }
 
 export async function assertFeatureOrThrow(feature: FeatureKey) {
+  if (getTestingOverrideDecision().allowed || TESTING_MODE_ENABLED) {
+    const session = await getServerSession(authOptions);
+    return { userId: session?.user?.id || "testing", plan: "pro" as const };
+  }
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
     const err = new Error("Authentication required");

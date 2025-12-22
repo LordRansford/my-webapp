@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/options";
 import { getUserPlan } from "@/lib/billing/access";
+import { getTestingOverrideDecision } from "@/lib/testingMode";
 
 const core = require("./entitlements.core.js");
 
@@ -30,6 +31,7 @@ export function getFeatureFlags() {
 }
 
 export async function getUserTierForRequest(): Promise<{ userId: string | null; tier: TierKey }> {
+  if (getTestingOverrideDecision().allowed) return { userId: "testing", tier: "professional" };
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) return { userId: null, tier: "free" };
 
@@ -45,6 +47,10 @@ export function hasEntitlement(tier: TierKey, feature: EntitlementFeature) {
 }
 
 export async function assertEntitlementOrThrow(feature: EntitlementFeature) {
+  if (getTestingOverrideDecision().allowed) {
+    const session = await getServerSession(authOptions);
+    return { userId: session?.user?.id || "testing", tier: "professional" as const };
+  }
   const { userId, tier } = await getUserTierForRequest();
   if (!userId) {
     const err = new Error("Authentication required");

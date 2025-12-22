@@ -4,6 +4,7 @@ import { Manrope, Space_Grotesk, JetBrains_Mono, Inter } from "next/font/google"
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Providers } from "./providers";
 import AssistantsMount from "./AssistantsMount";
+import TestingModeBanner from "@/components/TestingModeBanner";
 
 const display = Space_Grotesk({
   subsets: ["latin"],
@@ -47,6 +48,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable} ${inter.variable}`}>
       <body>
         <Providers>
+          <TestingModeBanner />
           {children}
           <AssistantsMount />
         </Providers>
