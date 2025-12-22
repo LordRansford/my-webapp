@@ -1,6 +1,6 @@
 import type { ArchitectureDiagramInput } from "../schema";
 import type { DiagramPack, DiagramVariant } from "../types";
-import { VARIANTS } from "./variants";
+import { getVariantsForAudience } from "./variants";
 import { generateContextDiagram } from "./context";
 import { generateContainerDiagram } from "./container";
 import { generateDeploymentDiagram } from "./deployment";
@@ -8,7 +8,7 @@ import { generateDfdDiagram } from "./dfd";
 import { generateSequenceDiagram } from "./sequence";
 
 export function generateDiagramPack(input: ArchitectureDiagramInput): DiagramPack {
-  const variants: DiagramVariant[] = VARIANTS.map((variant) => {
+  const variants: DiagramVariant[] = getVariantsForAudience(input.audience).map((variant) => {
     const a1 = generateContextDiagram(input, variant);
     const a2 = generateContainerDiagram(input, variant);
     const a3 = generateDeploymentDiagram(input, variant);

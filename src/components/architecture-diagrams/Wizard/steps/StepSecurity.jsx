@@ -1,5 +1,7 @@
 "use client";
 
+import { wizardCopy, isProfessionals } from "@/lib/architecture-diagrams/copy/audience";
+
 const DATA_TYPES = [
   { value: "pii", label: "PII" },
   { value: "financial", label: "Financial" },
@@ -9,15 +11,17 @@ const DATA_TYPES = [
   { value: "other", label: "Other" },
 ];
 
-export default function StepSecurity({ security, dataTypes, onChange, errors = [] }) {
+export default function StepSecurity({ audience = "students", security, dataTypes, onChange, errors = [] }) {
+  const copy = wizardCopy(audience);
   const selected = new Set(dataTypes || []);
   return (
     <div className="space-y-5">
       <div>
         <h2 className="text-xl font-semibold text-slate-900">Security and data 🔒</h2>
-        <p className="mt-1 text-sm text-slate-700">
-          This is a lightweight view. Capture what is true today so reviewers can reason about boundaries and sensitive flows.
-        </p>
+        <p className="mt-1 text-sm text-slate-700">{copy.securityHelp}</p>
+        {isProfessionals(audience) && copy.professionalsReminder ? (
+          <p className="mt-2 text-xs font-semibold text-slate-700">{copy.professionalsReminder}</p>
+        ) : null}
       </div>
 
       <label className="block text-sm font-semibold text-slate-900">

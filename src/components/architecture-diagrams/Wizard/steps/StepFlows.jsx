@@ -1,5 +1,7 @@
 "use client";
 
+import { wizardCopy } from "@/lib/architecture-diagrams/copy/audience";
+
 function SoftWarning({ children }) {
   return (
     <div className="rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
@@ -9,14 +11,13 @@ function SoftWarning({ children }) {
   );
 }
 
-export default function StepFlows({ flows, options, onChange, errors = [] }) {
+export default function StepFlows({ audience = "students", flows, options, onChange, errors = [] }) {
+  const copy = wizardCopy(audience);
   return (
     <div className="space-y-4">
       <div>
         <h2 className="text-xl font-semibold text-slate-900">Key flows 🔁</h2>
-        <p className="mt-1 text-sm text-slate-700">
-          A flow is a key interaction. For example, a user logs in, an API calls a third party, or data is written to a store.
-        </p>
+        <p className="mt-1 text-sm text-slate-700">{copy.flowsHelp}</p>
       </div>
 
       {flows.length === 0 ? <SoftWarning>Add one or two flows to make the review step more useful.</SoftWarning> : null}

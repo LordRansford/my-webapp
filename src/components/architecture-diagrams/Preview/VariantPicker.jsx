@@ -1,6 +1,8 @@
 "use client";
 
-export default function VariantPicker({ variants, selectedId, onSelect }) {
+import { getVariantCardDescription, getVariantCardLabel } from "@/lib/architecture-diagrams/copy/labels";
+
+export default function VariantPicker({ variants, selectedId, onSelect, audience = "students" }) {
   return (
     <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5" role="tablist" aria-label="Diagram variants">
       {variants.map((v) => {
@@ -16,13 +18,9 @@ export default function VariantPicker({ variants, selectedId, onSelect }) {
               active ? "border-slate-900 bg-slate-900 text-white" : "border-slate-200 bg-white text-slate-900 hover:bg-slate-50"
             }`}
           >
-            <p className="text-sm font-semibold">{v.label}</p>
+            <p className="text-sm font-semibold">{getVariantCardLabel(audience, v.id)}</p>
             <p className={`mt-1 text-xs ${active ? "text-white/80" : "text-slate-600"}`}>
-              {v.id === "minimal" ? "Essential nodes and short labels." : null}
-              {v.id === "stakeholder" ? "Plain language and grouped structure." : null}
-              {v.id === "security" ? "Boundaries and sensitive flows." : null}
-              {v.id === "data" ? "Data stores and flow direction." : null}
-              {v.id === "ops" ? "Runtime separation and dependencies." : null}
+              {getVariantCardDescription(audience, v.id)}
             </p>
           </button>
         );
