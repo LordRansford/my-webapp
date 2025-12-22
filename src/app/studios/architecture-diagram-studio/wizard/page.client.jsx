@@ -10,10 +10,12 @@ import StepBuildingBlocks from "@/components/architecture-diagrams/Wizard/steps/
 import StepFlows from "@/components/architecture-diagrams/Wizard/steps/StepFlows";
 import StepSecurity from "@/components/architecture-diagrams/Wizard/steps/StepSecurity";
 import StepReview from "@/components/architecture-diagrams/Wizard/steps/StepReview";
+import DiagramPackViewer from "@/components/architecture-diagrams/Preview/DiagramPackViewer";
 
 import { useTemplateState } from "@/hooks/useTemplateState";
 import { validateArchitectureDiagramInput } from "@/lib/architecture-diagrams/validate";
 import { EXAMPLE_KID_FRIENDLY } from "@/lib/architecture-diagrams/examples";
+import { generateDiagramPack } from "@/lib/architecture-diagrams/generate/pack";
 
 const steps = [
   { id: "goal", label: "Goal", hint: "Why you need diagrams" },
@@ -66,6 +68,7 @@ function findStepErrors(validation, stepId) {
 export default function WizardPageClient() {
   const { state, updateState, resetState, lastUpdated } = useTemplateState(storageKey, emptyDraft);
   const [activeStep, setActiveStep] = useState("goal");
+  const [pack, setPack] = useState(null);
 
   const validatedInput = useMemo(() => {
     const input = {
@@ -167,8 +170,11 @@ export default function WizardPageClient() {
           ...state,
         }}
         validation={validatedInput}
-        generationEnabled={false}
-        onGenerate={() => {}}
+        generationEnabled={Boolean(validatedInput?.ok)}
+        onGenerate={() => {
+          if (!validatedInput?.ok) return;
+          setPack(generateDiagramPack(validatedInput.value));
+        }}
       />
     );
   })();
@@ -237,6 +243,12 @@ export default function WizardPageClient() {
             Next
           </button>
         </div>
+
+        {activeStep === "review" && pack ? (
+          <div className="pt-6">
+            <DiagramPackViewer pack={pack} />
+          </div>
+        ) : null}
       </div>
     </WizardShell>
   );
