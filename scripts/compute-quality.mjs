@@ -28,9 +28,15 @@ for (const f of files) {
 
   if (!src.includes("useToolRunner")) continue;
 
-  // If this file uses the runner, it must render a compute meter panel.
-  if (!src.includes("ComputeMeterPanel")) {
-    offenders.push(`${rel} uses useToolRunner but does not render ComputeMeterPanel`);
+  // If this file uses the runner, it must render compute transparency UI.
+  // Either legacy metering (ComputeMeterPanel) or read-only transparency (ComputeEstimatePanel / ComputeSummaryPanel).
+  const hasLegacy = src.includes("ComputeMeterPanel");
+  const hasEstimate = src.includes("ComputeEstimatePanel");
+  const hasSummary = src.includes("ComputeSummaryPanel");
+  if (!(hasLegacy || (hasEstimate && hasSummary))) {
+    offenders.push(
+      `${rel} uses useToolRunner but does not render compute UI (ComputeMeterPanel or ComputeEstimatePanel+ComputeSummaryPanel)`
+    );
   }
 
   // Runner should always have toolId for consistent metering.

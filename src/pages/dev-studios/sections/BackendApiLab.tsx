@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import { SecurityBanner } from "@/components/dev-studios/SecurityBanner";
+import { Braces, Route, ShieldCheck } from "lucide-react";
 
 type StackId = "express" | "django" | "spring" | "aspnet" | "go";
 type TabId = "handler" | "routing" | "docker";
@@ -158,6 +159,15 @@ export default function BackendApiLab() {
     logs: false,
   });
 
+  // API design builder: intentionally conceptual and framework-neutral.
+  const [resource, setResource] = useState("orders");
+  const [method, setMethod] = useState("GET");
+  const [path, setPath] = useState("/api/orders");
+  const [versioning, setVersioning] = useState("URI versioning (/v1)");
+  const [requestBody, setRequestBody] = useState('{\n  "customerId": "cust_123",\n  "items": [{ "bookId": "bk_001", "qty": 1 }]\n}');
+  const [responseBody, setResponseBody] = useState('{\n  "id": "ord_001",\n  "status": "created",\n  "total": 29.99\n}');
+  const [errorMode, setErrorMode] = useState("400/401/403/404/409/429/500");
+
   const healthScore = useMemo(() => {
     const total = checklistItems.length;
     const passed = checklistItems.filter((c) => checks[c.key]).length;
@@ -279,6 +289,142 @@ export default function BackendApiLab() {
               />
             </div>
             <p className="text-xs text-slate-600">{healthCopy}</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <div className="rounded-3xl bg-white ring-1 ring-slate-100 shadow-[0_12px_30px_rgba(15,23,42,0.06)] p-6 space-y-4">
+          <div className="flex items-center gap-2">
+            <Route className="h-5 w-5 text-sky-600" aria-hidden="true" />
+            <h3 className="text-2xl font-semibold text-slate-900">API design lab</h3>
+          </div>
+          <p className="text-sm text-slate-700">
+            This is about contracts. Clients depend on shape, errors, and stability more than they depend on your favourite framework.
+          </p>
+
+          <div className="grid gap-3 md:grid-cols-2">
+            <label className="space-y-1">
+              <span className="text-xs font-semibold text-slate-700">Resource</span>
+              <input
+                value={resource}
+                onChange={(e) => setResource(e.target.value)}
+                className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200"
+              />
+            </label>
+            <label className="space-y-1">
+              <span className="text-xs font-semibold text-slate-700">Method</span>
+              <select
+                value={method}
+                onChange={(e) => setMethod(e.target.value)}
+                className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200"
+              >
+                {["GET", "POST", "PUT", "PATCH", "DELETE"].map((m) => (
+                  <option key={m}>{m}</option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <label className="space-y-1">
+            <span className="text-xs font-semibold text-slate-700">Path</span>
+            <input
+              value={path}
+              onChange={(e) => setPath(e.target.value)}
+              className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200"
+              placeholder="/api/v1/orders/{id}"
+            />
+          </label>
+
+          <div className="grid gap-3 md:grid-cols-2">
+            <label className="space-y-1">
+              <span className="text-xs font-semibold text-slate-700">Versioning strategy</span>
+              <select
+                value={versioning}
+                onChange={(e) => setVersioning(e.target.value)}
+                className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200"
+              >
+                {["URI versioning (/v1)", "Header versioning", "No explicit versioning (compat only)"].map((v) => (
+                  <option key={v}>{v}</option>
+                ))}
+              </select>
+            </label>
+            <label className="space-y-1">
+              <span className="text-xs font-semibold text-slate-700">Error strategy</span>
+              <select
+                value={errorMode}
+                onChange={(e) => setErrorMode(e.target.value)}
+                className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200"
+              >
+                {["400/401/403/404/409/429/500", "Minimal (400/404/500)", "Strict (with problem+json)"].map((v) => (
+                  <option key={v}>{v}</option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-2">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <Braces className="h-4 w-4 text-emerald-600" aria-hidden="true" />
+                <span className="text-xs font-semibold text-slate-700">Request body</span>
+              </div>
+              <textarea
+                value={requestBody}
+                onChange={(e) => setRequestBody(e.target.value)}
+                rows={8}
+                className="w-full rounded-2xl border border-slate-200 bg-white p-3 font-mono text-xs text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200"
+              />
+            </div>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <Braces className="h-4 w-4 text-indigo-600" aria-hidden="true" />
+                <span className="text-xs font-semibold text-slate-700">Response body</span>
+              </div>
+              <textarea
+                value={responseBody}
+                onChange={(e) => setResponseBody(e.target.value)}
+                rows={8}
+                className="w-full rounded-2xl border border-slate-200 bg-white p-3 font-mono text-xs text-slate-800 focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200"
+              />
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
+            <p className="text-sm font-semibold text-slate-900">Guidance</p>
+            <ul className="mt-2 list-disc pl-5 text-sm text-slate-700 space-y-1">
+              <li>Use nouns for resources and HTTP methods for intent (GET fetches, POST creates, PATCH updates).</li>
+              <li>Make errors predictable and safe. Clients should know what to do next.</li>
+              <li>Version when you must break clients. Prefer additive changes when possible.</li>
+              <li>Document auth requirements per endpoint, not only globally.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="rounded-3xl bg-white ring-1 ring-slate-100 shadow-[0_12px_30px_rgba(15,23,42,0.06)] p-6 space-y-4">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="h-5 w-5 text-emerald-600" aria-hidden="true" />
+            <h3 className="text-2xl font-semibold text-slate-900">Failure and abuse thinking</h3>
+          </div>
+          <p className="text-sm text-slate-700">Tie your API decisions directly to security and reliability outcomes.</p>
+          <div className="space-y-2 text-sm text-slate-700">
+            <p>
+              <span className="font-semibold text-slate-900">Authn vs authz</span>: authentication proves who the user is; authorisation decides what they can do.
+            </p>
+            <p>
+              <span className="font-semibold text-slate-900">Validation</span>: treat every input as hostile until proven otherwise. Reject early with clear messages.
+            </p>
+            <p>
+              <span className="font-semibold text-slate-900">Rate limiting</span>: protect availability and cost. A 429 should include guidance for retry behaviour.
+            </p>
+            <p>
+              <span className="font-semibold text-slate-900">Idempotency</span>: POST endpoints that can be retried should have an idempotency key to avoid double charging.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-white p-4">
+            <p className="text-sm font-semibold text-slate-900">Your current draft</p>
+            <p className="mt-2 text-sm text-slate-700">
+              {method} {path} ({versioning}). Errors: {errorMode}. Resource: {resource}.
+            </p>
           </div>
         </div>
       </div>

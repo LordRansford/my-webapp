@@ -8,7 +8,8 @@ export default function DonateSuccessPage() {
         <p className="eyebrow">Thank you</p>
         <h1 className="text-3xl font-semibold text-slate-900">Your donation was received</h1>
         <p className="mt-3 text-base text-slate-700 leading-relaxed">
-          Your support keeps the labs online and pays for the careful testing that makes these resources trustworthy. No upsell, just gratitude.
+          Your support keeps the labs online and pays for the careful testing that makes these resources trustworthy. Donations do not unlock
+          features or create advantages.
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Link href="/" className="rounded-full bg-slate-900 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800">

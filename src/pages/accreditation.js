@@ -39,6 +39,7 @@ export default function AccreditationPage() {
             Formal accreditation is being explored where appropriate. Until then, treat all material as CPD-aligned learning you can log under
             self-directed categories, subject to your professional body’s rules.
           </p>
+          <p className="text-muted">CPD certificates will be optional and available later.</p>
           <p className="text-muted">
             No certification, approval, or endorsement is implied unless explicitly announced with supporting documentation.
           </p>

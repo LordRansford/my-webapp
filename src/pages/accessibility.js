@@ -38,9 +38,17 @@ export default function AccessibilityPage() {
         <h2>What I plan to improve</h2>
         <ul>
           <li>Better screen reader hints in interactive tools.</li>
-          <li>A simple control to adjust font size and contrast.</li>
           <li>Clearer focus styles for keyboard users.</li>
           <li>More testing with different assistive technologies.</li>
+        </ul>
+      </section>
+
+      <section className="section">
+        <h2>Known limitations</h2>
+        <ul>
+          <li>Some interactive labs use custom UI elements that may need more screen reader hints.</li>
+          <li>Speech synthesis quality varies by device and browser.</li>
+          <li>Some pages mix older styles and newer styles while the platform is being upgraded.</li>
         </ul>
       </section>
 
@@ -50,6 +58,9 @@ export default function AccessibilityPage() {
           If you spot an accessibility problem, please tell me what page or tool you were using, what you were
           trying to do, what went wrong, and any assistive technology or browser you use. It will help me fix
           it faster.
+        </p>
+        <p>
+          Contact: <a className="link" href="mailto:hello@ransfordsnotes.example">hello@ransfordsnotes.example</a>
         </p>
       </section>
 

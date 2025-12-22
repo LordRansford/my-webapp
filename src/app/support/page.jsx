@@ -16,6 +16,9 @@ export default function SupportPage() {
           donating.
         </p>
         <p className="text-sm text-slate-700">
+          Donations help sustain free access for everyone. They do not unlock features or create advantages.
+        </p>
+        <p className="text-sm text-slate-700">
           If you donate, Stripe handles the payment. I only receive the donation status and amount, plus your email if you are
           signed in.
         </p>
@@ -51,8 +54,8 @@ export default function SupportPage() {
         <div className="rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-sm">
           <h2 className="text-lg font-semibold text-slate-900">Commercial use and signatures</h2>
           <p className="mt-2 text-sm text-slate-700">
-            Commercial exports keep attribution by default. If you need to remove it, submit a permission request or donate. A
-            token will unlock commercial exports without attribution in the export modal.
+            Commercial exports keep attribution by default. If you need a different arrangement, submit a permission request.
+            Donations do not change export permissions.
           </p>
         </div>
       </section>

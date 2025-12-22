@@ -1,47 +1,66 @@
 import Link from "next/link";
 import Layout from "@/components/Layout";
+import {
+  Shield,
+  Brain,
+  Boxes,
+  Database,
+  Compass,
+  FlaskConical,
+  LayoutDashboard,
+  FileText,
+  Wrench,
+  Users,
+  ArrowRight,
+  CheckCircle2,
+} from "lucide-react";
 
-const labs = [
+const subjects = [
   {
-    title: "Python lab (Pyodide)",
-    use: "Run Python in the browser for data transforms and quick experiments.",
-    unique: "No server needed; open source Pyodide runtime.",
-    example: `import math\nnums = [1,2,3]\nprint([math.sqrt(n) for n in nums])`,
-    pros: "Fast to start, safe, offline-friendly.",
-    cons: "No network or heavy native libs.",
+    title: "Cybersecurity",
+    description: "Practical security thinking, from foundations to strategy.",
+    href: "/cybersecurity",
+    Icon: Shield,
   },
   {
-    title: "WebCrypto studio",
-    use: "Hash, sign, and verify in the browser with the SubtleCrypto API.",
-    unique: "Standards-based crypto already in modern browsers.",
-    example: `const data = new TextEncoder().encode("hello");\nconst hash = await crypto.subtle.digest("SHA-256", data);`,
-    pros: "No dependencies, audited primitives.",
-    cons: "Asymmetric keys can be tricky to manage.",
+    title: "AI",
+    description: "Models, evaluation, and responsible use without the hype.",
+    href: "/ai",
+    Icon: Brain,
   },
   {
-    title: "Certificate viewer",
-    use: "Load a sample cert JSON and explore CN, SAN, issuer, and validity.",
-    unique: "Shows chain of trust visually in-browser.",
-    example: `{\n  "subject": "example.com",\n  "issuer": "Example CA",\n  "san": ["www.example.com"],\n  "notBefore": "2025-01-01"\n}`,
-    pros: "Great for explaining TLS trust quickly.",
-    cons: "Uses sample data only; no live network fetch.",
+    title: "Software architecture",
+    description: "Make trade-offs explicit and design systems that survive reality.",
+    href: "/software-architecture",
+    Icon: Boxes,
   },
   {
-    title: "Hash and entropy lab",
-    use: "See how tiny text changes alter hashes and how length drives entropy.",
-    unique: "Combines avalanche demo with entropy slider.",
-    example: `H = L * log2(N)\n# Change length to see bits of effort`,
-    pros: "Instant visual feedback.",
-    cons: "Didactic, not a production tool.",
+    title: "Data",
+    description: "Data quality, governance, and decision pipelines that work.",
+    href: "/data",
+    Icon: Database,
   },
   {
-    title: "Regex + log parser",
-    use: "Test patterns against sample logs and extract fields.",
-    unique: "Lightweight, client-only parsing with live matches.",
-    example: `/user=(\\w+)/g  -> captures user field`,
-    pros: "Great for quick triage and teaching patterns.",
-    cons: "Not a replacement for SIEM-scale tooling.",
+    title: "Digitalisation",
+    description: "Strategy, operating models, and delivery with clear outcomes.",
+    href: "/digitalisation",
+    Icon: Compass,
   },
+];
+
+const platformItems = [
+  { title: "Studios", description: "Guided spaces for deeper experiments.", href: "/studios", Icon: FlaskConical, cta: "Explore" },
+  { title: "Dashboards", description: "Interactive boards that turn concepts into decisions.", href: "/dashboards", Icon: LayoutDashboard, cta: "Try" },
+  { title: "Templates", description: "Evidence-friendly templates for planning and reporting.", href: "/templates", Icon: FileText, cta: "Browse" },
+  { title: "Tools", description: "Small labs and helpers you can run quickly.", href: "/tools", Icon: Wrench, cta: "Open" },
+];
+
+const audiences = [
+  { title: "Students", description: "Build intuition first, then learn the formal names.", Icon: Users },
+  { title: "Professionals", description: "Refresh core ideas and keep decision notes close.", Icon: CheckCircle2 },
+  { title: "Career switchers", description: "Get a map of the territory, not a wall of jargon.", Icon: Compass },
+  { title: "Engineers", description: "Use tools to test assumptions and see trade-offs.", Icon: Boxes },
+  { title: "Curious learners", description: "Explore safely with small experiments and prompts.", Icon: FlaskConical },
 ];
 
 export async function getStaticProps() {
@@ -54,68 +73,187 @@ export default function Home() {
       title="Ransford's Notes · Labs first"
       description="Browser-first labs for security, architecture, and AI. Practical, calm, and built for learning by doing."
     >
-      <div className="hero">
-        <div className="hero__copy">
-          <p className="eyebrow">Hands-on learning, not hype</p>
-          <h1>Ransford’s Notes</h1>
-          <p className="lead">
-            I build small labs that let you test an idea in minutes. This is for practitioners who prefer a concrete
-            example over a long lecture.
-          </p>
-          <p className="muted">
-            What this is: learning tools and notes you can reuse at work. What it is not: a certification provider, a
-            penetration test service, or a promise of professional advice.
-          </p>
-          <div className="actions">
-            <Link href="/tools" className="button primary">
-              Open the labs
+      {/* 1) Hero section */}
+      <section className="mx-auto max-w-6xl px-4 pt-12 md:px-6 lg:px-8">
+        <div className="grid gap-8 rounded-3xl bg-gradient-to-r from-slate-50 via-sky-50/60 to-slate-50 p-8 shadow-sm ring-1 ring-slate-100 md:grid-cols-2 md:items-center">
+          <div className="space-y-4">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Early access, free to use</p>
+            <h1 className="text-4xl font-semibold leading-tight text-slate-900 md:text-5xl">Ransford&apos;s Notes</h1>
+            <p className="text-base text-slate-700">
+              Calm, hands-on learning for cybersecurity, AI, architecture, data, and digitalisation. Notes you can reuse. Tools you can test in minutes.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link href="/courses" className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-2 text-sm font-semibold text-white hover:bg-slate-800">
+                Start learning <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+              <Link href="/tools" className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-50">
+                Explore tools and studios <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </div>
+            <p className="text-xs text-slate-600">Free to use during early access.</p>
+          </div>
+
+          <div className="grid gap-3">
+            <div className="rounded-2xl border border-slate-200 bg-white/80 p-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">What you can do right now</p>
+              <ul className="mt-3 space-y-2 text-sm text-slate-800">
+                <li className="flex gap-2"><span className="mt-0.5 inline-block h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true" />Follow structured courses.</li>
+                <li className="flex gap-2"><span className="mt-0.5 inline-block h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true" />Run labs and dashboards for practical intuition.</li>
+                <li className="flex gap-2"><span className="mt-0.5 inline-block h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true" />Use templates for evidence-friendly outputs.</li>
+              </ul>
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-white/80 p-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Why it is different</p>
+              <p className="mt-2 text-sm text-slate-700">
+                Less theory theatre. More decision notes, concrete examples, and tools with boundaries that match real work.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 2) What this site is */}
+      <section className="mx-auto max-w-6xl px-4 py-12 md:px-6 lg:px-8">
+        <div className="grid gap-6 md:grid-cols-3">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">What</p>
+            <h2 className="mt-2 text-xl font-semibold text-slate-900">Personal notes turned into a platform</h2>
+            <p className="mt-2 text-sm text-slate-700">Structured courses, labs, and templates built to be reused and improved over time.</p>
+          </div>
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Why</p>
+            <h2 className="mt-2 text-xl font-semibold text-slate-900">Learning that respects your time</h2>
+            <p className="mt-2 text-sm text-slate-700">A map first, then depth. The goal is confidence and judgement, not memorisation.</p>
+          </div>
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Different</p>
+            <h2 className="mt-2 text-xl font-semibold text-slate-900">Tools with context and boundaries</h2>
+            <p className="mt-2 text-sm text-slate-700">Every tool explains what it does, what it cannot do, and how to interpret the output.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* 3) What you can learn and do */}
+      <section className="mx-auto max-w-6xl px-4 pb-12 md:px-6 lg:px-8">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Topics</p>
+            <h2 className="mt-2 text-2xl font-semibold text-slate-900">What you can learn and do</h2>
+            <p className="mt-2 text-sm text-slate-700">Pick a subject, learn the foundations, then use tools to turn concepts into decisions.</p>
+          </div>
+        </div>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          {subjects.map(({ title, description, href, Icon }) => (
+            <Link key={title} href={href} className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm hover:border-slate-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
+              <Icon className="h-6 w-6 text-slate-900" aria-hidden="true" />
+              <h3 className="mt-3 text-base font-semibold text-slate-900">{title}</h3>
+              <p className="mt-2 text-sm text-slate-700">{description}</p>
+              <p className="mt-3 text-xs font-semibold text-slate-700">Open</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* 4) Studios, labs, and tools */}
+      <section className="mx-auto max-w-6xl px-4 pb-12 md:px-6 lg:px-8">
+        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Platform</p>
+          <h2 className="mt-2 text-2xl font-semibold text-slate-900">Studios, labs, and tools</h2>
+          <p className="mt-2 text-sm text-slate-700">Quick experiments when you need clarity, not another tab of theory.</p>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {platformItems.map(({ title, description, href, Icon, cta }) => (
+              <div key={title} className="rounded-2xl border border-slate-200 bg-slate-50/60 p-5">
+                <Icon className="h-6 w-6 text-slate-900" aria-hidden="true" />
+                <h3 className="mt-3 text-base font-semibold text-slate-900">{title}</h3>
+                <p className="mt-2 text-sm text-slate-700">{description}</p>
+                <Link href={href} className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-slate-900 underline decoration-slate-300 underline-offset-4 hover:decoration-slate-600">
+                  {cta} <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 5) Who this is for */}
+      <section className="mx-auto max-w-6xl px-4 pb-12 md:px-6 lg:px-8">
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Audience</p>
+        <h2 className="mt-2 text-2xl font-semibold text-slate-900">Who this is for</h2>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          {audiences.map(({ title, description, Icon }) => (
+            <div key={title} className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+              <Icon className="h-6 w-6 text-slate-900" aria-hidden="true" />
+              <h3 className="mt-3 text-base font-semibold text-slate-900">{title}</h3>
+              <p className="mt-2 text-sm text-slate-700">{description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 6) How to get started */}
+      <section className="mx-auto max-w-6xl px-4 pb-12 md:px-6 lg:px-8">
+        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Getting started</p>
+          <h2 className="mt-2 text-2xl font-semibold text-slate-900">A simple path</h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-4">
+            {[
+              { step: "1", title: "Pick a topic", text: "Choose the subject that matches your current work or curiosity." },
+              { step: "2", title: "Learn the foundations", text: "Get the mental model and language without the noise." },
+              { step: "3", title: "Try tools and labs", text: "Run small experiments to make ideas concrete." },
+              { step: "4", title: "Go deeper when ready", text: "Move into intermediate and advanced thinking at your pace." },
+            ].map((s) => (
+              <div key={s.step} className="rounded-2xl border border-slate-200 bg-slate-50/60 p-5">
+                <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-900 text-sm font-semibold text-white">{s.step}</div>
+                <h3 className="mt-3 text-base font-semibold text-slate-900">{s.title}</h3>
+                <p className="mt-2 text-sm text-slate-700">{s.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 7) Trust and credibility */}
+      <section className="mx-auto max-w-6xl px-4 pb-12 md:px-6 lg:px-8">
+        <div className="grid gap-6 md:grid-cols-2">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Trust</p>
+            <h2 className="mt-2 text-2xl font-semibold text-slate-900">Built for credible learning</h2>
+            <p className="mt-2 text-sm text-slate-700">
+              This started as personal notes for real work, then evolved into a platform. The goal is accuracy, clarity, and decision-ready thinking.
+            </p>
+            <p className="mt-2 text-sm text-slate-700">
+              It is designed to align with CPD expectations and professional standards, without claiming accreditation unless explicitly stated.
+            </p>
+          </div>
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Early access</p>
+            <h2 className="mt-2 text-2xl font-semibold text-slate-900">Improving quickly</h2>
+            <p className="mt-2 text-sm text-slate-700">
+              The site is in an early access phase. Content and tools improve based on feedback and careful review.
+            </p>
+            <Link href="/feedback" className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-slate-900 underline decoration-slate-300 underline-offset-4 hover:decoration-slate-600">
+              Leave feedback <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
         </div>
-        <div className="hero__panel">
-          <p className="eyebrow">How the labs are built</p>
-          <ul className="hero-list">
-            <li>
-              <span className="dot dot--accent" />
-              Open source runtimes and browser APIs (Pyodide, WebCrypto, client-only React)
-            </li>
-            <li>
-              <span className="dot dot--accent" />
-              Most tools run client-side; your inputs stay in your browser unless a page clearly says otherwise
-            </li>
-            <li>
-              <span className="dot dot--accent" />
-              Each tool includes context, concept, logical flow, and practical examples
-            </li>
-          </ul>
-          <p className="muted">
-            If something is unclear or feels off, assume I need to explain it better and tell me so I can improve it.
-          </p>
-        </div>
-      </div>
+      </section>
 
-      <section className="section">
-        <div className="section-heading">
-          <h2>Labs with clear boundaries</h2>
-          <span className="hint">Examples, trade-offs, and a clear statement of what the tool does</span>
-        </div>
-        <div className="card-grid">
-          {labs.map((lab) => (
-            <div key={lab.title} className="card" style={{ display: "grid", gap: "0.6rem" }}>
-              <div>
-                <h3>{lab.title}</h3>
-                <p className="muted">{lab.use}</p>
-              </div>
-              <p>
-                <strong>Concept</strong>: {lab.unique}
-              </p>
-              <p className="mono" style={{ whiteSpace: "pre-wrap" }}>
-                {lab.example}
-              </p>
-              <p className="muted">Pros: {lab.pros}</p>
-              <p className="muted">Cons: {lab.cons}</p>
-            </div>
-          ))}
+      {/* 8) Footer CTA */}
+      <section className="mx-auto max-w-6xl px-4 pb-16 md:px-6 lg:px-8">
+        <div className="flex flex-col items-start justify-between gap-4 rounded-3xl border border-slate-200 bg-slate-900 p-8 shadow-sm md:flex-row md:items-center">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-200">Ready</p>
+            <h2 className="mt-2 text-2xl font-semibold text-white">Start with something small and real</h2>
+            <p className="mt-2 text-sm text-slate-200">Pick a topic, run a tool, and write down one decision you would make differently tomorrow.</p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/courses" className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-100">
+              Start learning <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+            <Link href="/tools" className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-transparent px-5 py-2 text-sm font-semibold text-white hover:bg-white/10">
+              Explore the platform <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </div>
         </div>
       </section>
     </Layout>

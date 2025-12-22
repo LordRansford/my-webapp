@@ -44,6 +44,9 @@ export default function DonatePage() {
           not store card data.
         </p>
         <p className="text-sm text-slate-700">
+          Donations help sustain free access for everyone. They do not unlock features or create advantages.
+        </p>
+        <p className="text-sm text-slate-700">
           Donations do not guarantee services, support, or response times. This is a public education site, not a consulting contract.
         </p>
         <p className="text-sm text-slate-700">

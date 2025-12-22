@@ -25,11 +25,15 @@ type ComputeMeta = {
 type RunnerComputeState = {
   pre: ComputeCostBreakdown | null;
   post: ComputeCostBreakdown | null;
+  live: ComputeCostBreakdown | null;
   sessionFreeUsedUnits: number;
   creditsBalance: number | null;
   creditsVisible: boolean;
+  creditsExpiresAt: string | null;
+  usageHistory: any[];
   lastInputBytes?: number | null;
   lastConsumedCredits?: number | null;
+  hadPreview: boolean;
 };
 
 const COMPUTE_SESSION_KEY = "rn_compute_session_units_v1";
@@ -66,11 +70,15 @@ export function useToolRunner(options: RunnerOptions = {}) {
   const [compute, setCompute] = useState<RunnerComputeState>({
     pre: null,
     post: null,
+    live: null,
     sessionFreeUsedUnits: 0,
     creditsBalance: null,
     creditsVisible: false,
+    creditsExpiresAt: null,
+    usageHistory: [],
     lastInputBytes: null,
     lastConsumedCredits: null,
+    hadPreview: false,
   });
 
   const profile = useMemo(() => (toolId ? getToolComputeProfile(toolId) : null), [toolId]);
@@ -86,7 +94,9 @@ export function useToolRunner(options: RunnerOptions = {}) {
         if (!r.ok) throw new Error("No credits");
         const d = await r.json().catch(() => ({}));
         const bal = typeof d?.balance === "number" ? d.balance : 0;
-        setCompute((c) => ({ ...c, creditsBalance: bal, creditsVisible: true }));
+        const expiresAt = typeof d?.expiresAt === "string" ? d.expiresAt : d?.expiresAt ? String(d.expiresAt) : null;
+        const usage = Array.isArray(d?.usage) ? d.usage : [];
+        setCompute((c) => ({ ...c, creditsBalance: bal, creditsVisible: true, creditsExpiresAt: expiresAt, usageHistory: usage }));
       })
       .catch(() => {
         // Not signed in or endpoint not available; keep credits hidden.
@@ -98,7 +108,7 @@ export function useToolRunner(options: RunnerOptions = {}) {
   }, []);
 
   const clearCompute = useCallback(() => {
-    setCompute((c) => ({ ...c, pre: null, post: null, lastConsumedCredits: null }));
+    setCompute((c) => ({ ...c, pre: null, post: null, live: null, lastConsumedCredits: null, hadPreview: false }));
   }, []);
 
   const prepare = useCallback(
@@ -116,7 +126,7 @@ export function useToolRunner(options: RunnerOptions = {}) {
         sessionFreeUsedUnits: compute.sessionFreeUsedUnits,
         creditsBalance: compute.creditsVisible ? compute.creditsBalance : null,
       });
-      setCompute((c) => ({ ...c, pre, post: null, lastInputBytes: inputBytes }));
+      setCompute((c) => ({ ...c, pre, post: null, live: null, lastInputBytes: inputBytes, hadPreview: true }));
       return pre;
     },
     [toolId, profile, compute.sessionFreeUsedUnits, compute.creditsBalance, compute.creditsVisible]
@@ -140,16 +150,43 @@ export function useToolRunner(options: RunnerOptions = {}) {
         prepare({ inputBytes, steps, expectedWallMs: meta.expectedWallMs });
       }
 
-      // Hard block when signed in and credits are insufficient for the estimated paid portion.
-      const preSnapshot = compute.pre || estimatePreRunCost({ toolId: toolId || undefined, computeClass: profile?.computeClass, inputBytes, steps });
-      if (compute.creditsVisible && preSnapshot.estimate.creditShortfall) {
-        setState({ loading: false, errorMessage: "Not enough credits for the paid portion of this run. Reduce inputs or disable expensive options." });
-        inFlightRef.current = false;
-        return null;
+      // Enforce: if this run exceeds free tier, guest users cannot proceed unless they confirm a downgrade attempt.
+      // Downgrade here means "try a light run" by enforcing a strict client-side timeout (partial results possible).
+      const preForGate = compute.pre || prepare({ inputBytes, steps, expectedWallMs: meta.expectedWallMs });
+      const exceedsFree = preForGate.estimate.paidUnitsUsed > 0;
+      let downgradeFreeTierOnly = false;
+      if (exceedsFree && !compute.creditsVisible) {
+        const ok = window.confirm(
+          "This run may exceed the free tier. Guests cannot spend credits. Continue with a light run that may return partial results?"
+        );
+        if (!ok) return null;
+        downgradeFreeTierOnly = true;
+      }
+      if (exceedsFree && compute.creditsVisible && preForGate.estimate.creditShortfall) {
+        const ok = window.confirm(
+          "This run may exceed the free tier and you may not have enough credits for the paid portion. Continue with a light run that may return partial results?"
+        );
+        if (!ok) return null;
+        downgradeFreeTierOnly = true;
       }
 
       setState({ loading: true, errorMessage: "" });
       const start = Date.now();
+
+      // Live meter: update a running estimate from elapsed time.
+      const liveInterval = window.setInterval(() => {
+        const elapsed = Date.now() - start;
+        const live = estimatePostRunCost({
+          toolId: toolId || undefined,
+          computeClass: profile?.computeClass,
+          inputBytes,
+          steps,
+          actualWallMs: elapsed,
+          sessionFreeUsedUnits: compute.sessionFreeUsedUnits,
+          creditsBalance: compute.creditsVisible ? compute.creditsBalance : null,
+        });
+        setCompute((c) => ({ ...c, live }));
+      }, 250);
 
       const timeout =
         timeoutMs > 0
@@ -159,6 +196,15 @@ export function useToolRunner(options: RunnerOptions = {}) {
                 emitInternalToolEvent({ type: "tool_timeout", toolId, durationMs: Date.now() - start, success: false });
               }
             }, timeoutMs)
+          : null;
+
+      // Free-tier-only attempt: enforce a tighter timeout to avoid surprise usage.
+      // This is approximate and is meant to keep runs safely bounded on weak devices.
+      const freeTierTimeout =
+        downgradeFreeTierOnly && profile?.computeClass !== "A"
+          ? setTimeout(() => {
+              abortRef.current?.abort();
+            }, 2500)
           : null;
 
       try {
@@ -179,44 +225,39 @@ export function useToolRunner(options: RunnerOptions = {}) {
         const newSessionUsed = compute.sessionFreeUsedUnits + post.estimate.freeUnitsUsed;
         writeNumber(COMPUTE_SESSION_KEY, newSessionUsed);
 
-        // Server-authoritative credit deduction for above-free portion (signed-in users only).
-        let consumed = 0;
-        let remaining: number | null = null;
-        if (compute.creditsVisible && toolId) {
-          const res = await fetch("/api/credits/consume", {
+        // Deduct credits for paid portion (signed in only), but never for the free portion.
+        let consumedCredits = 0;
+        let remainingCredits: number | null = compute.creditsVisible ? (compute.creditsBalance ?? 0) : null;
+        if (toolId && compute.creditsVisible && post.estimate.estimatedCredits > 0 && !downgradeFreeTierOnly) {
+          const hadPreview = Boolean(compute.hadPreview || compute.pre);
+          const r = await fetch("/api/credits/consume", {
             method: "POST",
-            headers: { "content-type": "application/json" },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               toolId,
               inputBytes,
               durationMs: actualMs,
               featureFlags: {},
-              hadPreview: Boolean(compute.pre),
+              hadPreview,
             }),
           });
-          const data = await res.json().catch(() => ({}));
-          if (res.ok) {
-            consumed = typeof data?.consumed === "number" ? data.consumed : 0;
-            remaining = typeof data?.remaining === "number" ? data.remaining : null;
-          } else {
-            // If consume fails due to insufficient credits, surface a clear error and stop.
-            const msg = typeof data?.message === "string" ? data.message : "Not enough credits for the paid portion of this run.";
-            setState({ loading: false, errorMessage: msg });
-            setCompute((c) => ({ ...c, post, sessionFreeUsedUnits: newSessionUsed, lastConsumedCredits: 0 }));
-            return null;
+          if (r.ok) {
+            const d = await r.json().catch(() => ({}));
+            consumedCredits = typeof d?.consumed === "number" ? d.consumed : 0;
+            remainingCredits = typeof d?.remaining === "number" ? d.remaining : remainingCredits;
+          } else if (r.status === 402) {
+            // Paid portion denied by server. Keep the run result but inform the user.
+            setState((s) => ({ ...s, errorMessage: "Your run finished, but the paid portion could not be applied due to insufficient credits." }));
           }
-        } else {
-          // Fallback simulated counter for anonymous users, for transparency only.
-          const simulatedUsed = readNumber(COMPUTE_SIM_CREDITS_KEY);
-          writeNumber(COMPUTE_SIM_CREDITS_KEY, simulatedUsed + post.estimate.estimatedCredits);
         }
 
         setCompute((c) => ({
           ...c,
           post,
+          live: null,
           sessionFreeUsedUnits: newSessionUsed,
-          creditsBalance: typeof remaining === "number" ? remaining : c.creditsBalance,
-          lastConsumedCredits: consumed,
+          lastConsumedCredits: consumedCredits,
+          creditsBalance: remainingCredits ?? c.creditsBalance,
         }));
         setState({ loading: false, errorMessage: "" });
         return out;
@@ -233,10 +274,12 @@ export function useToolRunner(options: RunnerOptions = {}) {
         return null;
       } finally {
         if (timeout) clearTimeout(timeout);
+        if (liveInterval) clearInterval(liveInterval);
+        if (freeTierTimeout) clearTimeout(freeTierTimeout);
         inFlightRef.current = false;
       }
     },
-    [minIntervalMs, timeoutMs, toolId, profile, compute.pre, compute.lastInputBytes, compute.sessionFreeUsedUnits, compute.creditsBalance, compute.creditsVisible, prepare]
+    [minIntervalMs, timeoutMs, toolId, profile, compute.pre, compute.lastInputBytes, compute.sessionFreeUsedUnits, compute.creditsBalance, compute.creditsVisible, compute.hadPreview, prepare]
   );
 
   const cancel = useCallback(() => {

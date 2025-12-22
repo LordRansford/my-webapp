@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import Link from "next/link";
 import ControlRoom from "./sections/ControlRoom";
 import FrontendLab from "./sections/FrontendLab";
 import BackendApiLab from "./sections/BackendApiLab";
@@ -9,18 +10,27 @@ import PipelineDeployLab from "./sections/PipelineDeployLab";
 import SecurityQualityLab from "./sections/SecurityQualityLab";
 import ObservabilityLab from "./sections/ObservabilityLab";
 import AgentBuilderLab from "./sections/AgentBuilderLab";
+import RequirementsLab from "./sections/RequirementsLab";
+import SystemDesignLab from "./sections/SystemDesignLab";
+import TradeoffSimulatorLab from "./sections/TradeoffSimulatorLab";
+import ReflectionNextSteps from "./sections/ReflectionNextSteps";
 import { SecurityNotice } from "@/components/SecurityNotice";
 import { SecurityBanner } from "@/components/dev-studios/SecurityBanner";
 
 const tabs = [
-  { id: "control", label: "Control Room", component: ControlRoom },
-  { id: "frontend", label: "Frontend Lab", component: FrontendLab },
-  { id: "backend", label: "Backend and API Lab", component: BackendApiLab },
-  { id: "architecture", label: "Architecture and Patterns Lab", component: ArchitecturePatternsLab },
-  { id: "pipeline", label: "Pipeline and Deploy Lab", component: PipelineDeployLab },
-  { id: "security", label: "Security and Quality Lab", component: SecurityQualityLab },
-  { id: "observability", label: "Observability Lab", component: ObservabilityLab },
-  { id: "agent", label: "Agent Builder Lab", component: AgentBuilderLab },
+  { id: "overview", label: "Overview", component: ControlRoom },
+  { id: "requirements", label: "Requirements and domain modelling", component: RequirementsLab },
+  { id: "system-design", label: "Architecture and system design", component: SystemDesignLab },
+  { id: "architecture-sandbox", label: "Architecture sandbox", component: ArchitecturePatternsLab },
+  { id: "backend", label: "Backend and API design", component: BackendApiLab },
+  { id: "frontend", label: "Frontend and integration", component: FrontendLab },
+  { id: "security", label: "Security and reliability", component: SecurityQualityLab },
+  { id: "deploy", label: "Deployment and operations", component: PipelineDeployLab },
+  { id: "observability", label: "Observability basics", component: ObservabilityLab },
+  { id: "tradeoffs", label: "Trade-off simulator", component: TradeoffSimulatorLab },
+  { id: "reflection", label: "Reflection and next steps", component: ReflectionNextSteps },
+  // Keep this available but not on the main path yet.
+  { id: "agent", label: "Assistive agent (local)", component: AgentBuilderLab },
 ];
 
 export default function DevStudiosPage() {
@@ -39,6 +49,17 @@ export default function DevStudiosPage() {
         <p className="text-base text-slate-700 max-w-3xl leading-relaxed">
           This is my workshop for shipping software safely. We sketch systems, pick stacks, check security, and get friendly nudges from a local “agent”. No cloud calls, no telemetry. Just guidance, templates and checklists that behave.
         </p>
+        <div className="flex flex-wrap items-center gap-2 text-sm">
+          <Link href="/software-architecture" className="font-semibold text-emerald-700 hover:underline">
+            Back to software architecture notes
+          </Link>
+          <span className="text-slate-300" aria-hidden="true">
+            |
+          </span>
+          <Link href="/cybersecurity" className="font-semibold text-emerald-700 hover:underline">
+            Back to cybersecurity notes
+          </Link>
+        </div>
       </div>
 
       <SecurityNotice />
@@ -51,7 +72,7 @@ export default function DevStudiosPage() {
             <span>Guided journeys</span>
           </div>
           <p id="guided-journeys-title" className="text-lg font-semibold text-slate-900">
-            Walk BookTrack through all four labs
+            Walk BookTrack through the core labs
           </p>
           <p className="text-sm text-slate-700">
             Two guided runs for BookTrack. They are text-only, local-only, and point you at the existing labs so you can feel how architecture, backend, frontend, and
@@ -363,7 +384,7 @@ export default function DevStudiosPage() {
 
       <div className="overflow-x-auto">
         <div className="flex min-w-full gap-2" role="tablist" aria-label="Development Studios">
-          {tabs.map((tab) => (
+          {tabs.filter((t) => t.id !== "agent").map((tab) => (
             <button
               key={tab.id}
               role="tab"

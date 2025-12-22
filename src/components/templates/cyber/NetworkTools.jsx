@@ -7,8 +7,8 @@ import { useTemplateState } from "@/hooks/useTemplateState";
 import { useToolRunner } from "@/hooks/useToolRunner";
 import { isProbablyDomain, isProbablyHostname, isProbablyIp, safeTrim } from "@/lib/tooling/validation";
 import { postJson } from "@/lib/tooling/http";
-import ComputeMeterPanel from "@/components/compute/ComputeMeterPanel";
-import RunCostPreview from "@/components/compute/RunCostPreview";
+import ComputeEstimatePanel from "@/components/compute/ComputeEstimatePanel";
+import ComputeSummaryPanel from "@/components/compute/ComputeSummaryPanel";
 
 const attribution =
   "Created by Ransford for Ransfords Notes. Internal use allowed. Commercial use requires visible attribution. Exports are gated per policy.";
@@ -80,11 +80,7 @@ function useNetworkTool(storageKey, apiPath) {
     }
 
     const meta = { inputBytes: String(check.value).length, steps: 1, expectedWallMs: 900 };
-    const pre = runner.prepare(meta);
-    if (pre.estimate.creditShortfall) {
-      setConfirmOpen(true);
-      return;
-    }
+    runner.prepare(meta);
 
     const data = await runner.run(async (signal) => {
       const res = await postJson(`/api/tools/${apiPath}`, { target: check.value }, { signal });
@@ -151,40 +147,8 @@ function NetworkTemplate({
       <NetworkNotice />
 
       <div className="mt-4 space-y-3">
-        <RunCostPreview estimate={tool.runner.compute.pre} creditsBalance={tool.runner.compute.creditsVisible ? tool.runner.compute.creditsBalance : null} />
-        <ComputeMeterPanel toolId={storageKey} phase="pre" estimate={tool.runner.compute.pre} inputBytes={tool.runner.compute.lastInputBytes || undefined} />
-        {tool.runner.compute.post ? (
-          <ComputeMeterPanel toolId={storageKey} phase="post" estimate={tool.runner.compute.post} inputBytes={tool.runner.compute.lastInputBytes || undefined} />
-        ) : null}
-
-        {tool.confirmOpen ? (
-          <div className="rounded-2xl border border-amber-200 bg-amber-50/70 p-4">
-            <p className="text-sm font-semibold text-amber-900">Credit warning</p>
-            <p className="mt-1 text-sm text-amber-900">This run may exceed your visible credit balance. You can cancel or continue.</p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              <button
-                type="button"
-                className="button"
-                onClick={() => {
-                  tool.setConfirmOpen(false);
-                  tool.runner.clearCompute();
-                }}
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                className="button primary"
-                onClick={async () => {
-                  tool.setConfirmOpen(false);
-                  await tool.runLookup();
-                }}
-              >
-                Continue
-              </button>
-            </div>
-          </div>
-        ) : null}
+        <ComputeEstimatePanel estimate={tool.runner.compute.pre || tool.runner.compute.live} />
+        <ComputeSummaryPanel toolId={storageKey} summary={tool.runner.compute.post} />
       </div>
 
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between mt-4">
