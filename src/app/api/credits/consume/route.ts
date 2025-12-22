@@ -6,6 +6,7 @@ import { rateLimit } from "@/lib/security/rateLimit";
 import { withRequestLogging } from "@/lib/security/requestLog";
 import { prisma } from "@/lib/db/prisma";
 import { meterRun } from "@/lib/compute/metering";
+import { createCreditUsageEvent, enforceCreditExpiry } from "@/lib/credits/store";
 
 const DISABLED = process.env.CREDITS_METERING_ENABLED === "false";
 
@@ -52,9 +53,14 @@ export async function POST(req: Request) {
 
     // Transaction: ensure no surprise overspend and return updated balance.
     const userId = session.user.id;
+    await enforceCreditExpiry(userId);
     const result = await prisma.$transaction(async (tx) => {
       const credits = await tx.credits.findUnique({ where: { userId } });
       const balance = credits?.balance ?? 0;
+      const expiresAt = credits?.expiresAt ?? null;
+      if (expiresAt && expiresAt.getTime() <= Date.now()) {
+        return { ok: false as const, balance: 0, metered };
+      }
 
       if (balance < metered.creditsToConsume) {
         return { ok: false as const, balance, metered };
@@ -79,6 +85,16 @@ export async function POST(req: Request) {
         { status: 402 }
       );
     }
+
+    // Best-effort usage log (non-blocking for the client response).
+    createCreditUsageEvent({
+      userId,
+      toolId: metered.toolId,
+      consumed: metered.creditsToConsume,
+      units: metered.units,
+      freeUnits: metered.freeUnitsUsed,
+      paidUnits: metered.paidUnitsUsed,
+    }).catch(() => null);
 
     return NextResponse.json({
       ok: true,

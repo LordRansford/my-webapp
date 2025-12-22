@@ -158,20 +158,14 @@ export default function ToolCard({
             {Inner}
           </Link>
         ) : (
-          <div
+          <button
+            type="button"
             className="w-full min-w-0 focus:outline-none focus:ring focus:ring-blue-200 rounded-2xl"
             onClick={handleUse}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                handleUse();
-              }
-            }}
+            aria-label={`Use ${title}`}
           >
             {Inner}
-          </div>
+          </button>
         )}
       </m.section>
       {showSavePrompt && !isAuthed ? <SaveProgressPrompt /> : null}

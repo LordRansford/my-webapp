@@ -28,6 +28,7 @@ model UserIdentity {
   cpdState  CpdState?
   progress  Progress[]
   credits   Credits?
+  creditUsage CreditUsageEvent[]
 
   @@index([provider, providerAccountId])
 }
@@ -35,9 +36,27 @@ model UserIdentity {
 model Credits {
   userId    String   @id
   balance   Int      @default(0)
+  expiresAt DateTime?
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   user UserIdentity @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model CreditUsageEvent {
+  id         String   @id @default(cuid())
+  userId     String
+  toolId     String
+  consumed   Int
+  units      Int
+  freeUnits  Int
+  paidUnits  Int
+  occurredAt DateTime @default(now())
+
+  user UserIdentity @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, occurredAt])
+  @@index([toolId, occurredAt])
 }
 
 model FeedbackSubmission {

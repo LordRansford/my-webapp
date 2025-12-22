@@ -13,6 +13,7 @@ import { useEffect, useMemo, useState } from "react";
 import FeedbackPanel from "@/components/feedback/FeedbackPanel";
 import { highlightAnchorFromLocation } from "@/lib/mentor/highlight";
 import dynamic from "next/dynamic";
+import ReadAloudControls from "@/components/a11y/ReadAloudControls";
 
 const AssistantShell = dynamic(() => import("@/components/assistants/AssistantShell"), { ssr: false });
 
@@ -133,6 +134,14 @@ export default function NotesLayout({
   const slug = meta.slug || "";
   const showPreviewBanner = !slug.startsWith("/admin");
   const showFeedbackPanel = !slug.startsWith("/admin") && slug !== "/feedback" && slug !== "/signin";
+  const showReadAloud =
+    Boolean(slug) &&
+    (slug === "/" ||
+      slug.endsWith("/summary") ||
+      slug.includes("/beginner") ||
+      slug.includes("/foundations") ||
+      slug.endsWith("/course") ||
+      slug.endsWith("/index"));
 
   return (
     <Layout title={meta.title} description={meta.description}>
@@ -182,6 +191,7 @@ export default function NotesLayout({
               >
                 Ask the mentor
               </Link>
+              {showReadAloud ? <ReadAloudControls selector="main article" label="Listen" /> : null}
             </div>
             <div className="mt-4">
               {showStepper ? (

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ComingSoonPurchase } from "@/components/pricing/ComingSoonPurchase";
 
 export const metadata = {
   title: "Pricing",
@@ -34,7 +35,8 @@ export default function PricingPage() {
           <div className="inline-flex rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold text-white">Recommended</div>
           <h2 className="mt-3 text-xl font-semibold text-slate-900">Supporter</h2>
           <p className="mt-1 text-sm text-slate-700">
-            Unlock premium template downloads and higher limits. You also keep this project alive, which is oddly satisfying.
+            Payments are not enabled yet. You can explore everything freely during this early phase. Later, credits will apply only to compute above
+            the free tier. Minimum top-up will be £10 when payments launch.
           </p>
           <ul className="mt-4 space-y-2 text-sm text-slate-800">
             <li>Premium template downloads</li>
@@ -43,20 +45,23 @@ export default function PricingPage() {
             <li>Larger limits on heavy tools</li>
           </ul>
           <div className="mt-5 flex flex-wrap gap-2">
-            <Link
-              href="/support/donate"
-              className="inline-flex items-center justify-center rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
-            >
-              Support this work
-            </Link>
+            <ComingSoonPurchase label="Buy credits" />
             <Link
               href="/templates"
               className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-50"
             >
               Browse templates
             </Link>
+            <Link
+              href="/support/donate"
+              className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-50"
+            >
+              Donate
+            </Link>
           </div>
-          <p className="mt-3 text-xs text-slate-600">Payments are not enabled in this build yet.</p>
+          <p className="mt-3 text-xs text-slate-600">
+            Donations help sustain free access for everyone. They do not unlock features or create advantages.
+          </p>
         </div>
 
         <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -69,6 +74,54 @@ export default function PricingPage() {
           </ul>
           <p className="mt-4 text-xs text-slate-600">Status: coming soon</p>
         </div>
+      </section>
+
+      <section className="mt-10 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 className="text-xl font-semibold text-slate-900">Credits and compute</h2>
+        <p className="mt-2 text-sm text-slate-700">
+          Everything educational stays free. Credits only apply to compute above the free tier. Tools show an estimate before you run and a summary after.
+        </p>
+        <p className="mt-2 text-sm text-slate-700">
+          Credits are abstract units, not money. Estimates vary with input size, run time, and features.
+        </p>
+        <div className="mt-4 grid gap-3 md:grid-cols-2">
+          <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
+            <p className="text-sm font-semibold text-slate-900">What is always free</p>
+            <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-slate-700">
+              <li>All notes and course pages</li>
+              <li>Quizzes and reading</li>
+              <li>Runs that fit inside the free tier</li>
+            </ul>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
+            <p className="text-sm font-semibold text-slate-900">What can consume credits</p>
+            <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-slate-700">
+              <li>Large inputs (files or long text)</li>
+              <li>Long run times</li>
+              <li>Advanced options that do deeper analysis</li>
+            </ul>
+          </div>
+        </div>
+        <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
+          <p className="text-sm font-semibold text-slate-900">What £10 can typically do</p>
+          <p className="mt-2 text-sm text-slate-700">
+            When payments launch, the minimum top-up will be £10. In normal use, that should cover many medium runs that exceed the free tier, plus a
+            smaller number of large runs. The exact number varies by tool and input size.
+          </p>
+        </div>
+        <div className="mt-4">
+          <Link
+            href="/compute"
+            className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-50"
+          >
+            How compute works
+          </Link>
+        </div>
+      </section>
+
+      <section className="mt-10 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 className="text-xl font-semibold text-slate-900">CPD certificates</h2>
+        <p className="mt-2 text-sm text-slate-700">CPD certificates will be optional and available later.</p>
       </section>
     </main>
   );

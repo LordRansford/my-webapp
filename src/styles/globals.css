@@ -79,6 +79,17 @@ body {
   letter-spacing: -0.01em;
 }
 
+/* Global focus styling: visible, consistent, and not removed for aesthetics. */
+:where(a, button, input, textarea, select, summary):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Ensure small utility text remains readable. */
+.muted {
+  color: var(--text-muted);
+}
+
 .text-xs {
   font-size: 0.875rem !important;
 }

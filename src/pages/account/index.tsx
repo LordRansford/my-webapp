@@ -21,6 +21,8 @@ export default function AccountPage() {
   const [analyticsSummary, setAnalyticsSummary] = useState<any>(null);
   const [learningSummary, setLearningSummary] = useState<any>(null);
   const [credits, setCredits] = useState<number | null>(null);
+  const [creditsExpiry, setCreditsExpiry] = useState<string | null>(null);
+  const [creditsUsage, setCreditsUsage] = useState<any[]>([]);
   const [savingConsent, setSavingConsent] = useState(false);
   const [consent, setConsent] = useState<ConsentState>({
     termsAccepted: false,
@@ -66,7 +68,11 @@ export default function AccountPage() {
       .catch(() => setLearningSummary(null));
     fetch("/api/credits/status")
       .then((r) => (r.ok ? r.json() : null))
-      .then((d) => setCredits(typeof d?.balance === "number" ? d.balance : 0))
+      .then((d) => {
+        setCredits(typeof d?.balance === "number" ? d.balance : 0);
+        setCreditsExpiry(typeof d?.expiresAt === "string" ? d.expiresAt : d?.expiresAt ? String(d.expiresAt) : null);
+        setCreditsUsage(Array.isArray(d?.usage) ? d.usage : []);
+      })
       .catch(() => setCredits(0));
   }, [isAuthed, consent.cpdDataUseAccepted]);
 
@@ -170,13 +176,31 @@ export default function AccountPage() {
             <li>
               <strong>Credits</strong>: {credits ?? 0}
             </li>
+            <li>
+              <strong>Credits expiry</strong>: {creditsExpiry ? new Date(creditsExpiry).toLocaleDateString() : "Not set yet"}
+            </li>
             {learningSummary?.displayName ? (
               <li>
                 <strong>Name</strong>: {learningSummary.displayName}
               </li>
             ) : null}
           </ul>
-          <p className="muted">Payments coming soon. Credits are currently inactive.</p>
+          <p className="muted">
+            Payments are not enabled yet. Learning stays free. Credits only apply to compute above the free tier. When payments launch, the minimum
+            top-up will be £10 and credits will expire after a set period.
+          </p>
+          {creditsUsage?.length ? (
+            <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-4">
+              <h3 className="text-sm font-semibold text-slate-900">Recent credit usage</h3>
+              <ul className="mt-2 space-y-1 text-sm text-slate-700">
+                {creditsUsage.slice(0, 8).map((e) => (
+                  <li key={e.id}>
+                    {new Date(e.occurredAt || e.submittedAt || Date.now()).toLocaleDateString()} - {e.toolId} - {e.consumed} credits
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
           <div className="mt-4 flex flex-wrap gap-3">
             <Link href="/account/history" className="button">
               View history
