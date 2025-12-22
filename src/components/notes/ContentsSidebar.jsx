@@ -69,7 +69,7 @@ export default function ContentsSidebar({
 
         <m.aside
           aria-label="On-page contents"
-          className={`fixed inset-y-0 left-0 z-40 w-[82%] max-w-[320px] overflow-y-auto bg-white p-4 shadow-xl lg:inset-auto lg:block lg:w-full lg:max-w-[280px] lg:p-0 lg:shadow-none lg:sticky lg:top-24 lg:h-[calc(100vh-140px)] ${className}`}
+          className={`fixed inset-y-0 left-0 z-40 w-10/12 max-w-sm overflow-y-auto bg-white p-4 shadow-xl lg:inset-auto lg:block lg:w-72 lg:max-w-xs lg:p-0 lg:shadow-none lg:sticky lg:top-24 lg:h-[calc(100vh-140px)] ${className}`}
           initial={false}
           animate={
             reduce
@@ -128,7 +128,7 @@ export default function ContentsSidebar({
                             aria-controls={`${section.id}-children`}
                             onClick={() => setExpanded((prev) => ({ ...prev, [section.id]: !isExpanded }))}
                           >
-                            {isExpanded ? "–" : "+"}
+                            {isExpanded ? "-" : "+"}
                           </button>
                         </div>
                         {isExpanded && section.children.length ? (

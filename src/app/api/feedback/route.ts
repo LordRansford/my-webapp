@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     if (limited) return limited;
 
     const body = (await req.json().catch(() => null)) as any;
-    const result = submitFeedback(body);
+    const result = await submitFeedback(body);
     return jsonOk(result, { status: 200, requestId });
   });
 }

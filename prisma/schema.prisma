@@ -27,8 +27,38 @@ model UserIdentity {
 
   cpdState  CpdState?
   progress  Progress[]
+  credits   Credits?
 
   @@index([provider, providerAccountId])
+}
+
+model Credits {
+  userId    String   @id
+  balance   Int      @default(0)
+  updatedAt DateTime @updatedAt
+
+  user UserIdentity @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model FeedbackSubmission {
+  id          String   @id @default(cuid())
+  sessionId   String?
+  name        String?
+  source      String
+  pageUrl     String
+  pageTitle   String?
+  category    String?
+  followUp    String?
+  clientSummary String?
+  message     String
+  screenshotName String?
+  screenshotType String?
+  screenshotDataUrl String?
+  submittedAt DateTime @default(now())
+
+  @@index([submittedAt])
+  @@index([source])
+  @@index([sessionId])
 }
 
 model CpdState {

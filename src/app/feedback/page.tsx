@@ -3,7 +3,33 @@
 import { useMemo, useState } from "react";
 import NotesLayout from "@/components/notes/Layout";
 
-const OPTIONS = ["Family or friend", "Professional network", "Online search", "Social media", "Other"] as const;
+const OPTIONS = ["Family", "Friend", "Work colleague", "Other"] as const;
+
+function getSessionId() {
+  try {
+    const key = "rn_feedback_session_v1";
+    const existing = window.sessionStorage.getItem(key);
+    if (existing) return existing;
+    const id = cryptoRandomId();
+    window.sessionStorage.setItem(key, id);
+    return id;
+  } catch {
+    return cryptoRandomId();
+  }
+}
+
+function cryptoRandomId() {
+  try {
+    // Browser crypto is available in modern environments.
+    const bytes = new Uint8Array(12);
+    window.crypto.getRandomValues(bytes);
+    return Array.from(bytes)
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+  } catch {
+    return `${Date.now().toString(16)}${Math.random().toString(16).slice(2, 10)}`;
+  }
+}
 
 function sanitizeText(input: unknown, maxLen: number) {
   const raw = typeof input === "string" ? input : "";
@@ -33,11 +59,13 @@ export default function FeedbackPage() {
     try {
       // Server-side persistence (Prompt 1E). No client-side storage of submitted feedback.
       const payload = {
-        name: sanitizeText(name, 80) || "Anonymous",
-        source: heardFrom,
+        name: sanitizeText(name, 80) || "",
+        heardFrom,
         message: cleanMessage,
+        pageUrl: window.location.pathname || "/feedback",
+        sessionId: getSessionId(),
       };
-      const res = await fetch("/api/feedback/submit", {
+      const res = await fetch("/api/feedback", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(payload),

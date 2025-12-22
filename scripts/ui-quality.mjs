@@ -61,7 +61,7 @@ if (!/max-w-|w-|clamp\(|min-w-/.test(templateFilters)) {
   fail("TemplateFilters appears to lack explicit width constraints.");
 }
 
-if (/-/.test(combined)) {
+if (/—/.test(combined)) {
   fail("UI text must not contain an em dash. Use a hyphen instead.");
 }
 

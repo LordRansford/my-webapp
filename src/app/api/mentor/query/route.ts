@@ -3,8 +3,9 @@ import { rateLimit } from "@/lib/security/rateLimit";
 import { requireSameOrigin } from "@/lib/security/origin";
 import { withRequestLogging } from "@/lib/security/requestLog";
 import { sanitizeQuestion } from "@/lib/mentor/sanitize";
-import { searchContent } from "@/lib/mentor/search";
 import { incrementUsage } from "@/lib/mentor/usage";
+import { retrieveContent } from "@/lib/mentor/retrieveContent";
+import { findToolSuggestion } from "@/lib/tools/toolRegistry";
 
 const DISABLED = process.env.MENTOR_ENABLED === "false";
 
@@ -20,6 +21,7 @@ export async function POST(req: Request) {
 
     const body = (await req.json().catch(() => null)) as any;
     const question = typeof body?.question === "string" ? body.question : "";
+    const pageUrl = typeof body?.pageUrl === "string" ? body.pageUrl : "";
     const safe = sanitizeQuestion(question);
     if (!safe.ok) {
       return NextResponse.json(
@@ -28,28 +30,21 @@ export async function POST(req: Request) {
       );
     }
 
-    const results = searchContent(safe.cleaned, 3);
-    if (!results.length) {
-      return NextResponse.json({ message: "I can only help with what is covered on this site." }, { status: 200 });
-    }
+    const { matches, weak } = retrieveContent(safe.cleaned, pageUrl || null, 6);
+    if (!matches.length) return NextResponse.json({ message: "I can only help with what is covered on this site." }, { status: 200 });
 
     incrementUsage();
 
-    const top = results[0];
-    const lowConfidence = top.score < 2;
-    const short = top.excerpt.slice(0, 260).trim() || "This is covered in the notes.";
-    const detail = results
-      .map((r) => `${r.title}: ${r.excerpt.slice(0, 360).trim()}`)
-      .join("\n\n")
-      .trim();
+    const top = matches[0];
+    const lowConfidence = weak;
+    const tool = findToolSuggestion(safe.cleaned);
 
     return NextResponse.json(
       {
-        answer: lowConfidence
-          ? "I can only help explain what is already on this site. Try the sources below."
-          : short,
-        detail,
-        sources: results,
+        answer: lowConfidence ? "I might be wrong here. The closest matches are below." : (top.why || "This is covered in the notes."),
+        citationsTitle: "Where this is covered on the site",
+        citations: matches.slice(0, 5).map((m) => ({ title: m.title, href: m.href, why: m.why })),
+        tryNext: tool ? { title: tool.title, href: tool.route + (tool.anchor ? `#${tool.anchor}` : ""), steps: tool.tips.slice(0, 3) } : null,
         note: "Responses are limited to site content. No external advice is provided.",
         lowConfidence,
       },

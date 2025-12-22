@@ -4,12 +4,16 @@ import { useState } from "react";
 import { useToolRunner } from "@/hooks/useToolRunner";
 import { normaliseUrl } from "@/lib/tooling/validation";
 import { postJson } from "@/lib/tooling/http";
+import ComputeMeterPanel from "@/components/compute/ComputeMeterPanel";
+import RunCostPreview from "@/components/compute/RunCostPreview";
 
 export default function WebsiteSecurityLab() {
   const [url, setUrl] = useState("");
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const runner = useToolRunner({ minIntervalMs: 800, toolId: "website-security-lab" });
+  const toolId = "website-security-lab";
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -23,11 +27,18 @@ export default function WebsiteSecurityLab() {
       return;
     }
 
+    const meta = { inputBytes: parsed.url.length, steps: 6, expectedWallMs: 1200 };
+    const pre = runner.prepare(meta);
+    if (pre.estimate.creditShortfall) {
+      setConfirmOpen(true);
+      return;
+    }
+
     const data = await runner.run(async (signal) => {
       const res = await postJson("/api/dashboards/website-security", { url: parsed.url }, { signal });
       if (!res.ok) throw new Error("Request failed");
       return res.data;
-    });
+    }, meta);
 
     if (data) setResult(data);
     if (!data && runner.errorMessage) setError(runner.errorMessage);
@@ -35,6 +46,51 @@ export default function WebsiteSecurityLab() {
 
   return (
     <div className="space-y-4">
+      <RunCostPreview estimate={runner.compute.pre} creditsBalance={runner.compute.creditsVisible ? runner.compute.creditsBalance : null} />
+      <ComputeMeterPanel toolId={toolId} phase="pre" estimate={runner.compute.pre} inputBytes={runner.compute.lastInputBytes || undefined} />
+      {runner.compute.post ? (
+        <ComputeMeterPanel toolId={toolId} phase="post" estimate={runner.compute.post} inputBytes={runner.compute.lastInputBytes || undefined} />
+      ) : null}
+
+      {confirmOpen ? (
+        <div className="rounded-2xl border border-amber-200 bg-amber-50/70 p-4">
+          <p className="text-sm font-semibold text-amber-900">Credit warning</p>
+          <p className="mt-1 text-sm text-amber-900">
+            This run may exceed your visible credit balance. You can cancel or continue. If you continue, results may be partial.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              type="button"
+              className="button"
+              onClick={() => {
+                setConfirmOpen(false);
+                runner.clearCompute();
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              className="button primary"
+              onClick={async () => {
+                setConfirmOpen(false);
+                const parsed = normaliseUrl(url);
+                if (!parsed.ok) return;
+                const meta = { inputBytes: parsed.url.length, steps: 6, expectedWallMs: 1200 };
+                const data = await runner.run(async (signal) => {
+                  const res = await postJson("/api/dashboards/website-security", { url: parsed.url }, { signal });
+                  if (!res.ok) throw new Error("Request failed");
+                  return res.data;
+                }, meta);
+                if (data) setResult(data);
+              }}
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      ) : null}
+
       <div className="grid gap-3 md:grid-cols-3">
         <div className="rounded-2xl border border-slate-200 bg-white/80 p-4">
           <p className="text-xs font-semibold text-slate-800">What this tells you</p>

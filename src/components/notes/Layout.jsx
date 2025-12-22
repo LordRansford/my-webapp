@@ -10,6 +10,11 @@ import BetaBanner from "./BetaBanner";
 import PreviewBanner from "./PreviewBanner";
 import cybersecurityCourse from "../../../content/courses/cybersecurity.json";
 import { useEffect, useMemo, useState } from "react";
+import FeedbackPanel from "@/components/feedback/FeedbackPanel";
+import { highlightAnchorFromLocation } from "@/lib/mentor/highlight";
+import dynamic from "next/dynamic";
+
+const AssistantShell = dynamic(() => import("@/components/assistants/AssistantShell"), { ssr: false });
 
 export default function NotesLayout({
   meta = {},
@@ -33,6 +38,14 @@ export default function NotesLayout({
     );
     document.querySelectorAll("article h2, article h3").forEach((node) => observer.observe(node));
     return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    // Briefly highlight headings when navigating to an anchor link.
+    highlightAnchorFromLocation();
+    const onHash = () => highlightAnchorFromLocation();
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
   }, []);
 
   const resolvedSection =
@@ -117,7 +130,9 @@ export default function NotesLayout({
     return level.includes("summary") || (meta.slug || "").includes("summary");
   }, [meta.level, meta.slug]);
 
-  const showPreviewBanner = !(meta.slug || "").startsWith("/admin");
+  const slug = meta.slug || "";
+  const showPreviewBanner = !slug.startsWith("/admin");
+  const showFeedbackPanel = !slug.startsWith("/admin") && slug !== "/feedback" && slug !== "/signin";
 
   return (
     <Layout title={meta.title} description={meta.description}>
@@ -148,6 +163,7 @@ export default function NotesLayout({
         ) : null}
         <main className="w-full max-w-[1000px] flex-1">
           <BetaBanner />
+          <AssistantShell />
           <header className="mb-4 rounded-3xl border border-gray-200 bg-white/90 p-4 shadow-sm backdrop-blur">
             <p className="eyebrow m-0 text-gray-700">
               {sectionLabelMap[resolvedSection] || "Notes"} · {meta.level || "Notes"}
@@ -190,6 +206,7 @@ export default function NotesLayout({
               <DonateButton />
             </div>
           ) : null}
+          {showFeedbackPanel ? <FeedbackPanel /> : null}
         </main>
       </div>
     </Layout>

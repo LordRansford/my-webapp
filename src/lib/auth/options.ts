@@ -1,6 +1,4 @@
-import EmailProvider from "next-auth/providers/email";
 import GoogleProvider from "next-auth/providers/google";
-import GitHubProvider from "next-auth/providers/github";
 import type { NextAuthOptions } from "next-auth";
 import { BetterSqlite3Adapter } from "@/lib/auth/adapter";
 import { upsertUser, getUserById } from "@/lib/auth/store";
@@ -16,37 +14,23 @@ export const authOptions: NextAuthOptions = {
   // Keep secrets server-side only. NextAuth cookies are httpOnly by default and CSRF protection is enabled by default.
   secret: process.env.NEXTAUTH_SECRET,
   providers: (() => {
-    // Passwordless magic link (no password storage/reset flows).
-    const providers: any[] = [
-      EmailProvider({
-        server: process.env.EMAIL_SERVER,
-        from: process.env.EMAIL_FROM,
-      }),
-    ];
+    // Google OAuth only.
+    // Keep login optional: the site remains fully usable without auth, but users can sign in to persist progress across devices.
+    const id = process.env.GOOGLE_CLIENT_ID || "";
+    const secret = process.env.GOOGLE_CLIENT_SECRET || "";
 
-    // Optional OAuth (disabled by default for Stage 21).
-    // Enable only when explicitly turned on and all required env vars are present.
-    const oauthEnabled = process.env.AUTH_OAUTH_ENABLED === "true";
-    if (oauthEnabled) {
-      if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
-        providers.push(
-          GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-          })
-        );
-      }
-      if (process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET) {
-        providers.push(
-          GitHubProvider({
-            clientId: process.env.GITHUB_CLIENT_ID,
-            clientSecret: process.env.GITHUB_CLIENT_SECRET,
-          })
-        );
-      }
+    if (process.env.NODE_ENV !== "production" && (!id || !secret)) {
+      throw new Error("Missing Google OAuth env vars: GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET");
     }
 
-    return providers;
+    if (!id || !secret) return [];
+
+    return [
+      GoogleProvider({
+        clientId: id,
+        clientSecret: secret,
+      }),
+    ];
   })(),
   pages: {
     signIn: "/signin",
