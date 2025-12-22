@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { downloadSvg } from "@/lib/architecture-diagrams/export/svg";
 import { downloadPng } from "@/lib/architecture-diagrams/export/png";
 import { openPrintPreview } from "./PrintView";
+import { buildDiagramFileBase } from "@/lib/architecture-diagrams/export/filename";
 
 export default function ExportPanel({
   svgText,
@@ -13,6 +14,7 @@ export default function ExportPanel({
 }) {
   const [pageSize, setPageSize] = useState("a4-portrait");
   const [status, setStatus] = useState("");
+  const [pdfBusy, setPdfBusy] = useState(false);
 
   const disabledReason = useMemo(() => {
     if (!svgText) return "Render the diagram first.";
@@ -26,6 +28,50 @@ export default function ExportPanel({
     const res = await fn();
     if (res && res.ok === false) setStatus(res.reason || "Export failed. Please try again.");
     if (res && res.ok === true) setStatus("Export ready.");
+  };
+
+  const downloadPdf = async () => {
+    if (!svgText) return { ok: false, reason: "Render the diagram first." };
+    setPdfBusy(true);
+    setStatus("Preparing PDF…");
+    try {
+      const wantsA3 = pageSize === "a3-landscape";
+      const res = await fetch("/api/architecture-diagrams/export/pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          svg: svgText,
+          systemName,
+          diagramType,
+          variant: variantLabel,
+          pageSize: wantsA3 ? "A3" : "A4",
+          orientation: wantsA3 ? "landscape" : "portrait",
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        const msg = data?.error || "PDF export failed. Please try again.";
+        setStatus(msg);
+        return { ok: false, reason: msg };
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${buildDiagramFileBase({ systemName, diagramType, variant: variantLabel })}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 250);
+      setStatus("Export ready.");
+      return { ok: true };
+    } catch (err) {
+      const msg = "PDF export failed. Please try again.";
+      setStatus(msg);
+      return { ok: false, reason: msg };
+    } finally {
+      setPdfBusy(false);
+    }
   };
 
   return (
@@ -64,6 +110,16 @@ export default function ExportPanel({
             }`}
           >
             Print 🖨️
+          </button>
+          <button
+            type="button"
+            disabled={disabled || pdfBusy}
+            onClick={() => run(downloadPdf)}
+            className={`rounded-full px-4 py-2 text-sm font-semibold shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 ${
+              disabled || pdfBusy ? "bg-slate-200 text-slate-500 cursor-not-allowed" : "border border-slate-200 bg-white text-slate-800 hover:bg-slate-50"
+            }`}
+          >
+            Download PDF
           </button>
           <button
             type="button"
