@@ -78,6 +78,565 @@ export const templateDefinitions: TemplateDefinition[] = [
     disclaimer: "Informational only. Not legal advice. Results depend on inputs.",
   },
   {
+    slug: "ea-target-state-onepager",
+    title: "Target State One‑Pager (Starter)",
+    category: "digital-enterprise-architecture",
+    description: "Draft a concise target state: outcomes, principles, key capabilities, and constraints.",
+    estimatedMinutes: 12,
+    fields: [
+      { id: "initiative", type: "text", label: "Initiative / programme", placeholder: "Digital onboarding", required: true },
+      { id: "outcome", type: "textarea", label: "Primary outcome", placeholder: "Reduce onboarding time from 10 days to 1 day", required: true },
+      { id: "constraints", type: "multiselect", label: "Constraints", options: [
+        { label: "Regulatory", value: "regulatory" },
+        { label: "Legacy platforms", value: "legacy" },
+        { label: "Budget", value: "budget" },
+        { label: "Skills", value: "skills" },
+        { label: "Timeline", value: "timeline" },
+      ]},
+      { id: "principles", type: "slider", label: "Architecture principles clarity (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+      { id: "stakeholders", type: "slider", label: "Stakeholder alignment confidence (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+    ],
+    calcFn: (values) => {
+      const principles = clampValue(Number(values.principles) || 1, 1, 5);
+      const stakeholders = clampValue(Number(values.stakeholders) || 1, 1, 5);
+      const constraints = Array.isArray(values.constraints) ? values.constraints : [];
+      const penalty = Math.min(20, constraints.length * 4);
+      const score = clampValue(Math.round(((principles + stakeholders) / 10) * 100 - penalty), 0, 100);
+      const band = score >= 75 ? "High" : score >= 55 ? "Moderate" : "Low";
+      return {
+        scores: { risk: score, principles, stakeholders },
+        riskBand: band,
+        explanation: `Target state readiness: ${score}/100 (${band}). Penalty reflects ${constraints.length} constraints that need explicit handling.`,
+        assumptions: ["This is a documentation readiness score, not a delivery forecast.", "Treat constraints as items to resolve or design around."],
+        nextSteps: [
+          "List 6–10 target capabilities and name an owner for each.",
+          "Write 3–5 principles (e.g. API-first, least privilege, product analytics).",
+          "Validate the one‑pager with security, operations, and delivery leads.",
+        ],
+        chartData: [
+          { name: "Principles", value: principles * 20 },
+          { name: "Alignment", value: stakeholders * 20 },
+          { name: "Constraints", value: Math.max(0, 100 - penalty) },
+        ],
+        meaning: "Shows whether the target state is crisp enough to guide decisions.",
+        whyItMatters: "Unclear target states create rework and conflicting design choices.",
+        whenItBreaks: "If teams score optimistically without evidence or stakeholder input.",
+      };
+    },
+    charts: [{ id: "ea-target-state-bar", type: "bar", title: "Signals", xKey: "name", yKeys: ["value"] }],
+    exportProfile: { allowPDF: true, allowDOCX: true, allowXLSX: true, allowJSON: true },
+    disclaimer: "Informational only. Not legal advice. Results depend on inputs.",
+  },
+  {
+    slug: "ea-portfolio-slice-prioritiser",
+    title: "Portfolio Slice Prioritiser (Starter)",
+    category: "digital-enterprise-architecture",
+    description: "Rank a portfolio slice using value, feasibility, risk, and dependency load.",
+    estimatedMinutes: 10,
+    fields: [
+      { id: "sliceName", type: "text", label: "Slice name", placeholder: "Customer onboarding automation", required: true },
+      { id: "value", type: "slider", label: "Value (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 4, step: 1 },
+      { id: "feasibility", type: "slider", label: "Feasibility (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+      { id: "risk", type: "slider", label: "Delivery risk (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+      { id: "dependencies", type: "slider", label: "Dependency load (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 2, step: 1 },
+    ],
+    calcFn: (values) => {
+      const value = clampValue(Number(values.value) || 1, 1, 5);
+      const feasibility = clampValue(Number(values.feasibility) || 1, 1, 5);
+      const risk = clampValue(Number(values.risk) || 1, 1, 5);
+      const dependencies = clampValue(Number(values.dependencies) || 1, 1, 5);
+      const raw = value * 2 + feasibility * 2 - risk - dependencies;
+      const score = clampValue(Math.round(((raw + 10) / 20) * 100), 0, 100);
+      const band = score >= 75 ? "High" : score >= 55 ? "Moderate" : "Low";
+      return {
+        scores: { risk: score, value, feasibility },
+        riskBand: band,
+        explanation: `Prioritisation score: ${score}/100 (${band}). Value/feasibility weighted higher than risk/dependencies.`,
+        assumptions: ["Heuristic ranking only; validate with cost and capacity.", "Use consistent scoring across candidates."],
+        nextSteps: [
+          "Capture the top 3 dependencies and the earliest decision needed for each.",
+          "Define success measures and the first measurable milestone.",
+          "Confirm stakeholder appetite for risk and sequencing.",
+        ],
+        chartData: [
+          { name: "Value", value: value * 20 },
+          { name: "Feasibility", value: feasibility * 20 },
+          { name: "Risk", value: risk * 20 },
+          { name: "Dependencies", value: dependencies * 20 },
+        ],
+      };
+    },
+    charts: [{ id: "ea-portfolio-bar", type: "bar", title: "Signals", xKey: "name", yKeys: ["value"] }],
+    exportProfile: { allowPDF: true, allowDOCX: true, allowXLSX: true, allowJSON: true },
+    disclaimer: "Informational only. Not legal advice. Results depend on inputs.",
+  },
+  {
+    slug: "api-versioning-policy-starter",
+    title: "API Versioning Policy (Starter)",
+    category: "software-api-design",
+    description: "Draft a lightweight versioning and deprecation policy with clear consumer expectations.",
+    estimatedMinutes: 10,
+    fields: [
+      { id: "apiName", type: "text", label: "API name", placeholder: "Orders API", required: true },
+      { id: "style", type: "select", label: "Versioning style", required: true, options: [
+        { label: "URI versioning (/v1)", value: "uri" },
+        { label: "Header versioning", value: "header" },
+        { label: "No explicit version (compatibility only)", value: "compat" },
+      ], defaultValue: "uri" },
+      { id: "deprecationWindow", type: "select", label: "Deprecation window", required: true, options: [
+        { label: "30 days", value: "30" },
+        { label: "90 days", value: "90" },
+        { label: "180 days", value: "180" },
+      ], defaultValue: "90" },
+      { id: "compatTesting", type: "toggle", label: "Contract tests for backwards compatibility", defaultValue: false },
+      { id: "consumerComms", type: "slider", label: "Consumer comms maturity (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+    ],
+    calcFn: (values) => {
+      const comms = clampValue(Number(values.consumerComms) || 1, 1, 5);
+      const compat = Boolean(values.compatTesting) ? 1 : 0;
+      const windowDays = Number(values.deprecationWindow) || 90;
+      const windowScore = windowDays >= 180 ? 5 : windowDays >= 90 ? 4 : windowDays >= 30 ? 3 : 2;
+      const score = clampValue(Math.round(((comms + windowScore + (compat ? 2 : 0)) / 12) * 100), 0, 100);
+      const band = score >= 75 ? "High" : score >= 55 ? "Moderate" : "Low";
+      return {
+        scores: { risk: score, comms, window: windowScore },
+        riskBand: band,
+        explanation: `Versioning readiness: ${score}/100 (${band}). Window ${windowDays}d, comms ${comms}/5, contract tests ${compat ? "on" : "off"}.`,
+        assumptions: ["This scores policy clarity, not API design quality.", "Contract tests materially reduce accidental breaking changes."],
+        nextSteps: [
+          "Publish compatibility rules and breaking-change definition.",
+          "Add changelog + consumer notification process.",
+          compat ? "Run contract tests in CI for each release." : "Introduce contract tests for critical consumers.",
+        ].filter(Boolean) as string[],
+        chartData: [
+          { name: "Comms", value: comms * 20 },
+          { name: "Window", value: windowScore * 20 },
+          { name: "Contract tests", value: compat ? 100 : 0 },
+        ],
+      };
+    },
+    charts: [{ id: "api-versioning-bar", type: "bar", title: "Signals", xKey: "name", yKeys: ["value"] }],
+    exportProfile: { allowPDF: true, allowDOCX: true, allowXLSX: true, allowJSON: true },
+    disclaimer: "Informational only. Not legal advice. Results depend on inputs.",
+  },
+  {
+    slug: "integration-pattern-selector",
+    title: "Integration Pattern Selector (Starter)",
+    category: "software-api-design",
+    description: "Choose an integration style (sync, async, batch) based on reliability, latency, and coupling.",
+    estimatedMinutes: 9,
+    fields: [
+      { id: "useCase", type: "text", label: "Use case", placeholder: "Order created → notify warehouse", required: true },
+      { id: "latency", type: "select", label: "Latency need", required: true, options: [
+        { label: "Real-time", value: "realtime" },
+        { label: "Seconds to minutes", value: "near" },
+        { label: "Hours", value: "batch" },
+      ], defaultValue: "near" },
+      { id: "reliability", type: "slider", label: "Reliability requirement (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 4, step: 1 },
+      { id: "coupling", type: "slider", label: "Coupling tolerance (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+      { id: "idempotency", type: "toggle", label: "Idempotency supported", defaultValue: true },
+    ],
+    calcFn: (values) => {
+      const rel = clampValue(Number(values.reliability) || 1, 1, 5);
+      const coupling = clampValue(Number(values.coupling) || 1, 1, 5);
+      const latency = values.latency || "near";
+      const idem = Boolean(values.idempotency);
+      const pattern =
+        latency === "realtime" && coupling >= 4 ? "Synchronous API (with retries + timeouts)" :
+        rel >= 4 && coupling <= 3 ? "Async events/queue (at-least-once + idempotency)" :
+        latency === "batch" ? "Batch export/import (scheduled + reconciled)" :
+        "API + async fallback (outbox pattern)";
+      const score = clampValue(Math.round(((rel + coupling + (idem ? 1 : 0)) / 11) * 100), 0, 100);
+      const band = score >= 75 ? "High" : score >= 55 ? "Moderate" : "Low";
+      return {
+        scores: { risk: score, reliability: rel, coupling },
+        riskBand: band,
+        explanation: `Suggested pattern: ${pattern}. Confidence score ${score}/100 (${band}).`,
+        assumptions: ["Pattern choice depends on operational maturity.", "Idempotency is critical for reliable async delivery."],
+        nextSteps: [
+          "Define failure modes and retries/timeouts.",
+          "Document contracts (schema/versioning) and ownership.",
+          idem ? "Add idempotency keys/deduplication where needed." : "Introduce idempotency/deduplication for safe retries.",
+        ].filter(Boolean) as string[],
+        chartData: [
+          { name: "Reliability", value: rel * 20 },
+          { name: "Coupling tolerance", value: coupling * 20 },
+          { name: "Idempotency", value: idem ? 100 : 0 },
+        ],
+      };
+    },
+    charts: [{ id: "integration-bar", type: "bar", title: "Signals", xKey: "name", yKeys: ["value"] }],
+    exportProfile: { allowPDF: true, allowDOCX: true, allowXLSX: true, allowJSON: true },
+    disclaimer: "Informational only. Not legal advice. Results depend on inputs.",
+  },
+  {
+    slug: "soc2-evidence-pack-starter",
+    title: "SOC 2 Evidence Pack Starter (Starter)",
+    category: "regulatory-compliance",
+    description: "Create an evidence checklist for access, change management, and monitoring controls.",
+    estimatedMinutes: 12,
+    fields: [
+      { id: "system", type: "text", label: "System / scope", placeholder: "Production platform", required: true },
+      { id: "controlArea", type: "select", label: "Control focus", required: true, options: [
+        { label: "Logical access", value: "access" },
+        { label: "Change management", value: "change" },
+        { label: "Monitoring and response", value: "monitoring" },
+      ], defaultValue: "access" },
+      { id: "automation", type: "slider", label: "Automation level (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+      { id: "retention", type: "select", label: "Evidence retention", required: true, options: [
+        { label: "30 days", value: "30" },
+        { label: "90 days", value: "90" },
+        { label: "180 days", value: "180" },
+      ], defaultValue: "90" },
+      { id: "owner", type: "text", label: "Control owner", placeholder: "Security / Platform", required: true },
+    ],
+    calcFn: (values) => {
+      const automation = clampValue(Number(values.automation) || 1, 1, 5);
+      const retention = Number(values.retention) || 90;
+      const retentionScore = retention >= 180 ? 5 : retention >= 90 ? 4 : 3;
+      const score = clampValue(Math.round(((automation + retentionScore) / 10) * 100), 0, 100);
+      const band = score >= 75 ? "High" : score >= 55 ? "Moderate" : "Low";
+      const focus = values.controlArea || "access";
+      const checklist =
+        focus === "access"
+          ? ["IdP policy export (MFA, admin access)", "Quarterly access review records", "Joiner/mover/leaver tickets", "Privileged access logs"]
+          : focus === "change"
+          ? ["PR approvals + CI logs", "Deployment records", "Rollback/runbook evidence", "Change calendar (if used)"]
+          : ["Alert definitions", "Incident tickets + timelines", "On-call runbooks", "Post-incident actions"];
+      return {
+        scores: { risk: score, automation, retention: retentionScore },
+        riskBand: band,
+        explanation: `Evidence readiness: ${score}/100 (${band}). Focus: ${focus}.`,
+        assumptions: ["This helps organise evidence; it is not an audit opinion.", "Evidence should be reproducible and time-bounded."],
+        nextSteps: [
+          `Create a folder/index for: ${checklist.slice(0, 2).join(", ")}.`,
+          `Add remaining items: ${checklist.slice(2).join(", ")}.`,
+          "Define a monthly check to ensure evidence is still being produced.",
+        ],
+        chartData: [
+          { name: "Automation", value: automation * 20 },
+          { name: "Retention", value: retentionScore * 20 },
+        ],
+      };
+    },
+    charts: [{ id: "soc2-bar", type: "bar", title: "Signals", xKey: "name", yKeys: ["value"] }],
+    exportProfile: { allowPDF: true, allowDOCX: true, allowXLSX: true, allowJSON: true },
+    disclaimer: "Informational only. Not legal advice. Results depend on inputs.",
+  },
+  {
+    slug: "gdpr-dpia-screening",
+    title: "DPIA Screening (Starter)",
+    category: "regulatory-compliance",
+    description: "A quick screening to decide whether a DPIA is likely required and what to document.",
+    estimatedMinutes: 10,
+    fields: [
+      { id: "processing", type: "text", label: "Processing activity", placeholder: "Customer analytics", required: true },
+      { id: "specialCategory", type: "toggle", label: "Special category data involved", defaultValue: false },
+      { id: "scale", type: "slider", label: "Scale (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+      { id: "automated", type: "toggle", label: "Automated decision-making", defaultValue: false },
+      { id: "thirdParties", type: "toggle", label: "Third parties / cross-border transfers", defaultValue: false },
+    ],
+    calcFn: (values) => {
+      const scale = clampValue(Number(values.scale) || 1, 1, 5);
+      const special = Boolean(values.specialCategory);
+      const automated = Boolean(values.automated);
+      const third = Boolean(values.thirdParties);
+      const score = clampValue(scale * 15 + (special ? 25 : 0) + (automated ? 20 : 0) + (third ? 15 : 0), 0, 100);
+      const band = score >= 70 ? "High" : score >= 40 ? "Moderate" : "Low";
+      const likely = score >= 70 || (special && scale >= 3) || automated;
+      return {
+        scores: { risk: score, scale },
+        riskBand: band,
+        explanation: `DPIA screening score ${score}/100 (${band}). ${likely ? "A DPIA is likely appropriate." : "A DPIA may not be required; document rationale."}`,
+        assumptions: ["This is a screening aid; consult your DPO/legal where required.", "Jurisdiction and regulator guidance may vary."],
+        nextSteps: likely
+          ? ["Document purpose, lawful basis, and data minimisation.", "Assess risks to individuals and mitigations.", "Record approvals and review cadence."]
+          : ["Record purpose and lawful basis.", "Capture key mitigations (security, retention).", "Revisit if scope expands."],
+        chartData: [
+          { name: "Scale", value: scale * 20 },
+          { name: "Special category", value: special ? 100 : 0 },
+          { name: "Automated decision", value: automated ? 100 : 0 },
+          { name: "Third parties", value: third ? 100 : 0 },
+        ],
+      };
+    },
+    charts: [{ id: "dpia-bar", type: "bar", title: "Signals", xKey: "name", yKeys: ["value"] }],
+    exportProfile: { allowPDF: true, allowDOCX: true, allowXLSX: true, allowJSON: true },
+    disclaimer: "Informational only. Not legal advice. Results depend on inputs.",
+  },
+  {
+    slug: "slo-error-budget-planner",
+    title: "SLO & Error Budget Planner (Starter)",
+    category: "engineering-systems-design",
+    description: "Turn an availability target into an error budget and response policy.",
+    estimatedMinutes: 10,
+    fields: [
+      { id: "service", type: "text", label: "Service", placeholder: "Checkout API", required: true },
+      { id: "availability", type: "select", label: "Availability target", required: true, options: [
+        { label: "99.0%", value: "99.0" },
+        { label: "99.5%", value: "99.5" },
+        { label: "99.9%", value: "99.9" },
+        { label: "99.95%", value: "99.95" },
+      ], defaultValue: "99.9" },
+      { id: "windowDays", type: "select", label: "SLO window", required: true, options: [
+        { label: "7 days", value: "7" },
+        { label: "28 days", value: "28" },
+        { label: "90 days", value: "90" },
+      ], defaultValue: "28" },
+      { id: "oncall", type: "toggle", label: "On-call coverage exists", defaultValue: true },
+    ],
+    calcFn: (values) => {
+      const target = Number(values.availability) || 99.9;
+      const windowDays = Number(values.windowDays) || 28;
+      const minutes = windowDays * 24 * 60;
+      const errorBudgetMinutes = Math.round(minutes * (1 - target / 100));
+      const score = clampValue(Math.round((target / 100) * 100), 0, 100);
+      const band = target >= 99.9 ? "Moderate" : "Low";
+      const oncall = Boolean(values.oncall);
+      return {
+        scores: { risk: score },
+        riskBand: band,
+        explanation: `Error budget ≈ ${errorBudgetMinutes} minutes over ${windowDays} days for target ${target}%.`,
+        assumptions: ["Availability is measured against a clearly defined indicator (SLI).", "Error budget burn should guide release pacing."],
+        nextSteps: [
+          "Define SLI: what constitutes success for a request or job.",
+          "Choose burn alerts (fast and slow) and an escalation policy.",
+          oncall ? "Run a game day to validate response." : "Establish on-call ownership before committing to tight targets.",
+        ].filter(Boolean) as string[],
+        chartData: [
+          { name: "Target (%)", value: target },
+          { name: "Budget (mins)", value: Math.min(100, Math.round((errorBudgetMinutes / minutes) * 100)) },
+        ],
+        meaning: "Connects reliability targets to operational decisions.",
+        whyItMatters: "Teams ship safer when error budget burn informs change pace.",
+        whenItBreaks: "If the SLI is unclear or measurement is inconsistent.",
+      };
+    },
+    charts: [{ id: "slo-bar", type: "bar", title: "Signals", xKey: "name", yKeys: ["value"] }],
+    exportProfile: { allowPDF: true, allowDOCX: true, allowXLSX: true, allowJSON: true },
+    disclaimer: "Informational only. Not legal advice. Results depend on inputs.",
+  },
+  {
+    slug: "incident-severity-classifier",
+    title: "Incident Severity Classifier (Starter)",
+    category: "engineering-systems-design",
+    description: "Classify severity based on user impact, duration, and data exposure indicators.",
+    estimatedMinutes: 8,
+    fields: [
+      { id: "impactPct", type: "slider", label: "Users impacted (%)", required: true, validation: { min: 0, max: 100 }, defaultValue: 10, step: 5 },
+      { id: "duration", type: "select", label: "Duration", required: true, options: [
+        { label: "Under 15 minutes", value: "short" },
+        { label: "15–60 minutes", value: "medium" },
+        { label: "1–4 hours", value: "long" },
+        { label: "Over 4 hours", value: "critical" },
+      ], defaultValue: "medium" },
+      { id: "dataRisk", type: "toggle", label: "Possible sensitive data exposure", defaultValue: false },
+      { id: "workaround", type: "toggle", label: "Workaround available", defaultValue: false },
+    ],
+    calcFn: (values) => {
+      const impactPct = clampValue(Number(values.impactPct) || 0, 0, 100);
+      const duration = values.duration || "medium";
+      const dataRisk = Boolean(values.dataRisk);
+      const workaround = Boolean(values.workaround);
+      const durationScore = duration === "critical" ? 40 : duration === "long" ? 25 : duration === "medium" ? 15 : 8;
+      const impactScore = impactPct >= 50 ? 40 : impactPct >= 20 ? 25 : impactPct >= 5 ? 15 : 8;
+      const score = clampValue(durationScore + impactScore + (dataRisk ? 25 : 0) - (workaround ? 10 : 0), 0, 100);
+      const severity = score >= 80 ? "SEV-1" : score >= 55 ? "SEV-2" : score >= 30 ? "SEV-3" : "SEV-4";
+      const band = score >= 80 ? "Critical" : score >= 55 ? "High" : score >= 30 ? "Moderate" : "Low";
+      return {
+        scores: { risk: score },
+        riskBand: band,
+        explanation: `Suggested severity: ${severity} (${band}). Score ${score}/100 based on impact and duration${dataRisk ? ", with data risk" : ""}.`,
+        assumptions: ["Use your org’s definitions if they exist.", "Severity should be adjusted with context (regulatory, customer type)."],
+        nextSteps: [
+          severity === "SEV-1" ? "Start incident command, customer comms, and executive updates." : "Assign incident lead and run the checklist.",
+          dataRisk ? "Engage security/privacy and preserve evidence." : "Confirm no data exposure and document checks.",
+          "Capture timeline and follow-up actions for learning.",
+        ],
+        chartData: [
+          { name: "Impact", value: impactScore },
+          { name: "Duration", value: durationScore },
+          { name: "Data risk", value: dataRisk ? 25 : 0 },
+          { name: "Workaround", value: workaround ? -10 : 0 },
+        ],
+      };
+    },
+    charts: [{ id: "sev-bar", type: "bar", title: "Components", xKey: "name", yKeys: ["value"] }],
+    exportProfile: { allowPDF: true, allowDOCX: true, allowXLSX: true, allowJSON: true },
+    disclaimer: "Informational only. Not legal advice. Results depend on inputs.",
+  },
+  {
+    slug: "operating-model-raci-builder",
+    title: "Operating Model RACI Builder (Starter)",
+    category: "strategy-operating-models",
+    description: "Create a simple RACI for a capability or process and expose ownership gaps.",
+    estimatedMinutes: 10,
+    fields: [
+      { id: "capability", type: "text", label: "Capability / process", placeholder: "Change management", required: true },
+      { id: "rolesCount", type: "slider", label: "Number of roles involved (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+      { id: "clarity", type: "slider", label: "Role clarity (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+      { id: "decisionRights", type: "slider", label: "Decision rights clarity (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+      { id: "singleOwner", type: "toggle", label: "Single accountable owner exists", defaultValue: false },
+    ],
+    calcFn: (values) => {
+      const roles = clampValue(Number(values.rolesCount) || 1, 1, 5);
+      const clarity = clampValue(Number(values.clarity) || 1, 1, 5);
+      const rights = clampValue(Number(values.decisionRights) || 1, 1, 5);
+      const owner = Boolean(values.singleOwner);
+      const score = clampValue(Math.round(((clarity + rights + (owner ? 2 : 0)) / 12) * 100) - (roles >= 5 ? 8 : 0), 0, 100);
+      const band = score >= 75 ? "High" : score >= 55 ? "Moderate" : "Low";
+      return {
+        scores: { risk: score, clarity, rights },
+        riskBand: band,
+        explanation: `Operating model clarity: ${score}/100 (${band}). Roles ${roles}/5; single owner ${owner ? "yes" : "no"}.`,
+        assumptions: ["RACI works best when kept small and reviewed periodically.", "Accountability should be singular for core outcomes."],
+        nextSteps: [
+          owner ? "Publish the accountable owner and escalation route." : "Assign a single accountable owner for the outcome.",
+          "Define decision boundaries (what can be decided within the team vs escalated).",
+          "Run a 30-minute review with the people named in the RACI.",
+        ],
+        chartData: [
+          { name: "Clarity", value: clarity * 20 },
+          { name: "Decision rights", value: rights * 20 },
+          { name: "Single owner", value: owner ? 100 : 0 },
+        ],
+      };
+    },
+    charts: [{ id: "raci-bar", type: "bar", title: "Signals", xKey: "name", yKeys: ["value"] }],
+    exportProfile: { allowPDF: true, allowDOCX: true, allowXLSX: true, allowJSON: true },
+    disclaimer: "Informational only. Not legal advice. Results depend on inputs.",
+  },
+  {
+    slug: "north-star-metric-definition",
+    title: "North Star Metric Definition (Starter)",
+    category: "strategy-operating-models",
+    description: "Define a north star metric with guardrails and anti-gaming checks.",
+    estimatedMinutes: 10,
+    fields: [
+      { id: "product", type: "text", label: "Product / service", placeholder: "Learning platform", required: true },
+      { id: "metric", type: "text", label: "Candidate north star metric", placeholder: "Weekly active learners completing a lab", required: true },
+      { id: "decisionUse", type: "slider", label: "Decision usefulness (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 4, step: 1 },
+      { id: "measurability", type: "slider", label: "Measurability (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+      { id: "gameable", type: "slider", label: "Gaming risk (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+    ],
+    calcFn: (values) => {
+      const decision = clampValue(Number(values.decisionUse) || 1, 1, 5);
+      const measurable = clampValue(Number(values.measurability) || 1, 1, 5);
+      const gameable = clampValue(Number(values.gameable) || 1, 1, 5);
+      const score = clampValue(Math.round(((decision + measurable) / 10) * 100 - (gameable - 1) * 10), 0, 100);
+      const band = score >= 75 ? "High" : score >= 55 ? "Moderate" : "Low";
+      return {
+        scores: { risk: score, decision, measurable },
+        riskBand: band,
+        explanation: `North star quality: ${score}/100 (${band}). Higher gaming risk reduces the score.`,
+        assumptions: ["A north star metric should map to user value and business value.", "Guardrails reduce perverse incentives."],
+        nextSteps: [
+          "Define 2–3 guardrail metrics (quality, reliability, cost).",
+          "Document exclusions (internal users, bots, test traffic).",
+          "Create an anti-gaming check (e.g. completion quality threshold).",
+        ],
+        chartData: [
+          { name: "Decision usefulness", value: decision * 20 },
+          { name: "Measurability", value: measurable * 20 },
+          { name: "Gaming risk", value: gameable * 20 },
+        ],
+      };
+    },
+    charts: [{ id: "northstar-bar", type: "bar", title: "Signals", xKey: "name", yKeys: ["value"] }],
+    exportProfile: { allowPDF: true, allowDOCX: true, allowXLSX: true, allowJSON: true },
+    disclaimer: "Informational only. Not legal advice. Results depend on inputs.",
+  },
+  {
+    slug: "experiment-hypothesis-checker",
+    title: "Experiment Hypothesis Checker (Starter)",
+    category: "analytics-decision-making",
+    description: "Stress-test a hypothesis for clarity, measurability, and decision impact.",
+    estimatedMinutes: 8,
+    fields: [
+      { id: "hypothesis", type: "textarea", label: "Hypothesis", placeholder: "If we reduce checkout steps, conversion will increase", required: true },
+      { id: "metricDefined", type: "toggle", label: "Primary metric defined", defaultValue: true },
+      { id: "baselineKnown", type: "toggle", label: "Baseline known", defaultValue: false },
+      { id: "sample", type: "select", label: "Expected sample size", required: true, options: [
+        { label: "Small", value: "small" },
+        { label: "Medium", value: "medium" },
+        { label: "Large", value: "large" },
+      ], defaultValue: "medium" },
+      { id: "decisionImpact", type: "slider", label: "Decision impact (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 4, step: 1 },
+    ],
+    calcFn: (values) => {
+      const impact = clampValue(Number(values.decisionImpact) || 1, 1, 5);
+      const metric = Boolean(values.metricDefined);
+      const baseline = Boolean(values.baselineKnown);
+      const sample = values.sample || "medium";
+      const sampleScore = sample === "large" ? 5 : sample === "medium" ? 4 : 3;
+      const score = clampValue(Math.round(((impact + sampleScore + (metric ? 2 : 0) + (baseline ? 1 : 0)) / 13) * 100), 0, 100);
+      const band = score >= 75 ? "High" : score >= 55 ? "Moderate" : "Low";
+      return {
+        scores: { risk: score, impact, sample: sampleScore },
+        riskBand: band,
+        explanation: `Hypothesis readiness: ${score}/100 (${band}).`,
+        assumptions: ["This does not compute power; it checks readiness signals.", "Baseline and metric definition reduce wasted experiments."],
+        nextSteps: [
+          metric ? "Write the metric definition (window, exclusions)." : "Define a single primary metric and how it is calculated.",
+          baseline ? "Set a minimum detectable effect and decision rule." : "Capture baseline and define a minimum detectable effect.",
+          "Add guardrails (e.g. error rate, latency) and stopping rules.",
+        ],
+        chartData: [
+          { name: "Decision impact", value: impact * 20 },
+          { name: "Sample signal", value: sampleScore * 20 },
+          { name: "Metric defined", value: metric ? 100 : 0 },
+          { name: "Baseline known", value: baseline ? 100 : 0 },
+        ],
+      };
+    },
+    charts: [{ id: "experiment-bar", type: "bar", title: "Signals", xKey: "name", yKeys: ["value"] }],
+    exportProfile: { allowPDF: true, allowDOCX: true, allowXLSX: true, allowJSON: true },
+    disclaimer: "Informational only. Not legal advice. Results depend on inputs.",
+  },
+  {
+    slug: "metric-guardrail-builder",
+    title: "Metric Guardrail Builder (Starter)",
+    category: "analytics-decision-making",
+    description: "Define guardrails and anti-gaming checks for a KPI or north star metric.",
+    estimatedMinutes: 9,
+    fields: [
+      { id: "metricName", type: "text", label: "Primary metric", placeholder: "Activation rate (7d)", required: true },
+      { id: "guardrailsCount", type: "slider", label: "Number of guardrails (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+      { id: "qualitySignal", type: "toggle", label: "Quality signal included", defaultValue: true },
+      { id: "costSignal", type: "toggle", label: "Cost signal included", defaultValue: false },
+      { id: "latencySignal", type: "toggle", label: "Reliability/latency signal included", defaultValue: true },
+    ],
+    calcFn: (values) => {
+      const count = clampValue(Number(values.guardrailsCount) || 1, 1, 5);
+      const q = Boolean(values.qualitySignal);
+      const c = Boolean(values.costSignal);
+      const l = Boolean(values.latencySignal);
+      const coverage = (q ? 1 : 0) + (c ? 1 : 0) + (l ? 1 : 0);
+      const score = clampValue(Math.round(((count + coverage * 2) / 11) * 100), 0, 100);
+      const band = score >= 75 ? "High" : score >= 55 ? "Moderate" : "Low";
+      return {
+        scores: { risk: score },
+        riskBand: band,
+        explanation: `Guardrail strength: ${score}/100 (${band}). Coverage signals: ${coverage}/3.`,
+        assumptions: ["Guardrails should be monitored with the primary metric.", "Anti-gaming checks should be reviewed after changes."],
+        nextSteps: [
+          "Write definitions for each guardrail (calculation + threshold).",
+          "Add an anti-gaming check (e.g. minimum quality threshold).",
+          "Document ownership and escalation route when guardrails breach.",
+        ],
+        chartData: [
+          { name: "Guardrails count", value: count * 20 },
+          { name: "Quality", value: q ? 100 : 0 },
+          { name: "Cost", value: c ? 100 : 0 },
+          { name: "Reliability", value: l ? 100 : 0 },
+        ],
+      };
+    },
+    charts: [{ id: "guardrail-bar", type: "bar", title: "Signals", xKey: "name", yKeys: ["value"] }],
+    exportProfile: { allowPDF: true, allowDOCX: true, allowXLSX: true, allowJSON: true },
+    disclaimer: "Informational only. Not legal advice. Results depend on inputs.",
+  },
+  {
     slug: "phishing-email-triage",
     title: "Phishing Email Triage",
     category: "cybersecurity-architecture",

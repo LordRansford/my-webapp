@@ -63,6 +63,10 @@
   .site-footer {
     background: #0b1220;
   }
+
+  .pill {
+    background: rgba(255, 255, 255, 0.06);
+  }
 }
 
 body {
@@ -327,7 +331,8 @@ a {
 
 .button.primary {
   background: linear-gradient(120deg, var(--accent), var(--accent-2));
-  color: #071022;
+  /* Ensure strong contrast on the gradient in both light + dark contexts */
+  color: #ffffff;
   box-shadow: 0 18px 40px rgba(122, 232, 199, 0.35);
 }
 
@@ -386,8 +391,8 @@ a {
 }
 
 .rn-tab-active {
-  background: rgba(0, 122, 255, 0.14);
-  border-color: rgba(0, 122, 255, 0.35);
+  background: rgba(0, 122, 255, 0.18);
+  border-color: rgba(0, 122, 255, 0.45);
   color: var(--text-heading);
 }
 
@@ -398,6 +403,24 @@ a {
   margin-top: 0.15rem;
   border-radius: 999px;
   background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+
+@media (prefers-color-scheme: dark) {
+  /* Ensure tabs never end up dark-on-dark when nested inside dark surfaces. */
+  .rn-tabs-inner {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(148, 163, 184, 0.22);
+  }
+
+  .rn-tab:hover {
+    background: rgba(59, 130, 246, 0.18);
+    border-color: rgba(59, 130, 246, 0.3);
+  }
+
+  .rn-tab-active {
+    background: rgba(59, 130, 246, 0.24);
+    border-color: rgba(59, 130, 246, 0.42);
+  }
 }
 
 .section {
@@ -567,8 +590,8 @@ a {
   gap: 0.3rem;
   border-radius: 999px;
   padding: 0.35rem 0.7rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  background: rgba(15, 23, 42, 0.04);
   font-size: 0.95rem;
   color: var(--text);
 }

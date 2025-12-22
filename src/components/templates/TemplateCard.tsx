@@ -8,11 +8,11 @@ type TemplateCardProps = {
 export function TemplateCard({ template }: TemplateCardProps) {
   const summary = template.shortDescription || template.description || "";
   return (
-    <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:shadow-md">
+    <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:shadow-md">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h3 className="text-base font-semibold text-slate-900">{template.title}</h3>
-          <p className="text-sm text-slate-600">{summary}</p>
+          <h3 className="text-lg font-semibold text-slate-900">{template.title}</h3>
+          <p className="mt-1 text-base text-slate-600">{summary}</p>
         </div>
         <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">Preview only</span>
       </div>
