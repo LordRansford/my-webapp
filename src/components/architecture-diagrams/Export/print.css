@@ -1,0 +1,45 @@
+/* Print-only layout for Architecture Diagram Studio exports. */
+@media print {
+  .rn-print-hide {
+    display: none !important;
+  }
+
+  .rn-print-page {
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  .rn-print-sheet {
+    page-break-after: always;
+  }
+
+  .rn-print-title {
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    font-size: 14pt;
+    font-weight: 700;
+    margin: 0 0 6pt 0;
+  }
+
+  .rn-print-meta {
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    font-size: 10pt;
+    color: #334155;
+    margin: 0 0 12pt 0;
+  }
+
+  .rn-print-footer {
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    font-size: 9pt;
+    color: #334155;
+    margin-top: 10pt;
+  }
+
+  .rn-print-diagram svg {
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+
+

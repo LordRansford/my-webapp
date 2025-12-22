@@ -89,6 +89,7 @@ export default function MermaidRenderer({
   mermaidText,
   ariaLabel = "Diagram preview",
   maxChars = 30_000,
+  onRenderedSvg,
 }) {
   const containerRef = useRef(null);
   const [status, setStatus] = useState({ state: "idle", message: "" });
@@ -128,6 +129,7 @@ export default function MermaidRenderer({
 
         if (cancelled) return;
         containerRef.current.innerHTML = sanitized;
+        if (typeof onRenderedSvg === "function") onRenderedSvg(sanitized);
         setStatus({ state: "ready", message: "" });
       } catch (err) {
         if (cancelled) return;
@@ -138,7 +140,7 @@ export default function MermaidRenderer({
     return () => {
       cancelled = true;
     };
-  }, [safeInput]);
+  }, [safeInput, onRenderedSvg]);
 
   return (
     <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
