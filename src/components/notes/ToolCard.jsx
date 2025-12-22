@@ -132,9 +132,6 @@ export default function ToolCard({
           <p className="m-0 text-sm text-slate-700">
             Tool coming online. This card is intentionally visible so the section is not a blank gap.
           </p>
-          <p className="mt-2 text-xs text-slate-500">
-            {resolvedId ? `Tool id: ${resolvedId}` : "Tool id not set."}
-          </p>
         </div>
       ) : null}
     </>
@@ -144,6 +141,8 @@ export default function ToolCard({
     <LazyMotion features={domAnimation}>
       <m.section
         {...reducedMotionProps(reduce, motionPresets.slideUp)}
+        data-tool-id={resolvedId || ""}
+        data-tool-title={title || ""}
         className="notes-tool-card my-6 w-full rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:border-slate-300"
       >
         {href ? (

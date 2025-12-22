@@ -36,13 +36,19 @@ import BuildYourOwnQuiz from "@/components/notes/tools/ai/summary/BuildYourOwnQu
 
 <CPDTracker courseId="ai" levelId="summary" estimatedHours={4} />
 
-You made it through Foundations, Intermediate and Advanced. This page is a relaxed recap. Use it to test what stuck, spot gaps, and get playful with the ideas before you move on.
+You made it through Foundations, Intermediate and Advanced. This page is a calm recap with a few games and labs. Use it to test what stuck, spot gaps, and build the kind of confidence that comes from knowing what you do not know yet.
 
 ## Quick recap
 
 <SectionProgressToggle courseId="ai" levelId="summary" sectionId="ai-summary-concepts" />
 
-Across the track you saw how data turns into tokens and features, how models learn and overfit, and how agents and governance keep AI useful in the real world. This summary keeps the same short sentences and mixes in games so you can rehearse quickly.
+Across the track you saw how messy data becomes something a model can use, how models learn patterns and also learn the wrong lessons, and how real products wrap AI in systems, monitoring, and rules.
+
+Foundations gave you the vocabulary: data, labels, features, tokens, training, and evaluation. Intermediate asked the harder questions: what happens when the world changes, when users behave strategically, when your data is biased, or when the cost of a mistake is uneven.
+
+The key shift is this: traditional software is mostly deterministic, which means you can reason about exact behaviour from the code. AI systems are probabilistic, which means you manage distributions, uncertainty, and failure modes. You do not ship a single correct answer. You ship a system that is usually helpful, sometimes wrong, and always in need of feedback and boundaries.
+
+If you remember one practical idea, make it this. Always ask what the model is optimising, what it is blind to, and what you will do when it fails quietly.
 
 <DiagramBlock
   title="The AI journey in one picture"
@@ -70,9 +76,13 @@ Across the track you saw how data turns into tokens and features, how models lea
 
 ## Games and labs hub
 
-These drills are short. Set a timer, play a couple, and notice which ideas feel strong and which feel fuzzy. Everything is CPD aware so your tracker updates as you explore.
+These drills are short. Set a timer, play a couple, and notice which ideas feel strong and which feel fuzzy. Keep it light. The value is in the small moments where your intuition improves.
+
+As you play, connect each result to a real system: search ranking, recommendations, content moderation, summarisation, customer support automation, or a decision assist tool.
 
 ### Concept games
+
+Before you start: this is not about memorising definitions. It is about being able to explain an idea clearly enough that you can spot misuse in a meeting.
 
 <ToolCard
   id="ai-summary-flash-cards"
@@ -86,6 +96,10 @@ These drills are short. Set a timer, play a couple, and notice which ideas feel 
   <ConceptMatchGame />
 </ToolCard>
 
+After you finish: pick one concept you struggled with and write a one sentence explanation for future you. Then add the real world tie in. Where would this show up in search, recommendations, moderation, or automation.
+
+Before you start: treat this like a sanity check for your mental model. In real work, the odd one out is often the hidden assumption that breaks your system.
+
 <ToolCard
   id="ai-summary-odd-one-out"
   title="Odd one out"
@@ -98,9 +112,13 @@ These drills are short. Set a timer, play a couple, and notice which ideas feel 
   <OddOneOutGame />
 </ToolCard>
 
+After you finish: ask what decision this improves. For example, would you change the data, change the metric, add a human review step, or decide not to automate this at all.
+
 ### Scenario labs
 
 <SectionProgressToggle courseId="ai" levelId="summary" sectionId="ai-summary-scenarios" />
+
+Before you start: this is the practical skill. Reading an AI story, spotting what is risky, and choosing the smallest change that improves outcomes.
 
 <ToolCard
   id="ai-summary-scenario-triage"
@@ -114,6 +132,10 @@ These drills are short. Set a timer, play a couple, and notice which ideas feel 
   <ScenarioClinicGame />
 </ToolCard>
 
+After you finish: name the system you were implicitly building. Was it search, recommendations, moderation, or automation. Then write down one quiet failure mode you would monitor for, like drift, bias, or users gaming the inputs.
+
+Before you start: focus on building a small system you could actually run, not a magic brain. You are practising scoping, data choices, and where guardrails belong.
+
 <ToolCard
   id="ai-summary-mini-project"
   title="Design a tiny AI project"
@@ -126,9 +148,13 @@ These drills are short. Set a timer, play a couple, and notice which ideas feel 
   <MiniProjectDesigner />
 </ToolCard>
 
+After you finish: imagine you are shipping it into a real product. Who owns it. What is the rollback plan. What happens when users are unhappy. Those questions are the bridge into more advanced AI work.
+
 ### Build your own challenge
 
 <SectionProgressToggle courseId="ai" levelId="summary" sectionId="ai-summary-create" />
+
+Before you start: teaching is a cheat code. If you can write a good question, you probably understand the idea. If you cannot, you just found your next learning target.
 
 <ToolCard
   id="ai-summary-build-your-own-quiz"
@@ -141,6 +167,8 @@ These drills are short. Set a timer, play a couple, and notice which ideas feel 
 >
   <BuildYourOwnQuiz />
 </ToolCard>
+
+After you finish: add one question that connects to a real system (search, recommendations, moderation, automation) and one question that tests judgement (when to add humans, when to stop the rollout, when not to use AI).
 
 ## Final reflection and next steps
 
@@ -168,6 +196,14 @@ Use these reflection prompts to close the loop:
 - What part of AI feels most interesting to you?
 - What part still feels confusing?
 - What is one small thing you could try at work or at home?
+
+<Callout variant="note" title="Responsible AI reflection">
+Keep it real. Where could AI fail quietly in your context, such as wrong but confident answers, missing edge cases, or harmful ranking.
+
+How would bias and data quality show up in practice, such as who gets misclassified, who gets ignored, and whose language is treated as suspicious.
+
+And the most important question: when should you not use AI at all, because the cost of mistakes, the lack of data, or the need for explainability makes automation the wrong move.
+</Callout>
 
 <Callout variant="note" title="Next moves">
 Revisit any section that felt shaky, then head back to the AI overview or into your CPD dashboard to track the hours you want to invest next.

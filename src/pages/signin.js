@@ -24,7 +24,7 @@ export default function SignInPage({ providers }) {
           Sign in is optional. If you do, I can save progress across devices and keep your CPD record consistent.
         </p>
         <p className="text-sm text-slate-700">
-          Passwordless only: magic link email or Google or GitHub. No passwords to manage.
+          Google sign in only. No passwords to manage.
         </p>
 
         <div className="grid gap-2 sm:grid-cols-2">

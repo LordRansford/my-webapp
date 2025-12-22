@@ -18,21 +18,21 @@ import PrivilegeEscalationGame from "@/tools/cybersecurity/PrivilegeEscalationGa
 const recapCards = [
   {
     title: "Foundations",
-    body: "Data, packets, phishing tells, passwords and quick risk habits with hands-on labs. Human, plain language, no jargon.",
+    body: "You built the shared language: how data moves, how people get tricked, where accounts fail, and what basic controls actually do. The surprise for many people is that most incidents start as normal work, not movie hacking.",
     href: "/cybersecurity/beginner",
     icon: "shield",
     ring: "border-emerald-100 bg-emerald-50 text-emerald-700",
   },
   {
     title: "Applied",
-    body: "Threat thinking, web auth flows, common vulns, logs, and risk trade-offs. More scenarios, still grounded.",
+    body: "You moved from facts to judgement: threat modelling, identity flows, common vulnerabilities, and how logs turn into a story you can act on. What gets misunderstood in real teams is that scanning is not security. It is just a list until you make trade offs and fix things.",
     href: "/cybersecurity/intermediate",
     icon: "target",
     ring: "border-amber-100 bg-amber-50 text-amber-700",
   },
   {
     title: "Practice and Strategy",
-    body: "Secure architecture, crypto in practice, DevSecOps, ops, risk and governance tied together for real systems.",
+    body: "You connected the system view: architecture choices, crypto in practice, detection and response, and governance that makes improvements stick. The most useful shift here is this: security becomes a set of decisions you can explain, not a pile of tools you can buy.",
     href: "/cybersecurity/advanced",
     icon: "layers",
     ring: "border-blue-100 bg-blue-50 text-blue-700",
@@ -156,10 +156,10 @@ export default function CyberSummary() {
             <span className="chip chip--mint">Well done</span>
           </div>
           <p className="mt-3 text-base text-gray-800 leading-relaxed">
-            Well done for reaching the end of the core track. This page is your recap and a playful assessment hub. If you made it here, you already know more than you think.
+            Well done for reaching the end of the core track. This page is your recap and a playful assessment hub. The goal is not perfect recall. The goal is a calmer, faster &quot;what matters here&quot; instinct.
           </p>
           <p className="text-base text-gray-800 leading-relaxed">
-            Drop in after each level or months later to reconnect the dots between data, systems, attackers, defenders and everyday decisions.
+            Drop in after each level or months later to reconnect the dots between data, systems, attackers, defenders and everyday decisions. When time and budget are limited, the winning move is usually clarity: what you are protecting, who owns it, and which few controls buy you the most risk reduction.
           </p>
         </div>
       </header>
@@ -197,7 +197,9 @@ export default function CyberSummary() {
           </span>
           <h2 className="text-xl font-semibold text-gray-900">Quick recap of the journey</h2>
         </div>
-        <p className="text-base text-gray-700">Here is a one paragraph recap of each level. Click through if you want to revisit details.</p>
+        <p className="text-base text-gray-700">
+          Here is a one paragraph recap of each level. Notice how the thinking evolves from &quot;what is this thing&quot; to &quot;what decision do I make next&quot;. Click through if you want to revisit details.
+        </p>
         <div className="grid gap-4 md:grid-cols-3">
           {recapCards.map((card) => (
             <div key={card.title} className="rounded-2xl border border-gray-200 bg-white/85 p-4 shadow-sm backdrop-blur">
@@ -296,9 +298,11 @@ export default function CyberSummary() {
             <div>
               <h2 className="text-xl font-semibold text-gray-900">Games and playful practice</h2>
               <p className="text-base text-gray-700">
-                These games are here to help you revisit key ideas in a low pressure way. None record scores or personal details; just play, notice what feels fuzzy, and jump back to the notes if needed.
+                These games are here to help you revisit key ideas in a low pressure way. None record scores or personal details. Just play, notice what feels fuzzy, and jump back to the notes if needed.
               </p>
-              <p className="text-base text-gray-700">You can play them alone, with friends, or as quick warm ups in team sessions.</p>
+              <p className="text-base text-gray-700">
+                The point is purposeful repetition. Each game reinforces a decision you will make in the real world: what control to choose, where trust changes, what to log, and how to limit privilege.
+              </p>
             </div>
           </div>
           <div className="mt-4">
@@ -313,7 +317,17 @@ export default function CyberSummary() {
               level: "Warm up",
               minutes: 5,
               summary: "Choose the right tool for a work document, a login flow, or a shared file.",
-              component: <CryptoMisuseSimulator storageKey="cyber_game_crypto_misuse" />,
+              component: (
+                <div className="space-y-3">
+                  <p className="text-sm text-slate-800">
+                    Skill focus: picking the right primitive for the job, not the coolest sounding one. You are practising confidentiality vs integrity vs authenticity as a decision.
+                  </p>
+                  <CryptoMisuseSimulator storageKey="cyber_game_crypto_misuse" />
+                  <p className="text-sm text-slate-800">
+                    Reflection: where would your organisation pick the wrong option because it is convenient. What standard or default would prevent that mistake without slowing delivery.
+                  </p>
+                </div>
+              ),
             },
             {
               id: "trust_boundary",
@@ -321,7 +335,17 @@ export default function CyberSummary() {
               level: "Core",
               minutes: 6,
               summary: "Mark where trust changes in logins, shared folders, or admin pages.",
-              component: <TrustBoundaryExplorer storageKey="cyber_game_trust_boundary" />,
+              component: (
+                <div className="space-y-3">
+                  <p className="text-sm text-slate-800">
+                    Skill focus: seeing where assumptions change. Trust boundaries are where controls and logging need to get serious.
+                  </p>
+                  <TrustBoundaryExplorer storageKey="cyber_game_trust_boundary" />
+                  <p className="text-sm text-slate-800">
+                    Reflection: which boundary in your real systems is currently treated as &quot;internal so it is fine&quot;. What would you do first: tighten access, add checks, or improve detection.
+                  </p>
+                </div>
+              ),
             },
             {
               id: "logging_blind_spot",
@@ -329,7 +353,17 @@ export default function CyberSummary() {
               level: "Core",
               minutes: 6,
               summary: "Tune logging around a suspicious email login and see what you miss.",
-              component: <LoggingBlindSpotSimulator storageKey="cyber_game_logging_blind_spot" />,
+              component: (
+                <div className="space-y-3">
+                  <p className="text-sm text-slate-800">
+                    Skill focus: choosing logs that support decisions under pressure. You are learning the difference between noise, signals, and missing evidence.
+                  </p>
+                  <LoggingBlindSpotSimulator storageKey="cyber_game_logging_blind_spot" />
+                  <p className="text-sm text-slate-800">
+                    Reflection: if this happened tomorrow, what could you prove from your current logs. Name the first two log sources you would require to make incident handling less guessy.
+                  </p>
+                </div>
+              ),
             },
             {
               id: "privilege_escalation",
@@ -337,10 +371,25 @@ export default function CyberSummary() {
               level: "Stretch",
               minutes: 7,
               summary: "Assign roles for a small team or a kids gaming account and spot gaps.",
-              component: <PrivilegeEscalationGame storageKey="cyber_game_privilege_escalation" />,
+              component: (
+                <div className="space-y-3">
+                  <p className="text-sm text-slate-800">
+                    Skill focus: least privilege in human terms: who can do what, and what happens when an account is compromised.
+                  </p>
+                  <PrivilegeEscalationGame storageKey="cyber_game_privilege_escalation" />
+                  <p className="text-sm text-slate-800">
+                    Reflection: which role in your organisation is overpowered. What would you change first: remove permissions, add approval steps, or improve monitoring for the risky actions.
+                  </p>
+                </div>
+              ),
             },
               ]}
             />
+          </div>
+          <div className="mt-4 rounded-2xl border border-slate-200 bg-white/80 p-4">
+            <p className="text-base text-slate-800 leading-relaxed">
+              Quick nudge: when a game result surprises you, that is not failure. It is a signal. Go find the assumption you were using, then decide what control, log, or process would protect you when that assumption is wrong.
+            </p>
           </div>
           <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
             <div className="flex items-center gap-2">
@@ -400,7 +449,13 @@ export default function CyberSummary() {
             </div>
           </div>
           <div className="mt-3">
+            <p className="text-base text-gray-700">
+              Skill focus: spotting when a problem is not purely technical. These prompts reinforce decision making under uncertainty, where you balance safety, speed, user impact, and evidence.
+            </p>
             <CrossDomainGames />
+            <p className="mt-3 text-base text-gray-700">
+              Reflection: what did you prioritise, and why. If you were advising a team, what would you write down as the rule of thumb so others can make the same call.
+            </p>
           </div>
         </div>
       </section>
@@ -444,6 +499,34 @@ export default function CyberSummary() {
             "cross_game_autonomous_defence",
           ]}
         />
+      </section>
+
+      <section className="mt-10 space-y-3">
+        <div className="rounded-3xl border border-slate-200 bg-white/90 p-4 shadow-sm backdrop-blur">
+          <div className="flex items-start gap-3">
+            <span
+              className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-emerald-100 bg-emerald-50 text-emerald-700"
+              role="img"
+              aria-label="Reflection prompt"
+            >
+              <SafeIcon name="book" size={20} color="currentColor" style={{ marginRight: 0 }} />
+            </span>
+            <div className="space-y-2">
+              <h2 className="text-xl font-semibold text-gray-900">CPD reflection prompt</h2>
+              <p className="text-base text-gray-800 leading-relaxed">
+                If you had one hour next week to make a real organisation safer, what would you change first, and what would you deliberately not do yet.
+              </p>
+              <ul className="list-disc space-y-2 pl-5 text-base text-gray-800">
+                <li>Which two controls would you prioritise because they reduce real risk quickly.</li>
+                <li>Which risk would you now notice immediately in a meeting or design review.</li>
+                <li>What evidence or logs would you insist on so incidents become manageable, not mysterious.</li>
+              </ul>
+              <p className="text-base text-gray-800 leading-relaxed">
+                Bonus: write the decision in one sentence, then write the trade off you are accepting. That is the skill that scales.
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
 
       <div className="mt-10">

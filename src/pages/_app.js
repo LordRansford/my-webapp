@@ -4,6 +4,9 @@ import { Manrope, Space_Grotesk, JetBrains_Mono, Inter } from "next/font/google"
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { NotesProvider } from "@/components/notes/NotesProvider";
 import AuthSessionProvider from "@/components/auth/SessionProvider";
+import dynamic from "next/dynamic";
+
+const AssistantShell = dynamic(() => import("@/components/assistants/AssistantShell"), { ssr: false });
 
 const display = Space_Grotesk({
   subsets: ["latin"],
@@ -43,6 +46,7 @@ export default function App({ Component, pageProps }) {
       <AuthSessionProvider>
         <NotesProvider>
           <Component {...pageProps} />
+          <AssistantShell />
         </NotesProvider>
       </AuthSessionProvider>
       <SpeedInsights />

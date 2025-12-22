@@ -20,6 +20,7 @@ export default function AccountPage() {
   const [plan, setPlan] = useState<string>("free");
   const [analyticsSummary, setAnalyticsSummary] = useState<any>(null);
   const [learningSummary, setLearningSummary] = useState<any>(null);
+  const [credits, setCredits] = useState<number | null>(null);
   const [savingConsent, setSavingConsent] = useState(false);
   const [consent, setConsent] = useState<ConsentState>({
     termsAccepted: false,
@@ -63,6 +64,10 @@ export default function AccountPage() {
       .then((r) => r.json())
       .then((d) => setLearningSummary(d))
       .catch(() => setLearningSummary(null));
+    fetch("/api/credits/status")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => setCredits(typeof d?.balance === "number" ? d.balance : 0))
+      .catch(() => setCredits(0));
   }, [isAuthed, consent.cpdDataUseAccepted]);
 
   const saveConsent = async (next: ConsentState) => {
@@ -162,12 +167,16 @@ export default function AccountPage() {
             <li>
               <strong>Tier</strong>: {tierLabel}
             </li>
+            <li>
+              <strong>Credits</strong>: {credits ?? 0}
+            </li>
             {learningSummary?.displayName ? (
               <li>
                 <strong>Name</strong>: {learningSummary.displayName}
               </li>
             ) : null}
           </ul>
+          <p className="muted">Payments coming soon. Credits are currently inactive.</p>
           <div className="mt-4 flex flex-wrap gap-3">
             <Link href="/account/history" className="button">
               View history

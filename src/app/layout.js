@@ -3,6 +3,7 @@ import "katex/dist/katex.min.css";
 import { Manrope, Space_Grotesk, JetBrains_Mono, Inter } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Providers } from "./providers";
+import AssistantsMount from "./AssistantsMount";
 
 const display = Space_Grotesk({
   subsets: ["latin"],
@@ -45,7 +46,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable} ${inter.variable}`}>
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <AssistantsMount />
+        </Providers>
         <SpeedInsights />
       </body>
     </html>

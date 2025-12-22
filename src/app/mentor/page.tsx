@@ -31,7 +31,7 @@ export default function MentorPage() {
       const res = await fetch("/api/mentor/query", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question }),
+        body: JSON.stringify({ question, pageUrl: window.location.pathname || "/mentor" }),
       });
       const data = await res.json();
       if (!res.ok) {

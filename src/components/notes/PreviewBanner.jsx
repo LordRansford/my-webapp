@@ -49,8 +49,8 @@ export default function PreviewBanner() {
             overflow: "hidden",
           }}
         >
-          This site is an early preview of Ransford’s Notes. Content, tools and layouts are still evolving. Feedback is very welcome and
-          genuinely helps improve things.
+          This site is an open access preview of Ransford’s Notes. Content and tools are still evolving based on feedback. CPD accreditation
+          is planned but not yet submitted.
         </p>
 
         <div className="flex shrink-0 items-center gap-2">

@@ -3,6 +3,18 @@
 Premium, security-first learning hub for architecture, cybersecurity, and AI. Built with Next.js, MDX-driven
 courses, and interactive browser-only labs (RSA keygen, Python WASM sandbox, entropy checks).
 
+## Scope and guardrails
+
+The canonical scope and architecture constraints live in `docs/scope.md`.
+
+## How to contribute without breaking scope
+
+- Keep core learning content accessible without accounts.
+- Do not introduce paywalls, subscriptions, or credit metering unless there is an explicitly approved scoped plan.
+- Do not move secrets, billing logic, or privileged tokens into client code.
+- Prefer small, reversible changes with clear acceptance checks (lint, build, and mobile usability).
+- If in doubt, update `docs/scope.md` first and propose a bounded plan.
+
 ## Security and data handling
 
 - Dev and AI studios are educational sandboxes, not production. Do not upload real customer data or secrets.
