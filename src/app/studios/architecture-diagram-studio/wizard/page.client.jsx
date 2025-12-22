@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import WizardShell from "@/components/architecture-diagrams/Wizard/WizardShell";
 import WizardStepper from "@/components/architecture-diagrams/Wizard/WizardStepper";
 import StepGoal from "@/components/architecture-diagrams/Wizard/steps/StepGoal";
@@ -16,6 +17,7 @@ import { useTemplateState } from "@/hooks/useTemplateState";
 import { validateArchitectureDiagramInput } from "@/lib/architecture-diagrams/validate";
 import { EXAMPLE_KID_FRIENDLY } from "@/lib/architecture-diagrams/examples";
 import { generateDiagramPack } from "@/lib/architecture-diagrams/generate/pack";
+import { getArchitectureTemplate } from "@/lib/architecture-diagrams/templates";
 
 const steps = [
   { id: "goal", label: "Goal", hint: "Why you need diagrams" },
@@ -69,6 +71,20 @@ export default function WizardPageClient() {
   const { state, updateState, resetState, lastUpdated } = useTemplateState(storageKey, emptyDraft);
   const [activeStep, setActiveStep] = useState("goal");
   const [pack, setPack] = useState(null);
+  const searchParams = useSearchParams();
+  const templateId = searchParams?.get("template");
+  const [templateLoaded, setTemplateLoaded] = useState(false);
+
+  // One-time template prefill for zero-typing start.
+  useEffect(() => {
+    if (templateLoaded) return;
+    if (!templateId) return;
+    const tmpl = getArchitectureTemplate(templateId);
+    if (!tmpl) return;
+    updateState(() => ({ ...tmpl.input }));
+    setActiveStep("review");
+    setTemplateLoaded(true);
+  }, [templateId, templateLoaded, updateState]);
 
   const validatedInput = useMemo(() => {
     const input = {
@@ -199,6 +215,12 @@ export default function WizardPageClient() {
           <div className="rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm">
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Draft tools</p>
             <p className="mt-2 text-sm text-slate-700">Start from a safe example if you want a quick preview.</p>
+            <a
+              href="/studios/architecture-diagram-studio/templates"
+              className="mt-3 block w-full rounded-2xl border border-slate-200 bg-white px-4 py-2 text-center text-sm font-semibold text-slate-800 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
+            >
+              Browse templates
+            </a>
             <button
               type="button"
               onClick={() => updateState(() => ({ ...EXAMPLE_KID_FRIENDLY }))}
