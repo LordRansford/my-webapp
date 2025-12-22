@@ -10,6 +10,7 @@ import AnalyticsInsightLab from "./sections/AnalyticsInsightLab";
 import DataEthicsLab from "./sections/DataEthicsLab";
 import DigitalisationRoadmapLab from "./sections/DigitalisationRoadmapLab";
 import DataStudioReflection from "./sections/DataStudioReflection";
+import StudioTabs from "@/components/studios/StudioTabs";
 
 const tabs = [
   { id: "overview", label: "Overview", component: DataStrategyLab },
@@ -22,12 +23,6 @@ const tabs = [
   { id: "roadmap", label: "Digitalisation maturity and roadmap", component: DigitalisationRoadmapLab },
   { id: "reflection", label: "Reflection and next steps", component: DataStudioReflection },
 ];
-
-function chip(active: boolean) {
-  return `rounded-full border px-3 py-1.5 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 ${
-    active ? "border-slate-900 bg-slate-900 text-white" : "border-slate-200 bg-white text-slate-800 hover:bg-slate-50"
-  }`;
-}
 
 export default function DataStudiosPage() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -57,15 +52,11 @@ export default function DataStudiosPage() {
         </div>
       </header>
 
-      <nav aria-label="Data and Digitalisation Studio navigation" className="flex flex-wrap gap-2">
-        {tabs.map((t) => (
-          <button key={t.id} type="button" className={chip(activeTab === t.id)} onClick={() => setActiveTab(t.id)}>
-            {t.label}
-          </button>
-        ))}
-      </nav>
+      <div className="overflow-x-auto">
+        <StudioTabs ariaLabel="Data and Digitalisation Studio sections" tabs={tabs} activeId={activeTab} onSelect={setActiveTab} />
+      </div>
 
-      <section aria-label="Active lab" className="space-y-3">
+      <section id={`panel-${activeTab}`} role="tabpanel" aria-label={tabs.find((t) => t.id === activeTab)?.label} className="space-y-3">
         <ActiveComp />
       </section>
     </div>

@@ -12,6 +12,7 @@ import ResponsibleAiLab from "./sections/ResponsibleAiLab";
 import PracticalToolsLab from "./sections/PracticalToolsLab";
 import PracticalUseCasesLab from "./sections/PracticalUseCasesLab";
 import AiStudioReflection from "./sections/AiStudioReflection";
+import StudioTabs from "@/components/studios/StudioTabs";
 
 const tabs = [
   { id: "overview", label: "Overview", component: AiOverviewLab },
@@ -67,21 +68,12 @@ export default function AiStudiosPage() {
       </header>
 
       <div className="overflow-x-auto">
-        <div className="flex min-w-full gap-2" role="tablist" aria-label="AI Studio sections">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              role="tab"
-              aria-selected={activeTab === tab.id}
-              aria-controls={`panel-${tab.id}`}
-              onClick={() => setActiveTab(tab.id)}
-              className={tabClass(activeTab === tab.id)}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
+        <StudioTabs
+          ariaLabel="AI Studio sections"
+          tabs={tabs}
+          activeId={activeTab}
+          onSelect={setActiveTab}
+        />
       </div>
 
       <section id={`panel-${activeTab}`} role="tabpanel" aria-label={tabs.find((t) => t.id === activeTab)?.label}>

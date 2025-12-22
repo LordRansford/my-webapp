@@ -4,6 +4,9 @@ import Layout from "@/components/Layout";
 import LessonNavigation from "@/components/LessonNavigation";
 import mdxComponents from "@/components/mdx-components";
 import { getAllLessonPaths, getLesson } from "@/lib/courses";
+import NextActionsCard from "@/components/course/NextActionsCard";
+import { getLearnerPath } from "@/lib/learnerPaths";
+import CPDEvidencePanel from "@/components/cpd/CPDEvidencePanel";
 
 export async function getStaticPaths() {
   const paths = getAllLessonPaths().map(({ course, lesson }) => ({
@@ -32,6 +35,12 @@ export default function LessonPage({ course, lesson, mdx, lessons }) {
   const activeIndex = Array.isArray(lessons) ? lessons.findIndex((l) => l.slug === lesson.slug) : -1;
   const prevLesson = activeIndex > 0 ? lessons[activeIndex - 1] : null;
   const nextLesson = activeIndex >= 0 && activeIndex < lessons.length - 1 ? lessons[activeIndex + 1] : null;
+  const path = getLearnerPath(course?.slug);
+  const objectives = [
+    `Study: ${lesson?.meta?.title || "course module"}`,
+    "Apply one idea using a tool or template",
+    "Write a short reflection for CPD evidence",
+  ];
 
   return (
     <Layout
@@ -66,6 +75,24 @@ export default function LessonPage({ course, lesson, mdx, lessons }) {
           <article className="post-content">
             <MDXRemote {...mdx} components={mdxComponents} />
           </article>
+
+          {path ? (
+            <div className="mt-8 grid gap-4 md:grid-cols-2">
+              <NextActionsCard title="Next actions" links={path.recommended} />
+              <CPDEvidencePanel
+                itemId={`course:${course.slug}/${lesson.slug}`}
+                activityType="course-module"
+                defaultObjectives={objectives}
+                defaultMinutes={Math.max(10, Math.ceil(Number(lesson?.readingStats?.minutes || 10)))}
+                evidenceLinks={[
+                  `/courses/${course.slug}/${lesson.slug}`,
+                  path.courseHref,
+                  path.templatesCategoryHref,
+                ]}
+                category={course.slug}
+              />
+            </div>
+          ) : null}
 
           <nav className="mt-8 flex flex-wrap items-center justify-between gap-3" aria-label="Lesson navigation">
             {prevLesson ? (
