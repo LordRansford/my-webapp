@@ -71,14 +71,6 @@ export function TemplateListClient({ templates, categoryTitle }) {
     <div className="stack" style={{ gap: "1rem" }}>
       <div
         className="card"
-        style={{
-          display: "grid",
-          gap: "0.75rem",
-          padding: "1rem",
-          borderRadius: "18px",
-          border: "1px solid #e2e8f0",
-          background: "#fff",
-        }}
       >
         <div className="flex-between" style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
           <label style={{ flex: "1 1 240px" }}>

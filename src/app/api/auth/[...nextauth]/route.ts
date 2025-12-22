@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/auth/options";
 import { rateLimit } from "@/lib/security/rateLimit";
 
-const handler = NextAuth(authOptions);
+const { handlers } = NextAuth(authOptions);
 
 export async function GET(req: Request, ctx: any) {
   // Defensive: if NextAuth is misconfigured in production (e.g. missing NEXTAUTH_SECRET),
@@ -16,7 +16,8 @@ export async function GET(req: Request, ctx: any) {
   }
   const limited = rateLimit(req, { keyPrefix: "auth", limit: 30, windowMs: 60_000 });
   if (limited) return limited;
-  return (handler as any)(req as any, ctx as any) as any;
+  // Pass ctx through so NextAuth can read ctx.params.nextauth in the App Router.
+  return handlers.GET(req, ctx);
 }
 
 export async function POST(req: Request, ctx: any) {
@@ -28,7 +29,7 @@ export async function POST(req: Request, ctx: any) {
   }
   const limited = rateLimit(req, { keyPrefix: "auth", limit: 30, windowMs: 60_000 });
   if (limited) return limited;
-  return (handler as any)(req as any, ctx as any) as any;
+  return handlers.POST(req, ctx);
 }
 
 
