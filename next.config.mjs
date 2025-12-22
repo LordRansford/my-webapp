@@ -31,6 +31,10 @@ const nextConfig = {
   },
 
   async headers() {
+    const isProd = process.env.NODE_ENV === "production";
+    // NOTE: `next-mdx-remote` hydration uses `new Function(...)` in the browser, which requires 'unsafe-eval'.
+    // Without this, MDX-driven pages (courses/notes/posts) will crash client-side under a strict CSP.
+    const scriptSrc = "script-src 'self' 'unsafe-inline' 'unsafe-eval' https:";
     return [
       {
         source: "/(.*)",
@@ -52,7 +56,7 @@ const nextConfig = {
               "img-src 'self' data: https:",
               "font-src 'self' data: https:",
               "style-src 'self' 'unsafe-inline'",
-              "script-src 'self' 'unsafe-inline' https:",
+              scriptSrc,
               "connect-src 'self' https:",
               "upgrade-insecure-requests",
             ].join("; "),

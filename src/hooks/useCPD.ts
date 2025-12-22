@@ -12,7 +12,9 @@ import {
 } from "@/lib/cpd";
 
 export function useCPD() {
-  const [state, setState] = useState<CPDState>(() => getInitialCPDState());
+  // SSR/hydration safety: start with a deterministic empty state, then hydrate from storage on mount.
+  // This avoids server/client mismatches when localStorage has existing progress.
+  const [state, setState] = useState<CPDState>(() => ({ version: 1, sections: [], activity: [] }));
   const { data: session, status } = useSession();
   const isAuthed = Boolean(session?.user?.id);
 

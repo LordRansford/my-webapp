@@ -335,6 +335,280 @@ export const templateDefinitions: TemplateDefinition[] = [
     exportProfile: { allowPDF: true, allowDOCX: true, allowXLSX: true, allowJSON: true },
     disclaimer: "Informational only. Not legal advice. Results depend on inputs.",
   },
+  {
+    slug: "ea-capability-map-scope",
+    title: "Capability Map Scoping (Starter)",
+    category: "digital-enterprise-architecture",
+    description: "Quickly scope a capability map slice and identify the first 3 capabilities to detail.",
+    estimatedMinutes: 9,
+    fields: [
+      { id: "domain", type: "text", label: "Business domain", placeholder: "Customer onboarding", required: true },
+      {
+        id: "horizon",
+        type: "select",
+        label: "Planning horizon",
+        required: true,
+        options: [
+          { label: "0–3 months", value: "0-3" },
+          { label: "3–12 months", value: "3-12" },
+          { label: "12–24 months", value: "12-24" },
+        ],
+        defaultValue: "3-12",
+      },
+      { id: "complexity", type: "slider", label: "Complexity (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+      { id: "risk", type: "slider", label: "Delivery risk (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+      { id: "value", type: "slider", label: "Business value (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 4, step: 1 },
+    ],
+    calcFn: (values) => {
+      const complexity = clampValue(Number(values.complexity) || 1, 1, 5);
+      const risk = clampValue(Number(values.risk) || 1, 1, 5);
+      const value = clampValue(Number(values.value) || 1, 1, 5);
+      const score = clampValue(Math.round(((value * 2 - complexity - risk + 10) / 20) * 100), 0, 100);
+      const band = score >= 75 ? "High" : score >= 55 ? "Moderate" : "Low";
+      return {
+        scores: { risk: score, complexity, value },
+        riskBand: band,
+        explanation: `Starter prioritisation score: ${score}/100 (${band}). Value is weighted higher than complexity and risk.`,
+        assumptions: ["This is a lightweight heuristic, not a portfolio model.", "Use consistent scoring across candidates for comparability."],
+        nextSteps: [
+          "List 8–12 capabilities in scope for this domain.",
+          "Pick the top 3 by score to detail (owner, measures, dependencies).",
+          "Validate scope with stakeholders and adjust for constraints.",
+        ],
+        chartData: [
+          { name: "Value", value: value * 20 },
+          { name: "Complexity", value: complexity * 20 },
+          { name: "Risk", value: risk * 20 },
+        ],
+        meaning: "Helps decide which capability slice to detail first.",
+        whyItMatters: "Early focus prevents capability maps from becoming unmaintained diagrams.",
+        whenItBreaks: "If scoring is inconsistent or political rather than evidence-led.",
+      };
+    },
+    charts: [{ id: "ea-scope-radar", type: "radar", title: "Signal profile", series: [{ key: "value", label: "Score" }] }],
+    exportProfile: { allowPDF: true, allowDOCX: true, allowXLSX: true, allowJSON: true },
+    disclaimer: "Informational only. Not legal advice. Results depend on inputs.",
+  },
+  {
+    slug: "api-contract-quality-check",
+    title: "API Contract Quality Check (Starter)",
+    category: "software-api-design",
+    description: "A quick checklist score for API contract clarity, stability, and consumer ergonomics.",
+    estimatedMinutes: 8,
+    fields: [
+      { id: "apiName", type: "text", label: "API name", placeholder: "Payments API", required: true },
+      { id: "versioning", type: "slider", label: "Versioning clarity (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+      { id: "errors", type: "slider", label: "Error model quality (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+      { id: "docs", type: "slider", label: "Docs completeness (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+      { id: "idempotency", type: "toggle", label: "Idempotency supported for write operations", defaultValue: false },
+    ],
+    calcFn: (values) => {
+      const versioning = clampValue(Number(values.versioning) || 1, 1, 5);
+      const errors = clampValue(Number(values.errors) || 1, 1, 5);
+      const docs = clampValue(Number(values.docs) || 1, 1, 5);
+      const idem = Boolean(values.idempotency) ? 1 : 0;
+      const score = clampValue(Math.round(((versioning + errors + docs + (idem ? 1 : 0)) / 16) * 100), 0, 100);
+      const band = score >= 75 ? "High" : score >= 55 ? "Moderate" : "Low";
+      const nextSteps = [
+        versioning < 4 ? "Document compatibility policy and deprecation windows." : null,
+        errors < 4 ? "Standardise error shapes, codes, and retry guidance." : null,
+        docs < 4 ? "Add end-to-end examples (happy path + failures)." : null,
+        !idem ? "Add idempotency keys to write endpoints where possible." : null,
+      ].filter(Boolean) as string[];
+      return {
+        scores: { risk: score, versioning, docs },
+        riskBand: band,
+        explanation: `Contract quality score: ${score}/100 (${band}).`,
+        assumptions: ["Scoring is subjective; calibrate with a small rubric.", "This is a starter view; run real consumer tests."],
+        nextSteps: nextSteps.length ? nextSteps : ["Maintain contract tests and publish a consumer-facing changelog."],
+        chartData: [
+          { name: "Versioning", value: versioning * 20 },
+          { name: "Errors", value: errors * 20 },
+          { name: "Docs", value: docs * 20 },
+          { name: "Idempotency", value: idem ? 100 : 0 },
+        ],
+        meaning: "Highlights contract areas that usually cause integration friction.",
+        whyItMatters: "Better contracts reduce breakages and support load.",
+        whenItBreaks: "If the API is still evolving rapidly without governance.",
+      };
+    },
+    charts: [{ id: "api-quality-bar", type: "bar", title: "Component scores", xKey: "name", yKeys: ["value"] }],
+    exportProfile: { allowPDF: true, allowDOCX: true, allowXLSX: true, allowJSON: true },
+    disclaimer: "Informational only. Not legal advice. Results depend on inputs.",
+  },
+  {
+    slug: "control-evidence-pack-starter",
+    title: "Control Evidence Pack (Starter)",
+    category: "regulatory-compliance",
+    description: "Prioritise which controls to evidence first and outline what ‘good evidence’ looks like.",
+    estimatedMinutes: 10,
+    fields: [
+      { id: "framework", type: "select", label: "Framework", required: true, options: [{ label: "ISO 27001", value: "iso27001" }, { label: "SOC 2", value: "soc2" }, { label: "NIS2", value: "nis2" }], defaultValue: "soc2" },
+      { id: "auditWindow", type: "slider", label: "Audit window urgency (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+      { id: "controlMaturity", type: "slider", label: "Control maturity (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 2, step: 1 },
+      { id: "evidenceAutomation", type: "slider", label: "Evidence automation (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 2, step: 1 },
+    ],
+    calcFn: (values) => {
+      const urgency = clampValue(Number(values.auditWindow) || 1, 1, 5);
+      const maturity = clampValue(Number(values.controlMaturity) || 1, 1, 5);
+      const automation = clampValue(Number(values.evidenceAutomation) || 1, 1, 5);
+      const score = clampValue(Math.round(((urgency * 2 + (6 - maturity) + (6 - automation)) / 18) * 100), 0, 100);
+      const band = score >= 75 ? "High" : score >= 55 ? "Moderate" : "Low";
+      return {
+        scores: { risk: score, urgency, maturity },
+        riskBand: band,
+        explanation: `Evidence priority score: ${score}/100 (${band}). Higher means start evidence work sooner.`,
+        assumptions: ["This prioritises evidence readiness, not control effectiveness.", "Map to your actual control set and scoping."],
+        nextSteps: [
+          "Write a 1-page control narrative (what, who, when, tools).",
+          "List 3 evidence artefacts per control (policy, logs, screenshots, tickets).",
+          "Automate recurring evidence capture where possible.",
+        ],
+        chartData: [
+          { name: "Urgency", value: urgency * 20 },
+          { name: "Maturity gap", value: (6 - maturity) * 20 },
+          { name: "Automation gap", value: (6 - automation) * 20 },
+        ],
+        meaning: "Helps decide where to start evidence collection for audit readiness.",
+        whyItMatters: "Evidence work often blocks audits even when controls exist.",
+        whenItBreaks: "If audit scope is unclear or ownership is missing.",
+      };
+    },
+    charts: [{ id: "evidence-pack-radar", type: "radar", title: "Readiness signals", series: [{ key: "value", label: "Score" }] }],
+    exportProfile: { allowPDF: true, allowDOCX: true, allowXLSX: true, allowJSON: true },
+    disclaimer: "Informational only. Not legal advice. Results depend on inputs.",
+  },
+  {
+    slug: "slo-budget-starter",
+    title: "SLO + Error Budget Starter",
+    category: "engineering-systems-design",
+    description: "Set a starter SLO and estimate an error budget to align engineering and product expectations.",
+    estimatedMinutes: 7,
+    fields: [
+      { id: "service", type: "text", label: "Service name", placeholder: "Checkout", required: true },
+      { id: "availabilityTarget", type: "slider", label: "Availability target (%)", required: true, validation: { min: 95, max: 99.99 }, defaultValue: 99.5, step: 0.05 },
+      { id: "windowDays", type: "select", label: "Measurement window", required: true, options: [{ label: "7 days", value: "7" }, { label: "28 days", value: "28" }, { label: "90 days", value: "90" }], defaultValue: "28" },
+      { id: "userImpact", type: "slider", label: "User impact if down (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 4, step: 1 },
+    ],
+    calcFn: (values) => {
+      const target = clampValue(Number(values.availabilityTarget) || 99, 95, 99.99);
+      const days = clampValue(Number(values.windowDays) || 28, 1, 365);
+      const minutes = days * 24 * 60;
+      const errorBudgetMinutes = Math.max(0, Math.round(minutes * (1 - target / 100)));
+      const impact = clampValue(Number(values.userImpact) || 1, 1, 5);
+      const score = clampValue(Math.round(((impact + (100 - target)) / 10) * 100), 0, 100);
+      const band = score >= 75 ? "High" : score >= 55 ? "Moderate" : "Low";
+      return {
+        scores: { risk: score, impact, target },
+        riskBand: band,
+        explanation: `Error budget is ~${errorBudgetMinutes} minutes over ${days} days for a ${target}% target.`,
+        assumptions: ["This assumes a simple uptime SLI; tailor to real user journeys.", "Budgets should be reviewed after observing real performance."],
+        nextSteps: [
+          "Define the SLI precisely (what counts as ‘good’ and ‘bad’).",
+          "Add alerts on burn rate, not just availability.",
+          "Agree escalation + release gates when budget is burned.",
+        ],
+        chartData: [
+          { name: "Target (%)", value: target },
+          { name: "Budget (mins)", value: errorBudgetMinutes },
+        ],
+        meaning: "Makes reliability targets tangible in time you can spend on incidents.",
+        whyItMatters: "Aligns product tradeoffs with engineering operational reality.",
+        whenItBreaks: "If SLIs are misdefined or traffic patterns vary dramatically.",
+      };
+    },
+    charts: [{ id: "slo-budget-bar", type: "bar", title: "Budget summary", xKey: "name", yKeys: ["value"] }],
+    exportProfile: { allowPDF: true, allowDOCX: true, allowXLSX: true, allowJSON: true },
+    disclaimer: "Informational only. Not legal advice. Results depend on inputs.",
+  },
+  {
+    slug: "operating-model-decisions-starter",
+    title: "Operating Model Decisions (Starter)",
+    category: "strategy-operating-models",
+    description: "Identify the top decision areas and clarify who decides, who inputs, and who executes.",
+    estimatedMinutes: 9,
+    fields: [
+      { id: "orgUnit", type: "text", label: "Org unit / team", placeholder: "Platform engineering", required: true },
+      { id: "decisionClarity", type: "slider", label: "Decision clarity today (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 2, step: 1 },
+      { id: "handoffs", type: "slider", label: "Handoffs / dependencies (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+      { id: "conflictRate", type: "slider", label: "Decision conflict rate (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+    ],
+    calcFn: (values) => {
+      const clarity = clampValue(Number(values.decisionClarity) || 1, 1, 5);
+      const handoffs = clampValue(Number(values.handoffs) || 1, 1, 5);
+      const conflict = clampValue(Number(values.conflictRate) || 1, 1, 5);
+      const score = clampValue(Math.round((((6 - clarity) * 2 + handoffs + conflict) / 16) * 100), 0, 100);
+      const band = score >= 75 ? "High" : score >= 55 ? "Moderate" : "Low";
+      return {
+        scores: { risk: score, clarity, handoffs },
+        riskBand: band,
+        explanation: `Operating model friction score: ${score}/100 (${band}). Lower clarity usually drives higher friction.`,
+        assumptions: ["This is directional; confirm with stakeholder interviews.", "Use the same definitions for scoring across teams."],
+        nextSteps: [
+          "List 5 recurring decisions (e.g., prioritisation, standards, incident response).",
+          "Assign a single accountable owner per decision area.",
+          "Publish a lightweight decision record template and cadence.",
+        ],
+        chartData: [
+          { name: "Clarity gap", value: (6 - clarity) * 20 },
+          { name: "Handoffs", value: handoffs * 20 },
+          { name: "Conflict", value: conflict * 20 },
+        ],
+        meaning: "Highlights where decision ownership and process needs tightening.",
+        whyItMatters: "Faster decisions reduce delays and improve accountability.",
+        whenItBreaks: "If the real problem is capacity or incentives, not process.",
+      };
+    },
+    charts: [{ id: "opmodel-radar", type: "radar", title: "Friction signals", series: [{ key: "value", label: "Score" }] }],
+    exportProfile: { allowPDF: true, allowDOCX: true, allowXLSX: true, allowJSON: true },
+    disclaimer: "Informational only. Not legal advice. Results depend on inputs.",
+  },
+  {
+    slug: "decision-register-quality-starter",
+    title: "Decision Register Quality (Starter)",
+    category: "analytics-decision-making",
+    description: "Score how well a decision is documented (context, options, metrics, follow-up) to improve learning loops.",
+    estimatedMinutes: 6,
+    fields: [
+      { id: "decisionTitle", type: "text", label: "Decision title", placeholder: "Adopt event-driven ingestion", required: true },
+      { id: "context", type: "slider", label: "Context clarity (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+      { id: "options", type: "slider", label: "Options considered (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 2, step: 1 },
+      { id: "metrics", type: "slider", label: "Success metrics defined (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 2, step: 1 },
+      { id: "review", type: "toggle", label: "Review date set", defaultValue: false },
+    ],
+    calcFn: (values) => {
+      const context = clampValue(Number(values.context) || 1, 1, 5);
+      const options = clampValue(Number(values.options) || 1, 1, 5);
+      const metrics = clampValue(Number(values.metrics) || 1, 1, 5);
+      const review = Boolean(values.review) ? 1 : 0;
+      const score = clampValue(Math.round(((context + options + metrics + (review ? 1 : 0)) / 16) * 100), 0, 100);
+      const band = score >= 75 ? "High" : score >= 55 ? "Moderate" : "Low";
+      const nextSteps = [
+        options < 3 ? "Write 2 alternative options and why they were rejected." : null,
+        metrics < 3 ? "Define 1–3 measurable success indicators and a baseline." : null,
+        !review ? "Set a review date to check outcomes and capture learning." : null,
+      ].filter(Boolean) as string[];
+      return {
+        scores: { risk: score, context, metrics },
+        riskBand: band,
+        explanation: `Decision record quality: ${score}/100 (${band}).`,
+        assumptions: ["This scores documentation quality, not decision correctness.", "Keep records short and focused."],
+        nextSteps: nextSteps.length ? nextSteps : ["Share the decision record with stakeholders and store it where it will be found later."],
+        chartData: [
+          { name: "Context", value: context * 20 },
+          { name: "Options", value: options * 20 },
+          { name: "Metrics", value: metrics * 20 },
+          { name: "Review", value: review ? 100 : 0 },
+        ],
+        meaning: "Improves traceability and learning from decisions over time.",
+        whyItMatters: "Teams avoid repeating mistakes when decisions are reviewable.",
+        whenItBreaks: "If records are never revisited or ownership is unclear.",
+      };
+    },
+    charts: [{ id: "decision-quality-bar", type: "bar", title: "Component scores", xKey: "name", yKeys: ["value"] }],
+    exportProfile: { allowPDF: true, allowDOCX: true, allowXLSX: true, allowJSON: true },
+    disclaimer: "Informational only. Not legal advice. Results depend on inputs.",
+  },
 ];
 
 export const definitionMap = Object.fromEntries(templateDefinitions.map((def) => [def.slug, def]));

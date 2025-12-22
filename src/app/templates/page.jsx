@@ -3,6 +3,7 @@ import { CategoryGrid } from "@/components/templates/CategoryGrid";
 import { TEMPLATE_CATEGORIES } from "@/data/templates/categories";
 import SupportBanner from "@/components/SupportBanner";
 import Link from "next/link";
+import { templateDefinitions } from "../../../content/templates/definitions";
 
 export const metadata = {
   title: "Templates",
@@ -81,32 +82,13 @@ export default function TemplatesLandingPage() {
           </div>
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {[
-            {
-              slug: "cyber-risk-register",
-              title: "Cyber Risk Register Generator",
-              description: "Quick likelihood/impact scoring with control strength adjustment.",
-              eta: "8 mins",
-            },
-            {
-              slug: "phishing-email-triage",
-              title: "Phishing Email Triage",
-              description: "Score an email scenario and get safe next actions.",
-              eta: "6 mins",
-            },
-            {
-              slug: "ai-model-evaluation-planner",
-              title: "AI Model Evaluation Planner",
-              description: "Plan metrics, baselines, and risks before rollout.",
-              eta: "10 mins",
-            },
-          ].map((tpl) => (
+          {templateDefinitions.slice(0, 6).map((tpl) => (
             <div key={tpl.slug} className="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-slate-50/80 p-4 shadow-sm">
               <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">Preview + runner</div>
               <h3 className="text-base font-semibold text-slate-900">{tpl.title}</h3>
               <p className="text-sm text-slate-700 flex-1">{tpl.description}</p>
               <div className="flex items-center justify-between text-xs text-slate-700">
-                <span>Estimated {tpl.eta}</span>
+                <span>Estimated {tpl.estimatedMinutes} mins</span>
                 <span className="rounded-full bg-amber-50 px-2 py-1 font-semibold text-amber-800">Preview only</span>
               </div>
               <a

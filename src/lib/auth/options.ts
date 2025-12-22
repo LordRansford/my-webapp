@@ -20,7 +20,9 @@ export const authOptions: NextAuthOptions = {
     const secret = process.env.GOOGLE_CLIENT_SECRET || "";
 
     if (process.env.NODE_ENV !== "production" && (!id || !secret)) {
-      throw new Error("Missing Google OAuth env vars: GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET");
+      // In dev, missing OAuth env vars should not crash the app (logged-out browsing should still work).
+      console.warn("auth:warn Missing Google OAuth env vars: GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET");
+      return [];
     }
 
     if (!id || !secret) return [];
