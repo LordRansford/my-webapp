@@ -7,6 +7,7 @@ import { aiSectionManifest } from "@/lib/aiSections";
 import { cyberSections } from "@/lib/cyberSections";
 import { softwareArchitectureSectionManifest } from "@/lib/softwareArchitectureSections";
 import { dataSectionManifest } from "@/lib/dataSections";
+import { digitalisationSectionManifest } from "@/lib/digitalisationSections";
 
 const trackLabels: Record<string, string> = {
   cyber: "Cyber",
@@ -61,7 +62,7 @@ export default function MyCpdPage() {
       <section className="section">
         <div className="section-heading">
           <h2>Track progress</h2>
-          <span className="hint">Four core tracks using the same CPD engine</span>
+          <span className="hint">Five core tracks using the same CPD engine</span>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
@@ -85,6 +86,13 @@ export default function MyCpdPage() {
               title="Software Architecture"
               route="/courses/software-architecture"
               manifest={softwareArchitectureSectionManifest}
+              levelIds={["foundations", "intermediate", "advanced", "summary"]}
+            />
+            <CPDTrackSummaryCard
+              trackId="digitalisation"
+              title="Digitalisation"
+              route="/digitalisation"
+              manifest={digitalisationSectionManifest}
               levelIds={["foundations", "intermediate", "advanced", "summary"]}
             />
             <CPDTrackSummaryCard

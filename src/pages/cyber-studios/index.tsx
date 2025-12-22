@@ -12,6 +12,7 @@ import DetectionResponseLab from "./sections/DetectionResponseLab";
 import ResilienceRecoveryLab from "./sections/ResilienceRecoveryLab";
 import CyberGovernanceLab from "./sections/CyberGovernanceLab";
 import CyberReflection from "./sections/CyberReflection";
+import StudioTabs from "@/components/studios/StudioTabs";
 
 const tabs = [
   { id: "overview", label: "Overview", component: ThreatLandscapeLab },
@@ -26,12 +27,6 @@ const tabs = [
   { id: "governance", label: "Governance and accountability", component: CyberGovernanceLab },
   { id: "reflection", label: "Reflection and next steps", component: CyberReflection },
 ];
-
-function chip(active: boolean) {
-  return `rounded-full border px-3 py-1.5 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 ${
-    active ? "border-slate-900 bg-slate-900 text-white" : "border-slate-200 bg-white text-slate-800 hover:bg-slate-50"
-  }`;
-}
 
 export default function CyberStudiosPage() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -61,15 +56,11 @@ export default function CyberStudiosPage() {
         </div>
       </header>
 
-      <nav aria-label="Cybersecurity Studio navigation" className="flex flex-wrap gap-2">
-        {tabs.map((t) => (
-          <button key={t.id} type="button" className={chip(activeTab === t.id)} onClick={() => setActiveTab(t.id)}>
-            {t.label}
-          </button>
-        ))}
-      </nav>
+      <div className="overflow-x-auto">
+        <StudioTabs ariaLabel="Cybersecurity Studio sections" tabs={tabs} activeId={activeTab} onSelect={setActiveTab} />
+      </div>
 
-      <section aria-label="Active lab" className="space-y-3">
+      <section id={`panel-${activeTab}`} role="tabpanel" aria-label={tabs.find((t) => t.id === activeTab)?.label} className="space-y-3">
         <ActiveComp />
       </section>
     </div>

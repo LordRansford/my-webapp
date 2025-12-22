@@ -78,6 +78,144 @@ export const templateDefinitions: TemplateDefinition[] = [
     disclaimer: "Informational only. Not legal advice. Results depend on inputs.",
   },
   {
+    slug: "cyber-control-gap-check",
+    title: "Control Gap Quick Check (Starter)",
+    category: "cybersecurity-architecture",
+    description: "Quickly assess whether a scenario has prevention, detection, and recovery controls covered.",
+    estimatedMinutes: 8,
+    fields: [
+      { id: "scenario", type: "text", label: "Scenario", placeholder: "Credential stuffing on login", required: true },
+      { id: "prevention", type: "slider", label: "Prevention strength (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+      { id: "detection", type: "slider", label: "Detection strength (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 2, step: 1 },
+      { id: "response", type: "slider", label: "Response readiness (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 2, step: 1 },
+      { id: "recovery", type: "slider", label: "Recovery readiness (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 2, step: 1 },
+    ],
+    calcFn: (values) => {
+      const p = clampValue(Number(values.prevention) || 1, 1, 5);
+      const d = clampValue(Number(values.detection) || 1, 1, 5);
+      const r = clampValue(Number(values.response) || 1, 1, 5);
+      const rec = clampValue(Number(values.recovery) || 1, 1, 5);
+      const weakest = Math.min(p, d, r, rec);
+      const score = clampValue(Math.round(((p + d + r + rec) / 20) * 100), 0, 100);
+      const band = score >= 75 ? "High" : score >= 55 ? "Moderate" : "Low";
+      const gaps = [
+        d < 3 ? "Add detection: alerts, rate limits, anomaly rules, logging." : null,
+        r < 3 ? "Add response: runbook, on-call, escalation, comms." : null,
+        rec < 3 ? "Add recovery: rollback, backups, failover, rebuild steps." : null,
+      ].filter(Boolean) as string[];
+      return {
+        scores: { risk: score, prevention: p, detection: d },
+        riskBand: band,
+        explanation: `Control coverage score: ${score}/100 (${band}). Weakest area is ${weakest}/5.`,
+        assumptions: ["This is a lightweight sanity check, not a formal control assessment."],
+        nextSteps: gaps.length ? gaps : ["Validate control effectiveness with tests and tabletop exercises."],
+        chartData: [
+          { name: "Prevention", value: p * 20 },
+          { name: "Detection", value: d * 20 },
+          { name: "Response", value: r * 20 },
+          { name: "Recovery", value: rec * 20 },
+        ],
+      };
+    },
+    charts: [{ id: "control-gap-bar", type: "bar", title: "Signals", xKey: "name", yKeys: ["value"] }],
+    exportProfile: { allowPDF: true, allowDOCX: true, allowXLSX: true, allowJSON: true },
+    disclaimer: "Informational only. Not legal advice. Results depend on inputs.",
+  },
+  {
+    slug: "data-quality-checklist",
+    title: "Data Quality Checklist (Starter)",
+    category: "data-architecture-governance",
+    description: "Define a minimal quality checklist: completeness, validity, timeliness, and ownership.",
+    estimatedMinutes: 10,
+    fields: [
+      { id: "dataset", type: "text", label: "Dataset", placeholder: "Customer transactions", required: true },
+      { id: "completeness", type: "slider", label: "Completeness control (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+      { id: "validity", type: "slider", label: "Validity control (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+      { id: "timeliness", type: "slider", label: "Timeliness control (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 2, step: 1 },
+      { id: "owner", type: "toggle", label: "Named owner and escalation path exists", defaultValue: false },
+    ],
+    calcFn: (values) => {
+      const c = clampValue(Number(values.completeness) || 1, 1, 5);
+      const v = clampValue(Number(values.validity) || 1, 1, 5);
+      const t = clampValue(Number(values.timeliness) || 1, 1, 5);
+      const owner = Boolean(values.owner);
+      const score = clampValue(Math.round(((c + v + t + (owner ? 2 : 0)) / 17) * 100), 0, 100);
+      const band = score >= 75 ? "High" : score >= 55 ? "Moderate" : "Low";
+      const nextSteps = [
+        c < 4 ? "Add completeness checks on key columns with thresholds." : null,
+        v < 4 ? "Add validity checks (ranges, enums, referential integrity)." : null,
+        t < 4 ? "Define freshness SLO and alert on delays." : null,
+        !owner ? "Assign a named owner + escalation route." : null,
+      ].filter(Boolean) as string[];
+      return {
+        scores: { risk: score, completeness: c, validity: v },
+        riskBand: band,
+        explanation: `Quality readiness: ${score}/100 (${band}).`,
+        assumptions: ["Start small: a few controls are better than none.", "Document definitions so teams interpret metrics consistently."],
+        nextSteps: nextSteps.length ? nextSteps : ["Review monthly and refine controls based on incidents and user feedback."],
+        chartData: [
+          { name: "Completeness", value: c * 20 },
+          { name: "Validity", value: v * 20 },
+          { name: "Timeliness", value: t * 20 },
+          { name: "Ownership", value: owner ? 100 : 0 },
+        ],
+      };
+    },
+    charts: [{ id: "dq-bar", type: "bar", title: "Signals", xKey: "name", yKeys: ["value"] }],
+    exportProfile: { allowPDF: true, allowDOCX: true, allowXLSX: true, allowJSON: true },
+    disclaimer: "Informational only. Not legal advice. Results depend on inputs.",
+  },
+  {
+    slug: "ai-monitoring-plan",
+    title: "Model Monitoring Plan (Starter)",
+    category: "ai-systems-models",
+    description: "Draft a monitoring plan: performance, drift, safety signals, and review cadence.",
+    estimatedMinutes: 12,
+    fields: [
+      { id: "modelName", type: "text", label: "Model/system", placeholder: "Customer support classifier", required: true },
+      { id: "criticality", type: "select", label: "Criticality", required: true, options: [
+        { label: "Low", value: "low" },
+        { label: "Moderate", value: "moderate" },
+        { label: "High", value: "high" },
+      ], defaultValue: "moderate" },
+      { id: "drift", type: "slider", label: "Drift risk (1-5)", required: true, validation: { min: 1, max: 5 }, defaultValue: 3, step: 1 },
+      { id: "feedbackLoop", type: "toggle", label: "Human feedback loop exists", defaultValue: false },
+      { id: "reviewCadence", type: "select", label: "Review cadence", required: true, options: [
+        { label: "Weekly", value: "weekly" },
+        { label: "Monthly", value: "monthly" },
+        { label: "Quarterly", value: "quarterly" },
+      ], defaultValue: "monthly" },
+    ],
+    calcFn: (values) => {
+      const drift = clampValue(Number(values.drift) || 1, 1, 5);
+      const fb = Boolean(values.feedbackLoop);
+      const criticality = values.criticality || "moderate";
+      const base = criticality === "high" ? 60 : criticality === "moderate" ? 45 : 30;
+      const score = clampValue(base + drift * 6 + (fb ? 10 : 0), 0, 100);
+      const band = score >= 75 ? "High" : score >= 55 ? "Moderate" : "Low";
+      return {
+        scores: { risk: score, drift },
+        riskBand: band,
+        explanation: `Monitoring readiness signal: ${score}/100 (${band}).`,
+        assumptions: ["This suggests structure; it does not measure true risk.", "Monitoring should be paired with rollback and incident processes."],
+        nextSteps: [
+          "Define primary metric and slice metrics (by segment).",
+          "Add drift checks (input distribution + output distribution).",
+          fb ? "Operationalize feedback: sampling + labeling + review." : "Add a lightweight feedback loop (sampling + review).",
+          "Set escalation and rollback triggers.",
+        ],
+        chartData: [
+          { name: "Criticality", value: criticality === "high" ? 100 : criticality === "moderate" ? 70 : 40 },
+          { name: "Drift risk", value: drift * 20 },
+          { name: "Feedback loop", value: fb ? 100 : 0 },
+        ],
+      };
+    },
+    charts: [{ id: "ai-monitoring-bar", type: "bar", title: "Signals", xKey: "name", yKeys: ["value"] }],
+    exportProfile: { allowPDF: true, allowDOCX: true, allowXLSX: true, allowJSON: true },
+    disclaimer: "Informational only. Not legal advice. Results depend on inputs.",
+  },
+  {
     slug: "ea-target-state-onepager",
     title: "Target State One‑Pager (Starter)",
     category: "digital-enterprise-architecture",

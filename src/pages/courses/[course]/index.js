@@ -2,6 +2,8 @@ import Link from "next/link";
 import Layout from "@/components/Layout";
 import LessonNavigation from "@/components/LessonNavigation";
 import { getCourseLessons, getCoursesIndex } from "@/lib/courses";
+import NextActionsCard from "@/components/course/NextActionsCard";
+import { getLearnerPath } from "@/lib/learnerPaths";
 
 export async function getStaticPaths() {
   const courses = getCoursesIndex();
@@ -27,6 +29,7 @@ export async function getStaticProps({ params }) {
 
 export default function CourseOverviewPage({ course, lessons }) {
   const firstLesson = lessons[0];
+  const path = getLearnerPath(course?.slug);
 
   return (
     <Layout
@@ -62,8 +65,24 @@ export default function CourseOverviewPage({ course, lessons }) {
               <Link href="/tools" className="button ghost">
                 Jump to labs
               </Link>
+              <Link href="/my-cpd" className="button ghost">
+                Track CPD
+              </Link>
             </div>
           )}
+
+          {path ? (
+            <div className="mt-6">
+              <NextActionsCard
+                title="Practice + CPD"
+                links={[
+                  { kind: "cpd", label: "My CPD (track minutes)", href: "/my-cpd", note: "Log time as you study. Evidence is stored locally in this browser." },
+                  { kind: "cpd", label: "CPD evidence (copy/export)", href: "/my-cpd/evidence", note: "Copy a defensible summary into your CPD system." },
+                  ...path.recommended,
+                ]}
+              />
+            </div>
+          ) : null}
         </div>
 
         <LessonNavigation courseSlug={course.slug} lessons={lessons} />
