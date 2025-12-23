@@ -10,13 +10,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/options";
 import { runWithMetering } from "@/lib/tools/runWithMetering";
 
-type Body = {
-  templateId?: string;
-  requestedUse?: RequestedUse;
-  fileVariantId?: string;
-  message?: string;
-};
-
 type TemplateDownloadResponse =
   | { allowed: false; message: string; reason: string }
   | { allowed: true; downloadId: string; signedUrl: string; mustKeepSignature: boolean; message: string };
@@ -43,10 +36,29 @@ export async function POST(request: Request) {
   const limited = rateLimit(request, { keyPrefix: "templates-request-download", limit: 30, windowMs: 60_000 });
   if (limited) return limited;
 
-  const body = (await request.json().catch(() => null)) as Body | null;
+  const body = await request.json().catch(() => null);
 
-  if (!body?.templateId || !body?.requestedUse) {
-    return NextResponse.json({ message: "Missing templateId or requestedUse" }, { status: 400 });
+  if (!body || typeof body !== "object") {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
+
+  if (typeof (body as any).templateId !== "string") {
+    return NextResponse.json({ error: "templateId is required" }, { status: 400 });
+  }
+
+  if (typeof (body as any).requestedUse !== "string") {
+    return NextResponse.json({ error: "requestedUse is required" }, { status: 400 });
+  }
+
+  const templateId = (body as any).templateId;
+  const requestedUseRaw = (body as any).requestedUse;
+
+  if (
+    requestedUseRaw !== "internal_use" &&
+    requestedUseRaw !== "commercial_use_keep_signature" &&
+    requestedUseRaw !== "commercial_use_remove_signature"
+  ) {
+    return NextResponse.json({ error: "requestedUse is invalid" }, { status: 400 });
   }
 
   const session = await getServerSession(authOptions).catch(() => null);
@@ -62,16 +74,11 @@ export async function POST(request: Request) {
       const anonymousUserId = await ensureAnonymousId();
       const userId = authedUserId; // real auth when available
 
-      const permissionTokens = getActivePermissionTokens({ userId, anonymousUserId, templateId: body.templateId });
-      const donationQualification = qualifyDonation({ userId, anonymousUserId });
-
       const result = evaluateTemplateAccess({
-        templateId: body.templateId,
-        requestedUse: body.requestedUse,
+        templateId,
+        requestedUse: requestedUseRaw,
         userId,
         anonymousUserId,
-        permissionTokens,
-        donationQualification,
       });
 
       if (!result.allowed) {
@@ -83,26 +90,26 @@ export async function POST(request: Request) {
 
       const supportMethod: SupportMethod =
         result.appliedSupportMethod ||
-        (donationQualification.qualifying ? "donation" : permissionTokens.length ? "written_permission" : "none");
+        (result.appliedDonationId ? "donation" : result.appliedPermissionTokenId ? "written_permission" : "none");
 
       const signaturePolicyApplied = result.mustKeepSignature ? "kept" : "removed";
       const downloadId = crypto.randomUUID();
 
       saveDownload({
         downloadId,
-        templateId: body.templateId,
-        fileVariantId: body.fileVariantId || (result.mustKeepSignature ? "signed" : "unsigned"),
+        templateId,
+        fileVariantId: result.mustKeepSignature ? "signed" : "unsigned",
         userId,
         anonymousUserId,
-        requestedUse: body.requestedUse,
+        requestedUse: requestedUseRaw,
         supportMethod,
-        donationId: donationQualification.donationId || null,
-        permissionTokenId: permissionTokens[0]?.tokenId || null,
+        donationId: result.appliedDonationId || null,
+        permissionTokenId: result.appliedPermissionTokenId || null,
         issuedAt: new Date().toISOString(),
         signaturePolicyApplied,
       });
 
-      const signedUrl = buildSignedUrl(body.templateId, body.fileVariantId || "signed");
+      const signedUrl = buildSignedUrl(templateId, result.mustKeepSignature ? "signed" : "unsigned");
 
       const payload: TemplateDownloadResponse = {
         allowed: true,
