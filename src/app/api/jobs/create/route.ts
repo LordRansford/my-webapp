@@ -10,6 +10,8 @@ import { getJobRunnerToolLimits } from "@/config/computeLimits";
 import { validateCodeRunnerPayloadTs } from "@/lib/jobs/codeRunnerGuard";
 import { createNote, createRun, getProject, updateRun } from "@/lib/workspace/store";
 import { WORKSPACE_COOKIE, getOrCreateWorkspaceSession, newWorkspaceTokenRaw, signWorkspaceToken, verifyWorkspaceToken } from "@/lib/workspace/session";
+import { estimateRunCost, type ComplexityPreset } from "@/lib/billing/estimateRunCost";
+import { prisma } from "@/lib/db/prisma";
 
 type Body = {
   toolId?: string;
@@ -19,6 +21,7 @@ type Body = {
   payload?: any;
   projectId?: string;
   note?: string;
+  requestedComplexityPreset?: ComplexityPreset;
 };
 
 function getCookie(req: Request, name: string) {
@@ -75,6 +78,7 @@ export async function POST(req: Request) {
   const inputBytes = typeof body?.inputBytes === "number" ? Math.max(0, Math.round(body.inputBytes)) : null;
   const idempotencyKey = typeof body?.idempotencyKey === "string" ? body.idempotencyKey.trim() : null;
   const mode = body?.mode === "inline" ? "inline" : "enqueue";
+  const requestedComplexityPreset = (body?.requestedComplexityPreset || "standard") as ComplexityPreset;
 
   const requestId = req.headers.get("x-request-id") || null;
 
@@ -83,6 +87,39 @@ export async function POST(req: Request) {
     if (tight) return tight;
     const v = validateCodeRunnerPayloadTs(body?.payload);
     if (!v.ok) return NextResponse.json({ error: v.error }, { status: 400 });
+  }
+
+  // Server-side cost estimate and gating (authoritative).
+  // This reuses the same billing rule logic as the credits UI.
+  const estimate = await estimateRunCost({
+    req,
+    userId,
+    toolId,
+    inputBytes: inputBytes ?? 0,
+    requestedComplexityPreset,
+  });
+  if (!estimate.allowed) {
+    const alt =
+      requestedComplexityPreset === "light"
+        ? null
+        : await estimateRunCost({
+            req,
+            userId,
+            toolId,
+            inputBytes: inputBytes ?? 0,
+            requestedComplexityPreset: "light",
+          });
+    const res = NextResponse.json(
+      {
+        error: estimate.reason || "Run blocked.",
+        code: "RUN_BLOCKED",
+        estimate,
+        alternativeFreeTier: alt?.allowed ? { preset: "light", estimate: alt } : null,
+      },
+      { status: 402 }
+    );
+    if (tokenRawToSet) res.headers.append("set-cookie", `${WORKSPACE_COOKIE.name}=${encodeURIComponent(signWorkspaceToken(tokenRawToSet))}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${WORKSPACE_COOKIE.maxAgeSeconds}`);
+    return res;
   }
 
   if (mode === "inline") {
@@ -120,7 +157,8 @@ export async function POST(req: Request) {
       if (note.trim()) await createNote({ projectId, runId, content: note.trim() });
     }
 
-    const res = NextResponse.json(out, { status: 200 });
+    // Attach the estimate for client-side transparency (matches Job.estimatedCostCredits where possible).
+    const res = NextResponse.json({ ...out, estimate }, { status: 200 });
     if (tokenRawToSet) res.headers.append("set-cookie", `${WORKSPACE_COOKIE.name}=${encodeURIComponent(signWorkspaceToken(tokenRawToSet))}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${WORKSPACE_COOKIE.maxAgeSeconds}`);
     return res;
   }
@@ -144,7 +182,17 @@ export async function POST(req: Request) {
     payload: workspaceMeta ? { ...(body?.payload ?? null), __workspace: workspaceMeta } : body?.payload ?? null,
   });
 
-  const res = NextResponse.json(created, { status: 200 });
+  // Best effort: persist estimate on the queued job row for history.
+  try {
+    const jobModel = (prisma as any).job as { update: (args: any) => Promise<any> };
+    if (created?.jobId) {
+      await jobModel.update({ where: { id: String(created.jobId) }, data: { estimatedCostCredits: estimate?.estimatedCredits ?? 0 } });
+    }
+  } catch {
+    // ignore
+  }
+
+  const res = NextResponse.json({ ...created, estimate }, { status: 200 });
   if (tokenRawToSet) res.headers.append("set-cookie", `${WORKSPACE_COOKIE.name}=${encodeURIComponent(signWorkspaceToken(tokenRawToSet))}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${WORKSPACE_COOKIE.maxAgeSeconds}`);
   return res;
 }
