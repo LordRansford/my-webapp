@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import { GraduationCap, X } from "lucide-react";
 import CitationChip from "@/components/assistants/CitationChip";
+import { CreditMeter } from "@/components/CreditMeter";
 
 type MentorCitation = { title: string; href: string; why?: string };
 type MentorTryNext = { title: string; href: string; steps: string[] };
@@ -14,6 +15,7 @@ export type MentorMsg = {
   citations?: MentorCitation[];
   tryNext?: MentorTryNext | null;
   lowConfidence?: boolean;
+  receipt?: any;
 };
 
 const MSG_KEY_PREFIX = "rn_mentor_msgs_v1:";
@@ -141,6 +143,7 @@ export default function MentorAssistant({
           citations: filtered.length ? filtered : undefined,
           tryNext: data?.tryNext || null,
           lowConfidence: Boolean(data?.lowConfidence),
+          receipt: data?.receipt || null,
         },
       ]);
       setInput("");
@@ -193,6 +196,10 @@ export default function MentorAssistant({
               ) : null}
             </div>
           ))}
+        </div>
+
+        <div className="mt-4">
+          <CreditMeter toolId="mentor-query" inputBytes={Math.max(0, input.trim().length)} preset="standard" lastReceipt={messages[messages.length - 1]?.receipt || null} />
         </div>
 
         <div className="mt-4 flex flex-col gap-2">

@@ -52,21 +52,37 @@ model CreditUsageEvent {
   units      Int
   freeUnits  Int
   paidUnits  Int
+  runId            String?
+  baseFree         Boolean  @default(false)
+  estimatedCredits Int      @default(0)
+  actualCredits    Int      @default(0)
+  meteringUnit     String   @default("ms") // "ms" initially
+  durationMs       Int      @default(0)
+  inputBytes       Int      @default(0)
+  outputBytes      Int      @default(0)
+  freeTierAppliedMs Int     @default(0)
+  paidMs           Int      @default(0)
   occurredAt DateTime @default(now())
 
   user UserIdentity @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, occurredAt])
   @@index([toolId, occurredAt])
+  @@index([runId])
 }
 
 model CreditLot {
   id            String   @id @default(cuid())
   userId        String
-  credits       Int
+  credits       Int // legacy total credits granted (kept for compatibility)
+  amountCredits Int      @default(0)
+  remainingCredits Int   @default(0)
   source        String
   stripeEventId String?
   stripePriceId String?
+  stripeCheckoutSessionId String?
+  stripePaymentIntentId   String?
+  purchasedAt    DateTime @default(now())
   expiresAt     DateTime?
   createdAt     DateTime @default(now())
 
@@ -74,6 +90,7 @@ model CreditLot {
 
   @@index([userId, createdAt])
   @@index([stripeEventId])
+  @@index([stripeCheckoutSessionId])
 }
 
 model StripeWebhookEvent {
@@ -81,6 +98,68 @@ model StripeWebhookEvent {
   id         String   @id
   type       String
   processedAt DateTime @default(now())
+}
+
+model Purchase {
+  id              String   @id @default(cuid())
+  userId          String
+  productId       String
+  stripeSessionId String   @unique
+  stripeEventId   String   @unique
+  status          String
+  createdAt       DateTime @default(now())
+}
+
+model CertificateEntitlement {
+  id              String   @id @default(cuid())
+  userId          String
+  courseId        String
+  status          String // "not_requested" | "pending_payment" | "eligible" | "issued"
+  stripeSessionId String?  @unique
+  issuedAt        DateTime?
+  issuedCertificateId String? @unique
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([userId, courseId])
+}
+
+model CourseCompletionEvidence {
+  id           String   @id @default(cuid())
+  userId       String
+  courseId     String
+  evidenceType String // "progress" | "quiz" | "tool" | "manual"
+  payload      Json
+  createdAt    DateTime @default(now())
+
+  @@index([userId, courseId])
+}
+
+model CertificateIssuance {
+  id            String   @id @default(cuid())
+  userId        String
+  courseId      String
+  certificateId String   @unique // RN-AI-FOUND-2026-000123
+  entitlementId String
+  issuedAt      DateTime @default(now())
+  revokedAt     DateTime?
+  revokedReason String?
+  pdfStorageKey String
+  pdfSha256     String
+  version       Int      @default(1)
+  metadata      Json?
+}
+
+model AuditEvent {
+  id          String   @id @default(cuid())
+  actorUserId String?
+  action      String // "CERT_REQUESTED" | "CERT_PAYMENT_CONFIRMED" | "CERT_ISSUED" | "CERT_DOWNLOADED" | "EVIDENCE_RECORDED"
+  entityType  String // "certificate" | "evidence"
+  entityId    String?
+  details     Json?
+  ip          String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
 }
 
 model FeedbackSubmission {

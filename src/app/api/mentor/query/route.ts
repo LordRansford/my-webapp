@@ -6,6 +6,9 @@ import { sanitizeQuestion } from "@/lib/mentor/sanitize";
 import { incrementUsage } from "@/lib/mentor/usage";
 import { retrieveContent } from "@/lib/mentor/retrieveContent";
 import { findToolSuggestion } from "@/lib/tools/toolRegistry";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth/options";
+import { runWithMetering } from "@/lib/tools/runWithMetering";
 
 const DISABLED = process.env.MENTOR_ENABLED === "false";
 
@@ -30,26 +33,48 @@ export async function POST(req: Request) {
       );
     }
 
-    const { matches, weak } = retrieveContent(safe.cleaned, pageUrl || null, 6);
-    if (!matches.length) return NextResponse.json({ message: "I can only help with what is covered on this site." }, { status: 200 });
+    const session = await getServerSession(authOptions).catch(() => null);
+    const userId = session?.user?.id || null;
 
-    incrementUsage();
+    const metered = await runWithMetering({
+      req,
+      userId,
+      toolId: "mentor-query",
+      inputBytes: Buffer.from(question).byteLength,
+      requestedComplexityPreset: "standard",
+      execute: async () => {
+        const { matches, weak } = retrieveContent(safe.cleaned, pageUrl || null, 6);
+        if (!matches.length) {
+          return { output: { message: "I can only help with what is covered on this site." }, outputBytes: 0 };
+        }
 
-    const top = matches[0];
-    const lowConfidence = weak;
-    const tool = findToolSuggestion(safe.cleaned);
+        incrementUsage();
+        const top = matches[0];
+        const lowConfidence = weak;
+        const tool = findToolSuggestion(safe.cleaned);
 
-    return NextResponse.json(
-      {
-        answer: lowConfidence ? "I might be wrong here. The closest matches are below." : (top.why || "This is covered in the notes."),
-        citationsTitle: "Where this is covered on the site",
-        citations: matches.slice(0, 5).map((m) => ({ title: m.title, href: m.href, why: m.why })),
-        tryNext: tool ? { title: tool.title, href: tool.route + (tool.anchor ? `#${tool.anchor}` : ""), steps: tool.tips.slice(0, 3) } : null,
-        note: "Responses are limited to site content. No external advice is provided.",
-        lowConfidence,
+        const payload = {
+          answer: lowConfidence ? "I might be wrong here. The closest matches are below." : top.why || "This is covered in the notes.",
+          citationsTitle: "Where this is covered on the site",
+          citations: matches.slice(0, 5).map((m) => ({ title: m.title, href: m.href, why: m.why })),
+          tryNext: tool ? { title: tool.title, href: tool.route + (tool.anchor ? `#${tool.anchor}` : ""), steps: tool.tips.slice(0, 3) } : null,
+          note: "Responses are limited to site content. No external advice is provided.",
+          lowConfidence,
+        };
+        return { output: payload, outputBytes: Buffer.byteLength(JSON.stringify(payload)) };
       },
-      { status: 200 }
-    );
+    });
+
+    if (!metered.ok) {
+      return NextResponse.json({ message: metered.message, estimate: metered.estimate }, { status: metered.status });
+    }
+
+    // Preserve original response shape but include receipt for transparency.
+    if ((metered.output as any)?.message) {
+      return NextResponse.json({ ...(metered.output as any), receipt: metered.receipt }, { status: 200 });
+    }
+
+    return NextResponse.json({ ...(metered.output as any), receipt: metered.receipt }, { status: 200 });
   });
 }
 

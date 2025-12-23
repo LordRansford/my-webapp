@@ -98,6 +98,26 @@ export const TOOL_COMPUTE_PROFILES: Record<string, ToolComputeProfile> = {
   "whois-summary": { toolId: "whois-summary", label: "WHOIS summary", computeClass: "B", typicalInputBytes: 120, typicalSteps: 1, guidance: ["Compare results with context and expected registrant."] },
   "ip-reputation": { toolId: "ip-reputation", label: "IP reputation", computeClass: "B", typicalInputBytes: 60, typicalSteps: 1, guidance: ["Combine with logs and behavioural indicators."] },
 
+  // Mentor (server assisted, bounded).
+  "mentor-query": {
+    toolId: "mentor-query",
+    label: "Mentor",
+    computeClass: "B",
+    typicalInputBytes: 2_000,
+    typicalSteps: 6,
+    guidance: ["Ask one focused question at a time.", "Include the page link so the match is tighter.", "Shorter questions usually respond faster."],
+  },
+
+  // Template access evaluation (server assisted, bounded).
+  "templates-request-download": {
+    toolId: "templates-request-download",
+    label: "Template download request",
+    computeClass: "B",
+    typicalInputBytes: 800,
+    typicalSteps: 3,
+    guidance: ["Choose one template at a time.", "Keep the requested use clear and short."],
+  },
+
   // AI Studio (Model Forge): local training but metered for predictable limits and future paid tiers.
   "model-forge-train": {
     toolId: "model-forge-train",

@@ -45,6 +45,16 @@ export async function createCreditUsageEvent(input: {
   units: number;
   freeUnits: number;
   paidUnits: number;
+  runId?: string | null;
+  baseFree?: boolean;
+  estimatedCredits?: number;
+  actualCredits?: number;
+  meteringUnit?: string;
+  durationMs?: number;
+  inputBytes?: number;
+  outputBytes?: number;
+  freeTierAppliedMs?: number;
+  paidMs?: number;
 }) {
   return prisma.creditUsageEvent.create({
     data: {
@@ -54,6 +64,16 @@ export async function createCreditUsageEvent(input: {
       units: input.units,
       freeUnits: input.freeUnits,
       paidUnits: input.paidUnits,
+      runId: input.runId || null,
+      baseFree: Boolean(input.baseFree),
+      estimatedCredits: Math.max(0, Math.round(Number(input.estimatedCredits) || 0)),
+      actualCredits: Math.max(0, Math.round(Number(input.actualCredits) || 0)),
+      meteringUnit: input.meteringUnit || "ms",
+      durationMs: Math.max(0, Math.round(Number(input.durationMs) || 0)),
+      inputBytes: Math.max(0, Math.round(Number(input.inputBytes) || 0)),
+      outputBytes: Math.max(0, Math.round(Number(input.outputBytes) || 0)),
+      freeTierAppliedMs: Math.max(0, Math.round(Number(input.freeTierAppliedMs) || 0)),
+      paidMs: Math.max(0, Math.round(Number(input.paidMs) || 0)),
     },
   });
 }
@@ -76,15 +96,22 @@ export async function createCreditLot(input: {
   source: string;
   stripeEventId?: string | null;
   stripePriceId?: string | null;
+  stripeCheckoutSessionId?: string | null;
+  stripePaymentIntentId?: string | null;
   expiresAt?: Date | null;
 }) {
+  const credits = Math.max(0, Math.round(Number(input.credits) || 0));
   return prisma.creditLot.create({
     data: {
       userId: input.userId,
-      credits: Math.max(0, Math.round(Number(input.credits) || 0)),
+      credits,
+      amountCredits: credits,
+      remainingCredits: credits,
       source: input.source,
       stripeEventId: input.stripeEventId || null,
       stripePriceId: input.stripePriceId || null,
+      stripeCheckoutSessionId: input.stripeCheckoutSessionId || null,
+      stripePaymentIntentId: input.stripePaymentIntentId || null,
       expiresAt: input.expiresAt || null,
     },
   });
@@ -96,6 +123,8 @@ export async function grantCredits(input: {
   source: string;
   stripeEventId?: string | null;
   stripePriceId?: string | null;
+  stripeCheckoutSessionId?: string | null;
+  stripePaymentIntentId?: string | null;
 }) {
   const creditsToAdd = Math.max(0, Math.round(Number(input.credits) || 0));
   if (!creditsToAdd) return { ok: false as const, balance: null as number | null };
@@ -125,9 +154,13 @@ export async function grantCredits(input: {
       data: {
         userId: input.userId,
         credits: creditsToAdd,
+        amountCredits: creditsToAdd,
+        remainingCredits: creditsToAdd,
         source: input.source,
         stripeEventId: input.stripeEventId || null,
         stripePriceId: input.stripePriceId || null,
+        stripeCheckoutSessionId: input.stripeCheckoutSessionId || null,
+        stripePaymentIntentId: input.stripePaymentIntentId || null,
         expiresAt,
       },
     });
