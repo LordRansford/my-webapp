@@ -7,7 +7,7 @@
  * Turn off by removing the env var or setting it to "false".
  */
 export const TESTING_MODE_ENABLED =
-  process.env.NEXT_PUBLIC_TESTING_MODE === "true" || process.env.TESTING_MODE === "true";
+  process.env.NEXT_PUBLIC_TESTING_MODE === "true";
 
 export type TestingOverrideDecision =
   | { allowed: true; reason: "testing-mode" }

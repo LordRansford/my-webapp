@@ -1,6 +1,6 @@
 import type { ArchitectureDiagramInput } from "../schema";
 import type { VariantConfig } from "../types";
-import { capList, sanitizeLabel } from "./safety";
+import { capList, enforceCaps, sanitizeLabel } from "./safety";
 
 export function generateDfdDiagram(input: ArchitectureDiagramInput, variant: VariantConfig) {
   const omissions: string[] = [];
@@ -135,6 +135,10 @@ export function generateDfdDiagram(input: ArchitectureDiagramInput, variant: Var
 
   lines.push("classDef store fill:#f8fafc,stroke:#64748b,color:#0f172a;");
   storeNodes.forEach((n) => lines.push(`class ${n.id} store;`));
+
+  const nodeCount = procNodes.length + storeNodes.length + extNodes.length;
+  const edgeCount = edges.slice(0, variant.caps.maxEdges).length;
+  omissions.push(...enforceCaps({ nodes: nodeCount, edges: edgeCount, caps: variant.caps }));
 
   return { mermaid: lines.join("\n"), assumptions, omissions };
 }

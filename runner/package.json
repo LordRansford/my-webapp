@@ -1,0 +1,16 @@
+{
+  "name": "ransfordsnotes-runner",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "quickjs-emscripten": "^0.31.0",
+    "tsx": "^4.20.5",
+    "zod": "^4.2.1"
+  }
+}
+
+

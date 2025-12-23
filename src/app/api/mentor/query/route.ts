@@ -9,6 +9,8 @@ import { findToolSuggestion } from "@/lib/tools/toolRegistry";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/options";
 import { runWithMetering } from "@/lib/tools/runWithMetering";
+import { attachWorkspaceCookie, getWorkspaceIdentity } from "@/lib/workspace/request";
+import { createRun, createNote, updateRun, getProject } from "@/lib/workspace/store";
 
 const DISABLED = process.env.MENTOR_ENABLED === "false";
 
@@ -36,6 +38,8 @@ export async function POST(req: Request) {
     const body = (await req.json().catch(() => null)) as any;
     const question = typeof body?.question === "string" ? body.question : "";
     const pageUrl = typeof body?.pageUrl === "string" ? body.pageUrl : "";
+    const projectId = typeof body?.projectId === "string" ? body.projectId.trim() : "";
+    const note = typeof body?.note === "string" ? body.note.slice(0, 8000) : "";
     const safe = sanitizeQuestion(question);
     if (!safe.ok) {
       return NextResponse.json(
@@ -46,6 +50,17 @@ export async function POST(req: Request) {
 
     const session = await getServerSession(authOptions).catch(() => null);
     const userId = session?.user?.id || null;
+    const ws = await getWorkspaceIdentity(req);
+
+    let runId: string | null = null;
+    if (projectId) {
+      const p = await getProject({ projectId });
+      const allowed = userId ? p?.ownerId === userId : p?.ownerId == null && p?.workspaceSessionId === ws.workspaceSessionId;
+      if (p && allowed) {
+        const run = await createRun({ projectId, toolId: "mentor-query", status: "running", inputJson: { question, pageUrl } });
+        runId = String(run.id);
+      }
+    }
 
     const metered = await runWithMetering<MentorApiResponse>({
       req,
@@ -77,15 +92,26 @@ export async function POST(req: Request) {
     });
 
     if (!metered.ok) {
-      return NextResponse.json({ message: metered.message, estimate: metered.estimate }, { status: metered.status });
+      const res = NextResponse.json({ message: metered.message, estimate: metered.estimate }, { status: metered.status });
+      return attachWorkspaceCookie(res, ws.setCookieValue);
     }
 
     // Preserve original response shape but include receipt for transparency.
-    if ((metered.output as any)?.message) {
-      return NextResponse.json({ ...(metered.output as any), receipt: metered.receipt }, { status: 200 });
+    const output = { ...(metered.output as any), receipt: metered.receipt };
+
+    if (runId && projectId) {
+      const receiptAny = metered.receipt as any;
+      await updateRun({
+        runId,
+        status: "succeeded",
+        outputJson: metered.output,
+        metricsJson: { durationMs: receiptAny?.durationMs ?? 0, chargedCredits: receiptAny?.creditsCharged ?? 0 },
+      }).catch(() => null);
+      if (note.trim()) await createNote({ projectId, runId, content: note.trim() }).catch(() => null);
     }
 
-    return NextResponse.json({ ...(metered.output as any), receipt: metered.receipt }, { status: 200 });
+    const res = NextResponse.json(output, { status: 200 });
+    return attachWorkspaceCookie(res, ws.setCookieValue);
   });
 }
 

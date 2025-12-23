@@ -6,11 +6,15 @@ import { requireSameOrigin } from "@/lib/security/origin";
 import { withRequestLogging } from "@/lib/security/requestLog";
 import { getStripeTestClient } from "@/lib/payments/stripeTest";
 import { getUserPlan } from "@/lib/billing/access";
+import { isBillingEnabled, BILLING_DISABLED_MESSAGE } from "@/lib/billing/billingEnabled";
 
 const ALLOWED_AMOUNTS = [500, 1500, 3000, 5000]; // in cents
 
 export async function POST(req: Request) {
   return withRequestLogging(req, { route: "POST /api/payments/create-intent" }, async () => {
+    if (!isBillingEnabled()) {
+      return NextResponse.json({ message: BILLING_DISABLED_MESSAGE }, { status: 503 });
+    }
     if (process.env.STRIPE_TEST_ENABLED !== "true") {
       return NextResponse.json({ message: "Stripe test mode disabled" }, { status: 503 });
     }

@@ -17,11 +17,7 @@ export default function ArchitectureDiagramStudioClient() {
         <div className="lg:col-span-2 rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">What this studio does</p>
           <p className="mt-2 text-sm text-slate-700">
-            You describe your system in plain language. The studio generates draft architecture diagrams that help you explain, review, and discuss the system.
-            Diagrams are starting points for thinking and discussion.
-          </p>
-          <p className="mt-2 text-sm text-slate-700">
-            Outputs are designed to be CPD safe and reviewable. The tool does not guess missing details.
+            You describe your system in plain language. The studio generates draft architecture diagrams. Diagrams are starting points for thinking and discussion.
           </p>
         </div>
         <div className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
@@ -39,7 +35,7 @@ export default function ArchitectureDiagramStudioClient() {
           href="/studios/architecture-diagram-studio/wizard"
           className="group rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
         >
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Guided Wizard</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Guided Wizard 🧭</p>
           <h2 className="mt-2 text-2xl font-semibold text-slate-900">Step by step</h2>
           <p className="mt-2 text-sm text-slate-700">Best if you are new to architecture diagrams.</p>
           <p className="mt-4 text-sm font-semibold text-slate-900">Open wizard →</p>
@@ -49,32 +45,20 @@ export default function ArchitectureDiagramStudioClient() {
           href="/studios/architecture-diagram-studio/editor"
           className="group rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
         >
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Power Editor</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Power Editor ⚡</p>
           <h2 className="mt-2 text-2xl font-semibold text-slate-900">Direct control</h2>
           <p className="mt-2 text-sm text-slate-700">Best for professionals and reviewers.</p>
           <p className="mt-4 text-sm font-semibold text-slate-900">Open editor →</p>
         </Link>
       </section>
 
-      <section className="mt-4" aria-label="Templates">
-        <Link
-          href="/studios/architecture-diagram-studio/templates"
-          className="block rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
-        >
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Templates</p>
-          <h2 className="mt-2 text-2xl font-semibold text-slate-900">Start from a curated example</h2>
-          <p className="mt-2 text-sm text-slate-700">Zero typing. High quality starter packs for kids, students, and professionals.</p>
-          <p className="mt-4 text-sm font-semibold text-slate-900">Open templates →</p>
-        </Link>
-      </section>
-
       <section className="mt-8 rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm" aria-label="What you get">
         <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">What you get</p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4 text-sm text-slate-700">Print ready diagrams</div>
-          <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4 text-sm text-slate-700">Clear assumptions and boundaries</div>
-          <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4 text-sm text-slate-700">Beginner friendly guidance</div>
-          <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4 text-sm text-slate-700">Professional outputs for reviews</div>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4 text-sm text-slate-700">Print ready diagrams 🖨️</div>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4 text-sm text-slate-700">Clear assumptions and boundaries 🔍</div>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4 text-sm text-slate-700">Beginner friendly guidance 🧒</div>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4 text-sm text-slate-700">Professional outputs for reviews 🧑‍💻</div>
         </div>
       </section>
 

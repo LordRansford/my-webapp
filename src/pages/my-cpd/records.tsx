@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import Layout from "@/components/Layout";
 import Link from "next/link";
 import AccessGate from "@/components/AccessGate";
+import { getCpdCertificateCredits } from "@/lib/cpd/certificateCredits";
 
 type LearningRecord = {
   userId: string;
@@ -49,20 +50,21 @@ export default function LearningRecordsPage() {
   const issueCertificate = async (courseId: string, levelId: string) => {
     setIssuing(`${courseId}:${levelId}`);
     try {
+      const fullCourseId = `${courseId}:${levelId}`;
       const res = await fetch("/api/certificates/issue", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ courseId, levelId }),
+        body: JSON.stringify({ courseId: fullCourseId }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         setMessage(data?.message || "Unable to issue certificate.");
         return;
       }
-      const certId = data?.certificateId;
-      if (certId) {
-        window.location.href = `/certificates/${certId}`;
-      }
+      const pdfUrl = typeof data?.pdfUrl === "string" ? data.pdfUrl : null;
+      const verifyUrl = typeof data?.verifyUrl === "string" ? data.verifyUrl : null;
+      if (pdfUrl) window.location.href = pdfUrl;
+      else if (verifyUrl) window.location.href = verifyUrl;
     } catch {
       setMessage("Unable to issue certificate.");
     } finally {
@@ -110,21 +112,24 @@ export default function LearningRecordsPage() {
                       <div className="actions">
                         <AccessGate
                           requiredLevel="supporter"
-                          fallbackMessage="Sign in to generate a certificate for this course."
+                          fallbackMessage="Sign in to get a CPD certificate for this course."
                           showUpgradeHint
                         >
+                          <p className="muted" style={{ marginTop: 0 }}>
+                            Everything on RansfordsNotes is free to learn and use. We only charge for extra compute and for issuing CPD certificates.
+                          </p>
+                          <p className="muted" style={{ marginTop: 0 }}>
+                            You are purchasing certificate issuance. This covers identity linked issuance, a downloadable PDF, and a public verification page.
+                          </p>
                           <button
                             type="button"
                             className="button"
                             disabled={r.completionStatus !== "completed" || issuing === `${r.courseId}:${r.levelId}`}
                             onClick={() => issueCertificate(r.courseId, r.levelId)}
                           >
-                            {issuing === `${r.courseId}:${r.levelId}` ? "Preparing..." : "Download certificate"}
+                            {issuing === `${r.courseId}:${r.levelId}` ? "Issuing..." : `Get CPD certificate (${getCpdCertificateCredits(r.courseId)} credits)`}
                           </button>
                         </AccessGate>
-                        <Link href="/verify/[certificateId]" as="/verify/example" className="link text-sm">
-                          Verification page
-                        </Link>
                       </div>
                     </div>
                   ))}

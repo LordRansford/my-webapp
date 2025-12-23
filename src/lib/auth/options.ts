@@ -4,6 +4,8 @@ import { BetterSqlite3Adapter } from "@/lib/auth/adapter";
 import { upsertUser, getUserById } from "@/lib/auth/store";
 import { getUserPlan } from "@/lib/billing/access";
 import { upsertUserIdentity } from "@/services/progressService";
+import { prisma } from "@/lib/db/prisma";
+import { isAdminRole } from "@/lib/admin/rbac";
 
 export const authOptions: NextAuthOptions = {
   adapter: BetterSqlite3Adapter(),
@@ -71,9 +73,26 @@ export const authOptions: NextAuthOptions = {
     },
   },
   callbacks: {
-    async session({ session, user }) {
+    async jwt({ token, user }) {
+      // Embed admin role in JWT so middleware can enforce /admin without DB access.
+      // Fail closed: unknown values are ignored.
+      try {
+        const userId = (user as any)?.id || (token as any)?.sub;
+        if (userId) {
+          const rec = await (prisma as any).userIdentity.findUnique({ where: { id: String(userId) }, select: { adminRole: true } });
+          const role = rec?.adminRole;
+          (token as any).adminRole = isAdminRole(role) ? role : null;
+        }
+      } catch {
+        (token as any).adminRole = null;
+      }
+      return token;
+    },
+    async session({ session, token, user }) {
       if (session.user) {
-        session.user.id = user.id;
+        session.user.id = (user as any)?.id || String((token as any)?.sub || "");
+        // Surface admin role to server components; do not rely on this on the client for security.
+        (session.user as any).adminRole = (token as any)?.adminRole || null;
       }
       return session;
     },

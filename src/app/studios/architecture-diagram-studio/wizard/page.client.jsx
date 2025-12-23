@@ -19,6 +19,8 @@ import { EXAMPLE_KID_FRIENDLY } from "@/lib/architecture-diagrams/examples";
 import { generateDiagramPack } from "@/lib/architecture-diagrams/generate/pack";
 import { getArchitectureTemplate } from "@/lib/architecture-diagrams/templates";
 import { emitArchitectureTelemetry, durationBucketFrom } from "@/lib/architecture-diagrams/telemetry/client";
+import { assessPurpose } from "@/lib/architecture-diagrams/rules/purpose";
+import { hashArchitectureInputs } from "@/lib/architecture-diagrams/versioning/hash";
 
 const steps = [
   { id: "goal", label: "Goal", hint: "Why you need diagrams" },
@@ -105,6 +107,25 @@ export default function WizardPageClient() {
     return validateArchitectureDiagramInput(input);
   }, [state]);
 
+  const purpose = useMemo(() => {
+    if (!validatedInput?.ok) return null;
+    return assessPurpose(validatedInput.value);
+  }, [validatedInput]);
+
+  const inputVersion = useMemo(() => {
+    if (!validatedInput?.ok) return "";
+    return hashArchitectureInputs(validatedInput.value);
+  }, [validatedInput]);
+
+  const canGenerate = useMemo(() => {
+    if (!validatedInput?.ok) return false;
+    const g = validatedInput.value.goal;
+    const hasTrustBoundary = (validatedInput.value.security?.trustBoundaries || []).filter(Boolean).length > 0;
+    const hasAck = Boolean(validatedInput.value.security?.hasNoTrustBoundariesConfirmed);
+    if ((g === "security-review" || g === "data-review") && !hasTrustBoundary && !hasAck) return false;
+    return true;
+  }, [validatedInput]);
+
   const flowOptions = useMemo(() => {
     const opts = new Set();
     (state.users || []).forEach((u) => u?.name && opts.add(u.name));
@@ -190,26 +211,40 @@ export default function WizardPageClient() {
       <StepReview
         input={{
           ...state,
+          __purposeWarnings: (purpose?.warnings || []).map((w) => w.message),
+          __inputVersion: inputVersion,
         }}
         validation={validatedInput}
-        generationEnabled={Boolean(validatedInput?.ok)}
+        generationEnabled={canGenerate}
         onGenerate={() => {
           if (!validatedInput?.ok) return;
+          if (!canGenerate) return;
           const started = Date.now();
           emitArchitectureTelemetry({
             event: "generation_requested",
             audience: validatedInput.value.audience,
             goal: validatedInput.value.goal,
-          });
-          const nextPack = generateDiagramPack(validatedInput.value);
-          setPack(nextPack);
-          emitArchitectureTelemetry({
-            event: "generation_completed",
-            audience: validatedInput.value.audience,
-            goal: validatedInput.value.goal,
-            durationBucket: durationBucketFrom(started),
             outcome: "ok",
           });
+          try {
+            const nextPack = generateDiagramPack(validatedInput.value);
+            setPack(nextPack);
+            emitArchitectureTelemetry({
+              event: "generation_completed",
+              audience: validatedInput.value.audience,
+              goal: validatedInput.value.goal,
+              outcome: "ok",
+              durationBucket: durationBucketFrom(started),
+            });
+          } catch {
+            emitArchitectureTelemetry({
+              event: "generation_completed",
+              audience: validatedInput.value.audience,
+              goal: validatedInput.value.goal,
+              outcome: "failed",
+              durationBucket: durationBucketFrom(started),
+            });
+          }
         }}
       />
     );
@@ -230,13 +265,7 @@ export default function WizardPageClient() {
           <WizardStepper steps={steps} activeId={activeStep} onJump={setActiveStep} />
           <div className="rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm">
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Draft tools</p>
-            <p className="mt-2 text-sm text-slate-700">Start from a safe example if you want a quick preview.</p>
-            <a
-              href="/studios/architecture-diagram-studio/templates"
-              className="mt-3 block w-full rounded-2xl border border-slate-200 bg-white px-4 py-2 text-center text-sm font-semibold text-slate-800 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
-            >
-              Browse templates
-            </a>
+            <p className="mt-2 text-sm text-slate-700">Load a validated example if you want a quick start.</p>
             <button
               type="button"
               onClick={() => updateState(() => ({ ...EXAMPLE_KID_FRIENDLY }))}
@@ -286,7 +315,7 @@ export default function WizardPageClient() {
           </button>
         </div>
 
-        {activeStep === "review" && pack ? (
+        {pack ? (
           <div className="pt-6">
             <DiagramPackViewer pack={pack} />
           </div>

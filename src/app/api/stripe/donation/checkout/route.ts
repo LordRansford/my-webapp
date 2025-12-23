@@ -6,6 +6,7 @@ import { authOptions } from "@/lib/auth/options";
 import { requireSameOrigin } from "@/lib/security/origin";
 import { withRequestLogging } from "@/lib/security/requestLog";
 import { getBillingProvider } from "@/lib/billing/providers/stripeProvider";
+import { isBillingEnabled, BILLING_DISABLED_MESSAGE } from "@/lib/billing/billingEnabled";
 
 type Body = {
   amount?: number;
@@ -28,6 +29,9 @@ function isSafeReturnUrl(value: string) {
 
 export async function POST(req: Request) {
   return withRequestLogging(req, { route: "POST /api/stripe/donation/checkout" }, async () => {
+    if (!isBillingEnabled()) {
+      return NextResponse.json({ message: BILLING_DISABLED_MESSAGE }, { status: 503 });
+    }
     const originBlock = requireSameOrigin(req);
     if (originBlock) return originBlock;
 

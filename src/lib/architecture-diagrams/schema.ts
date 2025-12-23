@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ARCH_DIAGRAM_LIMITS, CONTROL_CHAR_REGEX } from "./limits";
+import { ARCH_DIAGRAM_LIMITS, CONTROL_CHAR_REGEX, CONTROL_CHAR_TEST_REGEX } from "./limits";
 
 const cleanText = (value: unknown) =>
   String(value ?? "")
@@ -10,6 +10,7 @@ const cleanText = (value: unknown) =>
 const boundedText = (max: number, label: string) =>
   z
     .string()
+    .refine((v) => !CONTROL_CHAR_TEST_REGEX.test(v), { message: `${label} contains invalid control characters.` })
     .transform((v) => cleanText(v))
     .refine((v) => v.length > 0, { message: `${label} is required.` })
     .refine((v) => v.length <= max, { message: `${label} must be ${max} characters or fewer.` });
@@ -30,14 +31,22 @@ export const ExternalSystemSchema = z.object({
 export const ContainerSchema = z.object({
   name: boundedText(80, "Container name"),
   type: ContainerTypeSchema,
-  description: z.string().transform(cleanText).refine((v) => v.length <= 200, { message: "Container description must be 200 characters or fewer." }),
+  description: z
+    .string()
+    .refine((v) => !CONTROL_CHAR_TEST_REGEX.test(v), { message: "Container description contains invalid control characters." })
+    .transform(cleanText)
+    .refine((v) => v.length <= 200, { message: "Container description must be 200 characters or fewer." }),
 });
 
 export const DataTypeSchema = z.enum(["pii", "financial", "telemetry", "credentials", "health", "other"]);
 
 export const DataStoreSchema = z.object({
   name: boundedText(80, "Data store name"),
-  description: z.string().transform(cleanText).refine((v) => v.length <= 200, { message: "Data store description must be 200 characters or fewer." }),
+  description: z
+    .string()
+    .refine((v) => !CONTROL_CHAR_TEST_REGEX.test(v), { message: "Data store description contains invalid control characters." })
+    .transform(cleanText)
+    .refine((v) => v.length <= 200, { message: "Data store description must be 200 characters or fewer." }),
 });
 
 export const FlowSchema = z.object({
@@ -48,8 +57,21 @@ export const FlowSchema = z.object({
 });
 
 export const SecuritySchema = z.object({
-  authenticationMethod: z.string().transform(cleanText).refine((v) => v.length <= 120, { message: "Authentication method must be 120 characters or fewer." }),
-  trustBoundaries: z.array(z.string().transform(cleanText).refine((v) => v.length > 0, { message: "Trust boundary cannot be empty." })).max(ARCH_DIAGRAM_LIMITS.maxActors).default([]),
+  authenticationMethod: z
+    .string()
+    .refine((v) => !CONTROL_CHAR_TEST_REGEX.test(v), { message: "Authentication method contains invalid control characters." })
+    .transform(cleanText)
+    .refine((v) => v.length <= 120, { message: "Authentication method must be 120 characters or fewer." }),
+  trustBoundaries: z
+    .array(
+      z
+        .string()
+        .refine((v) => !CONTROL_CHAR_TEST_REGEX.test(v), { message: "Trust boundary contains invalid control characters." })
+        .transform(cleanText)
+        .refine((v) => v.length > 0, { message: "Trust boundary cannot be empty." }),
+    )
+    .max(ARCH_DIAGRAM_LIMITS.maxActors)
+    .default([]),
   hasNoTrustBoundariesConfirmed: z.boolean().default(false),
   adminAccess: z.boolean().default(false),
   sensitiveDataCategories: z.array(DataTypeSchema).max(ARCH_DIAGRAM_LIMITS.maxDataTypes).default([]),
@@ -60,6 +82,7 @@ export const ArchitectureDiagramInputSchema = z
     systemName: boundedText(ARCH_DIAGRAM_LIMITS.maxSystemNameChars, "System name"),
     systemDescription: z
       .string()
+      .refine((v) => !CONTROL_CHAR_TEST_REGEX.test(v), { message: "System description contains invalid control characters." })
       .transform(cleanText)
       .refine((v) => v.length > 0, { message: "System description is required." })
       .refine((v) => v.length <= ARCH_DIAGRAM_LIMITS.maxSystemDescriptionChars, {
@@ -74,7 +97,12 @@ export const ArchitectureDiagramInputSchema = z
     dataStores: z.array(DataStoreSchema).max(ARCH_DIAGRAM_LIMITS.maxDataStores).default([]),
     flows: z.array(FlowSchema).max(ARCH_DIAGRAM_LIMITS.maxFlows).default([]),
     security: SecuritySchema,
-    versionName: z.string().transform(cleanText).refine((v) => v.length <= 60, { message: "Version name must be 60 characters or fewer." }).optional(),
+    versionName: z
+      .string()
+      .refine((v) => !CONTROL_CHAR_TEST_REGEX.test(v), { message: "Version name contains invalid control characters." })
+      .transform(cleanText)
+      .refine((v) => v.length <= 60, { message: "Version name must be 60 characters or fewer." })
+      .optional(),
   })
   .strict()
   .superRefine((val, ctx) => {

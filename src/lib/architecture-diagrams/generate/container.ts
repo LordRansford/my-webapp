@@ -1,6 +1,6 @@
 import type { ArchitectureDiagramInput } from "../schema";
 import type { VariantConfig } from "../types";
-import { capList, sanitizeLabel } from "./safety";
+import { capList, enforceCaps, sanitizeLabel } from "./safety";
 
 function shortType(type: string) {
   if (type === "ui") return "UI";
@@ -18,12 +18,14 @@ export function generateContainerDiagram(input: ArchitectureDiagramInput, varian
     "Links are derived from provided flows. No additional dependencies are inferred.",
   ];
 
-  const containers = capList(input.containers || [], variant.caps.maxNodes)
+  // Reserve one node for the system itself.
+  const maxChildNodes = Math.max(0, variant.caps.maxNodes - 1);
+  const containers = capList(input.containers || [], maxChildNodes)
     .map((c) => ({ name: c.name, type: c.type, description: c.description }))
     .filter((c) => String(c.name || "").trim().length > 0)
     .sort((a, b) => String(a.name).localeCompare(String(b.name)));
 
-  const externals = capList(input.externalSystems || [], variant.caps.maxNodes)
+  const externals = capList(input.externalSystems || [], maxChildNodes)
     .map((s) => s.name)
     .filter(Boolean)
     .sort((a, b) => String(a).localeCompare(String(b)));
@@ -100,12 +102,17 @@ export function generateContainerDiagram(input: ArchitectureDiagramInput, varian
 
   // Connect system to all containers if no edges.
   if (edges.size === 0) {
-    containerNodes.forEach((n) => lines.push(`${sysId} --> ${n.id}`));
-    externalNodes.forEach((n) => lines.push(`${n.id} --> ${sysId}`));
+    containerNodes.forEach((n) => {
+      if (lines.filter((l) => l.includes("-->")).length < variant.caps.maxEdges) lines.push(`${sysId} --> ${n.id}`);
+    });
+    externalNodes.forEach((n) => {
+      if (lines.filter((l) => l.includes("-->")).length < variant.caps.maxEdges) lines.push(`${n.id} --> ${sysId}`);
+    });
     if (containerNodes.length + externalNodes.length === 0) omissions.push("No nodes available to connect in container diagram.");
   } else {
     Array.from(edges)
       .sort((a, b) => a.localeCompare(b))
+      .slice(0, variant.caps.maxEdges)
       .forEach((e) => lines.push(e));
   }
 
@@ -114,6 +121,14 @@ export function generateContainerDiagram(input: ArchitectureDiagramInput, varian
   lines.push("classDef ext fill:#eef2ff,stroke:#64748b,color:#0f172a;");
   lines.push("class SYS sys;");
   externalNodes.forEach((n) => lines.push(`class ${n.id} ext;`));
+
+  omissions.push(
+    ...enforceCaps({
+      nodes: 1 + nodes.length,
+      edges: lines.filter((l) => l.includes("-->")).length,
+      caps: variant.caps,
+    }),
+  );
 
   return { mermaid: lines.join("\n"), assumptions, omissions };
 }

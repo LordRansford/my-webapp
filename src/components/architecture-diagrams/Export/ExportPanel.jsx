@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import { downloadSvg } from "@/lib/architecture-diagrams/export/svg";
 import { downloadPng } from "@/lib/architecture-diagrams/export/png";
 import { openPrintPreview } from "./PrintView";
-import { buildDiagramFileBase } from "@/lib/architecture-diagrams/export/filename";
 import { emitArchitectureTelemetry } from "@/lib/architecture-diagrams/telemetry/client";
 
 export default function ExportPanel({
@@ -16,7 +15,10 @@ export default function ExportPanel({
   audience,
   goal,
   appendixMarkdown,
+  briefMarkdown,
+  adrMarkdown,
   inputVersion,
+  footerRightText,
 }) {
   const [pageSize, setPageSize] = useState("a4-portrait");
   const [status, setStatus] = useState("");
@@ -41,8 +43,10 @@ export default function ExportPanel({
   const downloadPdf = async () => {
     if (!svgText) return { ok: false, reason: "Render the diagram first." };
     setPdfBusy(true);
-    setStatus("Preparing PDF…");
+    setStatus("Preparing PDF...");
+
     emitArchitectureTelemetry({ event: "export_pdf_requested", diagramType, variantId, audience, goal, pageSize: pageSize === "a3-landscape" ? "A3" : "A4" });
+
     try {
       const wantsA3 = pageSize === "a3-landscape";
       const res = await fetch("/api/architecture-diagrams/export/pdf", {
@@ -57,6 +61,7 @@ export default function ExportPanel({
           orientation: wantsA3 ? "landscape" : "portrait",
         }),
       });
+
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         const msg = data?.error || "PDF export failed. Please try again.";
@@ -67,11 +72,13 @@ export default function ExportPanel({
           variantId,
           audience,
           goal,
-          pageSize: pageSize === "a3-landscape" ? "A3" : "A4",
-          outcome: res.status === 429 ? "rate_limited" : msg.toLowerCase().includes("too large") ? "too_large" : msg.toLowerCase().includes("svg") ? "sanitise_failed" : "failed",
+          pageSize: wantsA3 ? "A3" : "A4",
+          outcome:
+            res.status === 429 ? "rate_limited" : msg.toLowerCase().includes("too large") ? "too_large" : msg.toLowerCase().includes("svg") ? "sanitise_failed" : "failed",
         });
         return { ok: false, reason: msg };
       }
+
       const blob = await res.blob();
       let outBlob = blob;
 
@@ -84,18 +91,14 @@ export default function ExportPanel({
           const page = doc.addPage();
           const { width, height } = page.getSize();
 
-          const header = `Appendix: Brief and ADR`;
-          const meta = `Input version: ${inputVersion || ""}  Date: ${new Date().toLocaleDateString()}`;
-          const watermark = includeWatermark ? "Draft architecture" : "";
+          const header = "Appendix: Architecture brief and ADR";
+          const meta = `Input version: ${String(inputVersion || "")}  Date: ${new Date().toLocaleDateString()}`;
 
           let y = height - 50;
           page.drawText(header, { x: 40, y, size: 14, font, color: rgb(0.06, 0.09, 0.16) });
           y -= 18;
           page.drawText(meta, { x: 40, y, size: 10, font, color: rgb(0.2, 0.25, 0.31) });
           y -= 18;
-          if (watermark) {
-            page.drawText(watermark, { x: width - 40 - font.widthOfTextAtSize(watermark, 10), y: height - 30, size: 10, font, color: rgb(0.4, 0.45, 0.5) });
-          }
 
           const text = String(appendixMarkdown).split("\n");
           const maxWidth = width - 80;
@@ -144,11 +147,14 @@ export default function ExportPanel({
       const url = URL.createObjectURL(outBlob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${buildDiagramFileBase({ systemName, diagramType, variant: variantLabel })}.pdf`;
+      const cd = res.headers.get("content-disposition") || "";
+      const m = cd.match(/filename="([^"]+)"/i);
+      a.download = m?.[1] || "diagram.pdf";
       document.body.appendChild(a);
       a.click();
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 250);
+
       setStatus("Export ready.");
       emitArchitectureTelemetry({
         event: "export_pdf_succeeded",
@@ -156,7 +162,7 @@ export default function ExportPanel({
         variantId,
         audience,
         goal,
-        pageSize: pageSize === "a3-landscape" ? "A3" : "A4",
+        pageSize: wantsA3 ? "A3" : "A4",
         outcome: "ok",
       });
       return { ok: true };
@@ -199,6 +205,7 @@ export default function ExportPanel({
                   variantLabel,
                   pageSize,
                   includeWatermark,
+                  footerRightText,
                 })
               )
             }
@@ -223,7 +230,7 @@ export default function ExportPanel({
             disabled={disabled}
             onClick={() => {
               emitArchitectureTelemetry({ event: "export_svg", diagramType, variantId, audience, goal, outcome: "ok" });
-              return run(() => downloadSvg({ svgText, systemName, diagramType, variantLabel, includeWatermark }));
+              return run(() => downloadSvg({ svgText, systemName, diagramType, variantLabel, includeWatermark, footerRightText }));
             }}
             className={`rounded-full px-4 py-2 text-sm font-semibold shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 ${
               disabled ? "bg-slate-200 text-slate-500 cursor-not-allowed" : "border border-slate-200 bg-white text-slate-800 hover:bg-slate-50"
@@ -236,7 +243,7 @@ export default function ExportPanel({
             disabled={disabled}
             onClick={() => {
               emitArchitectureTelemetry({ event: "export_png", diagramType, variantId, audience, goal, outcome: "ok" });
-              return run(() => downloadPng({ svgText, systemName, diagramType, variantLabel, scale: 2, includeWatermark }));
+              return run(() => downloadPng({ svgText, systemName, diagramType, variantLabel, scale: 2, includeWatermark, footerRightText }));
             }}
             className={`rounded-full px-4 py-2 text-sm font-semibold shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 ${
               disabled ? "bg-slate-200 text-slate-500 cursor-not-allowed" : "border border-slate-200 bg-white text-slate-800 hover:bg-slate-50"
@@ -250,46 +257,69 @@ export default function ExportPanel({
       {disabledReason ? <p className="mt-3 text-xs font-semibold text-slate-600">{disabledReason}</p> : null}
       {status ? <p className="mt-3 text-xs font-semibold text-slate-700">{status}</p> : null}
 
-      <div className="mt-4 grid gap-2 sm:grid-cols-2">
-        <label className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-800">
-          <span className="font-semibold">Include watermark: Draft architecture</span>
-          <input
-            type="checkbox"
-            checked={includeWatermark}
-            onChange={(e) => setIncludeWatermark(e.target.checked)}
-            className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-400"
-          />
-        </label>
-        <label className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-800">
-          <span className="font-semibold">Include brief and ADR appendix</span>
-          <input
-            type="checkbox"
-            checked={includeAppendix}
-            onChange={(e) => setIncludeAppendix(e.target.checked)}
-            className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-400"
-          />
-        </label>
+      <div className="mt-4">
+        <div className="grid gap-2 sm:grid-cols-2">
+          <label className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-800">
+            <span className="font-semibold">Include watermark: Draft architecture</span>
+            <input
+              type="checkbox"
+              checked={includeWatermark}
+              onChange={(e) => setIncludeWatermark(e.target.checked)}
+              className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-400"
+            />
+          </label>
+          <label className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-800">
+            <span className="font-semibold">Include brief and ADR appendix</span>
+            <input
+              type="checkbox"
+              checked={includeAppendix}
+              onChange={(e) => setIncludeAppendix(e.target.checked)}
+              className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-400"
+            />
+          </label>
+        </div>
       </div>
 
-      {appendixMarkdown ? (
-        <button
-          type="button"
-          onClick={() => {
-            const blob = new Blob([appendixMarkdown], { type: "text/markdown;charset=utf-8" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = `${buildDiagramFileBase({ systemName, diagramType: "appendix", variant: variantLabel })}.md`;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            setTimeout(() => URL.revokeObjectURL(url), 250);
-          }}
-          className="mt-3 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
-        >
-          Download Markdown appendix
-        </button>
-      ) : null}
+      <div className="mt-3 flex flex-wrap gap-2">
+        {briefMarkdown ? (
+          <button
+            type="button"
+            onClick={() => {
+              const blob = new Blob([briefMarkdown], { type: "text/markdown;charset=utf-8" });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = "architecture-brief.md";
+              document.body.appendChild(a);
+              a.click();
+              a.remove();
+              setTimeout(() => URL.revokeObjectURL(url), 250);
+            }}
+            className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
+          >
+            Download brief (Markdown)
+          </button>
+        ) : null}
+        {adrMarkdown ? (
+          <button
+            type="button"
+            onClick={() => {
+              const blob = new Blob([adrMarkdown], { type: "text/markdown;charset=utf-8" });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = "adr-stub.md";
+              document.body.appendChild(a);
+              a.click();
+              a.remove();
+              setTimeout(() => URL.revokeObjectURL(url), 250);
+            }}
+            className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
+          >
+            Download ADR (Markdown)
+          </button>
+        ) : null}
+      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import type { ArchitectureDiagramInput } from "../schema";
 import type { VariantConfig } from "../types";
-import { capList, sanitizeLabel } from "./safety";
+import { capList, enforceCaps, sanitizeLabel } from "./safety";
 
 function mermaidNode(id: string, label: string) {
   // Use bracket style for neutral nodes.
@@ -19,8 +19,10 @@ export function generateContextDiagram(input: ArchitectureDiagramInput, variant:
   const systemLabel = sysSan.ok ? sysSan.value : "System";
   if (!sysSan.ok) omissions.push(`System name omitted: ${sysSan.reason}`);
 
-  const users = capList(input.users || [], variant.caps.maxNodes).map((u) => u.name);
-  const externals = capList(input.externalSystems || [], variant.caps.maxNodes).map((s) => s.name);
+  // Reserve one node for the system itself.
+  const maxActorNodes = Math.max(0, variant.caps.maxNodes - 1);
+  const users = capList(input.users || [], maxActorNodes).map((u) => u.name);
+  const externals = capList(input.externalSystems || [], maxActorNodes).map((s) => s.name);
 
   const userNodes: { id: string; label: string }[] = [];
   const externalNodes: { id: string; label: string }[] = [];
@@ -83,7 +85,9 @@ export function generateContextDiagram(input: ArchitectureDiagramInput, variant:
   // Deterministic edges: connect every user/external to SYS if we have no explicit edges.
   if (edges.size === 0) {
     [...userNodes, ...externalNodes].forEach((n) => {
-      mermaidLines.push(`${n.id} --> ${systemId}`);
+      if (mermaidLines.filter((l) => l.includes("-->")).length < variant.caps.maxEdges) {
+        mermaidLines.push(`${n.id} --> ${systemId}`);
+      }
     });
     if (userNodes.length + externalNodes.length === 0) omissions.push("No users or external systems were provided for context.");
   } else {
@@ -91,7 +95,7 @@ export function generateContextDiagram(input: ArchitectureDiagramInput, variant:
     const labelToId = new Map<string, string>();
     userNodes.forEach((n) => labelToId.set(n.label, n.id));
     externalNodes.forEach((n) => labelToId.set(n.label, n.id));
-    const sortedEdges = Array.from(edges).sort((a, b) => a.localeCompare(b));
+    const sortedEdges = Array.from(edges).sort((a, b) => a.localeCompare(b)).slice(0, variant.caps.maxEdges);
     sortedEdges.forEach((e) => {
       const [fromLabel, toLabel] = e.split(" -> ").map((x) => x.trim());
       const fromId = labelToId.get(variant.minimalLabels ? fromLabel.slice(0, 24) : fromLabel);
@@ -99,6 +103,14 @@ export function generateContextDiagram(input: ArchitectureDiagramInput, variant:
       if (fromId && toId) mermaidLines.push(`${fromId} --> ${toId}`);
     });
   }
+
+  omissions.push(
+    ...enforceCaps({
+      nodes: 1 + userNodes.length + externalNodes.length,
+      edges: mermaidLines.filter((l) => l.includes("-->")).length,
+      caps: variant.caps,
+    }),
+  );
 
   // Keep a calm, consistent style.
   mermaidLines.push("classDef sys fill:#0f172a,color:#ffffff,stroke:#0f172a;");

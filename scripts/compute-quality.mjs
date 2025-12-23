@@ -49,6 +49,41 @@ if (offenders.length) {
   fail(offenders.slice(0, 20).join("\n"));
 }
 
+// Stage 4 safety envelope enforcement (server side)
+// 1) Prevent bypassing compute runner contract.
+// 2) Prevent server-side fetch usage outside safeFetch.
+// 3) Prevent upload handling via formData without validateUpload.
+const guardFiles = listFiles(path.join(process.cwd(), "src"))
+  .filter((p) => /\.(tsx|ts|jsx|js)$/.test(p))
+  .map((p) => ({ rel: path.relative(process.cwd(), p), src: fs.readFileSync(p, "utf8") }));
+
+const apiRoutes = guardFiles.filter((f) => f.rel.startsWith("src/app/api/") || f.rel.startsWith("src/pages/api/"));
+const jobHandlers = guardFiles.filter((f) => f.rel === "src/lib/jobs/registry.ts");
+
+for (const f of jobHandlers) {
+  if (f.src.includes("runInRunner(")) {
+    offenders.push(`${f.rel} calls runInRunner directly. Use runComputeJob from src/lib/compute/runner.ts`);
+  }
+}
+
+for (const f of apiRoutes) {
+  if (f.rel.includes("safeFetch")) continue;
+  // No direct fetch in API routes (defense in depth against SSRF).
+  if (f.src.includes("fetch(")) {
+    offenders.push(`${f.rel} uses fetch() in an API route. Use safeFetch from src/lib/network/safeFetch.ts`);
+  }
+  // Uploads must go through validateUpload (when formData is used).
+  if (f.src.includes(".formData(") || f.src.includes("formData()")) {
+    if (!f.src.includes("validateUpload")) {
+      offenders.push(`${f.rel} uses formData but does not call validateUpload`);
+    }
+  }
+}
+
+if (offenders.length) {
+  fail(offenders.slice(0, 20).join("\n"));
+}
+
 console.log("COMPUTE QUALITY PASSED");
 
 

@@ -2,6 +2,8 @@ import { getCpdState } from "@/lib/auth/store";
 import { getUserAnalytics } from "@/lib/analytics/store";
 import { deriveLearningRecord, upsertLearningRecord } from "@/lib/learning/records";
 import { getCourseLevelMeta } from "@/lib/cpd/courseEvidence";
+import { prisma } from "@/lib/db/prisma";
+import { getActiveCourseVersion } from "@/lib/cpd/courseVersion";
 
 export function mapCourseToTrack(courseId: string) {
   if (courseId === "cybersecurity") return "cyber";
@@ -77,7 +79,23 @@ export function refreshLearningRecordForUser(params: {
     estimatedMinutes,
   });
 
-  return upsertLearningRecord(record);
+  const saved = upsertLearningRecord(record);
+
+  // Persist a minimal, immutable completion marker in the database for certificates.
+  // This does not lock access and does not change learning behaviour.
+  if (saved.completionStatus === "completed") {
+    const certCourseId = `${courseId}:${levelId}`;
+    const courseVersion = getActiveCourseVersion(courseId);
+    (prisma as any).courseCompletion
+      .upsert({
+        where: { userId_courseId_courseVersion: { userId, courseId: certCourseId, courseVersion } },
+        create: { userId, courseId: certCourseId, courseVersion, completedAt: new Date(saved.completionDate || new Date().toISOString()), passed: true },
+        update: { passed: true },
+      })
+      .catch(() => null);
+  }
+
+  return saved;
 }
 
 

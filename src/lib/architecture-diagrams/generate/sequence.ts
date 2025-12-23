@@ -1,6 +1,6 @@
 import type { ArchitectureDiagramInput } from "../schema";
 import type { VariantConfig } from "../types";
-import { capList, sanitizeLabel } from "./safety";
+import { capList, enforceCaps, sanitizeLabel } from "./safety";
 
 export function generateSequenceDiagram(input: ArchitectureDiagramInput, variant: VariantConfig) {
   const omissions: string[] = [];
@@ -20,6 +20,10 @@ export function generateSequenceDiagram(input: ArchitectureDiagramInput, variant
     if (!san.ok) return null;
     const label = variant.minimalLabels ? san.value.slice(0, 24) : san.value;
     if (participants.has(label)) return participants.get(label);
+    if (participants.size >= variant.caps.maxNodes) {
+      omissions.push(`Participant cap reached (${variant.caps.maxNodes}). Extra participants were omitted.`);
+      return null;
+    }
     const id = `P${participants.size + 1}`;
     participants.set(label, id);
     lines.push(`participant ${id} as "${label}"`);
@@ -46,6 +50,13 @@ export function generateSequenceDiagram(input: ArchitectureDiagramInput, variant
   });
 
   if (participants.size === 0) omissions.push("Flow participants could not be rendered due to invalid labels.");
+  omissions.push(
+    ...enforceCaps({
+      nodes: participants.size,
+      edges: Math.min(flows.length, variant.caps.maxEdges),
+      caps: variant.caps,
+    }),
+  );
 
   return { mermaid: lines.join("\n"), assumptions, omissions };
 }

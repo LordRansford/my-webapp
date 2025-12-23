@@ -89,6 +89,7 @@ export function addTitleBlockToSvg({
   variantLabel,
   date = new Date(),
   footerText = "Generated with RansfordsNotes",
+  footerRightText,
   watermarkText,
 }: {
   svgText: string;
@@ -97,6 +98,7 @@ export function addTitleBlockToSvg({
   variantLabel: string;
   date?: Date;
   footerText?: string;
+  footerRightText?: string | null;
   watermarkText?: string | null;
 }) {
   const sanitized = sanitizeSvgForExport(svgText);
@@ -172,10 +174,22 @@ export function addTitleBlockToSvg({
     footer.setAttribute("font-family", "Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial");
     footer.textContent = footerText;
 
+    if (footerRightText) {
+      const note = doc.createElementNS("http://www.w3.org/2000/svg", "text");
+      note.setAttribute("x", String(width - 18));
+      note.setAttribute("y", String(headerH + height + 18));
+      note.setAttribute("fill", "#334155");
+      note.setAttribute("font-size", "10");
+      note.setAttribute("text-anchor", "end");
+      note.setAttribute("font-family", "Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial");
+      note.textContent = String(footerRightText).slice(0, 80);
+      svg.appendChild(note);
+    }
+
     if (watermarkText) {
       const wm = doc.createElementNS("http://www.w3.org/2000/svg", "text");
       wm.setAttribute("x", String(width - 18));
-      wm.setAttribute("y", String(headerH + height + 18));
+      wm.setAttribute("y", String(headerH + height + (footerRightText ? 26 : 18)));
       wm.setAttribute("fill", "#64748b");
       wm.setAttribute("font-size", "10");
       wm.setAttribute("text-anchor", "end");
@@ -203,18 +217,21 @@ export function downloadSvg({
   diagramType,
   variantLabel,
   includeWatermark = true,
+  footerRightText,
 }: {
   svgText: string;
   systemName: string;
   diagramType: string;
   variantLabel: string;
   includeWatermark?: boolean;
+  footerRightText?: string | null;
 }) {
   const prepared = addTitleBlockToSvg({
     svgText,
     systemName,
     diagramType,
     variantLabel,
+    footerRightText,
     watermarkText: includeWatermark ? "Draft architecture" : null,
   });
   if (!prepared.ok) return prepared;

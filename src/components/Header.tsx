@@ -55,6 +55,7 @@ const utilityLinks = [
   { label: "Accreditation", href: "/accreditation" },
   { label: "About", href: "/about" },
   { label: "Mentor", href: "/mentor" },
+  { label: "Workspace", href: "/workspace" },
   { label: "Play", href: "/play" },
 ];
 

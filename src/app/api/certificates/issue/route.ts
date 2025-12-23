@@ -1,15 +1,10 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/options";
-import { prisma } from "@/lib/db/prisma";
-import { getCourseLevelMeta, type CourseId } from "@/lib/cpd/courseEvidence";
-import { isEligibleForCertificate } from "@/lib/cpd/eligibility";
-import { formatCertificateId } from "@/lib/certificates/id";
-import { generateCertificatePdf } from "@/lib/certificates/pdf";
-import { putCertificatePdf } from "@/lib/storage/certificates";
 import { withRequestLogging } from "@/lib/security/requestLog";
 import { requireSameOrigin } from "@/lib/security/origin";
 import { rateLimit } from "@/lib/security/rateLimit";
+import { issueCpdCertificate } from "@/lib/cpd/issueCertificate";
 
 export async function POST(req: Request) {
   return withRequestLogging(req, { route: "POST /api/certificates/issue" }, async () => {
@@ -21,121 +16,55 @@ export async function POST(req: Request) {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
-    const body = (await req.json().catch(() => null)) as any;
-    const courseId = String(body?.courseId || "").trim();
-    if (!courseId) return NextResponse.json({ message: "Missing courseId" }, { status: 400 });
-
-    const entitlement = (prisma as any).certificateEntitlement as {
-      findUnique: (args: any) => Promise<any>;
-      update: (args: any) => Promise<any>;
-    };
-    const issuanceModel = (prisma as any).certificateIssuance as {
-      findFirst: (args: any) => Promise<any>;
-      create: (args: any) => Promise<any>;
-      count: (args: any) => Promise<number>;
-    };
-    const audit = (prisma as any).auditEvent as { create: (args: any) => Promise<any> };
-
-    const ent = await entitlement.findUnique({ where: { userId_courseId: { userId: session.user.id, courseId } } });
-    if (!ent || ent.status !== "eligible") {
-      return NextResponse.json({ message: "Entitlement not eligible" }, { status: 409 });
+    const body = await req.json().catch(() => null);
+    if (!body || typeof body !== "object") {
+      return NextResponse.json({ code: "INVALID_BODY", message: "Invalid request body." }, { status: 400 });
+    }
+    if (typeof (body as any).courseId !== "string") {
+      return NextResponse.json({ code: "COURSE_ID_REQUIRED", message: "courseId is required." }, { status: 400 });
     }
 
-    const elig = await isEligibleForCertificate(session.user.id, courseId);
-    if (!elig.eligible) {
-      return NextResponse.json({ message: "Not eligible", reasons: elig.reasons, summary: elig.summary }, { status: 400 });
+    const courseId = (body as any).courseId.trim();
+    if (!courseId) {
+      return NextResponse.json({ code: "COURSE_ID_REQUIRED", message: "courseId is required." }, { status: 400 });
     }
 
-    // If already issued, return existing issuance.
-    const existing = await issuanceModel.findFirst({ where: { userId: session.user.id, courseId } });
-    if (existing) {
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
+    try {
+      const issued = await issueCpdCertificate({
+        userId: session.user.id,
+        userDisplayName: session.user?.name || null,
+        userEmail: session.user?.email || null,
+        courseId,
+        siteUrl,
+      });
+
       return NextResponse.json(
         {
-          certificateId: existing.certificateId,
-          downloadUrl: `/api/certificates/download?certificateId=${encodeURIComponent(existing.certificateId)}`,
+          certificateId: issued.certificateId,
+          certificateHash: issued.certificateHash,
+          pdfUrl: issued.pdfUrl,
+          verifyUrl: issued.verifyUrl,
+          issuedAt: issued.issuedAt,
+          creditsUsed: issued.creditsUsed,
+          courseVersion: issued.courseVersion,
         },
         { status: 200 },
       );
+    } catch (err: any) {
+      const code = String(err?.message || "CERT_ISSUE_FAILED");
+      const status = typeof err?.status === "number" ? err.status : 400;
+      const message =
+        code === "CERT_NOT_ELIGIBLE"
+          ? "Completion is required for the active course version."
+          : code === "INSUFFICIENT_CREDITS"
+          ? "Not enough credits to issue this CPD certificate."
+          : code === "INVALID_COURSE_ID"
+          ? "courseId must include a level, for example ai:foundations."
+          : "Unable to issue certificate right now.";
+      return NextResponse.json({ code, message }, { status });
     }
-
-    // Certificate IDs must be unguessable (public verification). Retry on collision.
-    const year = new Date().getUTCFullYear();
-    let certificateId = "";
-    for (let attempt = 0; attempt < 5; attempt++) {
-      certificateId = formatCertificateId({ courseId, year });
-      try {
-        const learnerName = String(session.user?.name || "").trim();
-        const email = String(session.user?.email || "").trim();
-        const learnerIdentifier = email ? email.split("@")[0] : session.user.id;
-
-        const meta = getCourseLevelMeta(courseId as CourseId, "foundations" as any);
-        const courseTitle = meta?.title || courseId;
-        const cpdHours = meta?.estimatedHours ?? null;
-
-        const issuedAtIso = new Date().toISOString();
-        const pdf = await generateCertificatePdf({
-          learnerName: learnerName || learnerIdentifier,
-          learnerIdentifier,
-          courseTitle,
-          courseId,
-          issuedDateISO: issuedAtIso,
-          certificateId,
-          cpdHours,
-        });
-
-        const pdfKey = `certificates/${session.user.id}/${certificateId}.pdf`;
-        await putCertificatePdf({ key: pdfKey, bytes: pdf.bytes, contentType: "application/pdf" });
-
-        const issuance = await issuanceModel.create({
-          data: {
-            userId: session.user.id,
-            courseId,
-            certificateId,
-            entitlementId: ent.id,
-            pdfStorageKey: pdfKey,
-            pdfSha256: pdf.sha256,
-            version: 1,
-            metadata: {
-              learnerName: learnerName || learnerIdentifier,
-              courseTitle,
-              cpdHours,
-              issuedAt: issuedAtIso,
-              evidenceSummary: elig.summary,
-            },
-          },
-        });
-
-        await entitlement.update({
-          where: { id: ent.id },
-          data: { status: "issued", issuedAt: new Date(), issuedCertificateId: certificateId },
-        });
-
-        await audit.create({
-          data: {
-            actorUserId: session.user.id,
-            action: "CERT_ISSUED",
-            entityType: "certificate",
-            entityId: issuance.id,
-            details: { certificateId, courseId },
-            ip: (req.headers.get("x-forwarded-for") || "").split(",")[0]?.trim() || req.headers.get("x-real-ip") || null,
-            userAgent: req.headers.get("user-agent") || null,
-          },
-        });
-
-        return NextResponse.json(
-          {
-            certificateId,
-            downloadUrl: `/api/certificates/download?certificateId=${encodeURIComponent(certificateId)}`,
-          },
-          { status: 200 },
-        );
-      } catch (err: any) {
-        if (err?.code === "P2002") continue;
-        throw err;
-      }
-    }
-
-    return NextResponse.json({ message: "Unable to issue certificate right now" }, { status: 500 });
   });
 }
 

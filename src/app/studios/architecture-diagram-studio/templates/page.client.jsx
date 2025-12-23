@@ -1,25 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import TemplateGrid from "@/components/architecture-diagrams/Templates/TemplateGrid";
 import DiagramPackViewer from "@/components/architecture-diagrams/Preview/DiagramPackViewer";
 import { ARCHITECTURE_TEMPLATES, getArchitectureTemplate } from "@/lib/architecture-diagrams/templates";
 import { validateArchitectureDiagramInput } from "@/lib/architecture-diagrams/validate";
 import { generateDiagramPack } from "@/lib/architecture-diagrams/generate/pack";
+import { emitArchitectureTelemetry, durationBucketFrom } from "@/lib/architecture-diagrams/telemetry/client";
 
 export default function TemplatesGalleryClient() {
   const [previewId, setPreviewId] = useState(null);
+  const [previewPack, setPreviewPack] = useState(null);
   const [status, setStatus] = useState("");
-
-  const previewPack = useMemo(() => {
-    if (!previewId) return null;
-    const t = getArchitectureTemplate(previewId);
-    if (!t) return null;
-    const validation = validateArchitectureDiagramInput(t.input);
-    if (!validation.ok) return null;
-    return generateDiagramPack(validation.value);
-  }, [previewId]);
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-12 md:px-6 lg:px-8 space-y-6">
@@ -56,6 +49,41 @@ export default function TemplatesGalleryClient() {
         onPreview={(id) => {
           setStatus("");
           setPreviewId(id);
+          setPreviewPack(null);
+          const t = getArchitectureTemplate(id);
+          if (!t) return;
+          const validation = validateArchitectureDiagramInput(t.input);
+          if (!validation.ok) {
+            setPreviewPack(null);
+            return;
+          }
+          const started = Date.now();
+          emitArchitectureTelemetry({
+            event: "generation_requested",
+            audience: validation.value.audience,
+            goal: validation.value.goal,
+            outcome: "ok",
+          });
+          try {
+            const pack = generateDiagramPack(validation.value);
+            setPreviewPack(pack);
+            emitArchitectureTelemetry({
+              event: "generation_completed",
+              audience: validation.value.audience,
+              goal: validation.value.goal,
+              outcome: "ok",
+              durationBucket: durationBucketFrom(started),
+            });
+          } catch {
+            emitArchitectureTelemetry({
+              event: "generation_completed",
+              audience: validation.value.audience,
+              goal: validation.value.goal,
+              outcome: "failed",
+              durationBucket: durationBucketFrom(started),
+            });
+            setPreviewPack(null);
+          }
           // Scroll to preview calmly.
           setTimeout(() => {
             const el = document.getElementById("template-preview");
