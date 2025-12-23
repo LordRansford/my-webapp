@@ -20,11 +20,11 @@ export async function GET(req: Request) {
     const userId = session?.user?.id || "";
     if (!userId) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
-    const rows = await prisma.creditUsageEvent.findMany({
+    const rows = (await prisma.creditUsageEvent.findMany({
       where: { userId },
       orderBy: { occurredAt: "desc" },
       take: 5_000,
-    });
+    })) as any[];
 
     const header = [
       "occurredAt",
@@ -46,13 +46,13 @@ export async function GET(req: Request) {
           r.occurredAt?.toISOString?.() || "",
           r.toolId,
           r.runId || "",
-          r.durationMs,
-          r.inputBytes,
-          r.outputBytes,
-          r.freeTierAppliedMs,
-          r.paidMs,
-          r.estimatedCredits,
-          r.actualCredits,
+          Number(r.durationMs || 0),
+          Number(r.inputBytes || 0),
+          Number(r.outputBytes || 0),
+          Number(r.freeTierAppliedMs || 0),
+          Number(r.paidMs || 0),
+          Number(r.estimatedCredits || 0),
+          Number(r.actualCredits || 0),
           r.consumed,
         ].map(csvEscape).join(","),
       )
