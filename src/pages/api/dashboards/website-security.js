@@ -1,5 +1,6 @@
 import { assertAllowedRequest } from "@/lib/dashboard/allowlist";
 import { validateOutboundUrl } from "@/lib/security/ssrf";
+import { safeFetch } from "@/lib/network/safeFetch";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -28,20 +29,16 @@ export default async function handler(req, res) {
 
   try {
     // Fetch the URL with a timeout
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-
-    const response = await fetch(parsedUrl.href, {
+    const { res: response } = await safeFetch(parsedUrl.href, {
       method: "GET",
       headers: {
         "User-Agent": "Mozilla/5.0 (compatible; RansfordsNotes/1.0; Educational Tool)",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
       },
-      signal: controller.signal,
-      redirect: "manual",
+      allowHttp: true,
+      overallTimeoutMs: 10000,
+      maxResponseBytes: 128 * 1024,
     });
-
-    clearTimeout(timeoutId);
 
     // Extract security headers
     const headers = {
@@ -101,9 +98,8 @@ export default async function handler(req, res) {
       summary,
     });
   } catch (error) {
-    if (error.name === "AbortError") {
-      return res.status(408).json({ error: "Request timeout. The site may be slow or unreachable." });
-    }
+    const code = error?.code || "";
+    if (code === "SAFE_FETCH_TIMEOUT") return res.status(408).json({ error: "Request timeout. The site may be slow or unreachable." });
 
     if (error.code === "ENOTFOUND" || error.code === "ECONNREFUSED") {
       return res.status(404).json({ error: "Site not found or unreachable." });

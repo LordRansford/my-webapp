@@ -87,7 +87,8 @@ export async function safeFetch(inputUrl, init) {
   const url = new URL(inputUrl);
   const isProd = process.env.NODE_ENV === "production";
 
-  if (url.protocol !== "https:" && !(init.allowHttpInDev && !isProd && url.protocol === "http:")) {
+  const allowHttp = Boolean(init.allowHttp) || (Boolean(init.allowHttpInDev) && !isProd);
+  if (url.protocol !== "https:" && !(allowHttp && url.protocol === "http:")) {
     throw new SafeFetchBlockedError("Blocked protocol");
   }
 
