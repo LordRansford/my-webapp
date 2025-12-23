@@ -3,6 +3,7 @@ import Link from "next/link";
 import DonateButton from "@/components/donations/DonateButton";
 import Header from "@/components/Header";
 import TestingModeBanner from "@/components/TestingModeBanner";
+import BrandLogo from "@/components/BrandLogo";
 export default function Layout({
   children,
   title = "Ransford's Notes",
@@ -64,6 +65,9 @@ export default function Layout({
         <footer className="site-footer">
           <div className="site-footer__inner">
             <div>
+              <div style={{ marginBottom: "0.75rem" }} aria-label="Ransford’s Notes logo">
+                <BrandLogo className="h-12 w-auto text-slate-900" />
+              </div>
               <p className="eyebrow">Ransford Chung Amponsah</p>
               <p className="muted">
                 I build notes and browser labs for data, digitalisation, AI, cybersecurity, and engineering. I try to keep it clear,
