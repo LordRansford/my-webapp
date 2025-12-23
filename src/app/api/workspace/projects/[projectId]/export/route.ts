@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { rateLimit } from "@/lib/security/rateLimit";
 import { prisma } from "@/lib/db/prisma";
+import { attachWorkspaceCookie, getWorkspaceIdentity } from "@/lib/workspace/request";
 
 export async function GET(req: NextRequest, context: { params: Promise<{ projectId: string }> }) {
   const limited = rateLimit(req, { keyPrefix: "workspace-export", limit: 10, windowMs: 60_000 });
@@ -10,6 +11,7 @@ export async function GET(req: NextRequest, context: { params: Promise<{ project
   const projectId = String(rawId || "").trim();
   if (!projectId) return NextResponse.json({ ok: false, error: "Missing projectId" }, { status: 400 });
 
+  const ident = await getWorkspaceIdentity(req);
   const project = (prisma as any).project as { findUnique: (args: any) => Promise<any> };
   const p = await project.findUnique({
     where: { id: projectId },
@@ -20,6 +22,12 @@ export async function GET(req: NextRequest, context: { params: Promise<{ project
     },
   });
   if (!p) return NextResponse.json({ ok: false, error: "Project not found" }, { status: 404 });
+
+  const allowed = ident.userId ? p.ownerId === ident.userId : p.ownerId == null && p.workspaceSessionId === ident.workspaceSessionId;
+  if (!allowed) {
+    const res = NextResponse.json({ ok: false, error: "Project not found" }, { status: 404 });
+    return attachWorkspaceCookie(res, ident.setCookieValue);
+  }
 
   const data = {
     project: {
@@ -56,7 +64,8 @@ export async function GET(req: NextRequest, context: { params: Promise<{ project
     })),
   };
 
-  return NextResponse.json({ ok: true, data });
+  const res = NextResponse.json({ ok: true, data });
+  return attachWorkspaceCookie(res, ident.setCookieValue);
 }
 
 
