@@ -12,6 +12,17 @@ import { runWithMetering } from "@/lib/tools/runWithMetering";
 
 const DISABLED = process.env.MENTOR_ENABLED === "false";
 
+type MentorApiResponse =
+  | { message: string }
+  | {
+      answer: string;
+      citationsTitle: string;
+      citations: { title: string; href: string; why: string }[];
+      tryNext: { title: string; href: string; steps: string[] } | null;
+      note: string;
+      lowConfidence: boolean;
+    };
+
 export async function POST(req: Request) {
   return withRequestLogging(req, { route: "POST /api/mentor/query" }, async () => {
     if (DISABLED) return NextResponse.json({ message: "Mentor is disabled right now." }, { status: 503 });
@@ -36,7 +47,7 @@ export async function POST(req: Request) {
     const session = await getServerSession(authOptions).catch(() => null);
     const userId = session?.user?.id || null;
 
-    const metered = await runWithMetering({
+    const metered = await runWithMetering<MentorApiResponse>({
       req,
       userId,
       toolId: "mentor-query",
@@ -53,7 +64,7 @@ export async function POST(req: Request) {
         const lowConfidence = weak;
         const tool = findToolSuggestion(safe.cleaned);
 
-        const payload = {
+        const payload: MentorApiResponse = {
           answer: lowConfidence ? "I might be wrong here. The closest matches are below." : top.why || "This is covered in the notes.",
           citationsTitle: "Where this is covered on the site",
           citations: matches.slice(0, 5).map((m) => ({ title: m.title, href: m.href, why: m.why })),
