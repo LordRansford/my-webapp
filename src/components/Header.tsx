@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import Logo from "@/components/Logo";
+import BrandLogo from "@/components/BrandLogo";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 type Dropdown = {
@@ -151,9 +151,10 @@ export default function Header() {
                 <span className="block h-0.5 w-6 bg-slate-900" />
               </div>
             </button>
-            <Link href="/" className={`flex items-center gap-2 rounded-lg ${focusStyle}`}>
-              <Logo className="h-10 w-10 text-slate-900" />
-              <span className="text-sm font-semibold">Ransford’s Notes</span>
+            <Link href="/" className={`flex items-center gap-3 rounded-lg ${focusStyle}`}>
+              <div className="rounded-xl bg-white/0">
+                <BrandLogo className="h-10 w-auto text-slate-900" />
+              </div>
             </Link>
           </div>
 
