@@ -198,7 +198,10 @@ export default function MentorAssistant({
         { role: "user", content: question },
         {
           role: "mentor",
-          content: typeof data?.answer === "string" ? data.answer : "I could not find that in the site content. Try a keyword from a heading.",
+          content:
+            typeof data?.answer === "string"
+              ? data.answer
+              : "I could not find an exact match in the site content. I can still give general guidance, and I will list the closest sections when available.",
           answerFromSite: typeof data?.answerFromSite === "string" ? data.answerFromSite : undefined,
           citationsTitle: typeof data?.citationsTitle === "string" ? data.citationsTitle : undefined,
           citations: filtered.length ? filtered : undefined,
@@ -214,7 +217,13 @@ export default function MentorAssistant({
       ]);
       setInput("");
     } catch {
-      setMessages((m) => [...m, { role: "mentor", content: "I can only help with what is covered on this site." }]);
+      setMessages((m) => [
+        ...m,
+        {
+          role: "mentor",
+          content: "Something went wrong while looking up the site content. If you rephrase using a heading keyword, I can usually find the right section.",
+        },
+      ]);
     } finally {
       setStatus("idle");
     }
@@ -294,8 +303,11 @@ export default function MentorAssistant({
 
         <div className="mt-4 flex flex-col gap-2">
           <label className="text-sm font-semibold text-slate-800" htmlFor="mentor-question">
-            Ask about this page
+                Ask about this page
           </label>
+              <p className="text-xs text-slate-600 m-0">
+                I answer from the site when possible. If the page is thin, I will provide brief general guidance and link to nearby sections.
+              </p>
           <input
             id="mentor-question"
             value={input}
