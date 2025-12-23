@@ -5,12 +5,16 @@ import { downloadSvg } from "@/lib/architecture-diagrams/export/svg";
 import { downloadPng } from "@/lib/architecture-diagrams/export/png";
 import { openPrintPreview } from "./PrintView";
 import { buildDiagramFileBase } from "@/lib/architecture-diagrams/export/filename";
+import { emitArchitectureTelemetry } from "@/lib/architecture-diagrams/telemetry/client";
 
 export default function ExportPanel({
   svgText,
   systemName,
   diagramType,
   variantLabel,
+  variantId,
+  audience,
+  goal,
 }) {
   const [pageSize, setPageSize] = useState("a4-portrait");
   const [status, setStatus] = useState("");
@@ -34,6 +38,7 @@ export default function ExportPanel({
     if (!svgText) return { ok: false, reason: "Render the diagram first." };
     setPdfBusy(true);
     setStatus("Preparing PDF…");
+    emitArchitectureTelemetry({ event: "export_pdf_requested", diagramType, variantId, audience, goal, pageSize: pageSize === "a3-landscape" ? "A3" : "A4" });
     try {
       const wantsA3 = pageSize === "a3-landscape";
       const res = await fetch("/api/architecture-diagrams/export/pdf", {
@@ -52,6 +57,15 @@ export default function ExportPanel({
         const data = await res.json().catch(() => ({}));
         const msg = data?.error || "PDF export failed. Please try again.";
         setStatus(msg);
+        emitArchitectureTelemetry({
+          event: "export_pdf_failed",
+          diagramType,
+          variantId,
+          audience,
+          goal,
+          pageSize: pageSize === "a3-landscape" ? "A3" : "A4",
+          outcome: res.status === 429 ? "rate_limited" : msg.toLowerCase().includes("too large") ? "too_large" : msg.toLowerCase().includes("svg") ? "sanitise_failed" : "failed",
+        });
         return { ok: false, reason: msg };
       }
       const blob = await res.blob();
@@ -64,10 +78,20 @@ export default function ExportPanel({
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 250);
       setStatus("Export ready.");
+      emitArchitectureTelemetry({
+        event: "export_pdf_succeeded",
+        diagramType,
+        variantId,
+        audience,
+        goal,
+        pageSize: pageSize === "a3-landscape" ? "A3" : "A4",
+        outcome: "ok",
+      });
       return { ok: true };
     } catch (err) {
       const msg = "PDF export failed. Please try again.";
       setStatus(msg);
+      emitArchitectureTelemetry({ event: "export_pdf_failed", diagramType, variantId, audience, goal, pageSize: pageSize === "a3-landscape" ? "A3" : "A4", outcome: "failed" });
       return { ok: false, reason: msg };
     } finally {
       setPdfBusy(false);
@@ -124,7 +148,10 @@ export default function ExportPanel({
           <button
             type="button"
             disabled={disabled}
-            onClick={() => run(() => downloadSvg({ svgText, systemName, diagramType, variantLabel }))}
+            onClick={() => {
+              emitArchitectureTelemetry({ event: "export_svg", diagramType, variantId, audience, goal, outcome: "ok" });
+              return run(() => downloadSvg({ svgText, systemName, diagramType, variantLabel }));
+            }}
             className={`rounded-full px-4 py-2 text-sm font-semibold shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 ${
               disabled ? "bg-slate-200 text-slate-500 cursor-not-allowed" : "border border-slate-200 bg-white text-slate-800 hover:bg-slate-50"
             }`}
@@ -134,7 +161,10 @@ export default function ExportPanel({
           <button
             type="button"
             disabled={disabled}
-            onClick={() => run(() => downloadPng({ svgText, systemName, diagramType, variantLabel, scale: 2 }))}
+            onClick={() => {
+              emitArchitectureTelemetry({ event: "export_png", diagramType, variantId, audience, goal, outcome: "ok" });
+              return run(() => downloadPng({ svgText, systemName, diagramType, variantLabel, scale: 2 }));
+            }}
             className={`rounded-full px-4 py-2 text-sm font-semibold shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 ${
               disabled ? "bg-slate-200 text-slate-500 cursor-not-allowed" : "border border-slate-200 bg-white text-slate-800 hover:bg-slate-50"
             }`}

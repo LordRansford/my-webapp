@@ -18,6 +18,7 @@ import { validateArchitectureDiagramInput } from "@/lib/architecture-diagrams/va
 import { EXAMPLE_KID_FRIENDLY } from "@/lib/architecture-diagrams/examples";
 import { generateDiagramPack } from "@/lib/architecture-diagrams/generate/pack";
 import { getArchitectureTemplate } from "@/lib/architecture-diagrams/templates";
+import { emitArchitectureTelemetry, durationBucketFrom } from "@/lib/architecture-diagrams/telemetry/client";
 
 const steps = [
   { id: "goal", label: "Goal", hint: "Why you need diagrams" },
@@ -193,7 +194,21 @@ export default function WizardPageClient() {
         generationEnabled={Boolean(validatedInput?.ok)}
         onGenerate={() => {
           if (!validatedInput?.ok) return;
-          setPack(generateDiagramPack(validatedInput.value));
+          const started = Date.now();
+          emitArchitectureTelemetry({
+            event: "generation_requested",
+            audience: validatedInput.value.audience,
+            goal: validatedInput.value.goal,
+          });
+          const nextPack = generateDiagramPack(validatedInput.value);
+          setPack(nextPack);
+          emitArchitectureTelemetry({
+            event: "generation_completed",
+            audience: validatedInput.value.audience,
+            goal: validatedInput.value.goal,
+            durationBucket: durationBucketFrom(started),
+            outcome: "ok",
+          });
         }}
       />
     );
