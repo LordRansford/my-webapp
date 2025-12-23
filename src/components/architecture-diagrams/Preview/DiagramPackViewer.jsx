@@ -1,16 +1,29 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import VariantPicker from "./VariantPicker";
 import MermaidRenderer from "./MermaidRenderer";
 import AssumptionsPanel from "./AssumptionsPanel";
 import { DiagramTabs } from "./DiagramTabs";
 import ExportPanel from "../Export/ExportPanel";
+import { emitArchitectureTelemetry } from "@/lib/architecture-diagrams/telemetry/client";
 
 export default function DiagramPackViewer({ pack }) {
   const [variantId, setVariantId] = useState(pack?.variants?.[0]?.id || "minimal");
   const [diagramId, setDiagramId] = useState("context");
   const [lastSvg, setLastSvg] = useState("");
+
+  useEffect(() => {
+    if (!pack?.input) return;
+    emitArchitectureTelemetry({
+      event: "variant_selected",
+      variantId,
+      diagramType: diagramId,
+      audience: pack.input.audience,
+      goal: pack.input.goal,
+      outcome: "ok",
+    });
+  }, [diagramId, pack?.input, variantId]);
 
   const variant = useMemo(() => {
     const found = (pack?.variants || []).find((v) => v.id === variantId);
@@ -49,6 +62,9 @@ export default function DiagramPackViewer({ pack }) {
             systemName={pack.input.systemName}
             diagramType={diagramId}
             variantLabel={variant.label}
+            variantId={variant.id}
+            audience={pack.input.audience}
+            goal={pack.input.goal}
           />
           <MermaidRenderer
             mermaidText={mermaidText}
