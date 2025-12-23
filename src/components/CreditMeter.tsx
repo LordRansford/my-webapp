@@ -2,18 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { formatCreditsSafe, formatMsSafe, msOrNull, numberOrNull } from "@/lib/credits/format";
+import type { CreditsEstimateResponse } from "@/lib/contracts/credits";
 
 type Preset = "light" | "standard" | "heavy";
 
-type Estimate = {
-  allowed: boolean;
-  reason?: string | null;
-  estimatedDurationMs: number;
-  estimatedCredits: number;
-  freeTierRemainingMs: number;
-  willChargeCredits: boolean;
-  requiredCreditsIfAny: number;
-};
+type Estimate = Exclude<CreditsEstimateResponse, { message: string }>;
 
 type Receipt = {
   runId: string;
