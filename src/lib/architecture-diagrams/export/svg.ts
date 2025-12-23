@@ -89,6 +89,7 @@ export function addTitleBlockToSvg({
   variantLabel,
   date = new Date(),
   footerText = "Generated with RansfordsNotes",
+  watermarkText,
 }: {
   svgText: string;
   systemName: string;
@@ -96,6 +97,7 @@ export function addTitleBlockToSvg({
   variantLabel: string;
   date?: Date;
   footerText?: string;
+  watermarkText?: string | null;
 }) {
   const sanitized = sanitizeSvgForExport(svgText);
   if (!sanitized.ok) return sanitized;
@@ -170,6 +172,18 @@ export function addTitleBlockToSvg({
     footer.setAttribute("font-family", "Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial");
     footer.textContent = footerText;
 
+    if (watermarkText) {
+      const wm = doc.createElementNS("http://www.w3.org/2000/svg", "text");
+      wm.setAttribute("x", String(width - 18));
+      wm.setAttribute("y", String(headerH + height + 18));
+      wm.setAttribute("fill", "#64748b");
+      wm.setAttribute("font-size", "10");
+      wm.setAttribute("text-anchor", "end");
+      wm.setAttribute("font-family", "Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial");
+      wm.textContent = watermarkText;
+      svg.appendChild(wm);
+    }
+
     svg.appendChild(g);
     svg.appendChild(content);
     svg.appendChild(footerBg);
@@ -188,13 +202,21 @@ export function downloadSvg({
   systemName,
   diagramType,
   variantLabel,
+  includeWatermark = true,
 }: {
   svgText: string;
   systemName: string;
   diagramType: string;
   variantLabel: string;
+  includeWatermark?: boolean;
 }) {
-  const prepared = addTitleBlockToSvg({ svgText, systemName, diagramType, variantLabel });
+  const prepared = addTitleBlockToSvg({
+    svgText,
+    systemName,
+    diagramType,
+    variantLabel,
+    watermarkText: includeWatermark ? "Draft architecture" : null,
+  });
   if (!prepared.ok) return prepared;
 
   const base = buildDiagramFileBase({ systemName, diagramType, variant: variantLabel });

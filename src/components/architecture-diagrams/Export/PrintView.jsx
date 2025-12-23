@@ -49,8 +49,15 @@ export function openPrintPreview({
   diagramType,
   variantLabel,
   pageSize,
+  includeWatermark,
 }) {
-  const prepared = addTitleBlockToSvg({ svgText, systemName, diagramType, variantLabel });
+  const prepared = addTitleBlockToSvg({
+    svgText,
+    systemName,
+    diagramType,
+    variantLabel,
+    watermarkText: includeWatermark ? "Draft architecture" : null,
+  });
   if (!prepared.ok) return prepared;
 
   const title = `${systemName} · ${diagramType} · ${variantLabel}`;

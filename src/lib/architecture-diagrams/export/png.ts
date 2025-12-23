@@ -9,14 +9,22 @@ export async function downloadPng({
   diagramType,
   variantLabel,
   scale = 2,
+  includeWatermark = true,
 }: {
   svgText: string;
   systemName: string;
   diagramType: string;
   variantLabel: string;
   scale?: number;
+  includeWatermark?: boolean;
 }) {
-  const prepared = addTitleBlockToSvg({ svgText, systemName, diagramType, variantLabel });
+  const prepared = addTitleBlockToSvg({
+    svgText,
+    systemName,
+    diagramType,
+    variantLabel,
+    watermarkText: includeWatermark ? "Draft architecture" : null,
+  });
   if (!prepared.ok) return prepared;
 
   try {

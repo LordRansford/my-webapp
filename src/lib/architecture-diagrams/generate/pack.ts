@@ -6,8 +6,12 @@ import { generateContainerDiagram } from "./container";
 import { generateDeploymentDiagram } from "./deployment";
 import { generateDfdDiagram } from "./dfd";
 import { generateSequenceDiagram } from "./sequence";
+import { hashArchitectureInputs } from "../versioning/hash";
+import { assessPurpose } from "../rules/purpose";
 
 export function generateDiagramPack(input: ArchitectureDiagramInput): DiagramPack {
+  const inputVersion = hashArchitectureInputs(input);
+  const purpose = assessPurpose(input);
   const variants: DiagramVariant[] = getVariantsForAudience(input.audience).map((variant) => {
     const a1 = generateContextDiagram(input, variant);
     const a2 = generateContainerDiagram(input, variant);
@@ -45,7 +49,7 @@ export function generateDiagramPack(input: ArchitectureDiagramInput): DiagramPac
     };
   });
 
-  return { input, variants };
+  return { input, inputVersion, purpose, variants };
 }
 
 

@@ -172,6 +172,7 @@ export default function WizardPageClient() {
       return (
         <StepSecurity
           audience={state.audience}
+          goal={state.goal}
           security={state.security}
           dataTypes={state.dataTypes}
           onChange={(patch) =>
