@@ -30,7 +30,9 @@ export function generateDfdDiagram(input: ArchitectureDiagramInput, variant: Var
     .sort((a, b) => String(a).localeCompare(String(b)));
 
   const trustBoundaries = (input.security?.trustBoundaries || []).map((b) => String(b || "").trim()).filter(Boolean);
-  const showBoundaries = variant.emphasizeSecurity && (trustBoundaries.length > 0 || input.security?.hasNoTrustBoundariesConfirmed);
+  const showBoundaries =
+    (input.goal === "security-review" || input.goal === "data-review" || variant.emphasizeSecurity) &&
+    (trustBoundaries.length > 0 || input.security?.hasNoTrustBoundariesConfirmed);
 
   const procNodes: { id: string; label: string }[] = [];
   const storeNodes: { id: string; label: string }[] = [];
@@ -85,7 +87,7 @@ export function generateDfdDiagram(input: ArchitectureDiagramInput, variant: Var
   }
 
   const edges: string[] = [];
-  const sensitiveEdges: string[] = [];
+  const sensitiveIdx: number[] = [];
 
   const sortedFlows = capList(input.flows || [], variant.caps.maxEdges).slice().sort((a, b) => `${a.from}->${a.to}`.localeCompare(`${b.from}->${b.to}`));
   sortedFlows.forEach((f) => {
@@ -107,8 +109,8 @@ export function generateDfdDiagram(input: ArchitectureDiagramInput, variant: Var
     } else {
       edges.push(edge);
     }
-    if (variant.emphasizeSecurity && f.sensitive) {
-      sensitiveEdges.push(edge);
+    if ((input.goal === "security-review" || variant.emphasizeSecurity) && f.sensitive) {
+      sensitiveIdx.push(edges.length - 1);
     }
   });
 
@@ -116,12 +118,17 @@ export function generateDfdDiagram(input: ArchitectureDiagramInput, variant: Var
   if (edges.length === 0) omissions.push("No flows could be rendered in the DFD. Add flows that connect known entities.");
 
   // Security variant: visually distinct sensitive flows.
-  if (variant.emphasizeSecurity) {
+  if (input.goal === "security-review" || variant.emphasizeSecurity) {
+    // Default edges.
     lines.push("linkStyle default stroke:#334155,stroke-width:2px;");
-    if (sensitiveEdges.length > 0) {
-      lines.push("%% Sensitive flows exist. Review them carefully.");
+    // Highlight sensitive edges by index (mermaid uses link order).
+    sensitiveIdx.slice(0, 40).forEach((idx) => {
+      lines.push(`linkStyle ${idx} stroke:#b91c1c,stroke-width:3px;`);
+    });
+    if (sensitiveIdx.length > 0) {
+      lines.push("%% Sensitive flows are highlighted for review.");
       assumptions.push("Sensitive flows are highlighted based on the sensitive toggle in flows.");
-    } else {
+    } else if (input.dataTypes?.length) {
       omissions.push("No flows were marked as sensitive.");
     }
   }

@@ -14,6 +14,12 @@ export type DiagramVariant = {
 
 export type DiagramPack = {
   input: ArchitectureDiagramInput;
+  inputVersion: string;
+  purpose: {
+    warnings: { kind: "warning"; message: string }[];
+    suitableFor: string[];
+    notSuitableFor: string[];
+  };
   variants: DiagramVariant[];
 };
 

@@ -15,10 +15,14 @@ export default function ExportPanel({
   variantId,
   audience,
   goal,
+  appendixMarkdown,
+  inputVersion,
 }) {
   const [pageSize, setPageSize] = useState("a4-portrait");
   const [status, setStatus] = useState("");
   const [pdfBusy, setPdfBusy] = useState(false);
+  const [includeWatermark, setIncludeWatermark] = useState(true);
+  const [includeAppendix, setIncludeAppendix] = useState(true);
 
   const disabledReason = useMemo(() => {
     if (!svgText) return "Render the diagram first.";
@@ -69,7 +73,75 @@ export default function ExportPanel({
         return { ok: false, reason: msg };
       }
       const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
+      let outBlob = blob;
+
+      if (includeAppendix && appendixMarkdown) {
+        try {
+          const { PDFDocument, StandardFonts, rgb } = await import("pdf-lib");
+          const bytes = await blob.arrayBuffer();
+          const doc = await PDFDocument.load(bytes);
+          const font = await doc.embedFont(StandardFonts.Helvetica);
+          const page = doc.addPage();
+          const { width, height } = page.getSize();
+
+          const header = `Appendix: Brief and ADR`;
+          const meta = `Input version: ${inputVersion || ""}  Date: ${new Date().toLocaleDateString()}`;
+          const watermark = includeWatermark ? "Draft architecture" : "";
+
+          let y = height - 50;
+          page.drawText(header, { x: 40, y, size: 14, font, color: rgb(0.06, 0.09, 0.16) });
+          y -= 18;
+          page.drawText(meta, { x: 40, y, size: 10, font, color: rgb(0.2, 0.25, 0.31) });
+          y -= 18;
+          if (watermark) {
+            page.drawText(watermark, { x: width - 40 - font.widthOfTextAtSize(watermark, 10), y: height - 30, size: 10, font, color: rgb(0.4, 0.45, 0.5) });
+          }
+
+          const text = String(appendixMarkdown).split("\n");
+          const maxWidth = width - 80;
+          const size = 9;
+          const lineHeight = 12;
+          const wrapLine = (line) => {
+            const words = line.split(" ");
+            const out = [];
+            let current = "";
+            for (const w of words) {
+              const candidate = current ? `${current} ${w}` : w;
+              if (font.widthOfTextAtSize(candidate, size) > maxWidth) {
+                if (current) out.push(current);
+                current = w;
+              } else {
+                current = candidate;
+              }
+            }
+            if (current) out.push(current);
+            return out.length ? out : [""];
+          };
+
+          let currentPage = page;
+          for (const line of text) {
+            const lines = wrapLine(line);
+            for (const l of lines) {
+              if (y < 60) {
+                currentPage = doc.addPage();
+                y = currentPage.getSize().height - 50;
+              }
+              currentPage.drawText(l, { x: 40, y, size, font, color: rgb(0.06, 0.09, 0.16) });
+              y -= lineHeight;
+            }
+          }
+
+          const footer = "Generated with RansfordsNotes";
+          currentPage.drawText(footer, { x: 40, y: 40, size: 9, font, color: rgb(0.2, 0.25, 0.31) });
+
+          const outBytes = await doc.save();
+          outBlob = new Blob([outBytes], { type: "application/pdf" });
+        } catch {
+          // If appendix fails, continue with base PDF.
+        }
+      }
+
+      const url = URL.createObjectURL(outBlob);
       const a = document.createElement("a");
       a.href = url;
       a.download = `${buildDiagramFileBase({ systemName, diagramType, variant: variantLabel })}.pdf`;
@@ -126,6 +198,7 @@ export default function ExportPanel({
                   diagramType,
                   variantLabel,
                   pageSize,
+                  includeWatermark,
                 })
               )
             }
@@ -150,7 +223,7 @@ export default function ExportPanel({
             disabled={disabled}
             onClick={() => {
               emitArchitectureTelemetry({ event: "export_svg", diagramType, variantId, audience, goal, outcome: "ok" });
-              return run(() => downloadSvg({ svgText, systemName, diagramType, variantLabel }));
+              return run(() => downloadSvg({ svgText, systemName, diagramType, variantLabel, includeWatermark }));
             }}
             className={`rounded-full px-4 py-2 text-sm font-semibold shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 ${
               disabled ? "bg-slate-200 text-slate-500 cursor-not-allowed" : "border border-slate-200 bg-white text-slate-800 hover:bg-slate-50"
@@ -163,7 +236,7 @@ export default function ExportPanel({
             disabled={disabled}
             onClick={() => {
               emitArchitectureTelemetry({ event: "export_png", diagramType, variantId, audience, goal, outcome: "ok" });
-              return run(() => downloadPng({ svgText, systemName, diagramType, variantLabel, scale: 2 }));
+              return run(() => downloadPng({ svgText, systemName, diagramType, variantLabel, scale: 2, includeWatermark }));
             }}
             className={`rounded-full px-4 py-2 text-sm font-semibold shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 ${
               disabled ? "bg-slate-200 text-slate-500 cursor-not-allowed" : "border border-slate-200 bg-white text-slate-800 hover:bg-slate-50"
@@ -176,6 +249,47 @@ export default function ExportPanel({
 
       {disabledReason ? <p className="mt-3 text-xs font-semibold text-slate-600">{disabledReason}</p> : null}
       {status ? <p className="mt-3 text-xs font-semibold text-slate-700">{status}</p> : null}
+
+      <div className="mt-4 grid gap-2 sm:grid-cols-2">
+        <label className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-800">
+          <span className="font-semibold">Include watermark: Draft architecture</span>
+          <input
+            type="checkbox"
+            checked={includeWatermark}
+            onChange={(e) => setIncludeWatermark(e.target.checked)}
+            className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-400"
+          />
+        </label>
+        <label className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-800">
+          <span className="font-semibold">Include brief and ADR appendix</span>
+          <input
+            type="checkbox"
+            checked={includeAppendix}
+            onChange={(e) => setIncludeAppendix(e.target.checked)}
+            className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-400"
+          />
+        </label>
+      </div>
+
+      {appendixMarkdown ? (
+        <button
+          type="button"
+          onClick={() => {
+            const blob = new Blob([appendixMarkdown], { type: "text/markdown;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `${buildDiagramFileBase({ systemName, diagramType: "appendix", variant: variantLabel })}.md`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 250);
+          }}
+          className="mt-3 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
+        >
+          Download Markdown appendix
+        </button>
+      ) : null}
     </div>
   );
 }

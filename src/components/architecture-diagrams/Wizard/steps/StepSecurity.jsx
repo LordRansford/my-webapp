@@ -11,9 +11,12 @@ const DATA_TYPES = [
   { value: "other", label: "Other" },
 ];
 
-export default function StepSecurity({ audience = "students", security, dataTypes, onChange, errors = [] }) {
+export default function StepSecurity({ audience = "students", goal, security, dataTypes, onChange, errors = [] }) {
   const copy = wizardCopy(audience);
   const selected = new Set(dataTypes || []);
+  const hasSensitive = selected.size > 0;
+  const hasBoundary = (security.trustBoundaries || []).filter(Boolean).length > 0;
+  const needsBoundaryAck = (goal === "security-review" || goal === "data-review") && !hasBoundary && !security.hasNoTrustBoundariesConfirmed;
   return (
     <div className="space-y-5">
       <div>
@@ -21,6 +24,18 @@ export default function StepSecurity({ audience = "students", security, dataType
         <p className="mt-1 text-sm text-slate-700">{copy.securityHelp}</p>
         {isProfessionals(audience) && copy.professionalsReminder ? (
           <p className="mt-2 text-xs font-semibold text-slate-700">{copy.professionalsReminder}</p>
+        ) : null}
+        {needsBoundaryAck ? (
+          <div className="mt-3 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+            <p className="font-semibold">Consider adding a trust boundary</p>
+            <p className="mt-1">For security and data review goals, trust boundaries help reviewers understand where rules change.</p>
+          </div>
+        ) : null}
+        {hasSensitive && !hasBoundary && !security.hasNoTrustBoundariesConfirmed ? (
+          <div className="mt-3 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+            <p className="font-semibold">Sensitive data guidance</p>
+            <p className="mt-1">If sensitive data exists, consider adding a trust boundary and marking sensitive flows in the flows step.</p>
+          </div>
         ) : null}
       </div>
 

@@ -45,9 +45,19 @@ export default function StepReview({ input, validation, onGenerate, generationEn
       ) : (
         <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
           <p className="font-semibold">Validation results</p>
-          <p className="mt-1 text-xs text-emerald-900/80">Inputs look good. Diagram generation will be added next.</p>
+          <p className="mt-1 text-xs text-emerald-900/80">Inputs look good. You can generate diagrams now.</p>
         </div>
       )}
+
+      <Section title="Version">
+        <List
+          items={[
+            input.versionName ? `Version name: ${input.versionName}` : "Version name: (optional)",
+          ]}
+          empty="n/a"
+        />
+        <p className="mt-2 text-xs text-slate-600">A version hash will be shown after generation.</p>
+      </Section>
 
       <div className="grid gap-3 md:grid-cols-2">
         <Section title="Goal and audience">
@@ -123,7 +133,7 @@ export default function StepReview({ input, validation, onGenerate, generationEn
         >
           Generate diagrams
         </button>
-        {!generationEnabled ? <p className="text-sm font-semibold text-slate-700">Diagram generation coming next</p> : null}
+        {!generationEnabled ? <p className="text-sm font-semibold text-slate-700">Fix validation items to enable generation</p> : null}
       </div>
     </div>
   );
