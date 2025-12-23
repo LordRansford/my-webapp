@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { runWorkerTick } from "@/lib/jobs/worker";
 import { rateLimit } from "@/lib/security/rateLimit";
+import { logInfo } from "@/lib/telemetry/log";
 
 export async function POST(req: Request) {
   const limited = rateLimit(req, { keyPrefix: "admin-worker-tick", limit: 30, windowMs: 60_000 });
@@ -16,7 +17,10 @@ export async function POST(req: Request) {
   const limit = typeof body?.limit === "number" ? body.limit : 10;
 
   const out = await runWorkerTick({ limit });
-  console.log("admin:worker_tick", { processedCount: out.processedCount });
+  logInfo("admin.worker_tick", {
+    processedCount: out.processedCount,
+    requestId: req.headers.get("x-request-id") || null,
+  });
 
   return NextResponse.json(out, { status: 200 });
 }

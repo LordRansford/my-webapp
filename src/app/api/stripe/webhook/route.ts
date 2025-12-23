@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { prisma } from "@/lib/db/prisma";
+import { logInfo, logWarn } from "@/lib/telemetry/log";
 
 export async function POST(req: Request) {
   const secretKey = process.env.STRIPE_SECRET_KEY || "";
@@ -15,8 +16,10 @@ export async function POST(req: Request) {
   const body = await req.text();
   const sig = req.headers.get("stripe-signature");
 
-  console.log("Stripe webhook hit");
-  console.log("Stripe signature:", sig ? "present" : "missing");
+  logInfo("stripe.webhook.received", {
+    hasSignature: Boolean(sig),
+    requestId: req.headers.get("x-request-id") || null,
+  });
 
   let event: Stripe.Event | { type: string } = { type: "unknown" };
   try {
@@ -25,7 +28,11 @@ export async function POST(req: Request) {
     // leave event.type as "unknown"
   }
 
-  console.log("Stripe event type:", event.type);
+  if (event.type === "unknown") {
+    logWarn("stripe.webhook.unverified", { hasSignature: Boolean(sig) });
+  } else {
+    logInfo("stripe.webhook.verified", { type: String(event.type || "unknown") });
+  }
 
   // Record last webhook receipt time for admin readiness page (metadata only).
   try {
