@@ -11,29 +11,12 @@ import { authOptions } from "@/lib/auth/options";
 import { runWithMetering } from "@/lib/tools/runWithMetering";
 import { attachWorkspaceCookie, getWorkspaceIdentity } from "@/lib/workspace/request";
 import { createRun, createNote, updateRun, getProject } from "@/lib/workspace/store";
+import type { MentorPageContext, MentorRequest, MentorResponse } from "@/lib/contracts/mentor";
 
 const DISABLED = process.env.MENTOR_ENABLED === "false";
 
-type PageContext = {
-  pathname: string;
-  title?: string;
-  text?: string;
-  headings?: Array<{ id: string; text: string; depth?: number }>;
-  toc?: Array<{ id: string; text: string }>;
-};
-
-type MentorApiResponse =
-  | { message: string }
-  | {
-      answer: string;
-      answerFromSite?: string;
-      citationsTitle: string;
-      citations: { title: string; href: string; why: string }[];
-      sources?: { title: string; href: string; excerpt?: string }[];
-      tryNext: { title: string; href: string; steps: string[] } | null;
-      note: string;
-      lowConfidence: boolean;
-    };
+type PageContext = MentorPageContext;
+type MentorApiResponse = MentorResponse;
 
 function clampText(input: unknown, maxLen: number) {
   const raw = typeof input === "string" ? input : "";
@@ -79,7 +62,7 @@ export async function POST(req: Request) {
     const limited = rateLimit(req, { keyPrefix: "mentor-query", limit: 10, windowMs: 60_000 });
     if (limited) return limited;
 
-    const body = (await req.json().catch(() => null)) as any;
+    const body = (await req.json().catch(() => null)) as MentorRequest | null;
     const question = typeof body?.question === "string" ? body.question : "";
     const pageUrl = typeof body?.pageUrl === "string" ? body.pageUrl : "";
     const pageContextRaw = body?.pageContext ?? null;

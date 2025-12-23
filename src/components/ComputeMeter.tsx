@@ -3,25 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { formatCreditsSafe, formatMsSafe, msOrNull, numberOrNull } from "@/lib/credits/format";
-
-export type ComputeRunStatus = "success" | "blocked" | "aborted" | "error";
-
-export type ComputeEstimate = {
-  estimatedCpuMs: number;
-  estimatedWallTimeMs: number;
-  estimatedCreditCost: number;
-  freeTierAppliedMs: number;
-  paidMs: number;
-  allowed: boolean;
-  reasons: string[];
-};
-
-export type ComputeActual = {
-  durationMs: number;
-  freeTierAppliedMs: number;
-  paidMs: number;
-  creditsCharged: number;
-};
+import type { ComputeActual, ComputeEstimate, ComputeRunStatus } from "@/lib/contracts/compute";
 
 function safeList(v: unknown, max = 6): string[] {
   if (!Array.isArray(v)) return [];

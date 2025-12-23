@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import ComputeMeter, { type ComputeActual, type ComputeEstimate, type ComputeRunStatus } from "@/components/ComputeMeter";
+import ComputeMeter from "@/components/ComputeMeter";
+import type { ComputeActual, ComputeEstimate, ComputeRunStatus } from "@/lib/contracts/compute";
 
 type Project = { id: string; title: string; topic: string };
 

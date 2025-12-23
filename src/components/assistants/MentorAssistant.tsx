@@ -4,7 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import { GraduationCap, X } from "lucide-react";
 import CitationChip from "@/components/assistants/CitationChip";
-import ComputeMeter, { type ComputeActual, type ComputeEstimate } from "@/components/ComputeMeter";
+import ComputeMeter from "@/components/ComputeMeter";
+import type { ComputeActual, ComputeEstimate } from "@/lib/contracts/compute";
 
 type MentorCitation = { title: string; href: string; why?: string };
 type MentorSource = { title: string; href: string; excerpt?: string };
