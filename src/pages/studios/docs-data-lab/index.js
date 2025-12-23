@@ -6,6 +6,7 @@ import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGri
 import { useStudiosStore } from "@/stores/useStudiosStore";
 import { SecurityBanner } from "@/components/dev-studios/SecurityBanner";
 import { validateUpload } from "@/utils/validateUpload";
+import { formatBytes, getUploadPolicy } from "@/lib/uploads/policies";
 
 const stopwords = new Set([
   "the",
@@ -168,6 +169,8 @@ export default function DocsDataLabPage() {
   const [srcSchema, setSrcSchema] = useState("");
   const [tgtSchema, setTgtSchema] = useState("");
 
+  const uploadPolicy = useMemo(() => getUploadPolicy("docs-data-lab"), []);
+
   const selectedDoc = useMemo(() => docs.find((d) => d.id === selectedDocId) || null, [docs, selectedDocId]);
 
   const selectedStats = useMemo(() => {
@@ -242,7 +245,9 @@ export default function DocsDataLabPage() {
   };
 
   const handleFiles = async (fileList) => {
-    const { safeFiles, errors } = validateUpload(fileList, { maxBytes: 8 * 1024 * 1024, allowedExtensions: [".pdf", ".docx", ".txt", ".csv"] });
+    const maxBytes = uploadPolicy?.freeMaxBytes || 8 * 1024 * 1024;
+    const allowedExtensions = uploadPolicy?.allowExtensions || [".pdf", ".docx", ".txt", ".csv"];
+    const { safeFiles, errors } = validateUpload(fileList, { maxBytes, allowedExtensions });
     if (errors.length) alert(errors.join("\n"));
     if (!safeFiles.length) return;
     const parsed = await Promise.all(safeFiles.map(parseDoc));
@@ -345,8 +350,8 @@ export default function DocsDataLabPage() {
           </label>
         </div>
         <p className="text-xs text-slate-600">
-          Keep samples small (&lt; 8MB per file). Allowed: pdf, docx, txt, csv. Do not upload real customer data or secrets; use synthetic
-          or anonymised samples.
+          Free tier limit: {formatBytes(uploadPolicy?.freeMaxBytes || 0)} per file. With credits: {formatBytes(uploadPolicy?.paidMaxBytes || 0)}.
+          Allowed: pdf, docx, txt, csv. Do not upload real customer data or secrets; use synthetic or anonymised samples.
         </p>
         {docs.length === 0 && (
           <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 px-4 py-3 text-sm text-slate-700">

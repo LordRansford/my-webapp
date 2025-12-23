@@ -9,6 +9,7 @@ import { isProbablyDomain, isProbablyHostname, isProbablyIp, safeTrim } from "@/
 import { postJson } from "@/lib/tooling/http";
 import ComputeEstimatePanel from "@/components/compute/ComputeEstimatePanel";
 import ComputeSummaryPanel from "@/components/compute/ComputeSummaryPanel";
+import ComputeMeter from "@/components/ComputeMeter";
 
 const attribution =
   "Created by Ransford for Ransfords Notes. Internal use allowed. Commercial use requires visible attribution. Exports are gated per policy.";
@@ -38,6 +39,11 @@ function useNetworkTool(storageKey, apiPath) {
   });
   const runner = useToolRunner({ minIntervalMs: 900, toolId: storageKey });
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [serverEstimate, setServerEstimate] = useState(null);
+  const [serverActual, setServerActual] = useState(null);
+  const [serverFreeRemainingMs, setServerFreeRemainingMs] = useState(null);
+  const [serverHints, setServerHints] = useState([]);
+  const [serverStatus, setServerStatus] = useState("success");
 
   const validateTarget = useCallback((targetRaw) => {
     const t = safeTrim(targetRaw, 253);
@@ -67,6 +73,8 @@ function useNetworkTool(storageKey, apiPath) {
 
   const runLookup = async () => {
     updateState((prev) => ({ ...prev, error: "" }));
+    setServerActual(null);
+    setServerStatus("success");
 
     if (!state.consent) {
       updateState((prev) => ({ ...prev, error: "Please confirm you have permission to inspect this target." }));
@@ -83,8 +91,31 @@ function useNetworkTool(storageKey, apiPath) {
     runner.prepare(meta);
 
     const data = await runner.run(async (signal) => {
+      try {
+        const er = await fetch("/api/compute/estimate", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ toolId: apiPath, inputBytes: meta.inputBytes, requestedComplexityPreset: "standard" }),
+        });
+        const ej = await er.json().catch(() => null);
+        if (ej?.ok) {
+          setServerEstimate(ej);
+          setServerFreeRemainingMs(typeof ej?.freeTierRemainingMs === "number" ? ej.freeTierRemainingMs : null);
+          setServerHints(Array.isArray(ej?.costHints) ? ej.costHints : []);
+          if (!ej.allowed) setServerStatus("blocked");
+        }
+      } catch {
+        // ignore
+      }
       const res = await postJson(`/api/tools/${apiPath}`, { target: check.value }, { signal });
       if (!res.ok) throw new Error("Lookup failed");
+      if (res?.data?.receipt) {
+        const r = res.data.receipt;
+        const durationMs = Number(r?.durationMs || 0);
+        const freeTierAppliedMs = Number(r?.freeTierAppliedMs || 0);
+        const creditsCharged = Number(r?.creditsCharged || 0);
+        setServerActual({ durationMs, freeTierAppliedMs, paidMs: Math.max(0, durationMs - freeTierAppliedMs), creditsCharged });
+      }
       return res.data;
     }, meta);
 
@@ -92,7 +123,22 @@ function useNetworkTool(storageKey, apiPath) {
     if (!data && runner.errorMessage) updateState((prev) => ({ ...prev, error: runner.errorMessage }));
   };
 
-  return { state, updateState, resetState, lastUpdated, loading: runner.loading, runLookup, runner, confirmOpen, setConfirmOpen };
+  return {
+    state,
+    updateState,
+    resetState,
+    lastUpdated,
+    loading: runner.loading,
+    runLookup,
+    runner,
+    confirmOpen,
+    setConfirmOpen,
+    serverEstimate,
+    serverActual,
+    serverFreeRemainingMs,
+    serverHints,
+    serverStatus,
+  };
 }
 
 function NetworkTemplate({
@@ -149,6 +195,27 @@ function NetworkTemplate({
       <div className="mt-4 space-y-3">
         <ComputeEstimatePanel estimate={tool.runner.compute.pre || tool.runner.compute.live} />
         <ComputeSummaryPanel toolId={storageKey} summary={tool.runner.compute.post} />
+        <ComputeMeter
+          estimate={
+            tool.serverEstimate?.ok
+              ? {
+                  estimatedCpuMs: Number(tool.serverEstimate.estimatedCpuMs || 0),
+                  estimatedWallTimeMs: Number(tool.serverEstimate.estimatedWallTimeMs || 0),
+                  estimatedCreditCost: Number(tool.serverEstimate.estimatedCreditCost || 0),
+                  freeTierAppliedMs: Number(tool.serverEstimate.freeTierAppliedMs || 0),
+                  paidMs: Number(tool.serverEstimate.paidMs || 0),
+                  allowed: Boolean(tool.serverEstimate.allowed),
+                  reasons: Array.isArray(tool.serverEstimate.reasons) ? tool.serverEstimate.reasons : [],
+                }
+              : null
+          }
+          actual={tool.serverActual || null}
+          tier={typeof tool.serverFreeRemainingMs === "number" ? { freeMsRemainingToday: tool.serverFreeRemainingMs } : null}
+          remainingCredits={typeof tool.serverEstimate?.requiredCreditsIfAny === "number" ? null : null}
+          runStatus={tool.serverStatus || "success"}
+          costHints={tool.serverHints || []}
+          compact
+        />
       </div>
 
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between mt-4">

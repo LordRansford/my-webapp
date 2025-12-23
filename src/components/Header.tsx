@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import BrandLogo from "@/components/BrandLogo";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { formatCreditsSafe } from "@/lib/credits/format";
 
 type Dropdown = {
   id: string;
@@ -70,6 +71,9 @@ export default function Header() {
   const { data: session } = useSession();
   const user = session?.user;
   const [plan, setPlan] = useState<string | null>(null);
+  const [creditsOpen, setCreditsOpen] = useState(false);
+  const [creditsSummary, setCreditsSummary] = useState<{ balance: number; expiresAt: string | null } | null>(null);
+  const [recentRuns, setRecentRuns] = useState<any[]>([]);
 
   const initials = (() => {
     const src = user?.name || user?.email || "";
@@ -91,6 +95,30 @@ export default function Header() {
       .then((d) => setPlan(d?.plan || "free"))
       .catch(() => setPlan("free"));
   }, []);
+
+  useEffect(() => {
+    if (!user?.id) {
+      setCreditsSummary(null);
+      setRecentRuns([]);
+      return;
+    }
+    fetch("/api/credits/status")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!d) return;
+        const balance = typeof d?.balance === "number" ? d.balance : 0;
+        const expiresAt = typeof d?.expiresAt === "string" ? d.expiresAt : d?.expiresAt ? String(d.expiresAt) : null;
+        setCreditsSummary({ balance, expiresAt });
+      })
+      .catch(() => null);
+    fetch("/api/compute/history")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        const jobs = Array.isArray(d?.jobs) ? d.jobs : [];
+        setRecentRuns(jobs.slice(0, 5));
+      })
+      .catch(() => setRecentRuns([]));
+  }, [user?.id]);
 
   const focusStyle =
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600";
@@ -219,6 +247,18 @@ export default function Header() {
             </Link>
             {user?.id ? (
               <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setCreditsOpen(true)}
+                  className={`inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50 ${focusStyle}`}
+                  aria-label="Open credits and usage"
+                >
+                  <span aria-hidden="true" className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-900 text-white text-xs">
+                    C
+                  </span>
+                  <span className="hidden lg:inline">Credits: {formatCreditsSafe(creditsSummary?.balance ?? 0)}</span>
+                  <span className="lg:hidden sr-only">Credits: {formatCreditsSafe(creditsSummary?.balance ?? 0)}</span>
+                </button>
                 {plan === "supporter" ? (
                   <span className="rounded-full bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-800">Supporter</span>
                 ) : null}
@@ -254,6 +294,57 @@ export default function Header() {
             )}
           </div>
         </div>
+
+        {/* Credits drawer */}
+        {creditsOpen ? (
+          <>
+            <button
+              type="button"
+              className="fixed inset-0 z-40 bg-black/35"
+              aria-label="Close credits drawer"
+              onClick={() => setCreditsOpen(false)}
+            />
+            <aside className="fixed right-0 top-0 z-50 h-full w-full max-w-sm overflow-y-auto bg-white p-5 shadow-xl" aria-label="Credits drawer">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Credits</p>
+                  <p className="mt-1 text-xl font-semibold text-slate-900">{formatCreditsSafe(creditsSummary?.balance ?? 0)}</p>
+                  <p className="mt-1 text-sm text-slate-700">
+                    Expiry: {creditsSummary?.expiresAt ? new Date(creditsSummary.expiresAt).toISOString().slice(0, 10) : "—"}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  className="rounded-full border border-slate-300 px-3 py-1 text-sm font-semibold text-slate-900 hover:border-slate-400"
+                  onClick={() => setCreditsOpen(false)}
+                >
+                  Close
+                </button>
+              </div>
+
+              <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                <p className="text-sm font-semibold text-slate-900">Recent runs</p>
+                {recentRuns.length === 0 ? <p className="mt-2 text-sm text-slate-700">No runs yet.</p> : null}
+                <div className="mt-3 space-y-2">
+                  {recentRuns.map((r: any) => (
+                    <div key={r.id} className="rounded-xl border border-slate-200 bg-white p-3">
+                      <p className="text-sm font-semibold text-slate-900">{r.toolId}</p>
+                      <p className="text-xs text-slate-700">
+                        {r.status} • estimate {r.estimatedCostCredits ?? 0} • charged {r.chargedCredits ?? 0}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+                <p className="mt-3 text-sm">
+                  <Link href="/account/usage" className="font-semibold text-emerald-700 underline underline-offset-4" onClick={() => setCreditsOpen(false)}>
+                    View usage
+                  </Link>
+                </p>
+                <p className="mt-3 text-xs text-slate-700">Do not share sensitive data in tool inputs.</p>
+              </div>
+            </aside>
+          </>
+        ) : null}
 
         {/* Mobile menu */}
         {mobileOpen && (

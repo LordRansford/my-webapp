@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import ComputeMeter, { type ComputeActual, type ComputeEstimate, type ComputeRunStatus } from "@/components/ComputeMeter";
 
 type Project = { id: string; title: string; topic: string };
 
@@ -32,6 +33,11 @@ export default function CodeNotebookLabPage() {
   const [stdout, setStdout] = useState<Record<string, string>>({});
   const [stderr, setStderr] = useState<Record<string, string>>({});
   const [runMeta, setRunMeta] = useState<Record<string, { durationMs: number; freeTierAppliedMs: number; chargedCredits: number }>>({});
+  const [computeEstimate, setComputeEstimate] = useState<Record<string, ComputeEstimate | null>>({});
+  const [computeActual, setComputeActual] = useState<Record<string, ComputeActual | null>>({});
+  const [computeStatus, setComputeStatus] = useState<Record<string, ComputeRunStatus>>({});
+  const [computeHints, setComputeHints] = useState<Record<string, string[]>>({});
+  const [freeRemainingMs, setFreeRemainingMs] = useState<Record<string, number>>({});
   const [busyStep, setBusyStep] = useState<string | null>(null);
   const [noteDraft, setNoteDraft] = useState<Record<string, string>>({});
   const [lang, setLang] = useState<"js" | "py">("js");
@@ -90,7 +96,7 @@ export default function CodeNotebookLabPage() {
     setCreating(false);
   };
 
-  const runStep = async (step: Step) => {
+  const runStep = async (step: Step, preset: "light" | "standard" = "standard") => {
     setError(null);
     if (!projectId) {
       setError("Select a project first.");
@@ -100,6 +106,8 @@ export default function CodeNotebookLabPage() {
     setStdout((prev) => ({ ...prev, [step.id]: "" }));
     setStderr((prev) => ({ ...prev, [step.id]: "" }));
     setRunMeta((prev) => ({ ...prev, [step.id]: { durationMs: 0, freeTierAppliedMs: 0, chargedCredits: 0 } }));
+    setComputeActual((prev) => ({ ...prev, [step.id]: null }));
+    setComputeStatus((prev) => ({ ...prev, [step.id]: "success" }));
 
     if (lang === "py") {
       setStderr((prev) => ({ ...prev, [step.id]: "Python sandbox coming soon." }));
@@ -108,14 +116,59 @@ export default function CodeNotebookLabPage() {
     }
 
     const payload = { language: lang, code: stepCode[step.id] || "", input: "", presets: [] };
+
+    // Pre-run estimate (authoritative).
+    try {
+      const er = await fetch("/api/compute/estimate", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ toolId: "code-runner", inputBytes: payload.code.length, requestedComplexityPreset: preset }),
+      });
+      const ej = await er.json().catch(() => null);
+      if (ej?.ok) {
+        setComputeEstimate((prev) => ({
+          ...prev,
+          [step.id]: {
+            estimatedCpuMs: Number(ej.estimatedCpuMs || 0),
+            estimatedWallTimeMs: Number(ej.estimatedWallTimeMs || 0),
+            estimatedCreditCost: Number(ej.estimatedCreditCost || 0),
+            freeTierAppliedMs: Number(ej.freeTierAppliedMs || 0),
+            paidMs: Number(ej.paidMs || 0),
+            allowed: Boolean(ej.allowed),
+            reasons: Array.isArray(ej.reasons) ? ej.reasons : [],
+          },
+        }));
+        setComputeHints((prev) => ({ ...prev, [step.id]: Array.isArray(ej.costHints) ? ej.costHints : [] }));
+        setFreeRemainingMs((prev) => ({ ...prev, [step.id]: Number(ej.freeTierRemainingMs || 0) }));
+      }
+    } catch {
+      // ignore estimate failures
+    }
+
     const res = await fetch("/api/jobs/create", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ toolId: "code-runner", mode: "enqueue", inputBytes: payload.code.length, payload, projectId, note: noteDraft[step.id] || "" }),
+      body: JSON.stringify({
+        toolId: "code-runner",
+        mode: "enqueue",
+        inputBytes: payload.code.length,
+        payload,
+        projectId,
+        note: noteDraft[step.id] || "",
+        requestedComplexityPreset: preset,
+      }),
     });
     const data = await res.json().catch(() => null);
     const jobId = String(data?.jobId || "");
+    if (res.status === 402) {
+      setComputeStatus((prev) => ({ ...prev, [step.id]: "blocked" }));
+      const msg = String(data?.error || "Run blocked.");
+      setStderr((prev) => ({ ...prev, [step.id]: msg }));
+      setBusyStep(null);
+      return;
+    }
     if (!res.ok || !jobId) {
+      setComputeStatus((prev) => ({ ...prev, [step.id]: "error" }));
       setError(String(data?.error || "Could not start run."));
       setBusyStep(null);
       return;
@@ -126,14 +179,20 @@ export default function CodeNotebookLabPage() {
       const j = await jr.json().catch(() => null);
       const s = j?.job?.status || null;
       if (s === "succeeded") {
+        setComputeStatus((prev) => ({ ...prev, [step.id]: "success" }));
         setStdout((prev) => ({ ...prev, [step.id]: String(j?.job?.resultJson?.stdout || "") }));
         setStderr((prev) => ({ ...prev, [step.id]: String(j?.job?.resultJson?.stderr || "") }));
-        setRunMeta((prev) => ({
+        const durationMs = Number(j?.job?.durationMs || 0);
+        const freeTierAppliedMs = Number(j?.job?.freeTierAppliedMs || 0);
+        const chargedCredits = Number(j?.job?.chargedCredits || 0);
+        setRunMeta((prev) => ({ ...prev, [step.id]: { durationMs, freeTierAppliedMs, chargedCredits } }));
+        setComputeActual((prev) => ({
           ...prev,
           [step.id]: {
-            durationMs: Number(j?.job?.durationMs || 0),
-            freeTierAppliedMs: Number(j?.job?.freeTierAppliedMs || 0),
-            chargedCredits: Number(j?.job?.chargedCredits || 0),
+            durationMs,
+            freeTierAppliedMs,
+            paidMs: Math.max(0, durationMs - freeTierAppliedMs),
+            creditsCharged: chargedCredits,
           },
         }));
         setBusyStep(null);
@@ -142,6 +201,7 @@ export default function CodeNotebookLabPage() {
         return;
       }
       if (s === "denied" || s === "failed" || s === "cancelled") {
+        setComputeStatus((prev) => ({ ...prev, [step.id]: s === "cancelled" ? "aborted" : "error" }));
         setStderr((prev) => ({ ...prev, [step.id]: String(j?.job?.errorMessage || "Run did not complete.") }));
         setBusyStep(null);
         await loadProjects();
@@ -150,6 +210,7 @@ export default function CodeNotebookLabPage() {
       }
       await sleep(600);
     }
+    setComputeStatus((prev) => ({ ...prev, [step.id]: "error" }));
     setStderr((prev) => ({ ...prev, [step.id]: "Timed out waiting for run." }));
     setBusyStep(null);
   };
@@ -279,7 +340,7 @@ export default function CodeNotebookLabPage() {
               </div>
               <button
                 type="button"
-                onClick={() => runStep(step)}
+                  onClick={() => runStep(step, "standard")}
                 disabled={busyStep === step.id}
                 className="rounded-full bg-emerald-700 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-800 disabled:bg-slate-300"
               >
@@ -323,6 +384,29 @@ export default function CodeNotebookLabPage() {
                 <p className="mt-1 text-sm text-slate-900">{runMeta[step.id]?.chargedCredits ?? 0}</p>
               </div>
             </div>
+
+            <ComputeMeter
+              estimate={computeEstimate[step.id] || null}
+              actual={computeActual[step.id] || null}
+              tier={typeof freeRemainingMs[step.id] === "number" ? { freeMsRemainingToday: freeRemainingMs[step.id] } : null}
+              remainingCredits={null}
+              runStatus={computeStatus[step.id] || "success"}
+              costHints={computeHints[step.id] || []}
+              compact
+            />
+
+            {computeStatus[step.id] === "blocked" ? (
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="text-sm text-slate-700">Try a free tier run to get a smaller result.</p>
+                <button
+                  type="button"
+                  onClick={() => runStep(step, "light")}
+                  className="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-900 hover:border-slate-400"
+                >
+                  Run in free tier mode
+                </button>
+              </div>
+            ) : null}
 
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-2">
               <p className="text-xs font-semibold text-slate-700">Save note (plain text)</p>

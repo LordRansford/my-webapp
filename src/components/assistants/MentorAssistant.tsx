@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import { GraduationCap, X } from "lucide-react";
 import CitationChip from "@/components/assistants/CitationChip";
-import { CreditMeter } from "@/components/CreditMeter";
+import ComputeMeter, { type ComputeActual, type ComputeEstimate } from "@/components/ComputeMeter";
 
 type MentorCitation = { title: string; href: string; why?: string };
 type MentorSource = { title: string; href: string; excerpt?: string };
@@ -100,6 +100,11 @@ export default function MentorAssistant({
   const [messages, setMessages] = useState<MentorMsg[]>([]);
   const [input, setInput] = useState("");
   const [status, setStatus] = useState<"idle" | "loading">("idle");
+  const [estimate, setEstimate] = useState<ComputeEstimate | null>(null);
+  const [estimateFreeRemainingMs, setEstimateFreeRemainingMs] = useState<number | null>(null);
+  const [actual, setActual] = useState<ComputeActual | null>(null);
+  const [remainingCredits, setRemainingCredits] = useState<number | null>(null);
+  const [costHints, setCostHints] = useState<string[]>([]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -115,12 +120,39 @@ export default function MentorAssistant({
     const question = sanitizeText(input, 320);
     if (!question) return;
     setStatus("loading");
+    setActual(null);
+    setRemainingCredits(null);
 
     const headings = collectHeadings();
     const tools = collectToolTitles();
     const text = collectVisibleText(9000);
 
     try {
+      // Pre-run estimate (authoritative)
+      try {
+        const er = await fetch("/api/compute/estimate", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ toolId: "mentor-query", inputBytes: question.length, requestedComplexityPreset: "standard" }),
+        });
+        const ej = await er.json().catch(() => null);
+        if (ej?.ok) {
+          setEstimate({
+            estimatedCpuMs: Number(ej.estimatedCpuMs || 0),
+            estimatedWallTimeMs: Number(ej.estimatedWallTimeMs || 0),
+            estimatedCreditCost: Number(ej.estimatedCreditCost || 0),
+            freeTierAppliedMs: Number(ej.freeTierAppliedMs || 0),
+            paidMs: Number(ej.paidMs || 0),
+            allowed: Boolean(ej.allowed),
+            reasons: Array.isArray(ej.reasons) ? ej.reasons : [],
+          });
+          setEstimateFreeRemainingMs(typeof ej?.freeTierRemainingMs === "number" ? ej.freeTierRemainingMs : null);
+          setCostHints(Array.isArray(ej.costHints) ? ej.costHints : []);
+        }
+      } catch {
+        // ignore
+      }
+
       const res = await fetch("/api/mentor/query", {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -138,6 +170,14 @@ export default function MentorAssistant({
         }),
       });
       const data = await res.json().catch(() => ({}));
+      const receipt = data?.receipt || null;
+      if (receipt) {
+        const durationMs = Number(receipt?.durationMs || 0);
+        const freeTierAppliedMs = Number(receipt?.freeTierAppliedMs || 0);
+        const creditsCharged = Number(receipt?.creditsCharged || 0);
+        setActual({ durationMs, freeTierAppliedMs, paidMs: Math.max(0, durationMs - freeTierAppliedMs), creditsCharged });
+        setRemainingCredits(typeof receipt?.remainingCredits === "number" ? receipt.remainingCredits : null);
+      }
 
       const citations: MentorCitation[] = Array.isArray(data?.citations) ? data.citations : [];
       const filtered = citations.filter((c) => {
@@ -240,7 +280,15 @@ export default function MentorAssistant({
         </div>
 
         <div className="mt-4">
-          <CreditMeter toolId="mentor-query" inputBytes={Math.max(0, input.trim().length)} preset="standard" lastReceipt={messages[messages.length - 1]?.receipt || null} />
+          <ComputeMeter
+            estimate={estimate}
+            actual={actual}
+            tier={typeof estimateFreeRemainingMs === "number" ? { freeMsRemainingToday: estimateFreeRemainingMs } : null}
+            remainingCredits={remainingCredits}
+            runStatus={actual ? "success" : status === "loading" ? "success" : estimate && !estimate.allowed ? "blocked" : "success"}
+            costHints={costHints}
+            compact
+          />
         </div>
 
         <div className="mt-4 flex flex-col gap-2">
