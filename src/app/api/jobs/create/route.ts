@@ -12,6 +12,8 @@ import { createNote, createRun, getProject, updateRun } from "@/lib/workspace/st
 import { WORKSPACE_COOKIE, getOrCreateWorkspaceSession, newWorkspaceTokenRaw, signWorkspaceToken, verifyWorkspaceToken } from "@/lib/workspace/session";
 import { estimateRunCost, type ComplexityPreset } from "@/lib/billing/estimateRunCost";
 import { prisma } from "@/lib/db/prisma";
+import type { ComputeError } from "@/lib/contracts/compute";
+import { logWarn } from "@/lib/telemetry/log";
 
 type Body = {
   toolId?: string;
@@ -109,10 +111,23 @@ export async function POST(req: Request) {
             inputBytes: inputBytes ?? 0,
             requestedComplexityPreset: "light",
           });
+    const hint =
+      estimate.reason && estimate.reason.toLowerCase().includes("sign in")
+        ? "Sign in to run paid compute."
+        : estimate.reason && estimate.reason.toLowerCase().includes("credits")
+          ? "Try the free tier mode, use a lighter preset, or reduce input size."
+          : "Use a lighter preset or reduce input size.";
+    const errorObj: ComputeError = {
+      code: "RUN_BLOCKED",
+      message: estimate.reason || "Run blocked.",
+      hint,
+    };
+    logWarn("compute.run_blocked", { toolId, userId: userId || null, reason: estimate.reason || null });
     const res = NextResponse.json(
       {
-        error: estimate.reason || "Run blocked.",
-        code: "RUN_BLOCKED",
+        error: errorObj.message,
+        code: errorObj.code,
+        errorObj,
         estimate,
         alternativeFreeTier: alt?.allowed ? { preset: "light", estimate: alt } : null,
       },

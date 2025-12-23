@@ -7,6 +7,8 @@ import { withRequestLogging } from "@/lib/security/requestLog";
 import { prisma } from "@/lib/db/prisma";
 import { meterRun } from "@/lib/compute/metering";
 import { createCreditUsageEvent, enforceCreditExpiry } from "@/lib/credits/store";
+import type { ComputeError } from "@/lib/contracts/compute";
+import { logWarn } from "@/lib/telemetry/log";
 
 const DISABLED = process.env.CREDITS_METERING_ENABLED === "false";
 
@@ -76,9 +78,16 @@ export async function POST(req: Request) {
     });
 
     if (!result.ok) {
+      const errorObj: ComputeError = {
+        code: "INSUFFICIENT_CREDITS",
+        message: "Insufficient credits for the paid portion of this run.",
+        hint: "Reduce input size, disable expensive options, or run a free tier preview first.",
+      };
+      logWarn("credits.consume_insufficient", { userId, toolId, required: metered.creditsToConsume, balance: result.balance });
       return NextResponse.json(
         {
-          message: "Insufficient credits for the paid portion of this run. Reduce input size or disable expensive options.",
+          message: `${errorObj.message} ${errorObj.hint}`,
+          errorObj,
           metered: result.metered,
           remaining: result.balance,
         },

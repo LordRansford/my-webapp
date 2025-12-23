@@ -39,6 +39,7 @@ export default function CodeNotebookLabPage() {
   const [computeStatus, setComputeStatus] = useState<Record<string, ComputeRunStatus>>({});
   const [computeHints, setComputeHints] = useState<Record<string, string[]>>({});
   const [freeRemainingMs, setFreeRemainingMs] = useState<Record<string, number>>({});
+  const [computeError, setComputeError] = useState<Record<string, any | null>>({});
   const [busyStep, setBusyStep] = useState<string | null>(null);
   const [noteDraft, setNoteDraft] = useState<Record<string, string>>({});
   const [lang, setLang] = useState<"js" | "py">("js");
@@ -109,6 +110,7 @@ export default function CodeNotebookLabPage() {
     setRunMeta((prev) => ({ ...prev, [step.id]: { durationMs: 0, freeTierAppliedMs: 0, chargedCredits: 0 } }));
     setComputeActual((prev) => ({ ...prev, [step.id]: null }));
     setComputeStatus((prev) => ({ ...prev, [step.id]: "success" }));
+    setComputeError((prev) => ({ ...prev, [step.id]: null }));
 
     if (lang === "py") {
       setStderr((prev) => ({ ...prev, [step.id]: "Python sandbox coming soon." }));
@@ -165,6 +167,7 @@ export default function CodeNotebookLabPage() {
       setComputeStatus((prev) => ({ ...prev, [step.id]: "blocked" }));
       const msg = String(data?.error || "Run blocked.");
       setStderr((prev) => ({ ...prev, [step.id]: msg }));
+      setComputeError((prev) => ({ ...prev, [step.id]: data?.errorObj || null }));
       setBusyStep(null);
       return;
     }
@@ -393,6 +396,7 @@ export default function CodeNotebookLabPage() {
               remainingCredits={null}
               runStatus={computeStatus[step.id] || "success"}
               costHints={computeHints[step.id] || []}
+              error={computeError[step.id] || null}
               compact
             />
 
