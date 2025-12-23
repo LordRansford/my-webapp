@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { formatCreditsSafe, formatMsSafe, msOrNull, numberOrNull } from "@/lib/credits/format";
-import type { ComputeActual, ComputeEstimate, ComputeRunStatus } from "@/lib/contracts/compute";
+import type { ComputeActual, ComputeError, ComputeEstimate, ComputeRunStatus } from "@/lib/contracts/compute";
 
 function safeList(v: unknown, max = 6): string[] {
   if (!Array.isArray(v)) return [];
@@ -20,9 +20,10 @@ export default function ComputeMeter(props: {
   remainingCredits?: number | null;
   runStatus: ComputeRunStatus;
   costHints?: string[];
+  error?: ComputeError | null;
   compact?: boolean;
 }) {
-  const { estimate, actual, tier, remainingCredits, runStatus, costHints, compact = true } = props;
+  const { estimate, actual, tier, remainingCredits, runStatus, costHints, error, compact = true } = props;
   const [expanded, setExpanded] = useState(!compact);
 
   const statusLabel = useMemo(() => {
@@ -116,6 +117,13 @@ export default function ComputeMeter(props: {
 
       {expanded ? (
         <div className="mt-3 space-y-3">
+          {error ? (
+            <div className="rounded-2xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-900">
+              <p className="m-0 font-semibold">{error.message}</p>
+              {error.hint ? <p className="mt-1 m-0 text-sm text-rose-900">Try: {error.hint}</p> : null}
+              {error.details ? <p className="mt-1 m-0 text-xs text-rose-800">{error.details}</p> : null}
+            </div>
+          ) : null}
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="rounded-2xl border border-slate-200 bg-white p-3">
               <p className="text-xs font-semibold text-slate-800">Free tier usage</p>
