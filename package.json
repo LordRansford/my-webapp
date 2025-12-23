@@ -34,7 +34,10 @@
     "test:data": "node --test tests/**/*.test.mjs",
     "test:mentor": "npm run build:content-index && node --test tests/mentor-*.test.mjs",
     "test:e2e": "playwright test",
-    "test:ux": "node scripts/ux-check.mjs"
+    "test:ux": "node scripts/ux-check.mjs",
+    "worker:tick": "node scripts/worker.mjs",
+    "runner:dev": "docker compose -f docker-compose.runner.yml up --build",
+    "runner:down": "docker compose -f docker-compose.runner.yml down"
   },
   "dependencies": {
     "@prisma/client": "^6.1.0",

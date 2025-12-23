@@ -1,25 +1,27 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import crypto from "crypto";
 import { deletePermissionToken, listPermissionTokens, savePermissionToken } from "@/lib/templates/store";
 import { rateLimit } from "@/lib/security/rateLimit";
 import { requireSameOrigin } from "@/lib/security/origin";
-
-const ADMIN_KEY = process.env.ADMIN_DASHBOARD_TOKEN;
-
-async function isAuthorised() {
-  if (!ADMIN_KEY) return false;
-  const token = (await cookies()).get?.("admin_token")?.value;
-  return token === ADMIN_KEY;
-}
+import { requireAdminJson } from "@/lib/security/adminAuth";
+import { logAdminAction } from "@/lib/admin/audit";
 
 export async function POST(request: Request) {
   const originBlock = requireSameOrigin(request);
   if (originBlock) return originBlock;
-  const limited = rateLimit(request, { keyPrefix: "admin-permission-tokens", limit: 30, windowMs: 60_000 });
+  const auth = await requireAdminJson("MANAGE_SUPPORT");
+  if (!auth.ok) return auth.response;
+  const user = auth.session?.user;
+  if (!user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const keySuffix = auth.session?.user?.email || auth.session?.user?.id || "";
+  const limited = rateLimit(request, { keyPrefix: "admin-permission-tokens", limit: 15, windowMs: 60_000, keySuffix });
   if (limited) return limited;
-  if (!(await isAuthorised())) return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+
   const body = (await request.json().catch(() => ({}))) as any;
+  const reason = String(body.reason || "").trim();
+  if (!reason) return NextResponse.json({ message: "reason required" }, { status: 400 });
+
   const tokenId = body.tokenId || crypto.randomUUID();
   savePermissionToken({
     tokenId,
@@ -29,8 +31,17 @@ export async function POST(request: Request) {
     scope: "commercial_remove_signature",
     issuedAt: new Date().toISOString(),
     expiresAt: body.expiresAt || null,
-    issuedBy: "Ransford",
+    issuedBy: user.email || user.id,
     notes: body.notes || null,
+  });
+
+  await logAdminAction({
+    adminUser: { id: user.id, email: user.email || null },
+    adminRole: auth.role,
+    actionType: "MANAGE_PERMISSION_TOKEN_CREATE",
+    target: { targetType: "permission-token", targetId: tokenId },
+    reason,
+    req: request,
   });
   return NextResponse.json({ tokenId });
 }
@@ -38,18 +49,52 @@ export async function POST(request: Request) {
 export async function DELETE(request: Request) {
   const originBlock = requireSameOrigin(request);
   if (originBlock) return originBlock;
-  const limited = rateLimit(request, { keyPrefix: "admin-permission-tokens", limit: 30, windowMs: 60_000 });
+  const auth = await requireAdminJson("MANAGE_SUPPORT");
+  if (!auth.ok) return auth.response;
+  const user = auth.session?.user;
+  if (!user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const keySuffix = auth.session?.user?.email || auth.session?.user?.id || "";
+  const limited = rateLimit(request, { keyPrefix: "admin-permission-tokens", limit: 15, windowMs: 60_000, keySuffix });
   if (limited) return limited;
-  if (!(await isAuthorised())) return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+
   const { searchParams } = new URL(request.url);
   const tokenId = searchParams.get("tokenId");
   if (!tokenId) return NextResponse.json({ message: "tokenId required" }, { status: 400 });
+  const reason = (searchParams.get("reason") || "").trim();
+  if (!reason) return NextResponse.json({ message: "reason required" }, { status: 400 });
   deletePermissionToken(tokenId);
+
+  await logAdminAction({
+    adminUser: { id: user.id, email: user.email || null },
+    adminRole: auth.role,
+    actionType: "MANAGE_PERMISSION_TOKEN_DELETE",
+    target: { targetType: "permission-token", targetId: tokenId },
+    reason,
+    req: request,
+  });
   return NextResponse.json({ removed: tokenId });
 }
 
-export async function GET() {
-  if (!(await isAuthorised())) return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+export async function GET(request: Request) {
+  const auth = await requireAdminJson("VIEW_SUPPORT");
+  if (!auth.ok) return auth.response;
+  const user = auth.session?.user;
+  if (!user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const keySuffix = auth.session?.user?.email || auth.session?.user?.id || "";
+  const limited = rateLimit(request, { keyPrefix: "admin-permission-tokens", limit: 20, windowMs: 60_000, keySuffix });
+  if (limited) return limited;
+
   const tokens = listPermissionTokens(200);
+
+  await logAdminAction({
+    adminUser: { id: user.id, email: user.email || null },
+    adminRole: auth.role,
+    actionType: "VIEW_PERMISSION_TOKENS",
+    target: { targetType: "permission-token", targetId: null },
+    reason: "Admin support tooling view",
+    req: request,
+  });
   return NextResponse.json({ tokens });
 }

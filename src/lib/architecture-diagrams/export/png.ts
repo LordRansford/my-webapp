@@ -10,6 +10,7 @@ export async function downloadPng({
   variantLabel,
   scale = 2,
   includeWatermark = true,
+  footerRightText,
 }: {
   svgText: string;
   systemName: string;
@@ -17,12 +18,14 @@ export async function downloadPng({
   variantLabel: string;
   scale?: number;
   includeWatermark?: boolean;
+  footerRightText?: string | null;
 }) {
   const prepared = addTitleBlockToSvg({
     svgText,
     systemName,
     diagramType,
     variantLabel,
+    footerRightText,
     watermarkText: includeWatermark ? "Draft architecture" : null,
   });
   if (!prepared.ok) return prepared;

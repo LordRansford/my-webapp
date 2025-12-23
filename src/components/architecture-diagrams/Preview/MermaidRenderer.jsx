@@ -84,10 +84,49 @@ function sanitizeSvg(svgText) {
     .replace(/\s(xlink:href|href)\s*=\s*(['"])\s*(javascript:|https?:|data:).*?\2/gi, "");
 }
 
+function countMermaidEdges(text) {
+  const t = String(text || "");
+  const arrows = t.match(/-->|-\.->|->>|->/g) || [];
+  return arrows.length;
+}
+
+function countMermaidNodes(text) {
+  const t = String(text || "");
+  // Rough deterministic counts based on our generators.
+  const flowNodes = t.match(/\[\"/g) || [];
+  const storeNodes = t.match(/\[\(\"/g) || [];
+  const participants = t.match(/^\s*participant\s+/gm) || [];
+  return flowNodes.length + storeNodes.length + participants.length;
+}
+
+function validateMermaidText(text) {
+  const t = String(text || "");
+  const trimmed = t.trim();
+  if (!trimmed) return { ok: false, reason: "No diagram available." };
+
+  // Only allow the diagram types we generate in v1.
+  const firstLine = trimmed.split("\n")[0]?.trim() || "";
+  const allowedHeaders = ["flowchart", "sequenceDiagram"];
+  if (!allowedHeaders.some((h) => firstLine.startsWith(h))) {
+    return { ok: false, reason: "Unsupported diagram format." };
+  }
+
+  // Explicitly block interactive directives and external links.
+  const blocked = ["click ", "href", "link ", "callback", "%%{", "init:", "classDiagram", "stateDiagram", "erDiagram"];
+  const lowered = trimmed.toLowerCase();
+  if (blocked.some((b) => lowered.includes(b))) {
+    return { ok: false, reason: "This diagram includes unsupported directives." };
+  }
+
+  return { ok: true };
+}
+
 export default function MermaidRenderer({
   mermaidText,
   ariaLabel = "Diagram preview",
   maxChars = 30_000,
+  maxNodes = 40,
+  maxEdges = 60,
   onRenderedSvg,
 }) {
   const containerRef = useRef(null);
@@ -96,9 +135,16 @@ export default function MermaidRenderer({
 
   const safeInput = useMemo(() => {
     const text = String(mermaidText || "");
+    const fmt = validateMermaidText(text);
+    if (!fmt.ok) return { ok: false, reason: fmt.reason };
     if (text.length > maxChars) return { ok: false, reason: "This diagram is too large to render safely. Try removing some components or flows." };
+    const nodes = countMermaidNodes(text);
+    const edges = countMermaidEdges(text);
+    if (nodes > maxNodes || edges > maxEdges) {
+      return { ok: false, reason: "This diagram is too large to render safely. Try removing some components or flows." };
+    }
     return { ok: true, value: text };
-  }, [maxChars, mermaidText]);
+  }, [maxChars, maxEdges, maxNodes, mermaidText]);
 
   useEffect(() => {
     let cancelled = false;

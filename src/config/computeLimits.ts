@@ -6,6 +6,88 @@ export type ComputeTier = {
   creditUnitsPerCredit: number;
 };
 
+/**
+ * Job Runner compute limits (server-side execution).
+ *
+ * This is separate from UI-oriented compute profiles above. The Job Runner needs
+ * hard caps and free-tier accounting in milliseconds, plus per-tool allowlists.
+ */
+export type JobRunnerToolLimits = {
+  toolId: string;
+  maxInputBytesFreeAnon: number;
+  maxInputBytesFreeAuthed: number;
+  maxRunMsHardCap: number;
+  freeMsPerDayAuthed: number;
+  freeMsPerDayAnon: number;
+  creditsPerMsPaid: number;
+  allowAnonymous: boolean;
+  allowAuthed: boolean;
+};
+
+const SECOND_MS = 1000;
+
+export const JOB_RUNNER_TOOL_LIMITS: Record<string, JobRunnerToolLimits> = {
+  "mentor-query": {
+    toolId: "mentor-query",
+    maxInputBytesFreeAnon: 1_000,
+    maxInputBytesFreeAuthed: 6_000,
+    maxRunMsHardCap: 60 * SECOND_MS,
+    freeMsPerDayAuthed: 30 * SECOND_MS,
+    freeMsPerDayAnon: 8 * SECOND_MS,
+    creditsPerMsPaid: 1 / (10 * SECOND_MS), // 1 credit per 10s paid
+    allowAnonymous: true,
+    allowAuthed: true,
+  },
+  "whois-summary": {
+    toolId: "whois-summary",
+    maxInputBytesFreeAnon: 300,
+    maxInputBytesFreeAuthed: 2_000,
+    maxRunMsHardCap: 20 * SECOND_MS,
+    freeMsPerDayAuthed: 60 * SECOND_MS,
+    freeMsPerDayAnon: 15 * SECOND_MS,
+    creditsPerMsPaid: 1 / (20 * SECOND_MS), // 1 credit per 20s paid
+    allowAnonymous: true,
+    allowAuthed: true,
+  },
+  "templates-request-download": {
+    toolId: "templates-request-download",
+    maxInputBytesFreeAnon: 600,
+    maxInputBytesFreeAuthed: 2_000,
+    maxRunMsHardCap: 30 * SECOND_MS,
+    freeMsPerDayAuthed: 20 * SECOND_MS,
+    freeMsPerDayAnon: 0,
+    creditsPerMsPaid: 1 / (10 * SECOND_MS),
+    allowAnonymous: false,
+    allowAuthed: true,
+  },
+  "sandbox-echo": {
+    toolId: "sandbox-echo",
+    maxInputBytesFreeAnon: 2_000,
+    maxInputBytesFreeAuthed: 10_000,
+    maxRunMsHardCap: 15 * SECOND_MS,
+    freeMsPerDayAuthed: 20 * SECOND_MS,
+    freeMsPerDayAnon: 10 * SECOND_MS,
+    creditsPerMsPaid: 1 / (10 * SECOND_MS),
+    allowAnonymous: true,
+    allowAuthed: true,
+  },
+  "code-runner": {
+    toolId: "code-runner",
+    maxInputBytesFreeAnon: 6_500,
+    maxInputBytesFreeAuthed: 6_500,
+    maxRunMsHardCap: 8 * SECOND_MS,
+    freeMsPerDayAuthed: 20 * SECOND_MS,
+    freeMsPerDayAnon: 10 * SECOND_MS,
+    creditsPerMsPaid: 1 / (10 * SECOND_MS),
+    allowAnonymous: true,
+    allowAuthed: true,
+  },
+};
+
+export function getJobRunnerToolLimits(toolId: string): JobRunnerToolLimits | null {
+  return JOB_RUNNER_TOOL_LIMITS[toolId] || null;
+}
+
 export type ToolFileLimits = {
   freeMaxBytes: number;
   paidMaxBytes: number;

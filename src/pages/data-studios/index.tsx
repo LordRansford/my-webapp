@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import Link from "next/link";
+import DataStudioOverview from "./sections/DataStudioOverview";
 import DataStrategyLab from "./sections/DataStrategyLab";
 import DataArchitectureLab from "./sections/DataArchitectureLab";
 import DataGovernanceLab from "./sections/DataGovernanceLab";
@@ -13,7 +14,7 @@ import DataStudioReflection from "./sections/DataStudioReflection";
 import StudioTabs from "@/components/studios/StudioTabs";
 
 const tabs = [
-  { id: "overview", label: "Overview", component: DataStrategyLab },
+  { id: "overview", label: "Overview", component: DataStudioOverview },
   { id: "strategy", label: "Data strategy and purpose", component: DataStrategyLab },
   { id: "architecture", label: "Data architecture", component: DataArchitectureLab },
   { id: "governance", label: "Data governance and management", component: DataGovernanceLab },
@@ -40,6 +41,12 @@ export default function DataStudiosPage() {
           This studio is about decision quality, trust, and scale. We use a governance-led lens so that data supports real outcomes rather than becoming a costly hobby.
         </p>
         <div className="flex flex-wrap items-center gap-2 text-sm">
+          <Link href="/courses" className="font-semibold text-emerald-700 hover:underline">
+            Back to courses
+          </Link>
+          <span className="text-slate-300" aria-hidden="true">
+            |
+          </span>
           <Link href="/data" className="font-semibold text-emerald-700 hover:underline">
             Back to data course
           </Link>

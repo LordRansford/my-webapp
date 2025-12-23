@@ -24,6 +24,9 @@ model UserIdentity {
   providerAccountId String
   createdAt         DateTime @default(now())
   lastLoginAt       DateTime @default(now())
+  adminRole         String?  // OWNER | ADMIN | SUPPORT | READ_ONLY (null means not an admin)
+  accountStatus     String   @default("active") // active | suspended | pending
+  lastActiveAt      DateTime @default(now())
 
   cpdState  CpdState?
   progress  Progress[]
@@ -32,6 +35,51 @@ model UserIdentity {
   creditLots CreditLot[]
 
   @@index([provider, providerAccountId])
+}
+
+model SupportTicket {
+  id          String   @id @default(cuid())
+  userId      String?
+  name        String?
+  email       String?
+  category    String
+  message     String
+  status      String   @default("open") // open | in_progress | resolved
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  attachments SupportTicketAttachment[]
+  notes       SupportTicketNote[]
+
+  @@index([status, createdAt])
+  @@index([category, createdAt])
+  @@index([userId, createdAt])
+}
+
+model SupportTicketAttachment {
+  id           String   @id @default(cuid())
+  ticketId     String
+  fileName     String
+  mimeType     String
+  sizeBytes    Int
+  storageKey   String?  // stored outside repo (blob, s3, etc)
+  createdAt    DateTime @default(now())
+
+  ticket SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@index([ticketId, createdAt])
+}
+
+model SupportTicketNote {
+  id          String   @id @default(cuid())
+  ticketId    String
+  adminUserId String
+  note        String
+  createdAt   DateTime @default(now())
+
+  ticket SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@index([ticketId, createdAt])
 }
 
 model Credits {
@@ -71,6 +119,202 @@ model CreditUsageEvent {
   @@index([runId])
 }
 
+model CreditLedgerEvent {
+  id          String   @id @default(cuid())
+  userId      String
+  type        String // credit_grant | credit_purchase_pending | credit_purchase_completed | credit_spent | credit_refund | credit_expired | admin_adjustment
+  amountPence Int // positive or negative
+  reason      String
+  toolId      String?
+  runId       String?
+  createdAt   DateTime @default(now())
+  createdBy   String? // admin id
+
+  @@index([userId, createdAt])
+  @@index([type, createdAt])
+  @@index([runId])
+}
+
+model ToolRun {
+  id                 String   @id @default(cuid())
+  userId             String?  // null for anonymous
+  toolId             String
+  courseId           String?
+  pageId             String?
+  inputSizeBytes     Int?
+  computeUnits       Int      @default(0)
+  computeMs          Int      @default(0)
+  costPence          Int      @default(0)
+  freeTierCoveredPence Int    @default(0)
+  paidTierChargedPence Int    @default(0)
+  status             String   @default("success") // success | failed | blocked_insufficient_credit
+  createdAt          DateTime @default(now())
+  metadata           Json?
+
+  @@index([userId, createdAt])
+  @@index([toolId, createdAt])
+  @@index([status, createdAt])
+}
+
+model StripeWebhookEvent {
+  id           String   @id @default(cuid())
+  stripeEventId String  @unique
+  eventType    String
+  receivedAt   DateTime @default(now())
+
+  @@index([receivedAt])
+  @@index([eventType, receivedAt])
+}
+
+model Job {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  userId          String?
+  anonKey         String?
+  toolId          String
+  status          String   @default("queued") // queued | running | succeeded | failed | denied | cancelled
+
+  inputBytes      Int?
+  startedAt       DateTime?
+  finishedAt      DateTime?
+  durationMs      Int?
+
+  estimatedCostCredits Int?
+  chargedCredits  Int?
+  freeTierAppliedMs Int?
+
+  requestId       String?
+  idempotencyKey  String?  @unique
+
+  errorCode       String?
+  errorMessage    String?
+  errorStack      String?
+
+  outputRef       String?
+  payloadJson     Json?
+  resultJson      Json?
+
+  events          JobEvent[]
+
+  @@index([status, createdAt])
+  @@index([toolId, createdAt])
+  @@index([userId, createdAt])
+  @@index([anonKey, createdAt])
+}
+
+model JobEvent {
+  id        String   @id @default(cuid())
+  jobId     String
+  createdAt DateTime @default(now())
+  level     String   @default("info") // info | warn | error
+  message   String
+  data      Json?
+
+  job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId, createdAt])
+}
+
+model DailyUsage {
+  id            String   @id @default(cuid())
+  dayUtc        String   // YYYY-MM-DD
+  userId        String?
+  anonKey       String?
+  toolId        String?
+  usedMs        Int      @default(0)
+  usedCredits   Int      @default(0)
+  requestCount  Int      @default(0)
+  lastRequestAt DateTime?
+
+  @@unique([dayUtc, userId, anonKey, toolId])
+  @@index([dayUtc, userId])
+  @@index([dayUtc, anonKey])
+}
+
+model WorkspaceSession {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  projects Project[]
+}
+
+model Project {
+  id               String   @id @default(cuid())
+  ownerId          String?  // null means anonymous
+  workspaceSessionId String?
+  title            String
+  topic            String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  owner    UserIdentity?    @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+  session  WorkspaceSession? @relation(fields: [workspaceSessionId], references: [id], onDelete: Cascade)
+
+  runs        Run[]
+  attachments Attachment[]
+  notes       Note[]
+
+  @@index([ownerId, updatedAt])
+  @@index([workspaceSessionId, updatedAt])
+  @@index([topic, updatedAt])
+}
+
+model Run {
+  id         String   @id @default(cuid())
+  projectId  String
+  toolId     String
+  status     String   @default("queued") // queued | running | succeeded | failed | denied | cancelled | aborted
+  startedAt  DateTime?
+  finishedAt DateTime?
+
+  inputJson   Json?
+  outputJson  Json?
+  metricsJson Json?
+  errorJson   Json?
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  attachments Attachment[]
+  notes       Note[]
+
+  @@index([projectId, startedAt])
+  @@index([toolId, startedAt])
+}
+
+model Attachment {
+  id         String   @id @default(cuid())
+  projectId  String
+  runId      String?
+  filename   String
+  mimeType   String
+  sizeBytes  Int
+  storageKey String
+  createdAt  DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  run     Run?    @relation(fields: [runId], references: [id], onDelete: SetNull)
+
+  @@index([projectId, createdAt])
+  @@index([runId, createdAt])
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  projectId String
+  runId     String?
+  content   String
+  createdAt DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  run     Run?    @relation(fields: [runId], references: [id], onDelete: SetNull)
+
+  @@index([projectId, createdAt])
+  @@index([runId, createdAt])
+}
+
 model CreditLot {
   id            String   @id @default(cuid())
   userId        String
@@ -91,13 +335,6 @@ model CreditLot {
   @@index([userId, createdAt])
   @@index([stripeEventId])
   @@index([stripeCheckoutSessionId])
-}
-
-model StripeWebhookEvent {
-  // Stripe event id (evt_...) as primary key for idempotency.
-  id         String   @id
-  type       String
-  processedAt DateTime @default(now())
 }
 
 model Purchase {
@@ -150,6 +387,36 @@ model CertificateIssuance {
   metadata      Json?
 }
 
+model CourseCompletion {
+  id            String   @id @default(cuid())
+  userId        String
+  courseId      String
+  courseVersion String
+  completedAt   DateTime @default(now())
+  score         Int?
+  passed        Boolean  @default(true)
+
+  @@index([userId])
+  @@unique([userId, courseId, courseVersion])
+}
+
+model Certificate {
+  id              String   @id @default(cuid())
+  userId          String
+  courseId        String
+  courseVersion   String
+  issuedAt        DateTime @default(now())
+  certificateHash String   @unique
+  pdfKey          String
+  creditsUsed     Int
+  issuer          String   @default("RansfordsNotes")
+  status          String   @default("issued") // "issued" | "revoked"
+  createdAt       DateTime @default(now())
+
+  @@index([userId])
+  @@unique([userId, courseId, courseVersion])
+}
+
 model AuditEvent {
   id          String   @id @default(cuid())
   actorUserId String?
@@ -160,6 +427,23 @@ model AuditEvent {
   ip          String?
   userAgent   String?
   createdAt   DateTime @default(now())
+}
+
+model AdminAuditLog {
+  id           String   @id @default(cuid())
+  adminUserId  String
+  adminRole    String
+  actionType   String
+  targetType   String
+  targetId     String?
+  reason       String
+  timestamp    DateTime @default(now())
+  ipAddress    String?
+  userAgent    String?  // truncated in app layer
+
+  @@index([adminUserId, timestamp])
+  @@index([actionType, timestamp])
+  @@index([targetType, timestamp])
 }
 
 model FeedbackSubmission {

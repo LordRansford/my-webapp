@@ -203,6 +203,50 @@ export default function StudiosPage() {
             provider” via user-supplied keys. Keep vendor names out of the UI; mention them only in docs with proper trademark notes.
           </DevOnly>
         </StudioCard>
+
+        {/* Architecture Diagram Studio */}
+        <StudioCard>
+          <header className="space-y-2">
+            <div className="inline-flex items-center gap-2 rounded-2xl bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-900 ring-1 ring-indigo-100">
+              Architecture Diagram Studio
+            </div>
+            <p className="text-base text-slate-700">
+              Describe your system and generate clear, printable architecture diagrams. Choose the guided wizard for beginners or the power editor for direct control.
+            </p>
+          </header>
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="space-y-2 rounded-2xl border border-slate-100 bg-slate-50/60 p-4">
+              <p className="text-base font-semibold text-slate-900">Guided Wizard 🧭</p>
+              <p className="text-xs text-slate-600">Step by step. Best if you are new to architecture diagrams.</p>
+            </div>
+            <div className="space-y-2 rounded-2xl border border-slate-100 bg-slate-50/60 p-4">
+              <p className="text-base font-semibold text-slate-900">Power Editor ⚡</p>
+              <p className="text-xs text-slate-600">Direct control. Best for professionals and reviewers.</p>
+            </div>
+          </div>
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Link
+              href="/studios/architecture-diagram-studio"
+              className="rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-2"
+            >
+              Open Architecture Diagram Studio
+            </Link>
+            <Link
+              href="/studios/architecture-diagram-studio/wizard"
+              className="rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:border-indigo-300 hover:text-indigo-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300 focus-visible:ring-offset-2"
+            >
+              Open Wizard
+            </Link>
+            <Link
+              href="/studios/architecture-diagram-studio/editor"
+              className="rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:border-indigo-300 hover:text-indigo-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300 focus-visible:ring-offset-2"
+            >
+              Open Editor
+            </Link>
+          </div>
+        </StudioCard>
       </section>
 
       <StudioCard className="space-y-4">

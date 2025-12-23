@@ -37,22 +37,43 @@ export default function DiagramPackViewer({ pack }) {
   }, [pack?.variants, variantId]);
 
   const mermaidText = variant?.diagrams?.[diagramId] || "";
-  const appendixMarkdown = useMemo(() => {
+  const briefMarkdown = useMemo(() => {
     if (!pack?.inputVersion) return "";
-    const brief = buildArchitectureBriefMarkdown({
+    return buildArchitectureBriefMarkdown({
       input: pack.input,
       inputVersion: pack.inputVersion,
       assumptions: variant.assumptions || [],
       omissions: variant.omissions || [],
     });
-    const adr = buildAdrStubMarkdown({
-      input: pack.input,
-      inputVersion: pack.inputVersion,
-      assumptions: variant.assumptions || [],
-      omissions: variant.omissions || [],
-    });
-    return `${brief}\n\n---\n\n${adr}\n`;
   }, [pack, variant.assumptions, variant.omissions]);
+
+  const adrMarkdown = useMemo(() => {
+    if (!pack?.inputVersion) return "";
+    return buildAdrStubMarkdown({
+      input: pack.input,
+      inputVersion: pack.inputVersion,
+      assumptions: variant.assumptions || [],
+      omissions: variant.omissions || [],
+    });
+  }, [pack, variant.assumptions, variant.omissions]);
+
+  const appendixMarkdown = useMemo(() => {
+    if (!briefMarkdown && !adrMarkdown) return "";
+    return `${briefMarkdown}\n\n---\n\n${adrMarkdown}\n`;
+  }, [adrMarkdown, briefMarkdown]);
+
+  const footerRightText = useMemo(() => {
+    const notes = [];
+    if (pack?.inputVersion) notes.push(`Input version: ${pack.inputVersion}`);
+    if (
+      (pack?.input?.goal === "security-review" || pack?.input?.goal === "data-review") &&
+      !((pack?.input?.security?.trustBoundaries || []).filter(Boolean).length > 0) &&
+      pack?.input?.security?.hasNoTrustBoundariesConfirmed
+    ) {
+      notes.push("Trust boundaries: none (confirmed)");
+    }
+    return notes.join("  ").trim() || null;
+  }, [pack]);
 
   if (!pack || !pack.variants || pack.variants.length === 0) {
     return (
@@ -117,7 +138,10 @@ export default function DiagramPackViewer({ pack }) {
             audience={pack.input.audience}
             goal={pack.input.goal}
             appendixMarkdown={appendixMarkdown}
+            briefMarkdown={briefMarkdown}
+            adrMarkdown={adrMarkdown}
             inputVersion={pack.inputVersion}
+            footerRightText={footerRightText}
           />
           <MermaidRenderer
             mermaidText={mermaidText}

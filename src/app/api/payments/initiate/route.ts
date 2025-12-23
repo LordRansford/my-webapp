@@ -4,11 +4,13 @@ import { authOptions } from "@/lib/auth/options";
 import { rateLimit } from "@/lib/security/rateLimit";
 import { requireSameOrigin } from "@/lib/security/origin";
 import { withRequestLogging } from "@/lib/security/requestLog";
-
-const PLACEHOLDER_MESSAGE = "Payments are not yet enabled. This feature will be available shortly.";
+import { isBillingEnabled, BILLING_DISABLED_MESSAGE } from "@/lib/billing/billingEnabled";
 
 export async function POST(req: Request) {
   return withRequestLogging(req, { route: "POST /api/payments/initiate" }, async () => {
+    if (!isBillingEnabled()) {
+      return NextResponse.json({ enabled: false, message: BILLING_DISABLED_MESSAGE }, { status: 503 });
+    }
     const originBlock = requireSameOrigin(req);
     if (originBlock) return originBlock;
 
@@ -18,12 +20,10 @@ export async function POST(req: Request) {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
-    console.log("payments:initiate:attempt", { userId: session.user.id });
-
     return NextResponse.json(
       {
         enabled: false,
-        message: PLACEHOLDER_MESSAGE,
+        message: BILLING_DISABLED_MESSAGE,
       },
       { status: 200 }
     );

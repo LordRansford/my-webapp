@@ -1,10 +1,10 @@
 "use client";
 
 const OPTIONS = [
-  { value: "explain", label: "Explain a system", help: "Clarity for people who are new to the system." },
+  { value: "explain", label: "Explain a system", help: "Make the system easy to understand." },
   { value: "design-review", label: "Design review", help: "Check responsibilities, boundaries, and failure modes." },
   { value: "security-review", label: "Security review", help: "Focus on trust boundaries, sensitive flows, and access." },
-  { value: "data-review", label: "Data review", help: "Focus on data stores, flows, and sensitive categories." },
+  { value: "data-review", label: "Data review", help: "Focus on data stores, flow direction, and sensitivity." },
   { value: "cpd", label: "CPD artefact", help: "Create a clean summary you can use as evidence." },
 ];
 

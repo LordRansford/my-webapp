@@ -5,6 +5,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Providers } from "./providers";
 import AssistantsMount from "./AssistantsMount";
 import TestingModeBanner from "@/components/TestingModeBanner";
+import AppEnvBanner from "@/components/AppEnvBanner";
 
 const display = Space_Grotesk({
   subsets: ["latin"],
@@ -48,6 +49,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable} ${inter.variable}`}>
       <body>
         <Providers>
+          <AppEnvBanner />
           <TestingModeBanner />
           {children}
           <AssistantsMount />

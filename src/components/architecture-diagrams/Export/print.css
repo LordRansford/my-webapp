@@ -40,6 +40,10 @@
     width: 100% !important;
     height: auto !important;
   }
+
+  .rn-print-diagram {
+    overflow: visible !important;
+  }
 }
 
 

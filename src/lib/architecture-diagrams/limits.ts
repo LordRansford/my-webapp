@@ -11,5 +11,6 @@ export const ARCH_DIAGRAM_LIMITS = {
 } as const;
 
 export const CONTROL_CHAR_REGEX = /[\u0000-\u001F\u007F]/g;
+export const CONTROL_CHAR_TEST_REGEX = /[\u0000-\u001F\u007F]/;
 
 

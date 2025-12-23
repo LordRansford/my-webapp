@@ -22,6 +22,13 @@ function List({ items, empty }) {
 
 export default function StepReview({ input, validation, onGenerate, generationEnabled }) {
   const errors = validation?.ok ? [] : validation?.errors || [];
+  const canGenerate = Boolean(generationEnabled);
+  const purposeWarnings = input?.__purposeWarnings || [];
+  const inputVersion = input?.__inputVersion || "";
+  const needsTrustBoundaryAck =
+    (input?.goal === "security-review" || input?.goal === "data-review") &&
+    !((input?.security?.trustBoundaries || []).filter(Boolean).length > 0) &&
+    !input?.security?.hasNoTrustBoundariesConfirmed;
 
   return (
     <div className="space-y-5">
@@ -29,6 +36,17 @@ export default function StepReview({ input, validation, onGenerate, generationEn
         <h2 className="text-xl font-semibold text-slate-900">Review ✅</h2>
         <p className="mt-1 text-sm text-slate-700">This is a read only summary of your inputs.</p>
       </div>
+
+      {purposeWarnings.length ? (
+        <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+          <p className="font-semibold">Purpose guardrails</p>
+          <ul className="mt-2 list-disc space-y-1 pl-5">
+            {purposeWarnings.map((w, idx) => (
+              <li key={`${w}-${idx}`}>{w}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
 
       {!validation?.ok ? (
         <div className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-900">
@@ -45,7 +63,7 @@ export default function StepReview({ input, validation, onGenerate, generationEn
       ) : (
         <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
           <p className="font-semibold">Validation results</p>
-          <p className="mt-1 text-xs text-emerald-900/80">Inputs look good. You can generate diagrams now.</p>
+          <p className="mt-1 text-xs text-emerald-900/80">Inputs look good.</p>
         </div>
       )}
 
@@ -56,7 +74,11 @@ export default function StepReview({ input, validation, onGenerate, generationEn
           ]}
           empty="n/a"
         />
-        <p className="mt-2 text-xs text-slate-600">A version hash will be shown after generation.</p>
+        {inputVersion ? (
+          <p className="mt-2 text-xs text-slate-600">Generated from input version {inputVersion}</p>
+        ) : (
+          <p className="mt-2 text-xs text-slate-600">An input version hash will be shown after generation.</p>
+        )}
       </Section>
 
       <div className="grid gap-3 md:grid-cols-2">
@@ -125,15 +147,23 @@ export default function StepReview({ input, validation, onGenerate, generationEn
       <div className="flex flex-wrap items-center gap-3">
         <button
           type="button"
-          disabled={!generationEnabled}
-          onClick={onGenerate}
+          disabled={!canGenerate}
+          onClick={canGenerate ? onGenerate : undefined}
           className={`rounded-full px-5 py-2 text-sm font-semibold shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 ${
-            generationEnabled ? "bg-slate-900 text-white hover:bg-slate-800" : "bg-slate-200 text-slate-600 cursor-not-allowed"
+            canGenerate ? "bg-slate-900 text-white hover:bg-slate-800" : "bg-slate-200 text-slate-600 cursor-not-allowed"
           }`}
         >
           Generate diagrams
         </button>
-        {!generationEnabled ? <p className="text-sm font-semibold text-slate-700">Fix validation items to enable generation</p> : null}
+        {!canGenerate ? (
+          <p className="text-sm font-semibold text-slate-700">
+            {validation?.ok && needsTrustBoundaryAck
+              ? "Add a trust boundary or confirm that the system has no trust boundaries."
+              : "Fix validation items to enable generation"}
+          </p>
+        ) : (
+          <p className="text-sm font-semibold text-slate-700">These diagrams are generated drafts. Review before using in decisions.</p>
+        )}
       </div>
     </div>
   );

@@ -2,8 +2,23 @@
   "users": {
     "user-a": {
       "userId": "user-a",
-      "updatedAt": "2025-12-21T11:50:29.648Z",
+      "updatedAt": "2025-12-23T06:51:53.382Z",
       "events": [
+        {
+          "type": "tool_used",
+          "toolId": "dns-lookup",
+          "timestamp": "2025-01-01T00:00:00.000Z"
+        },
+        {
+          "type": "tool_used",
+          "toolId": "dns-lookup",
+          "timestamp": "2025-01-01T00:00:00.000Z"
+        },
+        {
+          "type": "tool_used",
+          "toolId": "dns-lookup",
+          "timestamp": "2025-01-01T00:00:00.000Z"
+        },
         {
           "type": "tool_used",
           "toolId": "dns-lookup",
@@ -108,8 +123,23 @@
     },
     "user-b": {
       "userId": "user-b",
-      "updatedAt": "2025-12-21T11:50:29.671Z",
+      "updatedAt": "2025-12-23T06:51:53.400Z",
       "events": [
+        {
+          "type": "tool_used",
+          "toolId": "tls-inspect",
+          "timestamp": "2025-01-01T00:00:00.000Z"
+        },
+        {
+          "type": "tool_used",
+          "toolId": "tls-inspect",
+          "timestamp": "2025-01-01T00:00:00.000Z"
+        },
+        {
+          "type": "tool_used",
+          "toolId": "tls-inspect",
+          "timestamp": "2025-01-01T00:00:00.000Z"
+        },
         {
           "type": "tool_used",
           "toolId": "tls-inspect",
@@ -214,7 +244,7 @@
     },
     "user-cap": {
       "userId": "user-cap",
-      "updatedAt": "2025-12-21T11:50:29.718Z",
+      "updatedAt": "2025-12-23T06:51:53.451Z",
       "events": [
         {
           "type": "quiz_attempted",

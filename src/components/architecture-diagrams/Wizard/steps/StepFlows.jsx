@@ -1,6 +1,6 @@
 "use client";
 
-import { wizardCopy } from "@/lib/architecture-diagrams/copy/audience";
+import { isProfessionals, wizardCopy } from "@/lib/architecture-diagrams/copy/audience";
 
 function SoftWarning({ children }) {
   return (
@@ -13,11 +13,13 @@ function SoftWarning({ children }) {
 
 export default function StepFlows({ audience = "students", flows, options, onChange, errors = [] }) {
   const copy = wizardCopy(audience);
+  const title = isProfessionals(audience) ? "Key flows" : "Key flows 🔁";
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-xl font-semibold text-slate-900">Key flows 🔁</h2>
-        <p className="mt-1 text-sm text-slate-700">{copy.flowsHelp}</p>
+        <h2 className="text-xl font-semibold text-slate-900">{title}</h2>
+        <p className="mt-1 text-sm text-slate-700">{copy.flowsIntro}</p>
+        <p className="mt-2 text-xs text-slate-600">{copy.flowsHelp}</p>
       </div>
 
       {flows.length === 0 ? <SoftWarning>Add one or two flows to make the review step more useful.</SoftWarning> : null}

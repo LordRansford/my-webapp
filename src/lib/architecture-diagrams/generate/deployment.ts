@@ -1,6 +1,6 @@
 import type { ArchitectureDiagramInput } from "../schema";
 import type { VariantConfig } from "../types";
-import { capList, sanitizeLabel } from "./safety";
+import { capList, enforceCaps, sanitizeLabel } from "./safety";
 
 export function generateDeploymentDiagram(input: ArchitectureDiagramInput, variant: VariantConfig) {
   const omissions: string[] = [];
@@ -9,12 +9,14 @@ export function generateDeploymentDiagram(input: ArchitectureDiagramInput, varia
     "No cloud provider, regions, or security controls are inferred in v1.",
   ];
 
-  const containers = capList(input.containers || [], variant.caps.maxNodes)
+  // Reserve one node for SYS.
+  const maxChildNodes = Math.max(0, variant.caps.maxNodes - 1);
+  const containers = capList(input.containers || [], maxChildNodes)
     .map((c) => ({ name: c.name, type: c.type }))
     .filter((c) => String(c.name || "").trim().length > 0)
     .sort((a, b) => String(a.name).localeCompare(String(b.name)));
 
-  const externals = capList(input.externalSystems || [], variant.caps.maxNodes)
+  const externals = capList(input.externalSystems || [], maxChildNodes)
     .map((s) => s.name)
     .filter(Boolean)
     .sort((a, b) => String(a).localeCompare(String(b)));
@@ -50,10 +52,12 @@ export function generateDeploymentDiagram(input: ArchitectureDiagramInput, varia
   const addSubgraph = (id: string, title: string, items: string[]) => {
     if (items.length === 0) return;
     lines.push(`subgraph ${id}["${title}"]`);
-    items.forEach((label, idx) => {
+    items.slice(0, maxChildNodes).forEach((label, idx) => {
       const nodeId = `${id}_${idx + 1}`;
       lines.push(`${nodeId}["${label}"]`);
-      lines.push(`SYS --> ${nodeId}`);
+      if (lines.filter((l) => l.includes("-->")).length < variant.caps.maxEdges) {
+        lines.push(`SYS --> ${nodeId}`);
+      }
     });
     lines.push("end");
   };
@@ -64,7 +68,7 @@ export function generateDeploymentDiagram(input: ArchitectureDiagramInput, varia
   addSubgraph("Other", "Other components", other);
 
   if (variant.emphasizeOps) {
-    externals.forEach((name, idx) => {
+    externals.slice(0, maxChildNodes).forEach((name, idx) => {
       const san = sanitizeLabel(name);
       if (!san.ok) {
         omissions.push(`External omitted (${name}): ${san.reason}`);
@@ -73,7 +77,9 @@ export function generateDeploymentDiagram(input: ArchitectureDiagramInput, varia
       const label = variant.minimalLabels ? san.value.slice(0, 24) : san.value;
       const id = `EXT_${idx + 1}`;
       lines.push(`${id}["${label}"]`);
-      lines.push(`${id} -. dependency .-> SYS`);
+      if (lines.filter((l) => l.includes(".->")).length < variant.caps.maxEdges) {
+        lines.push(`${id} -. dependency .-> SYS`);
+      }
     });
   } else if (externals.length > 0) {
     omissions.push("External dependencies are shown in the ops focused variant.");
@@ -81,6 +87,10 @@ export function generateDeploymentDiagram(input: ArchitectureDiagramInput, varia
 
   lines.push("classDef sys fill:#0f172a,color:#ffffff,stroke:#0f172a;");
   lines.push("class SYS sys;");
+
+  const nodeCount = lines.filter((l) => l.includes("[\"") || l.includes("[(\"")).length;
+  const edgeCount = lines.filter((l) => l.includes("-->") || l.includes(".->")).length;
+  omissions.push(...enforceCaps({ nodes: nodeCount, edges: edgeCount, caps: variant.caps }));
 
   return { mermaid: lines.join("\n"), assumptions, omissions };
 }

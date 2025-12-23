@@ -13,6 +13,7 @@ const DATA_TYPES = [
 
 export default function StepSecurity({ audience = "students", goal, security, dataTypes, onChange, errors = [] }) {
   const copy = wizardCopy(audience);
+  const title = isProfessionals(audience) ? "Security and data" : "Security and data 🔒";
   const selected = new Set(dataTypes || []);
   const hasSensitive = selected.size > 0;
   const hasBoundary = (security.trustBoundaries || []).filter(Boolean).length > 0;
@@ -20,8 +21,9 @@ export default function StepSecurity({ audience = "students", goal, security, da
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-semibold text-slate-900">Security and data 🔒</h2>
-        <p className="mt-1 text-sm text-slate-700">{copy.securityHelp}</p>
+        <h2 className="text-xl font-semibold text-slate-900">{title}</h2>
+        <p className="mt-1 text-sm text-slate-700">{copy.securityIntro}</p>
+        <p className="mt-2 text-xs text-slate-600">{copy.securityHelp}</p>
         {isProfessionals(audience) && copy.professionalsReminder ? (
           <p className="mt-2 text-xs font-semibold text-slate-700">{copy.professionalsReminder}</p>
         ) : null}

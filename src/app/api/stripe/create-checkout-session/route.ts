@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/options";
+import { isBillingEnabled, BILLING_DISABLED_MESSAGE } from "@/lib/billing/billingEnabled";
 
 type Body = {
   priceId?: string;
@@ -9,6 +10,9 @@ type Body = {
 };
 
 export async function POST(req: Request) {
+  if (!isBillingEnabled()) {
+    return NextResponse.json({ error: BILLING_DISABLED_MESSAGE }, { status: 503 });
+  }
   if (process.env.STRIPE_ENABLED !== "true") {
     return NextResponse.json({ error: "Stripe is not enabled" }, { status: 503 });
   }

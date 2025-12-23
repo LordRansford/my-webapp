@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/options";
 import { prisma } from "@/lib/db/prisma";
 import { listLearningRecordsForUser } from "@/lib/learning/records";
+import { isBillingEnabled, BILLING_DISABLED_MESSAGE } from "@/lib/billing/billingEnabled";
 
 /**
  * Certificates are intentionally separated from access:
@@ -26,6 +27,9 @@ function isFreeCertificateCourse(_courseId: string): boolean {
 }
 
 export async function POST(req: Request) {
+  if (!isBillingEnabled()) {
+    return NextResponse.json({ message: BILLING_DISABLED_MESSAGE }, { status: 503 });
+  }
   const session = await getServerSession(authOptions).catch(() => null);
   const userId = session?.user?.id || "";
   if (!userId) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });

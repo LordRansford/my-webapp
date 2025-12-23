@@ -82,7 +82,7 @@ export async function POST(req: Request) {
     const started = Date.now();
 
     const result = await Promise.race([
-      svgToPdf(svg, { systemName, diagramType, variant, pageSize, orientation }),
+      svgToPdf(safeSvg.svg, { systemName, diagramType, variant, pageSize, orientation }),
       new Promise<{ ok: false; reason: string }>((resolve) =>
         setTimeout(() => resolve({ ok: false, reason: "PDF export timed out. Please try again." }), timeoutMs)
       ),

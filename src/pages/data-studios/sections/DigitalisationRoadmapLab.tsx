@@ -89,6 +89,9 @@ export default function DigitalisationRoadmapLab() {
         <p className="text-sm text-slate-700">
           This lab helps you assess capability gaps and prioritise improvements. The goal is to avoid technology-first plans without ownership and controls.
         </p>
+        <p className="text-xs text-slate-600">
+          This planner uses bounded compute only when you click &quot;Generate a roadmap slice&quot;. You will see an estimate and a short usage summary after each run.
+        </p>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">

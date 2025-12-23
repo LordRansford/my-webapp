@@ -4,12 +4,18 @@ import { z } from "zod";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/options";
 import { runWithMetering } from "@/lib/tools/runWithMetering";
+import { getWorkspaceIdentity, attachWorkspaceCookie } from "@/lib/workspace/request";
+import { createRun, createNote, updateRun, getProject } from "@/lib/workspace/store";
 
 const limiter = new Map();
 const windowMs = 60 * 1000;
 const maxRequests = 20;
 
-const schema = z.object({ target: z.string().trim().min(1) });
+const schema = z.object({
+  target: z.string().trim().min(1),
+  projectId: z.string().trim().optional(),
+  note: z.string().optional(),
+});
 
 const isPrivate = (value) => {
   const ip = net.isIP(value) ? value : null;
@@ -48,6 +54,9 @@ export async function POST(req) {
     return NextResponse.json({ message: "Invalid input" }, { status: 400 });
   }
 
+  const projectId = typeof parsed?.projectId === "string" ? parsed.projectId.trim() : "";
+  const note = typeof parsed?.note === "string" ? String(parsed.note).slice(0, 8000) : "";
+
   const target = parsed.target.trim().toLowerCase();
   if (!isHostLike(target) || isPrivate(target)) {
     return NextResponse.json({ message: "Provide a valid public hostname" }, { status: 400 });
@@ -56,6 +65,17 @@ export async function POST(req) {
   // Simple educational fallback; real WHOIS often needs paid services.
   const session = await getServerSession(authOptions).catch(() => null);
   const userId = session?.user?.id || null;
+  const ws = await getWorkspaceIdentity(req);
+
+  let runId = null;
+  if (projectId) {
+    const p = await getProject({ projectId });
+    const allowed = userId ? p?.ownerId === userId : p?.ownerId == null && p?.workspaceSessionId === ws.workspaceSessionId;
+    if (p && allowed) {
+      const run = await createRun({ projectId, toolId: "whois-summary", status: "running", inputJson: { target } });
+      runId = String(run.id);
+    }
+  }
 
   const metered = await runWithMetering({
     req,
@@ -75,7 +95,21 @@ export async function POST(req) {
     },
   });
 
-  if (!metered.ok) return NextResponse.json({ message: metered.message, estimate: metered.estimate }, { status: metered.status });
+  if (!metered.ok) {
+    const res = NextResponse.json({ message: metered.message, estimate: metered.estimate }, { status: metered.status });
+    return attachWorkspaceCookie(res, ws.setCookieValue);
+  }
 
-  return NextResponse.json({ ...(metered.output || {}), receipt: metered.receipt });
+  if (runId && projectId) {
+    await updateRun({
+      runId,
+      status: "succeeded",
+      outputJson: metered.output,
+      metricsJson: { durationMs: metered.receipt?.durationMs ?? 0, chargedCredits: metered.receipt?.creditsCharged ?? 0 },
+    }).catch(() => null);
+    if (note.trim()) await createNote({ projectId, runId, content: note.trim() }).catch(() => null);
+  }
+
+  const res = NextResponse.json({ ...(metered.output || {}), receipt: metered.receipt });
+  return attachWorkspaceCookie(res, ws.setCookieValue);
 }

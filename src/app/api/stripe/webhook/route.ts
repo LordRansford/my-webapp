@@ -27,6 +27,23 @@ export async function POST(req: Request) {
 
   console.log("Stripe event type:", event.type);
 
+  // Record last webhook receipt time for admin readiness page (metadata only).
+  try {
+    const ev = event as Stripe.Event;
+    if (ev?.id && typeof ev.id === "string") {
+      const webhookEvents = (prisma as any).stripeWebhookEvent as { create: (args: any) => Promise<any> };
+      await webhookEvents.create({
+        data: {
+          stripeEventId: ev.id,
+          eventType: String(ev.type || "unknown"),
+          receivedAt: new Date(),
+        },
+      });
+    }
+  } catch {
+    // Intentionally ignore. Webhook must remain replay-safe and never crash on retries.
+  }
+
   if (event.type !== "checkout.session.completed") {
     return new NextResponse("ok", { status: 200 });
   }

@@ -50,12 +50,14 @@ export function openPrintPreview({
   variantLabel,
   pageSize,
   includeWatermark,
+  footerRightText,
 }) {
   const prepared = addTitleBlockToSvg({
     svgText,
     systemName,
     diagramType,
     variantLabel,
+    footerRightText,
     watermarkText: includeWatermark ? "Draft architecture" : null,
   });
   if (!prepared.ok) return prepared;
