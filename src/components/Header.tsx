@@ -107,7 +107,7 @@ export default function Header() {
   };
 
   return (
-    <header className="border-b border-slate-200 bg-white text-slate-900 shadow-sm">
+    <header className="border-b border-[color:var(--line)] bg-[var(--surface)] text-[var(--text-body)] shadow-sm">
       {/* Utility bar */}
       <div className="hidden items-center justify-between px-4 py-2 text-xs text-slate-700 sm:flex">
         <div className="flex items-center gap-4">
@@ -135,7 +135,7 @@ export default function Header() {
       </div>
 
       {/* Primary nav */}
-      <nav aria-label="Primary" className="border-t border-slate-100">
+      <nav aria-label="Primary" className="border-t border-[color:var(--line)]/50">
         <div className="flex items-center justify-between gap-4 px-4 py-3 md:px-6 lg:px-8">
           <div className="flex items-center gap-3">
             <button
@@ -176,14 +176,14 @@ export default function Header() {
                 {openDropdown === menu.id && (
                   <div
                     role="menu"
-                    className="absolute left-0 z-20 mt-2 w-52 rounded-2xl border border-slate-200 bg-white p-2 shadow-lg"
+                    className="absolute left-0 z-50 mt-2 w-52 rounded-2xl border border-[color:var(--line)] bg-[var(--surface)] p-2 shadow-lg"
                   >
                     {menu.items.map((item) => (
                       <Link
                         key={item.label}
                         href={item.href}
                         role="menuitem"
-                        className={`block rounded-xl px-3 py-2 text-sm text-slate-800 hover:bg-slate-50 ${focusStyle}`}
+                        className={`block rounded-xl px-3 py-2 text-sm text-[var(--text-body)] hover:bg-[var(--surface-2)] ${focusStyle}`}
                         onClick={() => setOpenDropdown(null)}
                       >
                         {item.label}

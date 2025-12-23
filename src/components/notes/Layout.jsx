@@ -17,14 +17,9 @@ import ReadAloudControls from "@/components/a11y/ReadAloudControls";
 
 const AssistantShell = dynamic(() => import("@/components/assistants/AssistantShell"), { ssr: false });
 
-export default function NotesLayout({
-  meta = {},
-  headings = [],
-  children,
-  activeLevelId,
-  showContentsSidebar = true,
-  showStepper = true,
-}) {
+/** @param {{ meta?: any, headings?: any[], children: any, activeLevelId?: any, showContentsSidebar?: boolean, showStepper?: boolean }} props */
+export default function NotesLayout(props) {
+  const { meta = {}, headings = [], children, activeLevelId, showContentsSidebar, showStepper = true } = props;
   const [activeId, setActiveId] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -143,12 +138,15 @@ export default function NotesLayout({
       slug.endsWith("/course") ||
       slug.endsWith("/index"));
 
+  const resolvedShowContentsSidebar =
+    typeof showContentsSidebar === "boolean" ? showContentsSidebar : Array.isArray(headings) && headings.length > 0;
+
   return (
     <Layout title={meta.title} description={meta.description}>
       {showPreviewBanner ? <PreviewBanner /> : null}
       <ProgressBar />
       <div className="flex flex-col lg:flex-row lg:gap-6">
-        {showContentsSidebar ? (
+        {resolvedShowContentsSidebar ? (
           <div className="mb-3 flex items-center justify-between lg:hidden">
             <button
               className="rounded-full border px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
@@ -161,7 +159,7 @@ export default function NotesLayout({
           </div>
         ) : null}
 
-        {showContentsSidebar ? (
+        {resolvedShowContentsSidebar ? (
           <ContentsSidebar
             headings={headings}
             activeId={activeId}

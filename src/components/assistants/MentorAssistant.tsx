@@ -7,12 +7,15 @@ import CitationChip from "@/components/assistants/CitationChip";
 import { CreditMeter } from "@/components/CreditMeter";
 
 type MentorCitation = { title: string; href: string; why?: string };
+type MentorSource = { title: string; href: string; excerpt?: string };
 type MentorTryNext = { title: string; href: string; steps: string[] };
 export type MentorMsg = {
   role: "user" | "mentor";
   content: string;
+  answerFromSite?: string;
   citationsTitle?: string;
   citations?: MentorCitation[];
+  sources?: MentorSource[];
   tryNext?: MentorTryNext | null;
   lowConfidence?: boolean;
   receipt?: any;
@@ -74,6 +77,16 @@ function writeMsgs(key: string, msgs: MentorMsg[]) {
   }
 }
 
+function collectVisibleText(maxLen = 8000) {
+  try {
+    const root = document.querySelector("article") || document.querySelector("main") || document.body;
+    const raw = String((root as any)?.innerText || (root as any)?.textContent || "");
+    return raw.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, " ").replace(/\s+/g, " ").trim().slice(0, maxLen);
+  } catch {
+    return "";
+  }
+}
+
 export default function MentorAssistant({
   open,
   onClose,
@@ -105,6 +118,7 @@ export default function MentorAssistant({
 
     const headings = collectHeadings();
     const tools = collectToolTitles();
+    const text = collectVisibleText(9000);
 
     try {
       const res = await fetch("/api/mentor/query", {
@@ -113,9 +127,14 @@ export default function MentorAssistant({
         body: JSON.stringify({
           question,
           pageUrl: pathname,
-          pageTitle: document.title || "",
-          headings,
-          tools,
+          pageContext: {
+            pathname,
+            title: document.title || "",
+            text,
+            headings,
+            // Tools are not used server-side today, but keep them for future expansion.
+            tools,
+          },
         }),
       });
       const data = await res.json().catch(() => ({}));
@@ -138,9 +157,15 @@ export default function MentorAssistant({
         { role: "user", content: question },
         {
           role: "mentor",
-          content: typeof data?.answer === "string" ? data.answer : "I can only help with what is covered on this site.",
+          content: typeof data?.answer === "string" ? data.answer : "I could not find that in the site content. Try a keyword from a heading.",
+          answerFromSite: typeof data?.answerFromSite === "string" ? data.answerFromSite : undefined,
           citationsTitle: typeof data?.citationsTitle === "string" ? data.citationsTitle : undefined,
           citations: filtered.length ? filtered : undefined,
+          sources: Array.isArray(data?.sources)
+            ? data.sources
+                .map((s: any) => ({ title: sanitizeText(s?.title, 140), href: sanitizeText(s?.href, 240), excerpt: sanitizeText(s?.excerpt, 240) }))
+                .filter((s: any) => s.title && s.href)
+            : undefined,
           tryNext: data?.tryNext || null,
           lowConfidence: Boolean(data?.lowConfidence),
           receipt: data?.receipt || null,
@@ -182,8 +207,24 @@ export default function MentorAssistant({
               className={`rounded-2xl border p-3 text-sm ${msg.role === "user" ? "border-sky-200 bg-sky-50" : "border-slate-200 bg-white"}`}
             >
               <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">{msg.role === "user" ? "You" : "Mentor"}</div>
+              {msg.role === "mentor" ? <div className="mt-2 text-xs font-semibold text-slate-700">Answer from this site</div> : null}
               <div className="mt-1 whitespace-pre-wrap text-slate-900">{msg.content}</div>
               {msg.lowConfidence ? <p className="mt-2 text-xs text-amber-800">I might be wrong here. Please check the citations.</p> : null}
+              {msg.sources && msg.sources.length ? (
+                <div className="mt-3">
+                  <div className="text-xs font-semibold text-slate-700">Sources</div>
+                  <ul className="mt-2 space-y-1">
+                    {msg.sources.slice(0, 6).map((s) => (
+                      <li key={`${s.href}-${s.title}`} className="text-xs text-slate-700">
+                        <a className="underline hover:no-underline" href={s.href}>
+                          {s.title}
+                        </a>
+                        {s.excerpt ? <span className="text-slate-500"> — {s.excerpt}</span> : null}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
               {msg.citations && msg.citations.length ? (
                 <div className="mt-3">
                   <div className="text-xs font-semibold text-slate-700">{msg.citationsTitle || "Where this is covered on the site"}</div>
