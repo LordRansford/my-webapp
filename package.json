@@ -33,7 +33,7 @@
     "test:security": "node scripts/secret-scan.mjs",
     "test:data": "node --test tests/**/*.test.mjs",
     "test:mentor": "npm run build:content-index && node --test tests/mentor-*.test.mjs",
-    "test:e2e": "playwright test",
+    "test:e2e": "node -e \"const fs=require('fs');const p='.next/dev/lock';if(fs.existsSync(p)) fs.rmSync(p,{force:true});\" && playwright test -c playwright.config.mjs",
     "test:ux": "node scripts/ux-check.mjs",
     "worker:tick": "node scripts/worker.mjs",
     "runner:dev": "docker compose -f docker-compose.runner.yml up --build",

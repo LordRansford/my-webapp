@@ -28,16 +28,22 @@ export default function SignInPage({ providers }) {
         </p>
 
         <div className="grid gap-2 sm:grid-cols-2">
-          {list.map((p) => (
-            <button
-              key={p.id}
-              type="button"
-              onClick={() => signIn(p.id)}
-              className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700"
-            >
-              Continue with {p.name}
-            </button>
-          ))}
+          {list.length ? (
+            list.map((p) => (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => signIn(p.id)}
+                className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700"
+              >
+                Continue with {p.name}
+              </button>
+            ))
+          ) : (
+            <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+              Sign in is not available right now. If you are the site owner, check your auth environment variables and redeploy.
+            </div>
+          )}
         </div>
 
         <div className="rounded-2xl border border-slate-200 bg-white/90 p-4 text-sm text-slate-700 shadow-sm">

@@ -19,7 +19,7 @@ function getMetaNumber(meta: any, key: string): number | null {
   return Number.isFinite(n) ? n : null;
 }
 
-export default async function VerifyCertificatePage(props: { params: Promise<{ certificateId: string }> }) {
+export default async function VerifyCertificateByIdPage(props: { params: Promise<{ certificateId: string }> }) {
   const { certificateId } = await props.params;
   const id = String(certificateId || "").trim();
 
@@ -32,9 +32,7 @@ export default async function VerifyCertificatePage(props: { params: Promise<{ c
     return (
       <main className="mx-auto max-w-2xl p-6">
         <h1 className="text-2xl font-semibold">Certificate verification</h1>
-        <p className="mt-4 rounded-lg border border-slate-200 bg-white p-4 text-sm text-slate-700">
-          Certificate not found or invalid
-        </p>
+        <p className="mt-4 rounded-lg border border-slate-200 bg-white p-4 text-sm text-slate-700">Certificate not found or invalid</p>
       </main>
     );
   }
@@ -52,9 +50,7 @@ export default async function VerifyCertificatePage(props: { params: Promise<{ c
     return (
       <main className="mx-auto max-w-2xl p-6">
         <h1 className="text-2xl font-semibold">Certificate verification</h1>
-        <p className="mt-4 rounded-lg border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800">
-          Certificate integrity check failed
-        </p>
+        <p className="mt-4 rounded-lg border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800">Certificate integrity check failed</p>
       </main>
     );
   }
@@ -82,11 +78,7 @@ export default async function VerifyCertificatePage(props: { params: Promise<{ c
             <div className={`mt-1 text-base font-semibold ${revoked ? "text-rose-700" : "text-emerald-700"}`}>
               {revoked ? "Revoked" : "Valid"}
             </div>
-            {revoked ? (
-              <div className="mt-2 text-sm text-slate-700">
-                This certificate has been revoked and is no longer valid.
-              </div>
-            ) : null}
+            {revoked ? <div className="mt-2 text-sm text-slate-700">This certificate has been revoked and is no longer valid.</div> : null}
           </div>
 
           <div className="rounded-lg border border-slate-200 p-4">

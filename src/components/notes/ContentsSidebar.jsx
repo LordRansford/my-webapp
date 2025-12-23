@@ -67,7 +67,7 @@ export default function ContentsSidebar({
 
         <m.aside
           aria-label="On-page contents"
-          className={`fixed inset-y-0 left-0 z-40 w-10/12 max-w-sm overflow-y-auto bg-white p-4 shadow-xl lg:inset-auto lg:block lg:w-72 lg:max-w-xs lg:p-0 lg:shadow-none lg:sticky lg:top-24 lg:h-[calc(100vh-140px)] ${className}`}
+          className={`fixed inset-y-0 left-0 z-40 w-10/12 max-w-sm overflow-y-auto bg-[var(--surface)] p-4 shadow-xl lg:inset-auto lg:block lg:w-72 lg:max-w-xs lg:p-0 lg:shadow-none lg:sticky lg:top-24 lg:h-[calc(100vh-140px)] ${className}`}
           initial={false}
           animate={
             reduce
@@ -81,12 +81,12 @@ export default function ContentsSidebar({
           transition={reduce ? { duration: 0 } : motionTransition}
           style={reduce ? undefined : { willChange: "transform" }}
         >
-          <div className="sticky top-4 rounded-2xl border border-gray-200 bg-white/95 p-3 shadow-sm backdrop-blur lg:top-4">
+          <div className="sticky top-4 rounded-2xl border border-[color:var(--line)] bg-[var(--surface)]/95 p-3 shadow-sm backdrop-blur lg:top-4">
             <div className="flex items-center justify-between gap-2">
-              <span className="text-sm font-semibold text-gray-800">Contents</span>
+              <span className="text-sm font-semibold text-[var(--text-body)]">Contents</span>
               <button
                 onClick={() => setOpen((v) => !v)}
-                className="rounded-full border px-3 py-1 text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-blue-200"
+                className="rounded-full border border-[color:var(--line)] px-3 py-1 text-sm text-[var(--text-body)] hover:bg-[var(--surface-2)] focus:outline-none focus:ring focus:ring-blue-200"
                 aria-expanded={open}
                 aria-controls={navId}
               >
@@ -103,7 +103,7 @@ export default function ContentsSidebar({
                       <li key={section.id}>
                         <div
                           className={`flex items-center justify-between rounded px-2 py-1 ${
-                            isActive ? "bg-blue-50 text-blue-800" : "text-gray-900"
+                            isActive ? "bg-blue-50 text-blue-800" : "text-[var(--text-body)]"
                           }`}
                         >
                           <a
@@ -120,7 +120,7 @@ export default function ContentsSidebar({
                           </a>
                           <button
                             type="button"
-                            className="ml-2 rounded-full border px-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-blue-200"
+                            className="ml-2 rounded-full border border-[color:var(--line)] px-2 text-sm text-[var(--text-muted)] hover:bg-[var(--surface-2)] focus:outline-none focus:ring focus:ring-blue-200"
                             aria-label={isExpanded ? `Collapse ${section.title}` : `Expand ${section.title}`}
                             aria-expanded={isExpanded}
                             aria-controls={`${section.id}-children`}
@@ -132,13 +132,13 @@ export default function ContentsSidebar({
                         {isExpanded && section.children.length ? (
                           <ul
                             id={`${section.id}-children`}
-                            className="ml-2 mt-1 space-y-1 border-l border-gray-200 pl-2"
+                            className="ml-2 mt-1 space-y-1 border-l border-[color:var(--line)] pl-2"
                           >
                             {section.children.map((c) => (
                               <li key={c.id}>
                                 <a
                                   className={`block rounded px-2 py-1 text-sm ${
-                                    activeId === c.id ? "bg-blue-50 text-blue-800" : "text-gray-800"
+                                    activeId === c.id ? "bg-blue-50 text-blue-800" : "text-[var(--text-body)]"
                                   } hover:bg-gray-100 focus:outline-none focus:ring focus:ring-blue-200`}
                                   href={`#${c.id}`}
                                   aria-current={activeId === c.id ? "location" : undefined}

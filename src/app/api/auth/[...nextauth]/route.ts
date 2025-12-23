@@ -2,34 +2,38 @@ import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/auth/options";
 import { rateLimit } from "@/lib/security/rateLimit";
+import { getAuthEnvStatus, logAuthEnvIfMisconfigured } from "@/lib/auth/env";
 
-const { handlers } = NextAuth(authOptions);
+// next-auth@4 App Router handler (runtime-typed)
+const handler: any = NextAuth(authOptions);
 
 export async function GET(req: Request, ctx: any) {
-  // Defensive: if NextAuth is misconfigured in production (e.g. missing NEXTAUTH_SECRET),
-  // avoid 500s that crash pages calling useSession(). Do not weaken security—disable auth cleanly.
-  if (process.env.NODE_ENV === "production" && !process.env.NEXTAUTH_SECRET) {
+  const env = getAuthEnvStatus();
+  if (!env.ok && process.env.NODE_ENV === "production") {
+    logAuthEnvIfMisconfigured("GET /api/auth");
     const path = new URL(req.url).pathname;
-    // next-auth client expects the session payload to be spreadable; returning JSON null can crash it.
+    // Keep useSession() stable even when misconfigured.
     if (path.endsWith("/session")) return NextResponse.json({ user: null, expires: new Date(0).toISOString() }, { status: 200 });
-    return NextResponse.json({ error: "Auth is misconfigured" }, { status: 503 });
+    // Send user to a friendly page instead of a raw JSON error.
+    return NextResponse.redirect(new URL("/signin?error=configuration", req.url));
   }
   const limited = rateLimit(req, { keyPrefix: "auth", limit: 30, windowMs: 60_000 });
   if (limited) return limited;
   // Pass ctx through so NextAuth can read ctx.params.nextauth in the App Router.
-  return handlers.GET(req, ctx);
+  return handler(req, ctx);
 }
 
 export async function POST(req: Request, ctx: any) {
-  if (process.env.NODE_ENV === "production" && !process.env.NEXTAUTH_SECRET) {
+  const env = getAuthEnvStatus();
+  if (!env.ok && process.env.NODE_ENV === "production") {
+    logAuthEnvIfMisconfigured("POST /api/auth");
     const path = new URL(req.url).pathname;
-    // next-auth posts diagnostic logs here; acknowledge to avoid noisy client errors.
     if (path.endsWith("/_log")) return new NextResponse(null, { status: 204 });
-    return NextResponse.json({ error: "Auth is misconfigured" }, { status: 503 });
+    return NextResponse.redirect(new URL("/signin?error=configuration", req.url));
   }
   const limited = rateLimit(req, { keyPrefix: "auth", limit: 30, windowMs: 60_000 });
   if (limited) return limited;
-  return handlers.POST(req, ctx);
+  return handler(req, ctx);
 }
 
 
