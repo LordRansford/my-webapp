@@ -3,6 +3,7 @@ import { getStripeTestClient } from "@/lib/payments/stripeTest";
 import { hasProcessedEvent, markProcessedEvent } from "@/lib/stripe/eventsStore";
 import { addUserEntitlement } from "@/lib/auth/store";
 import { upsertUserPlan } from "@/lib/billing/store";
+import { logError, logInfo, logWarn } from "@/lib/telemetry/log";
 
 const activateSupporter = process.env.SUPPORTER_ACTIVATION_ENABLED === "true";
 
@@ -23,7 +24,10 @@ export async function POST(req: Request) {
     if (!secret) throw new Error("Webhook secret missing");
     event = stripe.webhooks.constructEvent(rawBody, signature, secret);
   } catch (err: any) {
-    console.error("stripe:webhook invalid signature", { message: err?.message || "unknown" });
+    logWarn("stripe.test_webhook.invalid_signature", {
+      requestId: req.headers.get("x-request-id") || null,
+      message: String(err?.message || "invalid signature").slice(0, 120),
+    });
     return NextResponse.json({ message: "Invalid signature" }, { status: 400 });
   }
 
@@ -36,15 +40,19 @@ export async function POST(req: Request) {
       if (userId && activateSupporter) {
         addUserEntitlement({ userId, entitlement: "supporter", source: "donation" });
         upsertUserPlan({ userId, plan: "supporter", source: "donation", updatedAt: new Date().toISOString() });
-        console.info("supporter:activated", { userId, eventId: event.id });
+        logInfo("supporter.activated", { userId: String(userId), eventId: String(event.id || "") });
       } else {
-        console.info("supporter:skipped_activation_flag", { userId, eventId: event.id });
+        logInfo("supporter.skipped", { userId: userId ? String(userId) : null, eventId: String(event.id || ""), reason: "activation_flag_or_missing_user" });
       }
     }
     markProcessedEvent(event.id);
     return NextResponse.json({ ok: true });
   } catch (err: any) {
-    console.error("stripe:webhook processing failed", { message: err?.message || "unknown" });
+    logError("stripe.test_webhook.processing_failed", {
+      requestId: req.headers.get("x-request-id") || null,
+      message: String(err?.message || "processing failed").slice(0, 160),
+      eventType: String(event?.type || "unknown"),
+    });
     return NextResponse.json({ message: "Webhook processing failed" }, { status: 500 });
   }
 }
