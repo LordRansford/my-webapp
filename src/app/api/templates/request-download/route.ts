@@ -17,6 +17,10 @@ type Body = {
   message?: string;
 };
 
+type TemplateDownloadResponse =
+  | { allowed: false; message: string; reason: string }
+  | { allowed: true; downloadId: string; signedUrl: string; mustKeepSignature: boolean; message: string };
+
 const ANON_COOKIE = "rn_anonymous_id";
 
 async function ensureAnonymousId() {
@@ -48,7 +52,7 @@ export async function POST(request: Request) {
   const session = await getServerSession(authOptions).catch(() => null);
   const authedUserId = session?.user?.id || null;
 
-  const metered = await runWithMetering({
+  const metered = await runWithMetering<TemplateDownloadResponse>({
     req: request,
     userId: authedUserId,
     toolId: "templates-request-download",
@@ -72,7 +76,7 @@ export async function POST(request: Request) {
 
       if (!result.allowed) {
         return {
-          output: { allowed: false, message: result.uiMessage, reason: result.reason },
+          output: { allowed: false, message: result.uiMessage, reason: result.reason } satisfies TemplateDownloadResponse,
           outputBytes: Buffer.byteLength(result.uiMessage || ""),
         };
       }
@@ -100,7 +104,7 @@ export async function POST(request: Request) {
 
       const signedUrl = buildSignedUrl(body.templateId, body.fileVariantId || "signed");
 
-      const payload = {
+      const payload: TemplateDownloadResponse = {
         allowed: true,
         downloadId,
         signedUrl,
