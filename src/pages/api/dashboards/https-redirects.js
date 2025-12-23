@@ -1,5 +1,6 @@
 import { assertAllowedRequest } from "@/lib/dashboard/allowlist";
 import { validateOutboundUrl } from "@/lib/security/ssrf";
+import { safeFetch } from "@/lib/network/safeFetch";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -34,19 +35,15 @@ export default async function handler(req, res) {
 
     // Follow redirects manually to track the chain
     while (redirectCount < maxRedirects) {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-      const response = await fetch(currentUrl, {
+      const { res: response } = await safeFetch(currentUrl, {
         method: "GET",
         headers: {
           "User-Agent": "Mozilla/5.0 (compatible; RansfordsNotes/1.0; Educational Tool)",
         },
-        signal: controller.signal,
-        redirect: "manual", // Don't follow redirects automatically
+        allowHttp: true,
+        overallTimeoutMs: 5000,
+        maxResponseBytes: 64 * 1024,
       });
-
-      clearTimeout(timeoutId);
 
       const currentParsed = new URL(currentUrl);
       chain.push({
@@ -96,9 +93,8 @@ export default async function handler(req, res) {
       summary,
     });
   } catch (error) {
-    if (error.name === "AbortError") {
-      return res.status(408).json({ error: "Request timeout. The site may be slow or unreachable." });
-    }
+    const code = error?.code || "";
+    if (code === "SAFE_FETCH_TIMEOUT") return res.status(408).json({ error: "Request timeout. The site may be slow or unreachable." });
 
     console.error("HTTPS redirect analysis error:", error);
     return res.status(500).json({

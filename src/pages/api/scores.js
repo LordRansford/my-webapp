@@ -1,3 +1,5 @@
+import { safeFetch } from "@/lib/network/safeFetch";
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -11,7 +13,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const response = await fetch(backendUrl, {
+    const { res: response, body } = await safeFetch(backendUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -20,9 +22,19 @@ export default async function handler(req, res) {
         cookie: req.headers.cookie || "",
       },
       body: JSON.stringify(req.body || {}),
+      // Backend is expected to be HTTPS; do not allow downgrade in production.
+      allowHttp: false,
+      overallTimeoutMs: 15000,
+      maxResponseBytes: 512 * 1024,
     });
 
-    const data = await response.json().catch(() => ({}));
+    const data = (() => {
+      try {
+        return JSON.parse(body.toString("utf8"));
+      } catch {
+        return {};
+      }
+    })();
 
     if (!response.ok) {
       return res.status(response.status).json(data || { error: "Score backend error" });
@@ -30,6 +42,8 @@ export default async function handler(req, res) {
 
     return res.status(200).json(data);
   } catch (error) {
+    const code = error?.code || "";
+    if (code === "SAFE_FETCH_TIMEOUT") return res.status(504).json({ error: "Score backend timed out" });
     return res.status(502).json({ error: "Unable to reach score backend" });
   }
 }

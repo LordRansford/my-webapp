@@ -1,5 +1,6 @@
 import { assertAllowedRequest } from "@/lib/dashboard/allowlist";
 import { validateOutboundUrl } from "@/lib/security/ssrf";
+import { safeFetch } from "@/lib/network/safeFetch";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -28,41 +29,26 @@ export default async function handler(req, res) {
 
   try {
     // Fetch the page HTML
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000); // Increased timeout
-
-    let response;
-    try {
-      response = await fetch(parsedUrl.href, {
-        method: "GET",
-        headers: {
-          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-          "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-          "Accept-Language": "en-US,en;q=0.9",
-          "Accept-Encoding": "gzip, deflate, br",
-        },
-        signal: controller.signal,
-        redirect: "manual",
-      });
-    } catch (fetchError) {
-      clearTimeout(timeoutId);
-      if (fetchError.name === "AbortError") {
-        throw new Error("Request timeout");
-      }
-      throw fetchError;
-    }
-
-    clearTimeout(timeoutId);
+    const { res: response, body } = await safeFetch(parsedUrl.href, {
+      method: "GET",
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Accept-Encoding": "gzip, deflate, br",
+      },
+      allowHttp: true,
+      overallTimeoutMs: 15000,
+      maxResponseBytes: 1_000_000,
+    });
 
     if (!response.ok) {
       const statusText = response.statusText || "Unknown error";
       throw new Error(`HTTP ${response.status}: ${statusText}`);
     }
 
-    const html = await response.text();
-    if (html.length > 1_000_000) {
-      throw new Error("Response too large");
-    }
+    const html = body.toString("utf8");
     
     if (!html || html.length === 0) {
       throw new Error("Received empty response from server");
