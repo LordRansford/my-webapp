@@ -36,6 +36,7 @@ export async function runComputeJob<T>(params: {
   const maxRunMs = Math.max(1, Math.min(limits.maxRunMsHardCap, Math.round(params.limits.maxRunMs)));
   const maxOutputBytes = Math.max(1, Math.min(200_000, Math.round(params.limits.maxOutputBytes)));
   const maxMemoryMb = Math.max(1, Math.min(256, Math.round(params.limits.maxMemoryMb)));
+  const maxSteps = typeof params.limits.maxSteps === "number" ? Math.max(1, Math.min(1_000_000, Math.round(params.limits.maxSteps))) : undefined;
 
   // Credit check (simple, conservative): if user is authed and has zero credits, deny runs that likely exceed free tier.
   // Free tier is still applied in metering, but we fail closed when the worst case cannot be covered.
@@ -63,7 +64,7 @@ export async function runComputeJob<T>(params: {
     toolId,
     jobId: "n/a",
     payload: params.inputs,
-    limits: { maxRunMs, maxOutputBytes, maxMemoryMb },
+    limits: { maxRunMs, maxOutputBytes, maxMemoryMb, maxSteps },
   });
 
   const wallTimeMs = Date.now() - started;
