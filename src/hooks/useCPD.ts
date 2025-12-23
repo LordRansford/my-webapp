@@ -79,6 +79,22 @@ export function useCPD() {
           headers: { "content-type": "application/json" },
           body: JSON.stringify({ state: next }),
         }).catch(() => {});
+
+        // Minimal evidence capture for CPD audit trail.
+        // This does not lock learning and does not store secrets.
+        if (input.completed === true) {
+          const courseId =
+            input.trackId === "cyber" ? "cybersecurity" : String(input.trackId || "");
+          fetch("/api/cpd/evidence", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+              courseId,
+              evidenceType: "progress",
+              payload: { trackId: input.trackId, levelId: input.levelId, sectionId: input.sectionId, completed: true },
+            }),
+          }).catch(() => {});
+        }
         return next;
       });
     },

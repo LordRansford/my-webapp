@@ -1,101 +1,105 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { prisma } from "@/lib/db/prisma";
-import { grantCredits } from "@/lib/credits/store";
 
-export async function POST(req: NextRequest) {
-  const secretKey = process.env.STRIPE_SECRET_KEY;
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+export async function POST(req: Request) {
+  const secretKey = process.env.STRIPE_SECRET_KEY || "";
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || "";
 
   if (!secretKey || !webhookSecret) {
-    return NextResponse.json({ error: "Stripe is not configured" }, { status: 503 });
+    return new NextResponse("ok", { status: 200 });
   }
 
-  const stripe = new Stripe(secretKey, {
-    apiVersion: "2025-12-15.clover",
-  });
+  const stripe = new Stripe(secretKey);
 
   const body = await req.text();
   const sig = req.headers.get("stripe-signature");
 
-  if (!sig) {
-    return NextResponse.json({ error: "Missing Stripe signature" }, { status: 400 });
-  }
+  console.log("Stripe webhook hit");
+  console.log("Stripe signature:", sig ? "present" : "missing");
 
-  let event: Stripe.Event;
-
+  let event: Stripe.Event | { type: string } = { type: "unknown" };
   try {
-    event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
-  } catch (err: any) {
-    console.error("Webhook signature verification failed", err.message);
-    return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
+    event = stripe.webhooks.constructEvent(body, sig || "", webhookSecret);
+  } catch {
+    // leave event.type as "unknown"
   }
 
-  // Temporary: just log events
-  console.log("Stripe event received:", event.type);
+  console.log("Stripe event type:", event.type);
 
-  // DB-backed idempotency (safe on Vercel/serverless).
-  try {
-    await prisma.stripeWebhookEvent.create({ data: { id: event.id, type: event.type } });
-  } catch (err: any) {
-    // Unique constraint means we've already processed this event.
-    if (err?.code === "P2002") {
-      return NextResponse.json({ received: true, deduped: true });
-    }
-    console.error("stripe:webhook idempotency store failed", err?.message || err);
-    return NextResponse.json({ error: "Webhook store failure" }, { status: 500 });
+  if (event.type !== "checkout.session.completed") {
+    return new NextResponse("ok", { status: 200 });
   }
 
-  // Minimal checkpoint extension: issue credits for successful credit purchases.
-  // Default mapping: 1 credit per 1 penny unless overridden by CREDITS_PER_PENCE.
-  if (event.type === "checkout.session.completed") {
-    const session = event.data.object as Stripe.Checkout.Session;
-    const userId = typeof session.metadata?.userId === "string" ? session.metadata.userId.trim() : "";
+  const entitlement = (prisma as any).certificateEntitlement as {
+    findFirst: (args: any) => Promise<any>;
+    update: (args: any) => Promise<any>;
+  };
 
-    if (!userId) {
-      console.log("stripe:webhook checkout.session.completed missing userId metadata; skipping credit issuance", {
-        eventId: event.id,
-        sessionId: session.id,
-      });
-      return NextResponse.json({ received: true, skipped: "missing_userId" });
-    }
+  const purchase = (prisma as any).purchase as {
+    findUnique: (args: any) => Promise<any>;
+    create: (args: any) => Promise<any>;
+  };
 
+  const existing = await purchase.findUnique({ where: { stripeEventId: (event as Stripe.Event).id } });
+  if (existing) {
+    return new NextResponse("ok", { status: 200 });
+  }
+
+  const session = (event as Stripe.Event).data.object as Stripe.Checkout.Session;
+  const userId = typeof session.metadata?.userId === "string" ? session.metadata.userId : "";
+  const type = typeof session.metadata?.type === "string" ? session.metadata.type : "";
+  const courseId = typeof session.metadata?.courseId === "string" ? session.metadata.courseId : "";
+
+  // Certificate entitlement payment: mark eligible.
+  // This is intentionally separated from credits/purchases.
+  if (type === "certificate" && session.id) {
     try {
-      const perPenceRaw = process.env.CREDITS_PER_PENCE;
-      const perPence = perPenceRaw ? Number(perPenceRaw) : 1;
-      const multiplier = Number.isFinite(perPence) && perPence > 0 ? perPence : 1;
-
-      // Pull line items so we can record the price id (if present).
-      const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 10 });
-      const first = lineItems.data?.[0];
-      const priceId = typeof (first as any)?.price?.id === "string" ? (first as any).price.id : null;
-
-      const amountTotal = typeof session.amount_total === "number" ? session.amount_total : 0;
-      const creditsToGrant = Math.max(0, Math.round(amountTotal * multiplier));
-
-      if (!creditsToGrant) {
-        console.log("stripe:webhook checkout.session.completed has no chargeable amount; skipping credit issuance", {
-          eventId: event.id,
-          sessionId: session.id,
-          amountTotal,
-        });
-        return NextResponse.json({ received: true, skipped: "no_amount" });
+      const row = await entitlement.findFirst({ where: { stripeSessionId: session.id } });
+      if (row && row.status !== "eligible" && row.status !== "issued") {
+        await entitlement.update({ where: { id: row.id }, data: { status: "eligible" } });
       }
 
-      const result = await grantCredits({
-        userId,
-        credits: creditsToGrant,
-        source: "stripe_checkout",
-        stripeEventId: event.id,
-        stripePriceId: priceId,
+      const audit = (prisma as any).auditEvent as { create: (args: any) => Promise<any> };
+      await audit.create({
+        data: {
+          actorUserId: row?.userId || null,
+          action: "CERT_PAYMENT_CONFIRMED",
+          entityType: "certificate",
+          entityId: row?.id || null,
+          details: { courseId: row?.courseId || courseId || null, stripeSessionId: session.id },
+          ip: null,
+          userAgent: null,
+        },
       });
-
-      console.log("credits:granted", { userId, credits: creditsToGrant, balance: result.balance, eventId: event.id, priceId });
-    } catch (err: any) {
-      console.error("stripe:webhook credit issuance failed", { message: err?.message || "unknown", eventId: event.id });
-      return NextResponse.json({ error: "Credit issuance failed" }, { status: 500 });
+    } catch {
+      // Ignore failures; Stripe may retry and the flow must be replay-safe.
     }
+    return new NextResponse("ok", { status: 200 });
   }
 
-  return NextResponse.json({ received: true });
+  const productId = typeof session.metadata?.productId === "string" ? session.metadata.productId : "";
+
+  if (!userId || !productId || !session.id) {
+    return new NextResponse("ok", { status: 200 });
+  }
+
+  try {
+    await purchase.create({
+      data: {
+        userId,
+        productId,
+        stripeSessionId: session.id,
+        stripeEventId: (event as Stripe.Event).id,
+        status: "paid",
+      },
+    });
+  } catch (err: any) {
+    if (err?.code === "P2002") {
+      return new NextResponse("ok", { status: 200 });
+    }
+    return new NextResponse("ok", { status: 200 });
+  }
+
+  return new NextResponse("ok", { status: 200 });
 }

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ComingSoonPurchase } from "@/components/pricing/ComingSoonPurchase";
+import { CREDIT_MS_PER_1, FREE_TIER_MS_PER_DAY } from "@/lib/billing/creditsConfig";
 
 export const metadata = {
   title: "Pricing",
@@ -7,6 +8,13 @@ export const metadata = {
 };
 
 export default function PricingPage() {
+  const heavyMs = 120_000;
+  const standardMs = 30_000;
+  const heavyCredits = Math.ceil(heavyMs / CREDIT_MS_PER_1);
+  const standardCredits = Math.ceil(standardMs / CREDIT_MS_PER_1);
+  const tenCreditsHeavyRuns = heavyCredits ? Math.floor(10 / heavyCredits) : 0;
+  const tenCreditsStandardRuns = standardCredits ? Math.floor(10 / standardCredits) : 0;
+  const freePerDaySeconds = Math.round(FREE_TIER_MS_PER_DAY / 1000);
   return (
     <main className="mx-auto max-w-6xl px-4 py-12 md:px-6 lg:px-8">
       <section className="space-y-4 rounded-3xl bg-gradient-to-r from-slate-50 via-sky-50/60 to-slate-50 p-8 shadow-sm ring-1 ring-slate-100">
@@ -107,6 +115,12 @@ export default function PricingPage() {
           <p className="mt-2 text-sm text-slate-700">
             When payments launch, the minimum top-up will be £10. In normal use, that should cover many medium runs that exceed the free tier, plus a
             smaller number of large runs. The exact number varies by tool and input size.
+          </p>
+          <p className="mt-2 text-sm text-slate-700">
+            Using current settings, the free tier includes about {freePerDaySeconds}s of server assisted compute per day. Above that, one credit covers about {Math.round(CREDIT_MS_PER_1 / 1000)}s.
+          </p>
+          <p className="mt-2 text-sm text-slate-700">
+            Example estimates: 10 credits is roughly {tenCreditsStandardRuns} standard runs (about 30s) or {tenCreditsHeavyRuns} heavy runs (about 2 minutes). These are estimates, not promises.
           </p>
         </div>
         <div className="mt-4">

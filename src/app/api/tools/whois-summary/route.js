@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import net from "net";
 import { z } from "zod";
-import { assertToolRunAllowed } from "@/lib/billing/toolUsage";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth/options";
+import { runWithMetering } from "@/lib/tools/runWithMetering";
 
 const limiter = new Map();
 const windowMs = 60 * 1000;
@@ -38,11 +40,6 @@ const rateLimit = (ip) => {
 export async function POST(req) {
   const ip = req.headers.get("x-forwarded-for") || "anon";
   if (!rateLimit(ip)) return NextResponse.json({ message: "Rate limit exceeded" }, { status: 429 });
-  try {
-    await assertToolRunAllowed("whois-summary");
-  } catch (e) {
-    return NextResponse.json({ message: e.message || "Limit reached" }, { status: e.status || 429 });
-  }
 
   let parsed;
   try {
@@ -57,11 +54,28 @@ export async function POST(req) {
   }
 
   // Simple educational fallback; real WHOIS often needs paid services.
-  return NextResponse.json({
-    target,
-    fallback: true,
-    registrar: "Use your registrar WHOIS portal",
-    ageHint: "Check creation and expiry dates via WHOIS or RDAP",
-    tip: "Compare domain age to the context. Newly registered domains can be higher risk.",
+  const session = await getServerSession(authOptions).catch(() => null);
+  const userId = session?.user?.id || null;
+
+  const metered = await runWithMetering({
+    req,
+    userId,
+    toolId: "whois-summary",
+    inputBytes: Buffer.byteLength(target),
+    requestedComplexityPreset: "light",
+    execute: async () => {
+      const payload = {
+        target,
+        fallback: true,
+        registrar: "Use your registrar WHOIS portal",
+        ageHint: "Check creation and expiry dates via WHOIS or RDAP",
+        tip: "Compare domain age to the context. Newly registered domains can be higher risk.",
+      };
+      return { output: payload, outputBytes: Buffer.byteLength(JSON.stringify(payload)) };
+    },
   });
+
+  if (!metered.ok) return NextResponse.json({ message: metered.message, estimate: metered.estimate }, { status: metered.status });
+
+  return NextResponse.json({ ...(metered.output || {}), receipt: metered.receipt });
 }

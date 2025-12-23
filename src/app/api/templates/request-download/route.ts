@@ -6,6 +6,9 @@ import { getActivePermissionTokens, saveDownload } from "@/lib/templates/store";
 import { qualifyDonation } from "@/lib/donations/qualify";
 import { rateLimit } from "@/lib/security/rateLimit";
 import { requireSameOrigin } from "@/lib/security/origin";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth/options";
+import { runWithMetering } from "@/lib/tools/runWithMetering";
 
 type Body = {
   templateId?: string;
@@ -42,53 +45,78 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: "Missing templateId or requestedUse" }, { status: 400 });
   }
 
-  const anonymousUserId = await ensureAnonymousId();
-  const userId = null; // hook to real auth when available
+  const session = await getServerSession(authOptions).catch(() => null);
+  const authedUserId = session?.user?.id || null;
 
-  const permissionTokens = getActivePermissionTokens({ userId, anonymousUserId, templateId: body.templateId });
-  const donationQualification = qualifyDonation({ userId, anonymousUserId });
+  const metered = await runWithMetering({
+    req: request,
+    userId: authedUserId,
+    toolId: "templates-request-download",
+    inputBytes: Buffer.byteLength(JSON.stringify(body)),
+    requestedComplexityPreset: "light",
+    execute: async () => {
+      const anonymousUserId = await ensureAnonymousId();
+      const userId = authedUserId; // real auth when available
 
-  const result = evaluateTemplateAccess({
-    templateId: body.templateId,
-    requestedUse: body.requestedUse,
-    userId,
-    anonymousUserId,
-    permissionTokens,
-    donationQualification,
+      const permissionTokens = getActivePermissionTokens({ userId, anonymousUserId, templateId: body.templateId });
+      const donationQualification = qualifyDonation({ userId, anonymousUserId });
+
+      const result = evaluateTemplateAccess({
+        templateId: body.templateId,
+        requestedUse: body.requestedUse,
+        userId,
+        anonymousUserId,
+        permissionTokens,
+        donationQualification,
+      });
+
+      if (!result.allowed) {
+        return {
+          output: { allowed: false, message: result.uiMessage, reason: result.reason },
+          outputBytes: Buffer.byteLength(result.uiMessage || ""),
+        };
+      }
+
+      const supportMethod: SupportMethod =
+        result.appliedSupportMethod ||
+        (donationQualification.qualifying ? "donation" : permissionTokens.length ? "written_permission" : "none");
+
+      const signaturePolicyApplied = result.mustKeepSignature ? "kept" : "removed";
+      const downloadId = crypto.randomUUID();
+
+      saveDownload({
+        downloadId,
+        templateId: body.templateId,
+        fileVariantId: body.fileVariantId || (result.mustKeepSignature ? "signed" : "unsigned"),
+        userId,
+        anonymousUserId,
+        requestedUse: body.requestedUse,
+        supportMethod,
+        donationId: donationQualification.donationId || null,
+        permissionTokenId: permissionTokens[0]?.tokenId || null,
+        issuedAt: new Date().toISOString(),
+        signaturePolicyApplied,
+      });
+
+      const signedUrl = buildSignedUrl(body.templateId, body.fileVariantId || "signed");
+
+      const payload = {
+        allowed: true,
+        downloadId,
+        signedUrl,
+        mustKeepSignature: result.mustKeepSignature,
+        message: result.uiMessage,
+      };
+
+      return { output: payload, outputBytes: Buffer.byteLength(JSON.stringify(payload)) };
+    },
   });
 
-  if (!result.allowed) {
-    return NextResponse.json({ allowed: false, message: result.uiMessage, reason: result.reason }, { status: 403 });
+  if (!metered.ok) return NextResponse.json({ message: metered.message, estimate: metered.estimate }, { status: metered.status });
+
+  if ((metered.output as any)?.allowed === false) {
+    return NextResponse.json({ ...(metered.output as any), receipt: metered.receipt }, { status: 403 });
   }
 
-  const supportMethod: SupportMethod =
-    result.appliedSupportMethod ||
-    (donationQualification.qualifying ? "donation" : permissionTokens.length ? "written_permission" : "none");
-
-  const signaturePolicyApplied = result.mustKeepSignature ? "kept" : "removed";
-  const downloadId = crypto.randomUUID();
-
-  saveDownload({
-    downloadId,
-    templateId: body.templateId,
-    fileVariantId: body.fileVariantId || (result.mustKeepSignature ? "signed" : "unsigned"),
-    userId,
-    anonymousUserId,
-    requestedUse: body.requestedUse,
-    supportMethod,
-    donationId: donationQualification.donationId || null,
-    permissionTokenId: permissionTokens[0]?.tokenId || null,
-    issuedAt: new Date().toISOString(),
-    signaturePolicyApplied,
-  });
-
-  const signedUrl = buildSignedUrl(body.templateId, body.fileVariantId || "signed");
-
-  return NextResponse.json({
-    allowed: true,
-    downloadId,
-    signedUrl,
-    mustKeepSignature: result.mustKeepSignature,
-    message: result.uiMessage,
-  });
+  return NextResponse.json({ ...(metered.output as any), receipt: metered.receipt }, { status: 200 });
 }
