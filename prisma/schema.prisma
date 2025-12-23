@@ -33,6 +33,7 @@ model UserIdentity {
   credits   Credits?
   creditUsage CreditUsageEvent[]
   creditLots CreditLot[]
+  projects  Project[]
 
   @@index([provider, providerAccountId])
 }
