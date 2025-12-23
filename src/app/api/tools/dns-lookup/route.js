@@ -3,12 +3,20 @@ import dns from "dns";
 import net from "net";
 import { z } from "zod";
 import { assertToolRunAllowed } from "@/lib/billing/toolUsage";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth/options";
+import { getWorkspaceIdentity, attachWorkspaceCookie } from "@/lib/workspace/request";
+import { createNote, createRun, getProject, updateRun } from "@/lib/workspace/store";
 
 const limiter = new Map();
 const windowMs = 60 * 1000;
 const maxRequests = 20;
 
-const schema = z.object({ target: z.string().trim().min(1) });
+const schema = z.object({
+  target: z.string().trim().min(1),
+  projectId: z.string().trim().optional(),
+  note: z.string().optional(),
+});
 
 const isPrivate = (value) => {
   const ip = net.isIP(value) ? value : null;
@@ -43,6 +51,7 @@ const withTimeout = (promise, ms = 5000) =>
   ]);
 
 export async function POST(req) {
+  const started = Date.now();
   const ip = req.headers.get("x-forwarded-for") || "anon";
   if (!rateLimit(ip)) return NextResponse.json({ message: "Rate limit exceeded" }, { status: 429 });
   try {
@@ -59,20 +68,69 @@ export async function POST(req) {
   }
 
   const target = parsed.target.trim().toLowerCase();
+  const projectId = typeof parsed?.projectId === "string" ? parsed.projectId.trim() : "";
+  const note = typeof parsed?.note === "string" ? String(parsed.note).slice(0, 8000) : "";
   if (!isHostLike(target) || isPrivate(target)) {
     return NextResponse.json({ message: "Provide a valid public hostname" }, { status: 400 });
+  }
+
+  const session = await getServerSession(authOptions).catch(() => null);
+  const userId = session?.user?.id || null;
+  const ws = await getWorkspaceIdentity(req);
+
+  let runId = null;
+  if (projectId) {
+    const p = await getProject({ projectId });
+    const allowed = userId ? p?.ownerId === userId : p?.ownerId == null && p?.workspaceSessionId === ws.workspaceSessionId;
+    if (p && allowed) {
+      const run = await createRun({ projectId, toolId: "dns-lookup", status: "running", inputJson: { target } });
+      runId = String(run.id);
+    }
   }
 
   try {
     const records = await withTimeout(dns.promises.resolveAny(target)).catch(() => null);
     if (!records) {
-      return NextResponse.json({
+      const payload = {
         fallback: true,
         message: "Could not resolve. Use external DNS tools or verify the domain exists.",
-      });
+      };
+      if (runId && projectId) {
+        await updateRun({
+          runId,
+          status: "succeeded",
+          outputJson: payload,
+          metricsJson: { durationMs: Date.now() - started, chargedCredits: 0 },
+        }).catch(() => null);
+        if (note.trim()) await createNote({ projectId, runId, content: note.trim() }).catch(() => null);
+      }
+      const res = NextResponse.json(payload);
+      return attachWorkspaceCookie(res, ws.setCookieValue);
     }
-    return NextResponse.json({ target, records });
+    const payload = { target, records };
+    if (runId && projectId) {
+      await updateRun({
+        runId,
+        status: "succeeded",
+        outputJson: payload,
+        metricsJson: { durationMs: Date.now() - started, chargedCredits: 0 },
+      }).catch(() => null);
+      if (note.trim()) await createNote({ projectId, runId, content: note.trim() }).catch(() => null);
+    }
+    const res = NextResponse.json(payload);
+    return attachWorkspaceCookie(res, ws.setCookieValue);
   } catch (error) {
-    return NextResponse.json({ message: error.message || "Lookup failed" }, { status: 500 });
+    if (runId && projectId) {
+      await updateRun({
+        runId,
+        status: "failed",
+        outputJson: null,
+        metricsJson: { durationMs: Date.now() - started, chargedCredits: 0 },
+        errorJson: { code: "DNS_LOOKUP_FAILED", message: String(error?.message || "Lookup failed").slice(0, 500) },
+      }).catch(() => null);
+      if (note.trim()) await createNote({ projectId, runId, content: note.trim() }).catch(() => null);
+    }
+    const res = NextResponse.json({ message: error.message || "Lookup failed" }, { status: 500 });
+    return attachWorkspaceCookie(res, ws.setCookieValue);
   }
 }

@@ -131,6 +131,25 @@ test("export shape can include project metadata, runs, notes, attachments metada
   assert.equal(exportObj.notes.length, 1);
 });
 
+test("workspace project is not readable without ownership (basic guard)", async () => {
+  await ensureTables();
+  const sessionId = cuidish();
+  const tokenHash = crypto.createHash("sha256").update("token3").digest("hex");
+  await prisma.$executeRawUnsafe(`INSERT OR IGNORE INTO WorkspaceSession (id, tokenHash) VALUES ('${sessionId}', '${tokenHash}')`);
+
+  const projectId = cuidish();
+  await prisma.$executeRawUnsafe(
+    `INSERT INTO Project (id, ownerId, workspaceSessionId, title, topic) VALUES ('${projectId}', NULL, '${sessionId}', 'Private', 'software')`
+  );
+
+  // Different session should not match.
+  const otherSession = cuidish();
+  const rows = await prisma.$queryRawUnsafe(
+    `SELECT id FROM Project WHERE id='${projectId}' AND ownerId IS NULL AND workspaceSessionId='${otherSession}'`
+  );
+  assert.equal(rows.length, 0);
+});
+
 test.after(async () => {
   await prisma.$disconnect();
 });
