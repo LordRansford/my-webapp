@@ -71,7 +71,7 @@ export async function POST(req: Request) {
     const safe = sanitizeQuestion(question);
     if (!safe.ok) {
       return NextResponse.json(
-        { message: "I can only help with what is covered on this site." },
+        { message: safe.reason === "too_long" ? "Please ask a shorter question so I can match it to the site content." : "Please enter a valid question." },
         { status: safe.reason === "too_long" ? 413 : 400 }
       );
     }
@@ -118,7 +118,18 @@ export async function POST(req: Request) {
 
         const { matches, weak } = retrieveContent(safe.cleaned, pageUrl || ctx?.pathname || null, 6);
         if (!matches.length && !pageHit) {
-          return { output: { message: "I could not find this in the site content. Try rephrasing or use a keyword from the heading." }, outputBytes: 0 };
+          // Do not hard-refuse in normal cases. Provide brief general guidance and explain what was searched.
+          const payload: any = {
+            answer:
+              "I could not find an exact match in the site content. General guidance: break your question into one specific term, then look for it in headings or the table of contents. If you share the exact heading you are stuck on, I can map it to the right section.",
+            citationsTitle: "Best match sections",
+            citations: [],
+            sources: [],
+            tryNext: null,
+            note: "No matching sections were found for this query in the current page context or the site index.",
+            lowConfidence: true,
+          };
+          return { output: payload, outputBytes: Buffer.byteLength(JSON.stringify(payload)) };
         }
 
         incrementUsage();
