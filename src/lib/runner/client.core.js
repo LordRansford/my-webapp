@@ -11,6 +11,7 @@ export async function runInRunner(request) {
   const url = new URL("/run", base).toString();
   const maxOutputBytes = Math.max(1, Math.min(200_000, request.limits.maxOutputBytes));
   const maxRunMs = Math.max(1, Math.min(30_000, request.limits.maxRunMs));
+  const maxSteps = request?.limits?.maxSteps;
 
   const started = Date.now();
   try {
@@ -21,7 +22,7 @@ export async function runInRunner(request) {
         "x-job-id": request.jobId,
         "x-tool-id": request.toolId,
       },
-      body: JSON.stringify(request),
+      body: JSON.stringify({ ...request, limits: { ...request.limits, maxOutputBytes, maxRunMs, maxSteps } }),
       maxResponseBytes: maxOutputBytes,
       overallTimeoutMs: maxRunMs + 1500,
       allowHttpInDev: true,

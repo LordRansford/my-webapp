@@ -6,6 +6,7 @@ export type RunnerJobRequest = {
     maxRunMs: number;
     maxOutputBytes: number;
     maxMemoryMb: number;
+    maxSteps?: number;
   };
 };
 
