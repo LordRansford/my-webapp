@@ -12,7 +12,7 @@ export default function ContactPage() {
     setForm((current) => ({ ...current, [name]: value }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     
     // Honeypot check
@@ -25,9 +25,29 @@ export default function ContactPage() {
       return;
     }
     
-    // Simulated submit; real integration can connect to an email service or backend later.
-    setStatus("sent");
-    setForm({ name: "", email: "", message: "", company: "", extra: "" });
+    setStatus("sending");
+    try {
+      const res = await fetch("/api/contact/request", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          company: form.company,
+          message: form.message,
+          // extra is honeypot, intentionally omitted
+        }),
+      });
+      // Prevent enumeration: always show a generic success on 200/202.
+      if (res.ok) {
+        setStatus("sent");
+        setForm({ name: "", email: "", message: "", company: "", extra: "" });
+        return;
+      }
+      setStatus("error");
+    } catch {
+      setStatus("error");
+    }
   };
 
   return (
@@ -110,17 +130,17 @@ export default function ContactPage() {
                 />
               </div>
               <div className="form-actions">
-                <button type="submit" className="button primary">
-                  Send message
+                <button type="submit" className="button primary" disabled={status === "sending"}>
+                  {status === "sending" ? "Sending..." : "Send message"}
                 </button>
                 {status === "error" && (
                   <p className="text-rose-600 text-sm" role="alert">
-                    Please fill in all required fields.
+                    Could not send right now. Please try again.
                   </p>
                 )}
                 {status === "sent" && (
                   <p className="text-emerald-700 text-sm" role="alert">
-                    Thanks. Your message is noted; I will reply by email.
+                    Thanks. Your message was received.
                   </p>
                 )}
               </div>
@@ -133,9 +153,9 @@ export default function ContactPage() {
         <h2>Other ways to reach me</h2>
         <ul className="list">
           <li>
-            <strong>Email:</strong>{" "}
-            <a className="text-link" href="mailto:ransford@ransfordsnotes.com">
-              ransford@ransfordsnotes.com
+            <strong>WhatsApp:</strong>{" "}
+            <a className="text-link" href="/api/contact/whatsapp">
+              Start a chat
             </a>
           </li>
           <li>
