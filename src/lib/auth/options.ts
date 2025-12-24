@@ -1,4 +1,5 @@
 import GoogleProvider from "next-auth/providers/google";
+import EmailProvider from "next-auth/providers/email";
 import type { NextAuthOptions } from "next-auth";
 import { BetterSqlite3Adapter } from "@/lib/auth/adapter";
 import { upsertUser, getUserById } from "@/lib/auth/store";
@@ -6,6 +7,7 @@ import { getUserPlan } from "@/lib/billing/access";
 import { upsertUserIdentity } from "@/services/progressService";
 import { prisma } from "@/lib/db/prisma";
 import { isAdminRole } from "@/lib/admin/rbac";
+import { logWarn } from "@/lib/telemetry/log";
 
 export const authOptions: NextAuthOptions = {
   adapter: BetterSqlite3Adapter(),
@@ -16,29 +18,44 @@ export const authOptions: NextAuthOptions = {
   // Keep secrets server-side only. NextAuth cookies are httpOnly by default and CSRF protection is enabled by default.
   secret: process.env.NEXTAUTH_SECRET,
   providers: (() => {
-    // Google OAuth only.
-    // Keep login optional: the site remains fully usable without auth, but users can sign in to persist progress across devices.
-    const id = process.env.GOOGLE_CLIENT_ID || "";
-    const secret = process.env.GOOGLE_CLIENT_SECRET || "";
+    const providers: any[] = [];
 
-    if (process.env.NODE_ENV !== "production" && (!id || !secret)) {
-      // In dev, missing OAuth env vars should not crash the app (logged-out browsing should still work).
-      console.warn("auth:warn Missing Google OAuth env vars: GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET");
-      return [];
+    // Keep login optional: the site remains usable without auth, but users can sign in to persist progress across devices.
+    const googleId = process.env.GOOGLE_CLIENT_ID || "";
+    const googleSecret = process.env.GOOGLE_CLIENT_SECRET || "";
+    if (googleId && googleSecret) {
+      providers.push(
+        GoogleProvider({
+          clientId: googleId,
+          clientSecret: googleSecret,
+        })
+      );
+    } else if (process.env.NODE_ENV !== "production" && (googleId || googleSecret)) {
+      logWarn("auth.provider_misconfigured", { provider: "google" });
     }
 
-    if (!id || !secret) return [];
+    // Email magic link (passwordless). Only enable when fully configured.
+    const emailServer = process.env.EMAIL_SERVER || "";
+    const emailFrom = process.env.EMAIL_FROM || "";
+    if (emailServer && emailFrom) {
+      providers.push(
+        EmailProvider({
+          server: emailServer,
+          from: emailFrom,
+          // Magic link expiry <= 15 minutes.
+          maxAge: 15 * 60,
+        })
+      );
+    } else if (process.env.NODE_ENV !== "production" && (emailServer || emailFrom)) {
+      logWarn("auth.provider_misconfigured", { provider: "email" });
+    }
 
-    return [
-      GoogleProvider({
-        clientId: id,
-        clientSecret: secret,
-      }),
-    ];
+    return providers;
   })(),
   pages: {
     signIn: "/signin",
     verifyRequest: "/signin?check=1",
+    error: "/signin?error=auth",
   },
   events: {
     async signIn({ user, account }) {

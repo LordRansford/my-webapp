@@ -9,6 +9,21 @@ export async function getServerSideProps() {
 
 export default function SignInPage({ providers }) {
   const list = Object.values(providers || {});
+  const hasProviders = list.length > 0;
+  const hasEmail = list.some((p) => p.id === "email");
+  const hasGoogle = list.some((p) => p.id === "google");
+
+  const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+  const error = params ? params.get("error") : null;
+  const check = params ? params.get("check") : null;
+
+  const errorMessage =
+    error === "configuration"
+      ? "Sign in is not available right now. If you are the site owner, check your auth environment variables and redeploy."
+      : error
+        ? "Sign in failed. Please try again."
+        : null;
+
   return (
     <NotesLayout
       meta={{
@@ -23,12 +38,22 @@ export default function SignInPage({ providers }) {
         <p className="text-sm text-slate-700">
           Sign in is optional. If you do, I can save progress across devices and keep your CPD record consistent.
         </p>
-        <p className="text-sm text-slate-700">
-          Google sign in only. No passwords to manage.
-        </p>
+        <p className="text-sm text-slate-700">No passwords. Use Google or an email magic link.</p>
+
+        {check ? (
+          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
+            Check your email for a sign in link. The link expires quickly for security.
+          </div>
+        ) : null}
+
+        {errorMessage ? (
+          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+            {errorMessage}
+          </div>
+        ) : null}
 
         <div className="grid gap-2 sm:grid-cols-2">
-          {list.length ? (
+          {hasProviders ? (
             list.map((p) => (
               <button
                 key={p.id}
@@ -44,6 +69,19 @@ export default function SignInPage({ providers }) {
               Sign in is not available right now. If you are the site owner, check your auth environment variables and redeploy.
             </div>
           )}
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-white/90 p-4 text-sm text-slate-700 shadow-sm">
+          <p className="m-0">
+            <span className="font-semibold text-slate-900">Tip:</span> email links expire quickly. If you do not see it, check spam.
+          </p>
+          <p className="mt-2 m-0">
+            Available methods:{" "}
+            <span className="font-semibold text-slate-900">
+              {hasGoogle ? "Google" : "Google (disabled)"}{" "}
+              {hasEmail ? "and Email link" : "and Email link (disabled)"}
+            </span>
+          </p>
         </div>
 
         <div className="rounded-2xl border border-slate-200 bg-white/90 p-4 text-sm text-slate-700 shadow-sm">
