@@ -157,6 +157,7 @@ export default function StroopPage() {
         section: "ai",
       }}
       activeLevelId="summary"
+      useAppShell
     >
       <GameShell
         title="Stroop style challenge"

@@ -115,6 +115,7 @@ export default function MentorPage() {
       activeLevelId="summary"
       showContentsSidebar={false}
       showStepper={false}
+      useAppShell
     >
       <div className="space-y-6">
         <header className="space-y-2">

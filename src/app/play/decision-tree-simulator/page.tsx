@@ -151,6 +151,7 @@ export default function DecisionTreeSimulatorPage() {
         section: "ai",
       }}
       activeLevelId="summary"
+      useAppShell
     >
       <GameShell
         title="Decision tree simulator"

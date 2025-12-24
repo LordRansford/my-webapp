@@ -111,6 +111,7 @@ export default function ReactionTimePage() {
         section: "ai",
       }}
       activeLevelId="summary"
+      useAppShell
     >
       <GameShell
         title="Reaction time test"

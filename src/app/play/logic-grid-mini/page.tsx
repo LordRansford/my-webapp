@@ -155,6 +155,7 @@ export default function LogicGridMiniPage() {
         section: "ai",
       }}
       activeLevelId="summary"
+      useAppShell
     >
       <GameShell
         title="Logic grid mini"

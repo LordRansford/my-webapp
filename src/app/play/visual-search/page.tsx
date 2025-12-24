@@ -113,6 +113,7 @@ export default function VisualSearchPage() {
         section: "ai",
       }}
       activeLevelId="summary"
+      useAppShell
     >
       <GameShell
         title="Visual search"
