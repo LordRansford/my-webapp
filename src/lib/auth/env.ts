@@ -17,6 +17,13 @@ export function getAuthEnvStatus(): AuthEnvStatus {
     if (!process.env.GOOGLE_CLIENT_SECRET) missing.push("GOOGLE_CLIENT_SECRET");
   }
 
+  // Email magic link provider (optional). Enable only when fully configured.
+  const hasEmail = Boolean(process.env.EMAIL_SERVER || process.env.EMAIL_FROM);
+  if (hasEmail) {
+    if (!process.env.EMAIL_SERVER) missing.push("EMAIL_SERVER");
+    if (!process.env.EMAIL_FROM) missing.push("EMAIL_FROM");
+  }
+
   return { ok: missing.length === 0, missing };
 }
 
