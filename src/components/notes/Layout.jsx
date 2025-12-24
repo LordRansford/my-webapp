@@ -138,8 +138,17 @@ export default function NotesLayout(props) {
       slug.endsWith("/course") ||
       slug.endsWith("/index"));
 
+  const isNotesStyleRoute =
+    slug.startsWith("/ai") ||
+    slug.startsWith("/data") ||
+    slug.startsWith("/cybersecurity") ||
+    slug.startsWith("/software-architecture") ||
+    slug.startsWith("/digitalisation");
+
   const resolvedShowContentsSidebar =
-    typeof showContentsSidebar === "boolean" ? showContentsSidebar : Array.isArray(headings) && headings.length > 0;
+    typeof showContentsSidebar === "boolean"
+      ? showContentsSidebar
+      : isNotesStyleRoute && Array.isArray(headings) && headings.length > 0;
 
   return (
     <Layout title={meta.title} description={meta.description}>
