@@ -46,6 +46,7 @@ const dropdowns: Dropdown[] = [
     label: "Studios",
     items: [
       { label: "Ransford’s AI Studio", href: "/studios" },
+      { label: "Architecture Diagram Studio", href: "/studios/architecture-diagram-studio" },
       { label: "Software Development Studio", href: "/dev-studios" },
     ],
   },
@@ -56,6 +57,7 @@ const utilityLinks = [
   { label: "Accreditation", href: "/accreditation" },
   { label: "About", href: "/about" },
   { label: "Mentor", href: "/mentor" },
+  { label: "Listen", href: "/listen" },
   { label: "Workspace", href: "/workspace" },
   { label: "Play", href: "/play" },
 ];
