@@ -58,6 +58,7 @@
     "next": "16.0.10",
     "next-auth": "^4.24.13",
     "next-mdx-remote": "^5.0.0",
+    "nodemailer": "^7.0.12",
     "papaparse": "^5.5.3",
     "pdf-lib": "^1.17.1",
     "pdfkit": "^0.17.2",
