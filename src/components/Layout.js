@@ -4,6 +4,9 @@ import DonateButton from "@/components/donations/DonateButton";
 import Header from "@/components/Header";
 import TestingModeBanner from "@/components/TestingModeBanner";
 import BrandLogo from "@/components/BrandLogo";
+import dynamic from "next/dynamic";
+
+const SpotifyMiniPlayer = dynamic(() => import("@/components/spotify/SpotifyMiniPlayer"), { ssr: false });
 export default function Layout({
   children,
   title = "Ransford's Notes",
@@ -61,6 +64,8 @@ export default function Layout({
         >
           ?
         </a>
+
+        <SpotifyMiniPlayer />
 
         <footer className="site-footer">
           <div className="site-footer__inner">
