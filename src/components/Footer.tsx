@@ -3,7 +3,7 @@
 import Link from "next/link";
 import DonateButton from "@/components/donations/DonateButton";
 import BrandLogo from "@/components/BrandLogo";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { PersistStore } from "@/games/engine/persist";
 import { createGamesProgressStore } from "@/games/progress";
@@ -14,13 +14,18 @@ export default function Footer() {
   const holdTimer = useRef<number | null>(null);
   const seq = useRef<string[]>([]);
 
-  if (!storeRef.current) storeRef.current = new PersistStore({ prefix: "rn_games", version: "v1" });
+  useEffect(() => {
+    if (storeRef.current == null) {
+      storeRef.current = new PersistStore({ prefix: "rn_games", version: "v1" });
+    }
+  }, []);
 
-  const tryEnterDevRoom = () => {
-    const progress = createGamesProgressStore(storeRef.current!);
+  const tryEnterDevRoom = useCallback(() => {
+    if (!storeRef.current) return;
+    const progress = createGamesProgressStore(storeRef.current);
     if (!progress.tryUnlockDevRoom()) return;
     router.push("/games/dev-room");
-  };
+  }, [router]);
 
   useEffect(() => {
     // Konami-style sequence (documented in code comments only):
@@ -34,7 +39,7 @@ export default function Footer() {
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [tryEnterDevRoom]);
 
   const onHoldStart = () => {
     if (holdTimer.current) window.clearTimeout(holdTimer.current);
@@ -47,51 +52,105 @@ export default function Footer() {
     holdTimer.current = null;
   };
 
+  const footerNav = [
+    {
+      title: "Learn",
+      links: [
+        { label: "Courses", href: "/courses" },
+        { label: "CPD", href: "/cpd" },
+      ],
+    },
+    {
+      title: "Tools",
+      links: [
+        { label: "Labs", href: "/tools" },
+        { label: "Studios", href: "/studios" },
+      ],
+    },
+    {
+      title: "Play",
+      links: [
+        { label: "Games", href: "/games" },
+        { label: "Offline", href: "/play" },
+      ],
+    },
+    {
+      title: "Company",
+      links: [
+        { label: "About", href: "/about" },
+        { label: "Contact", href: "/contact" },
+      ],
+    },
+  ];
+
+  const policyLinks = [
+    { label: "Legal", href: "/trust-and-about" },
+    { label: "Privacy", href: "/privacy" },
+    { label: "Terms", href: "/terms" },
+  ];
+
   return (
-    <footer className="site-footer">
-      <div className="site-footer__inner">
-        <div>
-          <button
-            type="button"
-            onPointerDown={onHoldStart}
-            onPointerUp={onHoldEnd}
-            onPointerCancel={onHoldEnd}
-            onPointerLeave={onHoldEnd}
-            className="inline-flex items-center rounded-md"
-            style={{ marginBottom: "0.75rem" }}
-            aria-label="Ransford’s Notes logo"
-          >
-            <BrandLogo className="h-12 w-auto text-slate-900" />
-          </button>
-          <p className="eyebrow">Ransford Chung Amponsah</p>
-          <p className="muted">
-            I build notes and browser labs for data, digitalisation, AI, cybersecurity, and engineering. I try to keep it clear,
-            accurate, and practical.
-          </p>
-          <p className="muted">
-            CPD: designed to support self-directed CPD with clear objectives, conservative hour estimates, and evidence-friendly outputs.
-          </p>
+    <footer className="site-footer" aria-label="Footer">
+      <div className="site-footer__inner flex flex-col gap-8">
+        <div className="flex flex-wrap items-start justify-between gap-8">
+          <div className="max-w-xl space-y-3">
+            <button
+              type="button"
+              onPointerDown={onHoldStart}
+              onPointerUp={onHoldEnd}
+              onPointerCancel={onHoldEnd}
+              onPointerLeave={onHoldEnd}
+              className="inline-flex items-center rounded-md"
+              aria-label="Ransford’s Notes logo"
+            >
+              <BrandLogo className="h-12 w-auto text-slate-900" />
+            </button>
+            <p className="text-xl font-semibold text-slate-900">RansfordsNotes</p>
+            <p className="muted text-sm">
+              Browser-native courses, tools, labs, and games built to stay readable, calm, and offline-capable. Clear inputs, clear
+              outputs, and no hidden mechanics.
+            </p>
+            <p className="muted text-sm">
+              CPD: structured objectives with conservative hour estimates and evidence-friendly outputs.
+            </p>
+          </div>
+
+          <div className="grid w-full max-w-3xl gap-6 sm:grid-cols-2 md:grid-cols-4" role="navigation" aria-label="Footer sitemap">
+            {footerNav.map((section) => (
+              <div key={section.title} className="space-y-2">
+                <p className="text-sm font-semibold text-slate-900">{section.title}</p>
+                <ul className="space-y-2 text-sm text-slate-700">
+                  {section.links.map((link) => (
+                    <li key={link.href}>
+                      <Link className="hover:underline" href={link.href}>
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="footer-links" aria-label="Footer">
-          <Link href="/courses">Start learning</Link>
-          <Link href="/tools">Explore the platform</Link>
-          <Link href="/tools">Tools</Link>
-          <Link href="/templates">Templates</Link>
-          <Link href="/studios">Studios</Link>
-          <Link href="/dashboards">Dashboards</Link>
-          <Link href="/cpd">CPD</Link>
-          <Link href="/play">Play</Link>
-          <Link href="/support">Support</Link>
-          <Link href="/about">About</Link>
-          <Link href="/trust-and-about">Trust and credibility</Link>
-          <Link href="/accreditation-and-alignment">Accreditation</Link>
-          <Link href="/subscribe">Subscribe</Link>
-          <DonateButton />
-          <Link href="/contact">Contact</Link>
-          <a href="mailto:hello@ransfordsnotes.example">hello@ransfordsnotes.example</a>
-          <Link href="/accessibility">Accessibility</Link>
-          <Link href="/privacy">Privacy</Link>
-          <Link href="/terms">Terms</Link>
+
+        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[color:var(--line)] pt-4 text-sm">
+          <div className="flex flex-wrap items-center gap-4 font-semibold text-slate-800">
+            <span>© {new Date().getFullYear()} RansfordsNotes</span>
+            {policyLinks.map((item) => (
+              <Link key={item.href} className="hover:underline" href={item.href}>
+                {item.label}
+              </Link>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center gap-3 text-slate-700">
+            <a className="hover:underline" href="https://github.com/LordRansford" target="_blank" rel="noreferrer">
+              GitHub
+            </a>
+            <a className="hover:underline" href="mailto:hello@ransfordsnotes.example">
+              Email
+            </a>
+            <DonateButton />
+          </div>
         </div>
       </div>
     </footer>

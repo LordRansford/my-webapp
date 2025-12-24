@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Layout from "@/components/Layout";
 import Link from "next/link";
+import { StaticInfoTemplate } from "@/components/templates/PageTemplates";
 
 export default function ContactPage() {
   const [status, setStatus] = useState("idle");
@@ -56,6 +57,7 @@ export default function ContactPage() {
       title="Contact - Ransford's Notes"
       description="Get in touch with questions, feedback, or collaboration ideas."
     >
+      <StaticInfoTemplate breadcrumbs={[{ label: "Home", href: "/" }, { label: "Contact" }]}>
       <header className="page-header">
         <p className="eyebrow">Contact</p>
         <h1>Get in touch</h1>
@@ -175,6 +177,7 @@ export default function ContactPage() {
           I aim to reply within a few working days. If you are writing about something specific, include who you are, why you are reaching out, and any useful links. It helps me reply clearly and quickly.
         </p>
       </section>
+      </StaticInfoTemplate>
     </Layout>
   );
 }

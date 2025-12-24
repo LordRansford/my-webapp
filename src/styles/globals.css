@@ -144,6 +144,25 @@ html.dark [class*="bg-white/"] {
   background-color: var(--surface) !important;
 }
 
+/* Accessibility guardrails: avoid black-on-black or near-black text on dark backgrounds. */
+[class*="bg-gray-8"] .text-black,
+[class*="bg-gray-9"] .text-black,
+[class*="bg-slate-8"] .text-black,
+[class*="bg-slate-9"] .text-black,
+[class*="bg-neutral-8"] .text-neutral-900,
+[class*="bg-neutral-9"] .text-neutral-900,
+[class*="bg-gray-8"] .text-gray-900,
+[class*="bg-gray-9"] .text-gray-900 {
+  color: var(--text-body) !important;
+}
+
+/* Broader descendant guard: any dark background panel forces default readable text for dark text utility classes. */
+[class*="bg-slate-9"] :where(.text-black, .text-gray-900, .text-slate-900, .text-neutral-900),
+[class*="bg-neutral-9"] :where(.text-black, .text-gray-900, .text-slate-900, .text-neutral-900),
+[class*="bg-gray-9"] :where(.text-black, .text-gray-900, .text-slate-900, .text-neutral-900) {
+  color: var(--text-body) !important;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
@@ -229,6 +248,24 @@ pre {
 
 a {
   color: inherit;
+}
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 1rem;
+  padding: 0.5rem 0.75rem;
+  background: #0f172a;
+  color: #f8fafc;
+  border-radius: 0.5rem;
+  transition: top 0.2s ease;
+  z-index: 1000;
+}
+
+.skip-link:focus {
+  top: 1rem;
+  outline: 2px solid #0ea5e9;
+  outline-offset: 2px;
 }
 
 .app-shell {

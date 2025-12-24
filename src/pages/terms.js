@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Layout from "@/components/Layout";
+import { StaticInfoTemplate } from "@/components/templates/PageTemplates";
 
 export default function TermsPage() {
   return (
@@ -7,20 +8,15 @@ export default function TermsPage() {
       title="Terms - Ransford's Notes"
       description="The terms of use for the site, notes, and tools."
     >
-      <nav className="breadcrumb">
-        <Link href="/">Home</Link>
-        <span aria-hidden="true"> / </span>
-        <span>Terms</span>
-      </nav>
-
-      <header className="page-header">
-        <p className="eyebrow">Terms</p>
-        <h1>Terms of Use</h1>
-        <p className="lead">
-          By using this website you agree to the terms on this page. The goal is to keep the site safe and
-          useful for everyone.
-        </p>
-      </header>
+      <StaticInfoTemplate breadcrumbs={[{ label: "Home", href: "/" }, { label: "Terms" }]}>
+        <header className="page-header">
+          <p className="eyebrow">Terms</p>
+          <h1>Terms of Use</h1>
+          <p className="lead">
+            By using this website you agree to the terms on this page. The goal is to keep the site safe and
+            useful for everyone.
+          </p>
+        </header>
 
       <section className="section">
         <h2>Acceptable use</h2>
@@ -72,6 +68,7 @@ export default function TermsPage() {
           means you accept the updated terms.
         </p>
       </section>
+      </StaticInfoTemplate>
     </Layout>
   );
 }

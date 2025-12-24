@@ -21,6 +21,7 @@ import { getArchitectureTemplate } from "@/lib/architecture-diagrams/templates";
 import { emitArchitectureTelemetry, durationBucketFrom } from "@/lib/architecture-diagrams/telemetry/client";
 import { assessPurpose } from "@/lib/architecture-diagrams/rules/purpose";
 import { hashArchitectureInputs } from "@/lib/architecture-diagrams/versioning/hash";
+import { StudioToolTemplate, StudioResultsTemplate } from "@/components/templates/PageTemplates";
 
 const steps = [
   { id: "goal", label: "Goal", hint: "Why you need diagrams" },
@@ -255,73 +256,92 @@ export default function WizardPageClient() {
   const canGoNext = activeIndex < steps.length - 1;
 
   return (
-    <WizardShell
-      title="Guided wizard"
-      subtitle="Step by step input capture. Diagram generation comes next."
-      lastUpdated={lastUpdated ? new Date(lastUpdated).toLocaleString() : null}
-      onReset={() => resetState()}
-      left={
-        <div className="space-y-4">
-          <WizardStepper steps={steps} activeId={activeStep} onJump={setActiveStep} />
-          <div className="rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Draft tools</p>
-            <p className="mt-2 text-sm text-slate-700">Load a validated example if you want a quick start.</p>
+    <StudioToolTemplate
+      backHref="/studios/architecture-diagram-studio"
+      breadcrumbs={[
+        { label: "Home", href: "/" },
+        { label: "Studios", href: "/studios" },
+        { label: "Architecture Diagram Studio", href: "/studios/architecture-diagram-studio" },
+        { label: "Guided wizard" },
+      ]}
+    >
+      <WizardShell
+        title="Guided wizard"
+        subtitle="Step by step input capture. Diagram generation comes next."
+        lastUpdated={lastUpdated ? new Date(lastUpdated).toLocaleString() : null}
+        onReset={() => resetState()}
+        left={
+          <div className="space-y-4">
+            <WizardStepper steps={steps} activeId={activeStep} onJump={setActiveStep} />
+            <div className="rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Draft tools</p>
+              <p className="mt-2 text-sm text-slate-700">Load a validated example if you want a quick start.</p>
+              <button
+                type="button"
+                onClick={() => updateState(() => ({ ...EXAMPLE_KID_FRIENDLY }))}
+                className="mt-3 w-full rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
+              >
+                Load kid friendly example
+              </button>
+              <p className="mt-3 text-xs text-slate-600">
+                Examples are validated. You can edit them on the next steps.
+              </p>
+            </div>
+          </div>
+        }
+      >
+        <div className="space-y-6">
+          {content}
+
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-5">
             <button
               type="button"
-              onClick={() => updateState(() => ({ ...EXAMPLE_KID_FRIENDLY }))}
-              className="mt-3 w-full rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
+              onClick={() => setActiveStep(steps[Math.max(0, activeIndex - 1)].id)}
+              disabled={!canGoBack}
+              className={`rounded-full px-4 py-2 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 ${
+                canGoBack ? "border border-slate-200 bg-white text-slate-800 hover:bg-slate-50" : "bg-slate-100 text-slate-400 cursor-not-allowed"
+              }`}
             >
-              Load kid friendly example
+              Back
             </button>
-            <p className="mt-3 text-xs text-slate-600">
-              Examples are validated. You can edit them on the next steps.
-            </p>
+
+            <div className="flex flex-wrap items-center gap-2">
+              {activeStep !== "review" ? (
+                <p className="text-xs text-slate-600">
+                  Validation runs continuously. You can move ahead, and fix issues on the review step.
+                </p>
+              ) : null}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setActiveStep(steps[Math.min(steps.length - 1, activeIndex + 1)].id)}
+              disabled={!canGoNext}
+              className={`rounded-full px-4 py-2 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 ${
+                canGoNext ? "bg-slate-900 text-white hover:bg-slate-800" : "bg-slate-200 text-slate-500 cursor-not-allowed"
+              }`}
+            >
+              Next
+            </button>
           </div>
+
+          {pack ? (
+            <StudioResultsTemplate
+              breadcrumbs={[
+                { label: "Home", href: "/" },
+                { label: "Studios", href: "/studios" },
+                { label: "Architecture Diagram Studio", href: "/studios/architecture-diagram-studio" },
+                { label: "Guided wizard" },
+                { label: "Generated diagrams" },
+              ]}
+              backHref="/studios/architecture-diagram-studio/wizard"
+            >
+              <DiagramPackViewer pack={pack} />
+            </StudioResultsTemplate>
+          ) : null}
         </div>
-      }
-    >
-      <div className="space-y-6">
-        {content}
-
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-5">
-          <button
-            type="button"
-            onClick={() => setActiveStep(steps[Math.max(0, activeIndex - 1)].id)}
-            disabled={!canGoBack}
-            className={`rounded-full px-4 py-2 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 ${
-              canGoBack ? "border border-slate-200 bg-white text-slate-800 hover:bg-slate-50" : "bg-slate-100 text-slate-400 cursor-not-allowed"
-            }`}
-          >
-            Back
-          </button>
-
-          <div className="flex flex-wrap items-center gap-2">
-            {activeStep !== "review" ? (
-              <p className="text-xs text-slate-600">
-                Validation runs continuously. You can move ahead, and fix issues on the review step.
-              </p>
-            ) : null}
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setActiveStep(steps[Math.min(steps.length - 1, activeIndex + 1)].id)}
-            disabled={!canGoNext}
-            className={`rounded-full px-4 py-2 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 ${
-              canGoNext ? "bg-slate-900 text-white hover:bg-slate-800" : "bg-slate-200 text-slate-500 cursor-not-allowed"
-            }`}
-          >
-            Next
-          </button>
-        </div>
-
-        {pack ? (
-          <div className="pt-6">
-            <DiagramPackViewer pack={pack} />
-          </div>
-        ) : null}
-      </div>
-    </WizardShell>
+      </WizardShell>
+    </StudioToolTemplate>
   );
 }
 

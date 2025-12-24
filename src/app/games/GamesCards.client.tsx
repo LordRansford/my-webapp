@@ -11,14 +11,21 @@ import { GAMES_COPY } from "@/games/dedication";
 export default function GamesCards() {
   const store = useMemo(() => new PersistStore({ prefix: "rn_games", version: "v1" }), []);
   const progress = useMemo(() => createGamesProgressStore(store), [store]);
-  const [unlocked, setUnlocked] = useState(() => progress.get().charisTrophyUnlocked);
-  const [today] = useState(() => utcDateId());
-  const [todayDaily, setTodayDaily] = useState(() => progress.getDaily(today));
+  const [hydrated, setHydrated] = useState(false);
+  const [unlocked, setUnlocked] = useState(false);
+  const [today, setToday] = useState<string | null>(null);
+  const [todayDaily, setTodayDaily] = useState(() => ({ completed: false, attempted: false }));
 
   useEffect(() => {
+    const t = utcDateId();
+    setToday(t);
+    setUnlocked(progress.get().charisTrophyUnlocked);
+    setTodayDaily(progress.getDaily(t));
+    setHydrated(true);
+
     const refresh = () => {
       setUnlocked(progress.get().charisTrophyUnlocked);
-      setTodayDaily(progress.getDaily(today));
+      setTodayDaily(progress.getDaily(t));
     };
     window.addEventListener("focus", refresh);
     document.addEventListener("visibilitychange", refresh);
@@ -26,7 +33,7 @@ export default function GamesCards() {
       window.removeEventListener("focus", refresh);
       document.removeEventListener("visibilitychange", refresh);
     };
-  }, [progress, today]);
+  }, [progress]);
 
   const visible = useMemo(() => {
     return GAMES.filter((g) => {
@@ -38,6 +45,20 @@ export default function GamesCards() {
 
   const flagship = useMemo(() => visible.filter((g) => ["pulse-runner", "skyline-drift", "vault-circuit"].includes(g.id)), [visible]);
   const rest = useMemo(() => visible.filter((g) => !["pulse-runner", "skyline-drift", "vault-circuit"].includes(g.id)), [visible]);
+
+  if (!hydrated || !today) {
+    return (
+      <div className="space-y-4">
+        <div className="h-6 w-32 rounded bg-slate-200" />
+        <div className="h-4 w-48 rounded bg-slate-200" />
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="h-36 rounded-3xl border border-slate-200 bg-white/80 p-4 shadow-sm" />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">

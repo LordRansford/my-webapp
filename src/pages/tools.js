@@ -1,5 +1,5 @@
 import Link from "next/link";
-import NotesLayout from "@/components/NotesLayout";
+import { MarketingPageTemplate } from "@/components/templates/PageTemplates";
 
 const tools = [
   {
@@ -205,21 +205,7 @@ function toneForCategory(cat) {
 
 export default function ToolsPage() {
   return (
-    <NotesLayout
-      meta={{
-        title: "Useful tools",
-        description: "A professional toolkit hub: small, safe, browser-first workspaces for learning and practice.",
-        level: "Tools",
-        slug: "/tools",
-      }}
-      headings={[]}
-    >
-      <nav className="breadcrumb">
-        <Link href="/">Home</Link>
-        <span aria-hidden="true"> / </span>
-        <span>Tools</span>
-      </nav>
-
+    <MarketingPageTemplate breadcrumbs={[{ label: "Home", href: "/" }, { label: "Tools" }]}>
       <header className="page-header">
         <p className="eyebrow">Useful tools</p>
         <h1>Tool workspaces</h1>
@@ -268,6 +254,6 @@ export default function ToolsPage() {
           .
         </p>
       </section>
-    </NotesLayout>
+    </MarketingPageTemplate>
   );
 }

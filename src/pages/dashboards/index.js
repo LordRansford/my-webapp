@@ -2,6 +2,10 @@ import NotesLayout from "@/components/NotesLayout";
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
 
+export const getServerSideProps = async () => {
+  return { props: {} };
+};
+
 export default function DashboardsLanding() {
   return (
     <NotesLayout

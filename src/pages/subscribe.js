@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Layout from "@/components/Layout";
+import { StaticInfoTemplate } from "@/components/templates/PageTemplates";
 
 export default function SubscribePage() {
   return (
@@ -7,17 +8,12 @@ export default function SubscribePage() {
       title="Subscribe - Ransford's Notes"
       description="Get updates on new courses, labs, and architecture patterns."
     >
-      <nav className="breadcrumb">
-        <Link href="/">Home</Link>
-        <span aria-hidden="true"> / </span>
-        <span>Subscribe</span>
-      </nav>
-
-      <header className="page-header">
-        <p className="eyebrow">Newsletter</p>
-        <h1>Stay ahead with field-tested notes</h1>
-        <p className="lead">Receive practical updates when new labs, courses, or games go live.</p>
-      </header>
+      <StaticInfoTemplate breadcrumbs={[{ label: "Home", href: "/" }, { label: "Subscribe" }]}>
+        <header className="page-header">
+          <p className="eyebrow">Newsletter</p>
+          <h1>Stay ahead with field-tested notes</h1>
+          <p className="lead">Receive practical updates when new labs, courses, or games go live.</p>
+        </header>
 
       <section className="section">
         <h2>Join the list</h2>
@@ -42,6 +38,7 @@ export default function SubscribePage() {
           </p>
         </form>
       </section>
+      </StaticInfoTemplate>
     </Layout>
   );
 }

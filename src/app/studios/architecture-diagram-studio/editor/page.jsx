@@ -1,30 +1,14 @@
-import Link from "next/link";
+import dynamic from "next/dynamic";
 
 export const metadata = {
   title: "Architecture Diagram Studio Editor",
-  description: "Direct input editor for architecture diagrams. Validation only in v1.",
+  description: "Direct input editor for architecture diagrams. Validated locally, no data leaves your browser.",
 };
 
-export default function ArchitectureDiagramEditorStub() {
-  return (
-    <main className="mx-auto max-w-4xl px-4 py-12 md:px-6 lg:px-8">
-      <div className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
-        <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Architecture Diagram Studio</p>
-        <h1 className="mt-2 text-3xl font-semibold text-slate-900">Power editor</h1>
-        <p className="mt-2 text-sm text-slate-700">
-          This route is stubbed. Next prompt will wire the editor to the shared schema and validation layer.
-        </p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          <Link href="/studios/architecture-diagram-studio" className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50">
-            Back
-          </Link>
-          <Link href="/studios/architecture-diagram-studio/wizard" className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">
-            Open guided wizard
-          </Link>
-        </div>
-      </div>
-    </main>
-  );
+const EditorClient = dynamic(() => import("./page.client"));
+
+export default function ArchitectureDiagramEditorPage() {
+  return <EditorClient />;
 }
 
 

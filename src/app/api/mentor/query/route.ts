@@ -5,6 +5,7 @@ import { withRequestLogging } from "@/lib/security/requestLog";
 import { sanitizeQuestion } from "@/lib/mentor/sanitize";
 import { incrementUsage } from "@/lib/mentor/usage";
 import { retrieveContent } from "@/lib/mentor/retrieveContent";
+import { retrieveVectorContent } from "@/lib/mentor/vectorStore";
 import { findToolSuggestion } from "@/lib/tools/toolRegistry";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/options";
@@ -25,24 +26,6 @@ function clampText(input: unknown, maxLen: number) {
 
 function normalise(text: string) {
   return String(text || "").toLowerCase().replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
-}
-
-function buildGeneralDefinition(question: string) {
-  const q = normalise(question);
-  if (q.includes("digitalisation") || q.includes("digitalization")) {
-    return (
-      "Digitalisation is the practical use of digital technology to improve how an organisation works and delivers outcomes. " +
-      "It combines process change, data, and software so work is faster, safer, and easier to measure. " +
-      "Examples include digitising a paper workflow, automating approvals, improving reporting, or building self-service services."
-    );
-  }
-  if (q.includes("risk appetite")) {
-    return (
-      "Risk appetite is the amount and type of risk an organisation is willing to accept to achieve its goals. " +
-      "It sets boundaries for decisions (what is acceptable vs not) and helps teams choose controls, budgets, and trade-offs consistently."
-    );
-  }
-  return null;
 }
 
 function bestExcerptFromContext(query: string, ctx: PageContext | null) {
@@ -134,27 +117,27 @@ export async function POST(req: Request) {
 
         const pageHit = bestExcerptFromContext(safe.cleaned, ctx);
 
-        const { matches, weak } = retrieveContent(safe.cleaned, pageUrl || ctx?.pathname || null, 6);
+        const keyword = retrieveContent(safe.cleaned, pageUrl || ctx?.pathname || null, 6);
+        const vector = await retrieveVectorContent(safe.cleaned, pageUrl || ctx?.pathname || null, 6);
+        const matches = vector.matches.length ? vector.matches : keyword.matches;
+        const weak = vector.weak && keyword.matches.length === 0;
+
         if (!matches.length && !pageHit) {
-          const general = buildGeneralDefinition(safe.cleaned);
-          const fallbacks = retrieveContent(safe.cleaned, null, 5).matches;
           const payload: any = {
-            answer:
-              general ||
-              "I could not find an exact match in the site content. General guidance: reduce the question to one concrete term, then use the closest page links below.",
-            answerMode: general ? "general-guidance" : "general-guidance",
-            citationsV2: fallbacks.slice(0, 5).map((c) => ({ title: c.pageTitle || c.title, urlOrPath: c.pageRoute || c.href, anchorOrHeading: c.title })),
-            refusalReason: { code: "NO_MATCH", message: "I could not find an exact section match for this question in the site index." },
+            answer: "I could not find this in the site content. Here is what is missing and what to do next.",
+            answerMode: "site-grounded",
+            citationsV2: [],
+            refusalReason: { code: "NO_MATCH", message: "No indexed section covers this question yet." },
             suggestedNextActions: [
-              "Try one keyword from a page heading, then ask again.",
-              "Tell me which lab or page you are on and what you clicked.",
-              "If this is an upload issue: confirm file type, file size, and try selecting a different filename once.",
+              "Tell me which page or lab you expected to find this on so we can add it.",
+              "Use one concrete keyword from a heading and ask again.",
+              "If this is about a tool run, include the tool name, input type, and the error shown.",
             ],
-            citationsTitle: fallbacks.length ? "Where to read next on this site" : "Best match sections",
-            citations: fallbacks.slice(0, 5).map((c) => ({ title: c.title, href: c.href, why: c.why })),
-            sources: fallbacks.slice(0, 3).map((c) => ({ title: c.pageTitle || c.title, href: c.href, excerpt: c.why })),
-            tryNext: null,
-            note: "No matching sections were found for this query in the current page context or the site index.",
+            missingContent: {
+              proposedRoute: `/notes/${safe.cleaned.split(" ")[0] || "add-topic"}`,
+              summary: "Add a dedicated section for this topic with examples and failure modes.",
+            },
+            note: "RAG returned zero sources; content needs to be added.",
             lowConfidence: true,
           };
           return { output: payload, outputBytes: Buffer.byteLength(JSON.stringify(payload)) };
@@ -162,7 +145,7 @@ export async function POST(req: Request) {
 
         incrementUsage();
         const top = matches[0] || null;
-        const lowConfidence = Boolean(weak) || (!pageHit && !top) || (top ? top.score < 5 : false);
+        const lowConfidence = Boolean(weak) || (!pageHit && !top) || (top ? top.score < 0.18 : false);
         const tool = findToolSuggestion(safe.cleaned);
 
         const sources = [

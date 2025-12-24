@@ -14,6 +14,7 @@ import FeedbackPanel from "@/components/feedback/FeedbackPanel";
 import { highlightAnchorFromLocation } from "@/lib/mentor/highlight";
 import dynamic from "next/dynamic";
 import ReadAloudControls from "@/components/a11y/ReadAloudControls";
+import { CourseAssessmentTemplate, CourseLessonTemplate, CourseOverviewTemplate } from "@/components/templates/PageTemplates";
 
 const AssistantShell = dynamic(() => import("@/components/assistants/AssistantShell"), { ssr: false });
 
@@ -46,11 +47,11 @@ export default function NotesLayout(props) {
 
   const resolvedSection =
     meta.section ||
-    (meta.slug?.includes("/ai") && "ai") ||
-    (meta.slug?.includes("/digitalisation") && "digitalisation") ||
-    (meta.slug?.includes("/software-architecture") && "architecture") ||
-    (meta.slug?.includes("/data") && "data") ||
-    (meta.slug?.includes("/cybersecurity") && "cybersecurity") ||
+    (slug?.includes("/ai") && "ai") ||
+    (slug?.includes("/digitalisation") && "digitalisation") ||
+    (slug?.includes("/software-architecture") && "architecture") ||
+    (slug?.includes("/data") && "data") ||
+    (slug?.includes("/cybersecurity") && "cybersecurity") ||
     "";
 
   const sectionLabelMap = {
@@ -126,7 +127,10 @@ export default function NotesLayout(props) {
     return level.includes("summary") || (meta.slug || "").includes("summary");
   }, [meta.level, meta.slug]);
 
-  const slug = meta.slug || "";
+  const slug =
+    typeof window !== "undefined"
+      ? String(meta.slug || window.location?.pathname || "")
+      : String(meta.slug || "");
   const showPreviewBanner = !slug.startsWith("/admin");
   const showFeedbackPanel = !slug.startsWith("/admin") && slug !== "/feedback" && slug !== "/signin";
   const showReadAloud =
@@ -138,32 +142,33 @@ export default function NotesLayout(props) {
       slug.endsWith("/course") ||
       slug.endsWith("/index"));
 
-  const isNotesStyleRoute =
-    slug.startsWith("/ai") ||
-    slug.startsWith("/data") ||
-    slug.startsWith("/cybersecurity") ||
-    slug.startsWith("/software-architecture") ||
-    slug.startsWith("/digitalisation");
-
   const isCourseLearningPage =
-    isNotesStyleRoute &&
+    slug.startsWith("/courses/") &&
     (slug.includes("/beginner") ||
       slug.includes("/foundations") ||
       slug.includes("/intermediate") ||
       slug.includes("/advanced") ||
-      slug.endsWith("/summary"));
+      slug.endsWith("/summary") ||
+      slug.includes("/lesson") ||
+      slug.includes("/module"));
+
+  const isCourseNavigationAllowed = slug.startsWith("/courses/") && isCourseLearningPage;
+  const isCourseOverview = slug.endsWith("/course") || slug.endsWith("/overview") || meta.page === "Overview";
+  const isCourseAssessment = (meta.level || "").toLowerCase().includes("assessment") || slug.includes("/assessment");
 
   const resolvedShowContentsSidebar =
     typeof showContentsSidebar === "boolean"
-      ? showContentsSidebar
-      : isNotesStyleRoute && Array.isArray(headings) && headings.length > 0;
+      ? showContentsSidebar && isCourseNavigationAllowed
+      : isCourseNavigationAllowed && Array.isArray(headings) && headings.length > 0;
 
-  const resolvedShowStepper = typeof showStepper === "boolean" ? showStepper : isCourseLearningPage;
+  const resolvedShowStepper =
+    typeof showStepper === "boolean" ? showStepper && isCourseNavigationAllowed : isCourseNavigationAllowed;
+
+  const showCourseProgress = isCourseNavigationAllowed;
 
   const body = (
     <>
       {showPreviewBanner ? <PreviewBanner /> : null}
-      <ProgressBar />
       <div className="flex flex-col lg:flex-row lg:gap-6">
         {resolvedShowContentsSidebar ? (
           <div className="mb-3 flex items-center justify-between lg:hidden">
@@ -240,6 +245,27 @@ export default function NotesLayout(props) {
   );
 
   if (useAppShell) return body;
+
+  const breadcrumbs = [
+    { label: "Home", href: "/" },
+    resolvedSection ? { label: sectionLabelMap[resolvedSection] || "Course", href: `/${resolvedSection || ""}` } : null,
+    meta.title ? { label: meta.title } : null,
+  ].filter(Boolean);
+
+  if (isCourseNavigationAllowed) {
+    const Template = isCourseAssessment ? CourseAssessmentTemplate : isCourseOverview ? CourseOverviewTemplate : CourseLessonTemplate;
+    const wrapped = (
+      <Template breadcrumbs={breadcrumbs}>
+        {showCourseProgress ? <ProgressBar /> : null}
+        {body}
+      </Template>
+    );
+    return (
+      <Layout title={meta.title} description={meta.description}>
+        {wrapped}
+      </Layout>
+    );
+  }
 
   return (
     <Layout title={meta.title} description={meta.description}>

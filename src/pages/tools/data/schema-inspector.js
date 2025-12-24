@@ -1,6 +1,10 @@
 import Link from "next/link";
 import NotesLayout from "@/components/NotesLayout";
 
+export const getServerSideProps = async () => {
+  return { props: {} };
+};
+
 export default function SchemaInspectorWorkspace() {
   return (
     <NotesLayout

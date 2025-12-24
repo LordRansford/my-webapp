@@ -1,7 +1,16 @@
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { CheckCircle2 } from "lucide-react";
 
 export default function LessonNavigation({ courseSlug, lessons = [], active }) {
+  const [isCourseRoute, setIsCourseRoute] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const path = window.location?.pathname || "";
+    setIsCourseRoute(path.startsWith("/courses/"));
+  }, []);
+  if (!isCourseRoute) return null;
+
   return (
     <aside className="lesson-nav" aria-label="Course lessons">
       <p className="eyebrow">Lessons</p>

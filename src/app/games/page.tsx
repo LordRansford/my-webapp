@@ -2,6 +2,7 @@ import SwStatusPill from "./SwStatus.client";
 import DedicationBanner from "./DedicationBanner.client";
 import GamesCards from "./GamesCards.client";
 import LegacyGames from "./LegacyGames.client";
+import { GameHubTemplate } from "@/components/templates/PageTemplates";
 
 export const metadata = {
   title: "Games",
@@ -10,7 +11,7 @@ export const metadata = {
 
 export default function GamesHubPage() {
   return (
-    <div className="mx-auto w-full max-w-5xl p-6 space-y-6">
+    <GameHubTemplate>
       <header className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -25,7 +26,7 @@ export default function GamesHubPage() {
       <DedicationBanner />
       <GamesCards />
       <LegacyGames />
-    </div>
+    </GameHubTemplate>
   );
 }
 

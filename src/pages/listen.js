@@ -2,13 +2,14 @@
 
 import Layout from "@/components/Layout";
 import SpotifyMiniPlayer from "@/components/spotify/SpotifyMiniPlayer";
+import { StaticInfoTemplate } from "@/components/templates/PageTemplates";
 
 export default function ListenPage() {
   const embedUrl = process.env.NEXT_PUBLIC_SPOTIFY_EMBED_URL || "";
 
   return (
     <Layout title="Listen" description="Optional Spotify player for background study.">
-      <div className="page-content mx-auto max-w-3xl space-y-6">
+      <StaticInfoTemplate breadcrumbs={[{ label: "Home", href: "/" }, { label: "Listen" }]}>
         <header className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
           <p className="eyebrow">Player</p>
           <h1 className="text-3xl font-semibold text-slate-900">Listen while you learn</h1>
@@ -29,7 +30,7 @@ export default function ListenPage() {
 
         {/* Mounted globally too; including here ensures discoverability. */}
         <SpotifyMiniPlayer />
-      </div>
+      </StaticInfoTemplate>
     </Layout>
   );
 }

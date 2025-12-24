@@ -17,6 +17,10 @@ export const metadata = {
   description: "A recap of the cybersecurity notes with concise prompts to reinforce learning.",
 };
 
+export const getServerSideProps = async () => {
+  return { props: {} };
+};
+
 export default function CybersecuritySummaryPage() {
   const meta = {
     title: "Cybersecurity Notes – Summary",
