@@ -87,6 +87,7 @@ export async function POST(req: Request) {
       return NextResponse.json(
         {
           message: `${errorObj.message} ${errorObj.hint}`,
+          failureReason: "credits_insufficient",
           errorObj,
           metered: result.metered,
           remaining: result.balance,
