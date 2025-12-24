@@ -14,6 +14,8 @@ export type MentorMsg = {
   role: "user" | "mentor";
   content: string;
   answerFromSite?: string;
+  refusalReason?: { code: string; message: string } | null;
+  suggestedNextActions?: string[];
   citationsTitle?: string;
   citations?: MentorCitation[];
   sources?: MentorSource[];
@@ -210,6 +212,12 @@ export default function MentorAssistant({
                 .map((s: any) => ({ title: sanitizeText(s?.title, 140), href: sanitizeText(s?.href, 240), excerpt: sanitizeText(s?.excerpt, 240) }))
                 .filter((s: any) => s.title && s.href)
             : undefined,
+          refusalReason: data?.refusalReason && typeof data.refusalReason === "object"
+            ? { code: sanitizeText((data.refusalReason as any)?.code, 40), message: sanitizeText((data.refusalReason as any)?.message, 240) }
+            : null,
+          suggestedNextActions: Array.isArray(data?.suggestedNextActions)
+            ? data.suggestedNextActions.map((x: any) => sanitizeText(x, 160)).filter(Boolean).slice(0, 5)
+            : undefined,
           tryNext: data?.tryNext || null,
           lowConfidence: Boolean(data?.lowConfidence),
           receipt: data?.receipt || null,
@@ -260,6 +268,22 @@ export default function MentorAssistant({
               {msg.role === "mentor" ? <div className="mt-2 text-xs font-semibold text-slate-700">Answer from this site</div> : null}
               <div className="mt-1 whitespace-pre-wrap text-slate-900">{msg.content}</div>
               {msg.lowConfidence ? <p className="mt-2 text-xs text-amber-800">I might be wrong here. Please check the citations.</p> : null}
+              {msg.refusalReason?.message ? (
+                <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+                  <p className="m-0 font-semibold">Why I could not answer from the site</p>
+                  <p className="mt-1 m-0">{msg.refusalReason.message}</p>
+                </div>
+              ) : null}
+              {msg.suggestedNextActions && msg.suggestedNextActions.length ? (
+                <div className="mt-3">
+                  <div className="text-xs font-semibold text-slate-700">Suggested next actions</div>
+                  <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-800">
+                    {msg.suggestedNextActions.slice(0, 4).map((a) => (
+                      <li key={a}>{a}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
               {msg.sources && msg.sources.length ? (
                 <div className="mt-3">
                   <div className="text-xs font-semibold text-slate-700">Sources</div>

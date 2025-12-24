@@ -27,6 +27,8 @@ export type MentorResponse =
   | {
       answer: string;
       answerFromSite?: string;
+      refusalReason?: { code: string; message: string };
+      suggestedNextActions?: string[];
       citationsTitle: string;
       citations: { title: string; href: string; why: string }[];
       sources?: MentorSource[];
