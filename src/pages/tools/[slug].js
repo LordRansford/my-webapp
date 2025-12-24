@@ -2,9 +2,9 @@ import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote";
 import NotesLayout from "@/components/NotesLayout";
 import mdxComponents from "@/components/mdx-components";
-import { getAllToolPages, getToolPage } from "@/lib/tools-pages";
 
 export async function getServerSideProps({ params }) {
+  const { getToolPage } = await import("@/lib/tools-pages");
   const page = await getToolPage(params.slug);
   if (!page) return { notFound: true };
   return { props: { page } };
