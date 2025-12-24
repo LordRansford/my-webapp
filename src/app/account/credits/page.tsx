@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { MarketingPageTemplate } from "@/components/templates/PageTemplates";
 
 function fmtMs(ms: number) {
   const s = Math.max(0, Math.round(ms / 1000));
@@ -31,7 +32,7 @@ export default function CreditsWalletPage() {
   }, [data?.usage]);
 
   return (
-    <main className="mx-auto max-w-5xl px-4 py-12 md:px-6 lg:px-8">
+    <MarketingPageTemplate breadcrumbs={[{ label: "Home", href: "/" }, { label: "Pricing", href: "/pricing" }, { label: "Credits" }]}>
       <section className="space-y-3 rounded-3xl border border-slate-200 bg-white/90 p-8 shadow-sm backdrop-blur">
         <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Account</p>
         <h1 className="text-3xl font-semibold text-slate-900">Credits</h1>
@@ -101,7 +102,7 @@ export default function CreditsWalletPage() {
           )}
         </div>
       </section>
-    </main>
+    </MarketingPageTemplate>
   );
 }
 

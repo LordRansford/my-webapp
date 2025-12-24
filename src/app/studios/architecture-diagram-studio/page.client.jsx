@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { StudioLandingTemplate } from "@/components/templates/PageTemplates";
 
 export default function ArchitectureDiagramStudioClient() {
   return (
-    <main className="mx-auto max-w-6xl px-4 py-12 md:px-6 lg:px-8">
+    <StudioLandingTemplate breadcrumbs={[{ label: "Home", href: "/" }, { label: "Studios", href: "/studios" }, { label: "Architecture Diagram Studio" }]} backHref="/studios">
       <header className="space-y-3 rounded-3xl bg-gradient-to-br from-slate-50 via-sky-50/60 to-slate-50 p-8 shadow-sm ring-1 ring-slate-100">
         <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Studio</p>
         <h1 className="text-4xl font-semibold leading-tight text-slate-900">Architecture Diagram Studio</h1>
@@ -90,7 +91,7 @@ export default function ArchitectureDiagramStudioClient() {
           Back to studios
         </Link>
       </section>
-    </main>
+    </StudioLandingTemplate>
   );
 }
 

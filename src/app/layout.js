@@ -6,8 +6,7 @@ import { Providers } from "./providers";
 import AssistantsMount from "./AssistantsMount";
 import TestingModeBanner from "@/components/TestingModeBanner";
 import AppEnvBanner from "@/components/AppEnvBanner";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import AppShell from "@/components/navigation/AppShell";
 
 const display = Space_Grotesk({
   subsets: ["latin"],
@@ -55,13 +54,7 @@ export default function RootLayout({ children }) {
         <Providers>
           <AppEnvBanner />
           <TestingModeBanner />
-          <div className="app-shell">
-            <Header />
-            <main className="page-shell" role="main">
-              {children}
-            </main>
-            <Footer />
-          </div>
+          <AppShell>{children}</AppShell>
           <AssistantsMount />
         </Providers>
         <SpeedInsights />

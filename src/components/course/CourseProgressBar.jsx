@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useCPD } from "@/hooks/useCPD";
 import { getCompletionForCourse, resolveTrackId } from "@/lib/cpd";
 
@@ -13,13 +13,23 @@ const courseTitles = {
 };
 
 export default function CourseProgressBar({ courseId, manifest, courseTitle }) {
+  const [isCourseRoute, setIsCourseRoute] = useState(false);
   const { state } = useCPD();
   const trackId = resolveTrackId(courseId);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const path = window.location?.pathname || "";
+    setIsCourseRoute(path.startsWith("/courses/"));
+  }, []);
+
   const percent = useMemo(() => {
+    if (!isCourseRoute) return 0;
     const result = getCompletionForCourse(state, trackId, manifest || {});
     return result.percent;
-  }, [state, trackId, manifest]);
+  }, [state, trackId, manifest, isCourseRoute]);
+
+  if (!isCourseRoute) return null;
 
   const displayTitle = courseTitle || courseTitles[courseId] || "Course";
 

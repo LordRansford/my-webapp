@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Layout from "@/components/Layout";
+import { StaticInfoTemplate } from "@/components/templates/PageTemplates";
 
 export default function AccessibilityPage() {
   return (
@@ -7,15 +8,10 @@ export default function AccessibilityPage() {
       title="Accessibility - Ransford's Notes"
       description="How I aim to make Ransford's Notes usable by as many people as possible."
     >
-      <nav className="breadcrumb">
-        <Link href="/">Home</Link>
-        <span aria-hidden="true"> / </span>
-        <span>Accessibility</span>
-      </nav>
-
-      <header className="page-header">
-        <p className="eyebrow">Accessibility</p>
-        <h1>Accessibility Statement</h1>
+      <StaticInfoTemplate breadcrumbs={[{ label: "Home", href: "/" }, { label: "Accessibility" }]}>
+        <header className="page-header">
+          <p className="eyebrow">Accessibility</p>
+          <h1>Accessibility Statement</h1>
         <p className="lead">
           I want the site to work well for different devices, assistive technologies, and personal
           preferences.
@@ -71,6 +67,7 @@ export default function AccessibilityPage() {
           barriers and follow recognised guidelines as closely as possible.
         </p>
       </section>
+      </StaticInfoTemplate>
     </Layout>
   );
 }

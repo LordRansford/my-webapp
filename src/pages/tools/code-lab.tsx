@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { MarketingPageTemplate } from "@/components/templates/PageTemplates";
 
 type Lang = "js" | "py";
 
@@ -92,6 +93,26 @@ export default function CodeLabPage() {
     setCode(examples[idx].code);
   };
 
+  const reset = () => {
+    setCode(examples[exampleIdx].code);
+    setInput("");
+    setStdout("");
+    setStderr("");
+    setMeta(null);
+    setError(null);
+    setStatus("idle");
+    setJobId(null);
+    setBusy(false);
+  };
+
+  const copyCode = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+    } catch {
+      setError("Could not copy to clipboard. Please copy manually.");
+    }
+  };
+
   const run = async () => {
     setBusy(true);
     setError(null);
@@ -118,134 +139,173 @@ export default function CodeLabPage() {
   };
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-12 md:px-6 lg:px-8 space-y-8">
-      <header className="space-y-2">
-        <p className="text-xs font-semibold text-slate-600">Tools</p>
-        <h1 className="text-3xl font-semibold text-slate-900">Code Lab</h1>
-        <p className="text-slate-700">Run small snippets in a secure sandbox. No network. No filesystem. No OS shell access.</p>
-        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-800">
-          Runs in a secure sandbox with limits: 8 seconds, 128 MB, no network.
-        </div>
-      </header>
+    <MarketingPageTemplate breadcrumbs={[{ label: "Home", href: "/" }, { label: "Tools", href: "/tools" }, { label: "Code Lab" }]}>
+      <main className="mx-auto max-w-4xl px-4 py-12 md:px-6 lg:px-8 space-y-8">
+        <header className="space-y-2">
+          <p className="text-xs font-semibold text-slate-600">Tools</p>
+          <h1 className="text-3xl font-semibold text-slate-900">Code Lab</h1>
+          <p className="text-slate-700">Run small snippets in a secure sandbox. No network. No filesystem. No OS shell access.</p>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-800">
+            Runs in a secure sandbox with limits: 8 seconds, 128 MB, no network. JS runs in-browser; Python runs in a remote locked-down runner.
+          </div>
+        </header>
 
-      <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
-        <div className="flex flex-wrap gap-2">
-          <button
-            type="button"
-            onClick={() => setLang("js")}
-            className={`rounded-full px-4 py-2 text-sm font-semibold border ${
-              lang === "js" ? "bg-slate-900 text-white border-slate-900" : "bg-white text-slate-900 border-slate-300"
-            }`}
-          >
-            JavaScript
-          </button>
-          <button
-            type="button"
-            onClick={() => setLang("py")}
-            className={`rounded-full px-4 py-2 text-sm font-semibold border ${
-              lang === "py" ? "bg-slate-900 text-white border-slate-900" : "bg-white text-slate-900 border-slate-300"
-            }`}
-          >
-            Python
-          </button>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          {examples.map((ex, idx) => (
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+          <div className="flex flex-wrap gap-2">
             <button
-              key={ex.title}
               type="button"
-              onClick={() => setExample(idx)}
-              className={`rounded-full px-3 py-1 text-xs font-semibold border ${
-                exampleIdx === idx ? "bg-emerald-50 text-emerald-900 border-emerald-200" : "bg-white text-slate-700 border-slate-200"
+              onClick={() => setLang("js")}
+              className={`rounded-full px-4 py-2 text-sm font-semibold border ${
+                lang === "js" ? "bg-slate-900 text-white border-slate-900" : "bg-white text-slate-900 border-slate-300"
               }`}
             >
-              {ex.title}
+              JavaScript (runs in browser)
             </button>
-          ))}
-        </div>
-
-        <div className="grid gap-3 md:grid-cols-2">
-          <label className="space-y-1">
-            <span className="text-xs font-semibold text-slate-700">Code</span>
-            <textarea
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              rows={12}
-              className="w-full rounded-2xl border border-slate-200 bg-white p-3 font-mono text-sm text-slate-900"
-            />
-          </label>
-          <label className="space-y-1">
-            <span className="text-xs font-semibold text-slate-700">Input (optional)</span>
-            <textarea
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              rows={12}
-              className="w-full rounded-2xl border border-slate-200 bg-white p-3 font-mono text-sm text-slate-900"
-            />
-          </label>
-        </div>
-
-        {error ? <div className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-900">{error}</div> : null}
-
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <button
-            type="button"
-            onClick={run}
-            disabled={busy}
-            className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 disabled:bg-slate-300"
-          >
-            {busy ? "Running..." : "Run"}
-          </button>
-          <p className="text-xs text-slate-600">
-            Status: <span className="font-semibold">{status}</span> {jobId ? <span className="font-mono">({jobId})</span> : null}
-          </p>
-        </div>
-      </section>
-
-      <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
-        <div className="grid gap-3 md:grid-cols-2">
-          <div>
-            <h2 className="text-lg font-semibold text-slate-900">Stdout</h2>
-            <pre className="mt-2 min-h-[140px] overflow-auto rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-900 whitespace-pre-wrap">
-              {stdout || "No output yet."}
-            </pre>
+            <button
+              type="button"
+              onClick={() => setLang("py")}
+              className={`rounded-full px-4 py-2 text-sm font-semibold border ${
+                lang === "py" ? "bg-slate-900 text-white border-slate-900" : "bg-white text-slate-900 border-slate-300"
+              }`}
+            >
+              Python (sandboxed runner)
+            </button>
           </div>
-          <div>
-            <h2 className="text-lg font-semibold text-slate-900">Stderr</h2>
-            <pre className="mt-2 min-h-[140px] overflow-auto rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-900 whitespace-pre-wrap">
-              {stderr || "No errors."}
-            </pre>
+
+          <div className="flex flex-wrap gap-2">
+            {examples.map((ex, idx) => (
+              <button
+                key={ex.title}
+                type="button"
+                onClick={() => setExample(idx)}
+                className={`rounded-full px-3 py-1 text-xs font-semibold border ${
+                  exampleIdx === idx ? "bg-emerald-50 text-emerald-900 border-emerald-200" : "bg-white text-slate-700 border-slate-200"
+                }`}
+              >
+                {ex.title}
+              </button>
+            ))}
           </div>
+
+          <div className="grid gap-3 md:grid-cols-2">
+            <label className="space-y-1">
+              <span className="text-xs font-semibold text-slate-700">Code</span>
+              <textarea
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                rows={12}
+                className="w-full rounded-2xl border border-slate-200 bg-white p-3 font-mono text-sm text-slate-900"
+              />
+            </label>
+            <label className="space-y-1">
+              <span className="text-xs font-semibold text-slate-700">Input (optional)</span>
+              <textarea
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                rows={12}
+                className="w-full rounded-2xl border border-slate-200 bg-white p-3 font-mono text-sm text-slate-900"
+              />
+            </label>
+          </div>
+
+          {error ? <div className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-900">{error}</div> : null}
+
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={run}
+                disabled={busy}
+                className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 disabled:bg-slate-300"
+              >
+                {busy ? "Running..." : "Run"}
+              </button>
+              <button
+                type="button"
+                onClick={reset}
+                disabled={busy}
+                className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-50 disabled:bg-slate-200"
+              >
+                Reset
+              </button>
+              <button
+                type="button"
+                onClick={copyCode}
+                className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-50"
+              >
+                Copy
+              </button>
+            </div>
+            <p className="text-xs text-slate-600">
+              No network. No filesystem. CPU/Memory/Time limited. Python runs in remote sandbox; JS runs in-browser.
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 text-xs text-slate-700 space-y-1">
+            <p className="m-0 font-semibold text-slate-800">Status</p>
+            <p className="m-0">
+              {status === "idle"
+                ? "Idle"
+                : status === "creating"
+                  ? "Submitting job"
+                  : status === "queued"
+                    ? "Queued (waiting for runner)"
+                    : status === "running"
+                      ? "Running in sandbox"
+                      : status}
+            </p>
+            {meta ? (
+              <p className="m-0 text-slate-700">
+                Duration: {meta.durationMs} ms · Free tier: {meta.freeTierAppliedMs} ms · Charged credits: {meta.chargedCredits}
+              </p>
+            ) : null}
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+          <div className="grid gap-3 md:grid-cols-2">
+            <div>
+              <h2 className="text-lg font-semibold text-slate-900">Stdout</h2>
+              <pre className="mt-2 min-h-[140px] overflow-auto rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-900 whitespace-pre-wrap">
+                {stdout || "No output yet."}
+              </pre>
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-slate-900">Stderr</h2>
+              <pre className="mt-2 min-h-[140px] overflow-auto rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-900 whitespace-pre-wrap">
+                {stderr || "No errors."}
+              </pre>
+            </div>
+          </div>
+
+          {meta ? (
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
+                <p className="text-xs font-semibold text-slate-700">runtime (ms)</p>
+                <p className="mt-1 text-sm text-slate-900">{meta.durationMs}</p>
+              </div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
+                <p className="text-xs font-semibold text-slate-700">free tier applied (ms)</p>
+                <p className="mt-1 text-sm text-slate-900">{meta.freeTierAppliedMs}</p>
+              </div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
+                <p className="text-xs font-semibold text-slate-700">credits charged</p>
+                <p className="mt-1 text-sm text-slate-900">{meta.chargedCredits}</p>
+              </div>
+            </div>
+          ) : null}
+        </section>
+
+        <div className="flex items-center justify-between">
+          <Link href="/tools" className="text-sm font-semibold text-emerald-700 hover:underline">
+            Back to tools
+          </Link>
+          <Link href="/studios" className="text-sm font-semibold text-slate-700 hover:underline">
+            Go to studios
+          </Link>
         </div>
-
-        {meta ? (
-          <div className="grid gap-3 sm:grid-cols-3">
-            <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
-              <p className="text-xs font-semibold text-slate-700">runtime (ms)</p>
-              <p className="mt-1 text-sm text-slate-900">{meta.durationMs}</p>
-            </div>
-            <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
-              <p className="text-xs font-semibold text-slate-700">free tier applied (ms)</p>
-              <p className="mt-1 text-sm text-slate-900">{meta.freeTierAppliedMs}</p>
-            </div>
-            <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
-              <p className="text-xs font-semibold text-slate-700">credits charged</p>
-              <p className="mt-1 text-sm text-slate-900">{meta.chargedCredits}</p>
-            </div>
-          </div>
-        ) : null}
-      </section>
-
-      <div className="flex items-center justify-between">
-        <Link href="/tools" className="text-sm font-semibold text-emerald-700 hover:underline">
-          Back to tools
-        </Link>
-        <Link href="/studios" className="text-sm font-semibold text-slate-700 hover:underline">
-          Go to studios
-        </Link>
-      </div>
-    </main>
+      </main>
+    </MarketingPageTemplate>
   );
 }
 

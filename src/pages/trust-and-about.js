@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import { StaticInfoTemplate } from "@/components/templates/PageTemplates";
 
 export default function TrustAndAbout() {
   return (
@@ -6,7 +7,7 @@ export default function TrustAndAbout() {
       title="Trust and About Ransford"
       description="Who I am, why I built Ransford's Notes, and how I try to keep it accurate, safe, and useful."
     >
-      <main className="page">
+      <StaticInfoTemplate breadcrumbs={[{ label: "Home", href: "/" }, { label: "Trust and About" }]}>
         <header className="page-header">
           <p className="eyebrow">Ransford&apos;s Notes</p>
           <h1>Trust and About Ransford</h1>
@@ -106,7 +107,7 @@ export default function TrustAndAbout() {
             the footer or the security contact if your concern relates to a potential vulnerability.
           </p>
         </section>
-      </main>
+      </StaticInfoTemplate>
     </Layout>
   );
 }

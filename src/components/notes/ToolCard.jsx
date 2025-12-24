@@ -42,6 +42,7 @@ export default function ToolCard({
   id,
   title,
   description,
+  usageHint,
   children,
   href,
   icon: Icon,
@@ -113,6 +114,9 @@ export default function ToolCard({
             <div className="min-w-0">
               <h3 className="mb-2 text-lg font-semibold text-slate-900 break-words">{title}</h3>
               {description ? <p className="text-sm leading-relaxed text-slate-600 break-words">{description}</p> : null}
+              <p className="mt-1 text-xs font-semibold text-slate-700">
+                {usageHint || "How to use: open the tool, follow the inputs, and run with limits shown."}
+              </p>
             </div>
           </div>
           {showCta ? (

@@ -8,6 +8,7 @@ import { ARCHITECTURE_TEMPLATES, getArchitectureTemplate } from "@/lib/architect
 import { validateArchitectureDiagramInput } from "@/lib/architecture-diagrams/validate";
 import { generateDiagramPack } from "@/lib/architecture-diagrams/generate/pack";
 import { emitArchitectureTelemetry, durationBucketFrom } from "@/lib/architecture-diagrams/telemetry/client";
+import { StudioToolTemplate, StudioResultsTemplate } from "@/components/templates/PageTemplates";
 
 export default function TemplatesGalleryClient() {
   const [previewId, setPreviewId] = useState(null);
@@ -15,7 +16,15 @@ export default function TemplatesGalleryClient() {
   const [status, setStatus] = useState("");
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-12 md:px-6 lg:px-8 space-y-6">
+    <StudioToolTemplate
+      backHref="/studios/architecture-diagram-studio"
+      breadcrumbs={[
+        { label: "Home", href: "/" },
+        { label: "Studios", href: "/studios" },
+        { label: "Architecture Diagram Studio", href: "/studios/architecture-diagram-studio" },
+        { label: "Templates" },
+      ]}
+    >
       <header className="space-y-3 rounded-3xl bg-gradient-to-br from-slate-50 via-sky-50/60 to-slate-50 p-8 shadow-sm ring-1 ring-slate-100">
         <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Architecture Diagram Studio</p>
         <h1 className="text-4xl font-semibold leading-tight text-slate-900">Templates</h1>
@@ -94,15 +103,26 @@ export default function TemplatesGalleryClient() {
 
       <section id="template-preview" className="pt-2">
         {previewPack ? (
-          <div className="space-y-3">
-            <div className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Preview</p>
-              <p className="mt-2 text-sm text-slate-700">
-                These diagrams are generated drafts. Review before using in decisions.
-              </p>
+          <StudioResultsTemplate
+            breadcrumbs={[
+              { label: "Home", href: "/" },
+              { label: "Studios", href: "/studios" },
+              { label: "Architecture Diagram Studio", href: "/studios/architecture-diagram-studio" },
+              { label: "Templates" },
+              { label: "Preview" },
+            ]}
+            backHref="/studios/architecture-diagram-studio/templates"
+          >
+            <div className="space-y-3">
+              <div className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Preview</p>
+                <p className="mt-2 text-sm text-slate-700">
+                  These diagrams are generated drafts. Review before using in decisions.
+                </p>
+              </div>
+              <DiagramPackViewer pack={previewPack} />
             </div>
-            <DiagramPackViewer pack={previewPack} />
-          </div>
+          </StudioResultsTemplate>
         ) : previewId ? (
           <div className="rounded-3xl border border-rose-200 bg-rose-50 p-5 text-sm text-rose-900 shadow-sm">
             <p className="font-semibold">Preview not available</p>
@@ -110,7 +130,7 @@ export default function TemplatesGalleryClient() {
           </div>
         ) : null}
       </section>
-    </main>
+    </StudioToolTemplate>
   );
 }
 

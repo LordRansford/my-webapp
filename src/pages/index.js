@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Layout from "@/components/Layout";
+import { MarketingPageTemplate } from "@/components/templates/PageTemplates";
 import {
   Shield,
   Brain,
@@ -73,6 +74,7 @@ export default function Home() {
       title="Ransford's Notes · Labs first"
       description="Browser-first labs for security, architecture, and AI. Practical, calm, and built for learning by doing."
     >
+      <MarketingPageTemplate>
       {/* 1) Hero section */}
       <section className="mx-auto max-w-6xl px-4 pt-12 md:px-6 lg:px-8">
         <div className="grid gap-8 rounded-3xl bg-gradient-to-r from-slate-50 via-sky-50/60 to-slate-50 p-8 shadow-sm ring-1 ring-slate-100 md:grid-cols-2 md:items-center">
@@ -256,6 +258,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      </MarketingPageTemplate>
     </Layout>
   );
 }

@@ -1,9 +1,10 @@
 import Layout from "@/components/Layout";
+import { StaticInfoTemplate } from "@/components/templates/PageTemplates";
 
 export default function PrivacyPage() {
   return (
     <Layout title="Privacy" description="How Ransford's Notes handles your data and respects your privacy.">
-      <main className="page">
+      <StaticInfoTemplate breadcrumbs={[{ label: "Home", href: "/" }, { label: "Privacy" }]}>
         <header className="page-header">
           <p className="eyebrow">Ransford&apos;s Notes</p>
           <h1>Privacy</h1>
@@ -83,7 +84,7 @@ export default function PrivacyPage() {
             footer to get in touch.
           </p>
         </section>
-      </main>
+      </StaticInfoTemplate>
     </Layout>
   );
 }

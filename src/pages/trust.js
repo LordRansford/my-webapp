@@ -1,9 +1,10 @@
 import Layout from "@/components/Layout";
+import { StaticInfoTemplate } from "@/components/templates/PageTemplates";
 
 export default function TrustPage() {
   return (
     <Layout title="Trust - Ransford's Notes" description="How this platform stays accurate, transparent, and learner-safe.">
-      <main className="page">
+      <StaticInfoTemplate breadcrumbs={[{ label: "Home", href: "/" }, { label: "Trust" }]}>
         <header className="page-header">
           <p className="eyebrow">Trust</p>
           <h1>Why you can rely on this platform</h1>
@@ -46,7 +47,7 @@ export default function TrustPage() {
             you build intuition before applying ideas in production with your own controls and reviews.
           </p>
         </section>
-      </main>
+      </StaticInfoTemplate>
     </Layout>
   );
 }

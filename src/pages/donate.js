@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Layout from "@/components/Layout";
+import { StaticInfoTemplate } from "@/components/templates/PageTemplates";
 
 export default function DonatePage() {
   return (
@@ -7,20 +8,15 @@ export default function DonatePage() {
       title="Donate - Ransford's Notes"
       description="Support the continued creation of secure, hands-on learning resources."
     >
-      <nav className="breadcrumb">
-        <Link href="/">Home</Link>
-        <span aria-hidden="true"> / </span>
-        <span>Donate</span>
-      </nav>
-
-      <header className="page-header">
-        <p className="eyebrow">Support</p>
-        <h1>Help keep the labs online</h1>
-        <p className="lead">
-          Your support covers hosting, new interactive labs, and time to publish deeper security, architecture,
-          and AI content. Every contribution keeps the site independent and focused on learners.
-        </p>
-      </header>
+      <StaticInfoTemplate breadcrumbs={[{ label: "Home", href: "/" }, { label: "Donate" }]}>
+        <header className="page-header">
+          <p className="eyebrow">Support</p>
+          <h1>Help keep the labs online</h1>
+          <p className="lead">
+            Your support covers hosting, new interactive labs, and time to publish deeper security, architecture,
+            and AI content. Every contribution keeps the site independent and focused on learners.
+          </p>
+        </header>
 
       <section className="section">
         <h2>Ways to support</h2>
@@ -41,6 +37,7 @@ export default function DonatePage() {
           Contact to donate
         </Link>
       </section>
+      </StaticInfoTemplate>
     </Layout>
   );
 }

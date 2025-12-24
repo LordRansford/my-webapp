@@ -4,14 +4,7 @@ import NotesLayout from "@/components/NotesLayout";
 import mdxComponents from "@/components/mdx-components";
 import { getAllToolPages, getToolPage } from "@/lib/tools-pages";
 
-export async function getStaticPaths() {
-  const pages = getAllToolPages();
-  const paths = pages.map((page) => ({ params: { slug: page.slug } }));
-
-  return { paths, fallback: false };
-}
-
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
   const page = await getToolPage(params.slug);
   if (!page) return { notFound: true };
   return { props: { page } };
