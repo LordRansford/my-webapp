@@ -5,11 +5,11 @@
    - Avoid caching auth/session pages
 */
 
-const VERSION = "rn-games-sw-v1";
+const VERSION = "rn-games-sw-v3";
 const STATIC_CACHE = `${VERSION}:static`;
 const PAGES_CACHE = `${VERSION}:pages`;
 
-const PRECACHE_URLS = ["/games", "/games/offline"];
+const PRECACHE_URLS = ["/games", "/games/daily", "/games/dev-room", "/games/offline", "/games/pulse-runner", "/games/skyline-drift", "/games/vault-circuit"];
 
 function isApi(url) {
   return url.pathname.startsWith("/api/");
