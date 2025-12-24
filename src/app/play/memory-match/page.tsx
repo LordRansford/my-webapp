@@ -163,6 +163,7 @@ export default function MemoryMatchPage() {
         section: "ai",
       }}
       activeLevelId="summary"
+      useAppShell
     >
       <GameShell
         title="Memory match"

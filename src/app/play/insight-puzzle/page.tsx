@@ -149,6 +149,7 @@ export default function InsightPuzzlePage() {
         section: "ai",
       }}
       activeLevelId="summary"
+      useAppShell
     >
       <GameShell
         title="Insight puzzle"

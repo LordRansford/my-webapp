@@ -179,6 +179,7 @@ export default function CodeReadingLitePage() {
         section: "ai",
       }}
       activeLevelId="summary"
+      useAppShell
     >
       <GameShell
         title="Code reading lite"

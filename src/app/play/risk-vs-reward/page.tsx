@@ -114,6 +114,7 @@ export default function RiskVsRewardPage() {
         section: "ai",
       }}
       activeLevelId="summary"
+      useAppShell
     >
       <GameShell
         title="Risk vs reward"

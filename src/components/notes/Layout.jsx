@@ -17,9 +17,9 @@ import ReadAloudControls from "@/components/a11y/ReadAloudControls";
 
 const AssistantShell = dynamic(() => import("@/components/assistants/AssistantShell"), { ssr: false });
 
-/** @param {{ meta?: any, headings?: any[], children: any, activeLevelId?: any, showContentsSidebar?: boolean, showStepper?: boolean }} props */
+/** @param {{ meta?: any, headings?: any[], children: any, activeLevelId?: any, showContentsSidebar?: boolean, showStepper?: boolean, useAppShell?: boolean }} props */
 export default function NotesLayout(props) {
-  const { meta = {}, headings = [], children, activeLevelId, showContentsSidebar, showStepper } = props;
+  const { meta = {}, headings = [], children, activeLevelId, showContentsSidebar, showStepper, useAppShell } = props;
   const [activeId, setActiveId] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -160,8 +160,8 @@ export default function NotesLayout(props) {
 
   const resolvedShowStepper = typeof showStepper === "boolean" ? showStepper : isCourseLearningPage;
 
-  return (
-    <Layout title={meta.title} description={meta.description}>
+  const body = (
+    <>
       {showPreviewBanner ? <PreviewBanner /> : null}
       <ProgressBar />
       <div className="flex flex-col lg:flex-row lg:gap-6">
@@ -236,6 +236,14 @@ export default function NotesLayout(props) {
           {showFeedbackPanel ? <FeedbackPanel /> : null}
         </main>
       </div>
+    </>
+  );
+
+  if (useAppShell) return body;
+
+  return (
+    <Layout title={meta.title} description={meta.description}>
+      {body}
     </Layout>
   );
 }

@@ -165,6 +165,7 @@ export default function TimePressureMathPage() {
         section: "ai",
       }}
       activeLevelId="summary"
+      useAppShell
     >
       <GameShell
         title="Time pressure math"

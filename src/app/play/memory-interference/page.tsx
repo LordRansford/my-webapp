@@ -155,6 +155,7 @@ export default function MemoryInterferencePage() {
         section: "ai",
       }}
       activeLevelId="summary"
+      useAppShell
     >
       <GameShell
         title="Memory interference test"

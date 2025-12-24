@@ -15,6 +15,7 @@ export default function PlayPage() {
         section: "ai",
       }}
       activeLevelId="summary"
+      useAppShell
     >
       <div className="space-y-8">
         <header className="space-y-2">

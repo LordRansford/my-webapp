@@ -150,6 +150,7 @@ export default function PatternRecallPage() {
         section: "ai",
       }}
       activeLevelId="summary"
+      useAppShell
     >
       <GameShell
         title="Pattern recall"

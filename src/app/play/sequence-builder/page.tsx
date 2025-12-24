@@ -165,6 +165,7 @@ export default function SequenceBuilderPage() {
         section: "ai",
       }}
       activeLevelId="summary"
+      useAppShell
     >
       <GameShell
         title="Sequence builder"

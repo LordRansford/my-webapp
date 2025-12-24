@@ -123,6 +123,7 @@ export default function NumberEstimationPage() {
         section: "ai",
       }}
       activeLevelId="summary"
+      useAppShell
     >
       <GameShell
         title="Number estimation"

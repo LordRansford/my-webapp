@@ -84,6 +84,64 @@
   .bg-white {
     background-color: var(--surface) !important;
   }
+
+  /* Some components use opacity variants like bg-white/90. Avoid targeting the slash class directly. */
+  [class*="bg-white/"] {
+    background-color: var(--surface) !important;
+  }
+}
+
+/* Many sites use class-based dark mode (html.dark). Mirror the token overrides to fix black-on-black in that mode too. */
+html.dark {
+  color-scheme: dark;
+  --bg: #0b1220;
+  --bg-soft: #0f172a;
+  --surface: #0f172a;
+  --surface-2: #111c33;
+  --card: #0f172a;
+  --text-body: #e5e7eb;
+  --text-muted: #a8b3c7;
+  --text-heading: #f3f4f6;
+  --text-callout: #eef2ff;
+  --line: rgba(148, 163, 184, 0.22);
+  --shadow: 0 18px 50px rgba(0, 0, 0, 0.5);
+}
+
+html.dark body {
+  background: radial-gradient(circle at 20% 10%, rgba(59, 130, 246, 0.12), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(16, 185, 129, 0.08), transparent 45%),
+    linear-gradient(180deg, #060b16 0%, #0b1220 100%);
+  color: var(--text-body);
+}
+
+html.dark .site-header {
+  background: rgba(15, 23, 42, 0.78);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+html.dark .site-footer {
+  background: #0b1220;
+}
+
+html.dark .pill {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+html.dark .text-gray-900,
+html.dark .text-slate-900,
+html.dark .text-slate-800,
+html.dark .text-black {
+  color: var(--text-body) !important;
+}
+html.dark .text-gray-800,
+html.dark .text-gray-700,
+html.dark .text-slate-700,
+html.dark .text-slate-600 {
+  color: var(--text-muted) !important;
+}
+html.dark .bg-white,
+html.dark [class*="bg-white/"] {
+  background-color: var(--surface) !important;
 }
 
 body {

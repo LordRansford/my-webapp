@@ -161,6 +161,7 @@ export default function TowerOfLogicPage() {
         section: "ai",
       }}
       activeLevelId="summary"
+      useAppShell
     >
       <GameShell
         title="Tower of logic"
