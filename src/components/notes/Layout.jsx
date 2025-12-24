@@ -19,7 +19,7 @@ const AssistantShell = dynamic(() => import("@/components/assistants/AssistantSh
 
 /** @param {{ meta?: any, headings?: any[], children: any, activeLevelId?: any, showContentsSidebar?: boolean, showStepper?: boolean }} props */
 export default function NotesLayout(props) {
-  const { meta = {}, headings = [], children, activeLevelId, showContentsSidebar, showStepper = true } = props;
+  const { meta = {}, headings = [], children, activeLevelId, showContentsSidebar, showStepper } = props;
   const [activeId, setActiveId] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -145,10 +145,20 @@ export default function NotesLayout(props) {
     slug.startsWith("/software-architecture") ||
     slug.startsWith("/digitalisation");
 
+  const isCourseLearningPage =
+    isNotesStyleRoute &&
+    (slug.includes("/beginner") ||
+      slug.includes("/foundations") ||
+      slug.includes("/intermediate") ||
+      slug.includes("/advanced") ||
+      slug.endsWith("/summary"));
+
   const resolvedShowContentsSidebar =
     typeof showContentsSidebar === "boolean"
       ? showContentsSidebar
       : isNotesStyleRoute && Array.isArray(headings) && headings.length > 0;
+
+  const resolvedShowStepper = typeof showStepper === "boolean" ? showStepper : isCourseLearningPage;
 
   return (
     <Layout title={meta.title} description={meta.description}>
@@ -201,7 +211,7 @@ export default function NotesLayout(props) {
               {showReadAloud ? <ReadAloudControls selector="main article" label="Listen" /> : null}
             </div>
             <div className="mt-4">
-              {showStepper ? (
+              {resolvedShowStepper ? (
                 <NotesStepper
                   items={stepperItems}
                   activeLevelId={resolvedSection === "cybersecurity" ? activeLevelId : undefined}
