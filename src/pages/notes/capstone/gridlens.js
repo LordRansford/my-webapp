@@ -33,7 +33,12 @@ export default function Page({ source, headings, meta }) {
 
 export async function getStaticProps() {
   const { source, headings, meta } = await loadNote("capstone/gridlens.mdx");
-  return { props: { source, headings, meta } };
+  // Avoid Next.js serialization errors: omit undefined values.
+  const safeMeta = {
+    title: meta?.title || "",
+    description: meta?.description || "",
+  };
+  return { props: { source, headings, meta: safeMeta } };
 }
 
 
