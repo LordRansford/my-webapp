@@ -67,6 +67,25 @@
   .pill {
     background: rgba(255, 255, 255, 0.06);
   }
+
+  /* Guardrail: many components use light-mode utility colors (e.g. text-gray-900).
+     In dark mode these can become unreadable (black-on-black). Override to tokens. */
+  .text-gray-900,
+  .text-slate-900,
+  .text-slate-800 {
+    color: var(--text-body) !important;
+  }
+  .text-gray-800,
+  .text-gray-700,
+  .text-slate-700,
+  .text-slate-600 {
+    color: var(--text-muted) !important;
+  }
+  .bg-white,
+  .bg-white\\/90,
+  .bg-white\\/95 {
+    background-color: var(--surface) !important;
+  }
 }
 
 body {
