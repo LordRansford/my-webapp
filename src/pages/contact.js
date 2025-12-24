@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Layout from "@/components/Layout";
+import Link from "next/link";
 
 export default function ContactPage() {
   const [status, setStatus] = useState("idle");
@@ -154,9 +155,9 @@ export default function ContactPage() {
         <ul className="list">
           <li>
             <strong>WhatsApp:</strong>{" "}
-            <a className="text-link" href="/api/contact/whatsapp">
+            <Link className="text-link" href="/api/contact/whatsapp">
               Start a chat
-            </a>
+            </Link>
           </li>
           <li>
             <strong>GitHub:</strong>{" "}
