@@ -26,7 +26,9 @@ export type MentorResponse =
   | { message: string }
   | {
       answer: string;
+      answerMode?: "site-grounded" | "general-guidance" | "mixed";
       answerFromSite?: string;
+      citationsV2?: Array<{ title: string; urlOrPath: string; anchorOrHeading?: string }>;
       refusalReason?: { code: string; message: string };
       suggestedNextActions?: string[];
       citationsTitle: string;

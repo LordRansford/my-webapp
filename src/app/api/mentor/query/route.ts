@@ -27,6 +27,24 @@ function normalise(text: string) {
   return String(text || "").toLowerCase().replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
 }
 
+function buildGeneralDefinition(question: string) {
+  const q = normalise(question);
+  if (q.includes("digitalisation") || q.includes("digitalization")) {
+    return (
+      "Digitalisation is the practical use of digital technology to improve how an organisation works and delivers outcomes. " +
+      "It combines process change, data, and software so work is faster, safer, and easier to measure. " +
+      "Examples include digitising a paper workflow, automating approvals, improving reporting, or building self-service services."
+    );
+  }
+  if (q.includes("risk appetite")) {
+    return (
+      "Risk appetite is the amount and type of risk an organisation is willing to accept to achieve its goals. " +
+      "It sets boundaries for decisions (what is acceptable vs not) and helps teams choose controls, budgets, and trade-offs consistently."
+    );
+  }
+  return null;
+}
+
 function bestExcerptFromContext(query: string, ctx: PageContext | null) {
   const pageText = clampText(ctx?.text, 8000);
   if (pageText.length < 200) return null;
@@ -118,18 +136,23 @@ export async function POST(req: Request) {
 
         const { matches, weak } = retrieveContent(safe.cleaned, pageUrl || ctx?.pathname || null, 6);
         if (!matches.length && !pageHit) {
-          // Do not hard-refuse in normal cases. Provide brief general guidance and explain what was searched.
+          const general = buildGeneralDefinition(safe.cleaned);
+          const fallbacks = retrieveContent(safe.cleaned, null, 5).matches;
           const payload: any = {
-            answer: "I could not find an exact match in the site content.",
-            refusalReason: { code: "NO_MATCH", message: "No matching sections were found for this query in the current page context or the site index." },
+            answer:
+              general ||
+              "I could not find an exact match in the site content. General guidance: reduce the question to one concrete term, then use the closest page links below.",
+            answerMode: general ? "general-guidance" : "general-guidance",
+            citationsV2: fallbacks.slice(0, 5).map((c) => ({ title: c.pageTitle || c.title, urlOrPath: c.pageRoute || c.href, anchorOrHeading: c.title })),
+            refusalReason: { code: "NO_MATCH", message: "I could not find an exact section match for this question in the site index." },
             suggestedNextActions: [
-              "Try one keyword from a heading, then ask again.",
-              "Tell me the exact section heading you are reading and what sentence is confusing.",
-              "Ask a smaller question about one concept at a time.",
+              "Try one keyword from a page heading, then ask again.",
+              "Tell me which lab or page you are on and what you clicked.",
+              "If this is an upload issue: confirm file type, file size, and try selecting a different filename once.",
             ],
-            citationsTitle: "Best match sections",
-            citations: [],
-            sources: [],
+            citationsTitle: fallbacks.length ? "Where to read next on this site" : "Best match sections",
+            citations: fallbacks.slice(0, 5).map((c) => ({ title: c.title, href: c.href, why: c.why })),
+            sources: fallbacks.slice(0, 3).map((c) => ({ title: c.pageTitle || c.title, href: c.href, excerpt: c.why })),
             tryNext: null,
             note: "No matching sections were found for this query in the current page context or the site index.",
             lowConfidence: true,
@@ -155,6 +178,8 @@ export async function POST(req: Request) {
 
         const payload: MentorApiResponse = {
           answer: lowConfidence ? "I might be missing context. The closest matches are below." : answerFromSite,
+          answerMode: "site-grounded",
+          citationsV2: matches.slice(0, 5).map((m) => ({ title: m.title, urlOrPath: m.pageRoute || m.href, anchorOrHeading: m.title })),
           answerFromSite,
           citationsTitle: "Where this is covered on the site",
           citations: matches.slice(0, 5).map((m) => ({ title: m.title, href: m.href, why: m.why })),

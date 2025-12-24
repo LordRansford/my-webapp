@@ -43,6 +43,40 @@ function normalise(text: string) {
   return String(text || "").toLowerCase().replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
 }
 
+const STOPWORDS = new Set([
+  "a",
+  "an",
+  "and",
+  "are",
+  "as",
+  "at",
+  "be",
+  "by",
+  "can",
+  "do",
+  "does",
+  "for",
+  "from",
+  "how",
+  "i",
+  "in",
+  "is",
+  "it",
+  "of",
+  "on",
+  "or",
+  "the",
+  "this",
+  "to",
+  "what",
+  "when",
+  "where",
+  "why",
+  "with",
+  "you",
+  "your",
+]);
+
 function scoreSection(terms: string[], section: ContentSection, pageBoost: number) {
   const hay = `${section.title} ${section.excerpt}`.toLowerCase();
   let score = 0;
@@ -58,7 +92,11 @@ function scoreSection(terms: string[], section: ContentSection, pageBoost: numbe
 
 export function retrieveContent(question: string, currentRoute: string | null, limit = 6) {
   const q = normalise(question);
-  const terms = q.split(" ").filter(Boolean).slice(0, 12);
+  const terms = q
+    .split(" ")
+    .filter(Boolean)
+    .filter((t) => t.length >= 3 && !STOPWORDS.has(t))
+    .slice(0, 12);
   if (!terms.length) return { matches: [] as Citation[], weak: true };
 
   const idx = loadIndex();
