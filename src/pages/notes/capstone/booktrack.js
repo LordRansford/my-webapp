@@ -33,7 +33,11 @@ export default function Page({ source, headings, meta }) {
 
 export async function getStaticProps() {
   const { source, headings, meta } = await loadNote("capstone/booktrack.mdx");
-  return { props: { source, headings, meta } };
+  const safeMeta = {
+    title: meta?.title || "",
+    description: meta?.description || "",
+  };
+  return { props: { source, headings, meta: safeMeta } };
 }
 
 
