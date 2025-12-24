@@ -25,6 +25,21 @@ export default function PlayPage() {
           </p>
         </header>
 
+        <section className="rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">New</p>
+              <h2 className="mt-2 text-lg font-semibold text-slate-900">Games</h2>
+              <p className="mt-1 text-sm text-slate-700">
+                The full games collection is now in the dedicated Games area.
+              </p>
+            </div>
+            <Link className="button primary" href="/games">
+              Go to Games
+            </Link>
+          </div>
+        </section>
+
         <div className="grid gap-6">
           {PLAY_CATEGORIES.map((cat) => {
             const games = PLAY_GAMES.filter((g) => g.category === cat.id);
