@@ -59,6 +59,7 @@ export default function SpeechLabPage() {
   const [clipDuration, setClipDuration] = useState(0);
   const [recording, setRecording] = useState(false);
   const [recorderSupported, setRecorderSupported] = useState(false);
+  const [micError, setMicError] = useState("");
   const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
   const [recordTimer, setRecordTimer] = useState(0);
@@ -79,7 +80,12 @@ export default function SpeechLabPage() {
   }, []);
 
   const startRecording = async () => {
+    setMicError("");
     if (!recorderSupported) return;
+    if (typeof window !== "undefined" && window.isSecureContext === false) {
+      setMicError("Microphone access requires HTTPS. Use upload instead, or open this page on https://.");
+      return;
+    }
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mr = new MediaRecorder(stream);
@@ -99,7 +105,7 @@ export default function SpeechLabPage() {
       setRecordTimer(0);
       timerRef.current = setInterval(() => setRecordTimer((t) => t + 1), 1000);
     } catch (err) {
-      setRecorderSupported(false);
+      setMicError("Microphone permission was blocked. Allow mic access in your browser site settings, or upload an audio file instead.");
     }
   };
 
@@ -219,6 +225,7 @@ export default function SpeechLabPage() {
             {!recorderSupported && (
               <p className="text-xs text-amber-700">Browser recording is unavailable. Upload a small wav or mp3 instead.</p>
             )}
+            {micError ? <p className="text-xs text-amber-700">{micError}</p> : null}
           </div>
           <div className="space-y-3 rounded-2xl border border-slate-100 bg-slate-50/60 p-4">
             <div className="flex items-center gap-2">
@@ -274,14 +281,14 @@ export default function SpeechLabPage() {
         {!currentClip && <p className="text-sm text-slate-600">Record or upload a clip first.</p>}
         {segments.length > 0 && (
           <div className="space-y-3">
-            <div className="rounded-2xl border border-slate-100 bg-slate-50/60 p-3 text-sm text-slate-800 space-y-1">
+            <div className="rounded-2xl border border-slate-100 bg-slate-50/60 p-3 text-sm text-slate-800 space-y-1 overflow-x-auto">
               {segments.map((s, idx) => (
                 <div key={idx} className="flex items-start gap-2">
                   <span className="text-xs text-slate-700 min-w-[110px]">
                     [{formatTime(s.start)} - {formatTime(s.end)}]
                   </span>
                   <span
-                    className="rounded-lg px-2 py-1"
+                    className="rounded-lg px-2 py-1 break-words"
                     style={{ backgroundColor: `rgba(16,185,129,${(s.confidence || 0.7) * 0.25})` }}
                   >
                     {s.text}
@@ -294,11 +301,11 @@ export default function SpeechLabPage() {
             </div>
             <div className="space-y-2">
               <p className="text-xs font-semibold text-slate-900">Timeline</p>
-              <div className="relative h-10 rounded-xl bg-slate-100">
+              <div className="relative h-10 rounded-xl bg-slate-100 overflow-hidden">
                 {segments.map((s, idx) => {
                   const total = clipDuration || 1;
-                  const left = (s.start / total) * 100;
-                  const width = Math.max(2, ((s.end - s.start) / total) * 100);
+                  const left = Math.max(0, Math.min(98, (s.start / total) * 100));
+                  const width = Math.max(2, Math.min(100 - left, ((s.end - s.start) / total) * 100));
                   return (
                     <button
                       key={idx}
