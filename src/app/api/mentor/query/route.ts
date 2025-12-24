@@ -120,8 +120,13 @@ export async function POST(req: Request) {
         if (!matches.length && !pageHit) {
           // Do not hard-refuse in normal cases. Provide brief general guidance and explain what was searched.
           const payload: any = {
-            answer:
-              "I could not find an exact match in the site content. General guidance: break your question into one specific term, then look for it in headings or the table of contents. If you share the exact heading you are stuck on, I can map it to the right section.",
+            answer: "I could not find an exact match in the site content.",
+            refusalReason: { code: "NO_MATCH", message: "No matching sections were found for this query in the current page context or the site index." },
+            suggestedNextActions: [
+              "Try one keyword from a heading, then ask again.",
+              "Tell me the exact section heading you are reading and what sentence is confusing.",
+              "Ask a smaller question about one concept at a time.",
+            ],
             citationsTitle: "Best match sections",
             citations: [],
             sources: [],
