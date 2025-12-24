@@ -11,6 +11,7 @@ export type InputState = {
   moveY: number;
   // discrete actions
   pausePressed: boolean;
+  actionPressed: boolean;
 };
 
 export type GameContext = {
@@ -31,5 +32,20 @@ export interface GameScene {
   render(ctx: GameContext): void;
   dispose(): void;
 }
+
+export type GameSignals = {
+  // 0..1 difficulty/intensity (tempo/energy)
+  intensity?: number;
+  // 0..1 danger/near-failure
+  tension?: number;
+  // emit brief cue
+  milestone?: boolean;
+  // emit soft decay
+  fail?: boolean;
+};
+
+export type GameSceneWithSignals = GameScene & {
+  getSignals?: () => GameSignals;
+};
 
 

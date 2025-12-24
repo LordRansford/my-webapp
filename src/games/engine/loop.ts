@@ -1,4 +1,4 @@
-import type { GameContext, GameScene, GameSettings, InputState } from "./types";
+import type { GameContext, GameScene, GameSceneWithSignals, GameSettings, InputState } from "./types";
 
 export type LoopHandle = {
   start: () => void;
@@ -16,6 +16,8 @@ export function createFixedTimestepLoop(opts: {
   getInput: () => InputState;
   getSettings: () => GameSettings;
   onFrameEnd?: () => void;
+  onStep?: (ctx: GameContext) => void;
+  onRender?: (ctx: GameContext) => void;
 }): LoopHandle {
   const dtMs = 1000 / 60;
   const maxFrameMs = 1000 / 10;
@@ -62,6 +64,7 @@ export function createFixedTimestepLoop(opts: {
         input,
         settings,
       };
+      opts.onStep?.(ctx);
       opts.scene.update(ctx);
       acc -= dtMs;
       steps += 1;
@@ -78,6 +81,7 @@ export function createFixedTimestepLoop(opts: {
       input,
       settings,
     };
+    opts.onRender?.(renderCtx);
     opts.scene.render(renderCtx);
     opts.onFrameEnd?.();
   };

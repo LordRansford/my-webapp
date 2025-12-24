@@ -1,0 +1,27 @@
+export function utcDateId(d = new Date()): string {
+  // YYYY-MM-DD in UTC
+  return d.toISOString().slice(0, 10);
+}
+
+export function hashStringToUint32(s: string): number {
+  // FNV-1a 32-bit
+  let h = 0x811c9dc5;
+  for (let i = 0; i < s.length; i += 1) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return h >>> 0;
+}
+
+export function mulberry32(seed: number) {
+  let t = seed >>> 0;
+  return function rand() {
+    t += 0x6d2b79f5;
+    let x = t;
+    x = Math.imul(x ^ (x >>> 15), x | 1);
+    x ^= x + Math.imul(x ^ (x >>> 7), x | 61);
+    return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+

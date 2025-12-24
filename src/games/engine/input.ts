@@ -27,11 +27,13 @@ export function createInputController(target: HTMLElement | Window, bindings: Pa
   const b: InputBindings = { ...DEFAULT_BINDINGS, ...bindings };
   const pressed = new Set<string>();
   let pausePressed = false;
+  let actionPressed = false;
 
   const state: InputState = {
     moveX: 0,
     moveY: 0,
     pausePressed: false,
+    actionPressed: false,
   };
 
   const recomputeAxes = () => {
@@ -57,6 +59,8 @@ export function createInputController(target: HTMLElement | Window, bindings: Pa
   let swipeStart: { x: number; y: number; t: number } | null = null;
   const SWIPE_MIN_PX = 22;
   const SWIPE_MAX_MS = 700;
+  const TAP_MAX_PX = 10;
+  const TAP_MAX_MS = 350;
 
   const onPointerDown = (e: PointerEvent) => {
     if (e.pointerType === "mouse" && e.button !== 0) return;
@@ -71,6 +75,11 @@ export function createInputController(target: HTMLElement | Window, bindings: Pa
     if (dt > SWIPE_MAX_MS) return;
     const adx = Math.abs(dx);
     const ady = Math.abs(dy);
+    // Tap => one-frame action
+    if (dt <= TAP_MAX_MS && Math.max(adx, ady) <= TAP_MAX_PX) {
+      actionPressed = true;
+      return;
+    }
     if (Math.max(adx, ady) < SWIPE_MIN_PX) return;
     // impulse for one frame
     if (adx >= ady) {
@@ -97,10 +106,12 @@ export function createInputController(target: HTMLElement | Window, bindings: Pa
     bindings: b,
     getState: () => {
       state.pausePressed = pausePressed;
+      state.actionPressed = actionPressed;
       return { ...state };
     },
     resetFrame: () => {
       pausePressed = false;
+      actionPressed = false;
       // Clear swipe impulses (keyboard state will be recomputed via key events).
       recomputeAxes();
     },
