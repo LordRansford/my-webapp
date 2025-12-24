@@ -13,11 +13,13 @@ type MentorTryNext = { title: string; href: string; steps: string[] };
 export type MentorMsg = {
   role: "user" | "mentor";
   content: string;
+  answerMode?: "site-grounded" | "general-guidance" | "mixed";
   answerFromSite?: string;
   refusalReason?: { code: string; message: string } | null;
   suggestedNextActions?: string[];
   citationsTitle?: string;
   citations?: MentorCitation[];
+  citationsV2?: Array<{ title: string; urlOrPath: string; anchorOrHeading?: string }>;
   sources?: MentorSource[];
   tryNext?: MentorTryNext | null;
   lowConfidence?: boolean;
@@ -205,8 +207,19 @@ export default function MentorAssistant({
               ? data.answer
               : "I could not find an exact match in the site content. I can still give general guidance, and I will list the closest sections when available.",
           answerFromSite: typeof data?.answerFromSite === "string" ? data.answerFromSite : undefined,
+          answerMode: data?.answerMode === "site-grounded" || data?.answerMode === "general-guidance" || data?.answerMode === "mixed" ? data.answerMode : undefined,
           citationsTitle: typeof data?.citationsTitle === "string" ? data.citationsTitle : undefined,
           citations: filtered.length ? filtered : undefined,
+          citationsV2: Array.isArray(data?.citationsV2)
+            ? data.citationsV2
+                .map((c: any) => ({
+                  title: sanitizeText(c?.title, 140),
+                  urlOrPath: sanitizeText(c?.urlOrPath, 240),
+                  anchorOrHeading: sanitizeText(c?.anchorOrHeading, 140) || undefined,
+                }))
+                .filter((c: any) => c.title && c.urlOrPath)
+                .slice(0, 6)
+            : undefined,
           sources: Array.isArray(data?.sources)
             ? data.sources
                 .map((s: any) => ({ title: sanitizeText(s?.title, 140), href: sanitizeText(s?.href, 240), excerpt: sanitizeText(s?.excerpt, 240) }))
@@ -265,7 +278,11 @@ export default function MentorAssistant({
               className={`rounded-2xl border p-3 text-sm ${msg.role === "user" ? "border-sky-200 bg-sky-50" : "border-slate-200 bg-white"}`}
             >
               <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">{msg.role === "user" ? "You" : "Mentor"}</div>
-              {msg.role === "mentor" ? <div className="mt-2 text-xs font-semibold text-slate-700">Answer from this site</div> : null}
+              {msg.role === "mentor" ? (
+                <div className="mt-2 text-xs font-semibold text-slate-700">
+                  {msg.answerMode === "site-grounded" ? "From this site" : msg.answerMode === "general-guidance" ? "General guidance" : msg.answerMode === "mixed" ? "Mixed" : "Mentor reply"}
+                </div>
+              ) : null}
               <div className="mt-1 whitespace-pre-wrap text-slate-900">{msg.content}</div>
               {msg.lowConfidence ? <p className="mt-2 text-xs text-amber-800">I might be wrong here. Please check the citations.</p> : null}
               {msg.refusalReason?.message ? (
