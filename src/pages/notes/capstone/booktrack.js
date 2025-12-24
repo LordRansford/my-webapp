@@ -4,12 +4,14 @@ import { MDXRenderer } from "@/components/notes/MDXRenderer";
 import { loadNote } from "@/lib/content/loadNote";
 import Callout from "@/components/notes/Callout";
 import PageNav from "@/components/notes/PageNav";
+import QuizBlock from "@/components/notes/QuizBlock";
 
 export default function Page({ source, headings, meta }) {
   const mdxComponents = useMemo(
     () => ({
       Callout,
       PageNav,
+      QuizBlock,
     }),
     []
   );
