@@ -6,8 +6,43 @@ import { useSession } from "next-auth/react";
 
 type Project = { id: string; title: string; topic: string; updatedAt: string };
 
+const LOCAL_KEY = "rn_workspace_projects_v1";
+type LocalProject = Project & { localOnly?: boolean };
+
+function readLocalProjects(): LocalProject[] {
+  try {
+    const raw = window.localStorage.getItem(LOCAL_KEY);
+    const parsed = raw ? JSON.parse(raw) : null;
+    const items = Array.isArray(parsed) ? parsed : [];
+    return items
+      .map((p: any) => ({
+        id: String(p?.id || ""),
+        title: String(p?.title || ""),
+        topic: String(p?.topic || ""),
+        updatedAt: String(p?.updatedAt || new Date().toISOString()),
+        localOnly: true,
+      }))
+      .filter((p: any) => p.id && p.title);
+  } catch {
+    return [];
+  }
+}
+
+function writeLocalProjects(projects: LocalProject[]) {
+  try {
+    window.localStorage.setItem(LOCAL_KEY, JSON.stringify(projects));
+  } catch {
+    // ignore
+  }
+}
+
+function newLocalId() {
+  // readable, unique enough for local-only usage
+  return `local_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+}
+
 export default function WorkspaceHomePage() {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<LocalProject[]>([]);
   const [q, setQ] = useState("");
   const [title, setTitle] = useState("");
   const [topic, setTopic] = useState("software");
@@ -24,6 +59,14 @@ export default function WorkspaceHomePage() {
   }, [projects, q]);
 
   const load = async () => {
+    // Anonymous mode: local-only projects (as the UI promises).
+    if (!authed) {
+      const items = readLocalProjects();
+      const s = q.trim().toLowerCase();
+      setProjects(s ? items.filter((p) => p.title.toLowerCase().includes(s)) : items);
+      return;
+    }
+
     const res = await fetch(`/api/workspace/projects?q=${encodeURIComponent(q.trim())}`);
     const data = await res.json().catch(() => null);
     if (data?.ok) setProjects(data.projects || []);
@@ -37,6 +80,26 @@ export default function WorkspaceHomePage() {
   const create = async () => {
     setBusy(true);
     setError(null);
+
+    // Anonymous mode: local-only project creation (no DB, no API).
+    if (!authed) {
+      const t = title.trim().slice(0, 80);
+      if (!t) {
+        setError("Title is required.");
+        setBusy(false);
+        return;
+      }
+      const now = new Date().toISOString();
+      const next: LocalProject = { id: newLocalId(), title: t, topic, updatedAt: now, localOnly: true };
+      const current = readLocalProjects();
+      const merged = [next, ...current].slice(0, 50);
+      writeLocalProjects(merged);
+      setTitle("");
+      await load();
+      setBusy(false);
+      return;
+    }
+
     const res = await fetch("/api/workspace/projects", {
       method: "POST",
       headers: { "content-type": "application/json" },
@@ -154,21 +217,33 @@ export default function WorkspaceHomePage() {
               No projects yet.
             </div>
           ) : (
-            filtered.map((p) => (
-              <Link
-                key={p.id}
-                href={`/workspace/${encodeURIComponent(p.id)}`}
-                className="block rounded-2xl border border-slate-200 bg-white p-4 hover:border-slate-300"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-base font-semibold text-slate-900">{p.title}</p>
-                    <p className="text-xs text-slate-600">topic: {p.topic}</p>
+            filtered.map((p) =>
+              p.localOnly ? (
+                <div key={p.id} className="block rounded-2xl border border-slate-200 bg-white p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-base font-semibold text-slate-900">{p.title}</p>
+                      <p className="text-xs text-slate-600">topic: {p.topic} • stored on this device</p>
+                    </div>
+                    <p className="text-xs text-slate-600">{new Date(p.updatedAt).toLocaleString()}</p>
                   </div>
-                  <p className="text-xs text-slate-600">{new Date(p.updatedAt).toLocaleString()}</p>
                 </div>
-              </Link>
-            ))
+              ) : (
+                <Link
+                  key={p.id}
+                  href={`/workspace/${encodeURIComponent(p.id)}`}
+                  className="block rounded-2xl border border-slate-200 bg-white p-4 hover:border-slate-300"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-base font-semibold text-slate-900">{p.title}</p>
+                      <p className="text-xs text-slate-600">topic: {p.topic}</p>
+                    </div>
+                    <p className="text-xs text-slate-600">{new Date(p.updatedAt).toLocaleString()}</p>
+                  </div>
+                </Link>
+              )
+            )
           )}
         </div>
       </section>
