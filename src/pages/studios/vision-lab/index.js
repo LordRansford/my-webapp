@@ -296,7 +296,16 @@ export default function VisionLabPage() {
           not for medical use.
         </p>
         <label className="flex w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/60 px-4 py-6 text-sm text-slate-700 hover:border-sky-300 hover:bg-slate-50">
-          <input type="file" accept="image/png,image/jpeg" className="hidden" onChange={(e) => handleQuickUpload(e.target.files[0])} />
+          <input
+            type="file"
+            accept="image/png,image/jpeg"
+            className="hidden"
+            onChange={(e) => {
+              const f = e.target.files?.[0] || null;
+              e.target.value = "";
+              handleQuickUpload(f);
+            }}
+          />
           {quickLoading ? "Running model..." : "Click or drop an image"}
         </label>
         {quickImage && (
@@ -371,7 +380,17 @@ export default function VisionLabPage() {
               ))}
             </select>
             <label className="flex w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-200 bg-white px-3 py-4 text-sm text-slate-700 hover:border-sky-300">
-              <input type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleImageUpload(e.target.files)} />
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={(e) => {
+                  const files = e.target.files ? Array.from(e.target.files) : [];
+                  e.target.value = "";
+                  handleImageUpload(files);
+                }}
+              />
               Upload images for {uploadLabel}
             </label>
             <p className="text-xs text-slate-700">We cap to ~40 images to keep your browser happy.</p>
@@ -450,7 +469,16 @@ export default function VisionLabPage() {
           <div className="space-y-3 rounded-2xl border border-slate-100 bg-slate-50/60 p-4">
             <p className="text-xs font-semibold text-slate-900">Inference playground</p>
             <label className="flex w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-200 bg-white px-3 py-4 text-sm text-slate-700 hover:border-sky-300">
-              <input type="file" accept="image/*" className="hidden" onChange={(e) => handleTestImage(e.target.files[0])} />
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const f = e.target.files?.[0] || null;
+                  e.target.value = "";
+                  handleTestImage(f);
+                }}
+              />
               Upload a test image
             </label>
             {testImage && <img src={testImage} alt="test" className="h-40 w-full rounded-xl object-contain" />}
