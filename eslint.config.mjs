@@ -12,6 +12,25 @@ const eslintConfig = defineConfig([
       "react-hooks/preserve-manual-memoization": "off",
       "react-hooks/set-state-in-render": "off",
       "react-hooks/immutability": "off",
+      // Prevent server-only modules from being imported in client/shared code
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            {
+              name: "fs",
+              message: "fs is server-only. Import from server modules (e.g., @/server/tools-pages.server) instead.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  // Allow fs/path in server-only files
+  {
+    files: ["src/server/**/*.ts", "src/server/**/*.js"],
+    rules: {
+      "no-restricted-imports": "off",
     },
   },
   // Override default ignores of eslint-config-next.

@@ -74,6 +74,7 @@
     "remark-gfm": "^4.0.0",
     "remark-math": "^6.0.0",
     "sanitize-html": "^2.17.0",
+    "server-only": "^0.0.1",
     "sql.js": "^1.13.0",
     "stripe": "^20.1.0",
     "svg-to-pdfkit": "^0.1.8",

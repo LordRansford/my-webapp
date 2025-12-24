@@ -1,5 +1,3 @@
-"use strict";
-
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
@@ -32,9 +30,9 @@ const listToolFiles = () => {
   }
 };
 
-const toSlug = (fileName) => fileName.replace(/\.mdx$/, "");
+const toSlug = (fileName: string) => fileName.replace(/\.mdx$/, "");
 
-const extractMetaExport = (source, fallbackTitle) => {
+const extractMetaExport = (source: string, fallbackTitle: string) => {
   const match = source.match(/export const meta\s*=\s*({[\s\S]*?});/);
   if (!match) {
     return {
@@ -76,7 +74,7 @@ export const getAllToolPages = () =>
     return { slug, meta };
   });
 
-export const getToolPage = async (slug) => {
+export const getToolPage = async (slug: string) => {
   const fullPath = path.join(toolsDir, `${slug}.mdx`);
   if (!fs.existsSync(fullPath)) return null;
 
@@ -91,8 +89,9 @@ export const getToolPage = async (slug) => {
 
   const mdx = await serialize(content || source, {
     scope: meta,
-    mdxOptions,
+    mdxOptions: mdxOptions as any,
   });
 
   return { slug, meta, mdx };
 };
+
