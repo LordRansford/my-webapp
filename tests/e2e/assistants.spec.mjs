@@ -12,8 +12,9 @@ test("assistants: open mentor, ask, then open feedback and submit", async ({ pag
   await expect(
     page
       .getByText("Where this is covered on the site")
-      .or(page.getByText("I could not find that in the site content"))
-      .or(page.getByText("I can only help with what is covered on this site."))
+      .or(page.getByText("Best match sections"))
+      .or(page.getByText("General guidance:"))
+      .or(page.getByText("I could not find an exact match in the site content"))
   ).toBeVisible({ timeout: 20_000 });
   await page.getByRole("button", { name: "Close mentor panel" }).click();
 
