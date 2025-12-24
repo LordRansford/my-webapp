@@ -3,8 +3,44 @@
 import { useState } from "react";
 import NotesLayout from "@/components/notes/Layout";
 import { sanitizeQuestion } from "@/lib/mentor/sanitize";
+import type { MentorPageContext } from "@/lib/contracts/mentor";
 
-type Message = { role: "user" | "mentor"; content: string; detail?: string; sources?: { title: string; slug: string }[]; lowConfidence?: boolean };
+type Message = {
+  role: "user" | "mentor";
+  content: string;
+  answerMode?: "site-grounded" | "general-guidance" | "mixed";
+  refusalReason?: { code: string; message: string } | null;
+  suggestedNextActions?: string[];
+  citations?: Array<{ title: string; href: string; why?: string }>;
+  citationsV2?: Array<{ title: string; urlOrPath: string; anchorOrHeading?: string }>;
+  sources?: { title: string; href: string; excerpt?: string }[];
+  lowConfidence?: boolean;
+};
+
+function collectHeadings(): Array<{ id: string; text: string; depth: number }> {
+  try {
+    const nodes = Array.from(document.querySelectorAll("article h2, article h3"));
+    return nodes
+      .map((n: any) => ({
+        id: String(n?.id || "").trim(),
+        text: String(n?.textContent || "").trim().slice(0, 120),
+        depth: n?.tagName === "H2" ? 2 : 3,
+      }))
+      .filter((h) => h.id && h.text);
+  } catch {
+    return [];
+  }
+}
+
+function collectVisibleText(maxLen = 8000) {
+  try {
+    const root = document.querySelector("article") || document.querySelector("main") || document.body;
+    const raw = String((root as any)?.innerText || (root as any)?.textContent || "");
+    return raw.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, " ").replace(/\s+/g, " ").trim().slice(0, maxLen);
+  } catch {
+    return "";
+  }
+}
 
 const suggestions = [
   "Explain this section in simpler terms",
@@ -23,29 +59,39 @@ export default function MentorPage() {
     const question = (text || input).trim();
     const safe = sanitizeQuestion(question);
     if (!question || !safe.ok) {
-      setMessages((m) => [...m, { role: "mentor", content: "I can only help with what is covered on this site." }]);
+      setMessages((m) => [...m, { role: "mentor", content: "Please ask a shorter, specific question." }]);
       return;
     }
     setStatus("loading");
     try {
+      const pageContext: MentorPageContext = {
+        pathname: window.location.pathname || "/mentor",
+        title: document.title || "Mentor",
+        text: collectVisibleText(9000),
+        headings: collectHeadings(),
+      };
       const res = await fetch("/api/mentor/query", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question, pageUrl: window.location.pathname || "/mentor" }),
+        body: JSON.stringify({ question, pageUrl: window.location.pathname || "/mentor", pageContext }),
       });
       const data = await res.json();
       if (!res.ok) {
-        setMessages((m) => [...m, { role: "mentor", content: data?.message || "I can only help with site content." }]);
+        setMessages((m) => [...m, { role: "mentor", content: data?.message || "Something went wrong." }]);
       } else {
         setMessages((m) => [
           ...m,
           { role: "user", content: question },
           {
             role: "mentor",
-            content: data?.answer || "I can only help with site content.",
-            detail: data?.detail,
-            sources: data?.sources,
-            lowConfidence: !!data?.lowConfidence,
+            content: typeof data?.answer === "string" ? data.answer : "No answer available.",
+            answerMode: data?.answerMode,
+            refusalReason: data?.refusalReason || null,
+            suggestedNextActions: Array.isArray(data?.suggestedNextActions) ? data.suggestedNextActions : undefined,
+            citations: Array.isArray(data?.citations) ? data.citations : undefined,
+            citationsV2: Array.isArray(data?.citationsV2) ? data.citationsV2 : undefined,
+            sources: Array.isArray(data?.sources) ? data.sources : undefined,
+            lowConfidence: Boolean(data?.lowConfidence),
           },
         ]);
       }
@@ -53,7 +99,7 @@ export default function MentorPage() {
       setStatus("idle");
     } catch {
       setStatus("error");
-      setMessages((m) => [...m, { role: "mentor", content: "I can only help with what is covered on this site." }]);
+      setMessages((m) => [...m, { role: "mentor", content: "Could not reach the mentor right now. Please try again." }]);
     }
   };
 
@@ -67,12 +113,16 @@ export default function MentorPage() {
         section: "ai",
       }}
       activeLevelId="summary"
+      showContentsSidebar={false}
+      showStepper={false}
     >
       <div className="space-y-6">
         <header className="space-y-2">
           <p className="eyebrow">Mentor</p>
           <h1 className="text-3xl font-semibold text-slate-900">Learning Mentor</h1>
-          <p className="text-slate-700">Ask about the notes, tools, and dashboards on this site. I only answer from the existing content.</p>
+          <p className="text-slate-700">
+            Ask about the notes, tools, and labs. I answer from this site when possible, and I will label general guidance clearly.
+          </p>
         </header>
 
         <section className="space-y-4 rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm">
@@ -95,30 +145,54 @@ export default function MentorPage() {
                   }`}
                 >
                   <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">{msg.role === "user" ? "You" : "Mentor"}</div>
+                  {msg.role === "mentor" && msg.answerMode ? (
+                    <div className="mt-1 text-xs font-semibold text-slate-700">
+                      {msg.answerMode === "site-grounded" ? "From this site" : msg.answerMode === "general-guidance" ? "General guidance" : "Mixed"}
+                    </div>
+                  ) : null}
                   <div className="mt-1 text-slate-900 whitespace-pre-wrap">{msg.content}</div>
-                  {msg.detail ? (
-                    <div className="mt-2">
-                      <button
-                        type="button"
-                        className="text-xs font-semibold text-slate-800 underline"
-                        onClick={() => setExpanded((e) => ({ ...e, [idx]: !e[idx] }))}
-                      >
-                        {expanded[idx] ? "Hide detail" : "Show more detail"}
-                      </button>
-                      {expanded[idx] ? <p className="mt-1 text-sm text-slate-800 whitespace-pre-wrap">{msg.detail}</p> : null}
+                  {msg.refusalReason?.message ? (
+                    <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+                      <p className="m-0 font-semibold">Why I could not answer from the site</p>
+                      <p className="mt-1 m-0">{msg.refusalReason.message}</p>
+                    </div>
+                  ) : null}
+                  {msg.suggestedNextActions && msg.suggestedNextActions.length ? (
+                    <div className="mt-3">
+                      <div className="text-xs font-semibold text-slate-700">Suggested next actions</div>
+                      <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-800">
+                        {msg.suggestedNextActions.slice(0, 4).map((a) => (
+                          <li key={a}>{a}</li>
+                        ))}
+                      </ul>
                     </div>
                   ) : null}
                   {msg.lowConfidence ? (
                     <p className="mt-2 text-xs text-amber-800">I am not fully confident. Please check the sources below.</p>
                   ) : null}
                   {msg.sources && msg.sources.length ? (
-                    <div className="mt-2 text-xs text-slate-700">
-                      Sources:
-                      <ul className="list-disc pl-4">
-                        {msg.sources.map((s) => (
-                          <li key={s.slug}>
-                            <a className="link" href={s.slug}>
+                    <div className="mt-3">
+                      <div className="text-xs font-semibold text-slate-700">Sources</div>
+                      <ul className="mt-2 space-y-1">
+                        {msg.sources.slice(0, 6).map((s) => (
+                          <li key={`${s.href}-${s.title}`} className="text-xs text-slate-700">
+                            <a className="underline hover:no-underline" href={s.href}>
                               {s.title}
+                            </a>
+                            {s.excerpt ? <span className="text-slate-500"> — {s.excerpt}</span> : null}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                  {msg.citations && msg.citations.length ? (
+                    <div className="mt-3">
+                      <div className="text-xs font-semibold text-slate-700">Where to read next</div>
+                      <ul className="mt-2 space-y-1">
+                        {msg.citations.slice(0, 6).map((c) => (
+                          <li key={c.href} className="text-xs text-slate-700">
+                            <a className="underline hover:no-underline" href={c.href}>
+                              {c.title}
                             </a>
                           </li>
                         ))}
@@ -155,7 +229,7 @@ export default function MentorPage() {
                 </button>
               </div>
               <p className="text-xs text-slate-600">
-                I only answer from existing site content. If a question is out of scope, I will say so. No data is stored beyond anonymous counts.
+                I answer from this site when possible. If not, I provide brief general guidance and suggest what to do next.
               </p>
             </div>
           </div>
