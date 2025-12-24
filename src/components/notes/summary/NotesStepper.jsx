@@ -10,12 +10,12 @@ export default function NotesStepper({ items, activeLevelId }) {
     <div className="mb-6 w-full rounded-2xl border border-[color:var(--line)] bg-[var(--surface)]/80 p-4 shadow-sm">
       <div className="text-xs uppercase tracking-[0.18em] text-gray-500 mb-2">Progress</div>
       <LazyMotion features={domAnimation}>
-        <div className="flex flex-wrap justify-center gap-2 sm:justify-start">
+        <div className="grid gap-2 [grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr))]">
           <AnimatePresence initial={false}>
             {items.map((item) => {
               const isActive = activeLevelId ? item.id === activeLevelId : item.active;
               return (
-                <m.div key={item.label} {...reducedMotionProps(reduce, motionPresets.slideUp)} className="min-w-[9.5rem] flex-1 sm:flex-none">
+                <m.div key={item.label} {...reducedMotionProps(reduce, motionPresets.slideUp)}>
                   <Link
                     href={item.href}
                     aria-current={isActive ? "page" : undefined}
