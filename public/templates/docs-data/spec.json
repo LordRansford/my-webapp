@@ -1,0 +1,10 @@
+{
+  "acceptedExtensions": [".pdf", ".docx", ".txt", ".csv"],
+  "notes": [
+    "Use synthetic or anonymised data only.",
+    "Keep files small to stay within the free tier limits.",
+    "CSV should include a header row."
+  ]
+}
+
+
