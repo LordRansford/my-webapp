@@ -117,6 +117,14 @@ export async function POST(req: Request) {
         : estimate.reason && estimate.reason.toLowerCase().includes("credits")
           ? "Try the free tier mode, use a lighter preset, or reduce input size."
           : "Use a lighter preset or reduce input size.";
+    const failureReason =
+      estimate.reason && estimate.reason.toLowerCase().includes("sign in")
+        ? "auth_required"
+        : estimate.reason && estimate.reason.toLowerCase().includes("credits")
+          ? "credits_insufficient"
+          : estimate.reason && estimate.reason.toLowerCase().includes("too large")
+            ? "estimate_exceeded"
+            : "estimate_exceeded";
     const errorObj: ComputeError = {
       code: "RUN_BLOCKED",
       message: estimate.reason || "Run blocked.",
@@ -127,6 +135,7 @@ export async function POST(req: Request) {
       {
         error: errorObj.message,
         code: errorObj.code,
+        failureReason,
         errorObj,
         estimate,
         alternativeFreeTier: alt?.allowed ? { preset: "light", estimate: alt } : null,
