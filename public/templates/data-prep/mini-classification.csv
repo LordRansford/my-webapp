@@ -1,0 +1,8 @@
+row_id,age,tenure_months,plan,monthly_spend,refunds_last_12m,ticket_count_90d,churned
+1,29,3,basic,19.99,0,1,0
+2,41,24,pro,59.00,1,4,1
+3,33,12,basic,24.50,0,0,0
+4,52,60,pro,75.00,2,6,1
+5,26,1,basic,12.00,0,2,0
+
+

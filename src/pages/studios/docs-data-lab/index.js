@@ -345,7 +345,17 @@ export default function DocsDataLabPage() {
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="text-lg font-semibold text-slate-900">1. Upload and inspect documents</h2>
           <label className="cursor-pointer rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:border-sky-300 hover:text-sky-700">
-            <input type="file" className="hidden" accept=".pdf,.docx,.txt,.csv" multiple onChange={(e) => handleFiles(e.target.files)} />
+            <input
+              type="file"
+              className="hidden"
+              accept=".pdf,.docx,.txt,.csv"
+              multiple
+              onChange={(e) => {
+                const files = e.target.files;
+                e.target.value = "";
+                handleFiles(files);
+              }}
+            />
             Upload files
           </label>
         </div>
@@ -353,6 +363,28 @@ export default function DocsDataLabPage() {
           Free tier limit: {formatBytes(uploadPolicy?.freeMaxBytes || 0)} per file. With credits: {formatBytes(uploadPolicy?.paidMaxBytes || 0)}.
           Allowed: pdf, docx, txt, csv. Do not upload real customer data or secrets; use synthetic or anonymised samples.
         </p>
+        <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4 text-sm text-slate-700">
+          <p className="m-0 font-semibold text-slate-900">Templates and spec</p>
+          <p className="mt-1">
+            Download small examples you can upload immediately, plus a simple spec of what the lab accepts.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <a className="rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-900 hover:bg-slate-50" href="/templates/docs-data/example-small.csv">
+              Download example CSV (small)
+            </a>
+            <a className="rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-900 hover:bg-slate-50" href="/templates/docs-data/spec.json">
+              Download spec (JSON)
+            </a>
+            <a className="rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-900 hover:bg-slate-50" href="/templates/data-prep/mini-classification.csv">
+              Data prep mini dataset (CSV)
+            </a>
+          </div>
+          <ul className="mt-3 list-disc space-y-1 pl-5 text-xs text-slate-700">
+            <li>Keep uploads under the per-file size limit shown above.</li>
+            <li>CSV should include a header row.</li>
+            <li>Use synthetic or anonymised data only.</li>
+          </ul>
+        </div>
         {docs.length === 0 && (
           <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 px-4 py-3 text-sm text-slate-700">
             No documents yet. Upload a PDF, DOCX, TXT or small CSV.
