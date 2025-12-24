@@ -164,6 +164,40 @@ Before merging any PR that touches server/client boundaries:
 - `src/server/**` - All server-only modules
 - `package.json` - Includes `server-only` package for App Router
 
+## Codex Blocking Instruction
+
+**For AI assistants (Codex/Cursor):** When making changes that touch imports or module boundaries, enforce this rule:
+
+```
+🚨 CODEX BLOCKING INSTRUCTION — SERVER/CLIENT BOUNDARY
+
+HARD RULE (NON-NEGOTIABLE):
+
+You must enforce a strict server/client boundary in this repository.
+
+1. Any module importing fs, path, gray-matter, or performing file IO:
+   - MUST live under src/server/** or be explicitly marked with import "server-only"
+   - MUST NOT be imported by React components, hooks, layouts, or shared UI utilities
+
+2. Client-side code (components, pages, hooks):
+   - MUST NOT import or transitively depend on fs, path, or server-only modules
+   - MAY ONLY receive data via getServerSideProps, server actions, or API routes
+
+3. CI MUST FAIL if:
+   - fs/path/gray-matter is imported outside src/server/**
+   - a file without import "server-only" imports fs
+   - a component or page imports a server-only module
+
+4. If a boundary violation is detected:
+   - STOP immediately
+   - Refactor by introducing a server-only wrapper
+   - Re-run build before proceeding
+
+No new features, tools, pages, or refactors may proceed until these rules pass CI.
+
+If you are unsure whether a module is server-safe, assume it is NOT and block the change.
+```
+
 ## History
 
 This boundary was established after experiencing Vercel build failures due to `fs` module leakage into client bundles. The fix involved:
