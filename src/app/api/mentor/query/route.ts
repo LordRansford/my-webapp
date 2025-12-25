@@ -197,7 +197,7 @@ export async function POST(req: Request) {
       let retrievalCount = 0;
 
       try {
-        const metered = await Promise.race([
+        const meteredResult = await Promise.race([
           runWithMetering<MentorResponse>({
             req,
             userId,
@@ -230,7 +230,7 @@ export async function POST(req: Request) {
               retrievalSucceeded = keyword.matches.length > 0 || pageHit !== null;
 
               // Layer 2: Vector search (if OpenAI key exists)
-              let vector = { matches: [], weak: false };
+              let vector: { matches: Array<{ title: string; href: string; excerpt?: string; text?: string; score?: number }>; weak: boolean } = { matches: [], weak: false };
               try {
                 if (process.env.OPENAI_API_KEY && !abortController.signal.aborted) {
                   vector = await retrieveVectorContent(safe.cleaned, pageUrl || ctx?.pathname || null, 6);
@@ -256,7 +256,7 @@ export async function POST(req: Request) {
 
               incrementUsage();
               const top = matches[0] || null;
-              const lowConfidence = Boolean(weak) || (!pageHit && !top) || (top ? top.score < 0.18 : false);
+              const lowConfidence = Boolean(weak) || (!pageHit && !top) || (top && top.score !== undefined ? top.score < 0.18 : false);
               const tool = findToolSuggestion(safe.cleaned);
 
               // Generate answer (simplified - in production this would call OpenAI)
@@ -272,11 +272,13 @@ export async function POST(req: Request) {
                   anchorOrHeading: pageHit.title,
                 });
               } else if (top) {
-                answer = `From the site content: ${top.excerpt || top.text || "Relevant content found."}`;
+                // Handle both Citation (has 'why') and vector result (has 'excerpt' or 'text')
+                const excerpt = ('excerpt' in top ? top.excerpt : null) || ('text' in top ? top.text : null) || ('why' in top ? top.why : null) || "Relevant content found.";
+                answer = `From the site content: ${excerpt}`;
                 citationsV2.push({
                   title: top.title || "Content",
                   urlOrPath: top.href || "",
-                  anchorOrHeading: top.title || undefined,
+                  anchorOrHeading: ('excerpt' in top ? top.excerpt : null) || ('why' in top ? top.why : null) || top.title || undefined,
                 });
               }
 
@@ -310,23 +312,32 @@ export async function POST(req: Request) {
               };
             },
           }),
-          new Promise<MentorResponse>((_, reject) => {
+          new Promise<{ ok: false; status: number; message: string; estimate: any }>((_, reject) => {
             abortController.signal.addEventListener("abort", () => {
               reject(new Error("TIMEOUT"));
             });
           }),
-        ]);
+        ]) as Awaited<ReturnType<typeof runWithMetering<MentorResponse>>>;
 
         clearTimeout(timeoutId);
 
         const duration = Date.now() - startTime;
         console.log(`[MENTOR] requestId=${requestId} duration=${duration}ms retrieval=${retrievalSucceeded} model=${modelSucceeded} fallback=${fallbackUsed}`);
 
-        if (runId) {
-          await updateRun({ runId, status: "completed", outputJson: metered.output });
+        if (!meteredResult.ok) {
+          // If metering failed, return fallback
+          rawResponse = buildLocalFallback(safe.cleaned, pageUrl || null);
+          if (runId) {
+            await updateRun({ runId, status: "failed", outputJson: normalizeMentorResponse(rawResponse) }).catch(() => {});
+          }
+          return NextResponse.json(normalizeMentorResponse(rawResponse));
         }
 
-        return NextResponse.json(metered.output);
+        if (runId) {
+          await updateRun({ runId, status: "completed", outputJson: meteredResult.output });
+        }
+
+        return NextResponse.json(meteredResult.output);
       } catch (err) {
         clearTimeout(timeoutId);
         const isTimeout = err instanceof Error && err.message === "TIMEOUT";
@@ -335,7 +346,7 @@ export async function POST(req: Request) {
         console.error(`[MENTOR] requestId=${requestId} duration=${duration}ms error=${isTimeout ? "TIMEOUT" : "ERROR"}`, err);
 
         // Return fallback on timeout or error
-        rawResponse = buildLocalFallback(safe.cleaned, pageUrl || ctx?.pathname || null);
+        rawResponse = buildLocalFallback(safe.cleaned, pageUrl || null);
         fallbackUsed = true;
 
         if (runId) {

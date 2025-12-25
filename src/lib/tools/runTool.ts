@@ -221,7 +221,7 @@ export async function runTool(
     }
 
     // Local mode - route to appropriate sandbox
-    let result: { success: boolean; output?: unknown; error?: { code: string; message: string } };
+    let result: { success: boolean; output?: string | { result?: string; stdout?: string[] } | { rows: unknown[][]; columns: string[]; rowCount: number }; error?: { code: string; message: string } };
 
     if (contract.id === "js-sandbox" || contract.id === "javascript-sandbox" || contract.route.includes("js-sandbox")) {
       const code = inputs.code as string;
@@ -236,13 +236,20 @@ export async function runTool(
           },
         };
       }
-      result = await runJs(code, contract);
-      if (result.success && result.output) {
+      const jsResult = await runJs(code, contract);
+      if (jsResult.success && jsResult.output) {
+        const outputObj = jsResult.output;
+        let outputStr: string;
+        if (typeof outputObj === "string") {
+          outputStr = outputObj;
+        } else if (outputObj && typeof outputObj === "object") {
+          outputStr = outputObj.result || (Array.isArray(outputObj.stdout) ? outputObj.stdout.join("\n") : JSON.stringify(outputObj, null, 2));
+        } else {
+          outputStr = String(outputObj);
+        }
         return {
           ok: true,
-          output: typeof result.output === "string" 
-            ? result.output 
-            : (result.output.result || (result.output.stdout || []).join("\n")),
+          output: outputStr,
           metrics: {
             durationMs: Date.now() - startTime,
             cpuMs: Date.now() - startTime,
@@ -253,8 +260,8 @@ export async function runTool(
         return {
           ok: false,
           error: {
-            code: result.error?.code || "execution_error",
-            message: result.error?.message || "Execution failed",
+            code: jsResult.error?.code || "execution_error",
+            message: jsResult.error?.message || "Execution failed",
             whatToDo: "Check your code for syntax errors",
             debugId,
           },
@@ -273,13 +280,20 @@ export async function runTool(
           },
         };
       }
-      result = await runPython(code, contract);
-      if (result.success && result.output) {
+      const pythonResult = await runPython(code, contract);
+      if (pythonResult.success && pythonResult.output) {
+        const outputObj = pythonResult.output;
+        let outputStr: string;
+        if (typeof outputObj === "string") {
+          outputStr = outputObj;
+        } else if (outputObj && typeof outputObj === "object") {
+          outputStr = outputObj.result || (Array.isArray(outputObj.stdout) ? outputObj.stdout.join("\n") : JSON.stringify(outputObj, null, 2));
+        } else {
+          outputStr = String(outputObj);
+        }
         return {
           ok: true,
-          output: typeof result.output === "string" 
-            ? result.output 
-            : (result.output.result || (result.output.stdout || []).join("\n")),
+          output: outputStr,
           metrics: {
             durationMs: Date.now() - startTime,
             cpuMs: Date.now() - startTime,
@@ -290,8 +304,8 @@ export async function runTool(
         return {
           ok: false,
           error: {
-            code: result.error?.code || "execution_error",
-            message: result.error?.message || "Execution failed",
+            code: pythonResult.error?.code || "execution_error",
+            message: pythonResult.error?.message || "Execution failed",
             whatToDo: "Check your code for syntax errors or install Pyodide",
             debugId,
           },
@@ -310,11 +324,11 @@ export async function runTool(
           },
         };
       }
-      result = await runSql(query, contract);
-      if (result.success && result.output) {
+      const sqlResult = await runSql(query, contract);
+      if (sqlResult.success && sqlResult.output) {
         return {
           ok: true,
-          output: JSON.stringify(result.output, null, 2),
+          output: JSON.stringify(sqlResult.output, null, 2),
           metrics: {
             durationMs: Date.now() - startTime,
             cpuMs: Date.now() - startTime,
@@ -325,8 +339,8 @@ export async function runTool(
         return {
           ok: false,
           error: {
-            code: result.error?.code || "execution_error",
-            message: result.error?.message || "Query execution failed",
+            code: sqlResult.error?.code || "execution_error",
+            message: sqlResult.error?.message || "Query execution failed",
             whatToDo: "Check your SQL syntax and try again",
             debugId,
           },
@@ -341,32 +355,6 @@ export async function runTool(
           code: "not_implemented",
           message: `Local execution not implemented for ${contract.id}`,
           whatToDo: "This tool may require compute mode or needs implementation",
-          debugId,
-        },
-      };
-    }
-
-    const duration = Date.now() - startTime;
-
-    if (result.success) {
-      return {
-        ok: true,
-        output: typeof result.output === "string" 
-          ? result.output 
-          : JSON.stringify(result.output, null, 2),
-        metrics: {
-          durationMs: duration,
-          cpuMs: duration,
-          memoryMb: 0,
-        },
-      };
-    } else {
-      return {
-        ok: false,
-        error: {
-          code: result.error?.code || "execution_error",
-          message: result.error?.message || "Execution failed",
-          whatToDo: "Check your inputs and try again",
           debugId,
         },
       };
