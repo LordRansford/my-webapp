@@ -81,8 +81,8 @@ function getLocalFallback(question: string, pageUrl: string | null): MentorApiRe
     answerMode: "general-guidance",
     citationsV2: toolSuggestions.map((t) => ({
       title: t.title,
-      href: t.route,
-      excerpt: `Tool: ${t.title}`,
+      urlOrPath: t.route,
+      anchorOrHeading: t.title,
     })),
     refusalReason: {
       code: "FALLBACK_MODE",
@@ -212,21 +212,21 @@ export async function POST(req: Request) {
               // Generate answer (simplified - in production this would call OpenAI)
               // For now, use the top match or page hit
               let answer = "";
-              let citations: Array<{ title: string; href: string; excerpt: string }> = [];
+              let citations: Array<{ title: string; urlOrPath: string; anchorOrHeading?: string }> = [];
 
               if (pageHit) {
                 answer = `Based on the current page: ${pageHit.excerpt}`;
                 citations.push({
                   title: pageHit.title,
-                  href: pageHit.href,
-                  excerpt: pageHit.excerpt,
+                  urlOrPath: pageHit.href,
+                  anchorOrHeading: pageHit.title,
                 });
               } else if (top) {
                 answer = `From the site content: ${top.excerpt || top.text || "Relevant content found."}`;
                 citations.push({
                   title: top.title || "Content",
-                  href: top.href || "",
-                  excerpt: top.excerpt || top.text || "",
+                  urlOrPath: top.href || "",
+                  anchorOrHeading: top.title || undefined,
                 });
               }
 
