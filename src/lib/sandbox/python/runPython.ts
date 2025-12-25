@@ -2,7 +2,7 @@
  * Python Sandbox Runner (Pyodide)
  * 
  * Runs Python code in a Web Worker using Pyodide.
- * Note: Requires pyodide package. Install with: npm install pyodide
+ * Secure sandbox: no file system, no network access.
  */
 
 import type { ToolContract } from "@/components/tools/ToolShell";
@@ -20,6 +20,7 @@ export interface PythonRunResult {
 }
 
 // Inline worker code for Pyodide
+// Uses importScripts to load Pyodide from CDN
 const pythonWorkerCode = `
   let pyodide = null;
   let loading = false;
@@ -32,44 +33,41 @@ const pythonWorkerCode = `
     loading = true;
     loadPromise = (async () => {
       try {
-        // @ts-ignore - Pyodide types
-        self.pyodide = await loadPyodide({
+        // Load Pyodide script - this makes loadPyodide available globally
+        importScripts('https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js');
+        
+        // Wait a tick for global to be available
+        await new Promise(resolve => setTimeout(resolve, 10));
+        
+        // Check if loadPyodide is available (it should be after importScripts)
+        if (typeof self.loadPyodide === 'undefined') {
+          throw new Error('loadPyodide function not found after loading script');
+        }
+        
+        // Initialize Pyodide
+        pyodide = await self.loadPyodide({
           indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/',
         });
         
-        // Disable micropip and networking
-        self.pyodide.runPython(\`
+        // Block networking and file I/O
+        pyodide.runPython(\`
           import sys
-          sys.modules['micropip'] = None
+          # Block micropip
+          if 'micropip' in sys.modules:
+            sys.modules['micropip'] = None
         \`);
         
-        pyodide = self.pyodide;
+        loading = false;
         return pyodide;
       } catch (err) {
-        throw new Error('Failed to load Pyodide: ' + (err instanceof Error ? err.message : String(err)));
-      } finally {
         loading = false;
+        const errorMsg = err instanceof Error ? err.message : String(err);
+        throw new Error('Failed to load Pyodide: ' + errorMsg);
       }
     })();
     
     return loadPromise;
   }
-
-  const stdout = [];
-  const originalLog = console.log;
-  const originalError = console.error;
-
-  console.log = (...args) => {
-    const msg = args.map(a => String(a)).join(' ');
-    stdout.push(msg);
-    originalLog.apply(console, args);
-  };
-
-  console.error = (...args) => {
-    const msg = 'ERROR: ' + args.map(a => String(a)).join(' ');
-    stdout.push(msg);
-    originalError.apply(console, args);
-  };
 
   function truncateOutput(output, maxKb) {
     const maxBytes = maxKb * 1024;
@@ -79,12 +77,12 @@ const pythonWorkerCode = `
 
   self.onmessage = async (e) => {
     const { code, timeoutMs, maxOutputKb } = e.data;
-    stdout.length = 0;
 
     const timeoutId = setTimeout(() => {
       self.postMessage({
         success: false,
-        stdout: stdout.slice(),
+        stdout: [],
+        result: '',
         error: { code: 'timeout', message: 'Execution exceeded ' + timeoutMs + 'ms limit' }
       });
       self.close();
@@ -93,12 +91,15 @@ const pythonWorkerCode = `
     try {
       const py = await loadPyodide();
       
-      // Capture Python stdout
+      // Capture stdout/stderr using Python's sys
       py.runPython(\`
         import sys
         from io import StringIO
-        sys.stdout = StringIO()
-        sys.stderr = StringIO()
+        
+        _stdout_buffer = StringIO()
+        _stderr_buffer = StringIO()
+        sys.stdout = _stdout_buffer
+        sys.stderr = _stderr_buffer
       \`);
 
       // Run user code
@@ -108,30 +109,45 @@ const pythonWorkerCode = `
       const stdout_captured = py.runPython('sys.stdout.getvalue()');
       const stderr_captured = py.runPython('sys.stderr.getvalue()');
       
-      if (stdout_captured) stdout.push(stdout_captured);
-      if (stderr_captured) stdout.push('STDERR: ' + stderr_captured);
-
       clearTimeout(timeoutId);
 
-      const stdoutStr = stdout.join('\\n');
-      const truncatedOutput = truncateOutput(stdoutStr, maxOutputKb);
+      let output = '';
+      if (stdout_captured) output += stdout_captured;
+      if (stderr_captured) {
+        if (output) output += '\\n';
+        output += stderr_captured;
+      }
+      
+      const truncatedOutput = truncateOutput(output, maxOutputKb);
+      const stdoutLines = output.split('\\n').filter(line => line.trim());
 
       self.postMessage({
         success: true,
-        stdout: stdout.slice(),
+        stdout: stdoutLines,
         result: truncatedOutput
       });
     } catch (err) {
       clearTimeout(timeoutId);
       const error = err instanceof Error ? err : new Error(String(err));
-      const isSyntaxError = error.message.includes('SyntaxError') || error.message.includes('IndentationError');
+      
+      let errorCode = 'runtime_error';
+      const errorMsg = error.message || String(err);
+      
+      if (errorMsg.includes('SyntaxError') || errorMsg.includes('IndentationError')) {
+        errorCode = 'syntax_error';
+      } else if (errorMsg.includes('NameError')) {
+        errorCode = 'name_error';
+      } else if (errorMsg.includes('TypeError')) {
+        errorCode = 'type_error';
+      }
       
       self.postMessage({
         success: false,
-        stdout: stdout.slice(),
+        stdout: [],
+        result: '',
         error: {
-          code: isSyntaxError ? 'syntax_error' : 'runtime_error',
-          message: error.message
+          code: errorCode,
+          message: errorMsg
         }
       });
     }
@@ -153,9 +169,6 @@ export async function runPython(
       },
     };
   }
-
-  // Pyodide is optional - will be loaded in worker
-  // No need to check here as worker will handle it
 
   return new Promise((resolve) => {
     const blob = new Blob([pythonWorkerCode], { type: "application/javascript" });
@@ -191,7 +204,10 @@ export async function runPython(
       } else {
         resolve({
           success: false,
-          error: response.error,
+          error: response.error || {
+            code: "unknown_error",
+            message: "Execution failed",
+          },
         });
       }
     };
@@ -200,11 +216,14 @@ export async function runPython(
       clearTimeout(timeout);
       worker.terminate();
       URL.revokeObjectURL(workerUrl);
+      
+      // Provide more helpful error message
+      const errorMsg = err.message || "Worker execution failed";
       resolve({
         success: false,
         error: {
           code: "worker_error",
-          message: err.message || "Worker execution failed",
+          message: errorMsg + ". This may be due to Pyodide failing to load from CDN. Check your network connection.",
         },
       });
     };
@@ -216,4 +235,3 @@ export async function runPython(
     });
   });
 }
-
