@@ -78,7 +78,7 @@ function getLocalFallback(question: string, pageUrl: string | null): MentorApiRe
 
   return {
     answer,
-    answerMode: "fallback",
+    answerMode: "general-guidance",
     citationsV2: toolSuggestions.map((t) => ({
       title: t.title,
       href: t.route,
