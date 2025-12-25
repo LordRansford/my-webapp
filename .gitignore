@@ -21,6 +21,7 @@
 # local data / sqlite
 /data/*
 !/data/tool-contracts.json
+!/data/tools/catalog.json
 *.db
 *.db-journal
 

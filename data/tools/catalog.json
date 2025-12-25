@@ -1,0 +1,123 @@
+{
+  "tools": [
+    {
+      "id": "js-sandbox",
+      "defaultInputs": {
+        "code": "console.log('Hello, world!');"
+      },
+      "examples": [
+        {
+          "title": "Hello World",
+          "inputs": {
+            "code": "console.log('Hello, world!');"
+          },
+          "expectedOutput": "Hello, world!"
+        },
+        {
+          "title": "Simple Loop",
+          "inputs": {
+            "code": "let sum = 0;\nfor (let i = 1; i <= 5; i++) {\n  sum += i;\n}\nconsole.log('Sum:', sum);"
+          },
+          "expectedOutput": "Sum: 15"
+        }
+      ],
+      "explain": "The JavaScript sandbox lets you run JavaScript code safely in your browser. It uses a Web Worker to isolate execution, preventing access to the DOM or network. This is useful for testing logic, exploring language features, or debugging small code snippets. Use it when you need to test JavaScript behavior without setting up a full project. Don't use it for DOM manipulation, file I/O, or network requests - those are blocked for security. Inputs: code (string) - Your JavaScript code to execute. Limits: 2000ms CPU time, 128MB memory, 64KB output. Security: Runs in isolated worker with no DOM or network access."
+    },
+    {
+      "id": "python-playground",
+      "defaultInputs": {
+        "code": "print('Hello, world!')"
+      },
+      "examples": [
+        {
+          "title": "Hello World",
+          "inputs": {
+            "code": "print('Hello, world!')"
+          },
+          "expectedOutput": "Hello, world!"
+        },
+        {
+          "title": "List Comprehension",
+          "inputs": {
+            "code": "nums = [1, 2, 3, 4]\ndoubled = [n * 2 for n in nums]\nprint('Doubled:', doubled)"
+          },
+          "expectedOutput": "Doubled: [2, 4, 6, 8]"
+        }
+      ],
+      "explain": "The Python playground runs Python code in your browser using Pyodide. It's perfect for learning Python syntax, testing algorithms, or experimenting with data transformations. Use it for educational purposes, quick calculations, or prototyping small scripts. Don't use it for file I/O, network requests, or heavy computations - those are limited or blocked. Inputs: code (string) - Your Python code. Limits: 5000ms CPU, 256MB memory, 128KB output. Security: Runs in Pyodide worker with no file system or network access."
+    },
+    {
+      "id": "sql-sqlite",
+      "defaultInputs": {
+        "query": "SELECT * FROM users;"
+      },
+      "examples": [
+        {
+          "title": "Select All Users",
+          "inputs": {
+            "query": "SELECT * FROM users;"
+          },
+          "expectedOutput": "Returns all rows from users table"
+        },
+        {
+          "title": "Join Query",
+          "inputs": {
+            "query": "SELECT u.name, o.amount FROM users u JOIN orders o ON u.id = o.user_id;"
+          },
+          "expectedOutput": "Returns user names with their order amounts"
+        }
+      ],
+      "explain": "The SQL sandbox lets you practice SQL queries using SQLite in your browser. It includes sample tables (users, orders) so you can test queries immediately. Use it to learn SQL syntax, test query logic, or practice joins and aggregations. Don't use it for production data or complex multi-table schemas. Inputs: query (string) - Your SQL SELECT query. Limits: 3000ms CPU, 128MB memory, 256KB output. Security: Only SELECT queries and safe INSERT/UPDATE allowed. DROP and ALTER are blocked."
+    },
+    {
+      "id": "regex-tester",
+      "defaultInputs": {
+        "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+        "text": "Contact us at hello@example.com or support@test.org"
+      },
+      "examples": [
+        {
+          "title": "Email Pattern",
+          "inputs": {
+            "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+            "text": "Contact us at hello@example.com or support@test.org"
+          },
+          "expectedOutput": "Matches: hello@example.com, support@test.org"
+        },
+        {
+          "title": "Number Extraction",
+          "inputs": {
+            "pattern": "\\d+",
+            "text": "The price is $42.99 and quantity is 5"
+          },
+          "expectedOutput": "Matches: 42, 99, 5"
+        }
+      ],
+      "explain": "The regex tester helps you test regular expression patterns against sample text. It shows all matches and captured groups. Use it to debug regex patterns, learn regex syntax, or validate text extraction logic. Don't use it for extremely long text or complex patterns that might timeout. Inputs: pattern (string) - Your regex pattern. text (string) - Text to test against. Limits: 2000ms CPU, 64MB memory, 128KB output. Security: Patterns are executed with timeout protection to prevent ReDoS attacks."
+    },
+    {
+      "id": "password-entropy",
+      "defaultInputs": {
+        "password": "password123"
+      },
+      "examples": [
+        {
+          "title": "Weak Password",
+          "inputs": {
+            "password": "password123"
+          },
+          "expectedOutput": "Low entropy, weak strength"
+        },
+        {
+          "title": "Strong Password",
+          "inputs": {
+            "password": "Tr0ub4dor&3"
+          },
+          "expectedOutput": "Higher entropy, strong strength"
+        }
+      ],
+      "explain": "The password entropy meter calculates the entropy (randomness) of a password and estimates how long it would take to crack. It considers character set diversity (lowercase, uppercase, numbers, symbols) and length. Use it to understand password strength and compare different password strategies. Don't use it to validate actual passwords in production - this is educational. Inputs: password (string) - The password to analyze. Limits: 100ms CPU, 16MB memory, 1KB output. Security: All processing is local, no data is sent anywhere."
+    }
+  ]
+}
+

@@ -4,36 +4,10 @@ import React, { useState } from "react";
 import Link from "next/link";
 import ToolShell from "@/components/tools/ToolShell";
 import { getToolContract } from "@/lib/tools/loadContract";
-import { runJs } from "@/lib/sandbox/js/runJs";
-import { createToolError } from "@/components/tools/ErrorPanel";
 import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
+import type { ToolError } from "@/components/tools/ErrorPanel";
 
 const contract = getToolContract("js-sandbox");
-
-const examples = [
-  {
-    title: "Hello World",
-    inputs: { code: 'console.log("Hello, world!");' },
-  },
-  {
-    title: "Simple Loop",
-    inputs: {
-      code: `let sum = 0;
-for (let i = 1; i <= 5; i++) {
-  sum += i;
-}
-console.log("Sum:", sum);`,
-    },
-  },
-  {
-    title: "Array Transform",
-    inputs: {
-      code: `const nums = [1, 2, 3, 4];
-const doubled = nums.map(n => n * 2);
-console.log("Doubled:", doubled);`,
-    },
-  },
-];
 
 export default function JsSandboxPage() {
   const [code, setCode] = useState('console.log("Hello, world!");');
@@ -46,51 +20,8 @@ export default function JsSandboxPage() {
     );
   }
 
-  const handleRun = async (mode: ExecutionMode, inputs: Record<string, unknown>) => {
-    const codeInput = inputs.code as string;
-    if (!codeInput || typeof codeInput !== "string") {
-      return {
-        success: false,
-        error: createToolError("validation_error", "js-sandbox", { field: "code" }),
-      };
-    }
-
-    if (mode === "compute") {
-      // Call API for compute mode
-      try {
-        const res = await fetch("/api/tools/run", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ toolId: "js-sandbox", mode, inputs }),
-        });
-        const data = await res.json();
-        if (data.success) {
-          return { success: true, output: data.output };
-        } else {
-          return { success: false, error: createToolError(data.error.code, "js-sandbox", data.error) };
-        }
-      } catch (err) {
-        return {
-          success: false,
-          error: createToolError("runtime_error", "js-sandbox", { message: err instanceof Error ? err.message : String(err) }),
-        };
-      }
-    }
-
-    // Local mode
-    const result = await runJs(codeInput, contract);
-    if (result.success && result.output) {
-      return {
-        success: true,
-        output: result.output.result || result.output.stdout.join("\n"),
-      };
-    } else {
-      return {
-        success: false,
-        error: result.error ? createToolError(result.error.code, "js-sandbox", result.error) : createToolError("runtime_error", "js-sandbox"),
-      };
-    }
-  };
+  // ToolShell will use unified runner if onRun is undefined
+  // We can pass undefined to let it handle execution automatically
 
   return (
     <div className="mx-auto max-w-6xl p-6">
@@ -100,7 +31,7 @@ export default function JsSandboxPage() {
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ code }}>
+      <ToolShell contract={contract} initialInputs={{ code }}>
         <div className="space-y-4">
           <div>
             <label htmlFor="code" className="block text-sm font-semibold text-slate-900">
@@ -108,6 +39,7 @@ export default function JsSandboxPage() {
             </label>
             <textarea
               id="code"
+              name="code"
               value={code}
               onChange={(e) => setCode(e.target.value)}
               rows={15}

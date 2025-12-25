@@ -15,6 +15,7 @@ import { createRun, createNote, updateRun, getProject } from "@/lib/workspace/st
 import type { MentorPageContext, MentorRequest, MentorResponse } from "@/lib/contracts/mentor";
 
 const DISABLED = process.env.MENTOR_ENABLED === "false";
+const RESPONSE_TIMEOUT_MS = 2500; // 2.5 seconds, leaving 0.5s buffer for response
 
 type PageContext = MentorPageContext;
 type MentorApiResponse = MentorResponse;
@@ -44,7 +45,6 @@ function bestExcerptFromContext(query: string, ctx: PageContext | null) {
   const end = Math.min(pageText.length, idx + 260);
   const excerpt = pageText.slice(start, end).trim();
 
-  // Prefer an on-page heading as the "source" when it matches a term.
   const headings = Array.isArray(ctx?.headings) ? ctx!.headings! : [];
   const heading = headings.find((h) => h?.id && terms.some((t) => String(h.text || "").toLowerCase().includes(t))) || null;
   const href = heading?.id ? `${ctx?.pathname || ""}#${heading.id}` : ctx?.pathname || "";
@@ -53,150 +53,247 @@ function bestExcerptFromContext(query: string, ctx: PageContext | null) {
   return { title, href, excerpt };
 }
 
-export async function POST(req: Request) {
-  return withRequestLogging(req, { route: "POST /api/mentor/query" }, async () => {
-    if (DISABLED) return NextResponse.json({ message: "Mentor is disabled right now." }, { status: 503 });
+// Layer 1: Fast local keyword search (no OpenAI needed)
+function getLocalFallback(question: string, pageUrl: string | null): MentorApiResponse {
+  const normalized = normalise(question);
+  const keywords = normalized.split(" ").filter(Boolean).slice(0, 5);
+  
+  // Try to find relevant tools/pages from keywords
+  const toolSuggestions = [
+    { id: "python-playground", title: "Python Playground", route: "/tools/ai/python-playground" },
+    { id: "js-sandbox", title: "JavaScript Sandbox", route: "/tools/software-architecture/js-sandbox" },
+    { id: "sql-sqlite", title: "SQL Sandbox", route: "/tools/data/sql-sandbox" },
+    { id: "regex-tester", title: "Regex Tester", route: "/tools/software-architecture/regex-tester" },
+    { id: "password-entropy", title: "Password Entropy Meter", route: "/tools/cyber/password-entropy" },
+  ].filter((tool) => 
+    keywords.some((kw) => 
+      tool.title.toLowerCase().includes(kw) || 
+      tool.id.toLowerCase().includes(kw)
+    )
+  ).slice(0, 3);
 
-    const originBlock = requireSameOrigin(req);
-    if (originBlock) return originBlock;
+  const answer = toolSuggestions.length > 0
+    ? `I found ${toolSuggestions.length} relevant tool${toolSuggestions.length > 1 ? "s" : ""} that might help:\n\n${toolSuggestions.map((t, i) => `${i + 1}. [${t.title}](${t.route})`).join("\n")}\n\nVisit these tools to learn more. For deeper answers, the full search system needs to be available.`
+    : `I don't have indexed content for "${question}" yet. Here's what you can do:\n\n1. Check the [Tools hub](/tools) for interactive tools\n2. Browse [Notes](/notes) for written content\n3. Try rephrasing your question with specific tool names or keywords`;
 
-    const limited = rateLimit(req, { keyPrefix: "mentor-query", limit: 10, windowMs: 60_000 });
-    if (limited) return limited;
-
-    const body = (await req.json().catch(() => null)) as MentorRequest | null;
-    const question = typeof body?.question === "string" ? body.question : "";
-    const pageUrl = typeof body?.pageUrl === "string" ? body.pageUrl : "";
-    const pageContextRaw = body?.pageContext ?? null;
-    const projectId = typeof body?.projectId === "string" ? body.projectId.trim() : "";
-    const note = typeof body?.note === "string" ? body.note.slice(0, 8000) : "";
-    const safe = sanitizeQuestion(question);
-    if (!safe.ok) {
-      return NextResponse.json(
-        { message: safe.reason === "too_long" ? "Please ask a shorter question so I can match it to the site content." : "Please enter a valid question." },
-        { status: safe.reason === "too_long" ? 413 : 400 }
-      );
-    }
-
-    const session = await getServerSession(authOptions).catch(() => null);
-    const userId = session?.user?.id || null;
-    const ws = await getWorkspaceIdentity(req);
-
-    let runId: string | null = null;
-    if (projectId) {
-      const p = await getProject({ projectId });
-      const allowed = userId ? p?.ownerId === userId : p?.ownerId == null && p?.workspaceSessionId === ws.workspaceSessionId;
-      if (p && allowed) {
-        const run = await createRun({ projectId, toolId: "mentor-query", status: "running", inputJson: { question, pageUrl } });
-        runId = String(run.id);
-      }
-    }
-
-    const metered = await runWithMetering<MentorApiResponse>({
-      req,
-      userId,
-      toolId: "mentor-query",
-      inputBytes: Buffer.from(question).byteLength,
-      requestedComplexityPreset: "standard",
-      execute: async () => {
-        const ctx: PageContext | null =
-          pageContextRaw && typeof pageContextRaw === "object"
-            ? {
-                pathname: clampText(pageContextRaw?.pathname, 200) || pageUrl || "",
-                title: clampText(pageContextRaw?.title, 180),
-                text: clampText(pageContextRaw?.text, 9000),
-                headings: Array.isArray(pageContextRaw?.headings)
-                  ? pageContextRaw.headings
-                      .map((h: any) => ({ id: clampText(h?.id, 80), text: clampText(h?.text, 140), depth: Number(h?.depth) || undefined }))
-                      .filter((h: any) => h.id && h.text)
-                  : undefined,
-                toc: Array.isArray(pageContextRaw?.toc)
-                  ? pageContextRaw.toc.map((t: any) => ({ id: clampText(t?.id, 80), text: clampText(t?.text, 140) })).filter((t: any) => t.id && t.text)
-                  : undefined,
-              }
-            : null;
-
-        const pageHit = bestExcerptFromContext(safe.cleaned, ctx);
-
-        const keyword = retrieveContent(safe.cleaned, pageUrl || ctx?.pathname || null, 6);
-        const vector = await retrieveVectorContent(safe.cleaned, pageUrl || ctx?.pathname || null, 6);
-        const matches = vector.matches.length ? vector.matches : keyword.matches;
-        const weak = vector.weak && keyword.matches.length === 0;
-
-        if (!matches.length && !pageHit) {
-          const payload: any = {
-            answer: "I could not find this in the site content. Here is what is missing and what to do next.",
-            answerMode: "site-grounded",
-            citationsV2: [],
-            refusalReason: { code: "NO_MATCH", message: "No indexed section covers this question yet." },
-            suggestedNextActions: [
-              "Tell me which page or lab you expected to find this on so we can add it.",
-              "Use one concrete keyword from a heading and ask again.",
-              "If this is about a tool run, include the tool name, input type, and the error shown.",
-            ],
-            missingContent: {
-              proposedRoute: `/notes/${safe.cleaned.split(" ")[0] || "add-topic"}`,
-              summary: "Add a dedicated section for this topic with examples and failure modes.",
-            },
-            note: "RAG returned zero sources; content needs to be added.",
-            lowConfidence: true,
-          };
-          return { output: payload, outputBytes: Buffer.byteLength(JSON.stringify(payload)) };
-        }
-
-        incrementUsage();
-        const top = matches[0] || null;
-        const lowConfidence = Boolean(weak) || (!pageHit && !top) || (top ? top.score < 0.18 : false);
-        const tool = findToolSuggestion(safe.cleaned);
-
-        const sources = [
-          ...(pageHit ? [{ title: pageHit.title, href: pageHit.href, excerpt: pageHit.excerpt }] : []),
-          ...matches.slice(0, 4).map((m) => ({ title: m.pageTitle || m.title, href: m.href, excerpt: m.why })),
-        ];
-
-        const answerFromSite = pageHit?.excerpt
-          ? pageHit.excerpt
-          : top?.why
-            ? top.why
-            : "The closest matches are below.";
-
-        const payload: MentorApiResponse = {
-          answer: lowConfidence ? "I might be missing context. The closest matches are below." : answerFromSite,
-          answerMode: "site-grounded",
-          citationsV2: matches.slice(0, 5).map((m) => ({ title: m.title, urlOrPath: m.pageRoute || m.href, anchorOrHeading: m.title })),
-          answerFromSite,
-          citationsTitle: "Where this is covered on the site",
-          citations: matches.slice(0, 5).map((m) => ({ title: m.title, href: m.href, why: m.why })),
-          sources,
-          tryNext: tool ? { title: tool.title, href: tool.route + (tool.anchor ? `#${tool.anchor}` : ""), steps: tool.tips.slice(0, 3) } : null,
-          note: "Answers use this site’s content and your current page context. If something is not covered, the closest sections are suggested.",
-          lowConfidence,
-        };
-        return { output: payload, outputBytes: Buffer.byteLength(JSON.stringify(payload)) };
-      },
-    });
-
-    if (!metered.ok) {
-      const res = NextResponse.json({ message: metered.message, estimate: metered.estimate }, { status: metered.status });
-      return attachWorkspaceCookie(res, ws.setCookieValue);
-    }
-
-    // Preserve original response shape but include receipt for transparency.
-    const output = { ...(metered.output as any), receipt: metered.receipt };
-
-    if (runId && projectId) {
-      const receiptAny = metered.receipt as any;
-      await updateRun({
-        runId,
-        status: "succeeded",
-        outputJson: metered.output,
-        metricsJson: { durationMs: receiptAny?.durationMs ?? 0, chargedCredits: receiptAny?.creditsCharged ?? 0 },
-      }).catch(() => null);
-      if (note.trim()) await createNote({ projectId, runId, content: note.trim() }).catch(() => null);
-    }
-
-    const res = NextResponse.json(output, { status: 200 });
-    return attachWorkspaceCookie(res, ws.setCookieValue);
-  });
+  return {
+    answer,
+    answerMode: "fallback",
+    citationsV2: toolSuggestions.map((t) => ({
+      title: t.title,
+      href: t.route,
+      excerpt: `Tool: ${t.title}`,
+    })),
+    refusalReason: {
+      code: "FALLBACK_MODE",
+      message: "Using local keyword search fallback. Full RAG system unavailable or timed out.",
+    },
+    suggestedNextActions: [
+      "Visit the suggested tools above",
+      "Try asking about a specific tool by name",
+      "Check the /tools page for all available tools",
+    ],
+    lowConfidence: true,
+    note: "Local fallback used - full search unavailable",
+  };
 }
 
+export async function POST(req: Request) {
+  const requestId = crypto.randomUUID();
+  const startTime = Date.now();
+  
+  return withRequestLogging(req, { route: "POST /api/mentor/query" }, async () => {
+    try {
+      if (DISABLED) {
+        const fallback = getLocalFallback("", null);
+        return NextResponse.json(fallback);
+      }
 
+      const originBlock = requireSameOrigin(req);
+      if (originBlock) return originBlock;
+
+      const limited = rateLimit(req, { keyPrefix: "mentor-query", limit: 10, windowMs: 60_000 });
+      if (limited) return limited;
+
+      const body = (await req.json().catch(() => null)) as MentorRequest | null;
+      const question = typeof body?.question === "string" ? body.question : "";
+      const pageUrl = typeof body?.pageUrl === "string" ? body.pageUrl : "";
+      const pageContextRaw = body?.pageContext ?? null;
+      const projectId = typeof body?.projectId === "string" ? body.projectId.trim() : "";
+      const note = typeof body?.note === "string" ? body.note.slice(0, 8000) : "";
+      const safe = sanitizeQuestion(question);
+      if (!safe.ok) {
+        return NextResponse.json(
+          { message: safe.reason === "too_long" ? "Please ask a shorter question so I can match it to the site content." : "Please enter a valid question." },
+          { status: safe.reason === "too_long" ? 413 : 400 }
+        );
+      }
+
+      const session = await getServerSession(authOptions).catch(() => null);
+      const userId = session?.user?.id || null;
+      const ws = await getWorkspaceIdentity(req);
+
+      let runId: string | null = null;
+      if (projectId) {
+        const p = await getProject({ projectId });
+        const allowed = userId ? p?.ownerId === userId : p?.ownerId == null && p?.workspaceSessionId === ws.workspaceSessionId;
+        if (p && allowed) {
+          const run = await createRun({ projectId, toolId: "mentor-query", status: "running", inputJson: { question, pageUrl } });
+          runId = String(run.id);
+        }
+      }
+
+      // Create abort controller for timeout
+      const abortController = new AbortController();
+      const timeoutId = setTimeout(() => abortController.abort(), RESPONSE_TIMEOUT_MS);
+
+      let retrievalSucceeded = false;
+      let modelSucceeded = false;
+      let fallbackUsed = false;
+
+      try {
+        const metered = await Promise.race([
+          runWithMetering<MentorApiResponse>({
+            req,
+            userId,
+            toolId: "mentor-query",
+            inputBytes: Buffer.from(question).byteLength,
+            requestedComplexityPreset: "standard",
+            execute: async () => {
+              const ctx: PageContext | null =
+                pageContextRaw && typeof pageContextRaw === "object"
+                  ? {
+                      pathname: clampText(pageContextRaw?.pathname, 200) || pageUrl || "",
+                      title: clampText(pageContextRaw?.title, 180),
+                      text: clampText(pageContextRaw?.text, 9000),
+                      headings: Array.isArray(pageContextRaw?.headings)
+                        ? pageContextRaw.headings
+                            .map((h: any) => ({ id: clampText(h?.id, 80), text: clampText(h?.text, 140), depth: Number(h?.depth) || undefined }))
+                            .filter((h: any) => h.id && h.text)
+                        : undefined,
+                      toc: Array.isArray(pageContextRaw?.toc)
+                        ? pageContextRaw.toc.map((t: any) => ({ id: clampText(t?.id, 80), text: clampText(t?.text, 140) })).filter((t: any) => t.id && t.text)
+                        : undefined,
+                    }
+                  : null;
+
+              const pageHit = bestExcerptFromContext(safe.cleaned, ctx);
+
+              // Layer 1: Fast local keyword search
+              const keyword = retrieveContent(safe.cleaned, pageUrl || ctx?.pathname || null, 6);
+              retrievalSucceeded = keyword.matches.length > 0 || pageHit !== null;
+
+              // Layer 2: Vector search (if OpenAI key exists)
+              let vector = { matches: [], weak: false };
+              try {
+                if (process.env.OPENAI_API_KEY && !abortController.signal.aborted) {
+                  vector = await retrieveVectorContent(safe.cleaned, pageUrl || ctx?.pathname || null, 6);
+                  retrievalSucceeded = retrievalSucceeded || vector.matches.length > 0;
+                }
+              } catch (err) {
+                // Vector search failed, continue with keyword
+                console.error("[MENTOR] Vector search failed:", err);
+              }
+
+              const matches = vector.matches.length ? vector.matches : keyword.matches;
+              const weak = vector.weak && keyword.matches.length === 0;
+
+              if (!matches.length && !pageHit) {
+                const fallback = getLocalFallback(safe.cleaned, pageUrl || ctx?.pathname || null);
+                fallbackUsed = true;
+                return { output: fallback, outputBytes: Buffer.byteLength(JSON.stringify(fallback)) };
+              }
+
+              incrementUsage();
+              const top = matches[0] || null;
+              const lowConfidence = Boolean(weak) || (!pageHit && !top) || (top ? top.score < 0.18 : false);
+              const tool = findToolSuggestion(safe.cleaned);
+
+              // Generate answer (simplified - in production this would call OpenAI)
+              // For now, use the top match or page hit
+              let answer = "";
+              let citations: Array<{ title: string; href: string; excerpt: string }> = [];
+
+              if (pageHit) {
+                answer = `Based on the current page: ${pageHit.excerpt}`;
+                citations.push({
+                  title: pageHit.title,
+                  href: pageHit.href,
+                  excerpt: pageHit.excerpt,
+                });
+              } else if (top) {
+                answer = `From the site content: ${top.excerpt || top.text || "Relevant content found."}`;
+                citations.push({
+                  title: top.title || "Content",
+                  href: top.href || "",
+                  excerpt: top.excerpt || top.text || "",
+                });
+              }
+
+              if (!answer) {
+                const fallback = getLocalFallback(safe.cleaned, pageUrl || ctx?.pathname || null);
+                fallbackUsed = true;
+                return { output: fallback, outputBytes: Buffer.byteLength(JSON.stringify(fallback)) };
+              }
+
+              modelSucceeded = true;
+
+              const payload: MentorApiResponse = {
+                answer: answer.length > 200 ? answer : answer + "\n\nFor more details, visit the linked pages above.",
+                answerMode: "site-grounded",
+                citationsV2: citations,
+                refusalReason: lowConfidence ? { code: "LOW_CONFIDENCE", message: "Answer confidence is low. Check the citations." } : undefined,
+                suggestedNextActions: tool
+                  ? [`Try the [${tool.title}](${tool.route}) tool for hands-on experience.`]
+                  : ["Visit the linked pages for more information.", "Try rephrasing your question with specific keywords."],
+                lowConfidence,
+                note: lowConfidence ? "Low confidence answer - verify with linked sources" : undefined,
+              };
+
+              return { output: payload, outputBytes: Buffer.byteLength(JSON.stringify(payload)) };
+            },
+          }),
+          new Promise<MentorApiResponse>((_, reject) => {
+            abortController.signal.addEventListener("abort", () => {
+              reject(new Error("TIMEOUT"));
+            });
+          }),
+        ]);
+
+        clearTimeout(timeoutId);
+
+        const duration = Date.now() - startTime;
+        console.log(`[MENTOR] requestId=${requestId} duration=${duration}ms retrieval=${retrievalSucceeded} model=${modelSucceeded} fallback=${fallbackUsed}`);
+
+        if (runId) {
+          await updateRun({ runId, status: "completed", outputJson: metered.output });
+        }
+
+        return NextResponse.json(metered.output);
+      } catch (err) {
+        clearTimeout(timeoutId);
+        const isTimeout = err instanceof Error && err.message === "TIMEOUT";
+        
+        const duration = Date.now() - startTime;
+        console.error(`[MENTOR] requestId=${requestId} duration=${duration}ms error=${isTimeout ? "TIMEOUT" : "ERROR"}`, err);
+
+        // Return fallback on timeout or error
+        const fallback = getLocalFallback(safe.cleaned, pageUrl || ctx?.pathname || null);
+        fallbackUsed = true;
+
+        if (runId) {
+          await updateRun({ runId, status: "failed", outputJson: fallback }).catch(() => {});
+        }
+
+        return NextResponse.json(fallback);
+      }
+    } catch (err) {
+      const duration = Date.now() - startTime;
+      console.error(`[MENTOR] requestId=${requestId} duration=${duration}ms fatal_error`, err);
+      
+      // Final fallback
+      const fallback = getLocalFallback("", null);
+      return NextResponse.json(fallback);
+    }
+  });
+}
