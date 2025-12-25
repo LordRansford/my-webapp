@@ -44,6 +44,9 @@ export const metadata = {
   title: "Ransford's Notes",
   description: "Demystifying data, digitalisation, AI, cybersecurity, and engineering with hands-on tools.",
   manifest: "/manifest.webmanifest",
+};
+
+export const viewport = {
   themeColor: "#007aff",
 };
 
