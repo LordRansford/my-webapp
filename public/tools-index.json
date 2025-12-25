@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-12-25T22:31:53.464Z",
+  "generatedAt": "2025-12-25T23:01:15.775Z",
   "tools": [
     {
       "id": "architecture-diagram-studio",
@@ -14,13 +14,53 @@
         "cpuMs": 5000,
         "memoryMb": 256,
         "outputKb": 512,
-        "wallMs": 10000
+        "wallMs": 10000,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 0,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "local",
+      "failureModes": [
+        "validation_error",
+        "generation_error",
+        "user_error"
+      ],
+      "statusStates": [
+        "idle",
+        "validating",
+        "rendered",
+        "failed"
+      ],
+      "inputs": [
+        {
+          "name": "systemName",
+          "type": "string",
+          "limits": "max 80 chars"
+        },
+        {
+          "name": "systemDescription",
+          "type": "string",
+          "limits": "max 600 chars"
+        },
+        {
+          "name": "audience",
+          "type": "enum",
+          "limits": "students|professionals"
+        },
+        {
+          "name": "goal",
+          "type": "enum",
+          "limits": "explain|design-review|security-review|data-review"
+        },
+        {
+          "name": "actors/blocks/flows/security",
+          "type": "arrays",
+          "limits": "capped by ARCH_DIAGRAM_LIMITS"
+        }
+      ],
       "defaultInputs": {},
       "examples": [],
       "explain": ""
@@ -38,13 +78,28 @@
         "cpuMs": 0,
         "memoryMb": 128,
         "outputKb": 0,
-        "wallMs": 0
+        "wallMs": 0,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 0,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "local",
+      "failureModes": [
+        "not_found",
+        "locked_route",
+        "offline_not_ready"
+      ],
+      "statusStates": [
+        "loading",
+        "ready",
+        "running",
+        "paused",
+        "completed"
+      ],
+      "inputs": [],
       "defaultInputs": {},
       "examples": [],
       "explain": ""
@@ -63,13 +118,34 @@
         "memoryMb": 128,
         "outputKb": 64,
         "fileSizeKb": 5120,
-        "wallMs": 4000
+        "wallMs": 4000,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 2,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "/api/tools/run/vision-quick-check",
+      "failureModes": [
+        "file_too_large",
+        "unsupported_format",
+        "processing_error"
+      ],
+      "statusStates": [
+        "idle",
+        "uploading",
+        "processing",
+        "completed",
+        "failed"
+      ],
+      "inputs": [
+        {
+          "name": "image",
+          "type": "file",
+          "limits": "png/jpg/webp within lab size limit"
+        }
+      ],
       "defaultInputs": {},
       "examples": [],
       "explain": ""
@@ -89,13 +165,35 @@
         "outputKb": 128,
         "durationSeconds": 60,
         "fileSizeKb": 10240,
-        "wallMs": 10000
+        "wallMs": 10000,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 5,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "/api/tools/run/speech-sound-analysis",
+      "failureModes": [
+        "recording_unsupported",
+        "file_too_large",
+        "unsupported_format",
+        "processing_error"
+      ],
+      "statusStates": [
+        "idle",
+        "recording|uploading",
+        "processing",
+        "completed",
+        "failed"
+      ],
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "file|recording",
+          "limits": "wav/mp3 within duration+size caps"
+        }
+      ],
       "defaultInputs": {},
       "examples": [],
       "explain": ""
@@ -113,13 +211,41 @@
         "cpuMs": 2000,
         "memoryMb": 128,
         "outputKb": 64,
-        "wallMs": 4000
+        "wallMs": 4000,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 2,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "/api/jobs/create",
+      "failureModes": [
+        "validation_error",
+        "timeout",
+        "resource_limit",
+        "runtime_error",
+        "policy_denied"
+      ],
+      "statusStates": [
+        "idle",
+        "queued",
+        "running",
+        "completed",
+        "failed"
+      ],
+      "inputs": [
+        {
+          "name": "code",
+          "type": "string",
+          "limits": "per-language size limit (max 10KB)"
+        },
+        {
+          "name": "language",
+          "type": "enum",
+          "limits": "js|py (allowlist only)"
+        }
+      ],
       "defaultInputs": {},
       "examples": [],
       "explain": ""
@@ -137,13 +263,34 @@
         "cpuMs": 5000,
         "memoryMb": 256,
         "outputKb": 128,
-        "wallMs": 10000
+        "wallMs": 10000,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 0,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "local",
+      "failureModes": [
+        "syntax_error",
+        "runtime_error",
+        "timeout",
+        "memory_exceeded"
+      ],
+      "statusStates": [
+        "idle",
+        "running",
+        "completed",
+        "failed"
+      ],
+      "inputs": [
+        {
+          "name": "code",
+          "type": "string",
+          "limits": "max 10KB, ideal under 100 lines"
+        }
+      ],
       "defaultInputs": {
         "code": "print('Hello, world!')"
       },
@@ -185,13 +332,33 @@
         "cpuMs": 2000,
         "memoryMb": 128,
         "outputKb": 64,
-        "wallMs": 4000
+        "wallMs": 4000,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 0,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "local",
+      "failureModes": [
+        "syntax_error",
+        "runtime_error",
+        "timeout"
+      ],
+      "statusStates": [
+        "idle",
+        "running",
+        "completed",
+        "failed"
+      ],
+      "inputs": [
+        {
+          "name": "code",
+          "type": "string",
+          "limits": "max 10KB"
+        }
+      ],
       "defaultInputs": {
         "code": "console.log('Hello, world!');"
       },
@@ -233,13 +400,33 @@
         "cpuMs": 3000,
         "memoryMb": 128,
         "outputKb": 256,
-        "wallMs": 6000
+        "wallMs": 6000,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 0,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "local",
+      "failureModes": [
+        "syntax_error",
+        "query_error",
+        "timeout"
+      ],
+      "statusStates": [
+        "idle",
+        "running",
+        "completed",
+        "failed"
+      ],
+      "inputs": [
+        {
+          "name": "query",
+          "type": "string",
+          "limits": "max 5KB"
+        }
+      ],
       "defaultInputs": {
         "query": "SELECT * FROM users;"
       },
@@ -281,13 +468,43 @@
         "cpuMs": 2000,
         "memoryMb": 64,
         "outputKb": 32,
-        "wallMs": 4000
+        "wallMs": 4000,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 0,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "local",
+      "failureModes": [
+        "invalid_primes",
+        "invalid_message",
+        "computation_error"
+      ],
+      "statusStates": [
+        "idle",
+        "computing",
+        "completed",
+        "failed"
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "type": "number",
+          "limits": "small prime for demo"
+        },
+        {
+          "name": "q",
+          "type": "number",
+          "limits": "small prime for demo"
+        },
+        {
+          "name": "message",
+          "type": "number|string",
+          "limits": "max 1KB"
+        }
+      ],
       "defaultInputs": {
         "action": "generate"
       },
@@ -324,13 +541,36 @@
         "cpuMs": 1000,
         "memoryMb": 64,
         "outputKb": 1,
-        "wallMs": 2000
+        "wallMs": 2000,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 0,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "local",
+      "failureModes": [
+        "invalid_input",
+        "unsupported_algorithm"
+      ],
+      "statusStates": [
+        "idle",
+        "computing",
+        "completed"
+      ],
+      "inputs": [
+        {
+          "name": "input",
+          "type": "string",
+          "limits": "max 1KB"
+        },
+        {
+          "name": "algorithm",
+          "type": "enum",
+          "limits": "SHA-256|MD5|SHA-1"
+        }
+      ],
       "defaultInputs": {
         "input": "Hello, world!"
       },
@@ -365,13 +605,30 @@
         "cpuMs": 100,
         "memoryMb": 16,
         "outputKb": 1,
-        "wallMs": 200
+        "wallMs": 200,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 0,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "local",
+      "failureModes": [
+        "invalid_input"
+      ],
+      "statusStates": [
+        "idle",
+        "computing",
+        "completed"
+      ],
+      "inputs": [
+        {
+          "name": "password",
+          "type": "string",
+          "limits": "max 256 chars"
+        }
+      ],
       "defaultInputs": {
         "password": "password123"
       },
@@ -413,13 +670,32 @@
         "cpuMs": 500,
         "memoryMb": 32,
         "outputKb": 16,
-        "wallMs": 1000
+        "wallMs": 1000,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 0,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "local",
+      "failureModes": [
+        "invalid_format",
+        "parse_error"
+      ],
+      "statusStates": [
+        "idle",
+        "parsing",
+        "completed",
+        "failed"
+      ],
+      "inputs": [
+        {
+          "name": "certificate",
+          "type": "file|string",
+          "limits": "PEM/DER format, max 10KB"
+        }
+      ],
       "defaultInputs": {
         "certificate": ""
       },
@@ -454,13 +730,38 @@
         "cpuMs": 2000,
         "memoryMb": 64,
         "outputKb": 128,
-        "wallMs": 4000
+        "wallMs": 4000,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 0,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "local",
+      "failureModes": [
+        "invalid_regex",
+        "timeout",
+        "memory_exceeded"
+      ],
+      "statusStates": [
+        "idle",
+        "matching",
+        "completed",
+        "failed"
+      ],
+      "inputs": [
+        {
+          "name": "pattern",
+          "type": "string",
+          "limits": "max 1KB"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "limits": "max 50KB"
+        }
+      ],
       "defaultInputs": {
         "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
         "text": "Contact us at hello@example.com or support@test.org"
@@ -506,13 +807,32 @@
         "cpuMs": 1000,
         "memoryMb": 64,
         "outputKb": 256,
-        "wallMs": 2000
+        "wallMs": 2000,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 0,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "local",
+      "failureModes": [
+        "invalid_schema",
+        "parse_error"
+      ],
+      "statusStates": [
+        "idle",
+        "parsing",
+        "completed",
+        "failed"
+      ],
+      "inputs": [
+        {
+          "name": "schema",
+          "type": "string",
+          "limits": "SQL DDL or JSON schema, max 20KB"
+        }
+      ],
       "defaultInputs": {
         "schema": "{\"entities\": [{\"name\": \"User\", \"fields\": [{\"name\": \"id\", \"type\": \"string\"}]}]}"
       },
@@ -547,13 +867,40 @@
         "cpuMs": 10,
         "memoryMb": 16,
         "outputKb": 1,
-        "wallMs": 20
+        "wallMs": 20,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 0,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "local",
+      "failureModes": [
+        "invalid_input"
+      ],
+      "statusStates": [
+        "idle",
+        "computing",
+        "completed"
+      ],
+      "inputs": [
+        {
+          "name": "gateType",
+          "type": "enum",
+          "limits": "AND|OR|XOR"
+        },
+        {
+          "name": "inputA",
+          "type": "boolean",
+          "limits": "0 or 1"
+        },
+        {
+          "name": "inputB",
+          "type": "boolean",
+          "limits": "0 or 1"
+        }
+      ],
       "defaultInputs": {
         "gate": "AND",
         "inputA": true,
@@ -594,13 +941,31 @@
         "cpuMs": 100,
         "memoryMb": 64,
         "outputKb": 512,
-        "wallMs": 200
+        "wallMs": 200,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 0,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "local",
+      "failureModes": [
+        "validation_error",
+        "too_many_risks"
+      ],
+      "statusStates": [
+        "idle",
+        "processing",
+        "completed"
+      ],
+      "inputs": [
+        {
+          "name": "risks",
+          "type": "array",
+          "limits": "max 50 items, each risk max 5KB"
+        }
+      ],
       "defaultInputs": {
         "riskName": "Data breach",
         "likelihood": "medium",
@@ -641,13 +1006,46 @@
         "cpuMs": 100,
         "memoryMb": 32,
         "outputKb": 16,
-        "wallMs": 200
+        "wallMs": 200,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 0,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "local",
+      "failureModes": [
+        "validation_error",
+        "missing_fields"
+      ],
+      "statusStates": [
+        "idle",
+        "generating",
+        "completed"
+      ],
+      "inputs": [
+        {
+          "name": "decision",
+          "type": "string",
+          "limits": "max 200 chars"
+        },
+        {
+          "name": "context",
+          "type": "string",
+          "limits": "max 2KB"
+        },
+        {
+          "name": "options",
+          "type": "array",
+          "limits": "2-4 options, each max 500 chars"
+        },
+        {
+          "name": "rationale",
+          "type": "string",
+          "limits": "max 2KB"
+        }
+      ],
       "defaultInputs": {
         "decision": "Use microservices architecture",
         "context": "Need to scale independently",
@@ -697,13 +1095,42 @@
         "cpuMs": 500,
         "memoryMb": 128,
         "outputKb": 256,
-        "wallMs": 1000
+        "wallMs": 1000,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 0,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "local",
+      "failureModes": [
+        "validation_error",
+        "too_many_options",
+        "missing_criteria"
+      ],
+      "statusStates": [
+        "idle",
+        "analyzing",
+        "completed"
+      ],
+      "inputs": [
+        {
+          "name": "options",
+          "type": "array",
+          "limits": "2-3 options, each max 1KB"
+        },
+        {
+          "name": "constraints",
+          "type": "array",
+          "limits": "max 20 items, each max 200 chars"
+        },
+        {
+          "name": "criteria",
+          "type": "array",
+          "limits": "6-10 criteria, each max 500 chars"
+        }
+      ],
       "defaultInputs": {
         "options": [
           "Option A",
@@ -764,13 +1191,46 @@
         "cpuMs": 100,
         "memoryMb": 32,
         "outputKb": 16,
-        "wallMs": 200
+        "wallMs": 200,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 0,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "local",
+      "failureModes": [
+        "validation_error",
+        "invalid_classification"
+      ],
+      "statusStates": [
+        "idle",
+        "classifying",
+        "completed"
+      ],
+      "inputs": [
+        {
+          "name": "assetName",
+          "type": "string",
+          "limits": "max 200 chars"
+        },
+        {
+          "name": "sensitivity",
+          "type": "enum",
+          "limits": "Public|Internal|Confidential|Restricted"
+        },
+        {
+          "name": "compliance",
+          "type": "array",
+          "limits": "GDPR|HIPAA|PCI_DSS|None"
+        },
+        {
+          "name": "impact",
+          "type": "enum",
+          "limits": "High|Medium|Low"
+        }
+      ],
       "defaultInputs": {
         "dataType": "Customer email addresses",
         "sensitivity": "medium"
@@ -808,13 +1268,46 @@
         "cpuMs": 500,
         "memoryMb": 128,
         "outputKb": 256,
-        "wallMs": 1000
+        "wallMs": 1000,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 0,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "local",
+      "failureModes": [
+        "validation_error",
+        "missing_assets"
+      ],
+      "statusStates": [
+        "idle",
+        "analyzing",
+        "completed"
+      ],
+      "inputs": [
+        {
+          "name": "systemName",
+          "type": "string",
+          "limits": "max 200 chars"
+        },
+        {
+          "name": "assets",
+          "type": "array",
+          "limits": "max 20 items"
+        },
+        {
+          "name": "trustBoundaries",
+          "type": "array",
+          "limits": "max 10 items"
+        },
+        {
+          "name": "threats",
+          "type": "array",
+          "limits": "max 30 items"
+        }
+      ],
       "defaultInputs": {
         "systemName": "Web Application",
         "components": [
@@ -864,13 +1357,41 @@
         "cpuMs": 200,
         "memoryMb": 64,
         "outputKb": 128,
-        "wallMs": 400
+        "wallMs": 400,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 0,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "local",
+      "failureModes": [
+        "validation_error",
+        "unsupported_framework"
+      ],
+      "statusStates": [
+        "idle",
+        "mapping",
+        "completed"
+      ],
+      "inputs": [
+        {
+          "name": "controlDescription",
+          "type": "string",
+          "limits": "max 500 chars"
+        },
+        {
+          "name": "framework",
+          "type": "enum",
+          "limits": "NIST_CSF|ISO_27001|CIS_Controls"
+        },
+        {
+          "name": "mapping",
+          "type": "string",
+          "limits": "max 200 chars"
+        }
+      ],
       "defaultInputs": {
         "control": "Access Control",
         "frameworks": [
@@ -918,13 +1439,41 @@
         "cpuMs": 500,
         "memoryMb": 128,
         "outputKb": 256,
-        "wallMs": 1000
+        "wallMs": 1000,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 0,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "local",
+      "failureModes": [
+        "validation_error",
+        "missing_steps"
+      ],
+      "statusStates": [
+        "idle",
+        "analyzing",
+        "completed"
+      ],
+      "inputs": [
+        {
+          "name": "processSteps",
+          "type": "array",
+          "limits": "max 30 steps, each max 500 chars"
+        },
+        {
+          "name": "actors",
+          "type": "array",
+          "limits": "max 20 actors"
+        },
+        {
+          "name": "frictionPoints",
+          "type": "array",
+          "limits": "max 20 points"
+        }
+      ],
       "defaultInputs": {
         "processName": "Code Review",
         "steps": [
@@ -975,13 +1524,46 @@
         "cpuMs": 100,
         "memoryMb": 32,
         "outputKb": 16,
-        "wallMs": 200
+        "wallMs": 200,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 0,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "local",
+      "failureModes": [
+        "validation_error",
+        "missing_fields"
+      ],
+      "statusStates": [
+        "idle",
+        "prioritizing",
+        "completed"
+      ],
+      "inputs": [
+        {
+          "name": "debtItem",
+          "type": "string",
+          "limits": "max 500 chars"
+        },
+        {
+          "name": "impact",
+          "type": "enum",
+          "limits": "High|Medium|Low"
+        },
+        {
+          "name": "urgency",
+          "type": "enum",
+          "limits": "High|Medium|Low"
+        },
+        {
+          "name": "cost",
+          "type": "enum",
+          "limits": "High|Medium|Low"
+        }
+      ],
       "defaultInputs": {
         "debtItem": "Legacy authentication system",
         "impact": "high",
@@ -1022,13 +1604,56 @@
         "cpuMs": 200,
         "memoryMb": 128,
         "outputKb": 512,
-        "wallMs": 400
+        "wallMs": 400,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 0,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "local",
+      "failureModes": [
+        "validation_error",
+        "missing_required_fields"
+      ],
+      "statusStates": [
+        "idle",
+        "generating",
+        "completed"
+      ],
+      "inputs": [
+        {
+          "name": "title",
+          "type": "string",
+          "limits": "max 200 chars"
+        },
+        {
+          "name": "dateTime",
+          "type": "string",
+          "limits": "ISO 8601 format"
+        },
+        {
+          "name": "impact",
+          "type": "string",
+          "limits": "max 1KB"
+        },
+        {
+          "name": "timeline",
+          "type": "array",
+          "limits": "max 50 events"
+        },
+        {
+          "name": "rootCauses",
+          "type": "array",
+          "limits": "max 20 items"
+        },
+        {
+          "name": "actionItems",
+          "type": "array",
+          "limits": "max 30 items"
+        }
+      ],
       "defaultInputs": {
         "incidentTitle": "Service Outage",
         "severity": "high",
@@ -1069,13 +1694,51 @@
         "cpuMs": 100,
         "memoryMb": 32,
         "outputKb": 16,
-        "wallMs": 200
+        "wallMs": 200,
+        "inputKb": 64
       },
       "creditModel": {
         "baseCredits": 0,
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
+      "runner": "local",
+      "failureModes": [
+        "validation_error",
+        "missing_fields"
+      ],
+      "statusStates": [
+        "idle",
+        "defining",
+        "completed"
+      ],
+      "inputs": [
+        {
+          "name": "metricName",
+          "type": "string",
+          "limits": "max 200 chars"
+        },
+        {
+          "name": "definition",
+          "type": "string",
+          "limits": "max 1KB"
+        },
+        {
+          "name": "calculation",
+          "type": "string",
+          "limits": "max 2KB"
+        },
+        {
+          "name": "units",
+          "type": "string",
+          "limits": "max 50 chars"
+        },
+        {
+          "name": "source",
+          "type": "string",
+          "limits": "max 500 chars"
+        }
+      ],
       "defaultInputs": {
         "metricName": "API Response Time",
         "type": "latency",
