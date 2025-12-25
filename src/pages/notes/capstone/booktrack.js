@@ -39,7 +39,7 @@ export default function Page({ source, headings, meta }) {
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const { source, headings, meta } = await loadNote("capstone/booktrack.mdx");
   const safeMeta = {
     title: meta?.title || "",
