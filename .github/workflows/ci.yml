@@ -56,6 +56,9 @@ jobs:
       - name: Run Mentor E2E tests
         run: npx playwright test tests/mentor-e2e.test.ts --project=mentor-e2e
       
+      - name: Run Mentor contract tests
+        run: npx playwright test tests/mentor-contract.test.ts
+      
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4

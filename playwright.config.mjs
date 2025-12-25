@@ -24,6 +24,10 @@ export default defineConfig({
       testMatch: "**/mentor-e2e.test.ts",
     },
     {
+      name: "mentor-contract",
+      testMatch: "**/mentor-contract.test.ts",
+    },
+    {
       name: "e2e",
       testMatch: "**/e2e/**/*.spec.*",
     },
