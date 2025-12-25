@@ -62,10 +62,8 @@ export default function ToolSelfTest({ contract, defaultInputs, examples, onRun 
       missingFields.push("examples (need at least 2)");
     }
 
-    // Check runner
-    if (contract.runner === "local" && !onRun) {
-      missingFields.push("onRun handler (required for local execution)");
-    }
+    // Note: onRun is optional - ToolShell will use unified runner if not provided
+    // So we don't require it here
 
     if (missingFields.length > 0) {
       setTestResult({
