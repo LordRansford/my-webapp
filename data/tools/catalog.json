@@ -114,9 +114,50 @@
             "password": "Tr0ub4dor&3"
           },
           "expectedOutput": "Higher entropy, strong strength"
+        },
+        {
+          "title": "Very Long Password",
+          "inputs": {
+            "password": "correct horse battery staple"
+          },
+          "expectedOutput": "High entropy due to length, even with simple words"
         }
       ],
       "explain": "The password entropy meter calculates the entropy (randomness) of a password and estimates how long it would take to crack. It considers character set diversity (lowercase, uppercase, numbers, symbols) and length. Use it to understand password strength and compare different password strategies. Don't use it to validate actual passwords in production - this is educational. Inputs: password (string) - The password to analyze. Limits: 100ms CPU, 16MB memory, 1KB output. Security: All processing is local, no data is sent anywhere."
+    },
+    {
+      "id": "regex-tester",
+      "defaultInputs": {
+        "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+        "text": "Contact us at hello@example.com or support@test.org"
+      },
+      "examples": [
+        {
+          "title": "Email Pattern",
+          "inputs": {
+            "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+            "text": "Contact us at hello@example.com or support@test.org"
+          },
+          "expectedOutput": "Matches: hello@example.com, support@test.org"
+        },
+        {
+          "title": "Number Extraction",
+          "inputs": {
+            "pattern": "\\d+",
+            "text": "The price is $42.99 and quantity is 5"
+          },
+          "expectedOutput": "Matches: 42, 99, 5"
+        },
+        {
+          "title": "Word Boundaries",
+          "inputs": {
+            "pattern": "\\bcat\\b",
+            "text": "The cat sat on the mat. Category is different."
+          },
+          "expectedOutput": "Matches: cat (but not 'cat' in 'Category')"
+        }
+      ],
+      "explain": "The regex tester helps you test regular expression patterns against sample text. It shows all matches and captured groups. Use it to debug regex patterns, learn regex syntax, or validate text extraction logic. Don't use it for extremely long text or complex patterns that might timeout. Inputs: pattern (string) - Your regex pattern. text (string) - Text to test against. Limits: 2000ms CPU, 64MB memory, 128KB output. Security: Patterns are executed with timeout protection to prevent ReDoS attacks."
     }
   ]
 }

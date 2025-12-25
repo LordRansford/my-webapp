@@ -2,41 +2,6 @@ name: CI
 
 on:
   push:
-    branches: ["**"]
-  pull_request:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-
-      - name: Install
-        run: npm ci
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Build
-        run: npm run build
-
-      - name: Security scan (secrets)
-        run: npm run test:security
-
-      - name: npm audit (high and critical)
-        run: npm audit --audit-level=high
-
-name: CI
-
-on:
-  push:
     branches: ["main"]
   pull_request:
     branches: ["main"]
@@ -48,13 +13,53 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "20"
           cache: "npm"
+      
       - name: Install dependencies
-        run: npm install
+        run: npm ci
+      
       - name: Lint
         run: npm run lint
-      - name: Test (skip if none)
-        run: npm test || echo "no tests"
-      - name: npm audit (prod)
-        run: npm audit --omit=dev --audit-level=high
+      
+      - name: Build
+        run: npm run build
+      
+      - name: Security scan (secrets)
+        run: npm run test:security
+      
+      - name: npm audit (high and critical)
+        run: npm audit --audit-level=high
+
+  test-tools:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+      
+      - name: Build
+        run: npm run build
+      
+      - name: Run tool smoke tests
+        run: npx playwright test tests/tools-smoke.spec.ts --project=tools-smoke
+      
+      - name: Run Mentor E2E tests
+        run: npx playwright test tests/mentor-e2e.test.ts --project=mentor-e2e
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
