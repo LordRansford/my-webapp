@@ -1,0 +1,1295 @@
+{
+  "tools": [
+    {
+      "id": "architecture-diagram-studio",
+      "route": "/studios/architecture-diagram-studio",
+      "title": "Architecture Diagram Studio",
+      "purpose": "Generate draft architecture diagrams from structured inputs.",
+      "execution": "browser-only",
+      "inputs": [
+        {
+          "name": "systemName",
+          "type": "string",
+          "limits": "max 80 chars"
+        },
+        {
+          "name": "systemDescription",
+          "type": "string",
+          "limits": "max 600 chars"
+        },
+        {
+          "name": "audience",
+          "type": "enum",
+          "limits": "students|professionals"
+        },
+        {
+          "name": "goal",
+          "type": "enum",
+          "limits": "explain|design-review|security-review|data-review"
+        },
+        {
+          "name": "actors/blocks/flows/security",
+          "type": "arrays",
+          "limits": "capped by ARCH_DIAGRAM_LIMITS"
+        }
+      ],
+      "limits": {
+        "cpuMs": 5000,
+        "memoryMb": 256,
+        "outputKb": 512,
+        "wallMs": 10000
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "local",
+      "failureModes": [
+        "validation_error",
+        "generation_error",
+        "user_error"
+      ],
+      "statusStates": [
+        "idle",
+        "validating",
+        "rendered",
+        "failed"
+      ],
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Generate draft architecture diagrams from structured inputs."
+    },
+    {
+      "id": "game-canvas",
+      "route": "/games",
+      "title": "Game Canvas",
+      "purpose": "Interactive games with keyboard and touch; offline after first load.",
+      "execution": "browser-only",
+      "inputs": [],
+      "limits": {
+        "cpuMs": 0,
+        "memoryMb": 128,
+        "outputKb": 0,
+        "wallMs": 0
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "local",
+      "failureModes": [
+        "not_found",
+        "locked_route",
+        "offline_not_ready"
+      ],
+      "statusStates": [
+        "loading",
+        "ready",
+        "running",
+        "paused",
+        "completed"
+      ],
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Interactive games with keyboard and touch; offline after first load."
+    },
+    {
+      "id": "vision-quick-check",
+      "route": "/labs/vision/quick-check",
+      "title": "Vision Quick Check",
+      "purpose": "Validate and preview images; guide on size/format.",
+      "execution": "sandboxed-server",
+      "inputs": [
+        {
+          "name": "image",
+          "type": "file",
+          "limits": "png/jpg/webp within lab size limit"
+        }
+      ],
+      "limits": {
+        "cpuMs": 2000,
+        "memoryMb": 128,
+        "outputKb": 64,
+        "fileSizeKb": 5120,
+        "wallMs": 4000
+      },
+      "credits": {
+        "costPerRun": 2
+      },
+      "runner": "/api/tools/run/vision-quick-check",
+      "failureModes": [
+        "file_too_large",
+        "unsupported_format",
+        "processing_error"
+      ],
+      "statusStates": [
+        "idle",
+        "uploading",
+        "processing",
+        "completed",
+        "failed"
+      ],
+      "executionModes": [
+        "compute"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 2,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Validate and preview images; guide on size/format."
+    },
+    {
+      "id": "speech-sound-analysis",
+      "route": "/labs/speech/sound-analysis",
+      "title": "Speech Sound Analysis",
+      "purpose": "Analyze uploaded/recorded audio; transcript and basic metrics.",
+      "execution": "sandboxed-server",
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "file|recording",
+          "limits": "wav/mp3 within duration+size caps"
+        }
+      ],
+      "limits": {
+        "cpuMs": 5000,
+        "memoryMb": 256,
+        "outputKb": 128,
+        "durationSeconds": 60,
+        "fileSizeKb": 10240,
+        "wallMs": 10000
+      },
+      "credits": {
+        "costPerRun": 5
+      },
+      "runner": "/api/tools/run/speech-sound-analysis",
+      "failureModes": [
+        "recording_unsupported",
+        "file_too_large",
+        "unsupported_format",
+        "processing_error"
+      ],
+      "statusStates": [
+        "idle",
+        "recording|uploading",
+        "processing",
+        "completed",
+        "failed"
+      ],
+      "executionModes": [
+        "compute"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 5,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Analyze uploaded/recorded audio; transcript and basic metrics."
+    },
+    {
+      "id": "code-lab",
+      "route": "/tools/code-lab",
+      "title": "Code Lab",
+      "purpose": "Run code safely in a sandbox with allowlisted languages.",
+      "execution": "sandboxed-server",
+      "inputs": [
+        {
+          "name": "code",
+          "type": "string",
+          "limits": "per-language size limit (max 10KB)"
+        },
+        {
+          "name": "language",
+          "type": "enum",
+          "limits": "js|py (allowlist only)"
+        }
+      ],
+      "limits": {
+        "cpuMs": 2000,
+        "memoryMb": 128,
+        "outputKb": 64,
+        "wallMs": 4000
+      },
+      "credits": {
+        "costPerRun": 2
+      },
+      "runner": "/api/jobs/create",
+      "failureModes": [
+        "validation_error",
+        "timeout",
+        "resource_limit",
+        "runtime_error",
+        "policy_denied"
+      ],
+      "statusStates": [
+        "idle",
+        "queued",
+        "running",
+        "completed",
+        "failed"
+      ],
+      "executionModes": [
+        "compute"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 2,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Run code safely in a sandbox with allowlisted languages."
+    },
+    {
+      "id": "python-playground",
+      "route": "/tools/ai/python-playground",
+      "title": "Python playground",
+      "purpose": "Run small Python experiments in-browser (Pyodide).",
+      "execution": "browser-only",
+      "inputs": [
+        {
+          "name": "code",
+          "type": "string",
+          "limits": "max 10KB, ideal under 100 lines"
+        }
+      ],
+      "limits": {
+        "cpuMs": 5000,
+        "memoryMb": 256,
+        "outputKb": 128,
+        "wallMs": 10000
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "local",
+      "failureModes": [
+        "syntax_error",
+        "runtime_error",
+        "timeout",
+        "memory_exceeded"
+      ],
+      "statusStates": [
+        "idle",
+        "running",
+        "completed",
+        "failed"
+      ],
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Run small Python experiments in-browser (Pyodide)."
+    },
+    {
+      "id": "js-sandbox",
+      "route": "/tools/software-architecture/js-sandbox",
+      "title": "JavaScript sandbox",
+      "purpose": "Test JS behaviour and parsing safely.",
+      "execution": "browser-only",
+      "inputs": [
+        {
+          "name": "code",
+          "type": "string",
+          "limits": "max 10KB"
+        }
+      ],
+      "limits": {
+        "cpuMs": 2000,
+        "memoryMb": 128,
+        "outputKb": 64,
+        "wallMs": 4000
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "local",
+      "failureModes": [
+        "syntax_error",
+        "runtime_error",
+        "timeout"
+      ],
+      "statusStates": [
+        "idle",
+        "running",
+        "completed",
+        "failed"
+      ],
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Test JS behaviour and parsing safely."
+    },
+    {
+      "id": "sql-sqlite",
+      "route": "/tools/data/sql-sandbox",
+      "title": "SQL sandbox (SQLite)",
+      "purpose": "Practise queries and joins locally.",
+      "execution": "browser-only",
+      "inputs": [
+        {
+          "name": "query",
+          "type": "string",
+          "limits": "max 5KB"
+        }
+      ],
+      "limits": {
+        "cpuMs": 3000,
+        "memoryMb": 128,
+        "outputKb": 256,
+        "wallMs": 6000
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "local",
+      "failureModes": [
+        "syntax_error",
+        "query_error",
+        "timeout"
+      ],
+      "statusStates": [
+        "idle",
+        "running",
+        "completed",
+        "failed"
+      ],
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Practise queries and joins locally."
+    },
+    {
+      "id": "rsa-oaep",
+      "route": "/tools/cyber/rsa-lab",
+      "title": "RSA lab (OAEP + SHA-256)",
+      "purpose": "Generate keys and explain asymmetric crypto.",
+      "execution": "browser-only",
+      "inputs": [
+        {
+          "name": "p",
+          "type": "number",
+          "limits": "small prime for demo"
+        },
+        {
+          "name": "q",
+          "type": "number",
+          "limits": "small prime for demo"
+        },
+        {
+          "name": "message",
+          "type": "number|string",
+          "limits": "max 1KB"
+        }
+      ],
+      "limits": {
+        "cpuMs": 2000,
+        "memoryMb": 64,
+        "outputKb": 32,
+        "wallMs": 4000
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "local",
+      "failureModes": [
+        "invalid_primes",
+        "invalid_message",
+        "computation_error"
+      ],
+      "statusStates": [
+        "idle",
+        "computing",
+        "completed",
+        "failed"
+      ],
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Generate keys and explain asymmetric crypto."
+    },
+    {
+      "id": "entropy-hashing",
+      "route": "/tools/cyber/entropy-hashing",
+      "title": "Entropy and hashing",
+      "purpose": "Visualise randomness and the avalanche effect.",
+      "execution": "browser-only",
+      "inputs": [
+        {
+          "name": "input",
+          "type": "string",
+          "limits": "max 1KB"
+        },
+        {
+          "name": "algorithm",
+          "type": "enum",
+          "limits": "SHA-256|MD5|SHA-1"
+        }
+      ],
+      "limits": {
+        "cpuMs": 1000,
+        "memoryMb": 64,
+        "outputKb": 1,
+        "wallMs": 2000
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "local",
+      "failureModes": [
+        "invalid_input",
+        "unsupported_algorithm"
+      ],
+      "statusStates": [
+        "idle",
+        "computing",
+        "completed"
+      ],
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Visualise randomness and the avalanche effect."
+    },
+    {
+      "id": "password-entropy",
+      "route": "/tools/cyber/password-entropy",
+      "title": "Password entropy meter",
+      "purpose": "Compare length vs complexity trade-offs.",
+      "execution": "browser-only",
+      "inputs": [
+        {
+          "name": "password",
+          "type": "string",
+          "limits": "max 256 chars"
+        }
+      ],
+      "limits": {
+        "cpuMs": 100,
+        "memoryMb": 16,
+        "outputKb": 1,
+        "wallMs": 200
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "local",
+      "failureModes": [
+        "invalid_input"
+      ],
+      "statusStates": [
+        "idle",
+        "computing",
+        "completed"
+      ],
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Compare length vs complexity trade-offs."
+    },
+    {
+      "id": "cert-viewer",
+      "route": "/tools/cyber/certificate-viewer",
+      "title": "Certificate viewer",
+      "purpose": "Inspect certificate fields and trust cues.",
+      "execution": "browser-only",
+      "inputs": [
+        {
+          "name": "certificate",
+          "type": "file|string",
+          "limits": "PEM/DER format, max 10KB"
+        }
+      ],
+      "limits": {
+        "cpuMs": 500,
+        "memoryMb": 32,
+        "outputKb": 16,
+        "wallMs": 1000
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "local",
+      "failureModes": [
+        "invalid_format",
+        "parse_error"
+      ],
+      "statusStates": [
+        "idle",
+        "parsing",
+        "completed",
+        "failed"
+      ],
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Inspect certificate fields and trust cues."
+    },
+    {
+      "id": "regex-tester",
+      "route": "/tools/software-architecture/regex-tester",
+      "title": "Regex tester",
+      "purpose": "Extract patterns and groups from sample text.",
+      "execution": "browser-only",
+      "inputs": [
+        {
+          "name": "pattern",
+          "type": "string",
+          "limits": "max 1KB"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "limits": "max 50KB"
+        }
+      ],
+      "limits": {
+        "cpuMs": 2000,
+        "memoryMb": 64,
+        "outputKb": 128,
+        "wallMs": 4000
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "local",
+      "failureModes": [
+        "invalid_regex",
+        "timeout",
+        "memory_exceeded"
+      ],
+      "statusStates": [
+        "idle",
+        "matching",
+        "completed",
+        "failed"
+      ],
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Extract patterns and groups from sample text."
+    },
+    {
+      "id": "schema-inspector",
+      "route": "/tools/data/schema-inspector",
+      "title": "Schema inspector",
+      "purpose": "Explore entities, fields, and relationships.",
+      "execution": "browser-only",
+      "inputs": [
+        {
+          "name": "schema",
+          "type": "string",
+          "limits": "SQL DDL or JSON schema, max 20KB"
+        }
+      ],
+      "limits": {
+        "cpuMs": 1000,
+        "memoryMb": 64,
+        "outputKb": 256,
+        "wallMs": 2000
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "local",
+      "failureModes": [
+        "invalid_schema",
+        "parse_error"
+      ],
+      "statusStates": [
+        "idle",
+        "parsing",
+        "completed",
+        "failed"
+      ],
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Explore entities, fields, and relationships."
+    },
+    {
+      "id": "logic-gates",
+      "route": "/tools/software-architecture/logic-gates",
+      "title": "Logic gate simulator",
+      "purpose": "Learn AND/OR/XOR with truth tables.",
+      "execution": "browser-only",
+      "inputs": [
+        {
+          "name": "gateType",
+          "type": "enum",
+          "limits": "AND|OR|XOR"
+        },
+        {
+          "name": "inputA",
+          "type": "boolean",
+          "limits": "0 or 1"
+        },
+        {
+          "name": "inputB",
+          "type": "boolean",
+          "limits": "0 or 1"
+        }
+      ],
+      "limits": {
+        "cpuMs": 10,
+        "memoryMb": 16,
+        "outputKb": 1,
+        "wallMs": 20
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "local",
+      "failureModes": [
+        "invalid_input"
+      ],
+      "statusStates": [
+        "idle",
+        "computing",
+        "completed"
+      ],
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Learn AND/OR/XOR with truth tables."
+    },
+    {
+      "id": "risk-register-builder",
+      "route": "/tools/cyber/risk-register-builder",
+      "title": "Risk register builder",
+      "purpose": "Structure and prioritise risks with likelihood, impact, and mitigations.",
+      "execution": "static-analysis",
+      "inputs": [
+        {
+          "name": "risks",
+          "type": "array",
+          "limits": "max 50 items, each risk max 5KB"
+        }
+      ],
+      "limits": {
+        "cpuMs": 100,
+        "memoryMb": 64,
+        "outputKb": 512,
+        "wallMs": 200
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "local",
+      "failureModes": [
+        "validation_error",
+        "too_many_risks"
+      ],
+      "statusStates": [
+        "idle",
+        "processing",
+        "completed"
+      ],
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Structure and prioritise risks with likelihood, impact, and mitigations."
+    },
+    {
+      "id": "decision-log-generator",
+      "route": "/tools/software-architecture/decision-log-generator",
+      "title": "Decision log generator",
+      "purpose": "Create auditable records of decisions and rationale.",
+      "execution": "static-analysis",
+      "inputs": [
+        {
+          "name": "decision",
+          "type": "string",
+          "limits": "max 200 chars"
+        },
+        {
+          "name": "context",
+          "type": "string",
+          "limits": "max 2KB"
+        },
+        {
+          "name": "options",
+          "type": "array",
+          "limits": "2-4 options, each max 500 chars"
+        },
+        {
+          "name": "rationale",
+          "type": "string",
+          "limits": "max 2KB"
+        }
+      ],
+      "limits": {
+        "cpuMs": 100,
+        "memoryMb": 32,
+        "outputKb": 16,
+        "wallMs": 200
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "local",
+      "failureModes": [
+        "validation_error",
+        "missing_fields"
+      ],
+      "statusStates": [
+        "idle",
+        "generating",
+        "completed"
+      ],
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Create auditable records of decisions and rationale."
+    },
+    {
+      "id": "architecture-tradeoff-analysis",
+      "route": "/tools/software-architecture/architecture-tradeoff-analysis",
+      "title": "Architecture trade-off analysis",
+      "purpose": "Compare options against constraints and non-functional requirements.",
+      "execution": "static-analysis",
+      "inputs": [
+        {
+          "name": "options",
+          "type": "array",
+          "limits": "2-3 options, each max 1KB"
+        },
+        {
+          "name": "constraints",
+          "type": "array",
+          "limits": "max 20 items, each max 200 chars"
+        },
+        {
+          "name": "criteria",
+          "type": "array",
+          "limits": "6-10 criteria, each max 500 chars"
+        }
+      ],
+      "limits": {
+        "cpuMs": 500,
+        "memoryMb": 128,
+        "outputKb": 256,
+        "wallMs": 1000
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "local",
+      "failureModes": [
+        "validation_error",
+        "too_many_options",
+        "missing_criteria"
+      ],
+      "statusStates": [
+        "idle",
+        "analyzing",
+        "completed"
+      ],
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Compare options against constraints and non-functional requirements."
+    },
+    {
+      "id": "data-classification-helper",
+      "route": "/tools/data/data-classification-helper",
+      "title": "Data classification helper",
+      "purpose": "Classify sensitivity and handling requirements in plain terms.",
+      "execution": "static-analysis",
+      "inputs": [
+        {
+          "name": "assetName",
+          "type": "string",
+          "limits": "max 200 chars"
+        },
+        {
+          "name": "sensitivity",
+          "type": "enum",
+          "limits": "Public|Internal|Confidential|Restricted"
+        },
+        {
+          "name": "compliance",
+          "type": "array",
+          "limits": "GDPR|HIPAA|PCI_DSS|None"
+        },
+        {
+          "name": "impact",
+          "type": "enum",
+          "limits": "High|Medium|Low"
+        }
+      ],
+      "limits": {
+        "cpuMs": 100,
+        "memoryMb": 32,
+        "outputKb": 16,
+        "wallMs": 200
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "local",
+      "failureModes": [
+        "validation_error",
+        "invalid_classification"
+      ],
+      "statusStates": [
+        "idle",
+        "classifying",
+        "completed"
+      ],
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Classify sensitivity and handling requirements in plain terms."
+    },
+    {
+      "id": "threat-modelling-lite",
+      "route": "/tools/cyber/threat-modelling-lite",
+      "title": "Threat modelling lite",
+      "purpose": "Run a STRIDE-style walkthrough without diagrams.",
+      "execution": "static-analysis",
+      "inputs": [
+        {
+          "name": "systemName",
+          "type": "string",
+          "limits": "max 200 chars"
+        },
+        {
+          "name": "assets",
+          "type": "array",
+          "limits": "max 20 items"
+        },
+        {
+          "name": "trustBoundaries",
+          "type": "array",
+          "limits": "max 10 items"
+        },
+        {
+          "name": "threats",
+          "type": "array",
+          "limits": "max 30 items"
+        }
+      ],
+      "limits": {
+        "cpuMs": 500,
+        "memoryMb": 128,
+        "outputKb": 256,
+        "wallMs": 1000
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "local",
+      "failureModes": [
+        "validation_error",
+        "missing_assets"
+      ],
+      "statusStates": [
+        "idle",
+        "analyzing",
+        "completed"
+      ],
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Run a STRIDE-style walkthrough without diagrams."
+    },
+    {
+      "id": "control-mapping-tool",
+      "route": "/tools/cyber/control-mapping-tool",
+      "title": "Control mapping tool",
+      "purpose": "Map controls to standards at a conceptual level (ISO, NIST, SOC 2).",
+      "execution": "static-analysis",
+      "inputs": [
+        {
+          "name": "controlDescription",
+          "type": "string",
+          "limits": "max 500 chars"
+        },
+        {
+          "name": "framework",
+          "type": "enum",
+          "limits": "NIST_CSF|ISO_27001|CIS_Controls"
+        },
+        {
+          "name": "mapping",
+          "type": "string",
+          "limits": "max 200 chars"
+        }
+      ],
+      "limits": {
+        "cpuMs": 200,
+        "memoryMb": 64,
+        "outputKb": 128,
+        "wallMs": 400
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "local",
+      "failureModes": [
+        "validation_error",
+        "unsupported_framework"
+      ],
+      "statusStates": [
+        "idle",
+        "mapping",
+        "completed"
+      ],
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Map controls to standards at a conceptual level (ISO, NIST, SOC 2)."
+    },
+    {
+      "id": "process-friction-mapper",
+      "route": "/tools/digitalisation/process-friction-mapper",
+      "title": "Process friction mapper",
+      "purpose": "Identify where process slows delivery or creates risk.",
+      "execution": "static-analysis",
+      "inputs": [
+        {
+          "name": "processSteps",
+          "type": "array",
+          "limits": "max 30 steps, each max 500 chars"
+        },
+        {
+          "name": "actors",
+          "type": "array",
+          "limits": "max 20 actors"
+        },
+        {
+          "name": "frictionPoints",
+          "type": "array",
+          "limits": "max 20 points"
+        }
+      ],
+      "limits": {
+        "cpuMs": 500,
+        "memoryMb": 128,
+        "outputKb": 256,
+        "wallMs": 1000
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "local",
+      "failureModes": [
+        "validation_error",
+        "missing_steps"
+      ],
+      "statusStates": [
+        "idle",
+        "analyzing",
+        "completed"
+      ],
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Identify where process slows delivery or creates risk."
+    },
+    {
+      "id": "technical-debt-qualifier",
+      "route": "/tools/software-architecture/technical-debt-qualifier",
+      "title": "Technical debt qualifier",
+      "purpose": "Describe and prioritise debt with impact, cost, and risk.",
+      "execution": "static-analysis",
+      "inputs": [
+        {
+          "name": "debtItem",
+          "type": "string",
+          "limits": "max 500 chars"
+        },
+        {
+          "name": "impact",
+          "type": "enum",
+          "limits": "High|Medium|Low"
+        },
+        {
+          "name": "urgency",
+          "type": "enum",
+          "limits": "High|Medium|Low"
+        },
+        {
+          "name": "cost",
+          "type": "enum",
+          "limits": "High|Medium|Low"
+        }
+      ],
+      "limits": {
+        "cpuMs": 100,
+        "memoryMb": 32,
+        "outputKb": 16,
+        "wallMs": 200
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "local",
+      "failureModes": [
+        "validation_error",
+        "missing_fields"
+      ],
+      "statusStates": [
+        "idle",
+        "prioritizing",
+        "completed"
+      ],
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Describe and prioritise debt with impact, cost, and risk."
+    },
+    {
+      "id": "incident-postmortem-builder",
+      "route": "/tools/cyber/incident-post-mortem-builder",
+      "title": "Incident post-mortem builder",
+      "purpose": "Create learning-focused post-incident reviews and actions.",
+      "execution": "static-analysis",
+      "inputs": [
+        {
+          "name": "title",
+          "type": "string",
+          "limits": "max 200 chars"
+        },
+        {
+          "name": "dateTime",
+          "type": "string",
+          "limits": "ISO 8601 format"
+        },
+        {
+          "name": "impact",
+          "type": "string",
+          "limits": "max 1KB"
+        },
+        {
+          "name": "timeline",
+          "type": "array",
+          "limits": "max 50 events"
+        },
+        {
+          "name": "rootCauses",
+          "type": "array",
+          "limits": "max 20 items"
+        },
+        {
+          "name": "actionItems",
+          "type": "array",
+          "limits": "max 30 items"
+        }
+      ],
+      "limits": {
+        "cpuMs": 200,
+        "memoryMb": 128,
+        "outputKb": 512,
+        "wallMs": 400
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "local",
+      "failureModes": [
+        "validation_error",
+        "missing_required_fields"
+      ],
+      "statusStates": [
+        "idle",
+        "generating",
+        "completed"
+      ],
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Create learning-focused post-incident reviews and actions."
+    },
+    {
+      "id": "metrics-definition-studio",
+      "route": "/tools/data/metrics-definition-studio",
+      "title": "Metrics definition studio",
+      "purpose": "Define useful metrics and avoid vanity measurements.",
+      "execution": "static-analysis",
+      "inputs": [
+        {
+          "name": "metricName",
+          "type": "string",
+          "limits": "max 200 chars"
+        },
+        {
+          "name": "definition",
+          "type": "string",
+          "limits": "max 1KB"
+        },
+        {
+          "name": "calculation",
+          "type": "string",
+          "limits": "max 2KB"
+        },
+        {
+          "name": "units",
+          "type": "string",
+          "limits": "max 50 chars"
+        },
+        {
+          "name": "source",
+          "type": "string",
+          "limits": "max 500 chars"
+        }
+      ],
+      "limits": {
+        "cpuMs": 100,
+        "memoryMb": 32,
+        "outputKb": 16,
+        "wallMs": 200
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "local",
+      "failureModes": [
+        "validation_error",
+        "missing_fields"
+      ],
+      "statusStates": [
+        "idle",
+        "defining",
+        "completed"
+      ],
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Define useful metrics and avoid vanity measurements."
+    }
+  ]
+}

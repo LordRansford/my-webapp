@@ -19,7 +19,8 @@
 /out/
 
 # local data / sqlite
-/data/
+/data/*
+!/data/tool-contracts.json
 *.db
 *.db-journal
 
