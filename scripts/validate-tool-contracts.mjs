@@ -32,6 +32,13 @@ const REQUIRED_FIELDS = [
   "statusStates"
 ];
 
+// Required catalog fields (examples and explain)
+const REQUIRED_CATALOG_FIELDS = [
+  "defaultInputs",
+  "examples",
+  "explain"
+];
+
 // Required limit fields
 const REQUIRED_LIMIT_FIELDS = ["cpuMs", "memoryMb", "outputKb"];
 
@@ -57,6 +64,63 @@ function loadContracts() {
   const content = fs.readFileSync(contractsPath, "utf8");
   const data = JSON.parse(content);
   return data.tools || [];
+}
+
+function loadCatalog() {
+  const catalogPath = path.join(rootDir, "data", "tools", "catalog.json");
+  if (!fs.existsSync(catalogPath)) {
+    return { tools: [] };
+  }
+  const content = fs.readFileSync(catalogPath, "utf8");
+  const data = JSON.parse(content);
+  return data;
+}
+
+function validateCatalogEntry(catalogEntry, toolId) {
+  const errors = [];
+  const prefix = `Catalog entry for "${toolId}":`;
+  
+  // Check required fields
+  for (const field of REQUIRED_CATALOG_FIELDS) {
+    if (!(field in catalogEntry)) {
+      errors.push(`${prefix} Missing required field: ${field}`);
+    }
+  }
+  
+  // Validate defaultInputs is object
+  if (catalogEntry.defaultInputs && typeof catalogEntry.defaultInputs !== "object") {
+    errors.push(`${prefix} defaultInputs must be an object`);
+  }
+  
+  // Validate examples is array with at least 2 items
+  if (catalogEntry.examples) {
+    if (!Array.isArray(catalogEntry.examples)) {
+      errors.push(`${prefix} examples must be an array`);
+    } else if (catalogEntry.examples.length < 2) {
+      errors.push(`${prefix} examples must have at least 2 items (found ${catalogEntry.examples.length})`);
+    } else {
+      // Validate each example has title and inputs
+      catalogEntry.examples.forEach((example, idx) => {
+        if (!example.title || typeof example.title !== "string") {
+          errors.push(`${prefix} example ${idx + 1} missing or invalid title`);
+        }
+        if (!example.inputs || typeof example.inputs !== "object") {
+          errors.push(`${prefix} example ${idx + 1} missing or invalid inputs`);
+        }
+      });
+    }
+  }
+  
+  // Validate explain is string with minimum length
+  if (catalogEntry.explain) {
+    if (typeof catalogEntry.explain !== "string") {
+      errors.push(`${prefix} explain must be a string`);
+    } else if (catalogEntry.explain.length < 150) {
+      errors.push(`${prefix} explain must be at least 150 characters (found ${catalogEntry.explain.length})`);
+    }
+  }
+  
+  return errors;
 }
 
 function validateContract(contract, index) {
@@ -127,8 +191,10 @@ function main() {
   
   const toolIds = extractToolsFromToolsPage();
   const contracts = loadContracts();
+  const catalog = loadCatalog();
   
   const contractMap = new Map(contracts.map((c) => [c.id, c]));
+  const catalogMap = new Map(catalog.tools.map((t) => [t.id, t]));
   const errors = [];
   const warnings = [];
   
@@ -144,6 +210,17 @@ function main() {
     const contract = contracts[i];
     const contractErrors = validateContract(contract, i);
     errors.push(...contractErrors);
+    
+    // Validate catalog entry for tools that are in tools.js (not studios/games)
+    if (toolIds.includes(contract.id)) {
+      const catalogEntry = catalogMap.get(contract.id);
+      if (catalogEntry) {
+        const catalogErrors = validateCatalogEntry(catalogEntry, contract.id);
+        errors.push(...catalogErrors);
+      } else {
+        errors.push(`Tool "${contract.id}" (in tools.js) has no catalog entry in data/tools/catalog.json`);
+      }
+    }
   }
   
   // Check for contracts that don't have corresponding tools
@@ -170,6 +247,7 @@ function main() {
   console.log("✅ All tool contracts are valid!");
   console.log(`   - ${contracts.length} tool contracts validated`);
   console.log(`   - ${toolIds.length} tools from tools.js have contracts`);
+  console.log(`   - ${catalog.tools.length} catalog entries validated`);
   process.exit(0);
 }
 

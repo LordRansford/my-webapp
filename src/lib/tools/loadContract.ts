@@ -1,6 +1,6 @@
 /**
  * Load tool contract from data/tool-contracts.json
- * Client-safe: loads via fetch or static import
+ * Client-safe: uses static JSON import (bundled at build time)
  */
 
 // @ts-ignore - JSON import
@@ -77,4 +77,3 @@ export function getAllToolContracts(): ToolContract[] {
     return getToolContract(tool.id);
   }).filter((t): t is ToolContract => t !== null);
 }
-

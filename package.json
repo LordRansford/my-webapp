@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev --webpack",
     "build:content-index": "node scripts/build-content-index.mjs",
-    "build": "npm run quality:compute && npm run quality:credits && npm run validate:tool-contracts && npm run build:content-index && node -e \"const fs=require('fs');const p='.next/lock';if(fs.existsSync(p)) fs.rmSync(p,{force:true});\" && next build",
+    "build:tools-index": "node scripts/build-tools-index.mjs",
+    "build": "npm run quality:compute && npm run quality:credits && npm run validate:tool-contracts && npm run build:content-index && npm run build:tools-index && node -e \"const fs=require('fs');const p='.next/lock';if(fs.existsSync(p)) fs.rmSync(p,{force:true});\" && next build",
     "validate:tool-contracts": "node scripts/validate-tool-contracts.mjs",
     "start": "next start --hostname 0.0.0.0 --port 3000",
     "postinstall": "prisma generate",
