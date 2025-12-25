@@ -114,7 +114,7 @@ export default function CybersecurityOverviewPage({ source, headings }) {
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const note = await loadNote("cybersecurity/overview.mdx");
   return {
     props: {
