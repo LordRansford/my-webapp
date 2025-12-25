@@ -3,13 +3,14 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import ToolShell from "@/components/tools/ToolShell";
+import ToolsErrorBoundary from "@/components/tools/ToolsErrorBoundary";
 import { getToolContract } from "@/lib/tools/loadContract";
 import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
 import type { ToolError } from "@/components/tools/ErrorPanel";
 
 const contract = getToolContract("js-sandbox");
 
-export default function JsSandboxPage() {
+function JsSandboxContent() {
   const [code, setCode] = useState('console.log("Hello, world!");');
 
   if (!contract) {
@@ -51,5 +52,13 @@ export default function JsSandboxPage() {
         </div>
       </ToolShell>
     </div>
+  );
+}
+
+export default function JsSandboxPage() {
+  return (
+    <ToolsErrorBoundary toolId="js-sandbox">
+      <JsSandboxContent />
+    </ToolsErrorBoundary>
   );
 }
