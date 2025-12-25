@@ -79,7 +79,7 @@ ${strideThreats.map((t, i) => `${i + 1}. ${t}`).join("\n")}
     return { success: true, output: markdown };
   };
 
-  const updateArray = (setter: (v: string[]) => void, index: number, value: string) => {
+  const updateArray = (setter: React.Dispatch<React.SetStateAction<string[]>>, index: number, value: string) => {
     setter((prev) => {
       const newArr = [...prev];
       newArr[index] = value;
@@ -87,7 +87,7 @@ ${strideThreats.map((t, i) => `${i + 1}. ${t}`).join("\n")}
     });
   };
 
-  const addToArray = (setter: (v: string[]) => void, max: number) => {
+  const addToArray = (setter: React.Dispatch<React.SetStateAction<string[]>>, max: number) => {
     setter((prev) => (prev.length < max ? [...prev, ""] : prev));
   };
 
