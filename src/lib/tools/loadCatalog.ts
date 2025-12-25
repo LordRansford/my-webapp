@@ -1,7 +1,9 @@
 /**
  * Load tool catalog with defaults, examples, and explain content
+ * Client-safe: uses static JSON import (bundled at build time)
  */
 
+// @ts-ignore - JSON import
 import catalogData from "../../../data/tools/catalog.json";
 
 interface ToolCatalogEntry {
@@ -43,4 +45,3 @@ export function getToolExplain(toolId: string): string {
   const entry = getToolCatalogEntry(toolId);
   return entry?.explain || "No explanation available for this tool.";
 }
-

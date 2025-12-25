@@ -1,0 +1,983 @@
+{
+  "generatedAt": "2025-12-25T21:35:02.267Z",
+  "tools": [
+    {
+      "id": "architecture-diagram-studio",
+      "title": "Architecture Diagram Studio",
+      "description": "Generate draft architecture diagrams from structured inputs.",
+      "route": "/studios/architecture-diagram-studio",
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 5000,
+        "memoryMb": 256,
+        "outputKb": 512,
+        "wallMs": 10000
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {},
+      "examples": [],
+      "explain": ""
+    },
+    {
+      "id": "game-canvas",
+      "title": "Game Canvas",
+      "description": "Interactive games with keyboard and touch; offline after first load.",
+      "route": "/games",
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 0,
+        "memoryMb": 128,
+        "outputKb": 0,
+        "wallMs": 0
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {},
+      "examples": [],
+      "explain": ""
+    },
+    {
+      "id": "vision-quick-check",
+      "title": "Vision Quick Check",
+      "description": "Validate and preview images; guide on size/format.",
+      "route": "/labs/vision/quick-check",
+      "executionModes": [
+        "compute"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 2000,
+        "memoryMb": 128,
+        "outputKb": 64,
+        "fileSizeKb": 5120,
+        "wallMs": 4000
+      },
+      "creditModel": {
+        "baseCredits": 2,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {},
+      "examples": [],
+      "explain": ""
+    },
+    {
+      "id": "speech-sound-analysis",
+      "title": "Speech Sound Analysis",
+      "description": "Analyze uploaded/recorded audio; transcript and basic metrics.",
+      "route": "/labs/speech/sound-analysis",
+      "executionModes": [
+        "compute"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 5000,
+        "memoryMb": 256,
+        "outputKb": 128,
+        "durationSeconds": 60,
+        "fileSizeKb": 10240,
+        "wallMs": 10000
+      },
+      "creditModel": {
+        "baseCredits": 5,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {},
+      "examples": [],
+      "explain": ""
+    },
+    {
+      "id": "code-lab",
+      "title": "Code Lab",
+      "description": "Run code safely in a sandbox with allowlisted languages.",
+      "route": "/tools/code-lab",
+      "executionModes": [
+        "compute"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 2000,
+        "memoryMb": 128,
+        "outputKb": 64,
+        "wallMs": 4000
+      },
+      "creditModel": {
+        "baseCredits": 2,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {},
+      "examples": [],
+      "explain": ""
+    },
+    {
+      "id": "python-playground",
+      "title": "Python playground",
+      "description": "Run small Python experiments in-browser (Pyodide).",
+      "route": "/tools/ai/python-playground",
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 5000,
+        "memoryMb": 256,
+        "outputKb": 128,
+        "wallMs": 10000
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {
+        "code": "print('Hello, world!')"
+      },
+      "examples": [
+        {
+          "title": "Hello World",
+          "inputs": {
+            "code": "print('Hello, world!')"
+          },
+          "expectedOutput": "Hello, world!"
+        },
+        {
+          "title": "List Comprehension",
+          "inputs": {
+            "code": "nums = [1, 2, 3, 4]\ndoubled = [n * 2 for n in nums]\nprint('Doubled:', doubled)"
+          },
+          "expectedOutput": "Doubled: [2, 4, 6, 8]"
+        },
+        {
+          "title": "Dictionary Operations",
+          "inputs": {
+            "code": "data = {'name': 'Alice', 'age': 30}\nprint(f\"{data['name']} is {data['age']} years old\")"
+          },
+          "expectedOutput": "Alice is 30 years old"
+        }
+      ],
+      "explain": "The Python playground runs Python code in your browser using Pyodide. It's perfect for learning Python syntax, testing algorithms, or experimenting with data transformations. Use it for educational purposes, quick calculations, or prototyping small scripts. Don't use it for file I/O, network requests, or heavy computations - those are limited or blocked. Inputs: code (string) - Your Python code. Limits: 5000ms CPU, 256MB memory, 128KB output. Security: Runs in Pyodide worker with no file system or network access."
+    },
+    {
+      "id": "js-sandbox",
+      "title": "JavaScript sandbox",
+      "description": "Test JS behaviour and parsing safely.",
+      "route": "/tools/software-architecture/js-sandbox",
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 2000,
+        "memoryMb": 128,
+        "outputKb": 64,
+        "wallMs": 4000
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {
+        "code": "console.log('Hello, world!');"
+      },
+      "examples": [
+        {
+          "title": "Hello World",
+          "inputs": {
+            "code": "console.log('Hello, world!');"
+          },
+          "expectedOutput": "Hello, world!"
+        },
+        {
+          "title": "Simple Loop",
+          "inputs": {
+            "code": "let sum = 0;\nfor (let i = 1; i <= 5; i++) {\n  sum += i;\n}\nconsole.log('Sum:', sum);"
+          },
+          "expectedOutput": "Sum: 15"
+        },
+        {
+          "title": "Array Transform",
+          "inputs": {
+            "code": "const nums = [1, 2, 3, 4];\nconst doubled = nums.map(n => n * 2);\nconsole.log('Doubled:', doubled);"
+          },
+          "expectedOutput": "Doubled: [2, 4, 6, 8]"
+        }
+      ],
+      "explain": "The JavaScript sandbox lets you run JavaScript code safely in your browser. It uses a Web Worker to isolate execution, preventing access to the DOM or network. This is useful for testing logic, exploring language features, or debugging small code snippets. Use it when you need to test JavaScript behavior without setting up a full project. Don't use it for DOM manipulation, file I/O, or network requests - those are blocked for security. Inputs: code (string) - Your JavaScript code to execute. Limits: 2000ms CPU time, 128MB memory, 64KB output. Security: Runs in isolated worker with no DOM or network access."
+    },
+    {
+      "id": "sql-sqlite",
+      "title": "SQL sandbox (SQLite)",
+      "description": "Practise queries and joins locally.",
+      "route": "/tools/data/sql-sandbox",
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 3000,
+        "memoryMb": 128,
+        "outputKb": 256,
+        "wallMs": 6000
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {
+        "query": "SELECT * FROM users;"
+      },
+      "examples": [
+        {
+          "title": "Select All Users",
+          "inputs": {
+            "query": "SELECT * FROM users;"
+          },
+          "expectedOutput": "Returns all rows from users table"
+        },
+        {
+          "title": "Join Query",
+          "inputs": {
+            "query": "SELECT u.name, o.amount FROM users u JOIN orders o ON u.id = o.user_id;"
+          },
+          "expectedOutput": "Returns user names with their order amounts"
+        },
+        {
+          "title": "Aggregation",
+          "inputs": {
+            "query": "SELECT user_id, SUM(amount) as total FROM orders GROUP BY user_id;"
+          },
+          "expectedOutput": "Returns total order amount per user"
+        }
+      ],
+      "explain": "The SQL sandbox lets you practice SQL queries using SQLite in your browser. It includes sample tables (users, orders) so you can test queries immediately. Use it to learn SQL syntax, test query logic, or practice joins and aggregations. Don't use it for production data or complex multi-table schemas. Inputs: query (string) - Your SQL SELECT query. Limits: 3000ms CPU, 128MB memory, 256KB output. Security: Only SELECT queries and safe INSERT/UPDATE allowed. DROP and ALTER are blocked."
+    },
+    {
+      "id": "rsa-oaep",
+      "title": "RSA lab (OAEP + SHA-256)",
+      "description": "Generate keys and explain asymmetric crypto.",
+      "route": "/tools/cyber/rsa-lab",
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 2000,
+        "memoryMb": 64,
+        "outputKb": 32,
+        "wallMs": 4000
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {
+        "action": "generate"
+      },
+      "examples": [
+        {
+          "title": "Generate Key Pair",
+          "inputs": {
+            "action": "generate"
+          },
+          "expectedOutput": "Public and private key pair generated"
+        },
+        {
+          "title": "Encrypt Message",
+          "inputs": {
+            "action": "encrypt",
+            "publicKey": "",
+            "message": "Hello, RSA!"
+          },
+          "expectedOutput": "Encrypted ciphertext"
+        }
+      ],
+      "explain": "The RSA lab demonstrates asymmetric cryptography using RSA-OAEP with SHA-256. It lets you generate key pairs, encrypt messages, and decrypt ciphertext. Use it to understand how public-key cryptography works and see the difference between encryption and signing. Don't use it for production cryptographic operations - this is educational. Inputs: action (string) - 'generate', 'encrypt', or 'decrypt'. Limits: 2000ms CPU, 64MB memory, 16KB output. Security: Uses Web Crypto API with strict key size limits."
+    },
+    {
+      "id": "entropy-hashing",
+      "title": "Entropy and hashing",
+      "description": "Visualise randomness and the avalanche effect.",
+      "route": "/tools/cyber/entropy-hashing",
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 1000,
+        "memoryMb": 64,
+        "outputKb": 1,
+        "wallMs": 2000
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {
+        "input": "Hello, world!"
+      },
+      "examples": [
+        {
+          "title": "Hash Text",
+          "inputs": {
+            "input": "Hello, world!"
+          },
+          "expectedOutput": "SHA-256 hash of the input text"
+        },
+        {
+          "title": "Avalanche Effect",
+          "inputs": {
+            "input": "Hello, world"
+          },
+          "expectedOutput": "Different hash from 'Hello, world!' (demonstrates avalanche effect)"
+        }
+      ],
+      "explain": "The entropy and hashing tool visualizes randomness and the avalanche effect in cryptographic hash functions. It shows how small changes in input produce completely different hash outputs. Use it to understand hash function properties and verify data integrity concepts. Don't use it for actual cryptographic operations in production. Inputs: input (string) - Text to hash. Limits: 500ms CPU, 32MB memory, 2KB output. Security: Uses Web Crypto API, all processing is local."
+    },
+    {
+      "id": "password-entropy",
+      "title": "Password entropy meter",
+      "description": "Compare length vs complexity trade-offs.",
+      "route": "/tools/cyber/password-entropy",
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 100,
+        "memoryMb": 16,
+        "outputKb": 1,
+        "wallMs": 200
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {
+        "password": "password123"
+      },
+      "examples": [
+        {
+          "title": "Weak Password",
+          "inputs": {
+            "password": "password123"
+          },
+          "expectedOutput": "Low entropy, weak strength"
+        },
+        {
+          "title": "Strong Password",
+          "inputs": {
+            "password": "Tr0ub4dor&3"
+          },
+          "expectedOutput": "Higher entropy, strong strength"
+        },
+        {
+          "title": "Very Long Password",
+          "inputs": {
+            "password": "correct horse battery staple"
+          },
+          "expectedOutput": "High entropy due to length, even with simple words"
+        }
+      ],
+      "explain": "The password entropy meter calculates the entropy (randomness) of a password and estimates how long it would take to crack. It considers character set diversity (lowercase, uppercase, numbers, symbols) and length. Use it to understand password strength and compare different password strategies. Don't use it to validate actual passwords in production - this is educational. Inputs: password (string) - The password to analyze. Limits: 100ms CPU, 16MB memory, 1KB output. Security: All processing is local, no data is sent anywhere."
+    },
+    {
+      "id": "cert-viewer",
+      "title": "Certificate viewer",
+      "description": "Inspect certificate fields and trust cues.",
+      "route": "/tools/cyber/certificate-viewer",
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 500,
+        "memoryMb": 32,
+        "outputKb": 16,
+        "wallMs": 1000
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {
+        "certificate": ""
+      },
+      "examples": [
+        {
+          "title": "Parse Certificate",
+          "inputs": {
+            "certificate": "-----BEGIN CERTIFICATE-----\nMIIBkTCB+wIJAK..."
+          },
+          "expectedOutput": "Parsed certificate fields: issuer, subject, validity, etc."
+        }
+      ],
+      "explain": "The certificate viewer parses and displays X.509 certificate fields in a readable format. It shows issuer, subject, validity dates, and key information. Use it to inspect certificates and understand trust chains. Don't use it to validate actual certificates in production. Inputs: certificate (string) - PEM or DER encoded certificate. Limits: 1000ms CPU, 32MB memory, 8KB output. Security: Parsing only, no network validation."
+    },
+    {
+      "id": "regex-tester",
+      "title": "Regex tester",
+      "description": "Extract patterns and groups from sample text.",
+      "route": "/tools/software-architecture/regex-tester",
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 2000,
+        "memoryMb": 64,
+        "outputKb": 128,
+        "wallMs": 4000
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {
+        "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+        "text": "Contact us at hello@example.com or support@test.org"
+      },
+      "examples": [
+        {
+          "title": "Email Pattern",
+          "inputs": {
+            "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+            "text": "Contact us at hello@example.com or support@test.org"
+          },
+          "expectedOutput": "Matches: hello@example.com, support@test.org"
+        },
+        {
+          "title": "Number Extraction",
+          "inputs": {
+            "pattern": "\\d+",
+            "text": "The price is $42.99 and quantity is 5"
+          },
+          "expectedOutput": "Matches: 42, 99, 5"
+        },
+        {
+          "title": "Word Boundaries",
+          "inputs": {
+            "pattern": "\\bcat\\b",
+            "text": "The cat sat on the mat. Category is different."
+          },
+          "expectedOutput": "Matches: cat (but not 'cat' in 'Category')"
+        }
+      ],
+      "explain": "The regex tester helps you test regular expression patterns against sample text. It shows all matches and captured groups. Use it to debug regex patterns, learn regex syntax, or validate text extraction logic. Don't use it for extremely long text or complex patterns that might timeout. Inputs: pattern (string) - Your regex pattern. text (string) - Text to test against. Limits: 2000ms CPU, 64MB memory, 128KB output. Security: Patterns are executed with timeout protection to prevent ReDoS attacks."
+    },
+    {
+      "id": "schema-inspector",
+      "title": "Schema inspector",
+      "description": "Explore entities, fields, and relationships.",
+      "route": "/tools/data/schema-inspector",
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 1000,
+        "memoryMb": 64,
+        "outputKb": 256,
+        "wallMs": 2000
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {
+        "schema": "{\"entities\": [{\"name\": \"User\", \"fields\": [{\"name\": \"id\", \"type\": \"string\"}]}]}"
+      },
+      "examples": [
+        {
+          "title": "Inspect JSON Schema",
+          "inputs": {
+            "schema": "{\"entities\": [{\"name\": \"User\", \"fields\": [{\"name\": \"id\", \"type\": \"string\"}]}]}"
+          },
+          "expectedOutput": "Visual representation of entities, fields, and relationships"
+        }
+      ],
+      "explain": "The schema inspector visualizes data models from JSON schema definitions. It shows entities, fields, types, and relationships in an explorable format. Use it to understand data structures, plan database schemas, or document existing models. Don't use it for production schema validation. Inputs: schema (string) - JSON schema definition. Limits: 500ms CPU, 64MB memory, 64KB output. Security: JSON parsing only, no execution."
+    },
+    {
+      "id": "logic-gates",
+      "title": "Logic gate simulator",
+      "description": "Learn AND/OR/XOR with truth tables.",
+      "route": "/tools/software-architecture/logic-gates",
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 10,
+        "memoryMb": 16,
+        "outputKb": 1,
+        "wallMs": 20
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {
+        "gate": "AND",
+        "inputA": true,
+        "inputB": true
+      },
+      "examples": [
+        {
+          "title": "AND Gate",
+          "inputs": {
+            "gate": "AND",
+            "inputA": true,
+            "inputB": true
+          },
+          "expectedOutput": "Output: true (both inputs true)"
+        },
+        {
+          "title": "OR Gate",
+          "inputs": {
+            "gate": "OR",
+            "inputA": false,
+            "inputB": true
+          },
+          "expectedOutput": "Output: true (at least one input true)"
+        }
+      ],
+      "explain": "The logic gate simulator demonstrates boolean logic operations (AND, OR, XOR, NOT) with interactive truth tables. Use it to understand digital logic fundamentals and see how combinations of gates create circuits. Don't use it for actual circuit design. Inputs: gate (string) - Gate type. inputA, inputB (boolean) - Input values. Limits: 100ms CPU, 16MB memory, 4KB output. Security: Pure boolean logic, no external dependencies."
+    },
+    {
+      "id": "risk-register-builder",
+      "title": "Risk register builder",
+      "description": "Structure and prioritise risks with likelihood, impact, and mitigations.",
+      "route": "/tools/cyber/risk-register-builder",
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 100,
+        "memoryMb": 64,
+        "outputKb": 512,
+        "wallMs": 200
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {
+        "riskName": "Data breach",
+        "likelihood": "medium",
+        "impact": "high"
+      },
+      "examples": [
+        {
+          "title": "Create Risk Entry",
+          "inputs": {
+            "riskName": "Data breach",
+            "likelihood": "medium",
+            "impact": "high"
+          },
+          "expectedOutput": "Structured risk register entry with priority score"
+        }
+      ],
+      "explain": "The risk register builder helps you structure and prioritize risks with likelihood, impact, and mitigation strategies. It generates a prioritized list you can use for risk management planning. Use it to organize risk assessments and track mitigation efforts. Don't use it as a replacement for formal risk management processes. Inputs: riskName, likelihood, impact, mitigations (strings/arrays). Limits: 200ms CPU, 32MB memory, 32KB output. Security: Data processing only, no external storage."
+    },
+    {
+      "id": "decision-log-generator",
+      "title": "Decision log generator",
+      "description": "Create auditable records of decisions and rationale.",
+      "route": "/tools/software-architecture/decision-log-generator",
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 100,
+        "memoryMb": 32,
+        "outputKb": 16,
+        "wallMs": 200
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {
+        "decision": "Use microservices architecture",
+        "context": "Need to scale independently",
+        "alternatives": [
+          "Monolith",
+          "Serverless"
+        ]
+      },
+      "examples": [
+        {
+          "title": "Create Decision Log",
+          "inputs": {
+            "decision": "Use microservices architecture",
+            "context": "Need to scale independently",
+            "alternatives": [
+              "Monolith",
+              "Serverless"
+            ]
+          },
+          "expectedOutput": "Structured decision log with context, alternatives, and rationale"
+        }
+      ],
+      "explain": "The decision log generator creates auditable records of architectural and technical decisions. It captures context, alternatives considered, rationale, and consequences. Use it to document important decisions for future reference and team alignment. Don't use it as a replacement for formal ADR processes in large organizations. Inputs: decision, context, alternatives, rationale (strings). Limits: 200ms CPU, 32MB memory, 32KB output. Security: Text processing only."
+    },
+    {
+      "id": "architecture-tradeoff-analysis",
+      "title": "Architecture trade-off analysis",
+      "description": "Compare options against constraints and non-functional requirements.",
+      "route": "/tools/software-architecture/architecture-tradeoff-analysis",
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 500,
+        "memoryMb": 128,
+        "outputKb": 256,
+        "wallMs": 1000
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {
+        "options": [
+          "Option A",
+          "Option B"
+        ],
+        "criteria": [
+          "Performance",
+          "Cost",
+          "Security"
+        ]
+      },
+      "examples": [
+        {
+          "title": "Compare Options",
+          "inputs": {
+            "options": [
+              "Option A",
+              "Option B"
+            ],
+            "criteria": [
+              "Performance",
+              "Cost",
+              "Security"
+            ]
+          },
+          "expectedOutput": "Scored comparison table with trade-offs highlighted"
+        }
+      ],
+      "explain": "The architecture trade-off analysis tool helps you compare architectural options against multiple criteria. It generates a scored table that highlights trade-offs and helps make informed decisions. Use it during design reviews to make trade-offs explicit. Don't use it as the sole basis for architectural decisions. Inputs: options, criteria, scores (arrays/objects). Limits: 300ms CPU, 32MB memory, 32KB output. Security: Calculation only."
+    },
+    {
+      "id": "data-classification-helper",
+      "title": "Data classification helper",
+      "description": "Classify sensitivity and handling requirements in plain terms.",
+      "route": "/tools/data/data-classification-helper",
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 100,
+        "memoryMb": 32,
+        "outputKb": 16,
+        "wallMs": 200
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {
+        "dataType": "Customer email addresses",
+        "sensitivity": "medium"
+      },
+      "examples": [
+        {
+          "title": "Classify Data",
+          "inputs": {
+            "dataType": "Customer email addresses",
+            "sensitivity": "medium"
+          },
+          "expectedOutput": "Classification with handling requirements and controls"
+        }
+      ],
+      "explain": "The data classification helper guides you through classifying data sensitivity and determining appropriate handling requirements. It provides plain-language guidance on encryption, access controls, and retention policies. Use it to understand data protection requirements. Don't use it as a replacement for formal data classification policies. Inputs: dataType, sensitivity, context (strings). Limits: 200ms CPU, 32MB memory, 16KB output. Security: Guidance only, no actual data processing."
+    },
+    {
+      "id": "threat-modelling-lite",
+      "title": "Threat modelling lite",
+      "description": "Run a STRIDE-style walkthrough without diagrams.",
+      "route": "/tools/cyber/threat-modelling-lite",
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 500,
+        "memoryMb": 128,
+        "outputKb": 256,
+        "wallMs": 1000
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {
+        "systemName": "Web Application",
+        "components": [
+          "Frontend",
+          "API",
+          "Database"
+        ]
+      },
+      "examples": [
+        {
+          "title": "STRIDE Analysis",
+          "inputs": {
+            "systemName": "Web Application",
+            "components": [
+              "Frontend",
+              "API",
+              "Database"
+            ]
+          },
+          "expectedOutput": "STRIDE threat analysis report"
+        }
+      ],
+      "explain": "The threat modelling lite tool guides you through a STRIDE-style threat analysis without requiring diagrams. It helps identify threats across Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, and Elevation of Privilege. Use it for quick threat assessments and security reviews. Don't use it as a replacement for formal threat modeling processes. Inputs: systemName, components, dataFlows (strings/arrays). Limits: 500ms CPU, 64MB memory, 64KB output. Security: Analysis only, no external data."
+    },
+    {
+      "id": "control-mapping-tool",
+      "title": "Control mapping tool",
+      "description": "Map controls to standards at a conceptual level (ISO, NIST, SOC 2).",
+      "route": "/tools/cyber/control-mapping-tool",
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 200,
+        "memoryMb": 64,
+        "outputKb": 128,
+        "wallMs": 400
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {
+        "control": "Access Control",
+        "frameworks": [
+          "ISO 27001",
+          "NIST CSF"
+        ]
+      },
+      "examples": [
+        {
+          "title": "Map Control",
+          "inputs": {
+            "control": "Access Control",
+            "frameworks": [
+              "ISO 27001",
+              "NIST CSF"
+            ]
+          },
+          "expectedOutput": "Mapping of control to framework requirements"
+        }
+      ],
+      "explain": "The control mapping tool helps you map security controls to standards and frameworks like ISO 27001, NIST CSF, and SOC 2. It shows how controls align across frameworks and identifies gaps. Use it to understand compliance requirements and plan control implementations. Don't use it as a replacement for formal compliance assessments. Inputs: control, frameworks (strings/arrays). Limits: 300ms CPU, 32MB memory, 32KB output. Security: Mapping only, no external validation."
+    },
+    {
+      "id": "process-friction-mapper",
+      "title": "Process friction mapper",
+      "description": "Identify where process slows delivery or creates risk.",
+      "route": "/tools/digitalisation/process-friction-mapper",
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 500,
+        "memoryMb": 128,
+        "outputKb": 256,
+        "wallMs": 1000
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {
+        "processName": "Code Review",
+        "steps": [
+          "Submit PR",
+          "Review",
+          "Approve"
+        ]
+      },
+      "examples": [
+        {
+          "title": "Map Process Friction",
+          "inputs": {
+            "processName": "Code Review",
+            "steps": [
+              "Submit PR",
+              "Review",
+              "Approve"
+            ]
+          },
+          "expectedOutput": "Friction analysis with bottlenecks and improvement suggestions"
+        }
+      ],
+      "explain": "The process friction mapper helps identify where processes slow delivery or create risk. It visualizes bottlenecks, handoffs, and decision points that create friction. Use it to improve team processes and reduce waste. Don't use it as a replacement for formal process improvement methodologies. Inputs: processName, steps, frictionPoints (strings/arrays). Limits: 300ms CPU, 32MB memory, 32KB output. Security: Analysis only."
+    },
+    {
+      "id": "technical-debt-qualifier",
+      "title": "Technical debt qualifier",
+      "description": "Describe and prioritise debt with impact, cost, and risk.",
+      "route": "/tools/software-architecture/technical-debt-qualifier",
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 100,
+        "memoryMb": 32,
+        "outputKb": 16,
+        "wallMs": 200
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {
+        "debtItem": "Legacy authentication system",
+        "impact": "high",
+        "cost": "medium"
+      },
+      "examples": [
+        {
+          "title": "Qualify Debt",
+          "inputs": {
+            "debtItem": "Legacy authentication system",
+            "impact": "high",
+            "cost": "medium"
+          },
+          "expectedOutput": "Prioritized debt item with impact and cost analysis"
+        }
+      ],
+      "explain": "The technical debt qualifier helps you describe and prioritize technical debt with impact, cost, and risk assessments. It generates a prioritized backlog that helps make informed decisions about when to address debt. Use it to make technical debt visible and manageable. Don't use it as a replacement for formal architecture reviews. Inputs: debtItem, impact, cost, risk (strings). Limits: 200ms CPU, 32MB memory, 16KB output. Security: Analysis only."
+    },
+    {
+      "id": "incident-postmortem-builder",
+      "title": "Incident post-mortem builder",
+      "description": "Create learning-focused post-incident reviews and actions.",
+      "route": "/tools/cyber/incident-post-mortem-builder",
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 200,
+        "memoryMb": 128,
+        "outputKb": 512,
+        "wallMs": 400
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {
+        "incidentTitle": "Service Outage",
+        "severity": "high",
+        "duration": "2 hours"
+      },
+      "examples": [
+        {
+          "title": "Create Post-Mortem",
+          "inputs": {
+            "incidentTitle": "Service Outage",
+            "severity": "high",
+            "duration": "2 hours"
+          },
+          "expectedOutput": "Structured post-mortem template with timeline, root cause, and actions"
+        }
+      ],
+      "explain": "The incident post-mortem builder creates learning-focused post-incident review templates. It structures timelines, root causes, impacts, and action items to help teams learn from incidents. Use it to conduct blameless post-mortems and improve reliability. Don't use it as a replacement for formal incident management processes. Inputs: incidentTitle, severity, duration, timeline, rootCause (strings/arrays). Limits: 500ms CPU, 64MB memory, 64KB output. Security: Template generation only."
+    },
+    {
+      "id": "metrics-definition-studio",
+      "title": "Metrics definition studio",
+      "description": "Define useful metrics and avoid vanity measurements.",
+      "route": "/tools/data/metrics-definition-studio",
+      "executionModes": [
+        "local"
+      ],
+      "defaultMode": "local",
+      "limits": {
+        "cpuMs": 100,
+        "memoryMb": 32,
+        "outputKb": 16,
+        "wallMs": 200
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "defaultInputs": {
+        "metricName": "API Response Time",
+        "type": "latency",
+        "target": "200ms"
+      },
+      "examples": [
+        {
+          "title": "Define Metric",
+          "inputs": {
+            "metricName": "API Response Time",
+            "type": "latency",
+            "target": "200ms"
+          },
+          "expectedOutput": "Metric specification with definition, measurement method, and targets"
+        }
+      ],
+      "explain": "The metrics definition studio helps you define useful metrics and avoid vanity measurements. It guides you through specifying what to measure, how to measure it, and what targets to set. Use it to create meaningful metrics that drive decisions. Don't use it as a replacement for formal metrics frameworks. Inputs: metricName, type, target, measurementMethod (strings). Limits: 300ms CPU, 32MB memory, 32KB output. Security: Specification only."
+    }
+  ]
+}
