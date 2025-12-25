@@ -1,73 +1,120 @@
-# Tool & Studio Contracts (Purpose, Inputs, Limits, Outputs, Errors, Run Path)
-Every tool/studio must declare this metadata and UI must render it. CI gate: tools missing any field fail.
+# Tool Contracts Specification
 
-## Fields (required per tool)
-- `id`
-- `route`
-- `purpose`
-- `inputs` (name, type, limits)
-- `limits` (size/time/format)
-- `outputs`
-- `runPath` (local | compute-runner; endpoint/queue)
-- `errorTaxonomy` (codes + user-facing guidance)
-- `statusStates` (queued, running, completed, failed)
+Every tool on `/tools` must have a complete contract in `data/tool-contracts.json` with the following fields.
 
-## Current Inventory
+## Required Fields
 
-### Architecture Diagram Studio
-- id: `architecture-diagram-studio`
-- route: `/studios/architecture-diagram-studio`
-- purpose: Generate draft architecture diagrams from structured inputs.
-- inputs: systemName (string, 80 chars), systemDescription (string, 600 chars), audience (enum), goal (enum), actors/blocks/flows/security (arrays, capped by ARCH_DIAGRAM_LIMITS).
-- limits: text length caps per field; diagram counts enforced in UI.
-- outputs: Mermaid diagrams (context/container/DFD/sequence), SVG/PNG downloads, architecture brief and ADR stubs.
-- runPath: local (browser-only).
-- errorTaxonomy: `validation_error`, `generation_error`, `user_error` (missing required fields).
-- statusStates: idle → validating → rendered | failed.
+### Basic Metadata
+- `id`: Unique identifier (e.g., "python-playground")
+- `title`: Display name
+- `description`: Short description shown in tool card
+- `category`: Tool category (AI, Cybersecurity, Data, Software Architecture, Digitalisation)
+- `difficulty`: Beginner | Intermediate | Advanced
+- `route`: Full route path (e.g., "/tools/ai/python-playground")
 
-### Games (offline-capable)
-- id: `game-canvas`
-- routes: `/games/**`
-- purpose: Interactive games with keyboard + touch; offline after first load.
-- inputs: none; keyboard/touch controls.
-- limits: offline caching after first load; device input required.
-- outputs: run metrics, skill review.
-- runPath: local (canvas).
-- errorTaxonomy: `not_found`, `locked_route`, `offline_not_ready`.
-- statusStates: loading → ready → running → paused → completed.
+### Execution Configuration
+- `executionModes`: Array of supported modes
+  - `["local"]`: Only local (browser) execution
+  - `["local", "compute"]`: Both local and server-side compute available
+- `defaultMode`: Default mode when tool loads ("local" or "compute")
+- `execution`: Legacy field, maps to executionModes
+  - "browser-only" → `["local"]`
+  - "sandboxed-server" → `["compute"]` (or `["local", "compute"]` if local also supported)
+  - "static-analysis" → `["local"]`
 
-### Vision Quick Image Check (placeholder until wired)
-- id: `vision-quick-check`
-- route: `/labs/vision/quick-check`
-- purpose: Validate and preview images; guide on size/format.
-- inputs: image file (png/jpg/webp).
-- limits: size <= defined lab limit; dimension guidance.
-- outputs: validation result + preview.
-- runPath: compute-runner (upload + validate) or local if small; clarify in UI.
-- errorTaxonomy: `file_too_large`, `unsupported_format`, `processing_error`.
-- statusStates: idle → uploading → processing → completed | failed.
+### Inputs Schema
+- `inputs`: Array of input definitions
+  - `name`: Input field name
+  - `type`: "string" | "number" | "boolean" | "enum" | "file" | "array"
+  - `limits`: Human-readable limit description
+  - `required`: boolean (default: true)
+  - `default`: Default value (optional)
 
-### Speech Lab (sound analysis)
-- id: `speech-sound-analysis`
-- route: `/labs/speech/sound-analysis`
-- purpose: Analyze uploaded/recorded audio; transcript + basic metrics.
-- inputs: audio file (wav/mp3) or recording (if supported).
-- limits: duration cap; filesize cap; recording requires browser support.
-- outputs: transcript, duration, basic loudness/peaks.
-- runPath: compute-runner (upload + process).
-- errorTaxonomy: `recording_unsupported`, `file_too_large`, `unsupported_format`, `processing_error`.
-- statusStates: idle → recording/uploading → processing → completed | failed.
+### Limits
+- `limits`: Resource limits object
+  - `cpuMs`: Maximum CPU time in milliseconds
+  - `wallMs`: Maximum wall-clock time (includes I/O wait)
+  - `memoryMb`: Maximum memory in MB
+  - `inputKb`: Maximum input size in KB
+  - `outputKb`: Maximum output size in KB
 
-### Code Lab (sandboxed execution)
-- id: `code-lab`
-- route: `/labs/code`
-- purpose: Run code safely in sandbox (allowlisted languages).
-- inputs: code, language selection.
-- limits: CPU/memory/time quotas; no outbound network; package policy.
-- outputs: stdout/stderr, exit status, resource usage summary.
-- runPath: compute-runner via job queue (submit → poll → fetch artefact).
-- errorTaxonomy: `validation_error`, `timeout`, `resource_limit`, `runtime_error`, `policy_denied`.
-- statusStates: idle → queued → running → completed | failed.
+### Credit Model
+- `creditModel`: Credit calculation
+  - `baseCredits`: Base cost per run (number)
+  - `perKbCredits`: Additional credits per KB of input (number)
+  - `complexityMultiplierHints`: Object with hints for complexity estimation
+    - For JS: `{ hasLoops: 1.2, hasAsync: 1.3 }`
+    - For Python: `{ hasImports: 1.1, hasLoops: 1.2 }`
+    - For SQL: `{ hasJoins: 1.5, hasGroupBy: 1.3 }`
+- `credits`: Legacy field, maps to `creditModel.baseCredits`
 
-> Expand this file as new tools/studios are added. CI should validate that every declared tool has UI metadata rendered.
+### Runner
+- `runner`: Execution endpoint
+  - `"local"`: Runs in browser (no API call)
+  - `"/api/tools/run/<toolId>"`: Server-side execution endpoint
 
+### Error Handling
+- `failureModes`: Array of possible error codes
+- `statusStates`: Array of valid state transitions
+
+### Security
+- `securityNotes`: Human-readable security notes (optional)
+  - Example: "No network access. No file system access. Output truncated at limits."
+
+## Example Contract
+
+```json
+{
+  "id": "python-playground",
+  "title": "Python playground",
+  "description": "Run small Python experiments in-browser (Pyodide).",
+  "category": "AI",
+  "difficulty": "Intermediate",
+  "route": "/tools/ai/python-playground",
+  "executionModes": ["local", "compute"],
+  "defaultMode": "local",
+  "inputs": [
+    {
+      "name": "code",
+      "type": "string",
+      "limits": "max 10KB, ideal under 100 lines",
+      "required": true
+    }
+  ],
+  "limits": {
+    "cpuMs": 5000,
+    "wallMs": 10000,
+    "memoryMb": 256,
+    "inputKb": 10,
+    "outputKb": 128
+  },
+  "creditModel": {
+    "baseCredits": 0,
+    "perKbCredits": 0.1,
+    "complexityMultiplierHints": {
+      "hasLoops": 1.2,
+      "hasImports": 1.1
+    }
+  },
+  "runner": "local",
+  "failureModes": ["syntax_error", "runtime_error", "timeout", "memory_exceeded"],
+  "statusStates": ["idle", "running", "completed", "failed"],
+  "securityNotes": "Runs in isolated Pyodide worker. No network or file system access. Output truncated at 128KB."
+}
+```
+
+## Validation Rules
+
+1. Every tool in `/tools` hub must have a contract
+2. `executionModes` must include at least "local" for tools that run
+3. `defaultMode` must be one of the `executionModes`
+4. All limit fields must be numbers >= 0
+5. `creditModel.baseCredits` must be >= 0
+6. If `executionModes` includes "compute", `runner` must start with "/api/"
+
+## CI Enforcement
+
+The build will fail if:
+- Any tool route lacks a contract
+- Any contract is missing required fields
+- Any contract has invalid values (negative limits, etc.)
