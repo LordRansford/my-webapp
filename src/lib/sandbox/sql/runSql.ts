@@ -2,6 +2,7 @@
  * SQL Sandbox Runner (sql.js)
  * 
  * Runs SQL queries in a Web Worker using sql.js (SQLite compiled to WASM).
+ * Secure sandbox: no file system access, in-memory database only.
  */
 
 import type { ToolContract } from "@/components/tools/ToolShell";
@@ -23,17 +24,40 @@ export interface SqlRunResult {
 const sqlWorkerCode = `
   let SQL = null;
   let db = null;
+  let loading = false;
+  let loadPromise = null;
+
+  async function loadSqlJs() {
+    if (SQL) return SQL;
+    if (loading) return loadPromise;
+    
+    loading = true;
+    loadPromise = (async () => {
+      try {
+        // Load sql.js from CDN
+        importScripts('https://cdn.jsdelivr.net/npm/sql.js@1.10.3/dist/sql-wasm.js');
+        
+        // Initialize sql.js
+        SQL = await initSqlJs({
+          locateFile: (file) => 'https://cdn.jsdelivr.net/npm/sql.js@1.10.3/dist/' + file
+        });
+        
+        loading = false;
+        return SQL;
+      } catch (err) {
+        loading = false;
+        throw new Error('Failed to load sql.js: ' + (err instanceof Error ? err.message : String(err)));
+      }
+    })();
+    
+    return loadPromise;
+  }
 
   async function initDatabase() {
     if (db) return db;
     
-    if (!SQL) {
-      // Load sql.js from CDN (simplified - will need proper CDN loading)
-      // For now, return error if sql.js not available
-      throw new Error('sql.js must be loaded from CDN. This feature requires additional setup.');
-    }
-
-    db = new SQL.Database();
+    const sql = await loadSqlJs();
+    db = new sql.Database();
 
     // Create sample schema
     db.run(\`
@@ -83,6 +107,25 @@ const sqlWorkerCode = `
     return result;
   }
 
+  function validateQuery(query) {
+    const upperQuery = query.toUpperCase().trim();
+    
+    // Block dangerous operations
+    const dangerous = ['DROP', 'DELETE', 'ALTER', 'TRUNCATE', 'CREATE TABLE', 'CREATE INDEX'];
+    for (const keyword of dangerous) {
+      if (upperQuery.includes(keyword)) {
+        return { valid: false, reason: 'Dangerous operation not allowed: ' + keyword };
+      }
+    }
+    
+    // Block DELETE without WHERE (too dangerous)
+    if (upperQuery.includes('DELETE FROM') && !upperQuery.includes('WHERE')) {
+      return { valid: false, reason: 'DELETE without WHERE is not allowed' };
+    }
+    
+    return { valid: true };
+  }
+
   self.onmessage = async (e) => {
     const { query, timeoutMs, maxOutputKb, maxRows } = e.data;
 
@@ -95,51 +138,70 @@ const sqlWorkerCode = `
     }, timeoutMs);
 
     try {
+      const validation = validateQuery(query);
+      if (!validation.valid) {
+        clearTimeout(timeoutId);
+        self.postMessage({
+          success: false,
+          error: { code: 'validation_error', message: validation.reason }
+        });
+        return;
+      }
+      
       const database = await initDatabase();
       
-      // Validate query (basic safety - no DROP, DELETE without WHERE, etc.)
-      const upperQuery = query.toUpperCase().trim();
-      if (upperQuery.startsWith('DROP') || 
-          upperQuery.startsWith('ALTER') ||
-          (upperQuery.includes('DELETE') && !upperQuery.includes('WHERE'))) {
-        throw new Error('Unsafe query detected. Only SELECT queries and safe INSERT/UPDATE are allowed.');
-      }
-
-      const stmt = database.prepare(query);
-      const columns = stmt.getColumnNames();
-      const rows = [];
-      let rowCount = 0;
-
-      while (stmt.step() && rowCount < maxRows) {
-        const row = stmt.get();
-        rows.push(row);
-        rowCount++;
-      }
-
-      stmt.free();
-
+      // Execute query
+      const result = database.exec(query);
+      
       clearTimeout(timeoutId);
-
-      const truncatedRows = truncateRows(rows, maxOutputKb);
-
+      
+      if (!result || result.length === 0) {
+        self.postMessage({
+          success: true,
+          rows: [],
+          columns: [],
+          rowCount: 0
+        });
+        return;
+      }
+      
+      const firstResult = result[0];
+      let rows = firstResult.values || [];
+      const columns = firstResult.columns || [];
+      
+      // Apply row limit
+      if (maxRows && rows.length > maxRows) {
+        rows = rows.slice(0, maxRows);
+      }
+      
+      // Truncate if too large
+      const rowsStr = JSON.stringify(rows);
+      const rowsKb = new Blob([rowsStr]).size / 1024;
+      if (rowsKb > maxOutputKb) {
+        rows = truncateRows(rows, maxOutputKb);
+      }
+      
       self.postMessage({
         success: true,
-        output: {
-          rows: truncatedRows,
-          columns: columns,
-          rowCount: rowCount
-        }
+        rows: rows,
+        columns: columns,
+        rowCount: firstResult.values ? firstResult.values.length : 0
       });
     } catch (err) {
       clearTimeout(timeoutId);
       const error = err instanceof Error ? err : new Error(String(err));
-      const isSyntaxError = error.message.includes('SQLITE_ERROR') || error.message.includes('syntax');
+      const errorMsg = error.message || String(err);
+      
+      let errorCode = 'query_error';
+      if (errorMsg.includes('syntax error') || errorMsg.includes('SQLITE_ERROR')) {
+        errorCode = 'syntax_error';
+      }
       
       self.postMessage({
         success: false,
         error: {
-          code: isSyntaxError ? 'syntax_error' : 'query_error',
-          message: error.message
+          code: errorCode,
+          message: errorMsg
         }
       });
     }
@@ -162,19 +224,7 @@ export async function runSql(
     };
   }
 
-  // Client-side only
-  if (typeof window === "undefined") {
-    return {
-      success: false,
-      error: {
-        code: "server_side_error",
-        message: "SQL sandbox must run in the browser",
-      },
-    };
-  }
-
   return new Promise((resolve) => {
-    // Load sql.js from CDN in worker to avoid bundling issues
     const blob = new Blob([sqlWorkerCode], { type: "application/javascript" });
     const workerUrl = URL.createObjectURL(blob);
     const worker = new Worker(workerUrl);
@@ -186,7 +236,7 @@ export async function runSql(
         success: false,
         error: {
           code: "timeout",
-          message: `Query exceeded ${contract.limits.wallMs}ms limit`,
+          message: `Execution exceeded ${contract.limits.wallMs}ms limit`,
         },
       });
     }, contract.limits.wallMs);
@@ -200,12 +250,19 @@ export async function runSql(
       if (response.success) {
         resolve({
           success: true,
-          output: response.output,
+          output: {
+            rows: response.rows || [],
+            columns: response.columns || [],
+            rowCount: response.rowCount || 0,
+          },
         });
       } else {
         resolve({
           success: false,
-          error: response.error,
+          error: response.error || {
+            code: "unknown_error",
+            message: "Query execution failed",
+          },
         });
       }
     };
@@ -218,7 +275,7 @@ export async function runSql(
         success: false,
         error: {
           code: "worker_error",
-          message: err.message || "Worker execution failed",
+          message: err.message || "Worker execution failed. sql.js may not be loading correctly.",
         },
       });
     };
@@ -227,8 +284,7 @@ export async function runSql(
       query,
       timeoutMs: contract.limits.cpuMs,
       maxOutputKb: contract.limits.outputKb,
-      maxRows: 1000, // Limit result rows
+      maxRows: 1000, // Limit rows returned
     });
   });
 }
-
