@@ -4,7 +4,8 @@ import NotesLayout from "@/components/NotesLayout";
 import mdxComponents from "@/components/mdx-components";
 
 export async function getServerSideProps({ params }) {
-  const { getToolPage } = await import("@/lib/tools-pages");
+  // Direct dynamic import from server-only module to avoid client bundling
+  const { getToolPage } = await import("@/server/tools-pages.server");
   const page = await getToolPage(params.slug);
   if (!page) return { notFound: true };
   return { props: { page } };
