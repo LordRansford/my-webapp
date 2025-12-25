@@ -35,7 +35,7 @@ export default function Page({ source, headings }) {
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const note = await loadNote("cybersecurity/practitioner/cloud_platform_security.mdx");
   return {
     props: {
