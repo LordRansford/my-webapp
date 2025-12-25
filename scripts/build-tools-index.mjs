@@ -29,10 +29,24 @@ function buildToolsIndex() {
       category: contract.category,
       difficulty: contract.difficulty,
       route: contract.route,
-      executionModes: contract.executionModes || ["local"],
+      executionModes: contract.executionModes || (contract.execution === "sandboxed-server" ? ["compute"] : ["local"]),
       defaultMode: contract.defaultMode || "local",
-      limits: contract.limits,
-      creditModel: contract.creditModel,
+      limits: {
+        ...contract.limits,
+        inputKb: contract.limits.inputKb || 64, // Default if missing
+      },
+      creditModel: contract.creditModel || {
+        baseCredits: (contract.credits?.costPerRun) || 0,
+        perKbCredits: 0,
+        complexityMultiplierHints: {},
+      },
+      // Include fields needed by loadContract
+      runner: contract.runner || (contract.execution === "sandboxed-server" ? "/api/tools/run" : "local"),
+      failureModes: contract.failureModes || ["validation_error", "execution_error", "timeout", "security_error"],
+      statusStates: contract.statusStates || ["idle", "running", "completed", "failed"],
+      inputs: contract.inputs || [],
+      securityNotes: contract.securityNotes,
+      // Catalog fields
       defaultInputs: catalogEntry?.defaultInputs || {},
       examples: catalogEntry?.examples || [],
       explain: catalogEntry?.explain || "",
@@ -49,4 +63,3 @@ const index = buildToolsIndex();
 ensureDir(OUT_PATH);
 fs.writeFileSync(OUT_PATH, JSON.stringify(index, null, 2), "utf8");
 console.log(`Wrote ${OUT_PATH} (${index.tools.length} tools)`);
-
