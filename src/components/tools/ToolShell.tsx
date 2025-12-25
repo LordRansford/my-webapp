@@ -1,8 +1,12 @@
 "use client";
 
-import React, { useState, ReactNode } from "react";
+import React, { useState, ReactNode, useEffect, useMemo } from "react";
 import CreditEstimate from "./CreditEstimate";
 import ErrorPanel from "./ErrorPanel";
+import ToolSelfTest from "./ToolSelfTest";
+import { getDefaultInputs, getToolExamples, getToolExplain } from "@/lib/tools/loadCatalog";
+import { runTool, validateInputs, type ValidationError } from "@/lib/tools/runTool";
+import { createToolError } from "./ErrorPanel";
 import type { ToolError } from "./ErrorPanel";
 
 export type ExecutionMode = "local" | "compute";
@@ -50,7 +54,7 @@ interface ToolShellProps {
     error?: ToolError;
   }>;
   initialInputs?: Record<string, unknown>;
-  examples?: Array<{ title: string; inputs: Record<string, unknown> }>;
+  examples?: Array<{ title: string; inputs: Record<string, unknown>; expectedOutput?: string }>;
 }
 
 type Tab = "run" | "explain" | "examples";
@@ -62,21 +66,66 @@ export default function ToolShell({
   initialInputs = {},
   examples = [],
 }: ToolShellProps) {
+  // Load defaults and examples from catalog
+  const catalogDefaults = useMemo(() => getDefaultInputs(contract.id), [contract.id]);
+  const catalogExamples = useMemo(() => getToolExamples(contract.id), [contract.id]);
+  const catalogExplain = useMemo(() => getToolExplain(contract.id), [contract.id]);
+
+  // Merge catalog examples with prop examples
+  const allExamples = useMemo(() => {
+    const merged = [...catalogExamples, ...examples];
+    // Deduplicate by title
+    const seen = new Set<string>();
+    return merged.filter((ex) => {
+      if (seen.has(ex.title)) return false;
+      seen.add(ex.title);
+      return true;
+    });
+  }, [catalogExamples, examples]);
+
+  // Merge defaults: catalog > contract defaults > initialInputs
+  const mergedDefaults = useMemo(() => {
+    const contractDefaults: Record<string, unknown> = {};
+    if (contract.inputs) {
+      for (const input of contract.inputs) {
+        if (input.default !== undefined) {
+          contractDefaults[input.name] = input.default;
+        }
+      }
+    }
+    return { ...contractDefaults, ...catalogDefaults, ...initialInputs };
+  }, [contract, catalogDefaults, initialInputs]);
+
   const [activeTab, setActiveTab] = useState<Tab>("run");
   const [mode, setMode] = useState<ExecutionMode>(contract.defaultMode);
-  const [inputs, setInputs] = useState<Record<string, unknown>>(initialInputs);
+  const [inputs, setInputs] = useState<Record<string, unknown>>(mergedDefaults);
   const [status, setStatus] = useState<string>("idle");
   const [output, setOutput] = useState<string | null>(null);
   const [error, setError] = useState<ToolError | null>(null);
   const [isRunning, setIsRunning] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
+
+  // Validate inputs on change
+  useEffect(() => {
+    const validation = validateInputs(contract, inputs);
+    setValidationErrors(validation.errors);
+  }, [contract, inputs]);
 
   const handleRun = async () => {
-    if (!onRun) {
+    // Pre-validate
+    const validation = validateInputs(contract, inputs);
+    if (!validation.valid) {
       setError({
-        code: "not_implemented",
-        message: "This tool's execution is not yet implemented.",
-        fixSuggestion: "Please check back later or use a different tool.",
+        code: "validation_error",
+        message: `Please fix these fields: ${validation.errors.map((e) => e.field).join(", ")}`,
+        fixSuggestion: validation.errors.map((e) => e.message).join(". "),
       });
+      // Scroll to first error field
+      const firstErrorField = document.querySelector(`[name="${validation.errors[0].field}"]`);
+      if (firstErrorField) {
+        firstErrorField.scrollIntoView({ behavior: "smooth", block: "center" });
+        (firstErrorField as HTMLElement).focus();
+      }
       return;
     }
 
@@ -86,7 +135,30 @@ export default function ToolShell({
     setOutput(null);
 
     try {
-      const result = await onRun(mode, inputs);
+      // Use unified runner if onRun not provided, otherwise use custom handler
+      let result: { success: boolean; output?: string | unknown; error?: ToolError };
+      
+      if (onRun) {
+        result = await onRun(mode, inputs);
+      } else {
+        // Use unified runner
+        const runResult = await runTool(contract, mode, inputs);
+        if (runResult.ok) {
+          result = {
+            success: true,
+            output: runResult.output,
+          };
+        } else {
+          result = {
+            success: false,
+            error: runResult.error ? createToolError(runResult.error.code, contract.id, {
+              message: runResult.error.message,
+              whatToDo: runResult.error.whatToDo,
+            }) : createToolError("unknown_error", contract.id),
+          };
+        }
+      }
+
       if (result.success) {
         setStatus("completed");
         setOutput(typeof result.output === "string" ? result.output : JSON.stringify(result.output, null, 2));
@@ -110,22 +182,30 @@ export default function ToolShell({
   };
 
   const handleReset = () => {
-    setInputs(initialInputs);
+    setInputs(mergedDefaults);
     setOutput(null);
     setError(null);
     setStatus("idle");
+    setValidationErrors([]);
   };
 
   const handleStop = () => {
-    // For local execution, we can't actually stop, but we can reset
     setIsRunning(false);
     setStatus("idle");
   };
 
-  const canRun = mode === "local" || (mode === "compute" && contract.runner.startsWith("/api/"));
+  const canRun = (mode === "local" || (mode === "compute" && contract.runner.startsWith("/api/"))) && validationErrors.length === 0;
 
   return (
     <div className="tool-shell">
+      {/* Self Test Banner */}
+      <ToolSelfTest
+        contract={contract}
+        defaultInputs={mergedDefaults}
+        examples={allExamples}
+        onRun={onRun}
+      />
+
       {/* Header */}
       <header className="mb-6 space-y-3">
         <div className="flex items-start justify-between gap-4">
@@ -178,6 +258,20 @@ export default function ToolShell({
       {/* Tab Content */}
       {activeTab === "run" && (
         <div className="space-y-6">
+          {/* Validation Errors */}
+          {validationErrors.length > 0 && (
+            <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+              <h3 className="mb-2 text-sm font-semibold text-amber-900">Fix these fields:</h3>
+              <ul className="list-disc list-inside space-y-1 text-sm text-amber-800">
+                {validationErrors.map((err, idx) => (
+                  <li key={idx}>
+                    <strong>{err.field}:</strong> {err.message}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           {/* Mode Switch */}
           {contract.executionModes.length > 1 && (
             <div className="flex items-center gap-4 rounded-lg border border-slate-200 bg-white p-4">
@@ -244,7 +338,7 @@ export default function ToolShell({
               <button
                 type="button"
                 onClick={() => {
-                  navigator.clipboard.writeText(JSON.stringify(output, null, 2));
+                  navigator.clipboard.writeText(output);
                 }}
                 className="rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
               >
@@ -270,19 +364,25 @@ export default function ToolShell({
 
       {activeTab === "explain" && (
         <div className="prose prose-sm max-w-none">
-          <h3>What this tool is for</h3>
-          <p>{contract.description}</p>
-          <h3>Limits</h3>
-          <ul>
-            <li>CPU: {contract.limits.cpuMs}ms</li>
-            <li>Memory: {contract.limits.memoryMb}MB</li>
-            <li>Output: {contract.limits.outputKb}KB</li>
-            <li>Input: {contract.limits.inputKb}KB</li>
-          </ul>
-          {contract.securityNotes && (
+          {catalogExplain ? (
+            <div className="whitespace-pre-wrap text-sm text-slate-700">{catalogExplain}</div>
+          ) : (
             <>
-              <h3>Security</h3>
-              <p>{contract.securityNotes}</p>
+              <h3>What this tool is for</h3>
+              <p>{contract.description}</p>
+              <h3>Limits</h3>
+              <ul>
+                <li>CPU: {contract.limits.cpuMs}ms</li>
+                <li>Memory: {contract.limits.memoryMb}MB</li>
+                <li>Output: {contract.limits.outputKb}KB</li>
+                <li>Input: {contract.limits.inputKb}KB</li>
+              </ul>
+              {contract.securityNotes && (
+                <>
+                  <h3>Security</h3>
+                  <p>{contract.securityNotes}</p>
+                </>
+              )}
             </>
           )}
         </div>
@@ -290,10 +390,15 @@ export default function ToolShell({
 
       {activeTab === "examples" && (
         <div className="space-y-4">
-          {examples.length > 0 ? (
-            examples.map((example, idx) => (
+          {allExamples.length > 0 ? (
+            allExamples.map((example, idx) => (
               <div key={idx} className="rounded-lg border border-slate-200 bg-white p-4">
                 <h3 className="mb-2 text-sm font-semibold text-slate-900">{example.title}</h3>
+                {example.expectedOutput && (
+                  <div className="mb-3 rounded bg-slate-50 p-2 text-xs text-slate-600">
+                    <strong>Expected output:</strong> {example.expectedOutput}
+                  </div>
+                )}
                 <button
                   type="button"
                   onClick={() => setInputs(example.inputs)}
@@ -311,4 +416,3 @@ export default function ToolShell({
     </div>
   );
 }
-
