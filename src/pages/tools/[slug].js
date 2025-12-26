@@ -2,7 +2,7 @@ import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote";
 import NotesLayout from "@/components/NotesLayout";
 import mdxComponents from "@/components/mdx-components";
-import ToolsErrorBoundary from "@/components/tools/ToolsErrorBoundary";
+import { ErrorBoundary } from "@/components/notes/ErrorBoundary";
 
 export async function getServerSideProps({ params }) {
   // Direct dynamic import from server-only module to avoid client bundling
@@ -14,7 +14,7 @@ export async function getServerSideProps({ params }) {
 
 export default function ToolPage({ page }) {
   return (
-    <ToolsErrorBoundary toolId={page.slug}>
+    <ErrorBoundary>
       <NotesLayout
         meta={{
           title: page.meta.title,
@@ -39,6 +39,6 @@ export default function ToolPage({ page }) {
           </div>
         </article>
       </NotesLayout>
-    </ToolsErrorBoundary>
+    </ErrorBoundary>
   );
 }
