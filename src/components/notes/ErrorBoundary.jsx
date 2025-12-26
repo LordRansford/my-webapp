@@ -9,11 +9,19 @@ export class ErrorBoundary extends Component {
   }
 
   static getDerivedStateFromError(error) {
+    // #region agent log
+    if (typeof window !== 'undefined') {
+      fetch('http://127.0.0.1:7243/ingest/5c42012f-fdd0-45fd-8860-75c06576ec81',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ErrorBoundary.jsx:getDerivedStateFromError',message:'Error state derived',data:{errorMessage:error?.message,errorName:error?.name},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'H1'})}).catch(()=>{});
+    }
+    // #endregion
     return { hasError: true, error }
   }
 
   componentDidCatch(error, info) {
-    // Intentionally do not log tool errors to the console.
+    // #region agent log
+    fetch('http://127.0.0.1:7243/ingest/5c42012f-fdd0-45fd-8860-75c06576ec81',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ErrorBoundary.jsx:componentDidCatch',message:'Error caught by boundary',data:{errorMessage:error?.message,errorStack:error?.stack,componentStack:info?.componentStack},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'H1'})}).catch(()=>{});
+    // #endregion
+    console.error('[ErrorBoundary]', error, info);
   }
 
   handleReset = () => {
@@ -29,12 +37,12 @@ export class ErrorBoundary extends Component {
       }
       return (
         <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800">
-          <p className="font-semibold">Something went wrong in this tool.</p>
+          <p className="font-semibold">Something went wrong.</p>
           <button
             onClick={this.handleReset}
             className="mt-2 rounded-full border px-3 py-1 text-xs text-red-800 hover:bg-red-100 focus:outline-none focus:ring focus:ring-red-200"
           >
-            Reset tool
+            Try again
           </button>
         </div>
       )

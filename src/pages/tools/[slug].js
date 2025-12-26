@@ -13,6 +13,11 @@ export async function getServerSideProps({ params }) {
 }
 
 export default function ToolPage({ page }) {
+  // #region agent log
+  if (typeof window !== 'undefined') {
+    fetch('http://127.0.0.1:7243/ingest/5c42012f-fdd0-45fd-8860-75c06576ec81',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'tools/[slug].js:render',message:'Tool page rendering',data:{slug:page?.slug},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'H4'})}).catch(()=>{});
+  }
+  // #endregion
   return (
     <ErrorBoundary>
       <NotesLayout
