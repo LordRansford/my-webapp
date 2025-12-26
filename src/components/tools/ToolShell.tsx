@@ -55,9 +55,85 @@ interface ToolShellProps {
   }>;
   initialInputs?: Record<string, unknown>;
   examples?: Array<{ title: string; inputs: Record<string, unknown>; expectedOutput?: string }>;
+  onInputsChange?: (inputs: Record<string, unknown>) => void;
 }
 
 type Tab = "run" | "explain" | "examples";
+
+// Simple markdown-like parser for explain text
+function renderExplainText(text: string): React.ReactNode {
+  const lines = text.split('\n');
+  const elements: React.ReactNode[] = [];
+  let currentParagraph: string[] = [];
+  let inList = false;
+  let listItems: string[] = [];
+
+  function flushParagraph() {
+    if (currentParagraph.length > 0) {
+      elements.push(
+        <p key={elements.length} className="mb-3 text-sm text-slate-700 leading-relaxed">
+          {currentParagraph.join(' ')}
+        </p>
+      );
+      currentParagraph = [];
+    }
+  }
+
+  function flushList() {
+    if (listItems.length > 0) {
+      elements.push(
+        <ul key={elements.length} className="mb-4 ml-6 list-disc space-y-1 text-sm text-slate-700">
+          {listItems.map((item, idx) => (
+            <li key={idx}>{item}</li>
+          ))}
+        </ul>
+      );
+      listItems = [];
+      inList = false;
+    }
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    
+    if (!line) {
+      flushParagraph();
+      flushList();
+      continue;
+    }
+
+    // Headers
+    if (line.startsWith('**') && line.endsWith('**')) {
+      flushParagraph();
+      flushList();
+      const headerText = line.slice(2, -2);
+      elements.push(
+        <h3 key={elements.length} className="mb-3 mt-6 text-base font-semibold text-slate-900 first:mt-0">
+          {headerText}
+        </h3>
+      );
+      continue;
+    }
+
+    // List items
+    if (line.startsWith('✅') || line.startsWith('❌') || line.startsWith('-')) {
+      flushParagraph();
+      if (!inList) inList = true;
+      const itemText = line.replace(/^[✅❌-]\s*/, '');
+      listItems.push(itemText);
+      continue;
+    }
+
+    // Regular paragraph text
+    flushList();
+    currentParagraph.push(line);
+  }
+
+  flushParagraph();
+  flushList();
+
+  return <div>{elements}</div>;
+}
 
 export default function ToolShell({
   contract,
@@ -65,6 +141,7 @@ export default function ToolShell({
   onRun,
   initialInputs = {},
   examples = [],
+  onInputsChange,
 }: ToolShellProps) {
   // Load defaults and examples from catalog
   const catalogDefaults = useMemo(() => getDefaultInputs(contract.id), [contract.id]);
@@ -112,6 +189,13 @@ export default function ToolShell({
       setInputs(mergedDefaults);
     }
   }, [mergedDefaults, inputs]);
+
+  // Notify parent when inputs change (for syncing textarea)
+  useEffect(() => {
+    if (onInputsChange) {
+      onInputsChange(inputs);
+    }
+  }, [inputs, onInputsChange]);
 
   // Show reset reminder if there's output/error but user hasn't reset
   useEffect(() => {
@@ -207,6 +291,8 @@ export default function ToolShell({
     setShowResetReminder(false);
     // Load the example inputs
     setInputs(example.inputs);
+    // Switch to Run tab so user can see the loaded code
+    setActiveTab("run");
   };
 
   const canRun = (mode === "local" || (mode === "compute" && contract.runner.startsWith("/api/"))) && validationErrors.length === 0;
@@ -372,15 +458,15 @@ export default function ToolShell({
       )}
 
       {activeTab === "explain" && (
-        <div className="prose prose-sm max-w-none">
+        <div className="max-w-3xl">
           {catalogExplain ? (
-            <div className="whitespace-pre-wrap text-sm text-slate-700">{catalogExplain}</div>
+            renderExplainText(catalogExplain)
           ) : (
             <>
-              <h3>What this tool is for</h3>
-              <p>{contract.description}</p>
-              <h3>Limits</h3>
-              <ul>
+              <h3 className="mb-3 text-base font-semibold text-slate-900">What this tool is for</h3>
+              <p className="mb-3 text-sm text-slate-700 leading-relaxed">{contract.description}</p>
+              <h3 className="mb-3 mt-6 text-base font-semibold text-slate-900">Limits</h3>
+              <ul className="mb-4 ml-6 list-disc space-y-1 text-sm text-slate-700">
                 <li>CPU: {contract.limits.cpuMs}ms</li>
                 <li>Memory: {contract.limits.memoryMb}MB</li>
                 <li>Output: {contract.limits.outputKb}KB</li>
@@ -388,8 +474,8 @@ export default function ToolShell({
               </ul>
               {contract.securityNotes && (
                 <>
-                  <h3>Security</h3>
-                  <p>{contract.securityNotes}</p>
+                  <h3 className="mb-3 mt-6 text-base font-semibold text-slate-900">Security</h3>
+                  <p className="mb-3 text-sm text-slate-700 leading-relaxed">{contract.securityNotes}</p>
                 </>
               )}
             </>
