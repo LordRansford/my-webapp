@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import ToolShell from "@/components/tools/ToolShell";
 import { getToolContract } from "@/lib/tools/loadContract";
@@ -90,6 +90,13 @@ export default function PythonPlaygroundPage() {
     }
   };
 
+  // Sync code state with ToolShell inputs
+  const handleInputsChange = (inputs: Record<string, unknown>) => {
+    if (inputs.code && typeof inputs.code === "string") {
+      setCode(inputs.code);
+    }
+  };
+
   return (
     <div className="mx-auto max-w-6xl p-6">
       <nav className="mb-4">
@@ -98,7 +105,7 @@ export default function PythonPlaygroundPage() {
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ code }}>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ code }} onInputsChange={handleInputsChange}>
         <div className="space-y-4">
           <div>
             <label htmlFor="code" className="block text-sm font-semibold text-slate-900">
@@ -107,7 +114,11 @@ export default function PythonPlaygroundPage() {
             <textarea
               id="code"
               value={code}
-              onChange={(e) => setCode(e.target.value)}
+              onChange={(e) => {
+                setCode(e.target.value);
+                // Also update ToolShell inputs
+                handleInputsChange({ code: e.target.value });
+              }}
               rows={15}
               className="mt-2 w-full rounded-lg border border-slate-300 p-3 font-mono text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
               placeholder="Enter your Python code here..."

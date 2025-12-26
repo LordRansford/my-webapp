@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-12-26T00:18:42.904Z",
+  "generatedAt": "2025-12-26T00:34:44.731Z",
   "tools": [
     {
       "id": "architecture-diagram-studio",
@@ -317,7 +317,7 @@
           "expectedOutput": "Alice is 30 years old"
         }
       ],
-      "explain": "**What this tool does:**\n\nThe Python playground lets you run Python code right in your web browser! No installation needed - just type code and see it run. It's powered by Pyodide, which brings Python to the web.\n\n**When to use it:**\n\n✅ Learning Python\n✅ Testing algorithms\n✅ Quick calculations\n✅ Experimenting with code ideas\n✅ Practicing Python syntax\n\n**When NOT to use it:**\n\n❌ Reading or writing files\n❌ Accessing the internet\n❌ Very complex programs\n❌ Heavy computations (use your computer instead)\n\n**How to use:**\n\n1. Type your Python code in the box\n2. Click \"Run\"\n3. See the output below!\n\n**Try these:**\n\n- Print: `print('Hello, world!')`\n- Math: `result = 10 * 5; print(result)`\n- Lists: `numbers = [1, 2, 3]; print(numbers)`\n- Loops: `for i in range(5): print(i)`\n\n**Safety:** Your code runs in a secure sandbox - can't access files or internet.\n\n**Limits:** 5 seconds runtime, 256MB memory, 128KB output."
+      "explain": "**What this tool does**\n\nRun Python code right in your browser. No installation needed. Just type code and watch it run. It's powered by Pyodide, which is basically Python running in your browser. Pretty cool, right?\n\n**When to use it**\n\n✅ Learning Python\n✅ Testing algorithms\n✅ Quick calculations\n✅ Experimenting with code ideas\n✅ Practicing Python syntax\n\n**When NOT to use it**\n\n❌ Reading or writing files\n❌ Accessing the internet\n❌ Very complex programs\n❌ Heavy computations (use your computer instead)\n\n**How to use**\n\nType your Python code in the box. Click Run. See the output below. That's the whole process.\n\n**Try these**\n\n- Print: `print('Hello, world!')`\n- Math: `result = 10 * 5; print(result)`\n- Lists: `numbers = [1, 2, 3]; print(numbers)`\n- Loops: `for i in range(5): print(i)`\n\n**Safety**\n\nYour code runs in a secure sandbox. Can't access files or internet. Safe as houses.\n\n**Limits**\n\n5 seconds runtime. 256MB memory. 128KB output. Fair enough for practice."
     },
     {
       "id": "js-sandbox",
@@ -385,7 +385,7 @@
           "expectedOutput": "Doubled: [2, 4, 6, 8]"
         }
       ],
-      "explain": "**What this tool does:**\n\nThe JavaScript sandbox is like a safe practice room for code! Just like a sandbox where you can build without making a mess, this tool lets you write and test JavaScript code without affecting anything else.\n\n**When to use it:**\n\n✅ Learning JavaScript\n✅ Testing code quickly\n✅ Experimenting with ideas\n✅ Practicing programming\n\n**When NOT to use it:**\n\n❌ Changing webpage elements\n❌ Saving or reading files\n❌ Accessing the internet\n❌ Big projects (use a code editor instead)\n\n**How to use:**\n\n1. Type your code in the box\n2. Click \"Run\"\n3. See your results!\n\n**Try these:**\n\n- Print: `console.log('Hello!')`\n- Math: `let x = 5 + 3; console.log(x);`\n- Lists: `let list = [1, 2, 3]; console.log(list[0]);`\n\n**Safety:** Your code runs in an isolated space - completely safe!\n\n**Limits:** 2 seconds runtime, 64KB output, no internet/file access."
+      "explain": "**What this tool does**\n\nThink of this as a safe practice room for code. Like a real sandbox where you can build without making a mess, this tool lets you write and test JavaScript without affecting anything else. Your code runs in a completely isolated space.\n\n**When to use it**\n\n✅ Learning JavaScript\n✅ Testing code quickly\n✅ Experimenting with ideas\n✅ Practicing programming\n\n**When NOT to use it**\n\n❌ Changing webpage elements\n❌ Saving or reading files\n❌ Accessing the internet\n❌ Big projects (use a code editor instead)\n\n**How to use**\n\nType your code in the box. Click Run. See your results. That's it. Simple.\n\n**Try these**\n\n- Print: `console.log('Hello!')`\n- Math: `let x = 5 + 3; console.log(x);`\n- Lists: `let list = [1, 2, 3]; console.log(list[0]);`\n\n**Safety**\n\nYour code runs in an isolated space. Completely safe. No way to break anything.\n\n**Limits**\n\n2 seconds runtime. 64KB output. No internet or file access. That's the deal."
     },
     {
       "id": "sql-sqlite",
@@ -453,7 +453,7 @@
           "expectedOutput": "Returns total order amount per user"
         }
       ],
-      "explain": "**What this tool does:**\n\nThe SQL sandbox is like a practice database! You can write SQL queries (the language databases understand) and see results instantly. It comes with sample data already set up, so you can start practicing right away.\n\n**When to use it:**\n\n✅ Learning SQL\n✅ Testing queries\n✅ Practicing joins\n✅ Understanding how databases work\n\n**When NOT to use it:**\n\n❌ Real production data\n❌ Complex multi-table systems\n❌ Deleting or changing data structure (DROP/ALTER blocked for safety)\n\n**How to use:**\n\n1. Write a SQL query in the box\n2. Click \"Run\"\n3. See your results in a table!\n\n**Sample data included:**\n\n- `users` table: id, name, email, age\n- `orders` table: id, user_id, amount\n\n**Try these:**\n\n- Get all users: `SELECT * FROM users;`\n- Find specific user: `SELECT * FROM users WHERE name = 'Alice';`\n- Join tables: `SELECT u.name, o.amount FROM users u JOIN orders o ON u.id = o.user_id;`\n\n**Safety:** Only safe queries allowed. Dangerous operations are blocked.\n\n**Limits:** 3 seconds runtime, 128MB memory, 256KB output."
+      "explain": "**What this tool does**\n\nThis is a practice database. Write SQL queries and see results instantly. It comes with sample data already set up, so you can start practicing right away. No need to create tables or load data. Just write queries and go.\n\n**When to use it**\n\n✅ Learning SQL\n✅ Testing queries\n✅ Practicing joins\n✅ Understanding how databases work\n\n**When NOT to use it**\n\n❌ Real production data\n❌ Complex multi-table systems\n❌ Deleting or changing data structure (DROP and ALTER are blocked for safety)\n\n**How to use**\n\nWrite a SQL query in the box. Click Run. See your results in a table. Simple.\n\n**Sample data included**\n\n- `users` table: id, name, email, age\n- `orders` table: id, user_id, amount\n\n**Try these**\n\n- Get all users: `SELECT * FROM users;`\n- Find specific user: `SELECT * FROM users WHERE name = 'Alice';`\n- Join tables: `SELECT u.name, o.amount FROM users u JOIN orders o ON u.id = o.user_id;`\n\n**Safety**\n\nOnly safe queries allowed. Dangerous operations are blocked. Can't break anything.\n\n**Limits**\n\n3 seconds runtime. 128MB memory. 256KB output. Good enough for learning."
     },
     {
       "id": "rsa-oaep",
