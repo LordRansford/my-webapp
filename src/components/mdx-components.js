@@ -15,10 +15,11 @@ import ConceptMapExplorer from "@/components/ConceptMapExplorer";
 import { ConceptBlock, WhyItMatters, HowItWorks, KeyTakeaways } from "@/components/notes/TeachingBlocks";
 import { Definition, Warning, Example, CommonMistake } from "@/components/notes/CalloutBlocks";
 import { Figure, Diagram, Icon, Table } from "./content";
-import { EmailHeaderLab } from "@/components/tools/cybersecurity/EmailHeaderLab";
-import { PhishingStorySimulator } from "@/components/tools/cybersecurity/PhishingStorySimulator";
-import { SafeLinkInspector } from "@/components/tools/cybersecurity/SafeLinkInspector";
 import dynamic from "next/dynamic";
+
+const EmailHeaderLab = dynamic(() => import("@/components/tools/cybersecurity/EmailHeaderLab").then(m => ({ default: m.EmailHeaderLab })), { ssr: false });
+const PhishingStorySimulator = dynamic(() => import("@/components/tools/cybersecurity/PhishingStorySimulator").then(m => ({ default: m.PhishingStorySimulator })), { ssr: false });
+const SafeLinkInspector = dynamic(() => import("@/components/tools/cybersecurity/SafeLinkInspector").then(m => ({ default: m.SafeLinkInspector })), { ssr: false });
 
 const CookieInspector = dynamic(() => import("@/components/tools/cyber/CookieInspector").then(m => ({ default: m.CookieInspector })), { ssr: false });
 const SecurityHeaderTool = dynamic(() => import("@/components/tools/cyber/SecurityHeaderTool").then(m => ({ default: m.SecurityHeaderTool })), { ssr: false });
