@@ -1,0 +1,22 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "outputDirectory": ".next",
+  "regions": ["iad1"],
+  "env": {
+    "NEXTAUTH_URL": {
+      "description": "The base URL of your application for NextAuth",
+      "value": "https://yourdomain.com"
+    },
+    "NEXTAUTH_SECRET": {
+      "description": "Secret key for encrypting JWT tokens (generate with: openssl rand -base64 32)",
+      "value": ""
+    }
+  },
+  "github": {
+    "silent": false
+  }
+}

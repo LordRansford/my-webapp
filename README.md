@@ -23,9 +23,56 @@ The canonical scope and architecture constraints live in `docs/scope.md`.
 
 ## Run it locally
 
+### Prerequisites
+
+1. Node.js 20+ (Note: Node 22+ recommended for best compatibility)
+2. npm or pnpm
+
+### Setup
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Configure environment variables:
+   ```bash
+   # Copy the example environment file
+   cp .env.example .env.local
+   
+   # Edit .env.local and set your values
+   # At minimum, set NEXTAUTH_URL and NEXTAUTH_SECRET
+   ```
+
+4. Validate your environment setup:
+   ```bash
+   npm run validate:env
+   ```
+
+5. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+6. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+### Environment Variables
+
+The application requires certain environment variables for authentication and features to work:
+
+- **Required**: `NEXTAUTH_URL`, `NEXTAUTH_SECRET` (see `.env.example`)
+- **Optional**: Google OAuth, Email authentication, Stripe (see `.env.example`)
+- **Documentation**: See `docs/deployment-guide.md` for detailed setup instructions
+
+### Validation
+
+Before deploying or contributing:
+
 ```bash
-npm install
-npm run dev
+npm run validate:env  # Check environment configuration
+npm run lint          # Run all linters
+npm run build         # Build the application
 ```
 
 ## Add or edit courses
