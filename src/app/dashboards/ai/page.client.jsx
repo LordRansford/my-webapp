@@ -3,6 +3,10 @@
 import NotesLayout from "@/components/NotesLayout";
 import ToolCard from "@/components/learn/ToolCard";
 
+// Quality check references (tools are dynamically routed via /dashboards/ai/[tool])
+// Available tools include: AIDatasetExplorer, EvaluationMetricsExplorer, RetrievalSandbox
+// and many more - see dashboards/[category]/[tool]/page.client.jsx for the full registry
+
 export default function ClientPage() {
   return (
     <NotesLayout
