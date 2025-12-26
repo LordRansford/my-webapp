@@ -37,8 +37,6 @@ export default class ToolsErrorBoundary extends Component<Props, State> {
 
   handleReset = () => {
     this.setState({ hasError: false, error: null });
-    // Reload the page to fully reset state
-    window.location.reload();
   };
 
   render() {

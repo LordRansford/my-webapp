@@ -14,8 +14,8 @@ export async function GET(req: Request, ctx: any) {
     const path = new URL(req.url).pathname;
     // Keep useSession() stable even when misconfigured.
     if (path.endsWith("/session")) return NextResponse.json({ user: null, expires: new Date(0).toISOString() }, { status: 200 });
-    // Send user to a friendly page instead of a raw JSON error.
-    return NextResponse.redirect(new URL("/signin?error=configuration", req.url));
+    // Return a friendly JSON response instead of redirecting (which causes 500 errors)
+    return NextResponse.json({ error: "Authentication is not configured. Sign in is optional and not required to use the site." }, { status: 503 });
   }
   const limited = rateLimit(req, { keyPrefix: "auth", limit: 30, windowMs: 60_000 });
   if (limited) return limited;
@@ -29,7 +29,8 @@ export async function POST(req: Request, ctx: any) {
     logAuthEnvIfMisconfigured("POST /api/auth");
     const path = new URL(req.url).pathname;
     if (path.endsWith("/_log")) return new NextResponse(null, { status: 204 });
-    return NextResponse.redirect(new URL("/signin?error=configuration", req.url));
+    // Return a friendly JSON response instead of redirecting (which causes 500 errors)
+    return NextResponse.json({ error: "Authentication is not configured. Sign in is optional and not required to use the site." }, { status: 503 });
   }
   const limited = rateLimit(req, { keyPrefix: "auth", limit: 30, windowMs: 60_000 });
   if (limited) return limited;
