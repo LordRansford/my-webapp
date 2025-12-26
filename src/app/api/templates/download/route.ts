@@ -1,10 +1,5 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth/options";
 import crypto from "crypto";
-import { addTemplateDownload } from "@/lib/billing/store";
-import { getUserPlan } from "@/lib/billing/access";
-import { assertEntitlementOrThrow } from "@/lib/billing/entitlements";
 import { rateLimit } from "@/lib/security/rateLimit";
 import { requireSameOrigin } from "@/lib/security/origin";
 import { withRequestLogging } from "@/lib/security/requestLog";
@@ -15,6 +10,7 @@ type Body = {
   templateId?: string;
   licenseChoice?: "internal_use" | "commercial_use";
   keepSignature?: boolean;
+  format?: "txt" | "json" | "markdown";
 };
 
 function safeFilename(input: string) {
@@ -35,6 +31,11 @@ function getTemplateGatingLevel(templateId: string): "none" | "donation" | "perm
   } catch {
     return "none";
   }
+}
+
+// Check if template is a CPD certificate (should remain restricted)
+function isCpdCertificate(templateId: string): boolean {
+  return templateId.toLowerCase().includes("cpd") || templateId.toLowerCase().includes("certificate");
 }
 
 function buildTemplateText(params: { templateId: string; licenseChoice: "internal_use" | "commercial_use"; signaturePolicy: "kept" | "removed" }) {
@@ -61,68 +62,42 @@ export async function POST(req: Request) {
     const originBlock = requireSameOrigin(req);
     if (originBlock) return originBlock;
 
-    const limited = rateLimit(req, { keyPrefix: "templates-download", limit: 20, windowMs: 60_000 });
+    const limited = rateLimit(req, { keyPrefix: "templates-download", limit: 100, windowMs: 60_000 });
     if (limited) return limited;
 
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
-    return NextResponse.json({ message: "Sign in required" }, { status: 401 });
-  }
+    const body = (await req.json().catch(() => null)) as Body | null;
+    const templateId = body?.templateId;
+    const licenseChoice = body?.licenseChoice || "internal_use";
+    const format = body?.format || "txt";
 
-  const body = (await req.json().catch(() => null)) as Body | null;
-  const templateId = body?.templateId;
-  const licenseChoice = body?.licenseChoice || "internal_use";
+    if (!templateId) return NextResponse.json({ message: "Missing templateId" }, { status: 400 });
 
-  if (!templateId) return NextResponse.json({ message: "Missing templateId" }, { status: 400 });
-
-  const plan = await getUserPlan(session.user.id);
-  const gatingLevel = getTemplateGatingLevel(templateId);
-
-  // Premium template downloads require the templates_download entitlement.
-  if (gatingLevel === "donation" || gatingLevel === "permission") {
-    try {
-      await assertEntitlementOrThrow("templates_download");
-    } catch (e: any) {
-      console.info("access:denied", { route: "POST /api/templates/download", feature: "templates_download", plan });
-      return NextResponse.json({ message: "Professional tier required for this download" }, { status: e?.status || 403 });
+    // CPD certificates remain restricted - require authentication
+    if (isCpdCertificate(templateId)) {
+      const { getServerSession } = await import("next-auth");
+      const { authOptions } = await import("@/lib/auth/options");
+      const session = await getServerSession(authOptions);
+      if (!session?.user?.id) {
+        return NextResponse.json({ message: "Authentication required for certificate downloads" }, { status: 401 });
+      }
     }
-  }
 
-  // License rules:
-  // - Internal use: signature can be removed.
-  // - Commercial use: requires supporter, signature must stay.
-  let signaturePolicy: "kept" | "removed" = body?.keepSignature ? "kept" : "removed";
-  if (licenseChoice === "commercial_use") {
-    try {
-      await assertEntitlementOrThrow("templates_download");
-    } catch (e: any) {
-      console.info("access:denied", { route: "POST /api/templates/download", feature: "templates_download", plan });
-      return NextResponse.json({ message: "Professional tier required for commercial use downloads" }, { status: e?.status || 403 });
+    // All other templates are freely downloadable
+    let signaturePolicy: "kept" | "removed" = body?.keepSignature ? "kept" : "removed";
+    if (licenseChoice === "commercial_use") {
+      // For commercial use, signature should be kept by default
+      signaturePolicy = "kept";
     }
-    signaturePolicy = "kept";
-  }
 
-  const content = buildTemplateText({ templateId, licenseChoice, signaturePolicy });
-  const filename = `ransfords-notes-${safeFilename(templateId)}-${licenseChoice}-${signaturePolicy}.txt`;
-
-  addTemplateDownload({
-    id: crypto.randomUUID(),
-    userId: session.user.id,
-    templateId,
-    licenseChoice,
-    signaturePolicyApplied: signaturePolicy,
-    timestamp: new Date().toISOString(),
-    metadata: { plan, gatingLevel },
-  });
+    const content = buildTemplateText({ templateId, licenseChoice, signaturePolicy });
+    const filename = `ransfords-notes-${safeFilename(templateId)}-${licenseChoice}-${signaturePolicy}.${format}`;
 
     return new NextResponse(content, {
       headers: {
-        "content-type": "text/plain; charset=utf-8",
+        "content-type": format === "json" ? "application/json" : format === "markdown" ? "text/markdown" : "text/plain; charset=utf-8",
         "content-disposition": `attachment; filename="${filename}"`,
         "cache-control": "no-store",
       },
     });
   });
 }
-
-
