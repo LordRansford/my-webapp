@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import "katex/dist/katex.min.css";
 import { Manrope, Space_Grotesk, JetBrains_Mono, Inter } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 import { Providers } from "./providers";
 import AssistantsMount from "./AssistantsMount";
 import TestingModeBanner from "@/components/TestingModeBanner";
@@ -61,6 +62,7 @@ export default function RootLayout({ children }) {
           <AssistantsMount />
         </Providers>
         <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
