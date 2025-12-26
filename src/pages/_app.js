@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import "katex/dist/katex.min.css";
 import { Manrope, Space_Grotesk, JetBrains_Mono, Inter } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 import { NotesProvider } from "@/components/notes/NotesProvider";
 import AuthSessionProvider from "@/components/auth/SessionProvider";
 import dynamic from "next/dynamic";
@@ -50,6 +51,7 @@ export default function App({ Component, pageProps }) {
         </NotesProvider>
       </AuthSessionProvider>
       <SpeedInsights />
+      <Analytics />
     </div>
   );
 }
