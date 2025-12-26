@@ -28,7 +28,7 @@
           "expectedOutput": "Doubled: [2, 4, 6, 8]"
         }
       ],
-      "explain": "The JavaScript sandbox lets you run JavaScript code safely in your browser. It uses a Web Worker to isolate execution, preventing access to the DOM or network. This is useful for testing logic, exploring language features, or debugging small code snippets. Use it when you need to test JavaScript behavior without setting up a full project. Don't use it for DOM manipulation, file I/O, or network requests - those are blocked for security. Inputs: code (string) - Your JavaScript code to execute. Limits: 2000ms CPU time, 128MB memory, 64KB output. Security: Runs in isolated worker with no DOM or network access."
+      "explain": "**What this tool does:**\n\nThe JavaScript sandbox is like a safe practice room for code! Just like a sandbox where you can build without making a mess, this tool lets you write and test JavaScript code without affecting anything else.\n\n**When to use it:**\n\n✅ Learning JavaScript\n✅ Testing code quickly\n✅ Experimenting with ideas\n✅ Practicing programming\n\n**When NOT to use it:**\n\n❌ Changing webpage elements\n❌ Saving or reading files\n❌ Accessing the internet\n❌ Big projects (use a code editor instead)\n\n**How to use:**\n\n1. Type your code in the box\n2. Click \"Run\"\n3. See your results!\n\n**Try these:**\n\n- Print: `console.log('Hello!')`\n- Math: `let x = 5 + 3; console.log(x);`\n- Lists: `let list = [1, 2, 3]; console.log(list[0]);`\n\n**Safety:** Your code runs in an isolated space - completely safe!\n\n**Limits:** 2 seconds runtime, 64KB output, no internet/file access."
     },
     {
       "id": "python-playground",
@@ -58,7 +58,7 @@
           "expectedOutput": "Alice is 30 years old"
         }
       ],
-      "explain": "The Python playground runs Python code in your browser using Pyodide. It's perfect for learning Python syntax, testing algorithms, or experimenting with data transformations. Use it for educational purposes, quick calculations, or prototyping small scripts. Don't use it for file I/O, network requests, or heavy computations - those are limited or blocked. Inputs: code (string) - Your Python code. Limits: 5000ms CPU, 256MB memory, 128KB output. Security: Runs in Pyodide worker with no file system or network access."
+      "explain": "**What this tool does:**\n\nThe Python playground lets you run Python code right in your web browser! No installation needed - just type code and see it run. It's powered by Pyodide, which brings Python to the web.\n\n**When to use it:**\n\n✅ Learning Python\n✅ Testing algorithms\n✅ Quick calculations\n✅ Experimenting with code ideas\n✅ Practicing Python syntax\n\n**When NOT to use it:**\n\n❌ Reading or writing files\n❌ Accessing the internet\n❌ Very complex programs\n❌ Heavy computations (use your computer instead)\n\n**How to use:**\n\n1. Type your Python code in the box\n2. Click \"Run\"\n3. See the output below!\n\n**Try these:**\n\n- Print: `print('Hello, world!')`\n- Math: `result = 10 * 5; print(result)`\n- Lists: `numbers = [1, 2, 3]; print(numbers)`\n- Loops: `for i in range(5): print(i)`\n\n**Safety:** Your code runs in a secure sandbox - can't access files or internet.\n\n**Limits:** 5 seconds runtime, 256MB memory, 128KB output."
     },
     {
       "id": "sql-sqlite",
@@ -88,7 +88,7 @@
           "expectedOutput": "Returns total order amount per user"
         }
       ],
-      "explain": "The SQL sandbox lets you practice SQL queries using SQLite in your browser. It includes sample tables (users, orders) so you can test queries immediately. Use it to learn SQL syntax, test query logic, or practice joins and aggregations. Don't use it for production data or complex multi-table schemas. Inputs: query (string) - Your SQL SELECT query. Limits: 3000ms CPU, 128MB memory, 256KB output. Security: Only SELECT queries and safe INSERT/UPDATE allowed. DROP and ALTER are blocked."
+      "explain": "**What this tool does:**\n\nThe SQL sandbox is like a practice database! You can write SQL queries (the language databases understand) and see results instantly. It comes with sample data already set up, so you can start practicing right away.\n\n**When to use it:**\n\n✅ Learning SQL\n✅ Testing queries\n✅ Practicing joins\n✅ Understanding how databases work\n\n**When NOT to use it:**\n\n❌ Real production data\n❌ Complex multi-table systems\n❌ Deleting or changing data structure (DROP/ALTER blocked for safety)\n\n**How to use:**\n\n1. Write a SQL query in the box\n2. Click \"Run\"\n3. See your results in a table!\n\n**Sample data included:**\n\n- `users` table: id, name, email, age\n- `orders` table: id, user_id, amount\n\n**Try these:**\n\n- Get all users: `SELECT * FROM users;`\n- Find specific user: `SELECT * FROM users WHERE name = 'Alice';`\n- Join tables: `SELECT u.name, o.amount FROM users u JOIN orders o ON u.id = o.user_id;`\n\n**Safety:** Only safe queries allowed. Dangerous operations are blocked.\n\n**Limits:** 3 seconds runtime, 128MB memory, 256KB output."
     },
     {
       "id": "regex-tester",
