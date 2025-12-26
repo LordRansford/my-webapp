@@ -126,6 +126,11 @@ function encodeLabels(rows: ParsedRow[], targetColumn: string): { labelsTensor: 
 }
 
 export function TabularModelLab() {
+  // #region agent log
+  if (typeof window !== 'undefined') {
+    fetch('http://127.0.0.1:7243/ingest/5c42012f-fdd0-45fd-8860-75c06576ec81',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'TabularModelLab.tsx:render',message:'Component rendering',data:{hasWindow:typeof window !== 'undefined',hasTf:typeof tf !== 'undefined'},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'H3'})}).catch(()=>{});
+  }
+  // #endregion
   const [parsedData, setParsedData] = useState<ParsedData | null>(null);
   const [targetColumn, setTargetColumn] = useState<string>("");
   const [featureColumns, setFeatureColumns] = useState<string[]>([]);
