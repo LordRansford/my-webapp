@@ -1,3 +1,5 @@
+"use client";
+
 import Callout from "./Callout";
 import PythonPlayground from "./PythonPlayground";
 import RsaPlayground from "./RsaPlayground";
