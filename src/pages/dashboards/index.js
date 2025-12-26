@@ -58,6 +58,15 @@ export default function DashboardsLanding() {
       </section>
 
       <section className="rn-section">
+        <h2 className="rn-h2">Licensing and data safety</h2>
+        <p className="rn-body">
+          All dashboards are educational tools built for learning. They run in your browser, with no third-party tracking or data collection.
+          Datasets used are either synthetic, curated educational examples, or derived from public domain sources.
+          No production data or secrets should be used with these tools.
+        </p>
+      </section>
+
+      <section className="rn-section">
         <h2 className="rn-h2">Note</h2>
         <p className="rn-body">This page exists only as a compatibility link target.</p>
       </section>

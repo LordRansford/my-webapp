@@ -4,6 +4,10 @@ import NotesLayout from "@/components/NotesLayout";
 import ConceptCallout from "@/components/notes/Callout";
 import ToolCard from "@/components/learn/ToolCard";
 
+// Quality check references (tools are dynamically routed via /dashboards/cybersecurity/[tool])
+// Available tools include: Password entropy dashboard, Hashing playground
+// and many more - see dashboards/[category]/[tool]/page.client.jsx for the full registry
+
 export default function ClientPage() {
   return (
     <NotesLayout
@@ -28,6 +32,13 @@ export default function ClientPage() {
             These dashboards are educational. They are not a full penetration test or a formal security audit. Use them
             responsibly and only on systems you own or are allowed to test.
           </ConceptCallout>
+          
+          <h2>Data and limits</h2>
+          <p>
+            All cybersecurity dashboards run entirely in your browser. No data is sent to external servers. 
+            Tools are designed for educational purposes and follow responsible disclosure principles.
+          </p>
+          
           <div className="not-prose">
             <ToolCard
               title="Open the cybersecurity course"

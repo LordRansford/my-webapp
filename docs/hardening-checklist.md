@@ -2,6 +2,25 @@
 
 Keep changes small. Verify each stage before merging.
 
+### Environment Setup
+
+Before deploying, ensure all environment variables are properly configured:
+
+- **Check configuration**:
+  - Run `npm run validate:env` to verify all required variables are set
+  - Review `.env.example` for a complete list of available variables
+  - See `docs/deployment-guide.md` for detailed setup instructions
+
+- **Required for all deployments**:
+  - `NEXTAUTH_URL` - Must match your production domain exactly
+  - `NEXTAUTH_SECRET` - Generate with `openssl rand -base64 32`
+
+- **Security requirements**:
+  - Never commit `.env.local` or production secrets to git
+  - Use different credentials for dev/staging/production
+  - Store production secrets in platform's secure variable system (e.g., Vercel Environment Variables)
+  - Ensure `NEXTAUTH_SECRET` is at least 32 characters
+
 ### Auth (NextAuth)
 - **Preview and Production env vars (names only)**:
   - `NEXTAUTH_URL`
@@ -44,6 +63,7 @@ Keep changes small. Verify each stage before merging.
   - Check progress tracker wraps and remains readable on mobile widths.
 
 ### Commands
+- Validate environment: `npm run validate:env`
 - Lint: `npm run lint`
 - Unit tests: `npm run test:data`
 - E2E tests: `npm run test:e2e`
