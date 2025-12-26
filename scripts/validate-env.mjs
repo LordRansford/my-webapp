@@ -22,6 +22,13 @@ import { dirname, join } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// Constants for validation
+const EXAMPLE_SECRET_VALUES = [
+  'your-secret-key-here-change-this-in-production',
+  'REPLACE_WITH_GENERATED_SECRET_use_openssl_rand_base64_32',
+];
+const MIN_SECRET_LENGTH = 32;
+
 // ANSI color codes for terminal output
 const colors = {
   reset: '\x1b[0m',
@@ -75,12 +82,12 @@ function validateSecretStrength(name, value) {
   
   const issues = [];
   
-  if (value.length < 32) {
-    issues.push('Should be at least 32 characters for security');
+  if (value.length < MIN_SECRET_LENGTH) {
+    issues.push(`Should be at least ${MIN_SECRET_LENGTH} characters for security`);
   }
   
-  if (value === 'your-secret-key-here-change-this-in-production') {
-    issues.push('Using example value - change this in production!');
+  if (EXAMPLE_SECRET_VALUES.includes(value)) {
+    issues.push('Using example value - MUST be changed before deployment!');
   }
   
   if (issues.length > 0) {
