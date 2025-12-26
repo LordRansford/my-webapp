@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { MDXRemote } from "next-mdx-remote";
 import NotesLayout from "@/components/NotesLayout";
-import mdxComponents from "@/components/mdx-components";
 import { ErrorBoundary } from "@/components/notes/ErrorBoundary";
+import dynamic from "next/dynamic";
+
+const MDXClientWrapper = dynamic(() => import("@/components/MDXClientWrapper"), { ssr: false });
 
 export async function getServerSideProps({ params }) {
   // Direct dynamic import from server-only module to avoid client bundling
@@ -39,9 +40,7 @@ export default function ToolPage({ page }) {
           <p className="eyebrow">Labs</p>
           <h1>{page.meta.title}</h1>
           {page.meta.description && <p className="lead">{page.meta.description}</p>}
-          <div className="post-content">
-            <MDXRemote {...page.mdx} components={mdxComponents} />
-          </div>
+          <MDXClientWrapper mdx={page.mdx} />
         </article>
       </NotesLayout>
     </ErrorBoundary>

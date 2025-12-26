@@ -169,6 +169,7 @@ import ReplicationConsistencyVisualizerTool from "@/components/notes/tools/data/
 import GovernanceDecisionSimulatorTool from "@/components/notes/tools/data/advanced/GovernanceDecisionSimulatorTool";
 import DataStrategySandboxTool from "@/components/notes/tools/data/advanced/DataStrategySandboxTool";
 
+// Create components object - dynamic imports will only load on client
 const mdxComponents = {
   Callout,
   ConceptBlock,
@@ -197,6 +198,7 @@ const mdxComponents = {
   EmailHeaderLab,
   PhishingStorySimulator,
   SafeLinkInspector,
+  // Client-only components (loaded dynamically, ssr: false)
   CookieInspector,
   SecurityHeaderTool,
   UrlSafetyTool,
