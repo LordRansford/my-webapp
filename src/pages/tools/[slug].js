@@ -2,6 +2,7 @@ import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote";
 import NotesLayout from "@/components/NotesLayout";
 import mdxComponents from "@/components/mdx-components";
+import ToolsErrorBoundary from "@/components/tools/ToolsErrorBoundary";
 
 export async function getServerSideProps({ params }) {
   // Direct dynamic import from server-only module to avoid client bundling
@@ -13,29 +14,31 @@ export async function getServerSideProps({ params }) {
 
 export default function ToolPage({ page }) {
   return (
-    <NotesLayout
-      meta={{
-        title: page.meta.title,
-        description: page.meta.description || "Browser-based labs and sandboxes.",
-        level: "Tools",
-        slug: `/tools/${page.slug}`,
-      }}
-      headings={[]}
-    >
-      <nav className="breadcrumb">
-        <Link href="/tools">Labs</Link>
-        <span aria-hidden="true"> / </span>
-        <span>{page.meta.title}</span>
-      </nav>
+    <ToolsErrorBoundary toolId={page.slug}>
+      <NotesLayout
+        meta={{
+          title: page.meta.title,
+          description: page.meta.description || "Browser-based labs and sandboxes.",
+          level: "Tools",
+          slug: `/tools/${page.slug}`,
+        }}
+        headings={[]}
+      >
+        <nav className="breadcrumb">
+          <Link href="/tools">Labs</Link>
+          <span aria-hidden="true"> / </span>
+          <span>{page.meta.title}</span>
+        </nav>
 
-      <article className="lesson-content">
-        <p className="eyebrow">Labs</p>
-        <h1>{page.meta.title}</h1>
-        {page.meta.description && <p className="lead">{page.meta.description}</p>}
-        <div className="post-content">
-          <MDXRemote {...page.mdx} components={mdxComponents} />
-        </div>
-      </article>
-    </NotesLayout>
+        <article className="lesson-content">
+          <p className="eyebrow">Labs</p>
+          <h1>{page.meta.title}</h1>
+          {page.meta.description && <p className="lead">{page.meta.description}</p>}
+          <div className="post-content">
+            <MDXRemote {...page.mdx} components={mdxComponents} />
+          </div>
+        </article>
+      </NotesLayout>
+    </ToolsErrorBoundary>
   );
 }

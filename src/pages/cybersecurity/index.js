@@ -10,6 +10,7 @@ import cybersecurityCourse from "../../../content/courses/cybersecurity.json";
 import SafeIcon from "@/components/content/SafeIcon";
 import ToolCard from "@/components/notes/ToolCard";
 import QuizBlock from "@/components/notes/QuizBlock";
+import { ErrorBoundary } from "@/components/notes/ErrorBoundary";
 
 function StartButton() {
   return (
@@ -48,24 +49,19 @@ function LevelCards({ levels = [] }) {
                 >
                   <SafeIcon name={accent.icon} size={18} color="currentColor" style={{ marginRight: 0 }} />
                 </span>
-                <div>
-                  <p className="eyebrow mb-1 text-gray-700">{level.label}</p>
-                  <h3 className="text-lg font-semibold text-gray-900">{level.title}</h3>
+                <div className="flex-1">
+                  <h3 className="text-base font-semibold text-gray-900">{level.label}</h3>
+                  <p className="mt-1 text-sm text-gray-600">{level.description}</p>
                 </div>
               </div>
-              <span className={`chip ${accent.chip}`}>
-                {level.estimated_hours ? `${level.estimated_hours} hrs` : "Self paced"}
-              </span>
             </div>
-            <p className="mt-2 text-sm text-gray-700">{level.summary}</p>
-            <div className="mt-auto pt-3">
-              <Link
-                href={level.route}
-                className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-900 focus:outline-none focus:ring focus:ring-blue-200"
-              >
-                Go to {level.label} <span aria-hidden="true">-&gt;</span>
-              </Link>
-            </div>
+            <Link
+              href={level.href}
+              className="mt-4 inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+              Open {level.label}
+              <span aria-hidden="true" className="ml-1">→</span>
+            </Link>
           </div>
         );
       })}
@@ -76,22 +72,18 @@ function LevelCards({ levels = [] }) {
 export default function CybersecurityOverviewPage({ source, headings }) {
   const mdxComponents = useMemo(
     () => ({
-      StartButton,
-      SafeIcon,
       LevelCards: () => <LevelCards levels={cybersecurityCourse.levels} />,
       CourseProgressBar: () => <CourseProgressBar courseId="cybersecurity" manifest={cyberSections} />,
-      CPDHoursTotal: () => {
+      CPDTracker: () => {
         const total = getTotalCpdHours("cybersecurity");
         return (
-          <div className="rounded-2xl border border-gray-200 bg-white/85 p-4 shadow-sm">
+          <div className="my-4 rounded-lg border border-blue-200 bg-blue-50 p-4">
             <p className="text-sm font-semibold text-gray-900">Your recorded CPD hours for Cybersecurity</p>
-            <p className="text-base font-semibold text-gray-800">{total.toFixed(1)} hours</p>
-            <p className="text-sm text-gray-700">
-              This stays in your browser only. If you need official CPD credit, log your time with your professional body as well.
-            </p>
+            <p className="mt-1 text-2xl font-semibold text-blue-700">{total.toFixed(1)} hours</p>
           </div>
         );
       },
+      StartButton,
       ToolCard,
       QuizBlock,
     }),
@@ -99,27 +91,29 @@ export default function CybersecurityOverviewPage({ source, headings }) {
   );
 
   return (
-    <NotesLayout
-      meta={{
-        title: cybersecurityCourse.title,
-        description: cybersecurityCourse.description,
-        level: "Overview",
-        slug: cybersecurityCourse.overview_route,
-      }}
-      activeLevelId="overview"
-      headings={headings}
-    >
-      <MDXRenderer source={source} components={mdxComponents} />
-    </NotesLayout>
+    <ErrorBoundary>
+      <NotesLayout
+        meta={{
+          title: cybersecurityCourse.title,
+          description: cybersecurityCourse.description,
+          level: "Overview",
+          slug: cybersecurityCourse.overview_route,
+          section: "cybersecurity",
+        }}
+        headings={headings}
+      >
+        <MDXRenderer source={source} components={mdxComponents} />
+      </NotesLayout>
+    </ErrorBoundary>
   );
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const note = await loadNote("cybersecurity/overview.mdx");
   return {
     props: {
       source: note.source,
-      headings: note.headings,
+      headings: note.headings || [],
     },
   };
 }
