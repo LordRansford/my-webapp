@@ -2,10 +2,6 @@
 
 import { MDXRemote } from "next-mdx-remote";
 import { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
-
-// Lazy load mdx-components only on client
-const mdxComponentsLoader = dynamic(() => import("@/components/mdx-components"), { ssr: false });
 
 export default function MDXClientWrapper({ mdx }) {
   const [isClient, setIsClient] = useState(false);
@@ -14,16 +10,18 @@ export default function MDXClientWrapper({ mdx }) {
 
   useEffect(() => {
     setIsClient(true);
-    // Load components after mount
-    mdxComponentsLoader.then((mod) => {
-      setComponents(mod.default);
-    }).catch((err) => {
-      // #region agent log
-      fetch('http://127.0.0.1:7243/ingest/5c42012f-fdd0-45fd-8860-75c06576ec81',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MDXClientWrapper.jsx:loadError',message:'Failed to load mdx components',data:{error:err?.message,stack:err?.stack},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'H6'})}).catch(()=>{});
-      // #endregion
-      setError(err);
-      console.error('[MDXClientWrapper] Failed to load components:', err);
-    });
+    // Load components after mount using regular dynamic import
+    import("@/components/mdx-components")
+      .then((mod) => {
+        setComponents(mod.default);
+      })
+      .catch((err) => {
+        // #region agent log
+        fetch('http://127.0.0.1:7243/ingest/5c42012f-fdd0-45fd-8860-75c06576ec81',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MDXClientWrapper.jsx:loadError',message:'Failed to load mdx components',data:{error:err?.message,stack:err?.stack},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'H6'})}).catch(()=>{});
+        // #endregion
+        setError(err);
+        console.error('[MDXClientWrapper] Failed to load components:', err);
+      });
   }, []);
 
   if (!isClient) {
