@@ -11,6 +11,7 @@ import SafeIcon from "@/components/content/SafeIcon";
 import ToolCard from "@/components/notes/ToolCard";
 import QuizBlock from "@/components/notes/QuizBlock";
 import { ErrorBoundary } from "@/components/notes/ErrorBoundary";
+import CPDTracker from "@/components/CPDTracker";
 
 function StartButton() {
   return (
@@ -72,18 +73,23 @@ function LevelCards({ levels = [] }) {
 export default function CybersecurityOverviewPage({ source, headings }) {
   const mdxComponents = useMemo(
     () => ({
+      StartButton,
+      SafeIcon,
       LevelCards: () => <LevelCards levels={cybersecurityCourse.levels} />,
       CourseProgressBar: () => <CourseProgressBar courseId="cybersecurity" manifest={cyberSections} />,
-      CPDTracker: () => {
+      CPDHoursTotal: () => {
         const total = getTotalCpdHours("cybersecurity");
         return (
-          <div className="my-4 rounded-lg border border-blue-200 bg-blue-50 p-4">
+          <div className="rounded-2xl border border-gray-200 bg-white/85 p-4 shadow-sm">
             <p className="text-sm font-semibold text-gray-900">Your recorded CPD hours for Cybersecurity</p>
-            <p className="mt-1 text-2xl font-semibold text-blue-700">{total.toFixed(1)} hours</p>
+            <p className="text-base font-semibold text-gray-800">{total.toFixed(1)} hours</p>
+            <p className="text-sm text-gray-700">
+              This stays in your browser only. If you need official CPD credit, log your time with your professional body as well.
+            </p>
           </div>
         );
       },
-      StartButton,
+      CPDTracker,
       ToolCard,
       QuizBlock,
     }),
@@ -108,7 +114,7 @@ export default function CybersecurityOverviewPage({ source, headings }) {
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const note = await loadNote("cybersecurity/overview.mdx");
   return {
     props: {
