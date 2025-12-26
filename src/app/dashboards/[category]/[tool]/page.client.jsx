@@ -324,7 +324,7 @@ export default function ClientPage({ params }) {
           <Link href={backHref} className="rn-mini rn-card-link">
             ← Back to {categoryLabel} dashboards
           </Link>
-        </Link>
+        </div>
         <div className="rn-callout">
           <div className="rn-callout-title">Dashboard not found</div>
           <div className="rn-callout-body">
