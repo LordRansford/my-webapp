@@ -99,40 +99,44 @@ export default function ToolShell({
   const [activeTab, setActiveTab] = useState<Tab>("run");
   const [mode, setMode] = useState<ExecutionMode>(contract.defaultMode);
   const [inputs, setInputs] = useState<Record<string, unknown>>(mergedDefaults);
-  const [status, setStatus] = useState<string>("idle");
   const [output, setOutput] = useState<string | null>(null);
   const [error, setError] = useState<ToolError | null>(null);
+  const [status, setStatus] = useState<"idle" | "running" | "completed" | "failed">("idle");
   const [isRunning, setIsRunning] = useState(false);
   const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
+  const [showResetReminder, setShowResetReminder] = useState(false);
 
-  // Validate inputs on change
+  // Reset inputs when defaults change
+  useEffect(() => {
+    if (Object.keys(mergedDefaults).length > 0 && Object.keys(inputs).length === 0) {
+      setInputs(mergedDefaults);
+    }
+  }, [mergedDefaults, inputs]);
+
+  // Show reset reminder if there's output/error but user hasn't reset
+  useEffect(() => {
+    if ((output || error) && status !== "idle") {
+      setShowResetReminder(true);
+    } else {
+      setShowResetReminder(false);
+    }
+  }, [output, error, status]);
+
+  // Validate inputs whenever they change
   useEffect(() => {
     const validation = validateInputs(contract, inputs);
     setValidationErrors(validation.errors);
   }, [contract, inputs]);
 
   const handleRun = async () => {
-    // Pre-validate
-    const validation = validateInputs(contract, inputs);
-    if (!validation.valid) {
-      setError({
-        code: "validation_error",
-        message: `Please fix these fields: ${validation.errors.map((e) => e.field).join(", ")}`,
-        fixSuggestion: validation.errors.map((e) => e.message).join(". "),
-      });
-      // Scroll to first error field
-      const firstErrorField = document.querySelector(`[name="${validation.errors[0].field}"]`);
-      if (firstErrorField) {
-        firstErrorField.scrollIntoView({ behavior: "smooth", block: "center" });
-        (firstErrorField as HTMLElement).focus();
-      }
-      return;
-    }
+    if (isRunning) return;
 
+    // Clear previous results
+    setOutput(null);
+    setError(null);
+    setShowResetReminder(false);
     setStatus("running");
     setIsRunning(true);
-    setError(null);
-    setOutput(null);
 
     try {
       // Use unified runner if onRun not provided, otherwise use custom handler
@@ -187,11 +191,22 @@ export default function ToolShell({
     setError(null);
     setStatus("idle");
     setValidationErrors([]);
+    setShowResetReminder(false);
   };
 
   const handleStop = () => {
     setIsRunning(false);
     setStatus("idle");
+  };
+
+  const handleLoadExample = (example: { title: string; inputs: Record<string, unknown> }) => {
+    // Clear previous results when loading example
+    setOutput(null);
+    setError(null);
+    setStatus("idle");
+    setShowResetReminder(false);
+    // Load the example inputs
+    setInputs(example.inputs);
   };
 
   const canRun = (mode === "local" || (mode === "compute" && contract.runner.startsWith("/api/"))) && validationErrors.length === 0;
@@ -217,95 +232,89 @@ export default function ToolShell({
         </div>
 
         {/* Limits & Security */}
-        <div className="flex flex-wrap gap-4 rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm">
-          <div>
-            <span className="font-semibold text-slate-900">Limits:</span>{" "}
-            <span className="text-slate-700">
-              {contract.limits.cpuMs}ms CPU, {contract.limits.memoryMb}MB memory, {contract.limits.outputKb}KB output
-            </span>
-          </div>
+        <div className="flex flex-wrap gap-4 text-sm text-slate-600">
+          <span>Limits: {contract.limits.cpuMs}ms CPU, {contract.limits.memoryMb}MB memory, {contract.limits.outputKb}KB output</span>
           {contract.securityNotes && (
-            <div>
-              <span className="font-semibold text-slate-900">Security:</span>{" "}
-              <span className="text-slate-700">{contract.securityNotes}</span>
-            </div>
+            <span className="text-amber-700">⚠️ {contract.securityNotes}</span>
           )}
         </div>
       </header>
 
       {/* Tabs */}
-      <div className="mb-6 border-b border-slate-200">
-        <nav className="flex gap-4" role="tablist">
-          {(["run", "explain", "examples"] as Tab[]).map((tab) => (
-            <button
-              key={tab}
-              type="button"
-              role="tab"
-              aria-selected={activeTab === tab}
-              onClick={() => setActiveTab(tab)}
-              className={`border-b-2 px-4 py-2 text-sm font-semibold transition ${
-                activeTab === tab
-                  ? "border-slate-900 text-slate-900"
-                  : "border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-800"
-              }`}
-            >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
-            </button>
-          ))}
-        </nav>
+      <div className="mb-6 flex gap-2 border-b border-slate-200">
+        {(["run", "explain", "examples"] as Tab[]).map((tab) => (
+          <button
+            key={tab}
+            type="button"
+            onClick={() => setActiveTab(tab)}
+            className={`border-b-2 px-4 py-2 text-sm font-semibold capitalize transition ${
+              activeTab === tab
+                ? "border-slate-900 text-slate-900"
+                : "border-transparent text-slate-600 hover:text-slate-900"
+            }`}
+          >
+            {tab}
+          </button>
+        ))}
       </div>
 
-      {/* Tab Content */}
+      {/* Reset Reminder Banner */}
+      {showResetReminder && (
+        <div className="mb-4 rounded-lg border border-blue-200 bg-blue-50 p-4" role="alert">
+          <div className="flex items-start gap-3">
+            <span className="text-lg" aria-hidden="true">💡</span>
+            <div className="flex-1">
+              <h3 className="text-sm font-semibold text-blue-900">Ready for a new run?</h3>
+              <p className="mt-1 text-xs text-blue-700">
+                Click <strong>Reset</strong> to clear the previous results and start fresh. This ensures your code runs with clean inputs.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowResetReminder(false)}
+              className="text-blue-600 hover:text-blue-800"
+              aria-label="Dismiss reminder"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
+
       {activeTab === "run" && (
         <div className="space-y-6">
-          {/* Validation Errors */}
-          {validationErrors.length > 0 && (
-            <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
-              <h3 className="mb-2 text-sm font-semibold text-amber-900">Fix these fields:</h3>
-              <ul className="list-disc list-inside space-y-1 text-sm text-amber-800">
-                {validationErrors.map((err, idx) => (
-                  <li key={idx}>
-                    <strong>{err.field}:</strong> {err.message}
-                  </li>
-                ))}
-              </ul>
+          {/* Mode Selector */}
+          <div className="flex items-center gap-4">
+            <span className="text-sm font-semibold text-slate-700">Execution Mode:</span>
+            <div className="flex gap-2 rounded-lg border border-slate-300 p-1">
+              {contract.executionModes.map((m) => (
+                <button
+                  key={m}
+                  type="button"
+                  onClick={() => setMode(m)}
+                  disabled={m === "compute" && !contract.runner.startsWith("/api/")}
+                  className={`rounded-lg px-4 py-2 text-sm font-semibold transition ${
+                    mode === m
+                      ? "bg-slate-900 text-white"
+                      : "bg-transparent text-slate-700 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                  }`}
+                >
+                  {m === "local" ? "Local" : "Compute"}
+                </button>
+              ))}
             </div>
-          )}
-
-          {/* Mode Switch */}
-          {contract.executionModes.length > 1 && (
-            <div className="flex items-center gap-4 rounded-lg border border-slate-200 bg-white p-4">
-              <span className="text-sm font-semibold text-slate-900">Execution Mode:</span>
-              <div className="flex gap-2">
-                {contract.executionModes.map((m) => (
-                  <button
-                    key={m}
-                    type="button"
-                    onClick={() => setMode(m)}
-                    disabled={m === "compute" && !contract.runner.startsWith("/api/")}
-                    className={`rounded-lg px-4 py-2 text-sm font-semibold transition ${
-                      mode === m
-                        ? "bg-slate-900 text-white"
-                        : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                    } disabled:opacity-50 disabled:cursor-not-allowed`}
-                  >
-                    {m === "local" ? "Local (Free)" : "Compute (Credits)"}
-                  </button>
-                ))}
-              </div>
-              {mode === "compute" && !contract.runner.startsWith("/api/") && (
-                <p className="text-sm text-amber-700">
-                  Compute mode is temporarily unavailable. Use Local mode.
-                </p>
-              )}
-            </div>
-          )}
+            {mode === "compute" && !contract.runner.startsWith("/api/") && (
+              <p className="text-sm text-amber-700">
+                Compute mode is temporarily unavailable. Use Local mode.
+              </p>
+            )}
+          </div>
 
           {/* Credit Estimate */}
           <CreditEstimate contract={contract} mode={mode} inputs={inputs} />
 
-          {/* Inputs - rendered by children */}
-          <div className="space-y-4">{children}</div>
+          {/* Input Fields (children) */}
+          {children}
 
           {/* Action Buttons */}
           <div className="flex items-center gap-3">
@@ -391,23 +400,30 @@ export default function ToolShell({
       {activeTab === "examples" && (
         <div className="space-y-4">
           {allExamples.length > 0 ? (
-            allExamples.map((example, idx) => (
-              <div key={idx} className="rounded-lg border border-slate-200 bg-white p-4">
-                <h3 className="mb-2 text-sm font-semibold text-slate-900">{example.title}</h3>
-                {example.expectedOutput && (
-                  <div className="mb-3 rounded bg-slate-50 p-2 text-xs text-slate-600">
-                    <strong>Expected output:</strong> {example.expectedOutput}
-                  </div>
-                )}
-                <button
-                  type="button"
-                  onClick={() => setInputs(example.inputs)}
-                  className="text-sm text-slate-700 underline hover:text-slate-900"
-                >
-                  Load this example
-                </button>
+            <>
+              <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
+                <p className="text-sm text-blue-800">
+                  <strong>💡 Tip:</strong> Click "Load this example" to see it in action. After loading, click "Run" to execute it. Use "Reset" to clear results before trying a new example.
+                </p>
               </div>
-            ))
+              {allExamples.map((example, idx) => (
+                <div key={idx} className="rounded-lg border border-slate-200 bg-white p-4">
+                  <h3 className="mb-2 text-sm font-semibold text-slate-900">{example.title}</h3>
+                  {example.expectedOutput && (
+                    <div className="mb-3 rounded bg-slate-50 p-2 text-xs text-slate-600">
+                      <strong>Expected output:</strong> {example.expectedOutput}
+                    </div>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => handleLoadExample(example)}
+                    className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
+                  >
+                    Load this example
+                  </button>
+                </div>
+              ))}
+            </>
           ) : (
             <p className="text-sm text-slate-600">No examples available for this tool.</p>
           )}
