@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import NotesLayout from "@/components/NotesLayout";
 import LoadingState from "@/components/LoadingState";
+import { ErrorBoundary } from "@/components/notes/ErrorBoundary";
 import { LazyMotion, domAnimation, m, useReducedMotion } from "framer-motion";
 import { motionPresets, reducedMotionProps } from "@/lib/motion";
 
@@ -261,6 +262,26 @@ const COURSE_LINKS = {
   digitalisation: "/digitalisation",
 };
 
+function ErrorFallback({ error, resetErrorBoundary }) {
+  return (
+    <div className="rn-callout" role="alert">
+      <div className="rn-callout-title">Dashboard unavailable</div>
+      <div className="rn-callout-body">
+        <p>This dashboard could not be loaded. This might be a temporary issue.</p>
+        {process.env.NODE_ENV !== "production" && error && (
+          <details className="mt-2">
+            <summary className="cursor-pointer text-sm">Technical details</summary>
+            <pre className="mt-2 overflow-auto text-xs">{error?.message || String(error)}</pre>
+          </details>
+        )}
+        <button onClick={resetErrorBoundary} className="rn-btn rn-btn-primary rn-mt" type="button">
+          Try again
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function ClientPage({ params }) {
   const category = params?.category;
   const tool = params?.tool;
@@ -287,13 +308,45 @@ export default function ClientPage({ params }) {
     return () => clearTimeout(t);
   }, [category, tool, reduce]);
 
+  if (!entry || !entry.Component) {
+    return (
+      <NotesLayout
+        meta={{
+          title: "Dashboard not found",
+          description: "The requested dashboard could not be found.",
+          section: category,
+          slug: `/dashboards/${category}/${tool}`,
+          level: "Further practice",
+        }}
+        headings={[]}
+      >
+        <div className="mb-4">
+          <Link href={backHref} className="rn-mini rn-card-link">
+            ← Back to {categoryLabel} dashboards
+          </Link>
+        </Link>
+        <div className="rn-callout">
+          <div className="rn-callout-title">Dashboard not found</div>
+          <div className="rn-callout-body">
+            <p>The dashboard "{tool}" in category "{categoryLabel}" could not be found.</p>
+            <Link href={backHref} className="rn-btn rn-btn-primary rn-mt">
+              Go back
+            </Link>
+          </div>
+        </div>
+      </NotesLayout>
+    );
+  }
+
+  const Component = entry.Component;
+
   return (
     <NotesLayout
       meta={{
-        title: "Further practice",
-        description: `${categoryLabel} further practice`,
+        title: title,
+        description: `${categoryLabel} dashboard: ${title}`,
         section: category,
-        slug: category && tool ? `/dashboards/${category}/${tool}` : "/dashboards",
+        slug: `/dashboards/${category}/${tool}`,
         level: "Further practice",
       }}
       headings={[]}
@@ -304,24 +357,13 @@ export default function ClientPage({ params }) {
         </Link>
       </div>
 
-      <LazyMotion features={domAnimation}>
-        <m.div {...reducedMotionProps(reduce, motionPresets.fadeIn)} className="rn-card">
-          <div className="rn-card-title">Further practice</div>
-          <div className="rn-card-body">
-            Dashboards are shown inside the relevant course pages so they appear in the right learning flow.
-          </div>
-          <div className="rn-mt" style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-            <Link href={courseHref} className="rn-card-button">
-              Open course
-            </Link>
-            <Link href={backHref} className="rn-card-link">
-              Back to further practice hub
-            </Link>
-          </div>
-        </m.div>
-      </LazyMotion>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <LazyMotion features={domAnimation}>
+          <m.div {...reducedMotionProps(reduce, motionPresets.fadeIn)}>
+            <Component />
+          </m.div>
+        </LazyMotion>
+      </ErrorBoundary>
     </NotesLayout>
   );
 }
-
-
