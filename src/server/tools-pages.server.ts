@@ -75,8 +75,44 @@ export const getAllToolPages = () =>
   });
 
 export const getToolPage = async (slug: string) => {
+  // #region agent log
+  try {
+    const logPath = path.join(process.cwd(), '.cursor', 'debug.log');
+    const logDir = path.dirname(logPath);
+    if (!fs.existsSync(logDir)) {
+      fs.mkdirSync(logDir, { recursive: true });
+    }
+    const logEntry = JSON.stringify({
+      location: 'tools-pages.server.ts:getToolPage',
+      message: 'getToolPage entry',
+      data: { slug },
+      timestamp: Date.now(),
+      sessionId: 'debug-session',
+      runId: 'run4',
+      hypothesisId: 'H1',
+    }) + '\n';
+    fs.appendFileSync(logPath, logEntry, 'utf8');
+  } catch (e) {}
+  // #endregion
   const fullPath = path.join(toolsDir, `${slug}.mdx`);
-  if (!fs.existsSync(fullPath)) return null;
+  if (!fs.existsSync(fullPath)) {
+    // #region agent log
+    try {
+      const logPath = path.join(process.cwd(), '.cursor', 'debug.log');
+      const logEntry = JSON.stringify({
+        location: 'tools-pages.server.ts:getToolPage',
+        message: 'File not found',
+        data: { slug, fullPath },
+        timestamp: Date.now(),
+        sessionId: 'debug-session',
+        runId: 'run4',
+        hypothesisId: 'H1',
+      }) + '\n';
+      fs.appendFileSync(logPath, logEntry, 'utf8');
+    } catch (e) {}
+    // #endregion
+    return null;
+  }
 
   const source = fs.readFileSync(fullPath, "utf8");
   const { content, data } = matter(source);
@@ -87,11 +123,66 @@ export const getToolPage = async (slug: string) => {
     topic: data.topic || metaExport.topic,
   };
 
-  const mdx = await serialize(content || source, {
-    scope: meta,
-    mdxOptions: mdxOptions as any,
-  });
+  // #region agent log
+  try {
+    const logPath = path.join(process.cwd(), '.cursor', 'debug.log');
+    const logEntry = JSON.stringify({
+      location: 'tools-pages.server.ts:getToolPage',
+      message: 'About to serialize MDX',
+      data: { slug, contentLength: content?.length || 0 },
+      timestamp: Date.now(),
+      sessionId: 'debug-session',
+      runId: 'run4',
+      hypothesisId: 'H1',
+    }) + '\n';
+    fs.appendFileSync(logPath, logEntry, 'utf8');
+  } catch (e) {}
+  // #endregion
 
-  return { slug, meta, mdx };
+  try {
+    const mdx = await serialize(content || source, {
+      scope: meta,
+      mdxOptions: mdxOptions as any,
+    });
+    // #region agent log
+    try {
+      const logPath = path.join(process.cwd(), '.cursor', 'debug.log');
+      const logEntry = JSON.stringify({
+        location: 'tools-pages.server.ts:getToolPage',
+        message: 'MDX serialized successfully',
+        data: { slug, hasMdx: !!mdx },
+        timestamp: Date.now(),
+        sessionId: 'debug-session',
+        runId: 'run4',
+        hypothesisId: 'H1',
+      }) + '\n';
+      fs.appendFileSync(logPath, logEntry, 'utf8');
+    } catch (e) {}
+    // #endregion
+    return { slug, meta, mdx };
+  } catch (error) {
+    // #region agent log
+    try {
+      const logPath = path.join(process.cwd(), '.cursor', 'debug.log');
+      const logEntry = JSON.stringify({
+        location: 'tools-pages.server.ts:getToolPage',
+        message: 'MDX serialization error',
+        data: { 
+          slug, 
+          errorMessage: (error as Error)?.message, 
+          errorName: (error as Error)?.name,
+          errorStack: (error as Error)?.stack?.substring(0, 1000)
+        },
+        timestamp: Date.now(),
+        sessionId: 'debug-session',
+        runId: 'run4',
+        hypothesisId: ['H1', 'H5'],
+      }) + '\n';
+      fs.appendFileSync(logPath, logEntry, 'utf8');
+    } catch (e) {}
+    // #endregion
+    console.error('[getToolPage] Error serializing MDX:', error);
+    throw error;
+  }
 };
 
