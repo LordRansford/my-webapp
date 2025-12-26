@@ -86,8 +86,8 @@ DATABASE_URL=file:./dev.db
 Only needed if using payment features:
 
 ```bash
-STRIPE_SECRET_KEY=sk_live_your_stripe_secret_key
-STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
+STRIPE_SECRET_KEY=sk-live-replace-with-your-actual-key
+STRIPE_WEBHOOK_SECRET=whsec-replace-with-your-webhook-secret
 ```
 
 ## Deploying to Vercel
