@@ -8,13 +8,28 @@ export default function MDXClientWrapper({ mdx }) {
   const [components, setComponents] = useState(null);
   const [error, setError] = useState(null);
 
+  // #region agent log
+  if (typeof window !== 'undefined') {
+    fetch('http://127.0.0.1:7243/ingest/5c42012f-fdd0-45fd-8860-75c06576ec81',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MDXClientWrapper.jsx:render',message:'MDXClientWrapper rendering',data:{hasMdx:!!mdx,isClient:typeof window !== 'undefined'},timestamp:Date.now(),sessionId:'debug-session',runId:'run3',hypothesisId:'H2'})}).catch(()=>{});
+  }
+  // #endregion
+
   useEffect(() => {
     setIsClient(true);
+    // #region agent log
+    fetch('http://127.0.0.1:7243/ingest/5c42012f-fdd0-45fd-8860-75c06576ec81',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MDXClientWrapper.jsx:useEffect',message:'useEffect started',data:{isClient:typeof window !== 'undefined'},timestamp:Date.now(),sessionId:'debug-session',runId:'run3',hypothesisId:'H2'})}).catch(()=>{});
+    // #endregion
     // Load components after mount using regular dynamic import
     // Wait a tick to ensure we're fully client-side
     Promise.resolve().then(() => {
+      // #region agent log
+      fetch('http://127.0.0.1:7243/ingest/5c42012f-fdd0-45fd-8860-75c06576ec81',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MDXClientWrapper.jsx:beforeImport',message:'About to import mdx-components',data:{},timestamp:Date.now(),sessionId:'debug-session',runId:'run3',hypothesisId:'H3'})}).catch(()=>{});
+      // #endregion
       return import("@/components/mdx-components");
     }).then((mod) => {
+      // #region agent log
+      fetch('http://127.0.0.1:7243/ingest/5c42012f-fdd0-45fd-8860-75c06576ec81',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MDXClientWrapper.jsx:afterImport',message:'mdx-components imported',data:{hasMod:!!mod,hasDefault:!!mod.default,componentKeys:mod.default ? Object.keys(mod.default).length : 0},timestamp:Date.now(),sessionId:'debug-session',runId:'run3',hypothesisId:'H3'})}).catch(()=>{});
+      // #endregion
       // Force re-creation of components object on client
       const components = mod.default;
       // If components object is empty (SSR fallback), recreate it
