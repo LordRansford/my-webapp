@@ -56,14 +56,18 @@ const aiLevels = [
 
 function StartButton() {
   return (
-    <div className="my-4">
-      <Link
-        href="/ai/beginner"
-        className="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-200"
-      >
-        <SafeIcon name="brain" size={16} color="currentColor" style={{ marginRight: 0 }} />
+    <div className="actions">
+      <Link href="/ai/beginner" className="button primary">
         Start with Foundations
-        <span aria-hidden="true">-&gt;</span>
+      </Link>
+      <Link href="/my-cpd" className="button ghost">
+        Track CPD
+      </Link>
+      <Link href="/my-cpd/evidence" className="button ghost">
+        Export CPD evidence
+      </Link>
+      <Link href="/tools" className="button ghost">
+        Open the labs
       </Link>
     </div>
   );
@@ -132,7 +136,7 @@ function LevelCards() {
                 href={level.href}
                 className="inline-flex items-center gap-2 text-sm font-semibold text-indigo-700 hover:text-indigo-900 focus:outline-none focus:ring focus:ring-indigo-200"
               >
-                Go to {level.label} <span aria-hidden="true">-&gt;</span>
+                Open notes <span aria-hidden="true">-&gt;</span>
               </Link>
             </div>
           </div>
