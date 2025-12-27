@@ -72,14 +72,24 @@ export async function POST(req: Request) {
 
     if (!templateId) return NextResponse.json({ message: "Missing templateId" }, { status: 400 });
 
-    // CPD certificates remain restricted - require authentication
+    const { getServerSession } = await import("next-auth");
+    const { authOptions } = await import("@/lib/auth/options");
+    const session = await getServerSession(authOptions);
+    const userId = session?.user?.id;
+
+    // All template downloads require authentication and the templates_download feature
+    if (!userId) {
+      return NextResponse.json({ message: "Authentication required for template downloads" }, { status: 401 });
+    }
+    const { getUserPlan, hasFeature } = await import("@/lib/billing/access");
+    const plan = await getUserPlan(userId);
+    if (!hasFeature(plan, "templates_download")) {
+      return NextResponse.json({ message: "Upgrade required for template downloads" }, { status: 403 });
+    }
+
+    // CPD certificates remain restricted even after plan checks
     if (isCpdCertificate(templateId)) {
-      const { getServerSession } = await import("next-auth");
-      const { authOptions } = await import("@/lib/auth/options");
-      const session = await getServerSession(authOptions);
-      if (!session?.user?.id) {
-        return NextResponse.json({ message: "Authentication required for certificate downloads" }, { status: 401 });
-      }
+      return NextResponse.json({ message: "Certificates require explicit permission" }, { status: 403 });
     }
 
     // All other templates are freely downloadable

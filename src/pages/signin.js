@@ -1,28 +1,20 @@
-import Link from "next/link";
-import { getProviders, signIn } from "next-auth/react";
+"use client";
+
+import { useMemo } from "react";
+import { signIn } from "next-auth/react";
 import NotesLayout from "@/components/NotesLayout";
 
-export async function getServerSideProps() {
-  const providers = await getProviders();
-  return { props: { providers: providers || {} } };
-}
-
-export default function SignInPage({ providers }) {
-  const list = Object.values(providers || {});
-  const hasProviders = list.length > 0;
-  const hasEmail = list.some((p) => p.id === "email");
-  const hasGoogle = list.some((p) => p.id === "google");
-
-  const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
-  const error = params ? params.get("error") : null;
-  const check = params ? params.get("check") : null;
-
-  const errorMessage =
-    error === "configuration"
-      ? "Sign in is not available right now. If you are the site owner, check your auth environment variables and redeploy."
-      : error
-        ? "Sign in failed. Please try again."
-        : null;
+/**
+ * Simplified sign-in page that uses client-side signIn to avoid server-side rendering issues.
+ * We render a single Google button; if more providers are added later, extend this list.
+ */
+export default function SignInPage() {
+  const providers = useMemo(
+    () => [
+      { id: "google", name: "Google" },
+    ],
+    []
+  );
 
   return (
     <NotesLayout
@@ -34,68 +26,29 @@ export default function SignInPage({ providers }) {
       }}
       headings={[]}
     >
-      <div className="space-y-3">
+      <div className="space-y-4">
         <p className="text-sm text-slate-700">
-          Sign in is optional. If you do, I can save progress across devices and keep your CPD record consistent.
+          Sign in is optional. Use Google to sync progress across devices. No passwords.
         </p>
-        <p className="text-sm text-slate-700">No passwords. Use Google or an email magic link.</p>
-
-        {check ? (
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
-            Check your email for a sign in link. The link expires quickly for security.
-          </div>
-        ) : null}
-
-        {errorMessage ? (
-          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-            {errorMessage}
-          </div>
-        ) : null}
 
         <div className="grid gap-2 sm:grid-cols-2">
-          {hasProviders ? (
-            list.map((p) => (
-              <button
-                key={p.id}
-                type="button"
-                onClick={() => signIn(p.id)}
-                className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700"
-              >
-                Continue with {p.name}
-              </button>
-            ))
-          ) : (
-            <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-              Sign in is not available right now. If you are the site owner, check your auth environment variables and redeploy.
-            </div>
-          )}
+          {providers.map((p) => (
+            <button
+              key={p.id}
+              type="button"
+              onClick={() => signIn(p.id)}
+              className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700"
+            >
+              Continue with {p.name}
+            </button>
+          ))}
         </div>
 
         <div className="rounded-2xl border border-slate-200 bg-white/90 p-4 text-sm text-slate-700 shadow-sm">
           <p className="m-0">
-            <span className="font-semibold text-slate-900">Tip:</span> email links expire quickly. If you do not see it, check spam.
-          </p>
-          <p className="mt-2 m-0">
-            Available methods:{" "}
-            <span className="font-semibold text-slate-900">
-              {hasGoogle ? "Google" : "Google (disabled)"}{" "}
-              {hasEmail ? "and Email link" : "and Email link (disabled)"}
-            </span>
+            <span className="font-semibold text-slate-900">Privacy note:</span> we store your email and learning progress so your account works. We do not store card details or use behavioural profiling.
           </p>
         </div>
-
-        <div className="rounded-2xl border border-slate-200 bg-white/90 p-4 text-sm text-slate-700 shadow-sm">
-          <p className="m-0">
-            <span className="font-semibold text-slate-900">Privacy note:</span> we store your email and learning progress so
-            your account works. We do not store card details. We do not use behavioural profiling.
-          </p>
-        </div>
-
-        <p className="text-xs text-slate-600">
-          <Link href="/" className="font-semibold text-slate-800 underline underline-offset-4">
-            Back to home
-          </Link>
-        </p>
       </div>
     </NotesLayout>
   );

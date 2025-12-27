@@ -489,7 +489,7 @@ export default function ToolShell({
             <>
               <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
                 <p className="text-sm text-blue-800">
-                  <strong>💡 Tip:</strong> Click "Load this example" to see it in action. After loading, click "Run" to execute it. Use "Reset" to clear results before trying a new example.
+                  <strong>💡 Tip:</strong> Click Load this example to see it in action. After loading, click Run to execute it. Use Reset to clear results before trying a new example.
                 </p>
               </div>
               {allExamples.map((example, idx) => (
@@ -518,3 +518,4 @@ export default function ToolShell({
     </div>
   );
 }
+

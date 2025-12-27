@@ -1,3 +1,5 @@
+import path from "path";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -20,10 +22,14 @@ const nextConfig = {
         ...(config.watchOptions || {}),
         // Ignore Windows system files if a parent directory ever gets watched.
         ignored: [
-          "**/DumpStack.log.tmp",
+          "**/DumpStack.log*",
           "**/pagefile.sys",
           "**/swapfile.sys",
           "**/hiberfil.sys",
+          path.resolve("C:/DumpStack.log.tmp"),
+          path.resolve("C:/pagefile.sys"),
+          path.resolve("C:/swapfile.sys"),
+          path.resolve("C:/hiberfil.sys"),
         ],
       };
     }

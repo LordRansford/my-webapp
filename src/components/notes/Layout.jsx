@@ -45,6 +45,12 @@ export default function NotesLayout(props) {
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
 
+  // Compute slug early so downstream calculations don't reference it before initialization.
+  const slug =
+    typeof window !== "undefined"
+      ? String(meta.slug || window.location?.pathname || "")
+      : String(meta.slug || "");
+
   const resolvedSection =
     meta.section ||
     (slug?.includes("/ai") && "ai") ||
@@ -127,10 +133,6 @@ export default function NotesLayout(props) {
     return level.includes("summary") || (meta.slug || "").includes("summary");
   }, [meta.level, meta.slug]);
 
-  const slug =
-    typeof window !== "undefined"
-      ? String(meta.slug || window.location?.pathname || "")
-      : String(meta.slug || "");
   const showPreviewBanner = !slug.startsWith("/admin");
   const showFeedbackPanel = !slug.startsWith("/admin") && slug !== "/feedback" && slug !== "/signin";
   const showReadAloud =

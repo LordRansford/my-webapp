@@ -38,6 +38,7 @@ function LevelCards({ levels = [] }) {
   return (
     <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
       {levels.map((level) => {
+        const href = level.href || level.route || "#";
         const accent = levelAccents[level.id] || levelAccents.foundations;
         return (
           <div key={level.id} className="flex flex-col rounded-2xl border border-gray-200 bg-white/90 p-4 shadow-sm backdrop-blur">
@@ -57,7 +58,7 @@ function LevelCards({ levels = [] }) {
               </div>
             </div>
             <Link
-              href={level.href}
+              href={href}
               className="mt-4 inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               Open {level.label}
