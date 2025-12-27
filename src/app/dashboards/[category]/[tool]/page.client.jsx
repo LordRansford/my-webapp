@@ -8,6 +8,7 @@ import LoadingState from "@/components/LoadingState";
 import { ErrorBoundary } from "@/components/notes/ErrorBoundary";
 import { LazyMotion, domAnimation, m, useReducedMotion } from "framer-motion";
 import { motionPresets, reducedMotionProps } from "@/lib/motion";
+import { ArrowLeft } from "lucide-react";
 
 const loading = () => <LoadingState label="Preparing tool" compact />;
 
@@ -283,10 +284,30 @@ function ErrorFallback({ error, resetErrorBoundary }) {
 }
 
 export default function ClientPage({ params }) {
-  const category = params?.category;
-  const tool = params?.tool;
   const reduce = useReducedMotion();
   const [ready, setReady] = useState(false);
+  const [routeParams, setRouteParams] = useState(() => ({
+    category: params?.category || null,
+    tool: params?.tool || null,
+  }));
+
+  useEffect(() => {
+    if (routeParams.category && routeParams.tool) return;
+    if (typeof window === "undefined") return;
+
+    const parts = String(window.location?.pathname || "")
+      .split("/")
+      .filter(Boolean);
+    const idx = parts.indexOf("dashboards");
+    const categoryFromPath = idx >= 0 ? parts[idx + 1] : null;
+    const toolFromPath = idx >= 0 ? parts[idx + 2] : null;
+
+    if (!categoryFromPath || !toolFromPath) return;
+    setRouteParams({ category: categoryFromPath, tool: toolFromPath });
+  }, [routeParams.category, routeParams.tool]);
+
+  const category = routeParams.category;
+  const tool = routeParams.tool;
 
   const entry = useMemo(() => {
     if (!category || !tool) return null;
@@ -308,6 +329,23 @@ export default function ClientPage({ params }) {
     return () => clearTimeout(t);
   }, [category, tool, reduce]);
 
+  if (!category || !tool) {
+    return (
+      <NotesLayout
+        meta={{
+          title: "Loading dashboard",
+          description: "Preparing dashboard.",
+          section: "dashboards",
+          slug: "/dashboards",
+          level: "Further practice",
+        }}
+        headings={[]}
+      >
+        <LoadingState label="Preparing dashboard" compact />
+      </NotesLayout>
+    );
+  }
+
   if (!entry || !entry.Component) {
     return (
       <NotesLayout
@@ -322,7 +360,10 @@ export default function ClientPage({ params }) {
       >
         <div className="mb-4">
           <Link href={backHref} className="rn-mini rn-card-link">
-            ← Back to {categoryLabel} dashboards
+            <span className="inline-flex items-center gap-2">
+              <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+              Back to {categoryLabel} dashboards
+            </span>
           </Link>
         </div>
         <div className="rn-callout">
@@ -353,7 +394,10 @@ export default function ClientPage({ params }) {
     >
       <div className="mb-4">
         <Link href={backHref} className="rn-mini rn-card-link">
-          ← Back to {categoryLabel} dashboards
+          <span className="inline-flex items-center gap-2">
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+            Back to {categoryLabel} dashboards
+          </span>
         </Link>
       </div>
 

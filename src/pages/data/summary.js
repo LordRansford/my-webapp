@@ -39,6 +39,9 @@ const CorrelationMythsGame = dynamic(
   () => import("@/components/notes/tools/data/summary/CorrelationMythsGame"),
   { ssr: false }
 );
+const DataSummaryGameHub = dynamic(() => import("@/components/notes/summary/DataSummaryGameHub"), {
+  ssr: false,
+});
 
 export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
@@ -56,6 +59,7 @@ export default function Page({ source, headings }) {
       SamplingBiasSimulatorTool,
       EthicsScenarioTool,
       CorrelationMythsGame,
+      DataSummaryGameHub,
     }),
     []
   );

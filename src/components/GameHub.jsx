@@ -70,7 +70,7 @@ export default function GameHub({ storageKey, title, subtitle, games }) {
           <a
             key={g.id}
             href={`#game=${encodeURIComponent(g.id)}`}
-            className={`group rounded-2xl border bg-white p-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring focus:ring-blue-200 ${
+            className={`group rounded-2xl border bg-white p-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
               active === g.id ? "border-blue-200 ring-1 ring-blue-100" : "border-slate-200"
             }`}
             onClick={(e) => {
@@ -104,7 +104,7 @@ export default function GameHub({ storageKey, title, subtitle, games }) {
             </div>
             <div className="flex items-center gap-2">
               <button
-                className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold text-white hover:bg-slate-800 focus:outline-none focus:ring focus:ring-blue-200"
+                className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                 type="button"
                 onClick={async () => {
                   if (typeof window === "undefined") return;
@@ -118,7 +118,7 @@ export default function GameHub({ storageKey, title, subtitle, games }) {
                 Copy link
               </button>
               <button
-                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring focus:ring-blue-200"
+                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                 type="button"
                 onClick={close}
               >
@@ -132,4 +132,3 @@ export default function GameHub({ storageKey, title, subtitle, games }) {
     </section>
   );
 }
-

@@ -54,27 +54,35 @@ export default function EthicsScenarioTool() {
           return (
             <div key={scenario.id} className="rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm">
               <p className="text-sm font-semibold text-slate-900">{scenario.text}</p>
-              <div className="mt-2 space-y-2">
+              <div className="mt-2 space-y-2" role="radiogroup" aria-label={`Scenario ${scenario.id} choices`}>
                 {scenario.options.map((option, idx) => {
                   const value = idx;
                   const selected = chosen === value;
                   return (
-                    <label
+                    <button
                       key={option}
-                      className={`flex items-start gap-2 rounded-lg border px-2 py-2 text-sm ${
-                        selected ? "border-sky-400 bg-sky-50" : "border-slate-200"
+                      type="button"
+                      role="radio"
+                      aria-checked={selected}
+                      onClick={() => setChoices((prev) => ({ ...prev, [scenario.id]: value }))}
+                      className={`flex w-full items-center justify-between gap-3 rounded-xl border px-3 py-3 text-left text-sm shadow-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
+                        selected ? "border-sky-300 bg-sky-50" : "border-slate-200 bg-white hover:border-sky-200"
                       }`}
                     >
-                      <input
-                        type="radio"
-                        name={`ethics-${scenario.id}`}
-                        value={value}
-                        checked={selected}
-                        onChange={() => setChoices((prev) => ({ ...prev, [scenario.id]: value }))}
-                        className="mt-1"
-                      />
-                      <span className="text-slate-800">{option}</span>
-                    </label>
+                      <span className="min-w-0 flex-1 text-slate-900">{option}</span>
+                      <span
+                        className={`relative inline-flex h-6 w-11 flex-none items-center rounded-full border transition-colors ${
+                          selected ? "border-sky-400 bg-sky-500" : "border-slate-200 bg-slate-100"
+                        }`}
+                        aria-hidden="true"
+                      >
+                        <span
+                          className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-sm transition-transform ${
+                            selected ? "translate-x-5" : "translate-x-1"
+                          }`}
+                        />
+                      </span>
+                    </button>
                   );
                 })}
               </div>

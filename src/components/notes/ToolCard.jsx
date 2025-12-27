@@ -154,7 +154,7 @@ export default function ToolCard({
         {href ? (
           <Link
             href={href}
-            className="block w-full min-w-0 rounded-2xl focus:outline-none focus:ring focus:ring-blue-200"
+            className="block w-full min-w-0 rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
             onClick={() => handleUse({ allowPrompt: false })}
             aria-label={`Open ${title}`}
           >
@@ -163,7 +163,7 @@ export default function ToolCard({
         ) : (
           <button
             type="button"
-            className="w-full min-w-0 rounded-2xl focus:outline-none focus:ring focus:ring-blue-200"
+            className="w-full min-w-0 rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
             onClick={() => handleUse({ allowPrompt: true })}
             aria-label={`Use ${title}`}
           >
@@ -175,4 +175,3 @@ export default function ToolCard({
     </LazyMotion>
   );
 }
-

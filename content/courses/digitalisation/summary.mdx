@@ -28,11 +28,7 @@ import DigitalisationDashboard from "@/components/dashboards/DigitalisationDashb
 import SchemaMappingSandbox from "@/components/notes/tools/digitalisation/intermediate/SchemaMappingSandbox"
 import DigitalMaturityGauge from "@/components/notes/tools/digitalisation/beginner/DigitalMaturityGauge"
 import RiskRoadmapPlannerTool from "@/components/notes/tools/digitalisation/advanced/RiskRoadmapPlannerTool"
-import DigiConceptMatchGame from "@/components/games/digitalisation/DigiConceptMatchGame"
-import ValueChainBuilderGame from "@/components/games/digitalisation/ValueChainBuilderGame"
-import OperatingModelDesignerGame from "@/components/games/digitalisation/OperatingModelDesignerGame"
-import MaturityPathGame from "@/components/games/digitalisation/MaturityPathGame"
-import DigiQuickFireQuizGame from "@/components/games/digitalisation/DigiQuickFireQuizGame"
+import DigitalisationGameHub from "@/components/notes/summary/DigitalisationGameHub"
 
 # Digitalisation summary and games
 
@@ -147,7 +143,7 @@ The hard work here is shared meaning. <GlossaryTip term="API">A defined way for 
 
 ---
 
-## Real world scenarios and games
+## Real world scenarios
 
 <SectionProgressToggle courseId="digitalisation" levelId="summary" sectionId="dig-summary-scenarios-and-games" />
 
@@ -174,37 +170,9 @@ Use these as short practice rounds. Pick a scenario and decide the first two cha
   </div>
 </DiagramBlock>
 
-<ToolCard
-  id="dig-summary-concept-match"
-  title="Digitalisation concept match"
-  description="Match plain language descriptions to key digitalisation terms."
->
-  <DigiConceptMatchGame />
-</ToolCard>
+## Games and drills
 
-<ToolCard
-  id="dig-summary-value-chain"
-  title="Digital value chain builder"
-  description="Arrange steps in a digital value chain and see where value is created or lost."
->
-  <ValueChainBuilderGame />
-</ToolCard>
-
-<ToolCard
-  id="dig-summary-operating-model"
-  title="Operating model designer"
-  description="Choose how responsibility is shared and see the trade offs."
->
-  <OperatingModelDesignerGame />
-</ToolCard>
-
-<ToolCard
-  id="dig-summary-maturity-path"
-  title="Digital maturity path game"
-  description="Step through a journey from basic capability to sector leading capability."
->
-  <MaturityPathGame />
-</ToolCard>
+<DigitalisationGameHub />
 
 <QuizBlock
   id="dig-summary-scenarios-quiz"

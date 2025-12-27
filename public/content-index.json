@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-12-27T08:15:16.096Z",
+  "generatedAt": "2025-12-27T11:14:42.070Z",
   "pages": [
     {
       "route": "/courses/ai/advanced",
@@ -689,9 +689,15 @@
         },
         {
           "depth": 2,
-          "title": "Real world scenarios and games",
-          "anchor": "real-world-scenarios-and-games",
+          "title": "Real world scenarios",
+          "anchor": "real-world-scenarios",
           "excerpt": "Use these as short practice rounds. Pick a scenario and decide the first two changes you would make."
+        },
+        {
+          "depth": 2,
+          "title": "Games and drills",
+          "anchor": "games-and-drills",
+          "excerpt": "id=\"dig-summary-scenarios-quiz\" title=\"Quick check: scenarios and games\" questions={[ { q: \"Why start with outcomes in a scenario\", a: \"It keeps the change focused on value rather than tools.\" }, { q: \"What does a good standard decision consider\", a: \"Shared meaning, cost of change, and ecosystem impact.\" }, { q: \"Why do journeys need signals\", a: \"Signals s"
         },
         {
           "depth": 2,

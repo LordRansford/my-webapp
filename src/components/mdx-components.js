@@ -174,6 +174,8 @@ import ReplicationConsistencyVisualizerTool from "@/components/notes/tools/data/
 import GovernanceDecisionSimulatorTool from "@/components/notes/tools/data/advanced/GovernanceDecisionSimulatorTool";
 import DataStrategySandboxTool from "@/components/notes/tools/data/advanced/DataStrategySandboxTool";
 import CorrelationMythsGame from "@/components/notes/tools/data/summary/CorrelationMythsGame";
+import DataSummaryGameHub from "@/components/notes/summary/DataSummaryGameHub";
+import DigitalisationGameHub from "@/components/notes/summary/DigitalisationGameHub";
 
 // Create components object - dynamic imports will only load on client
 const mdxComponents = {
@@ -358,6 +360,8 @@ const mdxComponents = {
   GovernanceDecisionSimulatorTool,
   DataStrategySandboxTool,
   CorrelationMythsGame,
+  DataSummaryGameHub,
+  DigitalisationGameHub,
 };
 
 export default mdxComponents;
