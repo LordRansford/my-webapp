@@ -28,6 +28,7 @@ import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
 import DiagramBlock from "@/components/DiagramBlock"
+import Callout from "@/components/notes/Callout"
 import { aiSectionManifest } from "@/lib/aiSections"
 
 # AI Intermediate
@@ -35,6 +36,10 @@ import { aiSectionManifest } from "@/lib/aiSections"
 <LevelProgressBar courseId="ai" levelId="intermediate" sectionIds={aiSectionManifest.intermediate} />
 
 <CPDTracker courseId="ai" levelId="intermediate" estimatedHours={12} />
+
+<Callout variant="info">
+  **Recommended reading**: Before diving into intermediate concepts, consider reading [AI Fundamentals Explained](/posts/ai-fundamentals-explained) for a clear overview of data, models, evaluation, and deployment from first principles.
+</Callout>
 
 ## Models, parameters and training dynamics
 

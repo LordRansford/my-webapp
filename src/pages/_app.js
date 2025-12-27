@@ -5,6 +5,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import { NotesProvider } from "@/components/notes/NotesProvider";
 import AuthSessionProvider from "@/components/auth/SessionProvider";
+import { MusicProvider } from "@/components/spotify/MusicProvider";
+import { AccessibilityProvider } from "@/components/accessibility/AccessibilityProvider";
 import dynamic from "next/dynamic";
 
 const AssistantShell = dynamic(() => import("@/components/assistants/AssistantShell"), { ssr: false });
@@ -46,8 +48,12 @@ export default function App({ Component, pageProps }) {
     <div className={`${display.variable} ${body.variable} ${mono.variable} ${inter.variable}`}>
       <AuthSessionProvider>
         <NotesProvider>
-          <Component {...pageProps} />
-          <AssistantShell />
+          <MusicProvider>
+            <AccessibilityProvider>
+              <Component {...pageProps} />
+              <AssistantShell />
+            </AccessibilityProvider>
+          </MusicProvider>
         </NotesProvider>
       </AuthSessionProvider>
       <SpeedInsights />

@@ -296,6 +296,15 @@ body {
   border-radius: 0.5rem;
   transition: top 0.2s ease;
   z-index: 1000;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.skip-link:focus {
+  top: 1rem;
+  outline: 3px solid #0ea5e9;
+  outline-offset: 2px;
 }
 
 .skip-link:focus {
@@ -2243,4 +2252,121 @@ section[class*="ToolCard"]:nth-child(4) { animation-delay: 0.4s; }
     border: 1px solid #ccc !important;
     box-shadow: none !important;
   }
+}
+
+/* ============================================
+   ACCESSIBILITY STYLES
+   ============================================ */
+
+/* High Contrast Mode */
+html.high-contrast {
+  --bg: #ffffff;
+  --bg-soft: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f0f0f0;
+  --card: #ffffff;
+  --text-body: #000000;
+  --text-muted: #333333;
+  --text-heading: #000000;
+  --text-callout: #000000;
+  --line: #000000;
+  --accent: #0066cc;
+  --accent-2: #006600;
+  --accent-mint: #006666;
+  --accent-amber: #cc6600;
+  --shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+html.high-contrast.dark,
+html.dark.high-contrast {
+  --bg: #000000;
+  --bg-soft: #000000;
+  --surface: #000000;
+  --surface-2: #1a1a1a;
+  --card: #000000;
+  --text-body: #ffffff;
+  --text-muted: #cccccc;
+  --text-heading: #ffffff;
+  --text-callout: #ffffff;
+  --line: #ffffff;
+  --accent: #66ccff;
+  --accent-2: #66ff66;
+  --accent-mint: #66ffff;
+  --accent-amber: #ffcc66;
+  --shadow: 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+html.high-contrast * {
+  border-color: var(--line) !important;
+}
+
+html.high-contrast a {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+html.high-contrast button,
+html.high-contrast [role="button"] {
+  border: 2px solid var(--line) !important;
+}
+
+/* Reduced Motion Mode */
+html.reduced-motion *,
+html.reduced-motion *::before,
+html.reduced-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Read Aloud Highlight (no layout shift) */
+.read-aloud-highlight {
+  background-color: rgba(255, 255, 0, 0.3) !important;
+  outline: 2px solid rgba(255, 200, 0, 0.8) !important;
+  outline-offset: 1px !important;
+  border-radius: 2px !important;
+  /* Ensure no layout shift */
+  box-shadow: none !important;
+  transform: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+html.high-contrast .read-aloud-highlight {
+  background-color: rgba(255, 255, 0, 0.5) !important;
+  outline: 3px solid #ff0000 !important;
+  outline-offset: 2px !important;
+}
+
+/* Enhanced Focus Visible Ring */
+:where(a, button, input, textarea, select, summary, [role="button"], [tabindex]):focus-visible {
+  outline: 3px solid var(--accent) !important;
+  outline-offset: 3px !important;
+  border-radius: 2px !important;
+}
+
+html.high-contrast :where(a, button, input, textarea, select, summary, [role="button"], [tabindex]):focus-visible {
+  outline: 4px solid var(--accent) !important;
+  outline-offset: 4px !important;
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 6px var(--accent) !important;
+}
+
+/* Ensure skip link is always visible when focused */
+.skip-link:focus {
+  top: 1rem !important;
+  outline: 3px solid var(--accent) !important;
+  outline-offset: 2px !important;
+  z-index: 10000 !important;
+}
+
+html.high-contrast .skip-link {
+  background: var(--accent) !important;
+  color: var(--bg) !important;
+  border: 2px solid var(--text-body) !important;
+}
+
+html.high-contrast .skip-link:focus {
+  outline: 4px solid var(--text-body) !important;
+  outline-offset: 3px !important;
 }

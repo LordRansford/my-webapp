@@ -114,6 +114,34 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Featured Article */}
+      <section className="mx-auto max-w-6xl px-4 py-8 md:px-6 lg:px-8">
+        <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="flex-1">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Featured Article</p>
+              <h2 className="mt-2 text-2xl font-semibold text-slate-900">
+                <Link href="/posts/ai-fundamentals-explained" className="hover:text-slate-700">
+                  AI Fundamentals Explained: From Data to Decisions
+                </Link>
+              </h2>
+              <p className="mt-2 text-base text-slate-700">
+                A clear, practical guide to understanding AI from first principles. Learn what data is, how models learn patterns, and how to make sense of AI systems in real work.
+              </p>
+              <Link
+                href="/posts/ai-fundamentals-explained"
+                className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-slate-900 underline decoration-slate-300 underline-offset-4 hover:decoration-slate-600"
+              >
+                Read the article <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </div>
+            <div className="flex-shrink-0">
+              <Brain className="h-16 w-16 text-slate-400" aria-hidden="true" />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* 2) What this site is */}
       <section className="mx-auto max-w-6xl px-4 py-12 md:px-6 lg:px-8">
         <div className="grid gap-6 md:grid-cols-3">

@@ -56,9 +56,9 @@ export default function BrandImpersonationChecklist() {
       </p>
 
       <section className="grid gap-6 md:grid-cols-2">
-        <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-5 space-y-4">
-          <h3 className="text-base font-semibold text-slate-900 mb-2">Visual cues</h3>
-          <div className="space-y-2">
+        <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-6 space-y-4">
+          <h3 className="text-base font-semibold text-slate-900 mb-3">Visual cues</h3>
+          <div className="space-y-3">
             <CheckPill checked={answers.logoLowQuality} onCheckedChange={setChecked("logoLowQuality")} tone="sky">
               Logo looks blurred, stretched, or copied from a screenshot.
             </CheckPill>
@@ -72,9 +72,9 @@ export default function BrandImpersonationChecklist() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-5 space-y-4">
-          <h3 className="text-base font-semibold text-slate-900 mb-2">Sender and address</h3>
-          <div className="space-y-2">
+        <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-6 space-y-4">
+          <h3 className="text-base font-semibold text-slate-900 mb-3">Sender and address</h3>
+          <div className="space-y-3">
             <CheckPill checked={answers.senderDomainMismatch} onCheckedChange={setChecked("senderDomainMismatch")} tone="violet">
               Sender address domain does not match the official brand domain.
             </CheckPill>
@@ -84,9 +84,9 @@ export default function BrandImpersonationChecklist() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-5 space-y-4">
-          <h3 className="text-base font-semibold text-slate-900 mb-2">Language and pressure</h3>
-          <div className="space-y-2">
+        <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-6 space-y-4">
+          <h3 className="text-base font-semibold text-slate-900 mb-3">Language and pressure</h3>
+          <div className="space-y-3">
             <CheckPill checked={answers.urgentLanguage} onCheckedChange={setChecked("urgentLanguage")} tone="amber">
               Uses urgency or threats, such as account closure or legal action.
             </CheckPill>
@@ -99,9 +99,9 @@ export default function BrandImpersonationChecklist() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-5 space-y-4">
-          <h3 className="text-base font-semibold text-slate-900 mb-2">Requests and attachments</h3>
-          <div className="space-y-2">
+        <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-6 space-y-4">
+          <h3 className="text-base font-semibold text-slate-900 mb-3">Requests and attachments</h3>
+          <div className="space-y-3">
             <CheckPill checked={answers.asksForPassword} onCheckedChange={setChecked("asksForPassword")} tone="rose">
               Asks you to enter or confirm a password or a one time code.
             </CheckPill>
@@ -115,7 +115,7 @@ export default function BrandImpersonationChecklist() {
         </div>
       </section>
 
-      <section className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-slate-50/80 p-5 md:flex-row md:items-center md:justify-between">
+      <section className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-slate-50/80 p-6 md:flex-row md:items-center md:justify-between">
         <div className="flex-1">
           <p className="text-base font-semibold text-slate-900 mb-2">
             Overall risk level: <span className={`${

@@ -206,6 +206,7 @@ const mdxComponents = {
   Diagram,
   Icon,
   Table,
+  DiagramEmbed: dynamic(() => import("@/components/diagrams/DiagramEmbed").then(m => ({ default: m.default })), { ssr: false }),
   EmailHeaderLab,
   PhishingStorySimulator,
   SafeLinkInspector,
