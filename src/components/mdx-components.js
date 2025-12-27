@@ -176,6 +176,8 @@ import DataStrategySandboxTool from "@/components/notes/tools/data/advanced/Data
 import CorrelationMythsGame from "@/components/notes/tools/data/summary/CorrelationMythsGame";
 import DataSummaryGameHub from "@/components/notes/summary/DataSummaryGameHub";
 import DigitalisationGameHub from "@/components/notes/summary/DigitalisationGameHub";
+import CybersecuritySummaryGameHub from "@/components/notes/summary/CybersecuritySummaryGameHub";
+import CrossTopicGameHub from "@/components/notes/summary/CrossTopicGameHub";
 
 // Create components object - dynamic imports will only load on client
 const mdxComponents = {
@@ -362,6 +364,8 @@ const mdxComponents = {
   CorrelationMythsGame,
   DataSummaryGameHub,
   DigitalisationGameHub,
+  CybersecuritySummaryGameHub,
+  CrossTopicGameHub,
 };
 
 export default mdxComponents;

@@ -14,6 +14,7 @@ import DiagramBlock from "@/components/DiagramBlock";
 import Recap from "@/components/notes/Recap";
 import PageNav from "@/components/notes/PageNav";
 import GlossaryTip from "@/components/notes/GlossaryTip";
+import MermaidDiagram from "@/components/notes/MermaidDiagram";
 import QuizBlock from "@/components/notes/QuizBlock";
 import ProgressBar from "@/components/notes/ProgressBar";
 import CPDTracker from "@/components/CPDTracker";
@@ -54,6 +55,7 @@ export default function Page({ source, headings }) {
       Icon,
       Table,
       DiagramBlock,
+      MermaidDiagram,
       BitChangeTool,
       EncodingExplorerTool,
       UnicodeBytesTool,

@@ -6,14 +6,9 @@ import PageNav from "@/components/notes/PageNav";
 import DiagramBlock from "@/components/DiagramBlock";
 import SafeIcon from "@/components/content/SafeIcon";
 import ConceptMapExplorer from "@/components/ConceptMapExplorer";
-import GameHub from "@/components/GameHub";
-import CrossDomainGames from "@/components/CrossDomainGames";
 import ProgressInsights from "@/components/ProgressInsights";
-
-import CryptoMisuseSimulator from "@/tools/cybersecurity/CryptoMisuseSimulator";
-import TrustBoundaryExplorer from "@/tools/cybersecurity/TrustBoundaryExplorer";
-import LoggingBlindSpotSimulator from "@/tools/cybersecurity/LoggingBlindSpotSimulator";
-import PrivilegeEscalationGame from "@/tools/cybersecurity/PrivilegeEscalationGame";
+import CybersecuritySummaryGameHub from "@/components/notes/summary/CybersecuritySummaryGameHub";
+import CrossTopicGameHub from "@/components/notes/summary/CrossTopicGameHub";
 
 const recapCards = [
   {
@@ -306,85 +301,7 @@ export default function CyberSummary() {
             </div>
           </div>
           <div className="mt-4">
-            <GameHub
-              storageKey="cyber_summary_games"
-              title={null}
-              subtitle="Choose a game. Make the call. See the consequences."
-              games={[
-                {
-              id: "crypto_misuse",
-              title: "Hash, encrypt or sign?",
-              level: "Warm up",
-              minutes: 5,
-              summary: "Choose the right tool for a work document, a login flow, or a shared file.",
-              component: (
-                <div className="space-y-3">
-                  <p className="text-sm text-slate-800">
-                    Skill focus: picking the right primitive for the job, not the coolest sounding one. You are practising confidentiality vs integrity vs authenticity as a decision.
-                  </p>
-                  <CryptoMisuseSimulator storageKey="cyber_game_crypto_misuse" />
-                  <p className="text-sm text-slate-800">
-                    Reflection: where would your organisation pick the wrong option because it is convenient. What standard or default would prevent that mistake without slowing delivery.
-                  </p>
-                </div>
-              ),
-            },
-            {
-              id: "trust_boundary",
-              title: "Spot the trust boundary",
-              level: "Core",
-              minutes: 6,
-              summary: "Mark where trust changes in logins, shared folders, or admin pages.",
-              component: (
-                <div className="space-y-3">
-                  <p className="text-sm text-slate-800">
-                    Skill focus: seeing where assumptions change. Trust boundaries are where controls and logging need to get serious.
-                  </p>
-                  <TrustBoundaryExplorer storageKey="cyber_game_trust_boundary" />
-                  <p className="text-sm text-slate-800">
-                    Reflection: which boundary in your real systems is currently treated as &quot;internal so it is fine&quot;. What would you do first: tighten access, add checks, or improve detection.
-                  </p>
-                </div>
-              ),
-            },
-            {
-              id: "logging_blind_spot",
-              title: "The silent logging failure",
-              level: "Core",
-              minutes: 6,
-              summary: "Tune logging around a suspicious email login and see what you miss.",
-              component: (
-                <div className="space-y-3">
-                  <p className="text-sm text-slate-800">
-                    Skill focus: choosing logs that support decisions under pressure. You are learning the difference between noise, signals, and missing evidence.
-                  </p>
-                  <LoggingBlindSpotSimulator storageKey="cyber_game_logging_blind_spot" />
-                  <p className="text-sm text-slate-800">
-                    Reflection: if this happened tomorrow, what could you prove from your current logs. Name the first two log sources you would require to make incident handling less guessy.
-                  </p>
-                </div>
-              ),
-            },
-            {
-              id: "privilege_escalation",
-              title: "Privilege escalation quick play",
-              level: "Stretch",
-              minutes: 7,
-              summary: "Assign roles for a small team or a kids gaming account and spot gaps.",
-              component: (
-                <div className="space-y-3">
-                  <p className="text-sm text-slate-800">
-                    Skill focus: least privilege in human terms: who can do what, and what happens when an account is compromised.
-                  </p>
-                  <PrivilegeEscalationGame storageKey="cyber_game_privilege_escalation" />
-                  <p className="text-sm text-slate-800">
-                    Reflection: which role in your organisation is overpowered. What would you change first: remove permissions, add approval steps, or improve monitoring for the risky actions.
-                  </p>
-                </div>
-              ),
-            },
-              ]}
-            />
+            <CybersecuritySummaryGameHub />
           </div>
           <div className="mt-4 rounded-2xl border border-slate-200 bg-white/80 p-4">
             <p className="text-base text-slate-800 leading-relaxed">
@@ -452,7 +369,7 @@ export default function CyberSummary() {
             <p className="text-base text-gray-700">
               Skill focus: spotting when a problem is not purely technical. These prompts reinforce decision making under uncertainty, where you balance safety, speed, user impact, and evidence.
             </p>
-            <CrossDomainGames />
+            <CrossTopicGameHub />
             <p className="mt-3 text-base text-gray-700">
               Reflection: what did you prioritise, and why. If you were advising a team, what would you write down as the rule of thumb so others can make the same call.
             </p>

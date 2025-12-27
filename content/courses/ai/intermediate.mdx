@@ -101,7 +101,9 @@ Training is expensive and brittle because small changes can have large effects. 
   id="training-dynamics-simulator"
   title="See how models learn"
   description="Adjust learning rate, data size and noise to see how a simple model improves or collapses during training."
-/>
+>
+  <TrainingLoopVisualizerTool />
+</ToolCard>
 
 <QuizBlock
   id="ai-intermediate-training-dynamics-quiz"
@@ -171,7 +173,9 @@ When a model behaves strangely, look at representation before you blame the algo
   id="feature-representation-explorer"
   title="Explore data representations"
   description="Compare raw inputs to engineered features and embeddings to see how representation changes what a model can learn."
-/>
+>
+  <DataProfilerTool />
+</ToolCard>
 
 <QuizBlock
   id="ai-intermediate-representation-quiz"
@@ -250,7 +254,9 @@ This is why evaluation is not a one time exam. It is a lifecycle. You validate b
   id="model-metrics-playground"
   title="Explore model evaluation trade offs"
   description="Adjust thresholds and see how accuracy, precision and recall change for the same model."
-/>
+>
+  <MetricsLabTool />
+</ToolCard>
 
 <QuizBlock
   id="ai-intermediate-evaluation-quiz"
@@ -279,10 +285,52 @@ This is why evaluation is not a one time exam. It is a lifecycle. You validate b
   sectionId="ai-intermediate-deployment"
 />
 
-{/* Explanation content goes here */}
-{/* DiagramBlock goes here */}
-{/* ToolCard goes here */}
-{/* QuizBlock goes here */}
+Deployment is where good models go to die. The same model can behave very differently depending on latency, scaling, input validation, and how the product uses the output. A clean offline score does not protect you from a broken data pipeline, missing logging, or a workflow that encourages people to over trust the system.
+
+Monitoring is your early warning system. You watch three things.
+
+1. Inputs. Are users or upstream systems sending different data than before.
+2. Outputs. Are prediction rates, errors, and edge cases changing.
+3. System health. Are latency and failures rising, so the model is skipped or timeouts happen.
+
+Drift is often a slow change, so the first sign is a small shift in metrics, not an outage. You should design for action. Who investigates. Who can pause the feature. What is the safe fallback.
+
+<DiagramBlock title="Deployment and monitoring loop" subtitle="Treat model changes like a release, then watch reality.">
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>Validate inputs and log key fields before scoring</div>
+    <div>Run the model with a safe timeout and fallback</div>
+    <div>Track outputs, rates, and edge case failures</div>
+    <div>Watch drift and data quality over time</div>
+    <div>Decide: investigate, roll back, retrain, or update policy</div>
+  </div>
+</DiagramBlock>
+
+<ToolCard
+  id="ai-serving-monitor"
+  title="Spot monitoring signals"
+  description="Review drift, latency and failure signals and decide when to investigate, roll back or retrain."
+>
+  <ServingMonitorSimulatorTool />
+</ToolCard>
+
+<QuizBlock
+  id="ai-intermediate-deployment-quiz"
+  courseId="ai"
+  levelId="intermediate"
+  sectionId="ai-intermediate-deployment"
+  title="Quick check: deployment, monitoring and drift"
+  questions={[
+    { q: "Why can a model fail after deployment even if offline tests look good", a: "Because pipelines, latency, missing validation, and workflow misuse can break behaviour in production." },
+    { q: "Name three monitoring areas for production AI", a: "Inputs, outputs, and system health like latency and error rates." },
+    { q: "What is drift in plain terms", a: "Production data or behaviour changes so performance degrades over time." },
+    { q: "Why is logging important in a model service", a: "It lets you reconstruct what the model saw and how it behaved when something goes wrong." },
+    { q: "What is a safe fallback", a: "A simpler behaviour that keeps users safe if the model fails, times out, or is paused." },
+    { q: "What should happen when monitoring flags a serious risk", a: "Investigate and use a pause, rollback, or fallback before harm spreads." },
+    { q: "Why do timeouts matter", a: "If scoring is too slow, systems skip checks or fail in ways that change outcomes." },
+    { q: "What is a practical sign of input drift", a: "Key fields become missing or distribution shifts, such as different ranges or categories." },
+    { q: "What is a practical sign of output drift", a: "Prediction rates change, error cases rise, or the model flags far more or far less than before." },
+  ]}
+/>
 
 ## Responsible AI, limits and deployment risks
 
