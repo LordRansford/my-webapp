@@ -2,6 +2,7 @@
 
 import { use_tool_state } from "@/components/notes/hooks/use_tool_state";
 import ToolStateActions from "@/components/notes/ToolStateActions";
+import { CheckPill } from "@/components/ui/CheckPill";
 
 const steps = ["Root CA", "Intermediate CA", "Leaf certificate"];
 
@@ -57,9 +58,10 @@ export default function CertificateChainTool() {
 
 function Toggle({ label, checked, onChange }) {
   return (
-    <label className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs text-gray-800">
-      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} />
-      <span>{label}</span>
-    </label>
+    <div className="w-auto">
+      <CheckPill checked={checked} onCheckedChange={onChange} tone="emerald" size="xs" className="w-auto">
+        {label}
+      </CheckPill>
+    </div>
   );
 }

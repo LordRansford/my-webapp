@@ -2,6 +2,7 @@
 
 import { use_tool_state } from "@/components/notes/hooks/use_tool_state";
 import ToolStateActions from "@/components/notes/ToolStateActions";
+import { Check } from "lucide-react";
 
 const attacks = ["Credential theft", "Lateral movement", "Data exfiltration", "Persistence", "Command and control"];
 const signals = ["Auth logs", "Endpoint telemetry", "Network flow", "DNS", "App logs"];
@@ -40,13 +41,13 @@ export default function DetectionCoverageTool() {
                   const checked = Boolean(state.mapping?.[key]);
                   return (
                     <td key={key} className="px-3 py-2">
-                      <input
-                        type="checkbox"
+                      <MatrixToggleCell
                         checked={checked}
-                        onChange={(e) =>
+                        label={`${s} for ${a}`}
+                        onCheckedChange={(next) =>
                           set_state((prev) => ({
                             ...prev,
-                            mapping: { ...prev.mapping, [key]: e.target.checked },
+                            mapping: { ...prev.mapping, [key]: next },
                           }))
                         }
                       />
@@ -73,5 +74,22 @@ export default function DetectionCoverageTool() {
         onImport={import_json}
       />
     </div>
+  );
+}
+
+function MatrixToggleCell({ checked, onCheckedChange, label }) {
+  return (
+    <button
+      type="button"
+      role="checkbox"
+      aria-checked={checked}
+      aria-label={label}
+      onClick={() => onCheckedChange(!checked)}
+      className={`inline-flex h-8 w-8 items-center justify-center rounded-lg border text-slate-700 shadow-sm transition focus:outline-none focus:ring-2 focus:ring-emerald-200 ${
+        checked ? "border-emerald-400/50 bg-emerald-500/10 text-emerald-700" : "border-slate-200 bg-white hover:bg-slate-50"
+      }`}
+    >
+      {checked ? <Check className="h-4 w-4" aria-hidden="true" /> : null}
+    </button>
   );
 }

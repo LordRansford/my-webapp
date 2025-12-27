@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import { Lock, Shield } from "lucide-react";
+import { CheckPill } from "@/components/ui/CheckPill";
 
 const MAX_LENGTH = 50;
 
@@ -98,42 +99,18 @@ export default function PasswordEntropyDashboard() {
             Character sets
           </label>
           <div className="space-y-2">
-            <label className="flex items-center gap-2 text-xs text-slate-300">
-              <input
-                type="checkbox"
-                checked={useLowercase}
-                onChange={(e) => setUseLowercase(e.target.checked)}
-                className="rounded border-slate-600 bg-slate-800 text-sky-400 focus:ring-sky-400"
-              />
-              <span>Lowercase letters (a-z)</span>
-            </label>
-            <label className="flex items-center gap-2 text-xs text-slate-300">
-              <input
-                type="checkbox"
-                checked={useUppercase}
-                onChange={(e) => setUseUppercase(e.target.checked)}
-                className="rounded border-slate-600 bg-slate-800 text-sky-400 focus:ring-sky-400"
-              />
-              <span>Uppercase letters (A-Z)</span>
-            </label>
-            <label className="flex items-center gap-2 text-xs text-slate-300">
-              <input
-                type="checkbox"
-                checked={useDigits}
-                onChange={(e) => setUseDigits(e.target.checked)}
-                className="rounded border-slate-600 bg-slate-800 text-sky-400 focus:ring-sky-400"
-              />
-              <span>Digits (0-9)</span>
-            </label>
-            <label className="flex items-center gap-2 text-xs text-slate-300">
-              <input
-                type="checkbox"
-                checked={useSymbols}
-                onChange={(e) => setUseSymbols(e.target.checked)}
-                className="rounded border-slate-600 bg-slate-800 text-sky-400 focus:ring-sky-400"
-              />
-              <span>Symbols (!@#$%...)</span>
-            </label>
+            <CheckPill checked={useLowercase} onCheckedChange={setUseLowercase} tone="sky">
+              Lowercase letters (a to z)
+            </CheckPill>
+            <CheckPill checked={useUppercase} onCheckedChange={setUseUppercase} tone="sky">
+              Uppercase letters (A to Z)
+            </CheckPill>
+            <CheckPill checked={useDigits} onCheckedChange={setUseDigits} tone="sky">
+              Digits (0 to 9)
+            </CheckPill>
+            <CheckPill checked={useSymbols} onCheckedChange={setUseSymbols} tone="sky">
+              Symbols (!@#$%)
+            </CheckPill>
           </div>
         </div>
       </div>

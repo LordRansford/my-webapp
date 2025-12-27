@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from "react";
+import { CheckPill } from "@/components/ui/CheckPill";
 
 const services = [
   { id: "idp", name: "Identity provider", dependsOn: [] },
@@ -56,10 +57,11 @@ export default function BackupRansomwareRecoveryTool() {
         ))}
       </div>
 
-      <label className="flex items-center gap-2 text-xs text-gray-700">
-        <input type="checkbox" checked={tested} onChange={() => setTested((v) => !v)} />
-        We have tested restores recently
-      </label>
+      <div className="max-w-xs">
+        <CheckPill checked={tested} onCheckedChange={setTested} tone="emerald" size="xs">
+          We have tested restores recently
+        </CheckPill>
+      </div>
 
       <div className="rounded-lg border px-3 py-3 bg-gray-50 leading-6">
         <div className="font-semibold text-gray-800 mb-1">Notes</div>

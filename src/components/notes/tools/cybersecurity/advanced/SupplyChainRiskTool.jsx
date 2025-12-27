@@ -2,6 +2,7 @@
 
 import { use_tool_state } from "@/components/notes/hooks/use_tool_state";
 import ToolStateActions from "@/components/notes/ToolStateActions";
+import { CheckPill } from "@/components/ui/CheckPill";
 
 const deps = ["Library", "Build tool", "Container base", "Cloud service", "Identity provider"];
 
@@ -21,15 +22,15 @@ export default function SupplyChainRiskTool() {
 
       <div className="space-y-2">
         {deps.map((d) => (
-          <label key={d} className="flex items-start gap-2 rounded-lg border bg-gray-50 px-3 py-2">
-            <input
-              type="checkbox"
-              checked={Boolean(state.critical?.[d])}
-              onChange={(e) => set_state((prev) => ({ ...prev, critical: { ...prev.critical, [d]: e.target.checked } }))}
-              className="mt-1"
-            />
-            <span className="text-gray-800">{d}</span>
-          </label>
+          <CheckPill
+            key={d}
+            checked={Boolean(state.critical?.[d])}
+            onCheckedChange={(checked) => set_state((prev) => ({ ...prev, critical: { ...prev.critical, [d]: checked } }))}
+            tone="amber"
+            className="justify-start"
+          >
+            {d}
+          </CheckPill>
         ))}
       </div>
 

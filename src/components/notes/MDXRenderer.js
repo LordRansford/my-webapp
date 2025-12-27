@@ -2,6 +2,7 @@
 
 import React from "react";
 import { MDXRemote } from "next-mdx-remote";
+import MermaidDiagram from "@/components/notes/MermaidDiagram";
 
 function SafeParagraph({ children, ...props }) {
   const nodes = React.Children.toArray(children);
@@ -32,5 +33,5 @@ function SafeParagraph({ children, ...props }) {
 }
 
 export function MDXRenderer({ source, components }) {
-  return <MDXRemote {...source} components={{ p: SafeParagraph, ...(components || {}) }} />;
+  return <MDXRemote {...source} components={{ p: SafeParagraph, MermaidDiagram, ...(components || {}) }} />;
 }

@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import { Server, Shield } from "lucide-react";
+import { CheckPill } from "@/components/ui/CheckPill";
 
 const COMMON_PORTS = [
   { port: 22, service: "SSH", default: true },
@@ -48,35 +49,31 @@ export default function PortSurfaceConceptDashboard() {
           <div className="space-y-2">
             {COMMON_PORTS.map((item) => {
               const isOpen = openPorts.has(item.port);
-              return (
-                <label
-                  key={item.port}
-                  className="flex items-center justify-between rounded-lg border border-slate-700 bg-slate-950/80 p-2 transition hover:bg-slate-800/50"
+              const status = (
+                <span
+                  className={`rounded-full px-2 py-0.5 text-[0.65rem] font-medium ${
+                    isOpen ? "bg-emerald-500/20 text-emerald-300" : "bg-slate-800 text-slate-500"
+                  }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="checkbox"
-                      checked={isOpen}
-                      onChange={() => togglePort(item.port)}
-                      className="rounded border-slate-600 bg-slate-800 text-sky-400 focus:ring-sky-400"
-                    />
-                    <div>
-                      <span className="text-xs font-medium text-slate-100">
-                        Port {item.port}
-                      </span>
-                      <span className="ml-2 text-xs text-slate-400">{item.service}</span>
-                    </div>
-                  </div>
-                  <span
-                    className={`rounded-full px-2 py-0.5 text-[0.65rem] font-medium ${
-                      isOpen
-                        ? "bg-emerald-500/20 text-emerald-300"
-                        : "bg-slate-800 text-slate-500"
-                    }`}
+                  {isOpen ? "Open" : "Closed"}
+                </span>
+              );
+              return (
+                <div
+                  key={item.port}
+                  className="rounded-lg border border-slate-700 bg-slate-950/80 p-2 transition hover:bg-slate-800/50"
+                >
+                  <CheckPill
+                    checked={isOpen}
+                    onCheckedChange={() => togglePort(item.port)}
+                    after={status}
+                    tone="emerald"
+                    className="border-slate-700 bg-transparent text-slate-100 hover:bg-slate-900/40"
                   >
-                    {isOpen ? "Open" : "Closed"}
-                  </span>
-                </label>
+                    <span className="text-xs font-medium text-slate-100">Port {item.port}</span>{" "}
+                    <span className="text-xs text-slate-400">{item.service}</span>
+                  </CheckPill>
+                </div>
               );
             })}
           </div>

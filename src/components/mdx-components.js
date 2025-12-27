@@ -1,17 +1,12 @@
 "use client";
 
-// #region agent log
-if (typeof window !== 'undefined') {
-  fetch('http://127.0.0.1:7243/ingest/5c42012f-fdd0-45fd-8860-75c06576ec81',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'mdx-components.js:moduleLoad',message:'mdx-components module loading',data:{isClient:typeof window !== 'undefined'},timestamp:Date.now(),sessionId:'debug-session',runId:'run3',hypothesisId:'H3'})}).catch(()=>{});
-}
-// #endregion
-
 import Callout from "./Callout";
 import PythonPlayground from "./PythonPlayground";
 import RsaPlayground from "./RsaPlayground";
 import DiagramBlock from "./DiagramBlock";
 import ToolCard from "@/components/notes/ToolCard";
 import GlossaryTip from "@/components/notes/GlossaryTip";
+import MermaidDiagram from "@/components/notes/MermaidDiagram";
 import QuizBlock from "@/components/notes/QuizBlock";
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
 import LevelProgressBar from "@/components/course/LevelProgressBar";
@@ -178,12 +173,6 @@ import ReplicationConsistencyVisualizerTool from "@/components/notes/tools/data/
 import GovernanceDecisionSimulatorTool from "@/components/notes/tools/data/advanced/GovernanceDecisionSimulatorTool";
 import DataStrategySandboxTool from "@/components/notes/tools/data/advanced/DataStrategySandboxTool";
 
-// #region agent log
-if (typeof window !== 'undefined') {
-  fetch('http://127.0.0.1:7243/ingest/5c42012f-fdd0-45fd-8860-75c06576ec81',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'mdx-components.js:beforeObjectCreation',message:'About to create mdxComponents object',data:{isClient:typeof window !== 'undefined'},timestamp:Date.now(),sessionId:'debug-session',runId:'run3',hypothesisId:'H3'})}).catch(()=>{});
-}
-// #endregion
-
 // Create components object - dynamic imports will only load on client
 const mdxComponents = {
   Callout,
@@ -200,6 +189,7 @@ const mdxComponents = {
   DiagramBlock,
   ToolCard,
   GlossaryTip,
+  MermaidDiagram,
   QuizBlock,
   SectionProgressToggle,
   LevelProgressBar,
@@ -365,11 +355,5 @@ const mdxComponents = {
   GovernanceDecisionSimulatorTool,
   DataStrategySandboxTool,
 };
-
-// #region agent log
-if (typeof window !== 'undefined') {
-  fetch('http://127.0.0.1:7243/ingest/5c42012f-fdd0-45fd-8860-75c06576ec81',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'mdx-components.js:afterObjectCreation',message:'mdxComponents object created',data:{componentCount:Object.keys(mdxComponents).length,isClient:typeof window !== 'undefined'},timestamp:Date.now(),sessionId:'debug-session',runId:'run3',hypothesisId:'H3'})}).catch(()=>{});
-}
-// #endregion
 
 export default mdxComponents;

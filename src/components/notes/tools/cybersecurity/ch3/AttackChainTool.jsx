@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from "react";
+import { CheckPill } from "@/components/ui/CheckPill";
 
 const chain = [
   {
@@ -90,14 +91,15 @@ export default function AttackChainTool() {
       </div>
 
       <div className="flex items-center gap-3">
-        <label className="flex items-center gap-2 text-sm text-gray-800">
-          <input
-            type="checkbox"
+        <div className="max-w-xs">
+          <CheckPill
             checked={!!breakPoints[current.stage]}
-            onChange={() => markBreak(current.stage)}
-          />
-          Mark this stage as disrupted
-        </label>
+            onCheckedChange={() => markBreak(current.stage)}
+            tone="emerald"
+          >
+            Mark this stage as disrupted
+          </CheckPill>
+        </div>
         <span className="text-xs text-gray-600">
           Coverage: {coverage}% of stages planned
         </span>

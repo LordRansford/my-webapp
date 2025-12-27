@@ -103,11 +103,6 @@ function assessCookieRisk(cookie: ParsedCookie): string[] {
 }
 
 export function CookieInspector() {
-  // #region agent log
-  if (typeof window !== 'undefined') {
-    fetch('http://127.0.0.1:7243/ingest/5c42012f-fdd0-45fd-8860-75c06576ec81',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'CookieInspector.tsx:render',message:'Component rendering',data:{hasWindow:typeof window !== 'undefined'},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'H2'})}).catch(()=>{});
-  }
-  // #endregion
   const [rawInput, setRawInput] = useState(
     "Set-Cookie: sessionId=abc123; HttpOnly; Secure; SameSite=Lax\nSet-Cookie: analyticsId=xyz789; Path=/; Expires=Wed, 01 Jan 2030 00:00:00 GMT"
   );
