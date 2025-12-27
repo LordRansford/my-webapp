@@ -23,6 +23,7 @@ const ValueChainBuilderGame = dynamic(() => import("@/components/games/digitalis
 const OperatingModelDesignerGame = dynamic(() => import("@/components/games/digitalisation/OperatingModelDesignerGame"), { ssr: false });
 const MaturityPathGame = dynamic(() => import("@/components/games/digitalisation/MaturityPathGame"), { ssr: false });
 const DigiQuickFireQuizGame = dynamic(() => import("@/components/games/digitalisation/DigiQuickFireQuizGame"), { ssr: false });
+const DigitalisationGameHub = dynamic(() => import("@/components/notes/summary/DigitalisationGameHub"), { ssr: false });
 
 export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
@@ -45,6 +46,7 @@ export default function Page({ source, headings }) {
       OperatingModelDesignerGame,
       MaturityPathGame,
       DigiQuickFireQuizGame,
+      DigitalisationGameHub,
     }),
     []
   );
