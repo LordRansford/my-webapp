@@ -226,16 +226,44 @@ Why it matters: detection and response are how you limit harm when prevention fa
 Under the hood, data still moves as packets. A packet has a header and a payload. The header is the envelope that tells the network where it is going. The payload is the content. Even when the payload is encrypted, metadata can still reveal behaviour. That is why monitoring often starts with patterns, not secrets.
 
 <DiagramBlock
-  title="A packet’s short trip"
+  title="A packet's short trip"
   subtitle="Payload stays hidden but the envelope still talks."
 >
   <div className="text-xs sm:text-sm leading-5 space-y-2">
-    <div>Laptop → Home router → ISP → Internet → Server</div>
+    <div>Laptop -&gt; Home router -&gt; ISP -&gt; Internet -&gt; Server</div>
     <div>Header: source, destination, port, length</div>
     <div>Payload: the content (often encrypted)</div>
     <div className="text-gray-600">Metadata like timing and size still leaks patterns.</div>
   </div>
 </DiagramBlock>
+
+<MermaidDiagram caption="OSI and TCP/IP layer mapping" ariaLabel="OSI and TCP/IP layer mapping diagram">
+{`flowchart TB
+  subgraph OSI[OSI model]
+    O7[Application]
+    O6[Presentation]
+    O5[Session]
+    O4[Transport\\nTCP or UDP]
+    O3[Network\\nIP routing]
+    O2[Data Link\\nEthernet or Wi-Fi]
+    O1[Physical\\nSignals on wire or air]
+  end
+
+  subgraph TCPIP[TCP/IP model]
+    T4[Application\\nHTTP, DNS, TLS]
+    T3[Transport\\nTCP or UDP]
+    T2[Internet\\nIP]
+    T1[Link\\nEthernet or Wi-Fi]
+  end
+
+  O7 --> T4
+  O6 --> T4
+  O5 --> T4
+  O4 --> T3
+  O3 --> T2
+  O2 --> T1
+  O1 --> T1`}
+</MermaidDiagram>
 
 <GlossaryTip term="Packet">A small chunk of data with a header and payload used to move information across a network.</GlossaryTip>
 <GlossaryTip term="Metadata">Information about data such as source, destination, timing and size.</GlossaryTip>
