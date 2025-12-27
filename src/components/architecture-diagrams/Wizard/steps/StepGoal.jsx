@@ -12,7 +12,7 @@ export default function StepGoal({ value, onChange, errors = [] }) {
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-xl font-semibold text-slate-900">Goal 🎯</h2>
+        <h2 className="text-xl font-semibold text-slate-900">Goal</h2>
         <p className="mt-1 text-sm text-slate-700">Why are you creating diagrams?</p>
       </div>
 

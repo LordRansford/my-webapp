@@ -4,6 +4,7 @@ import React, { useMemo, useState } from "react";
 import { SecurityNotice } from "@/components/SecurityNotice";
 import { SecurityBanner } from "@/components/dev-studios/SecurityBanner";
 import { Activity, Radar, Bell } from "lucide-react";
+import SwitchRow from "@/components/ui/SwitchRow";
 
 export default function ObservabilityLab() {
   const [logging, setLogging] = useState(1); // 0 Minimal,1 Normal,2 Verbose
@@ -114,17 +115,15 @@ export default function ObservabilityLab() {
               <Bell className="h-5 w-5 text-indigo-600" aria-hidden="true" />
               <h3 className="text-2xl font-semibold text-slate-900">3. Alert sanity check</h3>
             </div>
-            <div className="space-y-2 text-sm text-slate-800">
+            <div className="space-y-2">
               {Object.keys(alertChecks).map((key) => (
-                <label key={key} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={alertChecks[key]}
-                    onChange={(e) => setAlertChecks((prev) => ({ ...prev, [key]: e.target.checked }))}
-                    className="h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-200"
-                  />
-                  <span>{key}</span>
-                </label>
+                <SwitchRow
+                  key={key}
+                  label={key}
+                  checked={alertChecks[key]}
+                  tone="indigo"
+                  onCheckedChange={(checked) => setAlertChecks((prev) => ({ ...prev, [key]: checked }))}
+                />
               ))}
             </div>
             <div className="space-y-1">

@@ -2,12 +2,14 @@
 
 import { useMemo, useState } from "react";
 import { STRIDE_ITEMS } from "@/lib/architecture-diagrams/security/stride";
+import SwitchRow from "@/components/ui/SwitchRow";
 
 export default function SecurityGuidancePanel({ inputVersion, goal }) {
   const storageKey = useMemo(() => `arch-stride-considered:${inputVersion}`, [inputVersion]);
   const [open, setOpen] = useState(false);
   const [considered, setConsidered] = useState(() => {
     try {
+      if (typeof window === "undefined") return {};
       const raw = window.localStorage.getItem(storageKey);
       const parsed = raw ? JSON.parse(raw) : {};
       return parsed && typeof parsed === "object" ? parsed : {};
@@ -50,19 +52,14 @@ export default function SecurityGuidancePanel({ inputVersion, goal }) {
       {open ? (
         <div className="mt-4 space-y-3">
           {STRIDE_ITEMS.map((item) => (
-            <label key={item.id} className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4">
-              <input
-                type="checkbox"
-                checked={Boolean(considered[item.id])}
-                onChange={(e) => setChecked(item.id, e.target.checked)}
-                className="mt-1 h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-400"
-              />
-              <div>
-                <p className="text-sm font-semibold text-slate-900">{item.label}</p>
-                <p className="mt-1 text-sm text-slate-700">{item.explanation}</p>
-                <p className="mt-2 text-xs font-semibold text-slate-600">Considered</p>
-              </div>
-            </label>
+            <SwitchRow
+              key={item.id}
+              label={item.label}
+              description={item.explanation}
+              checked={Boolean(considered[item.id])}
+              onCheckedChange={(checked) => setChecked(item.id, checked)}
+              tone="slate"
+            />
           ))}
         </div>
       ) : null}

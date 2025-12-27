@@ -4,6 +4,7 @@ import React, { useMemo, useState } from "react";
 import { SecurityNotice } from "@/components/SecurityNotice";
 import { SecurityBanner } from "@/components/dev-studios/SecurityBanner";
 import { GitBranch, ShieldCheck, Rocket } from "lucide-react";
+import SwitchRow from "@/components/ui/SwitchRow";
 
 type StageKey =
   | "Lint and unit tests"
@@ -62,7 +63,7 @@ export default function PipelineDeployLab() {
   const comboCopy = useMemo(() => {
     const goodPractice = "Keep configs and secrets in env vars; fail builds on critical scans.";
     const mistake = "Skipping staging or smoke tests sends surprises straight to prod.";
-    return `${host} with ${build} → ${target}. Ship artefacts, promote through staging, and keep prod deploys boring. Good: ${goodPractice} Common mistake: ${mistake}`;
+    return `${host} with ${build} to ${target}. Ship artefacts, promote through staging, and keep prod deploys boring. Good: ${goodPractice} Common mistake: ${mistake}`;
   }, [host, build, target]);
 
   const toggleStage = (key: StageKey, value: boolean) => {
@@ -127,17 +128,9 @@ export default function PipelineDeployLab() {
               <ShieldCheck className="h-5 w-5 text-emerald-600" aria-hidden="true" />
               <h3 className="text-2xl font-semibold text-slate-900">2. Stages and gates</h3>
             </div>
-            <div className="space-y-2 text-sm text-slate-800">
+            <div className="space-y-2">
               {stageList.map((s) => (
-                <label key={s} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={stages[s]}
-                    onChange={(e) => toggleStage(s, e.target.checked)}
-                    className="h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-200"
-                  />
-                  <span>{s}</span>
-                </label>
+                <SwitchRow key={s} label={s} checked={stages[s]} tone="emerald" onCheckedChange={(checked) => toggleStage(s, checked)} />
               ))}
             </div>
             <div className="space-y-1">

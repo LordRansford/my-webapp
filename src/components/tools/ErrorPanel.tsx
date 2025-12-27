@@ -29,7 +29,7 @@ export default function ErrorPanel({ error, onDismiss }: ErrorPanelProps) {
         <div className="flex-1">
           <div className="flex items-center gap-2">
             <span className="text-lg" aria-hidden="true">
-              ⚠️
+              !
             </span>
             <h3 className="text-base font-semibold text-red-900">Execution failed</h3>
           </div>

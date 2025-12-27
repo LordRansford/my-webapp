@@ -321,7 +321,7 @@ export default function ToolShell({
         <div className="flex flex-wrap gap-4 text-sm text-slate-600">
           <span>Limits: {contract.limits.cpuMs}ms CPU, {contract.limits.memoryMb}MB memory, {contract.limits.outputKb}KB output</span>
           {contract.securityNotes && (
-            <span className="text-amber-700">⚠️ {contract.securityNotes}</span>
+            <span className="text-amber-700">Important: {contract.securityNotes}</span>
           )}
         </div>
       </header>

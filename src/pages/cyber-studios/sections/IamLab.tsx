@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import { KeyRound, UserCheck, ShieldCheck } from "lucide-react";
+import SwitchRow from "@/components/ui/SwitchRow";
 
 export default function IamLab() {
   const [authn, setAuthn] = useState("Google sign-in (OAuth)");
@@ -63,17 +64,14 @@ export default function IamLab() {
               <ShieldCheck className="h-5 w-5 text-emerald-600" aria-hidden="true" />
               <h3 className="text-xl font-semibold text-slate-900">2. Controls checklist</h3>
             </div>
-            <div className="space-y-2 text-sm text-slate-800">
+            <div className="space-y-2">
               {[
                 { key: "leastPrivilege", label: "Least privilege by default", v: leastPrivilege, set: setLeastPrivilege },
                 { key: "mfa", label: "MFA for privileged operations", v: mfa, set: setMfa },
                 { key: "session", label: "Session expiry and revocation", v: sessionHygiene, set: setSessionHygiene },
                 { key: "admin", label: "Admin allowlist and auditability", v: adminAllowlist, set: setAdminAllowlist },
               ].map((x) => (
-                <label key={x.key} className="flex items-center gap-2">
-                  <input type="checkbox" checked={x.v} onChange={(e) => x.set(e.target.checked)} className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-200" />
-                  <span>{x.label}</span>
-                </label>
+                <SwitchRow key={x.key} label={x.label} checked={x.v} tone="emerald" onCheckedChange={x.set} />
               ))}
             </div>
             <div className="rounded-2xl border border-slate-200 bg-white p-4">

@@ -4,6 +4,7 @@ import React, { useMemo, useState } from "react";
 import { SecurityNotice } from "@/components/SecurityNotice";
 import { SecurityBanner } from "@/components/dev-studios/SecurityBanner";
 import { ShieldCheck, HeartPulse, AlertTriangle } from "lucide-react";
+import SwitchRow from "@/components/ui/SwitchRow";
 
 const secureCodingItems = [
   "Input validation at all trust boundaries",
@@ -63,17 +64,15 @@ export default function SecurityQualityLab() {
           <ShieldCheck className="h-5 w-5 text-emerald-600" aria-hidden="true" />
           <h2 className="text-2xl font-semibold text-slate-900">1. Secure coding habits</h2>
         </div>
-        <div className="space-y-2 text-sm text-slate-800">
+        <div className="space-y-2">
           {secureCodingItems.map((c) => (
-            <label key={c} className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={secureState[c]}
-                onChange={(e) => setSecureState((prev) => ({ ...prev, [c]: e.target.checked }))}
-                className="h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-200"
-              />
-              <span>{c}</span>
-            </label>
+            <SwitchRow
+              key={c}
+              label={c}
+              checked={secureState[c]}
+              tone="emerald"
+              onCheckedChange={(checked) => setSecureState((prev) => ({ ...prev, [c]: checked }))}
+            />
           ))}
         </div>
         <div className="space-y-1">
@@ -102,17 +101,15 @@ export default function SecurityQualityLab() {
           <HeartPulse className="h-5 w-5 text-sky-600" aria-hidden="true" />
           <h2 className="text-2xl font-semibold text-slate-900">2. Quality and resilience checks</h2>
         </div>
-        <div className="space-y-2 text-sm text-slate-800">
+        <div className="space-y-2">
           {qualityItems.map((c) => (
-            <label key={c} className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={qualityState[c]}
-                onChange={(e) => setQualityState((prev) => ({ ...prev, [c]: e.target.checked }))}
-                className="h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-200"
-              />
-              <span>{c}</span>
-            </label>
+            <SwitchRow
+              key={c}
+              label={c}
+              checked={qualityState[c]}
+              tone="sky"
+              onCheckedChange={(checked) => setQualityState((prev) => ({ ...prev, [c]: checked }))}
+            />
           ))}
         </div>
         <div className="space-y-1">

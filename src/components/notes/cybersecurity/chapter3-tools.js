@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import ToolCard from "@/components/notes/ToolCard";
+import SwitchRow from "@/components/ui/SwitchRow";
 
 function Panel({ title, eyebrow = "Tool", children }) {
   return (
@@ -153,7 +154,8 @@ export function RansomwareResponseSimulator() {
     { id: "notify", label: "Notify stakeholders and, if required, regulators" },
   ];
   const [done, setDone] = useState([]);
-  const toggle = (id) => setDone((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+  const toggle = (id, checked) =>
+    setDone((prev) => (checked ? (prev.includes(id) ? prev : [...prev, id]) : prev.filter((x) => x !== id)));
   return (
     <ToolCard
       title="Ransomware response simulator"
@@ -162,13 +164,15 @@ export function RansomwareResponseSimulator() {
       reflection="What would slow you down in a real incident? Write one fix."
     >
       <p className="muted">Tick actions in order. Preparation makes these steps faster.</p>
-      <div className="stack">
+      <div className="space-y-2">
         {steps.map((step) => (
-          <label key={step.id} className="control">
-            <span>
-              <input type="checkbox" checked={done.includes(step.id)} onChange={() => toggle(step.id)} /> {step.label}
-            </span>
-          </label>
+          <SwitchRow
+            key={step.id}
+            label={step.label}
+            checked={done.includes(step.id)}
+            tone="emerald"
+            onCheckedChange={(checked) => toggle(step.id, checked)}
+          />
         ))}
       </div>
       <p className="muted">Backups, segmentation, and rehearsed playbooks reduce impact.</p>
@@ -183,7 +187,8 @@ export function LogAnalysisMiniLab() {
     { id: "admin", text: "New admin account created at 02:14", suspicious: true },
   ];
   const [selected, setSelected] = useState([]);
-  const toggle = (id) => setSelected((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+  const toggle = (id, checked) =>
+    setSelected((prev) => (checked ? (prev.includes(id) ? prev : [...prev, id]) : prev.filter((x) => x !== id)));
   return (
     <ToolCard
       title="Log analysis mini lab"
@@ -192,11 +197,15 @@ export function LogAnalysisMiniLab() {
       reflection="How would you automate alerts for the items you picked?"
     >
       <p className="muted">Flag lines that deserve investigation.</p>
-      <div className="stack">
+      <div className="space-y-2">
         {events.map((e) => (
-          <label key={e.id} className={`quiz-option ${selected.includes(e.id) ? "is-selected" : ""}`}>
-            <input type="checkbox" checked={selected.includes(e.id)} onChange={() => toggle(e.id)} /> <span>{e.text}</span>
-          </label>
+          <SwitchRow
+            key={e.id}
+            label={e.text}
+            checked={selected.includes(e.id)}
+            tone={e.suspicious ? "amber" : "slate"}
+            onCheckedChange={(checked) => toggle(e.id, checked)}
+          />
         ))}
       </div>
       {selected.length > 0 && (

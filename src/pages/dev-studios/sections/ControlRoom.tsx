@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import { SecurityBanner } from "@/components/dev-studios/SecurityBanner";
+import SwitchRow from "@/components/ui/SwitchRow";
 
 type Project = {
   name: string;
@@ -29,6 +30,15 @@ const pill = (text: string, tone: "muted" | "ok" | "warn" | "bad" = "muted") => 
 export default function ControlRoom() {
   const [projects, setProjects] = useState<Project[]>([
     {
+      name: "BookTrack",
+      type: "Web app",
+      frontend: "React",
+      backend: "Node Express",
+      data: "Postgres",
+      status: "Designing",
+      risk: "Unknown",
+    },
+    {
       name: "Solar Fleet",
       type: "Web app",
       frontend: "React",
@@ -48,6 +58,7 @@ export default function ControlRoom() {
     },
   ]);
 
+  const [selectedProjectName, setSelectedProjectName] = useState<string>("BookTrack");
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({
     name: "",
@@ -65,12 +76,83 @@ export default function ControlRoom() {
   });
 
   const safetyScore = Object.values(safety).filter(Boolean).length;
+  const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">("idle");
+
+  const activeProject = useMemo(() => {
+    return projects.find((p) => p.name === selectedProjectName) || projects[0] || null;
+  }, [projects, selectedProjectName]);
+
+  const brief = useMemo(() => {
+    if (!activeProject) return "";
+    const safetyLines = [
+      { label: "Secrets live in environment variables, not in code", ok: safety.secrets },
+      { label: "HTTPS everywhere", ok: safety.https },
+      { label: "Audit logging planned", ok: safety.audit },
+      { label: "Basic threat modelling done", ok: safety.threat },
+    ];
+
+    const checklist = safetyLines.map((x) => `- [${x.ok ? "x" : " "}] ${x.label}`).join("\n");
+
+    return [
+      `# ${activeProject.name} project brief`,
+      ``,
+      `This brief was generated in Ransford's Software Development Studio.`,
+      `It is local to your browser and includes no telemetry.`,
+      ``,
+      `## Stack snapshot`,
+      `- Type: ${activeProject.type}`,
+      `- Frontend: ${activeProject.frontend}`,
+      `- Backend: ${activeProject.backend}`,
+      `- Data: ${activeProject.data}`,
+      ``,
+      `## Safety checklist`,
+      checklist,
+      ``,
+      `## Next steps in the studio`,
+      `1. Requirements and domain modelling: /dev-studios?tab=requirements`,
+      `2. Architecture and system design: /dev-studios?tab=system-design`,
+      `3. Backend and API design: /dev-studios?tab=backend`,
+      `4. Frontend and integration: /dev-studios?tab=frontend`,
+      `5. Security and reliability: /dev-studios?tab=security`,
+      `6. Deployment and operations: /dev-studios?tab=deploy`,
+      `7. Observability basics: /dev-studios?tab=observability`,
+      ``,
+      `## Rules for safe learning`,
+      `1. Do not paste real secrets, tokens, or passwords.`,
+      `2. Do not paste real customer or employee data.`,
+      `3. Use synthetic examples and keep notes portable.`,
+    ].join("\n");
+  }, [activeProject, safety]);
 
   const summary = useMemo(() => {
     const statusCounts = statusOptions.reduce((acc, s) => ({ ...acc, [s]: projects.filter((p) => p.status === s).length }), {} as Record<Project["status"], number>);
     const riskCounts = riskOptions.reduce((acc, r) => ({ ...acc, [r]: projects.filter((p) => p.risk === r).length }), {} as Record<Project["risk"], number>);
     return { statusCounts, riskCounts };
   }, [projects]);
+
+  const copyBrief = async () => {
+    try {
+      await navigator.clipboard.writeText(brief);
+      setCopyState("copied");
+      window.setTimeout(() => setCopyState("idle"), 1500);
+    } catch {
+      setCopyState("failed");
+      window.setTimeout(() => setCopyState("idle"), 2000);
+    }
+  };
+
+  const downloadBrief = () => {
+    if (!activeProject) return;
+    const blob = new Blob([brief], { type: "text/markdown;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${activeProject.name.replace(/[^a-z0-9_-]+/gi, "-").replace(/-+/g, "-")}-brief.md`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  };
 
   const addProject = () => {
     if (!form.name.trim()) return;
@@ -84,6 +166,7 @@ export default function ControlRoom() {
       risk: "Unknown",
     };
     setProjects((prev) => [...prev, newProject]);
+    setSelectedProjectName(newProject.name);
     setShowForm(false);
     setForm({ name: "", type: "Web app", frontend: "React", backend: "Node Express", data: "Postgres" });
   };
@@ -203,12 +286,21 @@ export default function ControlRoom() {
               </thead>
               <tbody>
                 {projects.map((p) => (
-                  <tr key={p.name} className="border-t border-slate-100">
-                    <td className="px-3 py-2 font-semibold text-slate-900">{p.name}</td>
+                  <tr key={p.name} className={`border-t border-slate-100 ${selectedProjectName === p.name ? "bg-slate-50/80" : ""}`}>
+                    <td className="px-3 py-2 font-semibold text-slate-900">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedProjectName(p.name)}
+                        className="text-left font-semibold text-slate-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
+                        aria-label={`Select project: ${p.name}`}
+                      >
+                        {p.name}
+                      </button>
+                    </td>
                     <td className="px-3 py-2 text-slate-700">{p.type}</td>
                     <td className="px-3 py-2 text-slate-700">
                       <div className="text-xs text-slate-600">
-                        FE: {p.frontend} • BE: {p.backend} • Data: {p.data}
+                        FE: {p.frontend} · BE: {p.backend} · Data: {p.data}
                       </div>
                     </td>
                     <td className="px-3 py-2">{pill(p.status, p.status === "Live" ? "ok" : p.status === "Testing" ? "warn" : "muted")}</td>
@@ -255,22 +347,20 @@ export default function ControlRoom() {
 
           <div className="rounded-3xl bg-white ring-1 ring-slate-100 shadow-[0_12px_30px_rgba(15,23,42,0.06)] p-5 space-y-3">
             <h3 className="text-xl font-semibold text-slate-900">Safety status</h3>
-            <div className="space-y-2 text-sm text-slate-700">
+            <div className="space-y-2">
               {[
                 { key: "secrets", label: "Secrets live in environment variables, not in code" },
                 { key: "https", label: "HTTPS everywhere" },
                 { key: "audit", label: "Audit logging planned" },
                 { key: "threat", label: "Basic threat modelling done" },
               ].map((item) => (
-                <label key={item.key} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={(safety as any)[item.key]}
-                    onChange={(e) => setSafety((prev) => ({ ...prev, [item.key]: e.target.checked }))}
-                    className="h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-200"
-                  />
-                  <span>{item.label}</span>
-                </label>
+                <SwitchRow
+                  key={item.key}
+                  label={item.label}
+                  checked={(safety as any)[item.key]}
+                  tone="sky"
+                  onCheckedChange={(checked) => setSafety((prev) => ({ ...prev, [item.key]: checked }))}
+                />
               ))}
             </div>
             <div className="space-y-1">
@@ -287,6 +377,38 @@ export default function ControlRoom() {
                 />
               </div>
             </div>
+          </div>
+
+          <div className="rounded-3xl bg-white ring-1 ring-slate-100 shadow-[0_12px_30px_rgba(15,23,42,0.06)] p-5 space-y-3">
+            <h3 className="text-xl font-semibold text-slate-900">Project brief</h3>
+            <p className="text-sm text-slate-700">
+              Pick a project from the table, then export a brief you can drop into a repo as a starting `README.md`.
+            </p>
+            <textarea
+              value={brief}
+              readOnly
+              rows={10}
+              className="w-full rounded-2xl border border-slate-200 bg-slate-50/60 p-3 text-xs text-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-2"
+            />
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={copyBrief}
+                disabled={!brief}
+                className="rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-2"
+              >
+                {copyState === "copied" ? "Copied" : copyState === "failed" ? "Copy failed" : "Copy brief"}
+              </button>
+              <button
+                type="button"
+                onClick={downloadBrief}
+                disabled={!brief}
+                className="rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-2"
+              >
+                Download `.md`
+              </button>
+            </div>
+            <p className="text-xs text-slate-600">This stays local. You control what goes into a real repo.</p>
           </div>
         </div>
       </div>

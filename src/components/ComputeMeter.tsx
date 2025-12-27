@@ -94,7 +94,7 @@ export default function ComputeMeter(props: {
         <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3">
           <div className="text-xs font-semibold text-slate-800">Estimate</div>
           <div className="mt-1 text-sm font-semibold text-slate-900">
-            {estimate ? (estimateCredits && estimateCredits > 0 ? `${formatCreditsSafe(estimateCredits)} credits` : "0 credits") : "—"}
+            {estimate ? (estimateCredits && estimateCredits > 0 ? `${formatCreditsSafe(estimateCredits)} credits` : "0 credits") : "N/A"}
           </div>
           <div className="mt-1 text-xs text-slate-700">
             {estimate ? `Time: ${formatMsSafe(estimate?.estimatedWallTimeMs)}` : "No estimate yet"}
@@ -103,7 +103,7 @@ export default function ComputeMeter(props: {
         <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3">
           <div className="text-xs font-semibold text-slate-800">After run</div>
           <div className="mt-1 text-sm font-semibold text-slate-900">
-            {actual ? (actualCredits && actualCredits > 0 ? `${formatCreditsSafe(actualCredits)} credits` : "0 credits") : "—"}
+            {actual ? (actualCredits && actualCredits > 0 ? `${formatCreditsSafe(actualCredits)} credits` : "0 credits") : "N/A"}
           </div>
           <div className="mt-1 text-xs text-slate-700">{actual ? `Time: ${formatMsSafe(actual?.durationMs)}` : "No receipt yet"}</div>
         </div>

@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import { ClipboardList, Users, Scale } from "lucide-react";
+import SwitchRow from "@/components/ui/SwitchRow";
 
 export default function CyberGovernanceLab() {
   const [policySet, setPolicySet] = useState({
@@ -82,7 +83,7 @@ export default function CyberGovernanceLab() {
             <p className="text-sm text-slate-700">
               Policies should be short, enforceable, and reviewed. A policy without ownership is just a document.
             </p>
-            <div className="space-y-2 text-sm text-slate-800">
+            <div className="space-y-2">
               {[
                 { key: "acceptableUse", label: "Acceptable use and training" },
                 { key: "accessControl", label: "Access control policy" },
@@ -91,15 +92,13 @@ export default function CyberGovernanceLab() {
                 { key: "logging", label: "Logging, monitoring, and retention policy" },
                 { key: "supplierRisk", label: "Supplier and third-party risk policy" },
               ].map((x) => (
-                <label key={x.key} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={(policySet as any)[x.key]}
-                    onChange={(e) => setPolicySet((p) => ({ ...p, [x.key]: e.target.checked }))}
-                    className="h-4 w-4 rounded border-slate-300 text-amber-600 focus:ring-amber-200"
-                  />
-                  <span>{x.label}</span>
-                </label>
+                <SwitchRow
+                  key={x.key}
+                  label={x.label}
+                  checked={(policySet as any)[x.key]}
+                  tone="amber"
+                  onCheckedChange={(checked) => setPolicySet((p) => ({ ...p, [x.key]: checked }))}
+                />
               ))}
             </div>
             <div className="rounded-2xl border border-slate-200 bg-white p-4">

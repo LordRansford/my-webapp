@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import { Radar, Target, Package } from "lucide-react";
+import SwitchRow from "@/components/ui/SwitchRow";
 
 type Lens = "Plain language" | "Technical context";
 
@@ -83,15 +84,14 @@ export default function ThreatLandscapeLab() {
               ].map((row) => (
                 <div key={row.key} className="rounded-2xl border border-slate-100 bg-slate-50/60 p-4 space-y-2">
                   <p className="text-sm font-semibold text-slate-900">{row.label}</p>
-                  <label className="flex items-center gap-2">
-                    <input type="checkbox" checked={row.vA} onChange={(e) => row.setA(e.target.checked)} className="h-4 w-4 rounded border-slate-300 text-rose-600 focus:ring-rose-200" />
-                    <span>{row.a}</span>
-                  </label>
+                  <SwitchRow label={row.a} checked={row.vA} tone="rose" onCheckedChange={(checked) => row.setA(checked)} />
                   {row.key === "opportunistic" ? (
-                    <label className="flex items-center gap-2">
-                      <input type="checkbox" checked={row.vB as any} onChange={(e) => (row.setB as any)(e.target.checked)} className="h-4 w-4 rounded border-slate-300 text-rose-600 focus:ring-rose-200" />
-                      <span>{row.b}</span>
-                    </label>
+                    <SwitchRow
+                      label={row.b}
+                      checked={row.vB as any}
+                      tone="rose"
+                      onCheckedChange={(checked) => (row.setB as any)(checked)}
+                    />
                   ) : (
                     <p className="text-xs text-slate-600">External threats always exist. The question is how you control access and blast radius.</p>
                   )}
@@ -102,10 +102,12 @@ export default function ThreatLandscapeLab() {
                   <Package className="h-5 w-5 text-amber-600" aria-hidden="true" />
                   <p className="text-sm font-semibold text-slate-900">Supply chain risk</p>
                 </div>
-                <label className="flex items-center gap-2 text-sm text-slate-800">
-                  <input type="checkbox" checked={supplyChain} onChange={(e) => setSupplyChain(e.target.checked)} className="h-4 w-4 rounded border-slate-300 text-amber-600 focus:ring-amber-200" />
-                  Dependencies, vendors, and build pipeline risk
-                </label>
+                <SwitchRow
+                  label="Dependencies, vendors, and build pipeline risk"
+                  checked={supplyChain}
+                  tone="amber"
+                  onCheckedChange={setSupplyChain}
+                />
                 <p className="text-xs text-slate-600">Supply chain risk often bypasses perimeter controls by abusing trusted relationships.</p>
               </div>
             </div>

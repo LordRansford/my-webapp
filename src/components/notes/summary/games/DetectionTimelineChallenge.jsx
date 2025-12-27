@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { track } from "@/lib/analytics/track";
+import MiniSwitch from "@/components/ui/MiniSwitch";
 
 const stages = ["Recon", "Initial access", "Privilege escalation", "Data access", "Exfiltration"];
 const signals = [
@@ -64,20 +65,21 @@ export default function DetectionTimelineChallenge({ onComplete }) {
               <tr key={sig.id} className="border-t">
                 <td className="px-3 py-2 font-semibold text-gray-900">
                   {sig.label}
-                  <div className="text-sm text-gray-500">Cost {sig.cost} · Noise {sig.noise}</div>
+                  <div className="text-sm text-gray-500">Cost {sig.cost}. Noise {sig.noise}.</div>
                 </td>
                 {stages.map((stage) => {
                   const key = `${sig.id}-${stage}`;
                   const active = placed[sig.id]?.includes(stage);
                   return (
                     <td key={key} className="px-3 py-2">
-                      <input
-                        type="checkbox"
-                        checked={active}
-                        onChange={(e) =>
+                      <MiniSwitch
+                        checked={!!active}
+                        tone="sky"
+                        ariaLabel={`Enable ${sig.label} at stage ${stage}`}
+                        onCheckedChange={(checked) =>
                           setPlaced((prev) => {
                             const list = new Set(prev[sig.id] || []);
-                            if (e.target.checked) list.add(stage);
+                            if (checked) list.add(stage);
                             else list.delete(stage);
                             return { ...prev, [sig.id]: Array.from(list) };
                           })
@@ -115,7 +117,7 @@ export default function DetectionTimelineChallenge({ onComplete }) {
             ? `Detected at ${stages[detectionStep]}.`
             : "No detection before exfiltration. Add better signals earlier."}
         </p>
-        <p className="text-xs text-gray-600">Cost {cost} · Noise score {noise}. Balance both.</p>
+        <p className="text-xs text-gray-600">Cost {cost}. Noise score {noise}. Balance both.</p>
       </div>
 
       <div className="flex flex-wrap gap-2">

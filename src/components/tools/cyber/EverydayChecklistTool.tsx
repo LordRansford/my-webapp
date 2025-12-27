@@ -3,6 +3,7 @@
 import React, { useMemo, useState } from "react";
 import { ClipboardCheck } from "lucide-react";
 import { CyberToolCard } from "./CyberToolCard";
+import SwitchRow from "@/components/ui/SwitchRow";
 
 type Role = "Employee" | "Engineer" | "Analyst";
 
@@ -34,8 +35,6 @@ export function EverydayChecklistTool() {
   const items = CHECKS[role];
   const completed = useMemo(() => items.filter((i) => done[i]).length, [items, done]);
   const percent = Math.round((completed / items.length) * 100);
-
-  const toggle = (item: string) => setDone((prev) => ({ ...prev, [item]: !prev[item] }));
 
   return (
     <CyberToolCard
@@ -69,18 +68,13 @@ export function EverydayChecklistTool() {
 
         <div className="space-y-2">
           {items.map((item) => (
-            <label
+            <SwitchRow
               key={item}
-              className="flex items-start gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-2 text-xs sm:text-sm text-slate-800 cursor-pointer"
-            >
-              <input
-                type="checkbox"
-                checked={!!done[item]}
-                onChange={() => toggle(item)}
-                className="mt-0.5 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500"
-              />
-              <span>{item}</span>
-            </label>
+              label={item}
+              checked={!!done[item]}
+              onCheckedChange={(checked) => setDone((prev) => ({ ...prev, [item]: checked }))}
+              tone="sky"
+            />
           ))}
         </div>
 

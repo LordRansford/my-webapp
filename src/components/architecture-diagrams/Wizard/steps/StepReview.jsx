@@ -33,7 +33,7 @@ export default function StepReview({ input, validation, onGenerate, generationEn
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-semibold text-slate-900">Review ✅</h2>
+        <h2 className="text-xl font-semibold text-slate-900">Review</h2>
         <p className="mt-1 text-sm text-slate-700">This is a read only summary of your inputs.</p>
       </div>
 

@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import { LifeBuoy, RotateCcw, Clock } from "lucide-react";
+import SwitchRow from "@/components/ui/SwitchRow";
 
 export default function ResilienceRecoveryLab() {
   const [rto, setRto] = useState(2);
@@ -67,19 +68,15 @@ export default function ResilienceRecoveryLab() {
               <RotateCcw className="h-5 w-5 text-amber-600" aria-hidden="true" />
               <h3 className="text-xl font-semibold text-slate-900">2. Backup and continuity basics</h3>
             </div>
-            <div className="space-y-2 text-sm text-slate-800">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" checked={backupTests} onChange={(e) => setBackupTests(e.target.checked)} className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-200" />
-                Restore tests are scheduled and tracked
-              </label>
-              <label className="flex items-center gap-2">
-                <input type="checkbox" checked={immutableBackups} onChange={(e) => setImmutableBackups(e.target.checked)} className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-200" />
-                Backups are protected against deletion or encryption
-              </label>
-              <label className="flex items-center gap-2">
-                <input type="checkbox" checked={runbooks} onChange={(e) => setRunbooks(e.target.checked)} className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-200" />
-                Runbooks exist for common failure modes
-              </label>
+            <div className="space-y-2">
+              <SwitchRow label="Restore tests are scheduled and tracked" checked={backupTests} tone="emerald" onCheckedChange={setBackupTests} />
+              <SwitchRow
+                label="Backups are protected against deletion or encryption"
+                checked={immutableBackups}
+                tone="emerald"
+                onCheckedChange={setImmutableBackups}
+              />
+              <SwitchRow label="Runbooks exist for common failure modes" checked={runbooks} tone="emerald" onCheckedChange={setRunbooks} />
             </div>
             <div className="rounded-2xl border border-slate-200 bg-white p-4">
               <p className="text-sm font-semibold text-slate-900">Guidance</p>

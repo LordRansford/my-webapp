@@ -24,12 +24,12 @@ export function wizardCopy(audience: Audience) {
       systemIntro: "Name your system and describe what it does.",
       systemDescriptionHelp: "Keep it short and true. Mention who uses it and what happens.",
       containersHelp: "A container is a big building block, like a website, an app, or a database.",
-      containersIntro: "Add the big pieces so your diagram is clear. 🧩",
+      containersIntro: "Add the big pieces so your diagram is clear.",
       flowsHelp: "A flow is a message or action that moves from one thing to another. Example: Customer logs in.",
-      flowsIntro: "Add the most important actions your system does. 🔁",
+      flowsIntro: "Add the most important actions your system does.",
       securityHelp:
         "Security is about keeping the right things private and letting the right people in. Mark sensitive data and boundaries carefully.",
-      securityIntro: "Mark what needs extra care, like private data and admin access. 🔒",
+      securityIntro: "Mark what needs extra care, like private data and admin access.",
       professionalsReminder: null,
     };
   }

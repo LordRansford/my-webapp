@@ -2,7 +2,7 @@ import type { ArchitectureTemplate } from "./types";
 
 export const studentsTodoLoginTemplate: ArchitectureTemplate = {
   id: "students-todo-login",
-  title: "Todo app with login ✅",
+  title: "Todo app with login",
   description: "A simple web app with login, an API, and a database to store tasks.",
   intendedAudience: "students",
   diagramTypesIncluded: ["Context", "Container", "Deployment", "Data Flow", "Sequence"],

@@ -3,6 +3,7 @@
 import React, { useMemo, useState } from "react";
 import { Palette, FolderTree, MonitorSmartphone } from "lucide-react";
 import { SecurityBanner } from "@/components/dev-studios/SecurityBanner";
+import SwitchRow from "@/components/ui/SwitchRow";
 
 type Framework = "React" | "Vue" | "Svelte" | "Vanilla JavaScript";
 type Styling = "Tailwind style utility classes" | "Component library" | "Plain CSS";
@@ -151,17 +152,15 @@ export default function FrontendLab() {
               </div>
               <div className="space-y-3">
                 <p className="text-sm text-slate-700">Component checklist</p>
-                <div className="space-y-2 text-sm text-slate-800">
+                <div className="space-y-2">
                   {checklistItems.map((item) => (
-                    <label key={item} className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={checks[item]}
-                        onChange={(e) => setChecks((prev) => ({ ...prev, [item]: e.target.checked }))}
-                        className="h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-200"
-                      />
-                      <span>{item}</span>
-                    </label>
+                    <SwitchRow
+                      key={item}
+                      label={item}
+                      checked={checks[item]}
+                      tone="emerald"
+                      onCheckedChange={(checked) => setChecks((prev) => ({ ...prev, [item]: checked }))}
+                    />
                   ))}
                 </div>
                 <div className="space-y-1">
@@ -217,7 +216,7 @@ export default function FrontendLab() {
               <div className="space-y-1 text-xs text-slate-700">
                 <p className="font-semibold text-slate-800">Accessibility hints</p>
                 <ul className="list-disc pl-4 space-y-1">
-                  <li>Body text ≥ 16px; if you squint on a phone, bump it.</li>
+                  <li>Body text should be at least 16px. If you squint on a phone, bump it.</li>
                   <li>Contrast: text on white/soft backgrounds should read at a glance.</li>
                   <li>Focus: tab through; outlines must stay visible on buttons and links.</li>
                 </ul>

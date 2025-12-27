@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import ControlRoom from "./sections/ControlRoom";
 import FrontendLab from "./sections/FrontendLab";
 import BackendApiLab from "./sections/BackendApiLab";
@@ -34,22 +35,47 @@ const tabs = [
 ];
 
 export default function DevStudiosPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState(tabs[0].id);
   const [openJourney, setOpenJourney] = useState<string | null>(null);
   const ActiveComp = useMemo(() => tabs.find((t) => t.id === activeTab)?.component || ControlRoom, [activeTab]);
+
+  const selectTab = useCallback(
+    (tabId: string) => {
+      setActiveTab(tabId);
+      if (!router.isReady) return;
+      const nextQuery = { ...router.query, tab: tabId };
+      router.replace({ pathname: router.pathname, query: nextQuery }, undefined, { shallow: true, scroll: false });
+    },
+    [router]
+  );
+
+  useEffect(() => {
+    if (!router.isReady) return;
+    const tabParam = typeof router.query.tab === "string" ? router.query.tab : null;
+    if (!tabParam) return;
+    if (!tabs.some((t) => t.id === tabParam)) return;
+    setActiveTab(tabParam);
+  }, [router.isReady, router.query.tab]);
 
   return (
     <div className="page-content max-w-6xl mx-auto space-y-8">
       <div className="rounded-3xl bg-gradient-to-br from-slate-50 via-sky-50/60 to-slate-50 ring-1 ring-slate-100 px-6 py-6 sm:px-8 sm:py-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] space-y-3">
         <div className="inline-flex items-center gap-2 rounded-2xl bg-slate-900 text-white px-3 py-1 text-xs font-semibold">
           New
-          <span aria-hidden="true">•</span> Ransford&apos;s Software Development Studio
+          <span aria-hidden="true">·</span> Ransford&apos;s Software Development Studio
         </div>
         <h1 className="text-3xl font-semibold text-slate-900">Ransford&apos;s Software Development Studio</h1>
         <p className="text-base text-slate-700 max-w-3xl leading-relaxed">
           This is my workshop for shipping software safely. We sketch systems, pick stacks, check security, and get friendly nudges from a local “agent”. No cloud calls, no telemetry. Just guidance, templates and checklists that behave.
         </p>
         <div className="flex flex-wrap items-center gap-2 text-sm">
+          <Link href="/studios" className="font-semibold text-emerald-700 hover:underline">
+            Back to studios hub
+          </Link>
+          <span className="text-slate-300" aria-hidden="true">
+            |
+          </span>
           <Link href="/software-architecture" className="font-semibold text-emerald-700 hover:underline">
             Back to software architecture notes
           </Link>
@@ -64,6 +90,36 @@ export default function DevStudiosPage() {
 
       <SecurityNotice />
       <SecurityBanner />
+
+      <section aria-label="Studio map" className="rounded-3xl bg-white ring-1 ring-slate-100 shadow-[0_12px_30px_rgba(15,23,42,0.06)] p-6 space-y-4">
+        <div className="space-y-1">
+          <p className="text-sm font-semibold text-slate-900">Studio map</p>
+          <p className="text-sm text-slate-700 max-w-3xl">
+            Jump straight to a lab. The URL updates, so you can share a specific view with learners or teammates.
+          </p>
+        </div>
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          {tabs
+            .filter((t) => t.id !== "agent")
+            .map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => selectTab(t.id)}
+                className={`rounded-2xl border px-4 py-3 text-left text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 ${
+                  activeTab === t.id
+                    ? "border-slate-900 bg-slate-900 text-white"
+                    : "border-slate-200 bg-white text-slate-900 hover:bg-slate-50"
+                }`}
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <span className="min-w-0 break-words">{t.label}</span>
+                  <span className="text-xs opacity-80">{activeTab === t.id ? "Open" : "Go"}</span>
+                </div>
+              </button>
+            ))}
+        </div>
+      </section>
 
       <section aria-labelledby="guided-journeys-title" className="space-y-3">
         <div className="rounded-3xl bg-white ring-1 ring-slate-100 shadow-[0_12px_30px_rgba(15,23,42,0.06)] p-6 space-y-3">
@@ -390,7 +446,7 @@ export default function DevStudiosPage() {
               role="tab"
               aria-selected={activeTab === tab.id}
               aria-controls={`panel-${tab.id}`}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => selectTab(tab.id)}
               className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 ${
                 activeTab === tab.id
                   ? "bg-slate-900 text-white border-slate-900"

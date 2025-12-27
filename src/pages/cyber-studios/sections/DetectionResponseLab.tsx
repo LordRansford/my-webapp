@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import { Siren, Activity, Bell } from "lucide-react";
+import SwitchRow from "@/components/ui/SwitchRow";
 
 export default function DetectionResponseLab() {
   const [logging, setLogging] = useState(2);
@@ -57,10 +58,12 @@ export default function DetectionResponseLab() {
                 <input type="range" min={0} max={4} step={1} value={x.value} onChange={(e) => x.set(Number(e.target.value))} className="w-full" />
               </div>
             ))}
-            <label className="flex items-center gap-2 text-sm text-slate-800">
-              <input type="checkbox" checked={postmortem} onChange={(e) => setPostmortem(e.target.checked)} className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-200" />
-              Run post-incident reviews and track actions
-            </label>
+            <SwitchRow
+              label="Run post-incident reviews and track actions"
+              checked={postmortem}
+              tone="emerald"
+              onCheckedChange={setPostmortem}
+            />
             <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
               <p className="text-sm font-semibold text-slate-900">Interpretation</p>
               <p className="mt-2 text-sm text-slate-700">{fatigueRisk}</p>

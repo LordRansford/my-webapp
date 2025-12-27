@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import { ShieldCheck, Eye, FileCheck2, AlertTriangle } from "lucide-react";
+import SwitchRow from "@/components/ui/SwitchRow";
 
 type UseCase = "Low risk assist" | "Moderate risk workflow" | "High impact decision";
 
@@ -91,23 +92,31 @@ export default function ResponsibleAiLab() {
               <FileCheck2 className="h-5 w-5 text-emerald-600" aria-hidden="true" />
               <h3 className="text-xl font-semibold text-slate-900">2. Responsible AI checklist</h3>
             </div>
-            <div className="space-y-2 text-sm text-slate-800">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" checked={transparency} onChange={(e) => setTransparency(e.target.checked)} className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-200" />
-                Transparency: users know AI is used and what it can fail at
-              </label>
-              <label className="flex items-center gap-2">
-                <input type="checkbox" checked={accountability} onChange={(e) => setAccountability(e.target.checked)} className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-200" />
-                Accountability: a named owner exists for outcomes and incidents
-              </label>
-              <label className="flex items-center gap-2">
-                <input type="checkbox" checked={safetyControls} onChange={(e) => setSafetyControls(e.target.checked)} className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-200" />
-                Safety: guardrails, escalation, monitoring, and audits exist
-              </label>
-              <label className="flex items-center gap-2">
-                <input type="checkbox" checked={inappropriateUse} onChange={(e) => setInappropriateUse(e.target.checked)} className="h-4 w-4 rounded border-slate-300 text-rose-600 focus:ring-rose-200" />
-                This is an inappropriate use case (too high impact or too unclear)
-              </label>
+            <div className="space-y-2">
+              <SwitchRow
+                label="Transparency. Users know AI is used and what it can fail at"
+                checked={transparency}
+                tone="emerald"
+                onCheckedChange={setTransparency}
+              />
+              <SwitchRow
+                label="Accountability. A named owner exists for outcomes and incidents"
+                checked={accountability}
+                tone="emerald"
+                onCheckedChange={setAccountability}
+              />
+              <SwitchRow
+                label="Safety. Guardrails, escalation, monitoring, and audits exist"
+                checked={safetyControls}
+                tone="emerald"
+                onCheckedChange={setSafetyControls}
+              />
+              <SwitchRow
+                label="This is an inappropriate use case. Too high impact or too unclear"
+                checked={inappropriateUse}
+                tone="rose"
+                onCheckedChange={setInappropriateUse}
+              />
             </div>
             <div className="rounded-2xl border border-slate-200 bg-white p-4">
               <p className="text-sm font-semibold text-slate-900">Status</p>

@@ -31,7 +31,6 @@ export default function ExportActions({ formats, disabled, disabledReason, onExp
             aria-disabled={disabled}
             aria-describedby={disabled ? "export-disabled-reason" : undefined}
           >
-            <span aria-hidden="true">⬇️</span>
             {formatLabels[format]}
           </button>
         ))}

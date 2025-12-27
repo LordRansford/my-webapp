@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import { Code, Database, ShieldCheck } from "lucide-react";
+import SwitchRow from "@/components/ui/SwitchRow";
 
 type Area = "Secure development principles" | "Common application risks" | "Data protection basics" | "Handling user data";
 
@@ -114,7 +115,7 @@ export default function AppDataSecurityLab() {
               <ShieldCheck className="h-5 w-5 text-emerald-600" aria-hidden="true" />
               <h3 className="text-xl font-semibold text-slate-900">Quick checklist</h3>
             </div>
-            <div className="space-y-2 text-sm text-slate-800">
+            <div className="space-y-2">
               {[
                 { key: "defaults", label: "Secure defaults", v: secureDefaults, set: setSecureDefaults },
                 { key: "validation", label: "Input validation at boundaries", v: inputValidation, set: setInputValidation },
@@ -123,10 +124,7 @@ export default function AppDataSecurityLab() {
                 { key: "rest", label: "Encryption at rest where appropriate", v: encryptionAtRest, set: setEncryptionAtRest },
                 { key: "logs", label: "Avoid logging sensitive data", v: loggingSensitive, set: setLoggingSensitive },
               ].map((x) => (
-                <label key={x.key} className="flex items-center gap-2">
-                  <input type="checkbox" checked={x.v} onChange={(e) => x.set(e.target.checked)} className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-200" />
-                  <span>{x.label}</span>
-                </label>
+                <SwitchRow key={x.key} label={x.label} checked={x.v} tone="emerald" onCheckedChange={x.set} />
               ))}
             </div>
             <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">

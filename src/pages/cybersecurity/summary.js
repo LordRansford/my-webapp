@@ -347,6 +347,12 @@ export default function CyberSummary() {
               >
                 URL safety check
               </Link>
+              <Link
+                href="/cyber-studios"
+                className="chip chip--ghost focus:outline-none focus:ring focus:ring-blue-200"
+              >
+                Open the cybersecurity studio
+              </Link>
             </div>
           </div>
         </div>

@@ -2,7 +2,7 @@ import type { ArchitectureTemplate } from "./types";
 
 export const cyberZeroTrustWebAppTemplate: ArchitectureTemplate = {
   id: "cyber-zero-trust-web-app",
-  title: "Zero trust web app 🔒",
+  title: "Zero trust web app",
   description: "Identity provider, policy enforcement, internal services, and logging and monitoring for security review.",
   intendedAudience: "professionals",
   diagramTypesIncluded: ["Context", "Container", "Deployment", "Data Flow", "Sequence"],

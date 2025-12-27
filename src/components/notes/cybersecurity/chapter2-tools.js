@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useEffect } from "react";
 import ToolCard from "@/components/notes/ToolCard";
+import SwitchRow from "@/components/ui/SwitchRow";
 
 export function PacketJourneyTool() {
   const [text, setText] = useState("Hello world from packets");
@@ -156,9 +157,7 @@ export function DNSJourney() {
         <span className="eyebrow">Resolver</span> {poisoned ? "Returns malicious IP" : "Returns correct IP"}
       </div>
       <p className="muted">If poisoned, traffic goes to an attacker-controlled host even with encryption.</p>
-      <label className="control">
-        <input type="checkbox" checked={poisoned} onChange={(e) => setPoisoned(e.target.checked)} /> Simulate cache poisoning
-      </label>
+      <SwitchRow label="Simulate cache poisoning" checked={poisoned} tone="amber" onCheckedChange={setPoisoned} />
       <p className="status">
         <span className="eyebrow">Outcome</span> {poisoned ? "Redirection risk" : "Trusted destination"}
       </p>
@@ -277,9 +276,7 @@ export function IntegrityLab() {
         <span>Shared secret</span>
         <input value={secret} onChange={(e) => setSecret(e.target.value)} />
       </label>
-      <label className="control">
-        <input type="checkbox" checked={tamper} onChange={(e) => setTamper(e.target.checked)} /> Simulate tampering
-      </label>
+      <SwitchRow label="Simulate tampering" checked={tamper} tone="rose" onCheckedChange={setTamper} />
       <p className="mono">{hashValue || "..."}</p>
       <p className="muted">If tampered, the verifier will detect a mismatch.</p>
     </ToolCard>

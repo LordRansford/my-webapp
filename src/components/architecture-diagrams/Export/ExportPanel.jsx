@@ -5,6 +5,7 @@ import { downloadSvg } from "@/lib/architecture-diagrams/export/svg";
 import { downloadPng } from "@/lib/architecture-diagrams/export/png";
 import { openPrintPreview } from "./PrintView";
 import { emitArchitectureTelemetry } from "@/lib/architecture-diagrams/telemetry/client";
+import SwitchRow from "@/components/ui/SwitchRow";
 
 export default function ExportPanel({
   svgText,
@@ -236,7 +237,7 @@ export default function ExportPanel({
               disabled ? "bg-slate-200 text-slate-500 cursor-not-allowed" : "border border-slate-200 bg-white text-slate-800 hover:bg-slate-50"
             }`}
           >
-            Download SVG 📄
+            Download SVG
           </button>
           <button
             type="button"
@@ -249,7 +250,7 @@ export default function ExportPanel({
               disabled ? "bg-slate-200 text-slate-500 cursor-not-allowed" : "border border-slate-200 bg-white text-slate-800 hover:bg-slate-50"
             }`}
           >
-            Download PNG 🖼️
+            Download PNG
           </button>
         </div>
       </div>
@@ -259,24 +260,22 @@ export default function ExportPanel({
 
       <div className="mt-4">
         <div className="grid gap-2 sm:grid-cols-2">
-          <label className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-800">
-            <span className="font-semibold">Include watermark: Draft architecture</span>
-            <input
-              type="checkbox"
-              checked={includeWatermark}
-              onChange={(e) => setIncludeWatermark(e.target.checked)}
-              className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-400"
-            />
-          </label>
-          <label className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-800">
-            <span className="font-semibold">Include brief and ADR appendix</span>
-            <input
-              type="checkbox"
-              checked={includeAppendix}
-              onChange={(e) => setIncludeAppendix(e.target.checked)}
-              className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-400"
-            />
-          </label>
+          <SwitchRow
+            label="Include watermark"
+            description="Adds Draft architecture to exports."
+            checked={includeWatermark}
+            onCheckedChange={setIncludeWatermark}
+            tone="slate"
+            className="py-2"
+          />
+          <SwitchRow
+            label="Include appendix"
+            description="Adds brief and ADR stubs."
+            checked={includeAppendix}
+            onCheckedChange={setIncludeAppendix}
+            tone="slate"
+            className="py-2"
+          />
         </div>
       </div>
 
