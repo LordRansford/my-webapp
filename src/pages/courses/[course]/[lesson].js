@@ -50,7 +50,7 @@ export default function LessonPage({ course, lesson, mdx, lessons }) {
 
   return (
     <Layout
-      title={`${lesson.meta.title} · ${course.meta.title}`}
+      title={`${lesson.meta.title} - ${course.meta.title}`}
       description={lesson.meta.description || course.meta.tagline}
     >
       <CourseLessonTemplate
@@ -60,14 +60,14 @@ export default function LessonPage({ course, lesson, mdx, lessons }) {
           <nav className="flex flex-wrap items-center justify-between gap-3" aria-label="Lesson navigation">
             {prevLesson ? (
               <Link href={`/courses/${course.slug}/${prevLesson.slug}`} className="button ghost" rel="prev">
-                ← {prevLesson.meta.title || "Previous"}
+                {"<-"} {prevLesson.meta.title || "Previous"}
               </Link>
             ) : (
               <span />
             )}
             {nextLesson ? (
               <Link href={`/courses/${course.slug}/${nextLesson.slug}`} className="button primary" rel="next">
-                {nextLesson.meta.title || "Next"} →
+                {nextLesson.meta.title || "Next"} {"->"}
               </Link>
             ) : (
               <span />
