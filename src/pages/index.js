@@ -14,7 +14,18 @@ import {
   Users,
   ArrowRight,
   CheckCircle2,
+  Gamepad2,
+  BookOpenText,
+  Settings,
+  Volume2,
+  Highlighter,
+  Contrast,
+  Minimize,
+  GraduationCap,
+  Map,
 } from "lucide-react";
+import { getAllPosts } from "@/lib/posts";
+import { siteStructure } from "@/lib/sitemap";
 
 const subjects = [
   {
@@ -51,9 +62,10 @@ const subjects = [
 
 const platformItems = [
   { title: "Studios", description: "Guided spaces for deeper experiments.", href: "/studios", Icon: FlaskConical, cta: "Explore" },
-  { title: "Dashboards", description: "Interactive boards that turn concepts into decisions.", href: "/dashboards", Icon: LayoutDashboard, cta: "Try" },
+  { title: "Dashboards", description: "Interactive boards that turn concepts into decisions.", href: "/dashboards/ai", Icon: LayoutDashboard, cta: "Try" },
   { title: "Templates", description: "Evidence-friendly templates for planning and reporting.", href: "/templates", Icon: FileText, cta: "Browse" },
   { title: "Tools", description: "Small labs and helpers you can run quickly.", href: "/tools", Icon: Wrench, cta: "Open" },
+  { title: "Games", description: "Offline-friendly mini games for practice and fun.", href: "/games", Icon: Gamepad2, cta: "Play" },
 ];
 
 const audiences = [
@@ -65,10 +77,11 @@ const audiences = [
 ];
 
 export async function getStaticProps() {
-  return { props: {}, revalidate: 300 };
+  const posts = getAllPosts();
+  return { props: { posts }, revalidate: 300 };
 }
 
-export default function Home() {
+export default function Home({ posts }) {
   return (
     <Layout
       title="Ransford's Notes | Labs first"
@@ -190,7 +203,7 @@ export default function Home() {
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Platform</p>
           <h2 className="mt-2 text-2xl font-semibold text-slate-900">Studios, labs, and tools</h2>
           <p className="mt-2 text-sm text-slate-700">Quick experiments when you need clarity, not another tab of theory.</p>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {platformItems.map(({ title, description, href, Icon, cta }) => (
               <div key={title} className="rounded-2xl border border-slate-200 bg-slate-50/60 p-5">
                 <Icon className="h-6 w-6 text-slate-900" aria-hidden="true" />
@@ -268,7 +281,141 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 8) Footer CTA */}
+      {/* 8) Blog Posts */}
+      {posts.length > 0 && (
+        <section className="mx-auto max-w-6xl px-4 py-12 md:px-6 lg:px-8">
+          <div className="flex items-end justify-between gap-4 mb-6">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Articles</p>
+              <h2 className="mt-2 text-2xl font-semibold text-slate-900">Blog Posts & Articles</h2>
+              <p className="mt-2 text-sm text-slate-700">In-depth articles and guides to deepen your understanding.</p>
+            </div>
+            <Link href="/posts" className="text-sm font-semibold text-slate-900 hover:text-slate-700">
+              View all posts →
+            </Link>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {posts.slice(0, 3).map((post) => (
+              <Link
+                key={post.slug}
+                href={`/posts/${post.slug}`}
+                className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm hover:border-slate-300 hover:shadow-md transition"
+              >
+                <BookOpenText className="h-6 w-6 text-slate-900 mb-3" aria-hidden="true" />
+                <h3 className="text-lg font-semibold text-slate-900">{post.title}</h3>
+                {post.excerpt && <p className="mt-2 text-sm text-slate-700 line-clamp-2">{post.excerpt}</p>}
+                <span className="mt-4 inline-block text-sm font-semibold text-slate-900">Read article →</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* 9) Accessibility Features */}
+      <section className="mx-auto max-w-6xl px-4 py-12 md:px-6 lg:px-8">
+        <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 via-blue-50/60 to-slate-50 p-8 shadow-sm">
+          <div className="flex items-center gap-3 mb-6">
+            <Settings className="h-6 w-6 text-slate-900" aria-hidden="true" />
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Accessibility</p>
+              <h2 className="mt-2 text-2xl font-semibold text-slate-900">Built for Everyone</h2>
+            </div>
+          </div>
+          <p className="text-base text-slate-700 mb-6 max-w-3xl">
+            This website is designed to be accessible to all users, including children, neurodivergent individuals, and people with disabilities. All accessibility features are free, browser-only, and privacy-preserving.
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="rounded-2xl border border-slate-200 bg-white/80 p-5">
+              <Volume2 className="h-6 w-6 text-slate-900 mb-3" aria-hidden="true" />
+              <h3 className="text-base font-semibold text-slate-900">Read Aloud</h3>
+              <p className="mt-2 text-sm text-slate-700">
+                Have any page read to you using your browser&apos;s built-in speech. Works on any device, no account needed.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-white/80 p-5">
+              <Highlighter className="h-6 w-6 text-slate-900 mb-3" aria-hidden="true" />
+              <h3 className="text-base font-semibold text-slate-900">Text Highlighting</h3>
+              <p className="mt-2 text-sm text-slate-700">
+                See words as they&apos;re read. Toggle highlighting on or off without affecting page layout.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-white/80 p-5">
+              <Contrast className="h-6 w-6 text-slate-900 mb-3" aria-hidden="true" />
+              <h3 className="text-base font-semibold text-slate-900">High Contrast</h3>
+              <p className="mt-2 text-sm text-slate-700">
+                Switch to high contrast mode for better visibility. Your preference is saved automatically.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-white/80 p-5">
+              <Minimize className="h-6 w-6 text-slate-900 mb-3" aria-hidden="true" />
+              <h3 className="text-base font-semibold text-slate-900">Reduce Motion</h3>
+              <p className="mt-2 text-sm text-slate-700">
+                Respects your motion preferences. Animations are minimized when you prefer reduced motion.
+              </p>
+            </div>
+          </div>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link href="/accessibility" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-900 underline decoration-slate-300 underline-offset-4 hover:decoration-slate-600">
+              Learn more about accessibility <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </div>
+          <p className="mt-4 text-xs text-slate-600">
+            Look for the accessibility settings icon (⚙️) in the bottom-right corner of any page to customize your experience.
+          </p>
+        </div>
+      </section>
+
+      {/* 10) Complete Discovery */}
+      <section className="mx-auto max-w-6xl px-4 py-12 md:px-6 lg:px-8">
+        <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+          <div className="flex items-center gap-3 mb-6">
+            <Map className="h-6 w-6 text-slate-900" aria-hidden="true" />
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Navigation</p>
+              <h2 className="mt-2 text-2xl font-semibold text-slate-900">Find Everything</h2>
+            </div>
+          </div>
+          <p className="text-base text-slate-700 mb-6 max-w-3xl">
+            Every page on this website is accessible through links. Nothing is hidden. Use the site map for a complete overview of all available content.
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <Link
+              href="/sitemap"
+              className="rounded-2xl border border-slate-200 bg-slate-50/60 p-5 hover:border-slate-300 hover:bg-slate-100 transition"
+            >
+              <Map className="h-6 w-6 text-slate-900 mb-3" aria-hidden="true" />
+              <h3 className="text-base font-semibold text-slate-900">Complete Site Map</h3>
+              <p className="mt-2 text-sm text-slate-700">See every page organized by category.</p>
+            </Link>
+            <Link
+              href="/courses"
+              className="rounded-2xl border border-slate-200 bg-slate-50/60 p-5 hover:border-slate-300 hover:bg-slate-100 transition"
+            >
+              <GraduationCap className="h-6 w-6 text-slate-900 mb-3" aria-hidden="true" />
+              <h3 className="text-base font-semibold text-slate-900">All Courses</h3>
+              <p className="mt-2 text-sm text-slate-700">Browse all learning paths and courses.</p>
+            </Link>
+            <Link
+              href="/studios"
+              className="rounded-2xl border border-slate-200 bg-slate-50/60 p-5 hover:border-slate-300 hover:bg-slate-100 transition"
+            >
+              <FlaskConical className="h-6 w-6 text-slate-900 mb-3" aria-hidden="true" />
+              <h3 className="text-base font-semibold text-slate-900">All Studios</h3>
+              <p className="mt-2 text-sm text-slate-700">Explore interactive workspaces and labs.</p>
+            </Link>
+            <Link
+              href="/games"
+              className="rounded-2xl border border-slate-200 bg-slate-50/60 p-5 hover:border-slate-300 hover:bg-slate-100 transition"
+            >
+              <Gamepad2 className="h-6 w-6 text-slate-900 mb-3" aria-hidden="true" />
+              <h3 className="text-base font-semibold text-slate-900">All Games</h3>
+              <p className="mt-2 text-sm text-slate-700">Find all games and practice activities.</p>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* 11) Footer CTA */}
       <section className="mx-auto max-w-6xl px-4 pb-16 md:px-6 lg:px-8">
         <div className="flex flex-col items-start justify-between gap-4 rounded-3xl border border-slate-200 bg-slate-900 p-8 text-white shadow-sm md:flex-row md:items-center">
           <div>
@@ -280,8 +427,8 @@ export default function Home() {
             <Link href="/courses" className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-100">
               Start learning <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
-            <Link href="/tools" className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-transparent px-5 py-2 text-sm font-semibold text-white hover:bg-white/10">
-              Explore the platform <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            <Link href="/sitemap" className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-transparent px-5 py-2 text-sm font-semibold text-white hover:bg-white/10">
+              Explore everything <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
         </div>
