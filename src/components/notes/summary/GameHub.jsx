@@ -77,7 +77,7 @@ export default function GameHub() {
             <div className="mt-1 text-lg font-semibold text-gray-900">{card.title}</div>
             <div className="mt-2 text-sm text-gray-700">{card.desc}</div>
             <div className="mt-3 text-xs text-gray-600">
-              {card.time} • {card.difficulty}
+              {card.time} | {card.difficulty}
             </div>
           </button>
         ))}

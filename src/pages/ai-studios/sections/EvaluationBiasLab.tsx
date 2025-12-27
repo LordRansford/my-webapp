@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import { ClipboardCheck, Users, Scale } from "lucide-react";
+import SwitchRow from "@/components/ui/SwitchRow";
 
 type Goal = "Accuracy" | "Safety" | "Usefulness";
 
@@ -90,10 +91,12 @@ export default function EvaluationBiasLab() {
                 <input type="range" min={0} max={4} step={1} value={x.value} onChange={(e) => x.set(Number(e.target.value))} className="w-full" />
               </div>
             ))}
-            <label className="flex items-center gap-2 text-sm text-slate-800">
-              <input type="checkbox" checked={humanOversight} onChange={(e) => setHumanOversight(e.target.checked)} className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-200" />
-              Human oversight exists for higher impact decisions
-            </label>
+            <SwitchRow
+              label="Human oversight exists for higher impact decisions"
+              checked={humanOversight}
+              tone="emerald"
+              onCheckedChange={setHumanOversight}
+            />
             <div className="rounded-2xl border border-slate-200 bg-white p-4">
               <p className="text-sm font-semibold text-slate-900">Interpretation</p>
               <ul className="mt-2 list-disc pl-5 text-sm text-slate-700 space-y-1">

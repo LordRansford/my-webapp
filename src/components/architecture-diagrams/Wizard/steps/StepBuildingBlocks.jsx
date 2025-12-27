@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { isProfessionals, wizardCopy } from "@/lib/architecture-diagrams/copy/audience";
+import { wizardCopy } from "@/lib/architecture-diagrams/copy/audience";
 
 const containerTypes = [
   { value: "ui", label: "UI" },
@@ -34,7 +34,7 @@ function RowActions({ onRemove, removeLabel = "Remove" }) {
 
 export default function StepBuildingBlocks({ audience = "students", users, externalSystems, containers, onChange, errors = [] }) {
   const copy = wizardCopy(audience);
-  const title = isProfessionals(audience) ? "Building blocks" : "Building blocks 🧩";
+  const title = "Building blocks";
   const hasNothing = useMemo(() => users.length === 0 && externalSystems.length === 0 && containers.length === 0, [containers.length, externalSystems.length, users.length]);
 
   return (

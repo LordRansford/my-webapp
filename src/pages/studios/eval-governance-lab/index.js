@@ -118,15 +118,15 @@ const answerOptions = [
 ];
 
 function humanDuration(ms) {
-  if (!ms || Number.isNaN(ms)) return "–";
+  if (!ms || Number.isNaN(ms)) return "N/A";
   if (ms < 1000) return `${ms.toFixed(0)} ms`;
   return `${(ms / 1000).toFixed(1)} s`;
 }
 
 function safeDate(dateStr) {
-  if (!dateStr) return "–";
+  if (!dateStr) return "N/A";
   const d = new Date(dateStr);
-  if (Number.isNaN(d.getTime())) return "–";
+  if (Number.isNaN(d.getTime())) return "N/A";
   return d.toLocaleString();
 }
 

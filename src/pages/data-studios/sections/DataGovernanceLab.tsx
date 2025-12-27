@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import { ShieldCheck, Fingerprint, ScrollText } from "lucide-react";
+import SwitchRow from "@/components/ui/SwitchRow";
 
 type Role = "Owner" | "Steward" | "Custodian" | "Consumer";
 
@@ -26,7 +27,7 @@ export default function DataGovernanceLab() {
     lineage: false,
   });
 
-  const [lineage, setLineage] = useState("Source system → operational store → analytics store → KPI dashboard");
+  const [lineage, setLineage] = useState("Source system to operational store to analytics store to KPI dashboard");
   const [metadata, setMetadata] = useState("Definition, owner, refresh frequency, quality rules, access groups");
 
   const readiness = useMemo(() => {
@@ -105,23 +106,21 @@ export default function DataGovernanceLab() {
             <p className="text-sm text-slate-700">
               Policies are the rules that keep decisions consistent. Standards make implementation repeatable. Keep them short and enforceable.
             </p>
-            <div className="space-y-2 text-sm text-slate-800">
+            <div className="space-y-2">
               {[
                 { key: "retention", label: "Retention and deletion rules are defined" },
-                { key: "access", label: "Access is least-privilege with reviews" },
+                { key: "access", label: "Access is least privilege with reviews" },
                 { key: "classification", label: "Data classification exists and is used" },
-                { key: "changeControl", label: "Change control for definitions and schema" },
+                { key: "changeControl", label: "Change control exists for definitions and schema" },
                 { key: "lineage", label: "Lineage is captured and maintained" },
               ].map((x) => (
-                <label key={x.key} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={(policy as any)[x.key]}
-                    onChange={(e) => setPolicy((p) => ({ ...p, [x.key]: e.target.checked }))}
-                    className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-200"
-                  />
-                  <span>{x.label}</span>
-                </label>
+                <SwitchRow
+                  key={x.key}
+                  label={x.label}
+                  checked={(policy as any)[x.key]}
+                  onCheckedChange={(checked) => setPolicy((p) => ({ ...p, [x.key]: checked }))}
+                  tone="emerald"
+                />
               ))}
             </div>
           </div>

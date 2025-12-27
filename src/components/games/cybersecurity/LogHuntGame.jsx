@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import MiniSwitch from "@/components/ui/MiniSwitch";
 
 const LOGS = [
   {
@@ -64,8 +65,8 @@ export default function LogHuntGame() {
     return { totalSuspicious, found, missed };
   }, [selected]);
 
-  const toggle = (id) => {
-    setSelected((prev) => ({ ...prev, [id]: !prev[id] }));
+  const setPick = (id, checked) => {
+    setSelected((prev) => ({ ...prev, [id]: checked }));
   };
 
   const reset = () => {
@@ -115,11 +116,17 @@ export default function LogHuntGame() {
                 return (
                   <tr key={log.id} className={`border-b border-slate-200 align-top ${stateClass}`}>
                     <td className="px-2 py-2">
-                      <input
-                        type="checkbox"
+                      <MiniSwitch
                         checked={!!isChosen}
-                        onChange={() => toggle(log.id)}
-                        className="h-4 w-4 rounded border-slate-300 text-sky-500 focus:ring-sky-300"
+                        onCheckedChange={(checked) => setPick(log.id, checked)}
+                        tone={
+                          show
+                            ? isSuspicious
+                              ? "emerald"
+                              : "rose"
+                            : "sky"
+                        }
+                        ariaLabel={`Mark log line ${log.id} as suspicious`}
                       />
                     </td>
                     <td className="px-2 py-2 text-slate-800">{log.ts}</td>

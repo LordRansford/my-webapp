@@ -13,7 +13,7 @@ const RiskBalancingGame = dynamic(() => import("@/components/games/cybersecurity
 const QuickFireQuizGame = dynamic(() => import("@/components/games/cybersecurity/QuickFireQuizGame"), { ssr: false });
 
 export const metadata = {
-  title: "Cybersecurity Notes – Summary",
+  title: "Cybersecurity Notes - Summary",
   description: "A recap of the cybersecurity notes with concise prompts to reinforce learning.",
 };
 
@@ -23,7 +23,7 @@ export const getServerSideProps = async () => {
 
 export default function CybersecuritySummaryPage() {
   const meta = {
-    title: "Cybersecurity Notes – Summary",
+    title: "Cybersecurity Notes - Summary",
     level: "Summary",
     slug: "/notes/cybersecurity/summary",
     page: 4,

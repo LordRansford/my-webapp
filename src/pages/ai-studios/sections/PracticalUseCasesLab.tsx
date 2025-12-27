@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import { Search, ThumbsUp, Shield, Workflow } from "lucide-react";
+import SwitchRow from "@/components/ui/SwitchRow";
 
 type UseCase = "Search" | "Recommendation" | "Moderation" | "Automation";
 
@@ -107,10 +108,7 @@ export default function PracticalUseCasesLab() {
                 <span>{["Low", "Some", "Medium", "High", "Very high"][risk]}</span>
               </div>
               <input type="range" min={0} max={4} step={1} value={risk} onChange={(e) => setRisk(Number(e.target.value))} className="w-full" />
-              <label className="flex items-center gap-2 text-sm text-slate-800">
-                <input type="checkbox" checked={oversight} onChange={(e) => setOversight(e.target.checked)} className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-200" />
-                Human oversight exists for higher impact actions
-              </label>
+              <SwitchRow label="Human oversight exists for higher impact actions" checked={oversight} tone="emerald" onCheckedChange={setOversight} />
               <p className="text-sm text-slate-700">{stance}</p>
             </div>
           </div>

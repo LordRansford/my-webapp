@@ -87,6 +87,9 @@ export default function CoursesPage({ courses }) {
               <Link href="/tools" className="button primary">
                 Open the labs
               </Link>
+              <Link href="/studios" className="button ghost">
+                Open studios
+              </Link>
               <Link href="/about" className="button ghost">
                 Meet the author
               </Link>

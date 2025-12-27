@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { track } from "@/lib/analytics/track";
+import { Check } from "lucide-react";
 
 const components = ["Browser", "API Gateway", "Auth Service", "Database", "Admin Panel", "Logging"];
 const zones = ["Public", "Semi trusted", "Trusted"];
@@ -62,12 +63,13 @@ export default function TrustBoundaryBuilder({ onComplete }) {
           {components.map((c) => (
             <button
               key={c}
-              className={`rounded-full border px-3 py-1 text-xs ${
+              className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs ${
                 validation[c] ? "bg-emerald-100 border-emerald-400 text-emerald-800" : "bg-white text-gray-800"
               }`}
               onClick={() => setValidation((prev) => ({ ...prev, [c]: !prev[c] }))}
             >
-              {validation[c] ? "✓ " : ""}Validate {c}
+              {validation[c] ? <Check className="h-3.5 w-3.5" aria-hidden="true" /> : null}
+              <span>Validate {c}</span>
             </button>
           ))}
         </div>

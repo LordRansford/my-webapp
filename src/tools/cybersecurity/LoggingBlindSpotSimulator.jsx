@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import SwitchRow from "@/components/ui/SwitchRow";
 
 function log(storageKey, event) {
   const raw = localStorage.getItem(storageKey);
@@ -29,19 +30,30 @@ export default function LoggingBlindSpotSimulator({ storageKey }) {
         <div className="rn-tool-sub">Toggle signals. An attack happens. Did you see it?</div>
       </div>
 
-      <div className="rn-grid rn-grid-2">
-        <label className="rn-choice">
-          <input type="checkbox" checked={auth} onChange={() => setAuth((v) => !v)} />
-          <span className="rn-choice-body">Authentication events</span>
-        </label>
-        <label className="rn-choice">
-          <input type="checkbox" checked={access} onChange={() => setAccess((v) => !v)} />
-          <span className="rn-choice-body">Sensitive endpoint access</span>
-        </label>
-        <label className="rn-choice">
-          <input type="checkbox" checked={db} onChange={() => setDb((v) => !v)} />
-          <span className="rn-choice-body">Database audit logs</span>
-        </label>
+      <div className="rn-grid rn-grid-1">
+        <div className="space-y-2">
+          <SwitchRow
+            label="Authentication events"
+            description="Helps you see account takeovers and suspicious sign-ins."
+            checked={auth}
+            onCheckedChange={setAuth}
+            tone="emerald"
+          />
+          <SwitchRow
+            label="Sensitive endpoint access"
+            description="Shows whether attackers touched admin or high-risk actions."
+            checked={access}
+            onCheckedChange={setAccess}
+            tone="sky"
+          />
+          <SwitchRow
+            label="Database audit logs"
+            description="Gives evidence of reads, writes, and data access at the source of truth."
+            checked={db}
+            onCheckedChange={setDb}
+            tone="indigo"
+          />
+        </div>
       </div>
 
       <div className="rn-actions rn-mt">

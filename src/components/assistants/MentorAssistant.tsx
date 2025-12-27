@@ -310,7 +310,7 @@ export default function MentorAssistant({
                         <a className="underline hover:no-underline" href={s.href}>
                           {s.title}
                         </a>
-                        {s.excerpt ? <span className="text-slate-500"> — {s.excerpt}</span> : null}
+                        {s.excerpt ? <span className="text-slate-500"> | {s.excerpt}</span> : null}
                       </li>
                     ))}
                   </ul>

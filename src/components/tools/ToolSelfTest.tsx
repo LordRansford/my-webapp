@@ -86,7 +86,7 @@ export default function ToolSelfTest({ contract, defaultInputs, examples, onRun 
   return (
     <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 p-4" role="alert">
       <div className="flex items-start gap-3">
-        <span className="text-lg" aria-hidden="true">⚠️</span>
+        <span className="text-lg font-semibold" aria-hidden="true">!</span>
         <div className="flex-1">
           <h3 className="text-sm font-semibold text-amber-900">{testResult.message}</h3>
           {testResult.missingFields && testResult.missingFields.length > 0 && (

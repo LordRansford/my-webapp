@@ -212,6 +212,17 @@ export default function ToolsPage() {
         <p className="lead">
           A compact hub for serious practice. Each tool opens into a dedicated workspace page with clear intent, inputs, outputs, and limits.
         </p>
+        <p className="text-sm text-slate-700">
+          Want a guided project flow instead of a single tool. Try{" "}
+          <Link href="/studios" className="font-semibold text-emerald-700 hover:underline">
+            Studios
+          </Link>{" "}
+          or{" "}
+          <Link href="/dev-studios" className="font-semibold text-emerald-700 hover:underline">
+            Software Development Studio
+          </Link>
+          .
+        </p>
       </header>
 
       <section className="section">

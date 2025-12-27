@@ -96,7 +96,7 @@ export function CreditMeter({
       ? "Loading…"
       : wallet.status === "signed_out"
         ? "Sign in to see credits"
-        : formatMsSafe(freeRemainingMs) ?? "—";
+        : formatMsSafe(freeRemainingMs) ?? "N/A";
 
   return (
     <section className="rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm" aria-label="Credits and compute">
@@ -125,9 +125,9 @@ export function CreditMeter({
           ) : estimate ? (
             <>
               <div className="mt-1 text-sm font-semibold text-slate-900">
-                {estimate.willChargeCredits ? `${formatCreditsSafe(estimate.estimatedCredits) ?? "—"} credits` : "0 credits"}
+                {estimate.willChargeCredits ? `${formatCreditsSafe(estimate.estimatedCredits) ?? "N/A"} credits` : "0 credits"}
               </div>
-              <div className="mt-1 text-xs text-slate-700">Estimated duration: {formatMsSafe(estimate.estimatedDurationMs) ?? "—"}</div>
+              <div className="mt-1 text-xs text-slate-700">Estimated duration: {formatMsSafe(estimate.estimatedDurationMs) ?? "N/A"}</div>
             </>
           ) : (
             <div className="mt-1 text-sm text-slate-700">Estimate unavailable</div>
@@ -146,16 +146,16 @@ export function CreditMeter({
           <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">After the run</div>
           <div className="mt-1 grid gap-2 sm:grid-cols-2 text-sm text-slate-800">
             <div>
-              Duration: <span className="font-semibold">{formatMsSafe(lastReceipt.durationMs) ?? "—"}</span>
+              Duration: <span className="font-semibold">{formatMsSafe(lastReceipt.durationMs) ?? "N/A"}</span>
             </div>
             <div>
-              Credits charged: <span className="font-semibold">{formatCreditsSafe(lastReceipt.creditsCharged) ?? "—"}</span>
+              Credits charged: <span className="font-semibold">{formatCreditsSafe(lastReceipt.creditsCharged) ?? "N/A"}</span>
             </div>
             <div>
-              Free applied: <span className="font-semibold">{formatMsSafe(lastReceipt.freeTierAppliedMs) ?? "—"}</span>
+              Free applied: <span className="font-semibold">{formatMsSafe(lastReceipt.freeTierAppliedMs) ?? "N/A"}</span>
             </div>
             <div>
-              Above free: <span className="font-semibold">{formatMsSafe(lastReceipt.paidMs) ?? "—"}</span>
+              Above free: <span className="font-semibold">{formatMsSafe(lastReceipt.paidMs) ?? "N/A"}</span>
             </div>
           </div>
           {Array.isArray(lastReceipt.guidanceTips) && lastReceipt.guidanceTips.length ? (

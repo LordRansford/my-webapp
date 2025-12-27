@@ -25,6 +25,9 @@ function StartButton() {
       <Link href="/my-cpd/evidence" className="button ghost">
         Export CPD evidence
       </Link>
+      <Link href="/cyber-studios" className="button ghost">
+        Open studios
+      </Link>
       <Link href="/tools/cybersecurity" className="button ghost">
         Open the labs
       </Link>

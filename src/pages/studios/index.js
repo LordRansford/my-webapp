@@ -8,9 +8,11 @@ import { SecurityBanner } from "@/components/dev-studios/SecurityBanner";
 import { StudioCard } from "@/components/studios/StudioCard";
 
 const navChips = [
-  { label: "Control Room", href: "/studios" },
+  { label: "Software Development Studio", href: "/dev-studios" },
+  { label: "Cybersecurity Studio", href: "/cyber-studios" },
+  { label: "Data and Digitalisation Studio", href: "/data-studios" },
+  { label: "AI Studio", href: "/ai-studios" },
   { label: "Architecture Diagram Studio", href: "/studios/architecture-diagram-studio" },
-  { label: "Responsible AI Studio", href: "/ai-studios" },
   { label: "Model Forge", href: "/studios/model-forge" },
   { label: "Vision Lab", href: "/studios/vision-lab" },
   { label: "Speech & Sound Lab", href: "/studios/speech-lab" },
@@ -55,11 +57,11 @@ export default function StudiosPage() {
             <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700 ring-1 ring-slate-200">
               New
             </span>
-            <span>Ransford&apos;s AI Studios</span>
+            <span>Studios</span>
           </div>
-          <h1 className="text-3xl font-semibold text-slate-900">Ransford&apos;s AI Studios</h1>
+          <h1 className="text-3xl font-semibold text-slate-900">Studios and labs</h1>
           <p className="text-base text-slate-700 max-w-3xl">
-            This is my AI sandbox. Bring your own data, keep everything local, and try ideas without handing them to a black box. We look at safety, drift, fairness and classic ML in one place, minus the vendor noise.
+            Studios are guided workspaces where you build a real project in small, safe steps. Labs are focused tools for drilling one skill.
           </p>
           <div className="flex flex-wrap gap-2" role="tablist" aria-label="Studios navigation">
             {navChips.map((item) => chip(item))}
@@ -70,12 +72,111 @@ export default function StudiosPage() {
       <SecurityNotice />
       <SecurityBanner />
 
-      <section className="grid gap-6 xl:grid-cols-2">
-        {/* Control Room */}
+      <section className="grid gap-6 md:grid-cols-2" aria-label="Core studios">
+        <StudioCard>
+          <header className="space-y-2">
+            <div className="inline-flex items-center gap-2 rounded-2xl bg-slate-900 px-3 py-1 text-xs font-semibold text-white ring-1 ring-slate-900">
+              Software Development Studio
+            </div>
+            <p className="text-base text-slate-700">
+              Build a full project end to end. Requirements, architecture, backend, frontend, security, and delivery. It stays local to your browser.
+            </p>
+          </header>
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href="/dev-studios"
+              className="rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-2"
+            >
+              Open Software Development Studio
+            </Link>
+            <Link
+              href="/dev-studios?tab=overview"
+              className="rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:border-slate-300 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-2"
+            >
+              Start in Control Room
+            </Link>
+          </div>
+          <p className="text-xs text-slate-600">Tip: keep secrets out of text boxes. Use `.env.local` in your own repos.</p>
+        </StudioCard>
+
+        <StudioCard>
+          <header className="space-y-2">
+            <div className="inline-flex items-center gap-2 rounded-2xl bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-900 ring-1 ring-amber-100">
+              Cybersecurity Studio
+            </div>
+            <p className="text-base text-slate-700">
+              Practise governance, threat thinking, incident response, and recovery planning. It is built to be useful for work and safe for learning.
+            </p>
+          </header>
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href="/cyber-studios"
+              className="rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-2"
+            >
+              Open Cybersecurity Studio
+            </Link>
+            <Link
+              href="/cybersecurity"
+              className="rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:border-amber-300 hover:text-amber-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 focus-visible:ring-offset-2"
+            >
+              Open cybersecurity notes
+            </Link>
+          </div>
+        </StudioCard>
+
+        <StudioCard>
+          <header className="space-y-2">
+            <div className="inline-flex items-center gap-2 rounded-2xl bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-900 ring-1 ring-emerald-100">
+              Data and Digitalisation Studio
+            </div>
+            <p className="text-base text-slate-700">Turn messy data and processes into decisions. Use dashboards, templates, and careful trade offs.</p>
+          </header>
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href="/data-studios"
+              className="rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-2"
+            >
+              Open Data and Digitalisation Studio
+            </Link>
+            <Link
+              href="/data"
+              className="rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:border-emerald-300 hover:text-emerald-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 focus-visible:ring-offset-2"
+            >
+              Open data notes
+            </Link>
+          </div>
+        </StudioCard>
+
+        <StudioCard>
+          <header className="space-y-2">
+            <div className="inline-flex items-center gap-2 rounded-2xl bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-900 ring-1 ring-indigo-100">
+              AI Studio
+            </div>
+            <p className="text-base text-slate-700">A responsible AI studio for scenarios, evaluation, and practical habits. It is designed to keep learning local.</p>
+          </header>
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href="/ai-studios"
+              className="rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-2"
+            >
+              Open AI Studio
+            </Link>
+            <Link
+              href="/ai"
+              className="rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:border-indigo-300 hover:text-indigo-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300 focus-visible:ring-offset-2"
+            >
+              Open AI notes
+            </Link>
+          </div>
+        </StudioCard>
+      </section>
+
+      <section className="grid gap-6 xl:grid-cols-2" aria-label="AI labs and specialist tools">
+        {/* AI Control Room */}
         <StudioCard>
           <header className="space-y-2">
             <div className="inline-flex items-center gap-2 rounded-2xl bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-800 ring-1 ring-emerald-100">
-              Control Room
+              AI Control Room
             </div>
             <p className="text-base text-slate-700">
               Overview of datasets, jobs and safety. Upload, profile, and keep an eye on running work before you jump into the other
@@ -99,7 +200,7 @@ export default function StudiosPage() {
                   <div>
                     <p className="text-base font-semibold text-slate-900">{d.name}</p>
                     <p className="text-xs text-slate-600">
-                      {d.columnCount ?? "?"} cols • {d.rowCount ?? "?"} rows
+                      {d.columnCount ?? "?"} cols · {d.rowCount ?? "?"} rows
                     </p>
                     <div className="flex flex-wrap gap-1 mt-1">
                       <span className="rounded-full bg-white px-2 py-0.5 text-xs text-slate-700 ring-1 ring-slate-200">
@@ -134,7 +235,7 @@ export default function StudiosPage() {
                     <div>
                       <p className="text-base font-semibold text-slate-900">{j.name}</p>
                       <p className="text-xs text-slate-600">
-                        {j.status} • {j.metrics ? Object.entries(j.metrics).map(([k, v]) => `${k}:${v}`).join(" ") : "no metrics yet"}
+                        {j.status} · {j.metrics ? Object.entries(j.metrics).map(([k, v]) => `${k}:${v}`).join(" ") : "no metrics yet"}
                       </p>
                     </div>
                     <button className="rounded-xl bg-slate-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-2">
@@ -217,11 +318,11 @@ export default function StudiosPage() {
 
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="space-y-2 rounded-2xl border border-slate-100 bg-slate-50/60 p-4">
-              <p className="text-base font-semibold text-slate-900">Guided Wizard 🧭</p>
+              <p className="text-base font-semibold text-slate-900">Guided wizard</p>
               <p className="text-xs text-slate-600">Step by step. Best if you are new to architecture diagrams.</p>
             </div>
             <div className="space-y-2 rounded-2xl border border-slate-100 bg-slate-50/60 p-4">
-              <p className="text-base font-semibold text-slate-900">Power Editor ⚡</p>
+              <p className="text-base font-semibold text-slate-900">Power editor</p>
               <p className="text-xs text-slate-600">Direct control. Best for professionals and reviewers.</p>
             </div>
           </div>

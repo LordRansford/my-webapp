@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { track } from "@/lib/analytics/track";
+import { Check } from "lucide-react";
 
 const controls = [
   { id: "httponly", label: "HttpOnly cookie", friction: 1, block: ["storage"] },
@@ -55,11 +56,12 @@ export default function SessionHijackSimulator({ onComplete }) {
               <button
                 key={c.id}
                 onClick={() => setChosen((prev) => ({ ...prev, [c.id]: !prev[c.id] }))}
-                className={`rounded-full border px-3 py-1 text-xs ${
+                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs ${
                   active ? "bg-emerald-100 border-emerald-400 text-emerald-800" : "bg-white text-gray-800"
                 }`}
               >
-                {active ? "✓ " : ""}{c.label}
+                {active ? <Check className="h-3.5 w-3.5" aria-hidden="true" /> : null}
+                <span>{c.label}</span>
               </button>
             );
           })}

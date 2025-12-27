@@ -11,6 +11,7 @@ type NavItem = { label: string; href: string };
 const navItems: NavItem[] = [
   { label: "Courses", href: "/courses" },
   { label: "Tools", href: "/tools" },
+  { label: "Studios", href: "/studios" },
   { label: "Games", href: "/games" },
   { label: "About", href: "/about" },
 ];
@@ -66,9 +67,6 @@ function AccountAction({ variant, isSignedIn, onActionClick }: { variant: "deskt
         className={`${base} ${variant === "desktop" ? "bg-slate-900 text-white hover:bg-slate-800" : ""}`}
         onClick={onActionClick}
       >
-        <span role="img" aria-hidden className="mr-1">
-          👤
-        </span>
         Account
       </Link>
     );
@@ -83,9 +81,6 @@ function AccountAction({ variant, isSignedIn, onActionClick }: { variant: "deskt
       }}
       className={`${base} ${variant === "desktop" ? "bg-slate-900 text-white hover:bg-slate-800" : ""}`}
     >
-      <span role="img" aria-hidden className="mr-1">
-        👤
-      </span>
       Sign in
     </button>
   );

@@ -3,6 +3,7 @@
 import React, { useMemo, useState } from "react";
 import { SecurityBanner } from "@/components/dev-studios/SecurityBanner";
 import { Braces, Route, ShieldCheck } from "lucide-react";
+import SwitchRow from "@/components/ui/SwitchRow";
 
 type StackId = "express" | "django" | "spring" | "aspnet" | "go";
 type TabId = "handler" | "routing" | "docker";
@@ -262,17 +263,15 @@ export default function BackendApiLab() {
             <h2 className="text-2xl font-semibold text-slate-900">API design checklist</h2>
             <p className="text-sm text-slate-700">Tick the boring-but-important boxes. Your future self will send you a thank you note.</p>
           </div>
-          <div className="space-y-2 text-sm text-slate-800">
+          <div className="space-y-2">
             {checklistItems.map((item) => (
-              <label key={item.key} className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={checks[item.key]}
-                  onChange={(e) => setChecks((prev) => ({ ...prev, [item.key]: e.target.checked }))}
-                  className="h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-200"
-                />
-                <span>{item.label}</span>
-              </label>
+              <SwitchRow
+                key={item.key}
+                label={item.label}
+                checked={checks[item.key]}
+                tone="sky"
+                onCheckedChange={(checked) => setChecks((prev) => ({ ...prev, [item.key]: checked }))}
+              />
             ))}
           </div>
           <div className="space-y-1">

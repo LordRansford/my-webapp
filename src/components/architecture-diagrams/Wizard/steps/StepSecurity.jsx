@@ -1,6 +1,7 @@
 "use client";
 
 import { wizardCopy, isProfessionals } from "@/lib/architecture-diagrams/copy/audience";
+import SwitchRow from "@/components/ui/SwitchRow";
 
 const DATA_TYPES = [
   { value: "pii", label: "PII" },
@@ -13,7 +14,7 @@ const DATA_TYPES = [
 
 export default function StepSecurity({ audience = "students", goal, security, dataTypes, onChange, errors = [] }) {
   const copy = wizardCopy(audience);
-  const title = isProfessionals(audience) ? "Security and data" : "Security and data 🔒";
+  const title = "Security and data";
   const selected = new Set(dataTypes || []);
   const hasSensitive = selected.size > 0;
   const hasBoundary = (security.trustBoundaries || []).filter(Boolean).length > 0;
@@ -53,39 +54,27 @@ export default function StepSecurity({ audience = "students", goal, security, da
       </label>
 
       <div className="grid gap-3 sm:grid-cols-2">
-        <label className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4">
-          <div>
-            <p className="text-sm font-semibold text-slate-900">Admin access</p>
-            <p className="mt-1 text-xs text-slate-600">Does anyone have elevated permissions?</p>
-          </div>
-          <input
-            type="checkbox"
-            checked={Boolean(security.adminAccess)}
-            onChange={(e) => onChange({ security: { ...security, adminAccess: e.target.checked } })}
-            className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-400"
-            aria-label="Admin access toggle"
-          />
-        </label>
+        <SwitchRow
+          label="Admin access"
+          description="Someone has elevated permissions."
+          checked={Boolean(security.adminAccess)}
+          onCheckedChange={(checked) => onChange({ security: { ...security, adminAccess: checked } })}
+          tone="indigo"
+        />
 
-        <label className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4">
-          <div>
-            <p className="text-sm font-semibold text-slate-900">Trust boundaries present</p>
-            <p className="mt-1 text-xs text-slate-600">A boundary where rules change, like browser to server.</p>
-          </div>
-          <input
-            type="checkbox"
-            checked={Boolean((security.trustBoundaries || []).length > 0)}
-            onChange={(e) => {
-              if (e.target.checked) {
-                onChange({ security: { ...security, trustBoundaries: ["Browser to server"], hasNoTrustBoundariesConfirmed: false } });
-              } else {
-                onChange({ security: { ...security, trustBoundaries: [], hasNoTrustBoundariesConfirmed: false } });
-              }
-            }}
-            className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-400"
-            aria-label="Trust boundary toggle"
-          />
-        </label>
+        <SwitchRow
+          label="Trust boundaries present"
+          description="A boundary where rules change, like browser to server."
+          checked={Boolean((security.trustBoundaries || []).length > 0)}
+          onCheckedChange={(checked) => {
+            if (checked) {
+              onChange({ security: { ...security, trustBoundaries: ["Browser to server"], hasNoTrustBoundariesConfirmed: false } });
+            } else {
+              onChange({ security: { ...security, trustBoundaries: [], hasNoTrustBoundariesConfirmed: false } });
+            }
+          }}
+          tone="sky"
+        />
       </div>
 
       {(security.trustBoundaries || []).length > 0 ? (
@@ -130,18 +119,13 @@ export default function StepSecurity({ audience = "students", goal, security, da
           </div>
         </div>
       ) : (
-        <label className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4">
-          <input
-            type="checkbox"
-            checked={Boolean(security.hasNoTrustBoundariesConfirmed)}
-            onChange={(e) => onChange({ security: { ...security, hasNoTrustBoundariesConfirmed: e.target.checked } })}
-            className="mt-1 h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-400"
-          />
-          <div>
-            <p className="text-sm font-semibold text-slate-900">This system has no trust boundaries</p>
-            <p className="mt-1 text-xs text-slate-600">If you are sure, you can confirm it here. Reviewers will see this choice.</p>
-          </div>
-        </label>
+        <SwitchRow
+          label="This system has no trust boundaries"
+          description="If you are sure, you can confirm it here. Reviewers will see this choice."
+          checked={Boolean(security.hasNoTrustBoundariesConfirmed)}
+          onCheckedChange={(checked) => onChange({ security: { ...security, hasNoTrustBoundariesConfirmed: checked } })}
+          tone="amber"
+        />
       )}
 
       <div className="space-y-2">
@@ -149,20 +133,19 @@ export default function StepSecurity({ audience = "students", goal, security, da
         <p className="text-xs text-slate-600">Select categories that appear in stores or flows.</p>
         <div className="grid gap-2 sm:grid-cols-3">
           {DATA_TYPES.map((dt) => (
-            <label key={dt.value} className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-800">
-              <input
-                type="checkbox"
-                checked={selected.has(dt.value)}
-                onChange={(e) => {
-                  const next = new Set(selected);
-                  if (e.target.checked) next.add(dt.value);
-                  else next.delete(dt.value);
-                  onChange({ dataTypes: Array.from(next) });
-                }}
-                className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-400"
-              />
-              <span>{dt.label}</span>
-            </label>
+            <SwitchRow
+              key={dt.value}
+              label={dt.label}
+              checked={selected.has(dt.value)}
+              onCheckedChange={(checked) => {
+                const next = new Set(selected);
+                if (checked) next.add(dt.value);
+                else next.delete(dt.value);
+                onChange({ dataTypes: Array.from(next) });
+              }}
+              className="px-3 py-2"
+              tone="slate"
+            />
           ))}
         </div>
       </div>

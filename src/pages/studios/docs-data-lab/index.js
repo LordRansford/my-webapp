@@ -268,7 +268,7 @@ export default function DocsDataLabPage() {
     setChunks(chunkList);
     setResults([]);
     const jobId = `docs-index-${Date.now()}`;
-    addJob({ id: jobId, name: "Docs & Data Lab – index build", studio: "docs-data-lab", status: "running" });
+    addJob({ id: jobId, name: "Docs and Data Lab index build", studio: "docs-data-lab", status: "running" });
     updateJob(jobId, {
       status: "completed",
       finishedAt: new Date().toISOString(),
