@@ -71,7 +71,7 @@ export async function getStaticProps() {
 export default function Home() {
   return (
     <Layout
-      title="Ransford's Notes · Labs first"
+      title="Ransford's Notes | Labs first"
       description="Browser-first labs for security, architecture, and AI. Practical, calm, and built for learning by doing."
     >
       <MarketingPageTemplate>

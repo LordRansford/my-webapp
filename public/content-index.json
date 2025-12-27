@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-12-27T06:06:46.968Z",
+  "generatedAt": "2025-12-27T08:15:16.096Z",
   "pages": [
     {
       "route": "/courses/ai/advanced",
@@ -1190,31 +1190,31 @@
           "depth": 2,
           "title": "1. Frame BookTrack as a system (Architecture)",
           "anchor": "1-frame-booktrack-as-a-system-architecture",
-          "excerpt": "Open the **Software architecture notes and dashboards**."
+          "excerpt": "Open the ."
         },
         {
           "depth": 2,
           "title": "2. Make security a first class concern (Cybersecurity)",
           "anchor": "2-make-security-a-first-class-concern-cybersecurity",
-          "excerpt": "Open the **Cybersecurity notes, dashboards and useful tools**."
+          "excerpt": "Open the , the , and the ."
         },
         {
           "depth": 2,
           "title": "3. Treat digitalisation as a strategy, not just IT",
           "anchor": "3-treat-digitalisation-as-a-strategy-not-just-it",
-          "excerpt": "Open the **Digitalisation notes, dashboards and summary**."
+          "excerpt": "Open the , the , and the ."
         },
         {
           "depth": 2,
           "title": "4. Build and test intelligence responsibly (AI and data)",
           "anchor": "4-build-and-test-intelligence-responsibly-ai-and-data",
-          "excerpt": "Open the **AI notes, dashboards, labs and Ransford’s AI Studios**."
+          "excerpt": "Open the , the , and ."
         },
         {
           "depth": 2,
           "title": "5. Ship BookTrack safely (Software development and dev studios)",
           "anchor": "5-ship-booktrack-safely-software-development-and-dev-studios",
-          "excerpt": "Open **Ransford’s Software Development Studio**."
+          "excerpt": "Open ."
         },
         {
           "depth": 2,
@@ -1232,7 +1232,7 @@
           "depth": 2,
           "title": "Quick practice",
           "anchor": "quick-practice",
-          "excerpt": "title=\"Checkpoint\" questions={[ { q: \"What is the goal of the BookTrack capstone\", a: \"To connect architecture, security, digitalisation and AI in one realistic system, not to build a perfect app.\" }, { q: \"How do you keep the capstone safe while experimenting\", a: \"Use teaching labs locally, respect upload limits, and record risks and controls for each choi"
+          "excerpt": "Sketch the system quickly in System landscape canvas. Write the decision in Decision log generator. Stress test the security angle using Threat modelling lite and Risk matrix builder. Capture the recovery story in Incident post mortem builder."
         }
       ]
     },

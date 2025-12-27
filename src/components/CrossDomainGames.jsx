@@ -8,8 +8,8 @@ export default function CrossDomainGames() {
   return (
     <GameHub
       storageKey="cross_domain_games"
-      title="Cross topic games"
-      subtitle="Where AI and security failures intersect."
+      title={null}
+      subtitle={null}
       games={[
         {
           id: "hallucination_trust",

@@ -308,7 +308,7 @@ export default function CyberSummary() {
           <div className="mt-4">
             <GameHub
               storageKey="cyber_summary_games"
-              title="Cybersecurity game hub"
+              title={null}
               subtitle="Choose a game. Make the call. See the consequences."
               games={[
                 {

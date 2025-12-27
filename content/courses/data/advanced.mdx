@@ -44,13 +44,25 @@ This level assumes you are comfortable with Foundations and Intermediate. The fo
 
 Maths in data systems describes patterns, uncertainty, and change. Abstraction turns messy reality into numbers we can reason about. At small scale numbers feel friendly. At large scale tiny errors compound and variation matters more than single values.
 
-A vector is a list of measurements, like [2, 4, 6]. A matrix is a table of relationships, like rows of customers and columns of attributes. Probability is bookkeeping for uncertainty. It tells us how unsure we are, not what will happen.
+A vector is a list of measurements, like $[2, 4, 6]$. A matrix is a table of relationships, like rows of customers and columns of attributes. Probability is bookkeeping for uncertainty. It tells us how unsure we are, not what will happen.
 
-Mean (average) is the central tendency. Formula: `mean = (1/n) * sum(x_i)`. In words: add all values and divide by how many there are. Example: values 2, 4, 6 give mean `(2 + 4 + 6) / 3 = 4`.
+Mean (average) is the central tendency.
 
-Variance measures spread. Formula: `variance = (1/n) * sum((x_i - mean)^2)`. In words: measure how far each value is from the mean, square it, average it. Example: values 2, 4, 6 with mean 4 give variance `((2-4)^2 + (4-4)^2 + (6-4)^2) / 3 = 8/3` which is about 2.67.
+$$
+\bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i
+$$
 
-Standard deviation is the square root of variance. It puts spread back into the same units as the data. Example: `sqrt(2.67)` is about 1.63.
+In words, add all values and divide by how many there are. Example: values $2, 4, 6$ give mean $\bar{x} = \frac{2 + 4 + 6}{3} = 4$.
+
+Variance measures spread.
+
+$$
+\sigma^2 = \frac{1}{n}\sum_{i=1}^{n} (x_i - \bar{x})^2
+$$
+
+In words, measure how far each value is from the mean, square it, and average it. Example: values $2, 4, 6$ with mean $4$ give variance $\sigma^2 = \frac{(2-4)^2 + (4-4)^2 + (6-4)^2}{3} = \frac{8}{3} \approx 2.67$.
+
+Standard deviation is the square root of variance. It puts spread back into the same units as the data. Example: $\sigma = \sqrt{2.67} \approx 1.63$.
 
 Probability distributions describe how likely values are. A fair coin has a distribution of 0.5 heads and 0.5 tails. Real data distributions are rarely symmetrical; knowing the shape stops us from trusting averages blindly.
 

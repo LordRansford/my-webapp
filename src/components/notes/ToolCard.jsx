@@ -29,7 +29,7 @@ class ToolErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="rounded-xl border border-slate-100 bg-slate-50/80 p-4 w-full">
+        <div className="w-full rounded-xl border border-slate-100 bg-slate-50/80 p-4">
           <p className="m-0 text-sm text-slate-700">This tool could not load. Please refresh the page.</p>
         </div>
       );
@@ -60,7 +60,6 @@ export default function ToolCard({
       .replace(/\s+/g, "-")
       .slice(0, 60);
 
-  // Guarantee a stable id for analytics/CPD notes even when MDX forgot to pass one.
   const resolvedId = id || slugify(title) || undefined;
 
   const { updateSection, isAuthed } = useCPD();
@@ -69,16 +68,18 @@ export default function ToolCard({
   const [showSavePrompt, setShowSavePrompt] = useState(false);
   const trackId = courseId ? resolveTrackId(courseId) : null;
   const reduce = useReducedMotion();
-  useSession(); // ensure session hook is initialized for prompt logic
+  useSession();
 
-  const handleUse = () => {
+  const handleUse = ({ allowPrompt = true } = {}) => {
     if (!isAuthed) {
-      setShowSavePrompt(true);
+      if (allowPrompt) setShowSavePrompt(true);
       return;
     }
+
     if (resolvedId) track({ type: "tool_used", toolId: resolvedId, trackId: trackId || undefined, levelId, sectionId });
     if (!trackId || !levelId || !sectionId) return;
     if (hasAwarded) return;
+
     updateSection({
       trackId,
       levelId,
@@ -86,6 +87,7 @@ export default function ToolCard({
       minutesDelta: cpdMinutesOnUse ?? 5,
       note: resolvedId ? `Used tool ${resolvedId}` : `Used tool ${title}`,
     });
+
     setHasAwarded(true);
   };
 
@@ -104,16 +106,16 @@ export default function ToolCard({
   const Inner = (
     <>
       <header className="mb-4 min-w-0">
-        <div className="flex items-start justify-between gap-3 min-w-0">
-          <div className="flex items-start gap-2 min-w-0">
+        <div className="flex min-w-0 items-start justify-between gap-3">
+          <div className="flex min-w-0 items-start gap-2">
             {showCta ? (
               <span className="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
                 <ResolvedIcon className="h-4 w-4 text-slate-700" aria-hidden="true" />
               </span>
             ) : null}
             <div className="min-w-0">
-              <h3 className="mb-2 text-lg font-semibold text-slate-900 break-words">{title}</h3>
-              {description ? <p className="text-sm leading-relaxed text-slate-600 break-words">{description}</p> : null}
+              <h3 className="mb-2 break-words text-lg font-semibold text-slate-900">{title}</h3>
+              {description ? <p className="break-words text-sm leading-relaxed text-slate-600">{description}</p> : null}
               <p className="mt-1 text-xs font-semibold text-slate-700">
                 {usageHint || "How to use: open the tool, follow the inputs, and run with limits shown."}
               </p>
@@ -121,18 +123,18 @@ export default function ToolCard({
           </div>
           {showCta ? (
             <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold text-white shadow-sm">
-              Open
-              <span aria-hidden="true">→</span>
+              Open <span aria-hidden="true">-&gt;</span>
             </span>
           ) : null}
         </div>
       </header>
+
       {children ? (
-        <div className="rounded-xl border border-slate-100 bg-slate-50/80 p-4 transition-colors duration-200 w-full overflow-x-auto">
+        <div className="w-full overflow-x-auto rounded-xl border border-slate-100 bg-slate-50/80 p-4 transition-colors duration-200">
           <ToolErrorBoundary>{children}</ToolErrorBoundary>
         </div>
       ) : showPlaceholder ? (
-        <div className="rounded-xl border border-slate-100 bg-slate-50/80 p-4 w-full">
+        <div className="w-full rounded-xl border border-slate-100 bg-slate-50/80 p-4">
           <p className="m-0 text-sm text-slate-700">
             Tool coming online. This card is intentionally visible so the section is not a blank gap.
           </p>
@@ -147,16 +149,13 @@ export default function ToolCard({
         {...reducedMotionProps(reduce, motionPresets.slideUp)}
         data-tool-id={resolvedId || ""}
         data-tool-title={title || ""}
-        className="notes-tool-card my-6 w-full rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:border-slate-300"
+        className="notes-tool-card my-6 w-full rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:border-slate-300 hover:shadow-md"
       >
         {href ? (
           <Link
             href={href}
-            className="block w-full min-w-0 focus:outline-none focus:ring focus:ring-blue-200 rounded-2xl"
-            onClick={(e) => {
-              if (!isAuthed) e.preventDefault();
-              handleUse();
-            }}
+            className="block w-full min-w-0 rounded-2xl focus:outline-none focus:ring focus:ring-blue-200"
+            onClick={() => handleUse({ allowPrompt: false })}
             aria-label={`Open ${title}`}
           >
             {Inner}
@@ -164,8 +163,8 @@ export default function ToolCard({
         ) : (
           <button
             type="button"
-            className="w-full min-w-0 focus:outline-none focus:ring focus:ring-blue-200 rounded-2xl"
-            onClick={handleUse}
+            className="w-full min-w-0 rounded-2xl focus:outline-none focus:ring focus:ring-blue-200"
+            onClick={() => handleUse({ allowPrompt: true })}
             aria-label={`Use ${title}`}
           >
             {Inner}
@@ -176,3 +175,4 @@ export default function ToolCard({
     </LazyMotion>
   );
 }
+
