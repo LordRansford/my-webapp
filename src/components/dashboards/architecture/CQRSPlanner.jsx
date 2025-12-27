@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { CheckPill } from "@/components/ui/CheckPill";
 
 export function CQRSPlanner() {
   const [writesPercent, setWritesPercent] = useState(20);
@@ -79,15 +80,11 @@ export function CQRSPlanner() {
             </div>
 
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-              <label className="flex items-center gap-2 text-xs text-slate-700">
-                <input
-                  type="checkbox"
-                  className="h-4 w-4 rounded border-slate-300"
-                  checked={splitEnabled}
-                  onChange={(e) => setSplitEnabled(e.target.checked)}
-                />
-                Use separate command and query models
-              </label>
+              <div className="sm:max-w-xs">
+                <CheckPill checked={splitEnabled} onCheckedChange={setSplitEnabled} tone="violet">
+                  Use separate command and query models
+                </CheckPill>
+              </div>
 
               <label className="text-xs text-slate-700">
                 Read side consistency

@@ -2,6 +2,7 @@
 
 import { use_tool_state } from "@/components/notes/hooks/use_tool_state";
 import ToolStateActions from "@/components/notes/ToolStateActions";
+import { CheckPill } from "@/components/ui/CheckPill";
 
 const zones = [
   { id: "user", label: "User input enters the app" },
@@ -31,20 +32,20 @@ export default function TrustBoundaryTool() {
 
       <div className="space-y-2">
         {zones.map((z) => (
-          <label key={z.id} className="flex items-start gap-2 rounded-lg border bg-gray-50 px-3 py-2">
-            <input
-              type="checkbox"
-              checked={Boolean(checks[z.id])}
-              onChange={(e) =>
-                set_state((prev) => ({
-                  ...prev,
-                  checks: { ...prev.checks, [z.id]: e.target.checked },
-                }))
-              }
-              className="mt-1"
-            />
-            <span className="text-gray-800">{z.label}</span>
-          </label>
+          <CheckPill
+            key={z.id}
+            checked={Boolean(checks[z.id])}
+            onCheckedChange={(checked) =>
+              set_state((prev) => ({
+                ...prev,
+                checks: { ...prev.checks, [z.id]: checked },
+              }))
+            }
+            tone="violet"
+            className="justify-start"
+          >
+            {z.label}
+          </CheckPill>
         ))}
       </div>
 

@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { use_tool_state } from "@/components/notes/hooks/use_tool_state";
 import ToolStateActions from "@/components/notes/ToolStateActions";
+import { CheckPill } from "@/components/ui/CheckPill";
 
 const PATHS = [
   {
@@ -52,20 +53,20 @@ export default function SecurityCareerPlannerTool() {
 
       <div className="grid gap-2 sm:grid-cols-2">
         {PATHS.map((path) => (
-          <label key={path.id} className="flex items-start gap-2 rounded-lg border bg-gray-50 px-3 py-2">
-            <input
-              type="checkbox"
-              checked={Boolean(state.selected?.[path.id])}
-              onChange={(e) =>
-                set_state((prev) => ({
-                  ...prev,
-                  selected: { ...prev.selected, [path.id]: e.target.checked },
-                }))
-              }
-              className="mt-1"
-            />
-            <span className="text-gray-800">{path.label}</span>
-          </label>
+          <CheckPill
+            key={path.id}
+            checked={Boolean(state.selected?.[path.id])}
+            onCheckedChange={(checked) =>
+              set_state((prev) => ({
+                ...prev,
+                selected: { ...prev.selected, [path.id]: checked },
+              }))
+            }
+            tone="emerald"
+            className="justify-start"
+          >
+            {path.label}
+          </CheckPill>
         ))}
       </div>
 

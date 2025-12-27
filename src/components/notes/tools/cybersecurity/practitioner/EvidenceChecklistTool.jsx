@@ -2,6 +2,7 @@
 
 import { use_tool_state } from "@/components/notes/hooks/use_tool_state";
 import ToolStateActions from "@/components/notes/ToolStateActions";
+import { CheckPill } from "@/components/ui/CheckPill";
 
 const evidenceItems = ["Log event", "Metric threshold", "Trace span", "User report", "Automated test"];
 
@@ -21,15 +22,17 @@ export default function EvidenceChecklistTool() {
 
       <div className="space-y-2">
         {evidenceItems.map((item) => (
-          <label key={item} className="flex items-start gap-2 rounded-lg border bg-gray-50 px-3 py-2">
-            <input
-              type="checkbox"
-              checked={Boolean(state.selected?.[item])}
-              onChange={(e) => set_state((prev) => ({ ...prev, selected: { ...prev.selected, [item]: e.target.checked } }))}
-              className="mt-1"
-            />
-            <span className="text-gray-800">{item}</span>
-          </label>
+          <CheckPill
+            key={item}
+            checked={Boolean(state.selected?.[item])}
+            onCheckedChange={(checked) =>
+              set_state((prev) => ({ ...prev, selected: { ...prev.selected, [item]: checked } }))
+            }
+            tone="emerald"
+            className="justify-start"
+          >
+            {item}
+          </CheckPill>
         ))}
       </div>
 

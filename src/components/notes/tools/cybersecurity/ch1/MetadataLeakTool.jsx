@@ -2,6 +2,7 @@
 
 import { use_tool_state } from "@/components/notes/hooks/use_tool_state";
 import ToolStateActions from "@/components/notes/ToolStateActions";
+import { CheckPill } from "@/components/ui/CheckPill";
 
 const signals = [
   { id: "addresses", label: "Source and destination addresses" },
@@ -27,31 +28,26 @@ export default function MetadataLeakTool() {
         Toggle encryption and see which signals remain visible to an observer. Payload secrecy does not hide behaviour.
       </p>
 
-      <label className="flex items-center gap-2 rounded-lg border bg-gray-50 px-3 py-2">
-        <input
-          type="checkbox"
-          checked={encrypted}
-          onChange={(e) => set_state((prev) => ({ ...prev, encrypted: e.target.checked }))}
-        />
-        <span className="text-gray-800">Payload encrypted</span>
-      </label>
+      <CheckPill checked={encrypted} onCheckedChange={(v) => set_state((prev) => ({ ...prev, encrypted: v }))} tone="emerald">
+        Payload encrypted
+      </CheckPill>
 
       <div className="space-y-2">
         {signals.map((s) => (
-          <label key={s.id} className="flex items-start gap-2 rounded-lg border px-3 py-2">
-            <input
-              type="checkbox"
-              checked={Boolean(observed[s.id])}
-              onChange={(e) =>
-                set_state((prev) => ({
-                  ...prev,
-                  observed: { ...prev.observed, [s.id]: e.target.checked },
-                }))
-              }
-              className="mt-1"
-            />
-            <span className="text-gray-800">{s.label}</span>
-          </label>
+          <CheckPill
+            key={s.id}
+            checked={Boolean(observed[s.id])}
+            onCheckedChange={(checked) =>
+              set_state((prev) => ({
+                ...prev,
+                observed: { ...prev.observed, [s.id]: checked },
+              }))
+            }
+            tone="violet"
+            className="justify-start"
+          >
+            {s.label}
+          </CheckPill>
         ))}
       </div>
 

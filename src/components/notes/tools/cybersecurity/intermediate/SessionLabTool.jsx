@@ -2,6 +2,7 @@
 
 import { use_tool_state } from "@/components/notes/hooks/use_tool_state";
 import ToolStateActions from "@/components/notes/ToolStateActions";
+import { CheckPill } from "@/components/ui/CheckPill";
 
 export default function SessionLabTool() {
   const { state, set_state, reset, copy_share_link, export_json, import_json, is_ready } = use_tool_state({
@@ -17,14 +18,11 @@ export default function SessionLabTool() {
     <div className="space-y-4 text-sm">
       <p className="text-gray-700">Adjust session lifetime and see why stolen tokens are dangerous.</p>
 
-      <label className="flex items-center gap-2 rounded-lg border bg-gray-50 px-3 py-2">
-        <input
-          type="checkbox"
-          checked={state.stolen}
-          onChange={(e) => set_state((prev) => ({ ...prev, stolen: e.target.checked }))}
-        />
-        <span className="text-gray-800">Token stolen</span>
-      </label>
+      <div className="max-w-xs">
+        <CheckPill checked={state.stolen} onCheckedChange={(stolen) => set_state((prev) => ({ ...prev, stolen }))} tone="rose">
+          Token stolen
+        </CheckPill>
+      </div>
 
       <label className="block space-y-1">
         <span className="text-xs uppercase tracking-wide text-gray-500">Session lifetime (minutes)</span>

@@ -2,6 +2,7 @@
 
 import { use_tool_state } from "@/components/notes/hooks/use_tool_state";
 import ToolStateActions from "@/components/notes/ToolStateActions";
+import { CheckPill } from "@/components/ui/CheckPill";
 
 const entries = ["Login", "API", "File upload", "Admin actions", "Third-party webhook"];
 
@@ -21,15 +22,17 @@ export default function AttackSurfaceMapperTool() {
 
       <div className="space-y-2">
         {entries.map((e) => (
-          <label key={e} className="flex items-start gap-2 rounded-lg border bg-gray-50 px-3 py-2">
-            <input
-              type="checkbox"
-              checked={Boolean(state.validated?.[e])}
-              onChange={(ev) => set_state((prev) => ({ ...prev, validated: { ...prev.validated, [e]: ev.target.checked } }))}
-              className="mt-1"
-            />
-            <span className="text-gray-800">{e}</span>
-          </label>
+          <CheckPill
+            key={e}
+            checked={Boolean(state.validated?.[e])}
+            onCheckedChange={(checked) =>
+              set_state((prev) => ({ ...prev, validated: { ...prev.validated, [e]: checked } }))
+            }
+            tone="violet"
+            className="justify-start"
+          >
+            {e}
+          </CheckPill>
         ))}
       </div>
 

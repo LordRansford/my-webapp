@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { CheckPill } from "@/components/ui/CheckPill";
 
 export function EventFlowModeler() {
   const [events, setEvents] = useState([
@@ -100,15 +101,15 @@ export function EventFlowModeler() {
                     </span>
                   </label>
 
-                  <label className="flex items-center gap-2 text-xs text-slate-700">
-                    <input
-                      type="checkbox"
-                      className="h-4 w-4 rounded border-slate-300"
+                  <div className="sm:max-w-xs">
+                    <CheckPill
                       checked={event.critical}
-                      onChange={(e) => updateEvent(event.id, { critical: e.target.checked })}
-                    />
-                    Critical event that must not be lost
-                  </label>
+                      onCheckedChange={(checked) => updateEvent(event.id, { critical: checked })}
+                      tone="amber"
+                    >
+                      Critical event that must not be lost
+                    </CheckPill>
+                  </div>
                 </div>
               </div>
             ))}

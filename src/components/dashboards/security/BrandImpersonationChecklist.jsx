@@ -1,6 +1,7 @@
 "use client"
 
 import { useMemo, useState, useEffect } from "react"
+import { CheckPill } from "@/components/ui/CheckPill"
 
 const initialState = {
   logoLowQuality: false,
@@ -34,8 +35,8 @@ export default function BrandImpersonationChecklist() {
     return "Very low"
   }, [riskScore])
 
-  const toggle = (key) => {
-    setAnswers((current) => ({ ...current, [key]: !current[key] }))
+  const setChecked = (key) => (checked) => {
+    setAnswers((current) => ({ ...current, [key]: checked }))
   }
 
   const reset = () => setAnswers(initialState)
@@ -57,138 +58,60 @@ export default function BrandImpersonationChecklist() {
       <section className="grid gap-6 md:grid-cols-2">
         <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-5 space-y-4">
           <h3 className="text-base font-semibold text-slate-900 mb-2">Visual cues</h3>
-          <label className="flex items-start gap-3 cursor-pointer group">
-            <input
-              type="checkbox"
-              checked={answers.logoLowQuality}
-              onChange={() => toggle("logoLowQuality")}
-              className="mt-0.5 h-5 w-5 rounded border-slate-300 text-sky-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-1 cursor-pointer"
-              style={{ zIndex: 10, position: "relative" }}
-            />
-            <span className="text-sm text-slate-700 leading-relaxed flex-1">
-              Logo looks blurred, stretched or copied from a screenshot.
-            </span>
-          </label>
-          <label className="flex items-start gap-3 cursor-pointer group">
-            <input
-              type="checkbox"
+          <div className="space-y-2">
+            <CheckPill checked={answers.logoLowQuality} onCheckedChange={setChecked("logoLowQuality")} tone="sky">
+              Logo looks blurred, stretched, or copied from a screenshot.
+            </CheckPill>
+            <CheckPill
               checked={answers.logoDifferentFromOfficial}
-              onChange={() => toggle("logoDifferentFromOfficial")}
-              className="mt-0.5 h-5 w-5 rounded border-slate-300 text-sky-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-1 cursor-pointer"
-              style={{ zIndex: 10, position: "relative" }}
-            />
-            <span className="text-sm text-slate-700 leading-relaxed flex-1">
-              Colours, fonts or logo layout look different from the official brand.
-            </span>
-          </label>
+              onCheckedChange={setChecked("logoDifferentFromOfficial")}
+              tone="sky"
+            >
+              Colours, fonts, or logo layout look different from the official brand.
+            </CheckPill>
+          </div>
         </div>
 
         <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-5 space-y-4">
           <h3 className="text-base font-semibold text-slate-900 mb-2">Sender and address</h3>
-          <label className="flex items-start gap-3 cursor-pointer group">
-            <input
-              type="checkbox"
-              checked={answers.senderDomainMismatch}
-              onChange={() => toggle("senderDomainMismatch")}
-              className="mt-0.5 h-5 w-5 rounded border-slate-300 text-sky-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-1 cursor-pointer"
-              style={{ zIndex: 10, position: "relative" }}
-            />
-            <span className="text-sm text-slate-700 leading-relaxed flex-1">
+          <div className="space-y-2">
+            <CheckPill checked={answers.senderDomainMismatch} onCheckedChange={setChecked("senderDomainMismatch")} tone="violet">
               Sender address domain does not match the official brand domain.
-            </span>
-          </label>
-          <label className="flex items-start gap-3 cursor-pointer group">
-            <input
-              type="checkbox"
-              checked={answers.replyToDifferentDomain}
-              onChange={() => toggle("replyToDifferentDomain")}
-              className="mt-0.5 h-5 w-5 rounded border-slate-300 text-sky-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-1 cursor-pointer"
-              style={{ zIndex: 10, position: "relative" }}
-            />
-            <span className="text-sm text-slate-700 leading-relaxed flex-1">
-              Reply To address uses a different domain from the From address.
-            </span>
-          </label>
+            </CheckPill>
+            <CheckPill checked={answers.replyToDifferentDomain} onCheckedChange={setChecked("replyToDifferentDomain")} tone="violet">
+              Reply to address uses a different domain from the From address.
+            </CheckPill>
+          </div>
         </div>
 
         <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-5 space-y-4">
           <h3 className="text-base font-semibold text-slate-900 mb-2">Language and pressure</h3>
-          <label className="flex items-start gap-3 cursor-pointer group">
-            <input
-              type="checkbox"
-              checked={answers.urgentLanguage}
-              onChange={() => toggle("urgentLanguage")}
-              className="mt-0.5 h-5 w-5 rounded border-slate-300 text-sky-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-1 cursor-pointer"
-              style={{ zIndex: 10, position: "relative" }}
-            />
-            <span className="text-sm text-slate-700 leading-relaxed flex-1">
-              Message uses urgency or threats such as account closure or legal action.
-            </span>
-          </label>
-          <label className="flex items-start gap-3 cursor-pointer group">
-            <input
-              type="checkbox"
-              checked={answers.genericGreeting}
-              onChange={() => toggle("genericGreeting")}
-              className="mt-0.5 h-5 w-5 rounded border-slate-300 text-sky-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-1 cursor-pointer"
-              style={{ zIndex: 10, position: "relative" }}
-            />
-            <span className="text-sm text-slate-700 leading-relaxed flex-1">
-              Greeting is generic or wrong such as Dear Customer when the brand normally uses your name.
-            </span>
-          </label>
-          <label className="flex items-start gap-3 cursor-pointer group">
-            <input
-              type="checkbox"
-              checked={answers.smallTypos}
-              onChange={() => toggle("smallTypos")}
-              className="mt-0.5 h-5 w-5 rounded border-slate-300 text-sky-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-1 cursor-pointer"
-              style={{ zIndex: 10, position: "relative" }}
-            />
-            <span className="text-sm text-slate-700 leading-relaxed flex-1">
+          <div className="space-y-2">
+            <CheckPill checked={answers.urgentLanguage} onCheckedChange={setChecked("urgentLanguage")} tone="amber">
+              Uses urgency or threats, such as account closure or legal action.
+            </CheckPill>
+            <CheckPill checked={answers.genericGreeting} onCheckedChange={setChecked("genericGreeting")} tone="amber">
+              Greeting is generic or wrong, such as Dear Customer when the brand normally uses your name.
+            </CheckPill>
+            <CheckPill checked={answers.smallTypos} onCheckedChange={setChecked("smallTypos")} tone="amber">
               Small spelling or grammar mistakes you would not expect from a large brand.
-            </span>
-          </label>
+            </CheckPill>
+          </div>
         </div>
 
         <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-5 space-y-4">
           <h3 className="text-base font-semibold text-slate-900 mb-2">Requests and attachments</h3>
-          <label className="flex items-start gap-3 cursor-pointer group">
-            <input
-              type="checkbox"
-              checked={answers.asksForPassword}
-              onChange={() => toggle("asksForPassword")}
-              className="mt-0.5 h-5 w-5 rounded border-slate-300 text-sky-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-1 cursor-pointer"
-              style={{ zIndex: 10, position: "relative" }}
-            />
-            <span className="text-sm text-slate-700 leading-relaxed flex-1">
-              Message asks you to enter or confirm a password or one time code.
-            </span>
-          </label>
-          <label className="flex items-start gap-3 cursor-pointer group">
-            <input
-              type="checkbox"
-              checked={answers.asksForPayment}
-              onChange={() => toggle("asksForPayment")}
-              className="mt-0.5 h-5 w-5 rounded border-slate-300 text-sky-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-1 cursor-pointer"
-              style={{ zIndex: 10, position: "relative" }}
-            />
-            <span className="text-sm text-slate-700 leading-relaxed flex-1">
-              Message asks for payment details or unusual transfers.
-            </span>
-          </label>
-          <label className="flex items-start gap-3 cursor-pointer group">
-            <input
-              type="checkbox"
-              checked={answers.unexpectedAttachment}
-              onChange={() => toggle("unexpectedAttachment")}
-              className="mt-0.5 h-5 w-5 rounded border-slate-300 text-sky-600 focus:ring-2 focus:ring-sky-500 focus:ring-offset-1 cursor-pointer"
-              style={{ zIndex: 10, position: "relative" }}
-            />
-            <span className="text-sm text-slate-700 leading-relaxed flex-1">
-              Message includes an attachment you did not expect to receive.
-            </span>
-          </label>
+          <div className="space-y-2">
+            <CheckPill checked={answers.asksForPassword} onCheckedChange={setChecked("asksForPassword")} tone="rose">
+              Asks you to enter or confirm a password or a one time code.
+            </CheckPill>
+            <CheckPill checked={answers.asksForPayment} onCheckedChange={setChecked("asksForPayment")} tone="rose">
+              Asks for payment details or unusual transfers.
+            </CheckPill>
+            <CheckPill checked={answers.unexpectedAttachment} onCheckedChange={setChecked("unexpectedAttachment")} tone="rose">
+              Includes an attachment you did not expect to receive.
+            </CheckPill>
+          </div>
         </div>
       </section>
 

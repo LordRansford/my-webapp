@@ -2,6 +2,7 @@
 
 import { use_tool_state } from "@/components/notes/hooks/use_tool_state";
 import ToolStateActions from "@/components/notes/ToolStateActions";
+import { CheckPill } from "@/components/ui/CheckPill";
 
 const controls = [
   { id: "mfa", label: "MFA", benefit: 3, cost: 1 },
@@ -35,17 +36,17 @@ export default function RiskTradeoffTool() {
 
       <div className="space-y-2">
         {controls.map((c) => (
-          <label key={c.id} className="flex items-start gap-2 rounded-lg border bg-gray-50 px-3 py-2">
-            <input
-              type="checkbox"
-              checked={Boolean(state.chosen?.[c.id])}
-              onChange={(e) => set_state((prev) => ({ ...prev, chosen: { ...prev.chosen, [c.id]: e.target.checked } }))}
-              className="mt-1"
-            />
-            <span className="text-gray-800">
-              {c.label} (benefit {c.benefit}, cost {c.cost})
-            </span>
-          </label>
+          <CheckPill
+            key={c.id}
+            checked={Boolean(state.chosen?.[c.id])}
+            onCheckedChange={(checked) =>
+              set_state((prev) => ({ ...prev, chosen: { ...prev.chosen, [c.id]: checked } }))
+            }
+            tone="emerald"
+            className="justify-start"
+          >
+            {c.label} (benefit {c.benefit}, cost {c.cost})
+          </CheckPill>
         ))}
       </div>
 

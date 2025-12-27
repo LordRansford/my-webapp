@@ -47,6 +47,15 @@ Here is a short story I have seen in some form more than once. A finance team ge
 
 Threats, vulnerabilities, and risk are not the same thing. A <GlossaryTip term="threat">A threat is something that could cause harm, like phishing, malware, or a dishonest insider.</GlossaryTip> is about what could happen. A <GlossaryTip term="vulnerability">A vulnerability is a weakness that makes a threat more likely to succeed, like reused passwords or missing patches.</GlossaryTip> is about what makes it easier. <GlossaryTip term="risk">Risk is likelihood and impact in your context. It is the decision about what you accept, what you reduce, and what you monitor.</GlossaryTip> A threat can exist with low risk if it cannot reach you. A vulnerability can exist with low risk if it has no meaningful impact. Context is the difference between a scary headline and a meaningful decision.
 
+<MermaidDiagram caption="Threat, vulnerability, and risk in context">
+{`flowchart TB
+  T[Threat] -->|tries to cause harm| H[Harm]
+  V[Vulnerability] -->|makes harm easier| H
+  C[Context] -->|shapes likelihood and impact| R[Risk]
+  H -->|creates impact| R
+`}
+</MermaidDiagram>
+
 Everyday example: if you leave your house key under a plant pot, the threat is someone trying doors, the vulnerability is the predictable hiding place, and the risk depends on your street, your neighbours, and what happens if someone gets inside.
 
 Common mistake: treating cyber as a list of bad things that might happen, instead of a set of assumptions you must test. Another common mistake is over focusing on rare, advanced attacks while ignoring easy ones that happen daily.

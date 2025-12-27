@@ -2,6 +2,7 @@
 
 import { use_tool_state } from "@/components/notes/hooks/use_tool_state";
 import ToolStateActions from "@/components/notes/ToolStateActions";
+import { CheckPill } from "@/components/ui/CheckPill";
 
 const steps = ["Identify implicit trust", "Verify identity and device", "Segment access", "Monitor continuously"];
 
@@ -21,20 +22,20 @@ export default function ZeroTrustPlannerTool() {
 
       <div className="space-y-2">
         {steps.map((s) => (
-          <label key={s} className="flex items-start gap-2 rounded-lg border bg-gray-50 px-3 py-2">
-            <input
-              type="checkbox"
-              checked={Boolean(state.completed?.[s])}
-              onChange={(e) =>
-                set_state((prev) => ({
-                  ...prev,
-                  completed: { ...prev.completed, [s]: e.target.checked },
-                }))
-              }
-              className="mt-1"
-            />
-            <span className="text-gray-800">{s}</span>
-          </label>
+          <CheckPill
+            key={s}
+            checked={Boolean(state.completed?.[s])}
+            onCheckedChange={(checked) =>
+              set_state((prev) => ({
+                ...prev,
+                completed: { ...prev.completed, [s]: checked },
+              }))
+            }
+            tone="emerald"
+            className="justify-start"
+          >
+            {s}
+          </CheckPill>
         ))}
       </div>
 

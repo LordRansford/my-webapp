@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { CheckPill } from "@/components/ui/CheckPill";
 
 export function ChangeRiskSimulator() {
   const [deploysPerDay, setDeploysPerDay] = useState(5);
@@ -86,15 +87,11 @@ export function ChangeRiskSimulator() {
               </span>
             </label>
 
-            <label className="mt-1 flex items-center gap-2 text-xs text-slate-700">
-              <input
-                type="checkbox"
-                className="h-4 w-4 rounded border-slate-300"
-                checked={rollbackReady}
-                onChange={(e) => setRollbackReady(e.target.checked)}
-              />
-              We have a rehearsed, fast rollback or feature flag fallback
-            </label>
+            <div className="mt-1">
+              <CheckPill checked={rollbackReady} onCheckedChange={setRollbackReady} tone="emerald">
+                We have a rehearsed rollback or a feature flag fallback
+              </CheckPill>
+            </div>
           </div>
         </div>
 

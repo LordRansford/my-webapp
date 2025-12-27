@@ -9,18 +9,10 @@ export class ErrorBoundary extends Component {
   }
 
   static getDerivedStateFromError(error) {
-    // #region agent log
-    if (typeof window !== 'undefined') {
-      fetch('http://127.0.0.1:7243/ingest/5c42012f-fdd0-45fd-8860-75c06576ec81',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ErrorBoundary.jsx:getDerivedStateFromError',message:'Error state derived',data:{errorMessage:error?.message,errorName:error?.name,errorStack:error?.stack?.substring(0,500)},timestamp:Date.now(),sessionId:'debug-session',runId:'run3',hypothesisId:['H1','H2','H3','H4','H5','H6','H7']})}).catch(()=>{});
-    }
-    // #endregion
     return { hasError: true, error }
   }
 
   componentDidCatch(error, info) {
-    // #region agent log
-    fetch('http://127.0.0.1:7243/ingest/5c42012f-fdd0-45fd-8860-75c06576ec81',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ErrorBoundary.jsx:componentDidCatch',message:'Error caught by boundary',data:{errorMessage:error?.message,errorName:error?.name,errorStack:error?.stack?.substring(0,1000),componentStack:info?.componentStack?.substring(0,1000)},timestamp:Date.now(),sessionId:'debug-session',runId:'run3',hypothesisId:['H1','H2','H3','H4','H5','H6','H7']})}).catch(()=>{});
-    // #endregion
     console.error('[ErrorBoundary]', error, info);
   }
 

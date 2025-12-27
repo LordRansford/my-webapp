@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { CheckPill } from "@/components/ui/CheckPill";
 
 export function DeploymentTopologyMapper() {
   const [environments, setEnvironments] = useState([
@@ -86,15 +87,15 @@ export function DeploymentTopologyMapper() {
                     </span>
                   </label>
 
-                  <label className="flex items-center gap-2 text-xs text-slate-700">
-                    <input
-                      type="checkbox"
-                      className="h-4 w-4 rounded border-slate-300"
+                  <div className="sm:max-w-xs">
+                    <CheckPill
                       checked={env.userFacing}
-                      onChange={(e) => updateEnv(env.id, { userFacing: e.target.checked })}
-                    />
-                    User facing environment
-                  </label>
+                      onCheckedChange={(checked) => updateEnv(env.id, { userFacing: checked })}
+                      tone="emerald"
+                    >
+                      User facing environment
+                    </CheckPill>
+                  </div>
                 </div>
               </div>
             ))}
