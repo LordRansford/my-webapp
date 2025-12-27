@@ -66,6 +66,145 @@ const parseJsonCourse = (fileName) => {
   }
 };
 
+const COURSE_TRACK_ORDER = [
+  "cybersecurity",
+  "ai",
+  "software-architecture",
+  "data",
+  "digitalisation",
+];
+
+const COURSE_TRACK_ROUTES = {
+  ai: "/ai",
+  cybersecurity: "/cybersecurity",
+  data: "/data",
+  digitalisation: "/digitalisation",
+  "software-architecture": "/software-architecture",
+};
+
+const COURSE_TRACK_LEVEL_ROUTES = {
+  ai: {
+    foundations: "/ai/beginner",
+    intermediate: "/ai/intermediate",
+    advanced: "/ai/advanced",
+    summary: "/ai/summary",
+  },
+  cybersecurity: {
+    foundations: "/cybersecurity/beginner",
+    intermediate: "/cybersecurity/intermediate",
+    advanced: "/cybersecurity/advanced",
+    summary: "/cybersecurity/summary",
+  },
+  data: {
+    foundations: "/data/foundations",
+    intermediate: "/data/intermediate",
+    advanced: "/data/advanced",
+    summary: "/data/summary",
+  },
+  digitalisation: {
+    foundations: "/digitalisation/beginner",
+    intermediate: "/digitalisation/intermediate",
+    advanced: "/digitalisation/advanced",
+    summary: "/digitalisation/summary",
+  },
+  "software-architecture": {
+    foundations: "/software-architecture/beginner",
+    intermediate: "/software-architecture/intermediate",
+    advanced: "/software-architecture/advanced",
+    summary: "/software-architecture/summary",
+  },
+};
+
+const parseCourseTrack = (fileName) => {
+  const filePath = path.join(coursesDir, fileName);
+  try {
+    const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
+    const slug = data.slug || data.id || toSlug(fileName);
+    const levels = Array.isArray(data.levels) ? data.levels : [];
+    const summaryRoute = data.summary_route || data.summaryRoute || null;
+    const totalHours = Number(data.totalEstimatedHours || data.total_estimated_hours) || 0;
+
+    return {
+      id: data.id || slug,
+      slug,
+      title: data.shortTitle || data.short_title || data.title || slug,
+      longTitle: data.title || data.shortTitle || slug,
+      description: data.description || "",
+      totalEstimatedHours: totalHours,
+      overviewRoute: data.overview_route || data.overviewRoute || COURSE_TRACK_ROUTES[slug] || `/courses/${slug}`,
+      summaryRoute,
+      levels,
+    };
+  } catch {
+    return null;
+  }
+};
+
+const resolveEstimatedHours = (level) =>
+  Number(level?.estimatedHours || level?.estimated_hours || level?.estimated_hours_total) || 0;
+
+const resolveLevelHref = (trackSlug, bandKey, level) => {
+  const override = COURSE_TRACK_LEVEL_ROUTES?.[trackSlug]?.[bandKey];
+  if (override) return override;
+  if (level?.route) return level.route;
+  if (level?.slug && COURSE_TRACK_ROUTES[trackSlug]) return `${COURSE_TRACK_ROUTES[trackSlug]}/${level.slug}`;
+  if (level?.slug) return `/courses/${trackSlug}/${level.slug}`;
+  return COURSE_TRACK_ROUTES[trackSlug] || `/courses/${trackSlug}`;
+};
+
+const buildTrackBands = (track) => {
+  const labels = ["Foundations", "Intermediate", "Advanced"];
+  const bandKeys = ["foundations", "intermediate", "advanced"];
+
+  const bands = track.levels.slice(0, 3).map((level, index) => {
+    const bandKey = bandKeys[index] || "advanced";
+    return {
+      key: bandKey,
+      label: labels[index] || "Level",
+      title: level?.title || labels[index] || "Level",
+      summary: level?.summary || "",
+      estimatedHours: resolveEstimatedHours(level),
+      href: resolveLevelHref(track.slug, bandKey, level),
+    };
+  });
+
+  const summaryHref = resolveLevelHref(track.slug, "summary", { route: track.summaryRoute, slug: "summary" });
+  return {
+    bands,
+    summary: {
+      key: "summary",
+      label: "Summary",
+      title: "Summary and games",
+      href: summaryHref,
+    },
+  };
+};
+
+export const getCourseTracks = () => {
+  const tracks = listCourseJson()
+    .map(parseCourseTrack)
+    .filter(Boolean)
+    .map((track) => {
+      const resolvedRoute = COURSE_TRACK_ROUTES[track.slug] || track.overviewRoute || `/courses/${track.slug}`;
+      const { bands, summary } = buildTrackBands(track);
+      const totalBandHours = bands.reduce((acc, b) => acc + (Number(b.estimatedHours) || 0), 0);
+      const totalHours = track.totalEstimatedHours || totalBandHours;
+
+      return {
+        ...track,
+        overviewRoute: resolvedRoute,
+        totalEstimatedHours: totalHours,
+        bands,
+        summary,
+        startHref: bands[0]?.href || resolvedRoute,
+      };
+    });
+
+  const orderIndex = new Map(COURSE_TRACK_ORDER.map((slug, idx) => [slug, idx]));
+  tracks.sort((a, b) => (orderIndex.get(a.slug) ?? 99) - (orderIndex.get(b.slug) ?? 99));
+  return tracks;
+};
+
 const listCourseSlugs = () =>
   readDirIfExists(coursesDir).filter((entry) =>
     fs.statSync(path.join(coursesDir, entry)).isDirectory(),

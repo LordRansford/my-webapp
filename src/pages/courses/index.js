@@ -1,15 +1,71 @@
 import Link from "next/link";
 import Layout from "@/components/Layout";
-import CourseCard from "@/components/CourseCard";
-import { getCoursesIndex } from "@/lib/courses";
+import { ArrowRight, Clock3 } from "lucide-react";
+import { getCourseTracks } from "@/lib/courses";
 import { MarketingPageTemplate } from "@/components/templates/PageTemplates";
 
 export async function getStaticProps() {
-  const courses = getCoursesIndex();
+  const courses = getCourseTracks();
 
   return {
     props: { courses },
   };
+}
+
+function CourseTrackCard({ course }) {
+  const levelCount = (course?.bands?.length || 0) + 1;
+  const hours = Number(course?.totalEstimatedHours || 0);
+  const firstLabel = course.bands?.[0]?.label || "Foundations";
+
+  return (
+    <div className="course-card">
+      <div className="course-card__meta">
+        <span className="chip chip--accent">{levelCount} levels</span>
+        {hours ? (
+          <span className="chip chip--ghost">
+            <Clock3 size={14} aria-hidden="true" />
+            {hours} hrs
+          </span>
+        ) : null}
+      </div>
+
+      <h3 className="text-xl font-semibold">
+        <Link href={course.overviewRoute} className="hover:underline">
+          {course.title}
+        </Link>
+      </h3>
+
+      {course.description ? <p className="muted">{course.description}</p> : null}
+
+      <div className="course-card__tags">
+        {course.bands?.map((level) => (
+          <Link key={level.key} href={level.href} className="pill pill--accent">
+            {level.label}
+          </Link>
+        ))}
+        <Link href={course.summary?.href || course.overviewRoute} className="pill pill--ghost">
+          {course.summary?.label || "Summary"}
+        </Link>
+      </div>
+
+      <div className="course-card__footer">
+        <Link
+          href={course.startHref || course.overviewRoute}
+          className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 hover:underline focus:outline-none focus:ring-2 focus:ring-emerald-200"
+        >
+          Start with {firstLabel}
+          <ArrowRight size={16} aria-hidden="true" />
+        </Link>
+        <Link
+          href={course.overviewRoute}
+          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:underline focus:outline-none focus:ring-2 focus:ring-slate-200"
+        >
+          Overview
+          <ArrowRight size={16} aria-hidden="true" />
+        </Link>
+      </div>
+    </div>
+  );
 }
 
 export default function CoursesPage({ courses }) {
@@ -22,10 +78,10 @@ export default function CoursesPage({ courses }) {
         <div className="hero">
           <div className="hero__copy">
             <p className="eyebrow">Courses</p>
-            <h1>Notes that build from beginner to advanced.</h1>
+            <h1>Notes that build from foundations to advanced practice.</h1>
             <p className="lead">
-              Five focused tracks - Cybersecurity, Data, Software Architecture, Digitalisation, and AI - each with clear
-              notes and safe browser practice so you can test ideas straight away.
+              Five focused tracks. Cybersecurity, AI, Software Architecture, Data, and Digitalisation. Each track has a
+              clear path from foundations to advanced practice, plus a summary with games and practical tools.
             </p>
             <div className="actions">
               <Link href="/tools" className="button primary">
@@ -75,7 +131,7 @@ export default function CoursesPage({ courses }) {
           </div>
           <div className="course-grid">
             {courses.map((course) => (
-              <CourseCard key={course.slug} course={course} />
+              <CourseTrackCard key={course.slug} course={course} />
             ))}
           </div>
         </section>
