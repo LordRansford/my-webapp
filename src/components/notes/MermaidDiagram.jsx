@@ -75,19 +75,19 @@ export default function MermaidDiagram({ children, caption, ariaLabel }) {
   }, [diagramText, id]);
 
   return (
-    <figure className="my-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900/60">
-      <div className="p-4">
+    <figure className="my-8 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900/60">
+      <div className="p-6">
         {error ? (
-          <div className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs text-rose-800 dark:border-rose-900/50 dark:bg-rose-950/30 dark:text-rose-200">
+          <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800 dark:border-rose-900/50 dark:bg-rose-950/30 dark:text-rose-200">
             <p className="font-semibold">Diagram failed to render.</p>
             <p className="mt-1">{error}</p>
-            <pre className="mt-3 whitespace-pre-wrap rounded-lg bg-white/70 p-3 text-[0.7rem] text-slate-800 dark:bg-black/30 dark:text-slate-100">
+            <pre className="mt-3 whitespace-pre-wrap rounded-lg bg-white/70 p-3 text-xs text-slate-800 dark:bg-black/30 dark:text-slate-100">
               {diagramText}
             </pre>
           </div>
         ) : (
           <div
-            className="mermaid-diagram overflow-x-auto"
+            className="mermaid-diagram overflow-x-auto flex items-center justify-center"
             aria-label={label}
             role="img"
             dangerouslySetInnerHTML={{ __html: svg }}
@@ -95,7 +95,7 @@ export default function MermaidDiagram({ children, caption, ariaLabel }) {
         )}
       </div>
       {caption ? (
-        <figcaption className="border-t border-slate-100 px-4 py-3 text-xs text-slate-600 dark:border-slate-800 dark:text-slate-300">
+        <figcaption className="border-t border-slate-100 px-6 py-4 text-sm text-slate-600 dark:border-slate-800 dark:text-slate-300 leading-relaxed">
           {caption}
         </figcaption>
       ) : null}

@@ -1,9 +1,9 @@
 "use client";
 
-import SpotifyMiniPlayer from "@/components/spotify/SpotifyMiniPlayer";
+import MusicControl from "@/components/spotify/MusicControl";
 
 export default function SpotifyMiniPlayerMount() {
-  return <SpotifyMiniPlayer />;
+  return <MusicControl />;
 }
 
 

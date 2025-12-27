@@ -1,8 +1,7 @@
-import { MDXRemote } from "next-mdx-remote";
 import Layout from "@/components/Layout";
-import mdxComponents from "@/components/mdx-components";
+import BlogPostLayout from "@/components/blog/BlogPostLayout";
 import { getAllPosts, getPostBySlug } from "@/lib/posts";
-import Link from "next/link";
+import "@/styles/blog-post.css";
 
 export async function getStaticPaths() {
   const posts = getAllPosts();
@@ -22,24 +21,7 @@ export default function PostPage({ post }) {
       title={`${post.title} - Ransford's Notes`}
       description={post.excerpt || "Notes and exercises."}
     >
-      <nav className="breadcrumb">
-        <Link href="/posts">Notes</Link>
-        <span aria-hidden="true"> / </span>
-        <span>{post.title}</span>
-      </nav>
-      <article className="lesson-content">
-        <p className="eyebrow">Notes</p>
-        <h1>{post.title}</h1>
-        {post.date && (
-          <p className="muted">
-            {new Intl.DateTimeFormat("en", { year: "numeric", month: "short", day: "numeric" }).format(new Date(post.date))}
-            {post.readingStats ? ` · ${Math.ceil(post.readingStats.minutes)} min read` : ""}
-          </p>
-        )}
-        <div className="post-content">
-          <MDXRemote {...post.mdx} components={mdxComponents} />
-        </div>
-      </article>
+      <BlogPostLayout post={post} />
     </Layout>
   );
 }

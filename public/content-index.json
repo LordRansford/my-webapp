@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-12-27T20:12:41.061Z",
+  "generatedAt": "2025-12-27T23:03:19.836Z",
   "pages": [
     {
       "route": "/courses/ai/advanced",
@@ -252,7 +252,7 @@
           "depth": 2,
           "title": "How to study",
           "anchor": "how-to-study",
-          "excerpt": "1. Skim the overview, then jump into the RSA lab to verify your cryptographic assumptions. 2. Use the CIA traceability list below as your checklist during architecture reviews. 3. Share your own playbooks by dropping new MDX lessons into ."
+          "excerpt": "1. Skim the overview, then jump into the RSA lab to verify your cryptographic assumptions. 2. Use the CIA traceability list below as your checklist during architecture reviews. 3. Connect to related courses: see for system design patterns, and for data governance that supports security controls. 4. Share your own playbooks by dropping new MDX lessons into ."
         },
         {
           "depth": 2,
@@ -2369,6 +2369,73 @@
           "title": "Reflection and next steps",
           "anchor": "reflection-and-next-steps",
           "excerpt": "Ask yourself: - Where do I see architectural problems in systems I know - What decisions would I revisit with this understanding - How would I explain architecture to a non-technical leader - What trade-offs am I currently ignoring"
+        }
+      ]
+    },
+    {
+      "route": "/posts/ai-fundamentals-explained",
+      "title": "AI Fundamentals Explained: From Data to Decisions",
+      "sourcePath": "/content/posts/ai-fundamentals-explained.mdx",
+      "sections": [
+        {
+          "depth": 2,
+          "title": "Introduction",
+          "anchor": "introduction",
+          "excerpt": "When people talk about AI, they often mean systems that learn patterns from data and use those patterns to make predictions or decisions. The core idea is simple: give a system examples, let it find patterns, then use those patterns on new situations."
+        },
+        {
+          "depth": 2,
+          "title": "What is data?",
+          "anchor": "what-is-data",
+          "excerpt": "Data is information organized so a system can learn from it. Think of it as examples with labels."
+        },
+        {
+          "depth": 2,
+          "title": "How models learn patterns",
+          "anchor": "how-models-learn-patterns",
+          "excerpt": "A model is a function that maps inputs to outputs. Training is the process of adjusting that function until it produces the right outputs for your examples."
+        },
+        {
+          "depth": 2,
+          "title": "Training, validation, and testing",
+          "anchor": "training-validation-and-testing",
+          "excerpt": "You split your data into three sets:"
+        },
+        {
+          "depth": 2,
+          "title": "Common data problems",
+          "anchor": "common-data-problems",
+          "excerpt": "Models learn whatever patterns exist in the data. If the data has problems, the model learns those problems."
+        },
+        {
+          "depth": 2,
+          "title": "Evaluation metrics in context",
+          "anchor": "evaluation-metrics-in-context",
+          "excerpt": "Accuracy tells you what percentage of predictions were correct. But accuracy can be misleading."
+        },
+        {
+          "depth": 2,
+          "title": "Models in practice",
+          "anchor": "models-in-practice",
+          "excerpt": "Modern AI uses many model types:"
+        },
+        {
+          "depth": 2,
+          "title": "Deployment changes everything",
+          "anchor": "deployment-changes-everything",
+          "excerpt": "A model that works in testing might fail in production. Real users behave differently than test data. Systems have latency, drift, and edge cases."
+        },
+        {
+          "depth": 2,
+          "title": "Responsible AI",
+          "anchor": "responsible-ai",
+          "excerpt": "AI systems make decisions that affect people. You need to think about:"
+        },
+        {
+          "depth": 2,
+          "title": "Conclusion",
+          "anchor": "conclusion",
+          "excerpt": "AI is pattern learning from data. The fundamentals are:"
         }
       ]
     },

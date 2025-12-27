@@ -5,6 +5,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import { Providers } from "./providers";
 import AssistantsMount from "./AssistantsMount";
+import MusicMount from "./MusicMount";
+import AccessibilityMount from "./AccessibilityMount";
 import TestingModeBanner from "@/components/TestingModeBanner";
 import AppEnvBanner from "@/components/AppEnvBanner";
 import AppShell from "@/components/navigation/AppShell";
@@ -60,6 +62,8 @@ export default function RootLayout({ children }) {
           <TestingModeBanner />
           <AppShell>{children}</AppShell>
           <AssistantsMount />
+          <MusicMount />
+          <AccessibilityMount />
         </Providers>
         <SpeedInsights />
         <Analytics />
