@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import { useMemo } from "react";
 import NotesLayout from "@/components/notes/Layout";
 import { MDXRenderer } from "@/components/notes/MDXRenderer";
@@ -10,6 +11,35 @@ import ToolCard from "@/components/notes/ToolCard";
 import QuizBlock from "@/components/notes/QuizBlock";
 import { dataSectionManifest } from "@/lib/dataSections";
 
+const DataPipelineDesignerTool = dynamic(
+  () => import("@/components/notes/tools/data/intermediate/DataPipelineDesignerTool"),
+  { ssr: false }
+);
+const DataRiskScenariosTool = dynamic(
+  () => import("@/components/notes/tools/data/intermediate/DataRiskScenariosTool"),
+  { ssr: false }
+);
+const AnalysisPlaygroundTool = dynamic(
+  () => import("@/components/notes/tools/data/intermediate/AnalysisPlaygroundTool"),
+  { ssr: false }
+);
+const DistributionExplorerTool = dynamic(
+  () => import("@/components/notes/tools/data/advanced/DistributionExplorerTool"),
+  { ssr: false }
+);
+const SamplingBiasSimulatorTool = dynamic(
+  () => import("@/components/notes/tools/data/advanced/SamplingBiasSimulatorTool"),
+  { ssr: false }
+);
+const EthicsScenarioTool = dynamic(
+  () => import("@/components/notes/tools/data/foundations/EthicsScenarioTool"),
+  { ssr: false }
+);
+const CorrelationMythsGame = dynamic(
+  () => import("@/components/notes/tools/data/summary/CorrelationMythsGame"),
+  { ssr: false }
+);
+
 export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
     () => ({
@@ -19,6 +49,13 @@ export default function Page({ source, headings }) {
       PageNav,
       ToolCard,
       QuizBlock,
+      DataPipelineDesignerTool,
+      DataRiskScenariosTool,
+      AnalysisPlaygroundTool,
+      DistributionExplorerTool,
+      SamplingBiasSimulatorTool,
+      EthicsScenarioTool,
+      CorrelationMythsGame,
     }),
     []
   );

@@ -18,6 +18,7 @@ const DataProfilerTool = dynamic(() => import("@/components/notes/tools/ai/inter
 const TrainingLoopVisualizerTool = dynamic(() => import("@/components/notes/tools/ai/intermediate/TrainingLoopVisualizerTool"), { ssr: false });
 const MetricsLabTool = dynamic(() => import("@/components/notes/tools/ai/intermediate/MetricsLabTool"), { ssr: false });
 const ServingMonitorSimulatorTool = dynamic(() => import("@/components/notes/tools/ai/intermediate/ServingMonitorSimulatorTool"), { ssr: false });
+const AiRiskScenarioSimulatorTool = dynamic(() => import("@/components/notes/tools/ai/intermediate/AiRiskScenarioSimulatorTool"), { ssr: false });
 
 export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
@@ -35,6 +36,7 @@ export default function Page({ source, headings }) {
       TrainingLoopVisualizerTool,
       MetricsLabTool,
       ServingMonitorSimulatorTool,
+      AiRiskScenarioSimulatorTool,
     }),
     []
   );

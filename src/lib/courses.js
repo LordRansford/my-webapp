@@ -4,8 +4,10 @@ import matter from "gray-matter";
 import readingTime from "reading-time";
 import { serialize } from "next-mdx-remote/serialize";
 import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeKatex from "rehype-katex";
 import { aiSectionManifest } from "./aiSections";
 import { digitalisationSectionManifest } from "./digitalisationSections";
 import { softwareArchitectureSectionManifest } from "./softwareArchitectureSections";
@@ -14,9 +16,10 @@ import { dataSectionManifest } from "./dataSections";
 const coursesDir = path.join(process.cwd(), "content", "courses");
 
 const mdxOptions = {
-  remarkPlugins: [remarkGfm],
+  remarkPlugins: [remarkGfm, remarkMath],
   rehypePlugins: [
     rehypeSlug,
+    rehypeKatex,
     [
       rehypeAutolinkHeadings,
       {

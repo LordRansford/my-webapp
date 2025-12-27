@@ -84,6 +84,7 @@ import DataProfilerTool from "@/components/notes/tools/ai/intermediate/DataProfi
 import TrainingLoopVisualizerTool from "@/components/notes/tools/ai/intermediate/TrainingLoopVisualizerTool";
 import MetricsLabTool from "@/components/notes/tools/ai/intermediate/MetricsLabTool";
 import ServingMonitorSimulatorTool from "@/components/notes/tools/ai/intermediate/ServingMonitorSimulatorTool";
+import AiRiskScenarioSimulatorTool from "@/components/notes/tools/ai/intermediate/AiRiskScenarioSimulatorTool";
 import LLMAgentPlaygroundTool from "@/components/notes/tools/ai/advanced/LLMAgentPlaygroundTool";
 import PromptPatternLabTool from "@/components/notes/tools/ai/advanced/PromptPatternLabTool";
 import ModelForgeAdvancedTool from "@/components/notes/tools/ai/advanced/ModelForgeAdvancedTool";
@@ -172,6 +173,7 @@ import SamplingBiasSimulatorTool from "@/components/notes/tools/data/advanced/Sa
 import ReplicationConsistencyVisualizerTool from "@/components/notes/tools/data/advanced/ReplicationConsistencyVisualizerTool";
 import GovernanceDecisionSimulatorTool from "@/components/notes/tools/data/advanced/GovernanceDecisionSimulatorTool";
 import DataStrategySandboxTool from "@/components/notes/tools/data/advanced/DataStrategySandboxTool";
+import CorrelationMythsGame from "@/components/notes/tools/data/summary/CorrelationMythsGame";
 
 // Create components object - dynamic imports will only load on client
 const mdxComponents = {
@@ -266,6 +268,7 @@ const mdxComponents = {
   TrainingLoopVisualizerTool,
   MetricsLabTool,
   ServingMonitorSimulatorTool,
+  AiRiskScenarioSimulatorTool,
   LLMAgentPlaygroundTool,
   PromptPatternLabTool,
   ModelForgeAdvancedTool,
@@ -354,6 +357,7 @@ const mdxComponents = {
   ReplicationConsistencyVisualizerTool,
   GovernanceDecisionSimulatorTool,
   DataStrategySandboxTool,
+  CorrelationMythsGame,
 };
 
 export default mdxComponents;

@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react";
 import Breadcrumbs, { type BreadcrumbItem } from "@/components/navigation/Breadcrumbs";
+import { ArrowLeft } from "lucide-react";
 
 type WithBreadcrumbs = {
   breadcrumbs?: BreadcrumbItem[];
@@ -73,7 +74,7 @@ function BackLink({ href }: { href: string }) {
   return (
     <div className="mb-3">
       <a href={href} className="inline-flex items-center gap-2 text-sm font-semibold text-slate-800 underline decoration-slate-300 underline-offset-4">
-        ← Back
+        <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Back
       </a>
     </div>
   );

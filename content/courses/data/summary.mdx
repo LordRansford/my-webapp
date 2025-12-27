@@ -20,6 +20,13 @@ import NotesLayout from "@/components/notes/Layout"
 import ToolCard from "@/components/notes/ToolCard"
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
 import QuizBlock from "@/components/notes/QuizBlock"
+import DataPipelineDesignerTool from "@/components/notes/tools/data/intermediate/DataPipelineDesignerTool"
+import DataRiskScenariosTool from "@/components/notes/tools/data/intermediate/DataRiskScenariosTool"
+import AnalysisPlaygroundTool from "@/components/notes/tools/data/intermediate/AnalysisPlaygroundTool"
+import DistributionExplorerTool from "@/components/notes/tools/data/advanced/DistributionExplorerTool"
+import SamplingBiasSimulatorTool from "@/components/notes/tools/data/advanced/SamplingBiasSimulatorTool"
+import EthicsScenarioTool from "@/components/notes/tools/data/foundations/EthicsScenarioTool"
+import CorrelationMythsGame from "@/components/notes/tools/data/summary/CorrelationMythsGame"
 
 # Data Summary and games
 
@@ -56,19 +63,25 @@ These challenges blend architecture, governance, analytics, and ethics. Treat th
   id="data-system-challenge"
   title="Design a data system"
   description="Choose architecture, governance, and analysis approaches for a scenario and see the consequences."
-/>
+>
+  <DataPipelineDesignerTool />
+</ToolCard>
 
 <ToolCard
   id="hidden-data-risks"
   title="Spot the hidden data risks"
   description="Review a realistic scenario and flag technical, ethical, and strategic risks before they spread."
-/>
+>
+  <DataRiskScenariosTool />
+</ToolCard>
 
 <ToolCard
   id="data-decision-lab"
   title="Make a data driven decision"
   description="Work with incomplete data, uncertainty, and trade offs to make a recommendation."
-/>
+>
+  <AnalysisPlaygroundTool />
+</ToolCard>
 
 ## Games that test your intuition
 
@@ -80,25 +93,33 @@ Lightweight games that surface common mistakes. Play them fast, then replay to s
   id="average-trap-game"
   title="The average trap"
   description="Spot when an average hides extremes or long tails."
-/>
+>
+  <DistributionExplorerTool />
+</ToolCard>
 
 <ToolCard
   id="correlation-myth-game"
   title="Correlation myths"
   description="Decide if pairs of events are related or just moving together by chance."
-/>
+>
+  <CorrelationMythsGame />
+</ToolCard>
 
 <ToolCard
   id="sampling-lottery"
   title="The sampling lottery"
   description="See how tiny samples can mislead and how bigger, fairer samples change the story."
-/>
+>
+  <SamplingBiasSimulatorTool />
+</ToolCard>
 
 <ToolCard
   id="data-bias-blindspot"
   title="Bias blind spots"
   description="Find where bias creeps into data collection, modelling, and interpretation."
-/>
+>
+  <EthicsScenarioTool />
+</ToolCard>
 
 ## How this connects to everything else you learn here
 

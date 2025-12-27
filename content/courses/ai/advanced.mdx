@@ -15,6 +15,7 @@ import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
 import DiagramBlock from "@/components/DiagramBlock"
+import PageNav from "@/components/notes/PageNav"
 import { aiSectionManifest } from "@/lib/aiSections"
 
 # AI Advanced
@@ -22,6 +23,8 @@ import { aiSectionManifest } from "@/lib/aiSections"
 <LevelProgressBar courseId="ai" levelId="advanced" sectionIds={aiSectionManifest.advanced} />
 
 <CPDTracker courseId="ai" levelId="advanced" estimatedHours={12} />
+
+<PageNav prevHref="/ai/intermediate" prevLabel="Intermediate" nextHref="/ai/summary" nextLabel="Summary and games" showTop />
 
 ## AI systems and model architectures
 
@@ -77,6 +80,7 @@ If you cannot trace what data was used, what model version ran, and why a decisi
     <div>Monitoring and logging (latency, errors, quality signals)</div>
   </div>
 </DiagramBlock>
+
 
 <ToolCard
   id="ai-architecture-explorer"
@@ -270,5 +274,7 @@ Good governance includes documentation and traceability. You want to know which 
     { q: "When should a system be shut down", a: "When it is causing harm, behaving unpredictably, or you cannot operate it safely and explain what it is doing." },
   ]}
 />
+
+<PageNav prevHref="/ai/intermediate" prevLabel="Intermediate" nextHref="/ai/summary" nextLabel="Summary and games" showBottom />
 
 

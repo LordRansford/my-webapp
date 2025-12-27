@@ -1,5 +1,4 @@
 import React from "react";
-import { Check } from "lucide-react";
 
 type Tone = "sky" | "emerald" | "violet" | "amber" | "rose" | "slate";
 
@@ -38,18 +37,22 @@ export function CheckPill({
   disabled = false,
 }: Props) {
   const toneStyle = toneClasses[tone] || toneClasses.sky;
-  const padding = size === "xs" ? "px-2.5 py-1" : "px-3 py-1.5";
+  const padding = size === "xs" ? "px-3 py-2" : "px-3.5 py-2.5";
   const text = size === "xs" ? "text-[0.7rem]" : "text-xs";
+  const toggle = size === "xs" ? "h-5 w-9" : "h-6 w-11";
+  const knob = size === "xs" ? "h-4 w-4" : "h-5 w-5";
+  const knobOn = size === "xs" ? "translate-x-4" : "translate-x-5";
+  const knobOff = "translate-x-1";
 
   return (
     <button
       type="button"
-      role="checkbox"
+      role="switch"
       aria-checked={checked}
       disabled={disabled}
       onClick={() => onCheckedChange(!checked)}
       className={cx(
-        "inline-flex w-full items-center justify-between gap-3 rounded-full border transition",
+        "inline-flex w-full items-center justify-between gap-3 rounded-2xl border transition",
         padding,
         text,
         "bg-white/80 text-slate-900 hover:bg-white",
@@ -61,21 +64,27 @@ export function CheckPill({
         className
       )}
     >
-      <span className="inline-flex min-w-0 items-center gap-2">
+      <span className="min-w-0">{children}</span>
+      <span className="inline-flex shrink-0 items-center gap-2">
+        {after ? <span className="shrink-0">{after}</span> : null}
         <span
           className={cx(
-            "inline-flex h-5 w-5 items-center justify-center rounded-full border",
-            checked ? cx(toneStyle.border, toneStyle.bg) : "border-slate-300 bg-white",
-            "dark:border-slate-600 dark:bg-slate-900"
+            "relative inline-flex items-center rounded-full border transition",
+            toggle,
+            checked ? cx(toneStyle.border, toneStyle.bg) : "border-slate-300 bg-slate-200",
+            "dark:border-slate-600 dark:bg-slate-800"
           )}
           aria-hidden="true"
         >
-          {checked ? <Check className="h-3.5 w-3.5 text-slate-900 dark:text-slate-100" /> : null}
+          <span
+            className={cx(
+              "inline-block transform rounded-full bg-white shadow-sm transition",
+              knob,
+              checked ? knobOn : knobOff
+            )}
+          />
         </span>
-        <span className="min-w-0">{children}</span>
       </span>
-      {after ? <span className="shrink-0">{after}</span> : null}
     </button>
   );
 }
-

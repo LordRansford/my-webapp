@@ -64,19 +64,26 @@ export default function SectionProgressToggle({ courseId, levelId, sectionId }) 
         type="button"
         onClick={onChange}
         disabled={!isAuthed}
-        aria-pressed={checked}
+        role="switch"
+        aria-checked={checked}
         aria-label={checked ? "Marked complete" : "Mark as complete"}
-        className={`inline-flex w-full flex-wrap items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold transition sm:w-auto ${
-          checked ? "border-green-500 bg-green-50 text-green-800" : "border-gray-200 bg-white text-gray-700"
-        } ${!isAuthed ? "opacity-70 cursor-not-allowed" : ""} focus:outline-none focus:ring focus:ring-blue-200`}
+        className={`inline-flex w-full items-center justify-between gap-4 rounded-2xl border px-4 py-2 text-sm font-semibold transition sm:w-auto ${
+          checked ? "border-emerald-200 bg-emerald-50 text-emerald-900" : "border-slate-200 bg-white text-slate-800"
+        } ${!isAuthed ? "cursor-not-allowed opacity-70" : ""} focus:outline-none focus:ring focus:ring-blue-200`}
       >
+        <span className="min-w-0 break-words">{checked ? "Marked complete" : "Mark as complete"}</span>
         <span
           aria-hidden="true"
-          className={`flex h-3 w-3 items-center justify-center rounded-full border ${
-            checked ? "border-green-600 bg-green-500" : "border-gray-400"
-          }`}
-        />
-        <span className="break-words">{checked ? "Marked complete" : "Mark as complete"}</span>
+          className={`relative inline-flex h-6 w-11 items-center rounded-full border transition ${
+            checked ? "border-emerald-500/30 bg-emerald-500" : "border-slate-300 bg-slate-200"
+          } dark:border-slate-600 dark:bg-slate-800`}
+        >
+          <span
+            className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-sm transition ${
+              checked ? "translate-x-5" : "translate-x-1"
+            }`}
+          />
+        </span>
       </button>
       {showSavePrompt && !isAuthed ? <SaveProgressPrompt /> : null}
     </div>
