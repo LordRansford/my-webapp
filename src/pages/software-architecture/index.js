@@ -1,42 +1,57 @@
 import Link from "next/link";
 import NotesLayout from "@/components/NotesLayout";
 
-const pages = [
+const corePath = [
   {
-    slug: "beginner",
-    title: "Beginner",
-    summary: "Foundations of systems, structure, boundaries, and architectural thinking.",
+    id: "foundations",
+    label: "Foundations",
+    title: "Architecture Foundations",
+    summary: "Systems, boundaries, responsibilities, and diagrams you can explain with confidence.",
+    href: "/software-architecture/beginner",
   },
   {
-    slug: "intermediate",
-    title: "Intermediate",
-    summary: "Designing real systems, styles, decomposition, quality driven design, and decisions.",
+    id: "intermediate",
+    label: "Intermediate",
+    title: "Applied Architecture",
+    summary: "Decomposition, styles, quality attributes, and decision making that stays practical.",
+    href: "/software-architecture/intermediate",
   },
   {
-    slug: "advanced",
-    title: "Advanced",
-    summary: "Architecture at organisational scale, platforms, resilience, and governance.",
+    id: "advanced",
+    label: "Advanced",
+    title: "Architecture at scale",
+    summary: "Platforms, resilience, governance, and change that stays auditable and calm.",
+    href: "/software-architecture/advanced",
   },
   {
-    slug: "dashboards",
-    title: "Further practice",
-    summary: "Further practice and labs to make latency, availability, and architecture trade-offs concrete.",
-  },
-  {
-    slug: "summary",
+    id: "summary",
+    label: "Summary",
     title: "Summary and games",
     summary: "Recap, games, dashboards, and reflection to consolidate architecture thinking.",
+    href: "/software-architecture/summary",
   },
+];
+
+const furtherPractice = [
   {
-    slug: "capstone",
+    id: "practice",
+    title: "Further practice",
+    summary: "Dashboards and labs to make latency, availability, and trade-offs concrete.",
+    href: "/software-architecture/dashboards",
+  },
+];
+
+const capstones = [
+  {
+    id: "capstone-booktrack",
     title: "BookTrack capstone journey",
-    summary: "An end to end journey that connects architecture, cybersecurity, digitalisation and AI using the BookTrack example.",
+    summary: "A full journey that connects architecture, cybersecurity, digitalisation and AI using the BookTrack example.",
     href: "/notes/capstone/booktrack",
   },
   {
-    slug: "capstone-gridlens",
+    id: "capstone-gridlens",
     title: "GridLens capstone journey",
-    summary: "An end to end journey that connects architecture, CIM based network data, cybersecurity, digitalisation and AI using the GridLens example.",
+    summary: "A full journey that connects architecture, CIM based network data, cybersecurity, digitalisation and AI using GridLens.",
     href: "/notes/capstone/gridlens",
   },
 ];
@@ -44,7 +59,10 @@ const pages = [
 export default function ArchitectureHub() {
   const headings = [
     { id: "overview", title: "Overview", depth: 2 },
-    { id: "levels", title: "Levels", depth: 2 },
+    { id: "path", title: "Core path", depth: 2 },
+    { id: "practice", title: "Further practice", depth: 2 },
+    { id: "capstones", title: "Capstones", depth: 2 },
+    { id: "cpd", title: "CPD", depth: 2 },
     { id: "references", title: "References", depth: 2 },
   ];
 
@@ -52,7 +70,7 @@ export default function ArchitectureHub() {
     <NotesLayout
       meta={{
         title: "Software Architecture Notes",
-        description: "Choose your level: beginner, intermediate, advanced, further practice, or summary with games.",
+        description: "Follow the core path from foundations to summary, then use practice labs and capstones to test your thinking.",
         slug: "/software-architecture",
         section: "architecture",
         level: "Overview",
@@ -65,26 +83,93 @@ export default function ArchitectureHub() {
           <p className="eyebrow">Software Architecture Notes</p>
           <h1>Read, design, and steward systems</h1>
           <p className="lead">
-            Pick the stage that fits you. Beginner for core structure, intermediate for design and decisions, advanced for platforms and governance, a further practice page with dashboards and labs, and a summary page with games.
+            Follow the core path in order. Foundations, intermediate, advanced, then a short summary with games and practice.
           </p>
+          <div className="actions">
+            <Link href="/software-architecture/beginner" className="button primary">
+              Start with Foundations
+            </Link>
+            <Link href="/my-cpd" className="button ghost">
+              Track CPD
+            </Link>
+            <Link href="/my-cpd/evidence" className="button ghost">
+              Export CPD evidence
+            </Link>
+            <Link href="/dashboards/architecture" className="button ghost">
+              Open dashboards
+            </Link>
+          </div>
         </section>
 
-        <section id="levels" className="space-y-4">
-          <h2>Levels</h2>
+        <section id="path" className="space-y-4">
+          <h2>Core path</h2>
           <div className="course-grid">
-            {pages.map((page) => (
-              <Link key={page.slug} href={page.href || `/software-architecture/${page.slug}`} className="course-card">
+            {corePath.map((level) => (
+              <Link key={level.id} href={level.href} className="course-card">
                 <div className="course-card__meta">
-                  <span className="chip chip--accent">{page.title}</span>
+                  <span className="chip chip--accent">{level.label}</span>
                 </div>
-                <h3 className="text-xl font-semibold text-slate-900">{page.title}</h3>
-                <p className="text-base text-slate-800">{page.summary}</p>
+                <h3 className="text-xl font-semibold text-slate-900">{level.title}</h3>
+                <p className="text-base text-slate-800">{level.summary}</p>
                 <div className="course-card__footer">
                   <span className="text-sm text-slate-700">Open notes</span>
                   <span aria-hidden="true">{">"}</span>
                 </div>
               </Link>
             ))}
+          </div>
+        </section>
+
+        <section id="practice" className="space-y-4">
+          <h2>Further practice</h2>
+          <div className="course-grid">
+            {furtherPractice.map((item) => (
+              <Link key={item.id} href={item.href} className="course-card">
+                <div className="course-card__meta">
+                  <span className="chip chip--accent">Practice</span>
+                </div>
+                <h3 className="text-xl font-semibold text-slate-900">{item.title}</h3>
+                <p className="text-base text-slate-800">{item.summary}</p>
+                <div className="course-card__footer">
+                  <span className="text-sm text-slate-700">Open</span>
+                  <span aria-hidden="true">{">"}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section id="capstones" className="space-y-4">
+          <h2>Capstones</h2>
+          <div className="course-grid">
+            {capstones.map((item) => (
+              <Link key={item.id} href={item.href} className="course-card">
+                <div className="course-card__meta">
+                  <span className="chip chip--accent">Capstone</span>
+                </div>
+                <h3 className="text-xl font-semibold text-slate-900">{item.title}</h3>
+                <p className="text-base text-slate-800">{item.summary}</p>
+                <div className="course-card__footer">
+                  <span className="text-sm text-slate-700">Open</span>
+                  <span aria-hidden="true">{">"}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section id="cpd" className="space-y-3">
+          <h2>CPD</h2>
+          <p className="text-base text-slate-800">
+            Log minutes as you study and practise. Your records stay in this browser. Use the export view when you need a clean summary for your CPD system.
+          </p>
+          <div className="actions">
+            <Link href="/my-cpd" className="button ghost">
+              Track CPD
+            </Link>
+            <Link href="/my-cpd/evidence" className="button ghost">
+              Export CPD evidence
+            </Link>
           </div>
         </section>
 

@@ -24,14 +24,14 @@ const recapCards = [
     ring: "border-emerald-100 bg-emerald-50 text-emerald-700",
   },
   {
-    title: "Applied",
+    title: "Intermediate",
     body: "You moved from facts to judgement: threat modelling, identity flows, common vulnerabilities, and how logs turn into a story you can act on. What gets misunderstood in real teams is that scanning is not security. It is just a list until you make trade offs and fix things.",
     href: "/cybersecurity/intermediate",
     icon: "target",
     ring: "border-amber-100 bg-amber-50 text-amber-700",
   },
   {
-    title: "Practice and Strategy",
+    title: "Advanced",
     body: "You connected the system view: architecture choices, crypto in practice, detection and response, and governance that makes improvements stick. The most useful shift here is this: security becomes a set of decisions you can explain, not a pile of tools you can buy.",
     href: "/cybersecurity/advanced",
     icon: "layers",
@@ -47,13 +47,13 @@ const courseMap = [
     chip: "chip--mint",
   },
   {
-    title: "Applied",
+    title: "Intermediate",
     summary: "Threat models, attack surfaces, and identity flows.",
     icon: "target",
     chip: "chip--amber",
   },
   {
-    title: "Practice and strategy",
+    title: "Advanced",
     summary: "Architecture, detection, and governance in context.",
     icon: "layers",
     chip: "chip--accent",
@@ -68,8 +68,8 @@ const courseMap = [
 
 const progressSegments = [
   { label: "Foundations", href: "/cybersecurity/beginner", state: "Viewed", tone: "bg-blue-100 text-blue-800" },
-  { label: "Applied", href: "/cybersecurity/intermediate", state: "Viewed", tone: "bg-emerald-100 text-emerald-800" },
-  { label: "Practice & Strategy", href: "/cybersecurity/advanced", state: "Viewed", tone: "bg-indigo-100 text-indigo-800" },
+  { label: "Intermediate", href: "/cybersecurity/intermediate", state: "Viewed", tone: "bg-emerald-100 text-emerald-800" },
+  { label: "Advanced", href: "/cybersecurity/advanced", state: "Viewed", tone: "bg-indigo-100 text-indigo-800" },
 ];
 
 const challenges = [
@@ -532,7 +532,7 @@ export default function CyberSummary() {
       <div className="mt-10">
         <PageNav
           prevHref="/cybersecurity/advanced"
-          prevLabel="Practice and Strategy"
+          prevLabel="Advanced"
           nextHref="/cybersecurity"
           nextLabel="Back to overview"
           showTop
