@@ -242,17 +242,17 @@ export default function Home() {
 
       {/* 8) Footer CTA */}
       <section className="mx-auto max-w-6xl px-4 pb-16 md:px-6 lg:px-8">
-        <div className="flex flex-col items-start justify-between gap-4 rounded-3xl border border-slate-200 bg-slate-900 p-8 shadow-sm md:flex-row md:items-center">
+        <div className="flex flex-col items-start justify-between gap-4 rounded-3xl border border-slate-200 bg-slate-900 p-8 text-white shadow-sm md:flex-row md:items-center">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-200">Ready</p>
             <h2 className="mt-2 text-2xl font-semibold text-white">Start with something small and real</h2>
-            <p className="mt-2 text-sm text-slate-200">Pick a topic, run a tool, and write down one decision you would make differently tomorrow.</p>
+            <p className="mt-2 text-sm text-slate-100">Pick a topic, run a tool, and write down one decision you would make differently tomorrow.</p>
           </div>
           <div className="flex flex-wrap gap-3">
             <Link href="/courses" className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-100">
               Start learning <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
-            <Link href="/tools" className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-transparent px-5 py-2 text-sm font-semibold text-white hover:bg-white/10">
+            <Link href="/tools" className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-transparent px-5 py-2 text-sm font-semibold text-white hover:bg-white/10">
               Explore the platform <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>

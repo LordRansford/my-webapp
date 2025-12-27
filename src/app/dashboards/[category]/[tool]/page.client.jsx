@@ -328,7 +328,7 @@ export default function ClientPage({ params }) {
         <div className="rn-callout">
           <div className="rn-callout-title">Dashboard not found</div>
           <div className="rn-callout-body">
-            <p>The dashboard "{tool}" in category "{categoryLabel}" could not be found.</p>
+            <p>The dashboard {tool} in category {categoryLabel} could not be found.</p>
             <Link href={backHref} className="rn-btn rn-btn-primary rn-mt">
               Go back
             </Link>

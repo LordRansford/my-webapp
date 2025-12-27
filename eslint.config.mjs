@@ -33,6 +33,20 @@ const eslintConfig = defineConfig([
       "no-restricted-imports": "off",
     },
   },
+  // Allow Node built-ins (fs, path) in server-only contexts and scripts
+  {
+    files: [
+      "scripts/**/*.{js,mjs,ts}",
+      "src/lib/**/*.{js,ts,tsx,mjs}",
+      "src/app/api/**/*.{js,ts,tsx}",
+      "src/pages/api/**/*.{js,ts,tsx}",
+      "src/pages/tools/**/*.{js,ts,tsx}",
+      "src/pages/cybersecurity/course.js",
+    ],
+    rules: {
+      "no-restricted-imports": "off",
+    },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
@@ -44,3 +58,4 @@ const eslintConfig = defineConfig([
 ]);
 
 export default eslintConfig;
+

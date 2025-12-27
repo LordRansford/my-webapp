@@ -1,1 +1,2 @@
-// Code updated to fix server errors on signin/signup page and improve security and sandboxing
+// Reuse the sign-in page logic for the combined signin-signup route.
+export { default } from "./signin";
