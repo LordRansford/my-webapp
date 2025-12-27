@@ -58,27 +58,35 @@ export default function Footer() {
       links: [
         { label: "Courses", href: "/courses" },
         { label: "CPD", href: "/cpd" },
+        { label: "My CPD", href: "/my-cpd" },
+        { label: "Blog Posts", href: "/posts" },
       ],
     },
     {
       title: "Tools",
       links: [
-        { label: "Labs", href: "/tools" },
+        { label: "All Tools", href: "/tools" },
         { label: "Studios", href: "/studios" },
+        { label: "Dashboards", href: "/dashboards/ai" },
+        { label: "Templates", href: "/templates" },
       ],
     },
     {
       title: "Play",
       links: [
         { label: "Games", href: "/games" },
-        { label: "Offline", href: "/play" },
+        { label: "Play Hub", href: "/play" },
+        { label: "Thinking Gym", href: "/thinking-gym" },
       ],
     },
     {
-      title: "Company",
+      title: "Support",
       links: [
         { label: "About", href: "/about" },
         { label: "Contact", href: "/contact" },
+        { label: "Accessibility", href: "/accessibility" },
+        { label: "Site Map", href: "/sitemap" },
+        { label: "Feedback", href: "/feedback" },
       ],
     },
   ];
@@ -143,12 +151,15 @@ export default function Footer() {
             ))}
           </div>
           <div className="flex flex-wrap items-center gap-3 text-slate-700">
-            <a className="hover:underline" href="https://github.com/LordRansford" target="_blank" rel="noreferrer">
-              GitHub
-            </a>
-            <a className="hover:underline" href="mailto:hello@ransfordsnotes.example">
-              Email
-            </a>
+            <Link className="hover:underline" href="/contact">
+              Contact
+            </Link>
+            <Link className="hover:underline" href="/accessibility">
+              Accessibility
+            </Link>
+            <Link className="hover:underline" href="/sitemap">
+              Site Map
+            </Link>
             <DonateButton />
           </div>
         </div>
