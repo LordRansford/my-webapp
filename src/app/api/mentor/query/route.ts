@@ -7,6 +7,8 @@ import { incrementUsage } from "@/lib/mentor/usage";
 import { retrieveContent } from "@/lib/mentor/retrieveContent";
 import { retrieveVectorContent } from "@/lib/mentor/vectorStore";
 import { findToolSuggestion } from "@/lib/tools/toolRegistry";
+import { enhancedRetrieve } from "@/lib/mentor/enhancedRetrieve";
+import { generateAnswer } from "@/lib/mentor/llm";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/options";
 import { runWithMetering } from "@/lib/tools/runWithMetering";
@@ -224,28 +226,24 @@ export async function POST(req: Request) {
 
               const pageHit = bestExcerptFromContext(safe.cleaned, ctx);
 
-              // Layer 1: Fast local keyword search
-              const keyword = retrieveContent(safe.cleaned, pageUrl || ctx?.pathname || null, 6);
-              retrievalCount = keyword.matches.length;
-              retrievalSucceeded = keyword.matches.length > 0 || pageHit !== null;
+              // Enhanced retrieval combining multiple sources
+              const retrievedItems = await enhancedRetrieve(safe.cleaned, pageUrl || ctx?.pathname || null, 8);
+              retrievalCount = retrievedItems.length;
+              retrievalSucceeded = retrievedItems.length > 0 || pageHit !== null;
 
-              // Layer 2: Vector search (if OpenAI key exists)
-              let vector: { matches: Array<{ title: string; href: string; excerpt?: string; text?: string; score?: number }>; weak: boolean } = { matches: [], weak: false };
-              try {
-                if (process.env.OPENAI_API_KEY && !abortController.signal.aborted) {
-                  vector = await retrieveVectorContent(safe.cleaned, pageUrl || ctx?.pathname || null, 6);
-                  retrievalCount = vector.matches.length || keyword.matches.length;
-                  retrievalSucceeded = retrievalSucceeded || vector.matches.length > 0;
-                }
-              } catch (err) {
-                // Vector search failed, continue with keyword
-                console.error("[MENTOR] Vector search failed:", err);
+              // Add page hit if available
+              if (pageHit && !retrievedItems.some((item) => item.href === pageHit.href)) {
+                retrievedItems.unshift({
+                  title: pageHit.title,
+                  href: pageHit.href,
+                  excerpt: pageHit.excerpt,
+                  text: pageHit.excerpt,
+                  kind: "section",
+                  score: 10, // High score for current page
+                });
               }
 
-              const matches = vector.matches.length ? vector.matches : keyword.matches;
-              const weak = vector.weak && keyword.matches.length === 0;
-
-              if (!matches.length && !pageHit) {
+              if (!retrievedItems.length) {
                 rawResponse = buildLocalFallback(safe.cleaned, pageUrl || ctx?.pathname || null);
                 fallbackUsed = true;
                 return { 
@@ -255,31 +253,78 @@ export async function POST(req: Request) {
               }
 
               incrementUsage();
-              const top = matches[0] || null;
-              const lowConfidence = Boolean(weak) || (!pageHit && !top) || (top && top.score !== undefined ? top.score < 0.18 : false);
+              const top = retrievedItems[0] || null;
+              const lowConfidence = !top || top.score < 0.15;
               const tool = findToolSuggestion(safe.cleaned);
 
-              // Generate answer (simplified - in production this would call OpenAI)
-              // For now, use the top match or page hit
+              // Try to generate answer using LLM (RAG)
               let answer = "";
               let citationsV2: MentorCitationV2[] = [];
+              let answerMode: "rag" | "fallback" = "fallback";
 
-              if (pageHit) {
-                answer = `Based on the current page: ${pageHit.excerpt}`;
-                citationsV2.push({
-                  title: pageHit.title,
-                  urlOrPath: pageHit.href,
-                  anchorOrHeading: pageHit.title,
-                });
-              } else if (top) {
-                // Handle both Citation (has 'why') and vector result (has 'excerpt' or 'text')
-                const excerpt = ('excerpt' in top ? top.excerpt : null) || ('text' in top ? top.text : null) || ('why' in top ? top.why : null) || "Relevant content found.";
-                answer = `From the site content: ${excerpt}`;
-                citationsV2.push({
-                  title: top.title || "Content",
-                  urlOrPath: top.href || "",
-                  anchorOrHeading: ('excerpt' in top ? top.excerpt : null) || ('why' in top ? top.why : null) || top.title || undefined,
-                });
+              try {
+                const llmResponse = await generateAnswer(
+                  safe.cleaned,
+                  retrievedItems.map((item) => ({
+                    title: item.title,
+                    href: item.href,
+                    excerpt: item.excerpt,
+                    text: item.text,
+                    why: item.why,
+                  })),
+                  ctx ? { title: ctx.title, pathname: ctx.pathname } : undefined,
+                  12000 // 12 second timeout for LLM
+                );
+
+                if (llmResponse && llmResponse.answer) {
+                  answer = llmResponse.answer;
+                  answerMode = "rag";
+                  modelSucceeded = true;
+                }
+              } catch (err) {
+                console.error("[MENTOR] LLM generation failed:", err);
+                // Fall through to keyword-based answer
+              }
+
+              // Fallback to keyword-based answer if LLM failed or unavailable
+              if (!answer) {
+                answerMode = "fallback";
+                if (pageHit) {
+                  answer = `Based on the current page: ${pageHit.excerpt}\n\nFor more details, visit the page sections linked below.`;
+                  citationsV2.push({
+                    title: pageHit.title,
+                    urlOrPath: pageHit.href,
+                    anchorOrHeading: pageHit.title,
+                  });
+                } else if (top) {
+                  answer = `From the site content: ${top.excerpt}\n\nVisit the linked pages below for more information.`;
+                  citationsV2.push({
+                    title: top.title,
+                    urlOrPath: top.href,
+                    anchorOrHeading: top.excerpt || top.title,
+                  });
+                }
+
+                // Add additional citations from retrieved items
+                for (const item of retrievedItems.slice(1, 5)) {
+                  if (!citationsV2.some((c) => c.urlOrPath === item.href)) {
+                    citationsV2.push({
+                      title: item.title,
+                      urlOrPath: item.href,
+                      anchorOrHeading: item.excerpt || undefined,
+                    });
+                  }
+                }
+              } else {
+                // LLM answer - add all retrieved items as citations for transparency
+                answerMode = "rag";
+                for (const item of retrievedItems.slice(0, 6)) {
+                  citationsV2.push({
+                    title: item.title,
+                    urlOrPath: item.href,
+                    anchorOrHeading: item.excerpt || undefined,
+                  });
+                }
               }
 
               if (!answer || citationsV2.length === 0) {
@@ -291,11 +336,9 @@ export async function POST(req: Request) {
                 };
               }
 
-              modelSucceeded = true;
-
               rawResponse = {
-                answer: answer.length > 200 ? answer : answer + "\n\nFor more details, visit the linked pages above.",
-                answerMode: "rag",
+                answer: answer.length > 100 ? answer : answer + "\n\nFor more details, visit the linked pages above.",
+                answerMode,
                 citationsV2,
                 suggestedActions: tool
                   ? [{ label: `Try ${tool.title}`, href: tool.route }]
