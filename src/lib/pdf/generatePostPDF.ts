@@ -6,15 +6,28 @@ export async function generatePostPDF(
   contentElement: HTMLElement,
   watermark: string = "Ransford's Notes"
 ): Promise<Blob> {
+  if (!contentElement) {
+    throw new Error("Content element is required");
+  }
+
   // Convert HTML content to canvas
-  const canvas = await html2canvas(contentElement, {
-    scale: 2,
-    useCORS: true,
-    logging: false,
-    backgroundColor: "#ffffff",
-    windowWidth: contentElement.scrollWidth,
-    windowHeight: contentElement.scrollHeight,
-  });
+  let canvas;
+  try {
+    canvas = await html2canvas(contentElement, {
+      scale: 1.5, // Reduced from 2 to avoid memory issues
+      useCORS: true,
+      allowTaint: true,
+      logging: false,
+      backgroundColor: "#ffffff",
+      width: contentElement.scrollWidth,
+      height: contentElement.scrollHeight,
+      windowWidth: contentElement.scrollWidth,
+      windowHeight: contentElement.scrollHeight,
+    });
+  } catch (error) {
+    console.error("html2canvas error:", error);
+    throw new Error(`Failed to capture content: ${error instanceof Error ? error.message : "Unknown error"}`);
+  }
 
   const imgData = canvas.toDataURL("image/png");
   const imgWidth = canvas.width;
@@ -44,20 +57,27 @@ export async function generatePostPDF(
     const page = pdfDoc.addPage([pdfWidth, pdfHeight]);
     const { width, height } = page.getSize();
 
-    // Add watermark to each page (centered, semi-transparent)
-    // For simplicity, we'll use a non-rotated watermark
+    // CRITICAL: Add watermark to EVERY page FIRST (before content)
+    // This ensures watermark appears on all pages, even if content fails
     const centerX = width / 2;
     const centerY = height / 2;
-    const textWidth = watermarkFont.widthOfTextAtSize(watermark, 40);
+    const watermarkSize = 50;
+    const textWidth = watermarkFont.widthOfTextAtSize(watermark, watermarkSize);
     
-    page.drawText(watermark, {
-      x: centerX - textWidth / 2,
-      y: centerY,
-      size: 40,
-      font: watermarkFont,
-      color: rgb(0.85, 0.85, 0.85),
-      opacity: 0.15,
-    });
+    // Draw watermark on every page - MUST be on every page
+    try {
+      page.drawText(watermark, {
+        x: centerX - textWidth / 2,
+        y: centerY,
+        size: watermarkSize,
+        font: watermarkFont,
+        color: rgb(0.85, 0.85, 0.85),
+        opacity: 0.2, // Semi-transparent but visible
+      });
+    } catch (watermarkError) {
+      console.error(`Failed to add watermark to page ${i + 1}:`, watermarkError);
+      // Continue anyway - watermark failure shouldn't stop PDF generation
+    }
 
     // Calculate Y position for this page's content
     // Position the full image so the correct portion shows on each page
@@ -65,12 +85,17 @@ export async function generatePostPDF(
     
     // Draw the full image, positioned to show the correct portion
     // The image will be clipped by page boundaries naturally
-    page.drawImage(pngImage, {
-      x: margin,
-      y: yOffset,
-      width: contentWidth,
-      height: scaledHeight,
-    });
+    try {
+      page.drawImage(pngImage, {
+        x: margin,
+        y: yOffset,
+        width: contentWidth,
+        height: scaledHeight,
+      });
+    } catch (error) {
+      console.error(`Error drawing image on page ${i + 1}:`, error);
+      throw new Error(`Failed to add content to page ${i + 1}`);
+    }
   }
 
   // Add footer to last page
@@ -86,7 +111,14 @@ export async function generatePostPDF(
     color: rgb(0.5, 0.5, 0.5),
   });
 
-  const pdfBytes = await pdfDoc.save();
+  let pdfBytes;
+  try {
+    pdfBytes = await pdfDoc.save();
+  } catch (error) {
+    console.error("PDF save error:", error);
+    throw new Error(`Failed to generate PDF: ${error instanceof Error ? error.message : "Unknown error"}`);
+  }
+
   // Convert Uint8Array to Blob - pdfBytes is already compatible
   return new Blob([pdfBytes as any], { type: "application/pdf" });
 }
