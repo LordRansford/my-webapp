@@ -104,10 +104,10 @@ export function createDailyChallengeScene(opts?: {
       }
 
       // Audio parameters: intensity ramps with time, tension rises as time-left shrinks.
-      const intensity = Math.max(0, Math.min(1, runMs / 45_000));
+      const audioIntensity = Math.max(0, Math.min(1, runMs / 45_000));
       const timeLeft = Math.max(0, GOAL_MS - runMs);
       const tension = Math.max(0, Math.min(1, 1 - timeLeft / 12_000));
-      opts?.onAudio?.({ intensity, tension });
+      opts?.onAudio?.({ intensity: audioIntensity, tension });
 
       const milestoneS = Math.floor((runMs / 1000) / 15) * 15;
       if (milestoneS > lastMilestone) {
