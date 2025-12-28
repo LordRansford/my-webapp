@@ -130,16 +130,21 @@ export default function ReadAloudControls() {
   }
 
   return (
-    <div className="read-aloud-controls fixed bottom-4 right-4 z-30 flex flex-col gap-2" style={{ bottom: '5.5rem' }}>
-      <div className="rounded-lg border border-[color:var(--line)] bg-[var(--surface)] p-2 shadow-sm flex items-center gap-2">
+    <div className="read-aloud-controls fixed bottom-4 right-4 z-40 flex flex-col gap-3">
+      <div className="rounded-2xl border-2 border-slate-200 bg-white p-3 shadow-xl backdrop-blur-sm flex items-center gap-2">
         <button
           type="button"
           onClick={handleToggle}
-          className="rounded-lg p-2 text-[var(--text-body)] hover:bg-[var(--surface-2)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2"
-          aria-label={isPlaying ? "Stop reading" : "Start reading"}
+          className={`flex items-center justify-center h-12 w-12 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-emerald-300 focus:ring-offset-2 ${
+            isPlaying
+              ? "bg-gradient-to-br from-red-500 to-rose-600 text-white shadow-lg hover:shadow-xl hover:scale-110"
+              : "bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg hover:shadow-xl hover:scale-110"
+          }`}
+          aria-label={isPlaying ? "Stop reading" : "Start reading everything on page"}
           aria-pressed={isPlaying}
+          title={isPlaying ? "Stop reading" : "Read everything on page"}
         >
-          {isPlaying ? <Square className="h-4 w-4" aria-hidden="true" /> : <Play className="h-4 w-4" aria-hidden="true" />}
+          {isPlaying ? <Square className="h-5 w-5" aria-hidden="true" /> : <Play className="h-5 w-5" aria-hidden="true" />}
         </button>
 
         {isPlaying && (
@@ -147,17 +152,19 @@ export default function ReadAloudControls() {
             <button
               type="button"
               onClick={handlePause}
-              className="rounded-lg p-2 text-[var(--text-body)] hover:bg-[var(--surface-2)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2"
+              className="flex items-center justify-center h-10 w-10 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 transition-all duration-200"
               aria-label={isPaused ? "Resume reading" : "Pause reading"}
               aria-pressed={isPaused}
+              title={isPaused ? "Resume reading" : "Pause reading"}
             >
               {isPaused ? <Volume2 className="h-4 w-4" aria-hidden="true" /> : <Pause className="h-4 w-4" aria-hidden="true" />}
             </button>
             <button
               type="button"
               onClick={handleStop}
-              className="rounded-lg p-2 text-[var(--text-body)] hover:bg-[var(--surface-2)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2"
+              className="flex items-center justify-center h-10 w-10 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 transition-all duration-200"
               aria-label="Stop reading"
+              title="Stop reading"
             >
               <Square className="h-4 w-4" aria-hidden="true" />
             </button>
@@ -167,7 +174,7 @@ export default function ReadAloudControls() {
         <button
           type="button"
           onClick={handleReadSelection}
-          className="rounded-lg p-2 text-[var(--text-body)] hover:bg-[var(--surface-2)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2"
+          className="flex items-center justify-center h-10 w-10 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 transition-all duration-200"
           aria-label="Read selected text"
           title="Select text and click to read selection"
         >
@@ -177,11 +184,11 @@ export default function ReadAloudControls() {
         <button
           type="button"
           onClick={() => setReadAloudHighlight(!prefs.readAloudHighlight)}
-          className={`rounded-lg p-2 ${
+          className={`flex items-center justify-center h-10 w-10 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 hover:scale-105 ${
             prefs.readAloudHighlight
-              ? "bg-[var(--accent)] text-white"
-              : "text-[var(--text-body)] hover:bg-[var(--surface-2)]"
-          } focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2`}
+              ? "bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-md"
+              : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+          }`}
           aria-label={prefs.readAloudHighlight ? "Disable highlight" : "Enable highlight"}
           aria-pressed={prefs.readAloudHighlight}
           title="Toggle text highlighting while reading"
