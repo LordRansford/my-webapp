@@ -82,12 +82,15 @@ export function createPulseRunnerScene(): GameScene {
       y = Math.random() * ctx.height;
     }
     
-    // Calculate direction toward player
-    const dx = px - x;
-    const dy = py - y;
+    // Calculate direction toward player (use center if player not initialized)
+    const targetX = px > 0 ? px : ctx.width / 2;
+    const targetY = py > 0 ? py : ctx.height / 2;
+    const dx = targetX - x;
+    const dy = targetY - y;
     const dist = Math.sqrt(dx * dx + dy * dy);
-    const vx = (dx / dist) * speed;
-    const vy = (dy / dist) * speed;
+    // Avoid division by zero
+    const vx = dist > 0 ? (dx / dist) * speed : speed;
+    const vy = dist > 0 ? (dy / dist) * speed : 0;
     
     // Color based on intensity (progressive modifier)
     const hue = 200 + (effectiveIntensity * 120); // Blue to red
@@ -185,10 +188,9 @@ export function createPulseRunnerScene(): GameScene {
 
         // Check if pulse passed player (dodge) - only count once
         if (!p.dodged) {
-          const oldDist = Math.sqrt((p.x - vx * ctx.dtMs / 1000 - px) ** 2 + (p.y - vy * ctx.dtMs / 1000 - py) ** 2);
-          const newDist = Math.sqrt((p.x - px) ** 2 + (p.y - py) ** 2);
-          if (oldDist < newDist && newDist > pr + p.r + 10) {
-            // Pulse passed by safely
+          const playerDist = Math.sqrt((p.x - targetX) ** 2 + (p.y - targetY) ** 2);
+          if (playerDist > pr + p.r + 20) {
+            // Pulse passed by safely (far enough away)
             p.dodged = true;
             dodgedCount++;
             const points = Math.floor(10 * (1 + intensity));

@@ -141,18 +141,16 @@ export function createVaultCircuitScene(): GameScene {
       ttl: 5000,
     });
     
-    // Progressive modifier: spawn multiple projectiles
+    // Progressive modifier: spawn multiple projectiles immediately
     if (effectiveIntensity > 0.8 && Math.random() < 0.4) {
-      setTimeout(() => {
-        projectiles.push({
-          x: x + (Math.random() - 0.5) * 50,
-          y: y + (Math.random() - 0.5) * 50,
-          vx: vx * (0.8 + Math.random() * 0.4),
-          vy: vy * (0.8 + Math.random() * 0.4),
-          r: 6 + effectiveIntensity * 4,
-          ttl: 5000,
-        });
-      }, 300);
+      projectiles.push({
+        x: x + (Math.random() - 0.5) * 50,
+        y: y + (Math.random() - 0.5) * 50,
+        vx: vx * (0.8 + Math.random() * 0.4),
+        vy: vy * (0.8 + Math.random() * 0.4),
+        r: 6 + effectiveIntensity * 4,
+        ttl: 5000,
+      });
     }
   };
 
@@ -278,7 +276,7 @@ export function createVaultCircuitScene(): GameScene {
 
       // Spawn projectiles
       if (runMs - lastProjectileSpawn >= projectileFrequency) {
-        spawnProjectile(ctx);
+        spawnProjectile(ctx, runMs);
         lastProjectileSpawn = runMs;
       }
 
