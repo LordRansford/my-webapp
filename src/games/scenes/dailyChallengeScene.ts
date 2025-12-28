@@ -32,24 +32,26 @@ export function createDailyChallengeScene(opts?: {
   const GOAL_MS = 45_000;
 
   const getDifficultyPhase = (ms: number): { phase: number; intensity: number } => {
-    // Phase 1: 0-10s - Start hard
-    if (ms < 10000) return { phase: 1, intensity: 0.7 + (ms / 10000) * 0.15 };
-    // Phase 2: 10-30s - Ramp up to very hard
-    if (ms < 30000) return { phase: 2, intensity: 0.85 + ((ms - 10000) / 20000) * 0.10 };
-    // Phase 3: 30-45s - Very hard
-    if (ms < 45000) return { phase: 3, intensity: 0.95 + ((ms - 30000) / 15000) * 0.03 };
-    // Phase 4: 45-60s - Transition to almost impossible
-    if (ms < 60000) return { phase: 4, intensity: 0.98 + ((ms - 45000) / 15000) * 0.015 };
-    // Phase 5: 60-90s - Almost impossible (if they survive past goal)
-    return { phase: 5, intensity: 0.995 + Math.min(0.005, (ms - 60000) / 30000 * 0.005) };
+    // Much harder base difficulty - starts at 0.85 instead of 0.7
+    // Phase 1: 0-10s - Start very hard
+    if (ms < 10000) return { phase: 1, intensity: 0.85 + (ms / 10000) * 0.10 };
+    // Phase 2: 10-25s - Very hard
+    if (ms < 25000) return { phase: 2, intensity: 0.95 + ((ms - 10000) / 15000) * 0.03 };
+    // Phase 3: 25-40s - Extremely hard (first new level)
+    if (ms < 40000) return { phase: 3, intensity: 0.98 + ((ms - 25000) / 15000) * 0.015 };
+    // Phase 4: 40-55s - Nearly impossible (second new level)
+    if (ms < 55000) return { phase: 4, intensity: 0.995 + ((ms - 40000) / 15000) * 0.004 };
+    // Phase 5: 55s+ - Almost impossible (final stage - almost impossible to complete)
+    return { phase: 5, intensity: 0.999 + Math.min(0.001, (ms - 55000) / 35000 * 0.001) };
   };
 
   const spawn = (w: number, h: number, intensity: number) => {
     const lane = Math.floor(rand() * 5); // 0..4
     const gap = w / 6;
     const x = Math.round((lane + 1) * gap);
-    const size = (18 + Math.round(rand() * 22)) * (0.9 + intensity * 0.3); // Larger obstacles
-    const speed = (90 + rand() * 140) * (0.8 + intensity * 0.7); // Faster speed
+    // Much larger obstacles and faster speeds due to higher base intensity
+    const size = (22 + Math.round(rand() * 26)) * (0.95 + intensity * 0.4); // Larger obstacles
+    const speed = (120 + rand() * 160) * (0.85 + intensity * 0.8); // Much faster speed
     obstacles.push({ x, y: -size - 6, w: size, h: size, speed });
   };
 
@@ -89,17 +91,37 @@ export function createDailyChallengeScene(opts?: {
       t += dt;
       runMs = ctx.nowMs - startedAt;
 
-      // Difficulty-based spawn schedule with adaptive ramp
-      const { intensity } = getDifficultyPhase(runMs);
+      // Difficulty-based spawn schedule with adaptive ramp - much more aggressive
+      const { phase, intensity } = getDifficultyPhase(runMs);
       if (t >= nextSpawnMs) {
         spawn(ctx.width, ctx.height, intensity);
-        const base = 420 + rand() * 260;
-        const ramp = Math.max(100, 520 - (runMs / 1000) * 8 * intensity); // Faster spawns at higher intensity
+        const base = 380 + rand() * 240;
+        const ramp = Math.max(80, 480 - (runMs / 1000) * 10 * intensity); // Much faster spawns
         nextSpawnMs = t + Math.min(ramp, base);
         
-        // Progressive modifier: spawn multiple obstacles in later phases
-        if (intensity > 0.85 && rand() < 0.3) {
+        // Progressive modifiers for new difficulty levels
+        // Phase 3 (extremely hard): 40% chance of double spawn
+        if (phase >= 3 && rand() < 0.4) {
           spawn(ctx.width, ctx.height, intensity);
+        }
+        // Phase 4 (nearly impossible): 60% chance of double spawn, 20% triple
+        if (phase >= 4) {
+          if (rand() < 0.6) {
+            spawn(ctx.width, ctx.height, intensity);
+          }
+          if (rand() < 0.2) {
+            spawn(ctx.width, ctx.height, intensity);
+          }
+        }
+        // Phase 5 (almost impossible): Always double spawn, 50% triple, 20% quadruple
+        if (phase >= 5) {
+          spawn(ctx.width, ctx.height, intensity); // Always at least double
+          if (rand() < 0.5) {
+            spawn(ctx.width, ctx.height, intensity);
+          }
+          if (rand() < 0.2) {
+            spawn(ctx.width, ctx.height, intensity);
+          }
         }
       }
 
@@ -154,15 +176,27 @@ export function createDailyChallengeScene(opts?: {
       ctx.ctx2d.fillRect(0, 0, ctx.width, ctx.height);
       ctx.ctx2d.restore();
 
-      // obstacles (high contrast)
+      // obstacles (bright, high contrast colors for dark background)
       ctx.ctx2d.save();
-      for (const o of obstacles) {
-        ctx.ctx2d.shadowBlur = 15;
-        ctx.ctx2d.shadowColor = "#ff6666";
-        ctx.ctx2d.fillStyle = "rgba(255, 100, 100, 0.9)";
+      const brightColors = [
+        "#00ffff", // Bright cyan
+        "#ffff00", // Bright yellow
+        "#ff00ff", // Bright magenta
+        "#00ff00", // Bright green
+        "#ff8800", // Bright orange
+        "#ff0088", // Bright pink
+      ];
+      for (let i = 0; i < obstacles.length; i++) {
+        const o = obstacles[i];
+        const colorIndex = Math.floor((o.x + o.y) / 50) % brightColors.length;
+        const brightColor = brightColors[colorIndex];
+        
+        ctx.ctx2d.shadowBlur = 25;
+        ctx.ctx2d.shadowColor = brightColor;
+        ctx.ctx2d.fillStyle = brightColor; // Fully opaque bright color
         ctx.ctx2d.fillRect(o.x - o.w / 2, o.y - o.h / 2, o.w, o.h);
         ctx.ctx2d.strokeStyle = "#ffffff";
-        ctx.ctx2d.lineWidth = 2;
+        ctx.ctx2d.lineWidth = 3; // Thicker outline for better visibility
         ctx.ctx2d.strokeRect(o.x - o.w / 2, o.y - o.h / 2, o.w, o.h);
       }
       ctx.ctx2d.restore();
