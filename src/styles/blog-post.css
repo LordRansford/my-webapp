@@ -156,6 +156,47 @@
   border: 1px solid rgba(0, 122, 255, 0.2);
 }
 
+.blog-post__actions {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.blog-post__download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 122, 255, 0.2);
+}
+
+.blog-post__download-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+}
+
+.blog-post__download-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.blog-post__download-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.blog-post__download-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
 /* Body Layout */
 .blog-post__body {
   display: grid;

@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote";
 import mdxComponents from "@/components/mdx-components";
-import { BookOpen, Clock } from "lucide-react";
+import { BookOpen, Clock, Download } from "lucide-react";
+import { generatePostPDF } from "@/lib/pdf/generatePostPDF";
+import { saveAs } from "file-saver";
 
 interface BlogPostLayoutProps {
   post: {
@@ -22,6 +24,8 @@ export default function BlogPostLayout({ post, showTOC = true }: BlogPostLayoutP
   const [headings, setHeadings] = useState<Array<{ id: string; text: string; level: number }>>([]);
   const [activeHeading, setActiveHeading] = useState<string>("");
   const [readingProgress, setReadingProgress] = useState(0);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   // Extract headings from content
   useEffect(() => {
@@ -90,6 +94,28 @@ export default function BlogPostLayout({ post, showTOC = true }: BlogPostLayoutP
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleDownloadPDF = async () => {
+    if (!contentRef.current || isGeneratingPDF) return;
+    
+    setIsGeneratingPDF(true);
+    try {
+      // Get the article element that contains the content
+      const articleElement = contentRef.current;
+      
+      // Generate PDF with watermark
+      const pdfBlob = await generatePostPDF(post.title, articleElement, "Ransford's Notes");
+      
+      // Download the PDF
+      const fileName = `${post.title.replace(/[^a-z0-9]/gi, "-").toLowerCase()}.pdf`;
+      saveAs(pdfBlob, fileName);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      alert("Failed to generate PDF. Please try again.");
+    } finally {
+      setIsGeneratingPDF(false);
+    }
+  };
+
   const hasHeadings = headings.length > 0 && showTOC;
 
   return (
@@ -153,6 +179,18 @@ export default function BlogPostLayout({ post, showTOC = true }: BlogPostLayoutP
                 ))}
               </div>
             )}
+
+            <div className="blog-post__actions">
+              <button
+                onClick={handleDownloadPDF}
+                disabled={isGeneratingPDF}
+                className="blog-post__download-btn"
+                aria-label="Download as PDF"
+              >
+                <Download className="blog-post__download-icon" aria-hidden="true" />
+                {isGeneratingPDF ? "Generating..." : "Download PDF"}
+              </button>
+            </div>
           </div>
         </header>
 
@@ -196,7 +234,7 @@ export default function BlogPostLayout({ post, showTOC = true }: BlogPostLayoutP
           )}
 
           {/* Content */}
-          <div className="blog-post-content">
+          <div ref={contentRef} className="blog-post-content">
             <MDXRemote {...post.mdx} components={mdxComponents} />
           </div>
         </div>
