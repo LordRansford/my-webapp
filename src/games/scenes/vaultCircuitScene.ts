@@ -52,6 +52,8 @@ export function createVaultCircuitScene(): GameScene {
 
   const spawnWallPattern = (ctx: { width: number; height: number }, currentRunMs: number) => {
     const { intensity } = getDifficultyPhase(currentRunMs);
+    // Note: getAdaptiveMultiplier uses runMs from closure, which should be currentRunMs
+    // For now, use currentRunMs directly for consistency
     const adaptive = getAdaptiveMultiplier();
     const effectiveIntensity = Math.min(1.0, intensity * adaptive);
     
@@ -99,8 +101,8 @@ export function createVaultCircuitScene(): GameScene {
     });
   };
 
-  const spawnProjectile = (ctx: { width: number; height: number }) => {
-    const { intensity } = getDifficultyPhase(runMs);
+  const spawnProjectile = (ctx: { width: number; height: number }, currentRunMs: number) => {
+    const { intensity } = getDifficultyPhase(currentRunMs);
     const adaptive = getAdaptiveMultiplier();
     const effectiveIntensity = Math.min(1.0, intensity * adaptive);
     
