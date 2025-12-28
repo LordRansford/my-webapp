@@ -2,6 +2,20 @@
 
 import React, { useMemo } from "react";
 import Link from "next/link";
+import { 
+  Code, 
+  Shield, 
+  Database, 
+  Brain, 
+  Sparkles, 
+  FlaskConical, 
+  Eye, 
+  Volume2, 
+  FileText, 
+  MessageSquare, 
+  Scale,
+  Layers
+} from "lucide-react";
 import { useStudiosStore } from "@/stores/useStudiosStore";
 import { SecurityNotice } from "@/components/SecurityNotice";
 import { SecurityBanner } from "@/components/dev-studios/SecurityBanner";
@@ -76,6 +90,7 @@ export default function StudiosPage() {
         <StudioCard>
           <header className="space-y-2">
             <div className="inline-flex items-center gap-2 rounded-2xl bg-slate-900 px-3 py-1 text-xs font-semibold text-white ring-1 ring-slate-900">
+              <Code className="h-4 w-4" aria-hidden="true" />
               Software Development Studio
             </div>
             <p className="text-base text-slate-700">
@@ -102,6 +117,7 @@ export default function StudiosPage() {
         <StudioCard>
           <header className="space-y-2">
             <div className="inline-flex items-center gap-2 rounded-2xl bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-900 ring-1 ring-amber-100">
+              <Shield className="h-4 w-4" aria-hidden="true" />
               Cybersecurity Studio
             </div>
             <p className="text-base text-slate-700">
@@ -127,6 +143,7 @@ export default function StudiosPage() {
         <StudioCard>
           <header className="space-y-2">
             <div className="inline-flex items-center gap-2 rounded-2xl bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-900 ring-1 ring-emerald-100">
+              <Database className="h-4 w-4" aria-hidden="true" />
               Data and Digitalisation Studio
             </div>
             <p className="text-base text-slate-700">Turn messy data and processes into decisions. Use dashboards, templates, and careful trade offs.</p>
@@ -150,6 +167,7 @@ export default function StudiosPage() {
         <StudioCard>
           <header className="space-y-2">
             <div className="inline-flex items-center gap-2 rounded-2xl bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-900 ring-1 ring-indigo-100">
+              <Brain className="h-4 w-4" aria-hidden="true" />
               AI Studio
             </div>
             <p className="text-base text-slate-700">A responsible AI studio for scenarios, evaluation, and practical habits. It is designed to keep learning local.</p>
@@ -176,6 +194,7 @@ export default function StudiosPage() {
         <StudioCard>
           <header className="space-y-2">
             <div className="inline-flex items-center gap-2 rounded-2xl bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-800 ring-1 ring-emerald-100">
+              <FlaskConical className="h-4 w-4" aria-hidden="true" />
               AI Control Room
             </div>
             <p className="text-base text-slate-700">
@@ -264,6 +283,7 @@ export default function StudiosPage() {
         <StudioCard>
           <header className="space-y-2">
             <div className="inline-flex items-center gap-2 rounded-2xl bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800 ring-1 ring-sky-100">
+              <Sparkles className="h-4 w-4" aria-hidden="true" />
               Model Forge
             </div>
             <p className="text-base text-slate-700">
@@ -309,6 +329,7 @@ export default function StudiosPage() {
         <StudioCard>
           <header className="space-y-2">
             <div className="inline-flex items-center gap-2 rounded-2xl bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-900 ring-1 ring-indigo-100">
+              <Layers className="h-4 w-4" aria-hidden="true" />
               Architecture Diagram Studio
             </div>
             <p className="text-base text-slate-700">
