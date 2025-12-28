@@ -50,8 +50,8 @@ export function createVaultCircuitScene(): GameScene {
     return 1.0;
   };
 
-  const spawnWallPattern = (ctx: { width: number; height: number }) => {
-    const { intensity } = getDifficultyPhase(runMs);
+  const spawnWallPattern = (ctx: { width: number; height: number }, currentRunMs: number) => {
+    const { intensity } = getDifficultyPhase(currentRunMs);
     const adaptive = getAdaptiveMultiplier();
     const effectiveIntensity = Math.min(1.0, intensity * adaptive);
     
@@ -264,7 +264,7 @@ export function createVaultCircuitScene(): GameScene {
 
       // Spawn new walls
       if (circuitScroll - lastWallSpawn >= wallFrequency) {
-        spawnWallPattern(ctx);
+        spawnWallPattern(ctx, runMs);
         lastWallSpawn = circuitScroll;
       }
 
