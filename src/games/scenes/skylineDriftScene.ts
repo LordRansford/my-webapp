@@ -53,8 +53,8 @@ export function createSkylineDriftScene(): GameScene {
     return 1.0;
   };
 
-  const spawnGate = (ctx: { width: number; height: number }) => {
-    const { intensity } = getDifficultyPhase(runMs);
+  const spawnGate = (ctx: { width: number; height: number }, currentRunMs: number) => {
+    const { intensity } = getDifficultyPhase(currentRunMs);
     const adaptive = getAdaptiveMultiplier();
     const effectiveIntensity = Math.min(1.0, intensity * adaptive);
     
