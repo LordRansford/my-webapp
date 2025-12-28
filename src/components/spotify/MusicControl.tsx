@@ -90,13 +90,13 @@ export default function MusicControl() {
   };
 
   if (!isVisible && !currentEmbed && !showInput) {
-    // Collapsed state - show minimal button
+    // Collapsed state - show minimal button at top left
     return (
-      <div className="fixed bottom-4 left-4 z-30">
+      <div className="fixed top-4 left-4 z-30">
         <button
           type="button"
           onClick={() => setShowInput(true)}
-          className="flex items-center gap-2 rounded-full border border-[color:var(--line)] bg-[var(--surface)] px-4 py-2.5 shadow-sm hover:bg-[var(--surface-2)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2"
+          className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 transition-colors"
           aria-label="Open music player"
         >
           <Music className="h-4 w-4 text-[var(--text-muted)]" aria-hidden="true" />
@@ -107,7 +107,7 @@ export default function MusicControl() {
   }
 
   return (
-    <div className="fixed bottom-4 left-4 z-30 max-w-[92vw] sm:max-w-md">
+    <div className="fixed top-4 left-4 z-30 max-w-[92vw] sm:max-w-md">
       <div className="rounded-2xl border border-[color:var(--line)] bg-[var(--surface)] p-4 shadow-sm">
         {/* Header */}
         <div className="flex items-center justify-between gap-3 mb-3">

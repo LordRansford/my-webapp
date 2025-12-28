@@ -9,6 +9,7 @@ import { signIn, useSession } from "next-auth/react";
 type NavItem = { label: string; href: string };
 
 const navItems: NavItem[] = [
+  { label: "Site Map", href: "/sitemap" },
   { label: "Courses", href: "/courses" },
   { label: "Tools", href: "/tools" },
   { label: "Studios", href: "/studios" },

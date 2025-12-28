@@ -18,13 +18,6 @@ export default function Layout({
       <TestingModeBanner />
       <AppShell>
         {children}
-        <Link
-          href="/mentor"
-          className="mentor-cta"
-          aria-label="Ask the mentor"
-        >
-          Ask the mentor
-        </Link>
       </AppShell>
       <SpotifyMiniPlayerMount />
 
@@ -35,36 +28,6 @@ export default function Layout({
             animation-iteration-count: 1 !important;
             transition-duration: 0.01ms !important;
             scroll-behavior: auto !important;
-          }
-        }
-        .mentor-cta {
-          position: fixed;
-          right: 1.25rem;
-          bottom: 1.25rem;
-          padding: 0.75rem 1rem;
-          border-radius: 9999px;
-          background: #0f172a;
-          color: #f8fafc;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          font-weight: 700;
-          box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
-          transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
-          text-decoration: none;
-        }
-        .mentor-cta:hover,
-        .mentor-cta:focus-visible {
-          background: #1e293b;
-          transform: translateY(-1px);
-          outline: 2px solid #0ea5e9;
-          outline-offset: 2px;
-        }
-        @media (max-width: 640px) {
-          .mentor-cta {
-            right: 1rem;
-            bottom: 1rem;
-            padding: 0.65rem 0.9rem;
           }
         }
       `}</style>
