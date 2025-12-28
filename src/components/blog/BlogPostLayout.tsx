@@ -102,15 +102,24 @@ export default function BlogPostLayout({ post, showTOC = true }: BlogPostLayoutP
       // Get the article element that contains the content
       const articleElement = contentRef.current;
       
+      if (!articleElement) {
+        throw new Error("Content element not found");
+      }
+
       // Generate PDF with watermark
       const pdfBlob = await generatePostPDF(post.title, articleElement, "Ransford's Notes");
+      
+      if (!pdfBlob || pdfBlob.size === 0) {
+        throw new Error("Generated PDF is empty");
+      }
       
       // Download the PDF
       const fileName = `${post.title.replace(/[^a-z0-9]/gi, "-").toLowerCase()}.pdf`;
       saveAs(pdfBlob, fileName);
     } catch (error) {
       console.error("Error generating PDF:", error);
-      alert("Failed to generate PDF. Please try again.");
+      const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+      alert(`Failed to generate PDF: ${errorMessage}. Please try again or contact support if the issue persists.`);
     } finally {
       setIsGeneratingPDF(false);
     }
