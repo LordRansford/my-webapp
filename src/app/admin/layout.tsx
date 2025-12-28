@@ -5,7 +5,7 @@ import { authOptions } from "@/lib/auth/options";
 import AdminAccessDeniedPage from "@/app/admin/access-denied/page";
 import { getAdminRole, hasPermission } from "@/lib/admin/rbac";
 
-// Previewnpm run dev/admin routes are not for indexing during early release.
+// Preview: /admin routes are not for indexing during early release.
 export const metadata: Metadata = {
   robots: {
     index: false,
