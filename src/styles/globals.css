@@ -1012,12 +1012,15 @@ textarea:focus {
 .site-footer__inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1.5rem;
+  padding: 2rem 1.5rem 1.5rem;
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
-  align-items: center;
-  justify-content: space-between;
+}
+
+@media (min-width: 768px) {
+  .site-footer__inner {
+    padding: 2.5rem 2rem 2rem;
+  }
 }
 
 .footer-links {
