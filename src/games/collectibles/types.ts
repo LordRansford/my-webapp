@@ -14,7 +14,7 @@ export type Collectible = {
   magnetRadius?: number; // For character magnet ability
 };
 
-export type PowerUpType = "slow-time" | "shield" | "double-points" | "speed-boost";
+export type PowerUpType = "slow-time" | "shield" | "double-points" | "speed-boost" | "rapid-fire" | "explosive-shots" | "life-extension" | "star-mode";
 
 export type PowerUp = {
   id: string;
@@ -46,6 +46,10 @@ export const POWER_UP_DURATIONS: Record<PowerUpType, number> = {
   shield: 8000,
   "double-points": 10000,
   "speed-boost": 6000,
+  "rapid-fire": 8000,
+  "explosive-shots": 10000,
+  "life-extension": 0, // Instant (adds hit point)
+  "star-mode": 7000, // Invincibility
 };
 
 export const POWER_UP_SPAWN_WEIGHT = 0.15; // 15% chance per spawn cycle

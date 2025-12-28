@@ -6,7 +6,7 @@ import { createFixedTimestepLoop } from "@/games/engine/loop";
 import { createInputController } from "@/games/engine/input";
 import { createAudioController } from "@/games/engine/audio";
 import { PersistStore } from "@/games/engine/persist";
-import type { GameSettings } from "@/games/engine/types";
+import type { GameSettings, InputState } from "@/games/engine/types";
 import { useOfflineReady } from "../SwStatus.client";
 import { GAME_LOADING_DEDICATION_LINES } from "@/games/dedication";
 import { GAMES_COPY } from "@/games/dedication";
@@ -85,7 +85,7 @@ export default function GameShellClient({ slug }: { slug: string }) {
     const windowInput = createInputController(window);
     // Merge inputs (touch from canvas, keyboard from window)
     const input = {
-      getState: () => {
+      getState: (): InputState => {
         const canvasState = canvasInput.getState();
         const windowState = windowInput.getState();
         return {
@@ -93,6 +93,8 @@ export default function GameShellClient({ slug }: { slug: string }) {
           moveY: canvasState.moveY || windowState.moveY,
           pausePressed: canvasState.pausePressed || windowState.pausePressed,
           actionPressed: canvasState.actionPressed || windowState.actionPressed,
+          shootPressed: canvasState.shootPressed || windowState.shootPressed,
+          shootJustPressed: canvasState.shootJustPressed || windowState.shootJustPressed,
         };
       },
       resetFrame: () => {
