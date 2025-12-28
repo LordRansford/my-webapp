@@ -254,7 +254,8 @@ export async function POST(req: Request) {
 
               incrementUsage();
               const top = retrievedItems[0] || null;
-              const lowConfidence = !top || top.score < 0.15;
+              // Lower threshold for confidence - even weak matches from keyword search (score 4+) are useful
+              const lowConfidence = !top || (top.score < 4 && top.score < 0.15);
               const tool = findToolSuggestion(safe.cleaned);
 
               // Try to generate answer using LLM (RAG)
