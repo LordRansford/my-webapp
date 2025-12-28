@@ -38,14 +38,18 @@ function GamesErrorFallback({ error, resetErrorBoundary }: { error: Error; reset
 export default function GamesPageClient() {
   return (
     <>
-      <header className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Games</p>
-            <h1 className="mt-2 text-3xl font-semibold text-slate-900">Offline-friendly mini games</h1>
-            <p className="mt-2 text-slate-700">Load once, then play offline. Arrow keys and swipe gestures supported.</p>
+      <header className="rounded-3xl border-2 border-slate-200 bg-gradient-to-br from-white to-slate-50/50 p-8 shadow-sm mb-8">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="flex-1 min-w-0">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Games</p>
+            <h1 className="text-4xl font-semibold text-slate-900 mb-3">Offline-friendly mini games</h1>
+            <p className="text-base text-slate-700 leading-relaxed max-w-2xl">
+              Load once, then play offline. Arrow keys and swipe gestures supported. Perfect for practicing on the go.
+            </p>
           </div>
-          <SwStatusPill />
+          <div className="flex-shrink-0">
+            <SwStatusPill />
+          </div>
         </div>
       </header>
 
