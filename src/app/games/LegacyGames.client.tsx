@@ -6,32 +6,32 @@ import CrossDomainGames from "@/components/CrossDomainGames";
 
 export default function LegacyGames() {
   return (
-    <section aria-label="More practice games" className="space-y-6">
-      <header className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-        <h2 className="text-lg font-semibold text-slate-900">More practice games</h2>
-        <p className="mt-1 text-sm text-slate-700">
-          These are lightweight interactive drills from the rest of the site.
+    <section aria-label="More practice games" className="space-y-6 mt-10">
+      <header className="rounded-3xl border-2 border-slate-200 bg-white p-6 shadow-sm">
+        <h2 className="text-2xl font-semibold text-slate-900">Practice Games</h2>
+        <p className="mt-2 text-base text-slate-700">
+          Lightweight interactive drills from across the site to reinforce learning.
         </p>
       </header>
 
-      <div className="space-y-8">
+      <div className="space-y-10">
         <div>
-          <h3 className="text-base font-semibold text-slate-900">Cybersecurity</h3>
-          <div className="mt-3">
+          <h3 className="text-xl font-semibold text-slate-900 mb-4">Cybersecurity</h3>
+          <div className="rounded-2xl border border-slate-200 bg-white/50 p-4">
             <GameHub />
           </div>
         </div>
 
         <div>
-          <h3 className="text-base font-semibold text-slate-900">Digitalisation</h3>
-          <div className="mt-3">
+          <h3 className="text-xl font-semibold text-slate-900 mb-4">Digitalisation</h3>
+          <div className="rounded-2xl border border-slate-200 bg-white/50 p-4">
             <DigitalisationGameHub />
           </div>
         </div>
 
         <div>
-          <h3 className="text-base font-semibold text-slate-900">Cross topic</h3>
-          <div className="mt-3">
+          <h3 className="text-xl font-semibold text-slate-900 mb-4">Cross Topic</h3>
+          <div className="rounded-2xl border border-slate-200 bg-white/50 p-4">
             <CrossDomainGames />
           </div>
         </div>
