@@ -7,7 +7,7 @@ import { templateDefinitions } from "../../../content/templates/definitions";
 
 export const metadata = {
   title: "Templates",
-  description: "Preview-only templates across architecture, engineering, and governance.",
+  description: "Templates across architecture, engineering, and governance.",
 };
 
 export default function TemplatesLandingPage() {
@@ -28,8 +28,8 @@ export default function TemplatesLandingPage() {
         </div>
         <div className="grid gap-3 sm:grid-cols-3">
           <div className="flex items-center gap-3 rounded-2xl bg-white/80 p-4 text-sm text-slate-800 shadow-sm ring-1 ring-slate-100">
-            <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800">Preview only</span>
-            Text-only stubs-no downloads or payments.
+            <span aria-hidden="true">📄</span>
+            Downloadable templates in multiple formats.
           </div>
           <div className="flex items-center gap-3 rounded-2xl bg-white/80 p-4 text-sm text-slate-800 shadow-sm ring-1 ring-slate-100">
             <span aria-hidden="true">🎛️</span>
@@ -50,9 +50,6 @@ export default function TemplatesLandingPage() {
               Explore by discipline
             </h2>
             <p className="text-sm text-slate-700">Structured coverage from cybersecurity architecture to operating models.</p>
-          </div>
-          <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800">
-            Preview only
           </div>
         </div>
 
@@ -93,7 +90,6 @@ export default function TemplatesLandingPage() {
               <p className="text-base text-slate-700 flex-1">{tpl.description}</p>
               <div className="flex items-center justify-between text-xs text-slate-700">
                 <span>Estimated {tpl.estimatedMinutes} mins</span>
-                <span className="rounded-full bg-amber-50 px-2 py-1 font-semibold text-amber-800">Preview only</span>
               </div>
               <a
                 href={`/templates/run/${tpl.slug}`}
