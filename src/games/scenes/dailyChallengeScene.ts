@@ -74,7 +74,7 @@ export function createDailyChallengeScene(opts?: {
       dead = false;
       t = 0;
       obstacles.length = 0;
-      nextSpawnMs = 400;
+      nextSpawnMs = 300; // Start spawning faster initially
       px = 0;
       py = 0;
     },
