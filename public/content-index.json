@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-12-28T07:23:10.876Z",
+  "generatedAt": "2025-12-28T07:35:28.513Z",
   "pages": [
     {
       "route": "/courses/ai/advanced",
@@ -2379,63 +2379,57 @@
       "sections": [
         {
           "depth": 2,
-          "title": "Introduction",
-          "anchor": "introduction",
-          "excerpt": "When people talk about AI, they often mean systems that learn patterns from data and use those patterns to make predictions or decisions. The core idea is simple: give a system examples, let it find patterns, then use those patterns on new situations."
+          "title": "What data actually is",
+          "anchor": "what-data-actually-is",
+          "excerpt": "Data is examples with labels. That's the simplest way to think about it."
         },
         {
           "depth": 2,
-          "title": "What is data?",
-          "anchor": "what-is-data",
-          "excerpt": "Data is information organized so a system can learn from it. Think of it as examples with labels."
+          "title": "How models learn",
+          "anchor": "how-models-learn",
+          "excerpt": "A model is just a function. It takes inputs and produces outputs. Training is the process of adjusting that function until it gets the outputs right."
         },
         {
           "depth": 2,
-          "title": "How models learn patterns",
-          "anchor": "how-models-learn-patterns",
-          "excerpt": "A model is a function that maps inputs to outputs. Training is the process of adjusting that function until it produces the right outputs for your examples."
+          "title": "Splitting your data",
+          "anchor": "splitting-your-data",
+          "excerpt": "You split your data into three sets. This sounds boring but it's actually important."
         },
         {
           "depth": 2,
-          "title": "Training, validation, and testing",
-          "anchor": "training-validation-and-testing",
-          "excerpt": "You split your data into three sets:"
+          "title": "When data goes wrong",
+          "anchor": "when-data-goes-wrong",
+          "excerpt": "Models learn whatever patterns exist in the data. If the data has problems, the model learns those problems as if they're features."
         },
         {
           "depth": 2,
-          "title": "Common data problems",
-          "anchor": "common-data-problems",
-          "excerpt": "Models learn whatever patterns exist in the data. If the data has problems, the model learns those problems."
+          "title": "Why accuracy lies",
+          "anchor": "why-accuracy-lies",
+          "excerpt": "Accuracy tells you what percentage of predictions were correct. Sounds simple. It's not."
         },
         {
           "depth": 2,
-          "title": "Evaluation metrics in context",
-          "anchor": "evaluation-metrics-in-context",
-          "excerpt": "Accuracy tells you what percentage of predictions were correct. But accuracy can be misleading."
+          "title": "Models in the real world",
+          "anchor": "models-in-the-real-world",
+          "excerpt": "Modern AI uses many model types. Each has tradeoffs."
         },
         {
           "depth": 2,
-          "title": "Models in practice",
-          "anchor": "models-in-practice",
-          "excerpt": "Modern AI uses many model types:"
+          "title": "What happens in production",
+          "anchor": "what-happens-in-production",
+          "excerpt": "A model that works in testing might fail in production. Real users behave differently than test data. Systems have latency, drift, and edge cases you never thought of."
         },
         {
           "depth": 2,
-          "title": "Deployment changes everything",
-          "anchor": "deployment-changes-everything",
-          "excerpt": "A model that works in testing might fail in production. Real users behave differently than test data. Systems have latency, drift, and edge cases."
+          "title": "Responsible AI isn't optional",
+          "anchor": "responsible-ai-isnt-optional",
+          "excerpt": "AI systems make decisions that affect people. You need to think about fairness, transparency, privacy, and safety. These aren't afterthoughts. They're core to building systems people can trust."
         },
         {
           "depth": 2,
-          "title": "Responsible AI",
-          "anchor": "responsible-ai",
-          "excerpt": "AI systems make decisions that affect people. You need to think about:"
-        },
-        {
-          "depth": 2,
-          "title": "Conclusion",
-          "anchor": "conclusion",
-          "excerpt": "AI is pattern learning from data. The fundamentals are:"
+          "title": "What actually matters",
+          "anchor": "what-actually-matters",
+          "excerpt": "AI is pattern learning from data. That's it. Everything else is implementation details."
         }
       ]
     },
