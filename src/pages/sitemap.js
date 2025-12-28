@@ -51,11 +51,14 @@ export default function SitemapPage({ posts }) {
             </div>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {siteStructure.courses.map((course) => (
-                <div key={course.id} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                  <h3 className="text-xl font-semibold text-slate-900">{course.title}</h3>
-                  <p className="mt-2 text-sm text-slate-700">{course.description}</p>
+                <div key={course.id} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:border-slate-300 hover:shadow-md transition">
+                  <div className="flex items-center gap-3 mb-3">
+                    <BookOpen className="h-6 w-6 text-emerald-600" aria-hidden="true" />
+                    <h3 className="text-xl font-semibold text-slate-900">{course.title}</h3>
+                  </div>
+                  <p className="mt-2 text-sm text-slate-700 leading-relaxed">{course.description}</p>
                   <div className="mt-4 space-y-2">
-                    <Link href={course.href} className="block text-sm font-semibold text-slate-900 hover:text-slate-700">
+                    <Link href={course.href} className="block text-sm font-semibold text-emerald-700 hover:text-emerald-800">
                       {course.title} Overview →
                     </Link>
                     {course.levels?.map((level) => (
@@ -80,10 +83,14 @@ export default function SitemapPage({ posts }) {
                 <Link
                   key={studio.href}
                   href={studio.href}
-                  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:border-slate-300 hover:shadow-md transition"
+                  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:border-purple-300 hover:shadow-md transition group"
                 >
-                  <h3 className="text-lg font-semibold text-slate-900">{studio.title}</h3>
-                  <span className="mt-2 inline-block text-sm text-slate-600">Open studio →</span>
+                  <div className="flex items-center gap-3 mb-2">
+                    <FlaskConical className="h-5 w-5 text-purple-600 group-hover:text-purple-700" aria-hidden="true" />
+                    <h3 className="text-lg font-semibold text-slate-900">{studio.title}</h3>
+                  </div>
+                  <p className="mt-2 text-sm text-slate-700 leading-relaxed">Guided spaces for deeper experiments and hands-on learning.</p>
+                  <span className="mt-3 inline-block text-sm font-semibold text-purple-700 group-hover:text-purple-800">Open studio →</span>
                 </Link>
               ))}
             </div>
@@ -100,10 +107,14 @@ export default function SitemapPage({ posts }) {
                 <Link
                   key={dashboard.href}
                   href={dashboard.href}
-                  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:border-slate-300 hover:shadow-md transition"
+                  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:border-blue-300 hover:shadow-md transition group"
                 >
-                  <h3 className="text-lg font-semibold text-slate-900">{dashboard.title}</h3>
-                  <span className="mt-2 inline-block text-sm text-slate-600">Open dashboards →</span>
+                  <div className="flex items-center gap-3 mb-2">
+                    <LayoutDashboard className="h-5 w-5 text-blue-600 group-hover:text-blue-700" aria-hidden="true" />
+                    <h3 className="text-lg font-semibold text-slate-900">{dashboard.title}</h3>
+                  </div>
+                  <p className="mt-2 text-sm text-slate-700 leading-relaxed">Interactive boards that turn concepts into decisions and insights.</p>
+                  <span className="mt-3 inline-block text-sm font-semibold text-blue-700 group-hover:text-blue-800">Open dashboards →</span>
                 </Link>
               ))}
             </div>
@@ -120,10 +131,14 @@ export default function SitemapPage({ posts }) {
                 <Link
                   key={template.href}
                   href={template.href}
-                  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:border-slate-300 hover:shadow-md transition"
+                  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:border-amber-300 hover:shadow-md transition group"
                 >
-                  <h3 className="text-lg font-semibold text-slate-900">{template.title}</h3>
-                  <span className="mt-2 inline-block text-sm text-slate-600">Browse templates →</span>
+                  <div className="flex items-center gap-3 mb-2">
+                    <FileText className="h-5 w-5 text-amber-600 group-hover:text-amber-700" aria-hidden="true" />
+                    <h3 className="text-lg font-semibold text-slate-900">{template.title}</h3>
+                  </div>
+                  <p className="mt-2 text-sm text-slate-700 leading-relaxed">Evidence-friendly templates for planning, reporting, and documentation.</p>
+                  <span className="mt-3 inline-block text-sm font-semibold text-amber-700 group-hover:text-amber-800">Browse templates →</span>
                 </Link>
               ))}
             </div>
@@ -140,10 +155,14 @@ export default function SitemapPage({ posts }) {
                 <Link
                   key={game.href}
                   href={game.href}
-                  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:border-slate-300 hover:shadow-md transition"
+                  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:border-pink-300 hover:shadow-md transition group"
                 >
-                  <h3 className="text-lg font-semibold text-slate-900">{game.title}</h3>
-                  <span className="mt-2 inline-block text-sm text-slate-600">Play games →</span>
+                  <div className="flex items-center gap-3 mb-2">
+                    <Gamepad2 className="h-5 w-5 text-pink-600 group-hover:text-pink-700" aria-hidden="true" />
+                    <h3 className="text-lg font-semibold text-slate-900">{game.title}</h3>
+                  </div>
+                  <p className="mt-2 text-sm text-slate-700 leading-relaxed">Offline-friendly mini games for practice, fun, and skill building.</p>
+                  <span className="mt-3 inline-block text-sm font-semibold text-pink-700 group-hover:text-pink-800">Play games →</span>
                 </Link>
               ))}
             </div>
@@ -160,10 +179,14 @@ export default function SitemapPage({ posts }) {
                 <Link
                   key={tool.href}
                   href={tool.href}
-                  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:border-slate-300 hover:shadow-md transition"
+                  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:border-indigo-300 hover:shadow-md transition group"
                 >
-                  <h3 className="text-lg font-semibold text-slate-900">{tool.title}</h3>
-                  <span className="mt-2 inline-block text-sm text-slate-600">Open tools →</span>
+                  <div className="flex items-center gap-3 mb-2">
+                    <Wrench className="h-5 w-5 text-indigo-600 group-hover:text-indigo-700" aria-hidden="true" />
+                    <h3 className="text-lg font-semibold text-slate-900">{tool.title}</h3>
+                  </div>
+                  <p className="mt-2 text-sm text-slate-700 leading-relaxed">Small labs and helpers you can run quickly to test ideas and build intuition.</p>
+                  <span className="mt-3 inline-block text-sm font-semibold text-indigo-700 group-hover:text-indigo-800">Open tools →</span>
                 </Link>
               ))}
             </div>
@@ -180,10 +203,14 @@ export default function SitemapPage({ posts }) {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:border-slate-300 hover:shadow-md transition"
+                  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:border-sky-300 hover:shadow-md transition group"
                 >
-                  <h3 className="text-lg font-semibold text-slate-900">{item.title}</h3>
-                  <span className="mt-2 inline-block text-sm text-slate-600">View →</span>
+                  <div className="flex items-center gap-3 mb-2">
+                    <GraduationCap className="h-5 w-5 text-sky-600 group-hover:text-sky-700" aria-hidden="true" />
+                    <h3 className="text-lg font-semibold text-slate-900">{item.title}</h3>
+                  </div>
+                  <p className="mt-2 text-sm text-slate-700 leading-relaxed">Resources to track progress, build skills, and advance your learning journey.</p>
+                  <span className="mt-3 inline-block text-sm font-semibold text-sky-700 group-hover:text-sky-800">View →</span>
                 </Link>
               ))}
             </div>
@@ -217,10 +244,14 @@ export default function SitemapPage({ posts }) {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:border-slate-300 hover:shadow-md transition"
+                  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:border-slate-300 hover:shadow-md transition group"
                 >
-                  <h3 className="text-lg font-semibold text-slate-900">{item.title}</h3>
-                  <span className="mt-2 inline-block text-sm text-slate-600">Visit page →</span>
+                  <div className="flex items-center gap-3 mb-2">
+                    <HelpCircle className="h-5 w-5 text-slate-600 group-hover:text-slate-700" aria-hidden="true" />
+                    <h3 className="text-lg font-semibold text-slate-900">{item.title}</h3>
+                  </div>
+                  <p className="mt-2 text-sm text-slate-700 leading-relaxed">Get help, learn more about the platform, or provide feedback.</p>
+                  <span className="mt-3 inline-block text-sm font-semibold text-slate-700 group-hover:text-slate-800">Visit page →</span>
                 </Link>
               ))}
             </div>

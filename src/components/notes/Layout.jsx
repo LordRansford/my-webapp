@@ -209,12 +209,6 @@ export default function NotesLayout(props) {
             ) : null}
             {meta.description ? <p className="mt-2 text-base text-gray-800">{meta.description}</p> : null}
             <div className="mt-3 flex flex-wrap gap-2">
-              <Link
-                href="/mentor"
-                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600"
-              >
-                Ask the mentor
-              </Link>
               {showReadAloud ? <ReadAloudControls selector="main article" label="Listen" /> : null}
             </div>
             <div className="mt-4">
