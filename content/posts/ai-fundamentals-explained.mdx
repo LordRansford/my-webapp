@@ -8,12 +8,6 @@ tags:
 excerpt: "A clear, practical guide to understanding AI from first principles. Learn what data is, how models learn patterns, and how to make sense of AI systems in real work."
 ---
 
-import ToolCard from "@/components/notes/ToolCard"
-import dynamic from "next/dynamic"
-
-const DatasetSplitLab = dynamic(() => import("@/components/tools/ai/DatasetSplitLab").then(m => ({ default: m.DatasetSplitLab })), { ssr: false })
-const FairnessProbeLab = dynamic(() => import("@/components/tools/ai/FairnessProbeLab").then(m => ({ default: m.FairnessProbeLab })), { ssr: false })
-const DriftMonitorLab = dynamic(() => import("@/components/tools/ai/DriftMonitorLab").then(m => ({ default: m.DriftMonitorLab })), { ssr: false })
 
 People talk about AI like it's magic. It's not. AI is just pattern matching. Give a system enough examples, let it find the patterns, then use those patterns on new situations. That's it. The rest is marketing.
 
