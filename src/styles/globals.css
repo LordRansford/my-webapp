@@ -2484,3 +2484,333 @@ html.high-contrast .skip-link:focus {
   outline: 4px solid var(--text-body) !important;
   outline-offset: 3px !important;
 }
+
+/* ============================================
+   PRACTICE GAMES STYLES
+   ============================================ */
+
+/* Game Hub Container */
+.rn-game-hub {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Game Card Styling - Enhanced */
+.rn-game-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: linear-gradient(to bottom right, #ffffff, #f8fafc);
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.rn-game-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.rn-card-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: rgb(15, 23, 42);
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+.rn-card-body {
+  color: rgb(51, 65, 85);
+}
+
+.rn-game-area {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+/* Game Row Styling */
+.rn-game-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.5rem;
+  background: rgba(248, 250, 252, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  transition: all 0.2s ease;
+}
+
+.rn-game-row:hover {
+  background: rgba(241, 245, 249, 0.8);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.rn-game-row label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  flex: 1;
+  font-size: 0.875rem;
+  color: rgb(51, 65, 85);
+}
+
+.rn-game-row input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+  accent-color: rgb(59, 130, 246);
+}
+
+.rn-game-row select {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: white;
+  font-size: 0.875rem;
+  color: rgb(51, 65, 85);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rn-game-row select:hover {
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.rn-game-row select:focus {
+  outline: none;
+  border-color: rgb(59, 130, 246);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Tool Styling */
+.rn-tool {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.rn-tool-head {
+  margin-bottom: 0.5rem;
+}
+
+.rn-tool-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: rgb(15, 23, 42);
+  margin-bottom: 0.5rem;
+}
+
+.rn-tool-sub {
+  font-size: 0.875rem;
+  color: rgb(100, 116, 139);
+  line-height: 1.5;
+}
+
+/* Mini Section (Reflection, Question, etc.) */
+.rn-mini {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: linear-gradient(to bottom right, rgba(59, 130, 246, 0.05), rgba(147, 51, 234, 0.05));
+  border: 1px solid rgba(59, 130, 246, 0.15);
+}
+
+.rn-mini-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgb(59, 130, 246);
+  margin-bottom: 0.5rem;
+}
+
+.rn-mini-body {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: rgb(51, 65, 85);
+}
+
+/* Choice Buttons */
+.rn-choice {
+  display: block;
+  width: 100%;
+  padding: 0.875rem 1rem;
+  text-align: left;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 0.5rem;
+  background: white;
+  color: rgb(51, 65, 85);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 0.5rem;
+}
+
+.rn-choice:hover {
+  border-color: rgba(59, 130, 246, 0.5);
+  background: rgba(59, 130, 246, 0.05);
+  transform: translateX(2px);
+}
+
+.rn-choice-active {
+  border-color: rgb(59, 130, 246);
+  background: linear-gradient(to right, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+  color: rgb(15, 23, 42);
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+/* Input and Label Styling */
+.rn-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgb(51, 65, 85);
+}
+
+.rn-input {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: white;
+  font-size: 0.875rem;
+  color: rgb(51, 65, 85);
+  transition: all 0.2s ease;
+}
+
+.rn-input:hover {
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.rn-input:focus {
+  outline: none;
+  border-color: rgb(59, 130, 246);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.rn-range {
+  width: 100%;
+  height: 0.5rem;
+  border-radius: 0.25rem;
+  background: rgba(148, 163, 184, 0.2);
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.rn-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background: rgb(59, 130, 246);
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.rn-range::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
+}
+
+.rn-range::-moz-range-thumb {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background: rgb(59, 130, 246);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.rn-range::-moz-range-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
+}
+
+/* Grid Layouts */
+.rn-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.rn-grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.rn-grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.rn-mt {
+  margin-top: 1rem;
+}
+
+.rn-flex {
+  display: flex;
+}
+
+.rn-items-center {
+  align-items: center;
+}
+
+.rn-justify-between {
+  justify-content: space-between;
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .rn-game-card {
+    background: linear-gradient(to bottom right, rgb(15, 23, 42), rgb(30, 41, 59));
+    border-color: rgba(148, 163, 184, 0.2);
+  }
+
+  .rn-card-title {
+    color: rgb(241, 245, 249);
+  }
+
+  .rn-card-body,
+  .rn-body {
+    color: rgb(203, 213, 225);
+  }
+
+  .rn-game-row {
+    background: rgba(30, 41, 59, 0.6);
+    border-color: rgba(148, 163, 184, 0.15);
+  }
+
+  .rn-game-row:hover {
+    background: rgba(51, 65, 85, 0.8);
+    border-color: rgba(59, 130, 246, 0.3);
+  }
+
+  .rn-choice {
+    background: rgb(30, 41, 59);
+    border-color: rgba(148, 163, 184, 0.3);
+    color: rgb(203, 213, 225);
+  }
+
+  .rn-choice:hover {
+    background: rgba(59, 130, 246, 0.15);
+  }
+
+  .rn-input,
+  .rn-game-row select {
+    background: rgb(30, 41, 59);
+    border-color: rgba(148, 163, 184, 0.3);
+    color: rgb(203, 213, 225);
+  }
+}
