@@ -158,10 +158,7 @@ export default function NotesLayout(props) {
   const isCourseOverview = slug.endsWith("/course") || slug.endsWith("/overview") || meta.page === "Overview";
   const isCourseAssessment = (meta.level || "").toLowerCase().includes("assessment") || slug.includes("/assessment");
 
-  const resolvedShowContentsSidebar =
-    typeof showContentsSidebar === "boolean"
-      ? showContentsSidebar && isCourseNavigationAllowed
-      : isCourseNavigationAllowed && Array.isArray(headings) && headings.length > 0;
+  const resolvedShowContentsSidebar = false; // Disabled to give more space to content
 
   const resolvedShowStepper =
     typeof showStepper === "boolean" ? showStepper && isCourseNavigationAllowed : isCourseNavigationAllowed;
@@ -194,7 +191,7 @@ export default function NotesLayout(props) {
             onClose={() => setMobileOpen(false)}
           />
         ) : null}
-        <main className="w-full max-w-[1000px] flex-1">
+        <main className="w-full max-w-full flex-1">
           <BetaBanner />
           <AssistantShell />
           <header className="mb-4 rounded-3xl border border-gray-200 bg-white/90 p-4 shadow-sm backdrop-blur">
