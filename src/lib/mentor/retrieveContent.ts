@@ -124,7 +124,8 @@ export function retrieveContent(question: string, currentRoute: string | null, l
 
   scored.sort((a, b) => b.score - a.score);
   const top = scored.slice(0, limit);
-  const weak = top.length === 0 || top[0].score < 5;
+  // Lower threshold: score of 4+ means we found relevant content (title match gives 4 points)
+  const weak = top.length === 0 || top[0].score < 4;
   return { matches: top, weak };
 }
 
