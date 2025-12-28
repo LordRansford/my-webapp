@@ -1006,7 +1006,8 @@ textarea:focus {
 
 .site-footer {
   border-top: 1px solid var(--line);
-  background: #f5f5f7;
+  background: #f8fafc;
+  margin-top: 4rem;
 }
 
 .site-footer__inner {
