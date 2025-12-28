@@ -61,7 +61,8 @@
   }
 
   .site-footer {
-    background: #0b1220;
+    background: #0f1729;
+    border-top-color: rgba(148, 163, 184, 0.15);
   }
 
   .pill {
@@ -140,7 +141,8 @@ html.dark .site-header {
 }
 
 html.dark .site-footer {
-  background: #0b1220;
+  background: #0f1729;
+  border-top-color: rgba(148, 163, 184, 0.15);
 }
 
 html.dark .pill {

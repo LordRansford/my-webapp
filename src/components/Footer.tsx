@@ -99,9 +99,9 @@ export default function Footer() {
 
   return (
     <footer className="site-footer" aria-label="Footer">
-      <div className="site-footer__inner flex flex-col gap-8">
-        <div className="flex flex-wrap items-start justify-between gap-8">
-          <div className="max-w-xl space-y-3">
+      <div className="site-footer__inner flex flex-col gap-6">
+        <div className="flex flex-wrap items-start justify-between gap-6">
+          <div className="max-w-md space-y-2">
             <button
               type="button"
               onPointerDown={onHoldStart}
@@ -111,25 +111,25 @@ export default function Footer() {
               className="inline-flex items-center rounded-md"
               aria-label="Ransford's Notes logo"
             >
-              <BrandLogo className="h-12 w-auto text-slate-900" />
+              <BrandLogo className="h-10 w-auto text-slate-900" />
             </button>
-            <p className="muted text-sm">
+            <p className="muted text-xs leading-relaxed">
               Browser-native courses, tools, labs, and games built to stay readable, calm, and offline-capable. Clear inputs, clear
               outputs, and no hidden mechanics.
             </p>
-            <p className="muted text-sm">
+            <p className="muted text-xs leading-relaxed">
               CPD: structured objectives with conservative hour estimates and evidence-friendly outputs.
             </p>
           </div>
 
-          <div className="grid w-full max-w-3xl gap-6 sm:grid-cols-2 md:grid-cols-4" role="navigation" aria-label="Footer sitemap">
+          <div className="grid w-full max-w-3xl gap-4 sm:grid-cols-2 md:grid-cols-4" role="navigation" aria-label="Footer sitemap">
             {footerNav.map((section) => (
-              <div key={section.title} className="space-y-2">
-                <p className="text-sm font-semibold text-slate-900">{section.title}</p>
-                <ul className="space-y-2 text-sm text-slate-700">
+              <div key={section.title} className="space-y-1.5">
+                <p className="text-xs font-semibold text-slate-900 uppercase tracking-wide">{section.title}</p>
+                <ul className="space-y-1 text-sm text-slate-700">
                   {section.links.map((link) => (
                     <li key={link.href}>
-                      <Link className="hover:underline" href={link.href}>
+                      <Link className="hover:underline transition-colors" href={link.href}>
                         {link.label}
                       </Link>
                     </li>
@@ -140,23 +140,23 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[color:var(--line)] pt-4 text-sm">
-          <div className="flex flex-wrap items-center gap-4 font-semibold text-slate-800">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[color:var(--line)] pt-3 text-xs">
+          <div className="flex flex-wrap items-center gap-3 font-semibold text-slate-800">
             <span>© {new Date().getFullYear()} RansfordsNotes</span>
             {policyLinks.map((item) => (
-              <Link key={item.href} className="hover:underline" href={item.href}>
+              <Link key={item.href} className="hover:underline transition-colors" href={item.href}>
                 {item.label}
               </Link>
             ))}
           </div>
           <div className="flex flex-wrap items-center gap-3 text-slate-700">
-            <Link className="hover:underline" href="/contact">
+            <Link className="hover:underline transition-colors" href="/contact">
               Contact
             </Link>
-            <Link className="hover:underline" href="/accessibility">
+            <Link className="hover:underline transition-colors" href="/accessibility">
               Accessibility
             </Link>
-            <Link className="hover:underline" href="/sitemap">
+            <Link className="hover:underline transition-colors" href="/sitemap">
               Site Map
             </Link>
             <DonateButton />
