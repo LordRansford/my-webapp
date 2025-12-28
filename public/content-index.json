@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-12-28T07:38:58.056Z",
+  "generatedAt": "2025-12-28T08:00:43.842Z",
   "pages": [
     {
       "route": "/courses/ai/advanced",
@@ -2440,33 +2440,33 @@
       "sections": [
         {
           "depth": 2,
-          "title": "Introduction",
-          "anchor": "introduction",
-          "excerpt": "Security protects confidentiality, integrity, and availability. Ask three quick questions: what must stay secret, what must stay accurate, and what must stay online? Those answers guide every control."
-        },
-        {
-          "depth": 2,
           "title": "Symmetric encryption",
           "anchor": "symmetric-encryption",
-          "excerpt": "One shared key locks and unlocks data. It is fast and proven (AES), but the shared key must be exchanged safely. Think of a locker code: if it leaks, privacy is gone."
+          "excerpt": "One shared key locks and unlocks data. That's it. Same key to encrypt, same key to decrypt."
         },
         {
           "depth": 2,
           "title": "Asymmetric encryption",
           "anchor": "asymmetric-encryption",
-          "excerpt": "Two keys: a public key to lock, a private key to unlock. Share the public key openly; never share the private key. This removes the need for a pre-shared secret."
+          "excerpt": "Two keys. A public key to lock. A private key to unlock. Share the public key with everyone. Never share the private key with anyone."
         },
         {
           "depth": 2,
           "title": "Hashing in practice",
           "anchor": "hashing-in-practice",
-          "excerpt": "A hash turns any input into a fixed-length fingerprint. Small input changes produce large output changes. Hashes support integrity checks and password storage (with salts and slow functions)."
+          "excerpt": "A hash turns any input into a fixed-length fingerprint. Change one bit in the input, and the hash changes completely. That's called the avalanche effect."
         },
         {
           "depth": 2,
-          "title": "Quick check",
-          "anchor": "quick-check",
-          "excerpt": "- Which part stays secret in asymmetric encryption? - Why does symmetric encryption not solve key exchange on its own? - When would you choose hashing instead of encryption?"
+          "title": "Certificates and trust",
+          "anchor": "certificates-and-trust",
+          "excerpt": "Certificates solve the identity problem. How do you know a public key actually belongs to who you think it belongs to?"
+        },
+        {
+          "depth": 2,
+          "title": "What actually matters",
+          "anchor": "what-actually-matters",
+          "excerpt": "Cryptography is math applied to security problems. The math is public. The security comes from computational hardness, not secrecy."
         }
       ]
     }

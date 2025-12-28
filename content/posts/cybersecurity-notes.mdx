@@ -8,32 +8,111 @@ tags:
 excerpt: "A beginner-friendly walkthrough of confidentiality, keys, and hashing with simple exercises."
 ---
 
-## Introduction
+import ToolCard from "@/components/notes/ToolCard"
 
-Security protects confidentiality, integrity, and availability. Ask three quick questions: what must stay secret, what must stay accurate, and what must stay online? Those answers guide every control.
+Security protects three things. Confidentiality. Integrity. Availability. Ask yourself three questions. What must stay secret? What must stay accurate? What must stay online? Those answers guide every control you'll ever build.
+
+I've seen systems break because people forgot one of these. A system that keeps secrets but loses data integrity is useless. A system that's accurate but goes offline when you need it is also useless. You need all three. That's not optional. That's how security works.
 
 ## Symmetric encryption
 
-One shared key locks and unlocks data. It is fast and proven (AES), but the shared key must be exchanged safely. Think of a locker code: if it leaks, privacy is gone.
+One shared key locks and unlocks data. That's it. Same key to encrypt, same key to decrypt.
 
-**Exercise:** List three ways to share a secret key without email. Pick the safest and explain why.
+Symmetric encryption is fast. AES is proven. It's what we use when speed matters. But here's the problem. How do you share that key safely? If you send it over email, anyone who intercepts the email has your key. If you store it in a file, anyone who gets the file has your key. The key is the weakest link.
+
+Think of it like a locker code. If someone gets the code, they can open the locker. The lock itself might be perfect, but if the code leaks, privacy is gone.
+
+The math behind symmetric encryption is straightforward. You take your message, mix it with the key using XOR or substitution, and out comes ciphertext. The mixing is reversible if you have the key. Without the key, it looks random.
+
+<ToolCard title="RSA Playground" description="Generate RSA keys and see the math in action. Pick small primes to understand the process, then scale up to see why large primes matter.">
+<RsaPlayground />
+</ToolCard>
 
 ## Asymmetric encryption
 
-Two keys: a public key to lock, a private key to unlock. Share the public key openly; never share the private key. This removes the need for a pre-shared secret.
+Two keys. A public key to lock. A private key to unlock. Share the public key with everyone. Never share the private key with anyone.
 
-<Callout title="Try it" type="info">
-Open the RSA sandbox in the tools page or the cybersecurity notes page. Generate a pair, keep the private key safe, and observe how the keys differ.
-</Callout>
+This solves the key exchange problem. You don't need to share a secret beforehand. Anyone can encrypt a message with your public key. Only you can decrypt it with your private key.
+
+RSA is the classic example. Here's how it works mathematically.
+
+Pick two large prime numbers, p and q. Multiply them to get n. That's your modulus. The modulus n equals p times q.
+
+Calculate Euler's totient function, φ(n). For two primes, this is simple. Euler's totient φ(n) equals (p minus 1) times (q minus 1).
+
+Pick a public exponent e. It must be coprime with φ(n), meaning their greatest common divisor is 1. Usually we use 65537. It's fast and safe.
+
+Find the private exponent d. This is the modular inverse of e modulo φ(n). In other words, find d such that.
+
+The product of e and d must equal 1 modulo φ(n).
+
+Your public key is (n, e). Your private key is (n, d). To encrypt a message m, compute.
+
+Ciphertext c equals m to the power of e, modulo n.
+
+To decrypt, compute.
+
+Message m equals c to the power of d, modulo n.
+
+The security comes from the fact that factoring n back into p and q is computationally hard. If someone could factor n, they could calculate φ(n) and find your private key. But for large primes, factoring takes longer than the universe has existed. That's the math that keeps you safe.
+
+
+Why does this work? Modular arithmetic. When you compute m^e mod n, you're working in a finite set. The result wraps around. This creates a one-way function. Easy to compute forward, hard to reverse without the private key.
+
+The beauty is that the math is public. Everyone knows how RSA works. The security isn't in hiding the algorithm. The security is in the difficulty of factoring large numbers. That's the difference between security through obscurity and security through mathematics.
 
 ## Hashing in practice
 
-A hash turns any input into a fixed-length fingerprint. Small input changes produce large output changes. Hashes support integrity checks and password storage (with salts and slow functions).
+A hash turns any input into a fixed-length fingerprint. Change one bit in the input, and the hash changes completely. That's called the avalanche effect.
 
-**Exercise:** Use the SHA-256 sandbox to hash a sentence. Change one word and note how the hash changes.
+Hashes are one-way functions. You can't reverse a hash to get the original input. At least, you shouldn't be able to. If you can, the hash function is broken.
 
-## Quick check
+Here's the math. A hash function H takes an input x of any length and produces an output H(x) of fixed length.
 
-- Which part stays secret in asymmetric encryption?
-- Why does symmetric encryption not solve key exchange on its own?
-- When would you choose hashing instead of encryption?
+The hash function H applied to input x produces hash h.
+
+Where h is a fixed-length string, usually 256 bits for SHA-256. The function has three properties.
+
+First, it's deterministic. Same input always produces same output. Hash "hello" twice, you get the same result both times.
+
+Second, it's fast to compute. Hashing should be quick. If it's slow, you can't use it for integrity checks or password verification.
+
+Third, it's hard to find collisions. A collision is when two different inputs produce the same hash. If collisions are easy to find, the hash is broken.
+
+The avalanche effect means small changes create large differences. Hash "hello" and hash "Hello" (capital H). The outputs are completely different. This is by design. It makes the hash sensitive to any change.
+
+<ToolCard title="Try the tools" description="Visit the tools page to explore RSA key generation, entropy and hashing, and certificate viewing. See the math in action.">
+</ToolCard>
+
+For password storage, you don't store the password. You store the hash of the password plus a salt. A salt is random data added to make each hash unique. Even if two users have the same password, their hashes are different because their salts are different.
+
+When someone logs in, you hash their input password with the stored salt and compare it to the stored hash. If they match, the password is correct. You never store the actual password. If your database leaks, attackers get hashes, not passwords. They'd have to reverse the hash to get the password, which should be computationally infeasible.
+
+## Certificates and trust
+
+Certificates solve the identity problem. How do you know a public key actually belongs to who you think it belongs to?
+
+A certificate is a signed statement. It says "this public key belongs to this identity." The signature comes from a certificate authority, someone you trust. If you trust the authority, you trust the certificate.
+
+The math is the same RSA or ECDSA signing. The certificate authority has a private key. They sign the certificate with that key. You verify the signature with their public key. If the signature verifies, the certificate is authentic.
+
+
+The trust chain is recursive. You trust the root certificate authority. They sign intermediate certificates. Those intermediates sign end-entity certificates. As long as you can verify the chain back to a root you trust, you trust the end certificate.
+
+This breaks if any link in the chain is compromised. If an intermediate CA's private key leaks, attackers can issue fake certificates. That's why key management matters. That's why revocation lists exist. That's why certificate pinning is a thing.
+
+## What actually matters
+
+Cryptography is math applied to security problems. The math is public. The security comes from computational hardness, not secrecy.
+
+Symmetric encryption is fast but requires key exchange. Asymmetric encryption solves key exchange but is slower. Use symmetric for bulk data, asymmetric for key exchange. That's how TLS works. That's how most systems work.
+
+Hashing provides integrity, not confidentiality. A hash tells you if data changed. It doesn't hide the data. If you need both, encrypt then hash, or use authenticated encryption.
+
+Certificates solve identity, not encryption. They tell you who owns a public key. They don't encrypt anything. Encryption and identity are separate problems that happen to use the same mathematical tools.
+
+The fundamentals are simple. The implementation is where things break. Weak random number generation. Poor key management. Skipped validation. These are the real problems. The math is solid. The execution is what fails.
+
+Understanding these fundamentals helps you evaluate security systems, ask better questions, and make better decisions about when and how to use cryptography. You don't need to become a cryptographer. You just need to understand enough to think clearly about security, ask the right questions, and make informed decisions.
+
+That's the goal. Clear thinking. Better questions. Informed decisions. The math is just the tool.
