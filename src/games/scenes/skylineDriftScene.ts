@@ -222,7 +222,7 @@ export function createSkylineDriftScene(): GameScene {
 
       // Spawn new gates
       if (scrollY - lastGateSpawn >= gateFrequency) {
-        spawnGate(ctx);
+        spawnGate(ctx, runMs);
         lastGateSpawn = scrollY;
       }
       
