@@ -290,7 +290,35 @@ export async function POST(req: Request) {
               // Fallback to keyword-based answer if LLM failed or unavailable
               if (!answer) {
                 answerMode = "fallback";
-                if (pageHit) {
+                
+                // Build a comprehensive answer from multiple retrieved items
+                const relevantItems = retrievedItems.slice(0, 3).filter(item => item.excerpt || item.text);
+                
+                if (relevantItems.length > 0) {
+                  const primaryItem = relevantItems[0];
+                  answer = primaryItem.excerpt || primaryItem.text || `Based on the site content about "${primaryItem.title}"`;
+                  
+                  // Add context from additional items if available
+                  if (relevantItems.length > 1) {
+                    answer += "\n\nAdditional relevant information:";
+                    for (const item of relevantItems.slice(1)) {
+                      if (item.excerpt || item.text) {
+                        answer += `\n\n• **${item.title}**: ${(item.excerpt || item.text).slice(0, 150)}...`;
+                      }
+                    }
+                  }
+                  
+                  answer += "\n\nFor complete information, visit the linked pages below.";
+                  
+                  // Add all relevant items as citations
+                  for (const item of relevantItems) {
+                    citationsV2.push({
+                      title: item.title,
+                      urlOrPath: item.href,
+                      anchorOrHeading: item.excerpt || undefined,
+                    });
+                  }
+                } else if (pageHit) {
                   answer = `Based on the current page: ${pageHit.excerpt}\n\nFor more details, visit the page sections linked below.`;
                   citationsV2.push({
                     title: pageHit.title,
@@ -298,23 +326,12 @@ export async function POST(req: Request) {
                     anchorOrHeading: pageHit.title,
                   });
                 } else if (top) {
-                  answer = `From the site content: ${top.excerpt}\n\nVisit the linked pages below for more information.`;
+                  answer = `From the site content: ${top.excerpt || top.text || "Relevant content found."}\n\nVisit the linked pages below for more information.`;
                   citationsV2.push({
                     title: top.title,
                     urlOrPath: top.href,
                     anchorOrHeading: top.excerpt || top.title,
                   });
-                }
-
-                // Add additional citations from retrieved items
-                for (const item of retrievedItems.slice(1, 5)) {
-                  if (!citationsV2.some((c) => c.urlOrPath === item.href)) {
-                    citationsV2.push({
-                      title: item.title,
-                      urlOrPath: item.href,
-                      anchorOrHeading: item.excerpt || undefined,
-                    });
-                  }
                 }
               } else {
                 // LLM answer - add all retrieved items as citations for transparency
