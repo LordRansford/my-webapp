@@ -13,6 +13,9 @@ export type InputState = {
   // discrete actions
   pausePressed: boolean;
   actionPressed: boolean;
+  // shooting
+  shootPressed: boolean; // True when action button is pressed (for auto-fire)
+  shootJustPressed: boolean; // True only on the frame action button was pressed (for tap-fire)
 };
 
 export type GameContext = {

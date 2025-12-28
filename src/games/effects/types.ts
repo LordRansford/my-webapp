@@ -33,3 +33,14 @@ export type ComboIndicator = {
   maxLife: number;
 };
 
+export type Explosion = {
+  x: number;
+  y: number;
+  radius: number;
+  maxRadius: number;
+  life: number;
+  maxLife: number;
+  color: string;
+  intensity: number;
+};
+

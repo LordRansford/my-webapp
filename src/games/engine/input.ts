@@ -28,12 +28,16 @@ export function createInputController(target: HTMLElement | Window, bindings: Pa
   const pressed = new Set<string>();
   let pausePressed = false;
   let actionPressed = false;
+  let actionJustPressed = false;
+  let lastActionState = false;
 
   const state: InputState = {
     moveX: 0,
     moveY: 0,
     pausePressed: false,
     actionPressed: false,
+    shootPressed: false,
+    shootJustPressed: false,
   };
 
   const recomputeAxes = () => {
@@ -72,10 +76,23 @@ export function createInputController(target: HTMLElement | Window, bindings: Pa
   const onKeyDown = (e: KeyboardEvent) => {
     pressed.add(e.key);
     if (b.pause.includes(e.key)) pausePressed = true;
+    // Handle shooting keys (Space, Enter, Z, X)
+    if (e.key === " " || e.key === "Enter" || e.key === "z" || e.key === "Z" || e.key === "x" || e.key === "X") {
+      if (!lastActionState) {
+        actionJustPressed = true;
+      }
+      actionPressed = true;
+      lastActionState = true;
+    }
     recomputeAxes();
   };
   const onKeyUp = (e: KeyboardEvent) => {
     pressed.delete(e.key);
+    // Handle shooting keys release
+    if (e.key === " " || e.key === "Enter" || e.key === "z" || e.key === "Z" || e.key === "x" || e.key === "X") {
+      actionPressed = false;
+      lastActionState = false;
+    }
     recomputeAxes();
   };
 
@@ -148,9 +165,10 @@ export function createInputController(target: HTMLElement | Window, bindings: Pa
     if (dt > SWIPE_MAX_MS) return;
     const adx = Math.abs(dx);
     const ady = Math.abs(dy);
-    // Tap => one-frame action
+    // Tap => one-frame action (shooting)
     if (dt <= TAP_MAX_MS && Math.max(adx, ady) <= TAP_MAX_PX) {
       actionPressed = true;
+      actionJustPressed = true;
       return;
     }
     if (Math.max(adx, ady) < SWIPE_MIN_PX) return;
@@ -186,15 +204,26 @@ export function createInputController(target: HTMLElement | Window, bindings: Pa
 
   return {
     bindings: b,
-    getState: () => {
+    getState: (): InputState => {
       recomputeAxes(); // Always recompute to handle continuous touch input
       state.pausePressed = pausePressed;
       state.actionPressed = actionPressed;
-      return { ...state };
+      state.shootPressed = actionPressed;
+      state.shootJustPressed = actionJustPressed;
+      const result: InputState = {
+        moveX: state.moveX,
+        moveY: state.moveY,
+        pausePressed: state.pausePressed,
+        actionPressed: state.actionPressed,
+        shootPressed: state.shootPressed,
+        shootJustPressed: state.shootJustPressed,
+      };
+      return result;
     },
     resetFrame: () => {
       pausePressed = false;
       actionPressed = false;
+      actionJustPressed = false;
       // Clear swipe impulses (keyboard state will be recomputed via key events).
       recomputeAxes();
     },
