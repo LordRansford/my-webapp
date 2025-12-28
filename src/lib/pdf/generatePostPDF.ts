@@ -57,14 +57,31 @@ export async function generatePostPDF(
     const page = pdfDoc.addPage([pdfWidth, pdfHeight]);
     const { width, height } = page.getSize();
 
-    // CRITICAL: Add watermark to EVERY page FIRST (before content)
-    // This ensures watermark appears on all pages, even if content fails
+    // Calculate Y position for this page's content
+    // Position the full image so the correct portion shows on each page
+    const yOffset = height - margin - scaledHeight + (pageHeight * i);
+    
+    // Draw the content image first
+    try {
+      page.drawImage(pngImage, {
+        x: margin,
+        y: yOffset,
+        width: contentWidth,
+        height: scaledHeight,
+      });
+    } catch (error) {
+      console.error(`Error drawing image on page ${i + 1}:`, error);
+      throw new Error(`Failed to add content to page ${i + 1}`);
+    }
+
+    // CRITICAL: Add watermark to EVERY page AFTER content (so it appears on top)
+    // This ensures watermark is visible on all pages
     const centerX = width / 2;
     const centerY = height / 2;
     const watermarkSize = 50;
     const textWidth = watermarkFont.widthOfTextAtSize(watermark, watermarkSize);
     
-    // Draw watermark on every page - MUST be on every page
+    // Draw watermark on every page - MUST be on every page, drawn last so it's visible
     try {
       page.drawText(watermark, {
         x: centerX - textWidth / 2,
@@ -77,24 +94,6 @@ export async function generatePostPDF(
     } catch (watermarkError) {
       console.error(`Failed to add watermark to page ${i + 1}:`, watermarkError);
       // Continue anyway - watermark failure shouldn't stop PDF generation
-    }
-
-    // Calculate Y position for this page's content
-    // Position the full image so the correct portion shows on each page
-    const yOffset = height - margin - scaledHeight + (pageHeight * i);
-    
-    // Draw the full image, positioned to show the correct portion
-    // The image will be clipped by page boundaries naturally
-    try {
-      page.drawImage(pngImage, {
-        x: margin,
-        y: yOffset,
-        width: contentWidth,
-        height: scaledHeight,
-      });
-    } catch (error) {
-      console.error(`Error drawing image on page ${i + 1}:`, error);
-      throw new Error(`Failed to add content to page ${i + 1}`);
     }
   }
 
