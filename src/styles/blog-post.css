@@ -199,15 +199,8 @@
 
 /* Body Layout */
 .blog-post__body {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 3rem;
-}
-
-@media (min-width: 1024px) {
-  .blog-post__body {
-    grid-template-columns: 240px 1fr;
-  }
+  display: block;
+  width: 100%;
 }
 
 /* Table of Contents */

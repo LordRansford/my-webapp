@@ -125,7 +125,7 @@ export default function BlogPostLayout({ post, showTOC = true }: BlogPostLayoutP
     }
   };
 
-  const hasHeadings = headings.length > 0 && showTOC;
+  const hasHeadings = false; // Disabled TOC to give more space to content
 
   return (
     <div className="blog-post-wrapper">
