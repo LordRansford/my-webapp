@@ -246,13 +246,13 @@ export default function LlmAgentLabPage() {
   };
 
   return (
-    <div className="page-content space-y-8">
-      <div className="rounded-3xl bg-white p-6 sm:p-8 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-3">
+    <div className="mx-auto w-full max-w-5xl px-4 py-6 space-y-6 sm:px-6 sm:py-8 md:space-y-8">
+      <div className="rounded-3xl bg-white p-4 sm:p-6 md:p-8 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-3">
         <div className="inline-flex items-center gap-2 rounded-2xl bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800 ring-1 ring-amber-100">
           LLM &amp; Agent Lab
         </div>
-        <h1 className="text-2xl sm:text-3xl font-semibold text-slate-900">LLM &amp; Agent Lab</h1>
-        <p className="text-sm text-slate-700 max-w-3xl">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-slate-900">LLM &amp; Agent Lab</h1>
+        <p className="text-xs sm:text-sm text-slate-700 max-w-3xl leading-relaxed">
           This is the part of the building where language models show their workings. Try prompts, wire simple tools together, watch an
           agent pick a path and see where things break in a low risk way.
         </p>
@@ -263,9 +263,9 @@ export default function LlmAgentLabPage() {
       {/* 1. Prompt bench */}
       <section
         id="prompt-bench"
-        className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
+        className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
       >
-        <h2 className="text-lg font-semibold text-slate-900">1. Prompt bench</h2>
+        <h2 className="text-base sm:text-lg font-semibold text-slate-900">1. Prompt bench</h2>
         <div className="grid gap-4 lg:grid-cols-2">
           <div className="space-y-2 text-sm text-slate-700">
             <p>Prompts are instructions. Temperature nudges creativity; max tokens caps output length. Try variations to feel the shifts.</p>
@@ -347,10 +347,10 @@ export default function LlmAgentLabPage() {
       {/* 2. Tool calling sandbox */}
       <section
         id="tool-sandbox"
-        className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
+        className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
       >
-        <h2 className="text-lg font-semibold text-slate-900">2. Tool calling sandbox</h2>
-        <p className="text-sm text-slate-700">
+        <h2 className="text-base sm:text-lg font-semibold text-slate-900">2. Tool calling sandbox</h2>
+        <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
           Tools are abilities the model can call. We show each step so you can see when a tool is invoked and how the answer is composed.
         </p>
         <div className="space-y-3 rounded-2xl border border-slate-100 bg-white p-4">
@@ -390,10 +390,10 @@ export default function LlmAgentLabPage() {
       {/* 3. Agent flow builder */}
       <section
         id="agent-builder"
-        className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
+        className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
       >
-        <h2 className="text-lg font-semibold text-slate-900">3. Agent flow builder</h2>
-        <p className="text-sm text-slate-700">
+        <h2 className="text-base sm:text-lg font-semibold text-slate-900">3. Agent flow builder</h2>
+        <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
           A sketch of routing logic: classify intent, pick a tool if allowed, then compose an answer. Good for building intuition before
           heavier agent frameworks.
         </p>
@@ -477,10 +477,10 @@ export default function LlmAgentLabPage() {
       {/* 4. Grounding on your own notes */}
       <section
         id="grounding"
-        className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
+        className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
       >
-        <h2 className="text-lg font-semibold text-slate-900">4. Grounding on your own notes</h2>
-        <p className="text-sm text-slate-700">
+        <h2 className="text-base sm:text-lg font-semibold text-slate-900">4. Grounding on your own notes</h2>
+        <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
           Ask a question, retrieve relevant chunks from your notes, and draft an answer. Stays in-browser for safety.
         </p>
         <div className="grid gap-4 lg:grid-cols-2">
@@ -546,12 +546,12 @@ export default function LlmAgentLabPage() {
       {/* 5. Recent LLM runs */}
       <section
         id="llm-runs"
-        className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
+        className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
       >
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">5. Recent LLM runs</h2>
-            <p className="text-sm text-slate-700">Prompt bench, tools, agents and grounding activity logged here.</p>
+            <h2 className="text-base sm:text-lg font-semibold text-slate-900">5. Recent LLM runs</h2>
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">Prompt bench, tools, agents and grounding activity logged here.</p>
           </div>
           <Link href="/studios" className="text-xs font-semibold text-emerald-700 hover:underline">
             Open Control Room

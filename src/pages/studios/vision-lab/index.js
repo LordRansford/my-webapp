@@ -271,12 +271,12 @@ export default function VisionLabPage() {
   const visionJobs = useMemo(() => jobs.filter((j) => j.studio === "vision-lab").slice(-5).reverse(), [jobs]);
 
   return (
-    <div className="page-content space-y-8">
-      <div className="rounded-3xl bg-white p-6 sm:p-8 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-3">
+    <div className="mx-auto w-full max-w-5xl px-4 py-6 space-y-6 sm:px-6 sm:py-8 md:space-y-8">
+      <div className="rounded-3xl bg-white p-4 sm:p-6 md:p-8 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-3">
         <div className="inline-flex items-center gap-2 rounded-2xl bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800 ring-1 ring-sky-100">
           Vision Lab
         </div>
-        <h1 className="text-2xl sm:text-3xl font-semibold text-slate-900">Vision Lab</h1>
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-slate-900">Vision Lab</h1>
         <p className="text-sm text-slate-700 max-w-3xl">
           This is the room where pixels tell their story. Test a browser vision model, teach a tiny classifier your own labels, and
           see which images cluster together in feature space.
@@ -288,10 +288,10 @@ export default function VisionLabPage() {
       {/* Quick image check */}
       <section
         id="quick-image-check"
-        className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
+        className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
       >
-        <h2 className="text-lg font-semibold text-slate-900">1. Quick image check</h2>
-        <p className="text-sm text-slate-700">
+        <h2 className="text-base sm:text-lg font-semibold text-slate-900">1. Quick image check</h2>
+        <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
           Upload a PNG or JPG and we run a lightweight browser vision model. Everything stays on-device; results are for learning,
           not for medical use.
         </p>
@@ -338,10 +338,10 @@ export default function VisionLabPage() {
       {/* Teach a custom classifier */}
       <section
         id="custom-classifier"
-        className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-5"
+        className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-5"
       >
-        <h2 className="text-lg font-semibold text-slate-900">2. Teach a custom classifier</h2>
-        <p className="text-sm text-slate-700">
+        <h2 className="text-base sm:text-lg font-semibold text-slate-900">2. Teach a custom classifier</h2>
+        <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
           Define a few labels, upload small images, and train a shallow classifier in your browser. We cap sizes to keep things
           responsive.
         </p>
@@ -502,10 +502,10 @@ export default function VisionLabPage() {
       {/* Embedding explorer */}
       <section
         id="embedding-explorer"
-        className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
+        className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
       >
-        <h2 className="text-lg font-semibold text-slate-900">3. Embedding explorer</h2>
-        <p className="text-sm text-slate-700">
+        <h2 className="text-base sm:text-lg font-semibold text-slate-900">3. Embedding explorer</h2>
+        <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
           See how your images cluster in feature space. Hover to see thumbnails; click to highlight neighbours. This is a visual sketch
           for intuition, not production explainability.
         </p>
@@ -562,12 +562,12 @@ export default function VisionLabPage() {
       {/* Run history */}
       <section
         id="vision-runs"
-        className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
+        className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
       >
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">4. Recent Vision runs</h2>
-            <p className="text-sm text-slate-700">Quick links to your latest image jobs. View details in Control Room.</p>
+            <h2 className="text-base sm:text-lg font-semibold text-slate-900">4. Recent Vision runs</h2>
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">Quick links to your latest image jobs. View details in Control Room.</p>
           </div>
           <Link href="/studios" className="text-xs font-semibold text-emerald-700 hover:underline">
             View in Control Room

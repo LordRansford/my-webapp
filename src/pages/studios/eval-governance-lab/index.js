@@ -286,12 +286,12 @@ export default function EvalGovernanceLabPage() {
   const currentDrift = driftScenarios.find((s) => s.id === driftSelected) || driftScenarios[0];
 
   return (
-    <div className="page-content space-y-8">
-      <div className="rounded-3xl bg-white p-6 sm:p-8 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-3">
+    <div className="mx-auto w-full max-w-5xl px-4 py-6 space-y-6 sm:px-6 sm:py-8 md:space-y-8">
+      <div className="rounded-3xl bg-white p-4 sm:p-6 md:p-8 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-3">
         <div className="inline-flex items-center gap-2 rounded-2xl bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-800 ring-1 ring-rose-100">
           Evaluation &amp; Governance Lab
         </div>
-        <h1 className="text-2xl sm:text-3xl font-semibold text-slate-900">Evaluation &amp; Governance Lab</h1>
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-slate-900">Evaluation &amp; Governance Lab</h1>
         <p className="text-sm text-slate-700 max-w-3xl">
           This is the oversight room. It does not train models, it keeps score. Review how runs behaved, explore bias and drift with safe
           examples, and walk a governance checklist before trusting anything in the real world.
@@ -303,10 +303,10 @@ export default function EvalGovernanceLabPage() {
       {/* 1. Metrics board */}
       <section
         id="metrics-board"
-        className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
+        className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-lg font-semibold text-slate-900">1. Metrics board</h2>
+          <h2 className="text-base sm:text-lg font-semibold text-slate-900">1. Metrics board</h2>
           <div className="flex flex-wrap gap-2 text-sm">
             <select
               value={studioFilter}
@@ -399,10 +399,10 @@ export default function EvalGovernanceLabPage() {
       {/* 2. Bias and fairness explorer */}
       <section
         id="fairness"
-        className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
+        className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
       >
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="text-lg font-semibold text-slate-900">2. Bias and fairness explorer</h2>
+          <h2 className="text-base sm:text-lg font-semibold text-slate-900">2. Bias and fairness explorer</h2>
           <select
             value={fairnessScenario}
             onChange={(e) => setFairnessScenario(e.target.value)}
@@ -412,7 +412,7 @@ export default function EvalGovernanceLabPage() {
             <option value="hiring">Hiring shortlist toy dataset</option>
           </select>
         </div>
-        <p className="text-sm text-slate-700">
+        <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
           Toy examples to illustrate fairness concepts. Adjust the threshold to see how group metrics move. Real fairness work needs richer
           context and data.
         </p>
@@ -482,10 +482,10 @@ export default function EvalGovernanceLabPage() {
       {/* 3. Drift and robustness simulator */}
       <section
         id="drift"
-        className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
+        className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
       >
-        <h2 className="text-lg font-semibold text-slate-900">3. Drift and robustness simulator</h2>
-        <p className="text-sm text-slate-700">
+        <h2 className="text-base sm:text-lg font-semibold text-slate-900">3. Drift and robustness simulator</h2>
+        <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
           Slide through scenarios to see how metrics degrade when data drifts. Monitoring and retraining plans keep you ready.
         </p>
         <div className="flex flex-wrap items-center gap-2">
@@ -534,10 +534,10 @@ export default function EvalGovernanceLabPage() {
       {/* 4. Governance checklist and risk view */}
       <section
         id="governance"
-        className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
+        className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-lg font-semibold text-slate-900">4. Governance checklist and risk view</h2>
+          <h2 className="text-base sm:text-lg font-semibold text-slate-900">4. Governance checklist and risk view</h2>
           <select
             value={checklistJobId}
             onChange={(e) => setChecklistJobId(e.target.value)}
@@ -592,10 +592,10 @@ export default function EvalGovernanceLabPage() {
       {/* 5. Run inspection panel */}
       <section
         id="run-inspection"
-        className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
+        className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-lg font-semibold text-slate-900">5. Run inspection panel</h2>
+          <h2 className="text-base sm:text-lg font-semibold text-slate-900">5. Run inspection panel</h2>
           <select
             value={inspectionJobId}
             onChange={(e) => setInspectionJobId(e.target.value)}

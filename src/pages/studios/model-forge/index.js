@@ -611,12 +611,12 @@ export default function ModelForgePage() {
   }, [modelState, sensitiveCol]);
 
   return (
-    <div className="page-content space-y-8">
-      <div className="rounded-3xl bg-white p-6 sm:p-8 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-3">
+    <div className="mx-auto w-full max-w-5xl px-4 py-6 space-y-6 sm:px-6 sm:py-8 md:space-y-8">
+      <div className="rounded-3xl bg-white p-4 sm:p-6 md:p-8 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-3">
         <div className="inline-flex items-center gap-2 rounded-2xl bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800 ring-1 ring-sky-100">
           Model Forge
         </div>
-        <h1 className="text-2xl sm:text-3xl font-semibold text-slate-900">Model Forge</h1>
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-slate-900">Model Forge</h1>
         <p className="text-sm text-slate-700 max-w-3xl">
           This is where spreadsheets come to be judged. We take your tabular data, agree what you are trying to predict, and build
           small models you can actually interrogate.
@@ -655,8 +655,8 @@ export default function ModelForgePage() {
 
       <SecurityBanner />
 
-      <section id="overview" className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4">
-        <h2 className="text-lg font-semibold text-slate-900">Overview</h2>
+      <section id="overview" className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4">
+        <h2 className="text-base sm:text-lg font-semibold text-slate-900">Overview</h2>
         <div className="grid gap-3 md:grid-cols-3">
           <div className="rounded-2xl border border-slate-100 bg-slate-50/60 p-4">
             <p className="text-sm font-semibold text-slate-900">What this teaches</p>
@@ -675,10 +675,10 @@ export default function ModelForgePage() {
         </div>
       </section>
 
-      <section id="data-prep" className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-5">
+      <section id="data-prep" className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-5">
         <div className="flex flex-col gap-2">
-          <h2 className="text-lg font-semibold text-slate-900">Data preparation</h2>
-          <p className="text-sm text-slate-700">Upload a small dataset, inspect its shape, and make deliberate choices before training.</p>
+          <h2 className="text-base sm:text-lg font-semibold text-slate-900">Data preparation</h2>
+          <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">Upload a small dataset, inspect its shape, and make deliberate choices before training.</p>
           <div className="flex flex-wrap items-center gap-2">
             <label className="cursor-pointer inline-flex items-center rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:border-sky-300 hover:text-sky-700">
               <input type="file" className="hidden" accept=".csv,.json" onChange={(e) => handleUpload(e.target.files)} />
@@ -717,7 +717,7 @@ export default function ModelForgePage() {
           <div className="grid gap-4 lg:grid-cols-2">
             <div className="space-y-2 rounded-2xl border border-slate-100 bg-slate-50/60 p-4">
               <p className="text-xs font-semibold text-slate-900">Dataset summary</p>
-              <p className="text-sm text-slate-700">{dataset.name}</p>
+              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">{dataset.name}</p>
               <p className="text-xs text-slate-700">
                 {dataset.rowCount ?? rows.length} rows • {dataset.columnCount ?? columns.length} columns
               </p>
@@ -754,9 +754,9 @@ export default function ModelForgePage() {
         )}
       </section>
 
-      <section id="training" className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4">
-        <h2 className="text-lg font-semibold text-slate-900">Model training</h2>
-        <p className="text-sm text-slate-700">Pick a target, choose a simple model, tune parameters, and train with predictable limits.</p>
+      <section id="training" className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4">
+        <h2 className="text-base sm:text-lg font-semibold text-slate-900">Model training</h2>
+        <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">Pick a target, choose a simple model, tune parameters, and train with predictable limits.</p>
         <div className="grid gap-4 lg:grid-cols-2">
           <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-900">Target column</label>
@@ -821,11 +821,11 @@ export default function ModelForgePage() {
         </div>
       </section>
 
-      <section id="evaluation" className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4">
+      <section id="evaluation" className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">Evaluation</h2>
-            <p className="text-sm text-slate-700">
+            <h2 className="text-base sm:text-lg font-semibold text-slate-900">Evaluation</h2>
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
               Evaluate on a holdout set. Watch for overfitting: great train metrics and weak test metrics.
             </p>
           </div>
@@ -862,7 +862,7 @@ export default function ModelForgePage() {
                 }`}
               >
                 <p className="text-sm font-semibold text-slate-900">Logistic regression</p>
-                <p className="text-sm text-slate-700">Fast, simple baseline. Good for linearly separable signals.</p>
+                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">Fast, simple baseline. Good for linearly separable signals.</p>
               </button>
               <button
                 onClick={() => setAlgorithm("rf")}
@@ -871,7 +871,7 @@ export default function ModelForgePage() {
                 }`}
               >
                 <p className="text-sm font-semibold text-slate-900">Tree ensemble</p>
-                <p className="text-sm text-slate-700">Handles non-linear patterns. This demo reuses a light trainer.</p>
+                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">Handles non-linear patterns. This demo reuses a light trainer.</p>
               </button>
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-slate-900">Max depth (trees)</label>
@@ -915,7 +915,7 @@ export default function ModelForgePage() {
                 }`}
               >
                 <p className="text-sm font-semibold text-slate-900">Tree-based regression</p>
-                <p className="text-sm text-slate-700">Captures non-linearities. Demo uses light-weight trainer.</p>
+                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">Captures non-linearities. Demo uses light-weight trainer.</p>
               </button>
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-slate-900">Regularisation strength</label>
@@ -1000,9 +1000,9 @@ export default function ModelForgePage() {
       </section>
 
       {modelState && (
-        <section id="inference" className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4">
-          <h2 className="text-lg font-semibold text-slate-900">Inference playground</h2>
-          <p className="text-sm text-slate-700">
+        <section id="inference" className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4">
+          <h2 className="text-base sm:text-lg font-semibold text-slate-900">Inference playground</h2>
+          <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
             Generated inputs from your feature columns. Predictions happen in your browser. Use this for intuition, not production
             decisions.
           </p>
@@ -1083,9 +1083,9 @@ export default function ModelForgePage() {
       )}
 
       {modelState ? (
-        <section id="responsible-ai" className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4">
-          <h2 className="text-lg font-semibold text-slate-900">Responsible AI and limitations</h2>
-          <p className="text-sm text-slate-700">
+        <section id="responsible-ai" className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4">
+          <h2 className="text-base sm:text-lg font-semibold text-slate-900">Responsible AI and limitations</h2>
+          <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
             This is not compliance theatre. It is a way to build the habit of checking how a model behaves across groups, and noticing quiet failures.
           </p>
           <div className="grid gap-4 md:grid-cols-2">
@@ -1150,17 +1150,17 @@ export default function ModelForgePage() {
               </table>
             </div>
           ) : (
-            <p className="text-sm text-slate-700">Train a classification model and choose a group column to see a simple breakdown.</p>
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">Train a classification model and choose a group column to see a simple breakdown.</p>
           )}
         </section>
       ) : null}
 
-      <section id="export" className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4">
-        <h2 className="text-lg font-semibold text-slate-900">Export and next steps</h2>
+      <section id="export" className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4">
+        <h2 className="text-base sm:text-lg font-semibold text-slate-900">Export and next steps</h2>
         <div className="grid gap-4 md:grid-cols-2">
           <div className="rounded-2xl border border-slate-100 bg-slate-50/60 p-4 space-y-2">
             <p className="text-sm font-semibold text-slate-900">Export</p>
-            <p className="text-sm text-slate-700">
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
               Export a small JSON summary of your run for notes, review, or a model card draft. This is not a deployment artifact.
             </p>
             <button
