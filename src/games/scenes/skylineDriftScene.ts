@@ -324,7 +324,7 @@ export function createSkylineDriftScene(): GameScene {
       ctx.ctx2d.lineWidth = 3;
       ctx.ctx2d.stroke();
       
-      // Thrust indicator (if moving)
+      // Thrust indicator (if moving) - calculate speed for both thrust and HUD
       const speed = Math.sqrt(vx * vx + vy * vy);
       if (speed > 50) {
         ctx.ctx2d.fillStyle = `rgba(255, 200, 0, ${Math.min(1, speed / 200)})`;
@@ -341,7 +341,6 @@ export function createSkylineDriftScene(): GameScene {
       // HUD
       const phase = getDifficultyPhase(runMs).phase;
       const timeS = (runMs / 1000).toFixed(1);
-      const speed = Math.sqrt(vx * vx + vy * vy);
       drawHudText(ctx.ctx2d, `Skyline Drift`, 16, 26);
       drawHudText(ctx.ctx2d, `Time: ${timeS}s | Score: ${score.toLocaleString()} | Gates: ${gatesPassed} | Phase ${phase}`, 16, 48);
       drawHudText(ctx.ctx2d, `Speed: ${speed.toFixed(0)} | Perfect: ${perfectPasses}`, 16, 70);

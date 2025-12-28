@@ -38,7 +38,7 @@ export default function GameShellClient({ slug }: { slug: string }) {
     setSettings((s) => ({
       ...s,
       reduceMotion: prefs.reducedMotion,
-      highContrast: prefs.highContrast || s.highContrast ?? true, // Default to true if not set
+      highContrast: prefs.highContrast ?? s.highContrast ?? true, // Default to true if not set
     }));
   }, [prefs.reducedMotion, prefs.highContrast]);
   const [showLoadingDedication, setShowLoadingDedication] = useState(true);
