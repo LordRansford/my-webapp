@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
-import { ErrorBoundary } from "@/components/notes/ErrorBoundary";
+import ErrorBoundary from "@/components/notes/ErrorBoundary";
 
 function LoadingSkeleton() {
   return (
