@@ -175,20 +175,26 @@ export function createPulseRunnerScene(): GameScene {
       }
 
       // Update pulses
+      const playerX = px > 0 ? px : ctx.width / 2;
+      const playerY = py > 0 ? py : ctx.height / 2;
       for (let i = pulses.length - 1; i >= 0; i--) {
         const p = pulses[i];
-        const dx = px - p.x;
-        const dy = py - p.y;
+        const dx = playerX - p.x;
+        const dy = playerY - p.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        const vx = (dx / dist) * p.speed;
-        const vy = (dy / dist) * p.speed;
-        
-        p.x += (vx * ctx.dtMs) / 1000;
-        p.y += (vy * ctx.dtMs) / 1000;
+        // Avoid division by zero
+        if (dist > 0.1) {
+          p.x += (dx / dist) * p.speed * ctx.dtMs / 1000;
+          p.y += (dy / dist) * p.speed * ctx.dtMs / 1000;
+        } else {
+          // Very close, just remove it
+          pulses.splice(i, 1);
+          continue;
+        }
 
         // Check if pulse passed player (dodge) - only count once
         if (!p.dodged) {
-          const playerDist = Math.sqrt((p.x - targetX) ** 2 + (p.y - targetY) ** 2);
+          const playerDist = Math.sqrt((p.x - playerX) ** 2 + (p.y - playerY) ** 2);
           if (playerDist > pr + p.r + 20) {
             // Pulse passed by safely (far enough away)
             p.dodged = true;
