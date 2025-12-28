@@ -302,8 +302,9 @@ export async function POST(req: Request) {
                   if (relevantItems.length > 1) {
                     answer += "\n\nAdditional relevant information:";
                     for (const item of relevantItems.slice(1)) {
-                      if (item.excerpt || item.text) {
-                        answer += `\n\n• **${item.title}**: ${(item.excerpt || item.text).slice(0, 150)}...`;
+                      const itemText = item.excerpt || item.text;
+                      if (itemText) {
+                        answer += `\n\n• **${item.title}**: ${itemText.slice(0, 150)}...`;
                       }
                     }
                   }
