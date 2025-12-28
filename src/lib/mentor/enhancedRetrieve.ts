@@ -47,11 +47,16 @@ function retrieveToolInfo(
   if (!toolsIndex || !Array.isArray(toolsIndex.tools)) return [];
 
   const q = question.toLowerCase();
-  const terms = q
+  let terms = q
     .replace(/[^a-z0-9\s]/g, " ")
     .split(/\s+/)
-    .filter((t) => t.length >= 3)
-    .slice(0, 8);
+    .filter((t) => t.length >= 2) // Lowered from 3 to 2
+    .slice(0, 12); // Increased from 8 to 12
+  
+  // Expand with variations
+  if (terms.some(t => t.includes("digital"))) {
+    terms.push("digitalisation", "digitalization", "digital");
+  }
 
   const scored = toolsIndex.tools
     .map((tool: any) => {

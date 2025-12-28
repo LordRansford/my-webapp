@@ -292,31 +292,44 @@ export async function POST(req: Request) {
                 answerMode = "fallback";
                 
                 // Build a comprehensive answer from multiple retrieved items
-                const relevantItems = retrievedItems.slice(0, 3).filter(item => item.excerpt || item.text);
+                const relevantItems = retrievedItems.slice(0, 5).filter(item => item.excerpt || item.text);
                 
                 if (relevantItems.length > 0) {
                   const primaryItem = relevantItems[0];
-                  answer = primaryItem.excerpt || primaryItem.text || `Based on the site content about "${primaryItem.title}"`;
+                  
+                  // Build a more comprehensive answer
+                  answer = `Based on the site content, here's what I found about "${safe.cleaned}":\n\n`;
+                  
+                  // Use the best excerpt or text from the primary item
+                  const primaryText = primaryItem.excerpt || primaryItem.text || primaryItem.why || "";
+                  if (primaryText) {
+                    answer += primaryText.slice(0, 400);
+                    if (primaryText.length > 400) answer += "...";
+                  } else {
+                    answer += `Relevant information is available in "${primaryItem.title}".`;
+                  }
                   
                   // Add context from additional items if available
                   if (relevantItems.length > 1) {
-                    answer += "\n\nAdditional relevant information:";
-                    for (const item of relevantItems.slice(1)) {
-                      const itemText = item.excerpt || item.text;
+                    answer += "\n\n**Additional relevant sections:**";
+                    for (const item of relevantItems.slice(1, 4)) {
+                      const itemText = item.excerpt || item.text || item.why || "";
                       if (itemText) {
-                        answer += `\n\n• **${item.title}**: ${itemText.slice(0, 150)}...`;
+                        answer += `\n\n• **[${item.title}](${item.href})**: ${itemText.slice(0, 200)}${itemText.length > 200 ? "..." : ""}`;
+                      } else {
+                        answer += `\n\n• **[${item.title}](${item.href})**`;
                       }
                     }
                   }
                   
-                  answer += "\n\nFor complete information, visit the linked pages below.";
+                  answer += "\n\nVisit the linked pages below for complete information and detailed explanations.";
                   
                   // Add all relevant items as citations
                   for (const item of relevantItems) {
                     citationsV2.push({
                       title: item.title,
                       urlOrPath: item.href,
-                      anchorOrHeading: item.excerpt || undefined,
+                      anchorOrHeading: item.excerpt ? item.excerpt.slice(0, 100) : undefined,
                     });
                   }
                 } else if (pageHit) {
