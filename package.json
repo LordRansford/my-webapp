@@ -33,6 +33,7 @@
     "lhci": "lhci autorun",
     "quality:content:ai-advanced": "node scripts/content-quality-advanced.mjs src/pages/ai/advanced.js",
     "build:mentor-embeddings": "node scripts/build-mentor-embeddings.mjs",
+    "validate:mentor-safety": "node scripts/validate-mentor-safety.mjs",
     "lint:templates": "node scripts/check-template-definitions.mjs",
     "test:security": "node scripts/secret-scan.mjs",
     "test:data": "node --test tests/**/*.test.mjs",

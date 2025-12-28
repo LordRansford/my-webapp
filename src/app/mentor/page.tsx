@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import NotesLayout from "@/components/notes/Layout";
 import { sanitizeQuestion } from "@/lib/mentor/sanitize";
 import type { MentorPageContext } from "@/lib/contracts/mentor";
@@ -151,7 +151,45 @@ export default function MentorPage() {
                       {msg.answerMode === "site-grounded" ? "From this site" : msg.answerMode === "general-guidance" ? "General guidance" : "Mixed"}
                     </div>
                   ) : null}
-                  <div className="mt-1 text-slate-900 whitespace-pre-wrap">{msg.content}</div>
+                  <div className="mt-1 text-slate-900 whitespace-pre-wrap">
+                    {msg.content.split('\n').map((line, idx) => {
+                      // Convert markdown links to clickable links
+                      const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+                      const parts: React.ReactNode[] = [];
+                      let lastIndex = 0;
+                      let match;
+                      
+                      while ((match = linkRegex.exec(line)) !== null) {
+                        // Add text before the link
+                        if (match.index > lastIndex) {
+                          parts.push(line.slice(lastIndex, match.index));
+                        }
+                        // Add the link
+                        parts.push(
+                          <a 
+                            key={`link-${idx}-${match.index}`}
+                            href={match[2]} 
+                            className="text-blue-600 underline hover:text-blue-800"
+                          >
+                            {match[1]}
+                          </a>
+                        );
+                        lastIndex = match.index + match[0].length;
+                      }
+                      // Add remaining text
+                      if (lastIndex < line.length) {
+                        parts.push(line.slice(lastIndex));
+                      }
+                      
+                      return parts.length > 1 ? (
+                        <p key={idx} className={idx > 0 ? "mt-2" : ""}>
+                          {parts}
+                        </p>
+                      ) : (
+                        <p key={idx} className={idx > 0 ? "mt-2" : ""}>{line}</p>
+                      );
+                    })}
+                  </div>
                   {msg.refusalReason?.message ? (
                     <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
                       <p className="m-0 font-semibold">Why I could not answer from the site</p>
