@@ -32,6 +32,11 @@ TOGETHER_MODEL=meta-llama/Llama-3.1-8B-Instruct-Turbo  # Optional
 
 ### Option 3: Ollama (Local, Most Secure)
 
+**Quick Start**: See [docs/ollama-quick-start.md](./docs/ollama-quick-start.md) for a 5-minute setup guide.
+
+**Detailed Guide**: See [docs/ollama-setup-guide.md](./docs/ollama-setup-guide.md) for complete step-by-step instructions.
+
+**Basic steps:**
 1. Install Ollama from https://ollama.ai
 2. Pull a model: `ollama pull llama3.2`
 3. Add to `.env.local`:
