@@ -18,17 +18,29 @@ import { createDailyChallengeScene } from "@/games/scenes/dailyChallengeScene";
 import { createPlayerOneScene } from "@/games/scenes/playerOneScene";
 import { createDevRoomScene } from "@/games/scenes/devRoomScene";
 import { analyzeRun, type RunMetrics } from "@/games/coaching";
+import { useAccessibility } from "@/components/accessibility/AccessibilityProvider";
 
 export default function GameShellClient({ slug }: { slug: string }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const store = useMemo(() => new PersistStore({ prefix: "rn_games", version: "v1" }), []);
   const progress = useMemo(() => createGamesProgressStore(store), [store]);
   const [paused, setPaused] = useState(false);
+  const { prefs } = useAccessibility();
   const [settings, setSettings] = useState<GameSettings>(() => ({
     muted: store.get("muted", false),
     reduceMotion: store.get("reduceMotion", false),
+    highContrast: store.get("highContrast", true), // Default to true (ON by default as per requirement)
   }));
   const { ready: offlineReady } = useOfflineReady();
+  
+  // Sync with global accessibility preferences
+  useEffect(() => {
+    setSettings((s) => ({
+      ...s,
+      reduceMotion: prefs.reducedMotion,
+      highContrast: prefs.highContrast || s.highContrast ?? true, // Default to true if not set
+    }));
+  }, [prefs.reducedMotion, prefs.highContrast]);
   const [showLoadingDedication, setShowLoadingDedication] = useState(true);
   const [loadingOpacity, setLoadingOpacity] = useState(0);
   const loadingLine = useMemo(() => {
@@ -49,6 +61,7 @@ export default function GameShellClient({ slug }: { slug: string }) {
   useEffect(() => {
     store.set("muted", settings.muted);
     store.set("reduceMotion", settings.reduceMotion);
+    store.set("highContrast", settings.highContrast ?? true);
   }, [settings, store]);
 
   useEffect(() => {
@@ -67,7 +80,31 @@ export default function GameShellClient({ slug }: { slug: string }) {
     if (meta.requiresDevRoomUnlock && !devRoomUnlocked) return;
 
     const view = createCanvasView(canvas);
-    const input = createInputController(window);
+    // Create input controllers: canvas for touch, window for keyboard
+    const canvasInput = createInputController(canvas);
+    const windowInput = createInputController(window);
+    // Merge inputs (touch from canvas, keyboard from window)
+    const input = {
+      getState: () => {
+        const canvasState = canvasInput.getState();
+        const windowState = windowInput.getState();
+        return {
+          moveX: canvasState.moveX || windowState.moveX,
+          moveY: canvasState.moveY || windowState.moveY,
+          pausePressed: canvasState.pausePressed || windowState.pausePressed,
+          actionPressed: canvasState.actionPressed || windowState.actionPressed,
+        };
+      },
+      resetFrame: () => {
+        canvasInput.resetFrame();
+        windowInput.resetFrame();
+      },
+      dispose: () => {
+        canvasInput.dispose();
+        windowInput.dispose();
+      },
+      bindings: canvasInput.bindings,
+    };
     const audio = createAudioController();
     audio.setMuted(settings.muted);
     // Dev Room starts in silence by design.
@@ -221,7 +258,7 @@ export default function GameShellClient({ slug }: { slug: string }) {
       audio.dispose();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug, settings.muted, settings.reduceMotion, showLoadingDedication, started, unlocked, devRoomUnlocked, paused, meta]);
+  }, [slug, settings.muted, settings.reduceMotion, settings.highContrast, showLoadingDedication, started, unlocked, devRoomUnlocked, paused, meta]);
 
   const onStartDaily = () => {
     if (!practiceMode) progress.markDailyAttempted(dailyDateId);
@@ -261,6 +298,12 @@ export default function GameShellClient({ slug }: { slug: string }) {
             onClick={() => setSettings((s) => ({ ...s, reduceMotion: !s.reduceMotion }))}
           >
             {settings.reduceMotion ? "Motion: reduced" : "Motion: normal"}
+          </button>
+          <button
+            className="rounded-full border px-3 py-1 text-sm font-semibold"
+            onClick={() => setSettings((s) => ({ ...s, highContrast: !(s.highContrast ?? true) }))}
+          >
+            {settings.highContrast !== false ? "Contrast: high" : "Contrast: normal"}
           </button>
         </div>
       </div>

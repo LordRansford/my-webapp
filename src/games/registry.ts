@@ -3,6 +3,9 @@ import { createDemoScene } from "@/games/scenes/demoScene";
 import { createDailyChallengeScene } from "@/games/scenes/dailyChallengeScene";
 import { createPlayerOneScene } from "@/games/scenes/playerOneScene";
 import { createDevRoomScene } from "@/games/scenes/devRoomScene";
+import { createPulseRunnerScene } from "@/games/scenes/pulseRunnerScene";
+import { createSkylineDriftScene } from "@/games/scenes/skylineDriftScene";
+import { createVaultCircuitScene } from "@/games/scenes/vaultCircuitScene";
 import { GAMES_BLURBS, GAMES_COPY } from "@/games/dedication";
 
 export type GameId = "pulse-runner" | "skyline-drift" | "vault-circuit" | "daily" | "player-one" | "dev-room";
@@ -24,21 +27,21 @@ export const GAMES: GameMeta[] = [
     title: "Pulse Runner",
     difficulty: "Easy",
     blurb: GAMES_BLURBS.pulseRunner,
-    scene: () => createDemoScene(),
+    scene: () => createPulseRunnerScene(),
   },
   {
     id: "skyline-drift",
     title: "Skyline Drift",
     difficulty: "Normal",
     blurb: GAMES_BLURBS.skylineDrift,
-    scene: () => createDemoScene(),
+    scene: () => createSkylineDriftScene(),
   },
   {
     id: "vault-circuit",
     title: "Vault Circuit",
     difficulty: "Hard",
     blurb: GAMES_BLURBS.vaultCircuit,
-    scene: () => createDemoScene(),
+    scene: () => createVaultCircuitScene(),
   },
   {
     id: "daily",

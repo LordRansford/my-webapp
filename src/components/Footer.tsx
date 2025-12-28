@@ -109,11 +109,10 @@ export default function Footer() {
               onPointerCancel={onHoldEnd}
               onPointerLeave={onHoldEnd}
               className="inline-flex items-center rounded-md"
-              aria-label="Ransford’s Notes logo"
+              aria-label="Ransford's Notes logo"
             >
               <BrandLogo className="h-12 w-auto text-slate-900" />
             </button>
-            <p className="text-xl font-semibold text-slate-900">RansfordsNotes</p>
             <p className="muted text-sm">
               Browser-native courses, tools, labs, and games built to stay readable, calm, and offline-capable. Clear inputs, clear
               outputs, and no hidden mechanics.

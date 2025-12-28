@@ -14,7 +14,6 @@ export function TemplateCard({ template }: TemplateCardProps) {
           <h3 className="text-lg font-semibold text-slate-900">{template.title}</h3>
           <p className="mt-1 text-base text-slate-600">{summary}</p>
         </div>
-        <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">Preview only</span>
       </div>
 
       <dl className="mt-4 grid grid-cols-2 gap-3 text-xs text-slate-700 sm:grid-cols-3">

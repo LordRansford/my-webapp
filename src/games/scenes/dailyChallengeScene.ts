@@ -31,12 +31,25 @@ export function createDailyChallengeScene(opts?: {
 
   const GOAL_MS = 45_000;
 
-  const spawn = (w: number, h: number) => {
+  const getDifficultyPhase = (ms: number): { phase: number; intensity: number } => {
+    // Phase 1: 0-10s - Start hard
+    if (ms < 10000) return { phase: 1, intensity: 0.7 + (ms / 10000) * 0.15 };
+    // Phase 2: 10-30s - Ramp up to very hard
+    if (ms < 30000) return { phase: 2, intensity: 0.85 + ((ms - 10000) / 20000) * 0.10 };
+    // Phase 3: 30-45s - Very hard
+    if (ms < 45000) return { phase: 3, intensity: 0.95 + ((ms - 30000) / 15000) * 0.03 };
+    // Phase 4: 45-60s - Transition to almost impossible
+    if (ms < 60000) return { phase: 4, intensity: 0.98 + ((ms - 45000) / 15000) * 0.015 };
+    // Phase 5: 60-90s - Almost impossible (if they survive past goal)
+    return { phase: 5, intensity: 0.995 + Math.min(0.005, (ms - 60000) / 30000 * 0.005) };
+  };
+
+  const spawn = (w: number, h: number, intensity: number) => {
     const lane = Math.floor(rand() * 5); // 0..4
     const gap = w / 6;
     const x = Math.round((lane + 1) * gap);
-    const size = 18 + Math.round(rand() * 22);
-    const speed = 90 + rand() * 140;
+    const size = (18 + Math.round(rand() * 22)) * (0.9 + intensity * 0.3); // Larger obstacles
+    const speed = (90 + rand() * 140) * (0.8 + intensity * 0.7); // Faster speed
     obstacles.push({ x, y: -size - 6, w: size, h: size, speed });
   };
 
@@ -76,12 +89,18 @@ export function createDailyChallengeScene(opts?: {
       t += dt;
       runMs = ctx.nowMs - startedAt;
 
-      // deterministic spawn schedule + mild ramp
+      // Difficulty-based spawn schedule with adaptive ramp
+      const { intensity } = getDifficultyPhase(runMs);
       if (t >= nextSpawnMs) {
-        spawn(ctx.width, ctx.height);
+        spawn(ctx.width, ctx.height, intensity);
         const base = 420 + rand() * 260;
-        const ramp = Math.max(140, 520 - (runMs / 1000) * 6);
+        const ramp = Math.max(100, 520 - (runMs / 1000) * 8 * intensity); // Faster spawns at higher intensity
         nextSpawnMs = t + Math.min(ramp, base);
+        
+        // Progressive modifier: spawn multiple obstacles in later phases
+        if (intensity > 0.85 && rand() < 0.3) {
+          spawn(ctx.width, ctx.height, intensity);
+        }
       }
 
       // Audio parameters: intensity ramps with time, tension rises as time-left shrinks.
@@ -135,20 +154,30 @@ export function createDailyChallengeScene(opts?: {
       ctx.ctx2d.fillRect(0, 0, ctx.width, ctx.height);
       ctx.ctx2d.restore();
 
-      // obstacles
+      // obstacles (high contrast)
       ctx.ctx2d.save();
-      ctx.ctx2d.fillStyle = "rgba(255,255,255,0.10)";
       for (const o of obstacles) {
+        ctx.ctx2d.shadowBlur = 15;
+        ctx.ctx2d.shadowColor = "#ff6666";
+        ctx.ctx2d.fillStyle = "rgba(255, 100, 100, 0.9)";
         ctx.ctx2d.fillRect(o.x - o.w / 2, o.y - o.h / 2, o.w, o.h);
+        ctx.ctx2d.strokeStyle = "#ffffff";
+        ctx.ctx2d.lineWidth = 2;
+        ctx.ctx2d.strokeRect(o.x - o.w / 2, o.y - o.h / 2, o.w, o.h);
       }
       ctx.ctx2d.restore();
 
-      // player
+      // player (high contrast)
       ctx.ctx2d.save();
+      ctx.ctx2d.shadowBlur = 20;
+      ctx.ctx2d.shadowColor = "#6366f1";
       ctx.ctx2d.fillStyle = "rgba(99,102,241,0.95)";
       ctx.ctx2d.beginPath();
       ctx.ctx2d.arc(px, py, pr, 0, Math.PI * 2);
       ctx.ctx2d.fill();
+      ctx.ctx2d.strokeStyle = "#ffffff";
+      ctx.ctx2d.lineWidth = 3;
+      ctx.ctx2d.stroke();
       ctx.ctx2d.restore();
 
       // minimal HUD

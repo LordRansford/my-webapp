@@ -40,7 +40,9 @@ function NavLinks({ vertical = false, pathname, onLinkClick }: { vertical?: bool
             aria-current={active ? "page" : undefined}
             data-active={active}
             className={`${vertical ? "rounded-2xl border border-slate-200 bg-white px-3 py-2 text-base" : "rounded-full px-3 py-2 text-sm"} font-semibold transition ${
-              active ? "bg-slate-900 text-white shadow-sm" : "text-slate-800 hover:bg-slate-100"
+              active 
+                ? "bg-slate-900 text-white shadow-sm hover:bg-slate-800" 
+                : "text-slate-900 bg-transparent hover:bg-slate-100 hover:text-slate-900"
             } ${focusStyle}`}
             onClick={onLinkClick}
           >
@@ -115,7 +117,6 @@ export default function Header() {
           <Link href="/" className="brand rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" onClick={() => setMobileOpen(false)}>
             <span className="sr-only">Ransford&apos;s Notes home</span>
             <BrandLogo className="h-10 w-auto text-slate-900" />
-            <span className="brand__text hidden text-slate-900 sm:inline">RansfordsNotes</span>
           </Link>
         </div>
 

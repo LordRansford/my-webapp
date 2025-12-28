@@ -22,11 +22,10 @@ export default async function TemplateCategoryPage({ params }: { params: Promise
 
       <div className="space-y-3 rounded-3xl bg-white px-6 py-7 ring-1 ring-slate-200 shadow-[0_12px_30px_rgba(15,23,42,0.06)]">
         <div className="inline-flex items-center gap-2 rounded-2xl bg-slate-900 px-3 py-1 text-xs font-semibold text-white">Templates</div>
-        <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800">Preview only</div>
         <h1 className="text-3xl font-semibold text-slate-900">{category?.title || "Templates category"}</h1>
         <p className="max-w-3xl text-base text-slate-700 leading-relaxed">
           {category?.description ||
-            "Browse available templates by category. These are preview-only placeholders that outline the structure of the platform."}
+            "Browse available templates by category. Download templates in multiple formats for your use."}
         </p>
       </div>
 
@@ -50,7 +49,6 @@ export default async function TemplateCategoryPage({ params }: { params: Promise
                 <p className="text-base text-slate-700 flex-1">{template.description}</p>
                 <div className="flex items-center justify-between text-xs text-slate-700">
                   <span>Estimated {template.estimatedMinutes} mins</span>
-                  <span className="rounded-full bg-amber-50 px-2 py-1 font-semibold text-amber-800">Preview only</span>
                 </div>
                 <Link
                   href={`/templates/run/${template.slug}`}

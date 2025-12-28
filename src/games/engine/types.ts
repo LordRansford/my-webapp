@@ -3,6 +3,7 @@ export type Vec2 = { x: number; y: number };
 export type GameSettings = {
   muted: boolean;
   reduceMotion: boolean;
+  highContrast?: boolean; // High contrast mode for games (default: true)
 };
 
 export type InputState = {
