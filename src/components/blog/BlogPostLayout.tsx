@@ -205,44 +205,7 @@ export default function BlogPostLayout({ post, showTOC = true }: BlogPostLayoutP
 
         {/* Main Content Area */}
         <div className="blog-post__body">
-          {/* Table of Contents */}
-          {hasHeadings && (
-            <aside className="blog-post__toc" aria-label="Table of contents">
-              <div className="blog-post__toc-header">
-                <BookOpen className="blog-post__toc-icon" aria-hidden="true" />
-                <h2 className="blog-post__toc-title">Contents</h2>
-              </div>
-              <nav className="blog-post__toc-nav">
-                <ul className="blog-post__toc-list">
-                  {headings.map((heading) => (
-                    <li
-                      key={heading.id}
-                      className={`blog-post__toc-item blog-post__toc-item--level-${heading.level}`}
-                    >
-                      <a
-                        href={`#${heading.id}`}
-                        className={`blog-post__toc-link ${
-                          activeHeading === heading.id ? "blog-post__toc-link--active" : ""
-                        }`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          document.getElementById(heading.id)?.scrollIntoView({
-                            behavior: "smooth",
-                            block: "start",
-                          });
-                          window.history.pushState(null, "", `#${heading.id}`);
-                        }}
-                      >
-                        {heading.text}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            </aside>
-          )}
-
-          {/* Content */}
+          {/* Content - TOC removed to give more space */}
           <div ref={contentRef} className="blog-post-content">
             <MDXRemote {...post.mdx} components={mdxComponents} />
           </div>
