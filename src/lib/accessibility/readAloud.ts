@@ -60,9 +60,13 @@ export class ReadAloudEngine {
   /**
    * Extract meaningful text content from main element
    * Excludes navigation, headers, footers, and interactive elements
+   * Reads top-down, everything on the screen
    */
   extractContent(mainElement: HTMLElement | null): Element[] {
-    if (!mainElement) return [];
+    if (!mainElement) {
+      // Fallback to body if no element provided
+      mainElement = document.body;
+    }
 
     const chunks: Element[] = [];
     const walker = document.createTreeWalker(
@@ -74,36 +78,46 @@ export class ReadAloudEngine {
           if (node.nodeType === 1) { // Node.ELEMENT_NODE
             const el = node as Element;
             const tagName = el.tagName.toLowerCase();
+            
+            // Skip hidden or script elements
             if (
-              ["script", "style", "noscript", "iframe", "svg"].includes(tagName) ||
+              ["script", "style", "noscript", "iframe", "svg", "canvas"].includes(tagName) ||
               el.hasAttribute("hidden") ||
-              el.getAttribute("aria-hidden") === "true"
+              el.getAttribute("aria-hidden") === "true" ||
+              el.classList.contains("read-aloud-highlight")
             ) {
               return NodeFilter.FILTER_REJECT;
             }
 
-            // Skip navigation, headers, footers
-            if (
-              el.closest("nav, header, footer, aside[role='complementary'], .skip-link") !== null
-            ) {
-              return NodeFilter.FILTER_REJECT;
+            // Skip navigation, headers, footers when reading main content
+            // But allow them if we're reading from body (fallback)
+            if (mainElement !== document.body) {
+              if (
+                el.closest("nav, header, footer, aside[role='complementary'], .skip-link") !== null
+              ) {
+                return NodeFilter.FILTER_REJECT;
+              }
             }
 
-            // Include headings, paragraphs, list items
+            // Include headings, paragraphs, list items, and other meaningful content
             if (
-              ["h1", "h2", "h3", "h4", "h5", "h6", "p", "li", "blockquote", "dd", "dt"].includes(
+              ["h1", "h2", "h3", "h4", "h5", "h6", "p", "li", "blockquote", "dd", "dt", "td", "th", "div", "section", "article"].includes(
                 tagName
               )
             ) {
-              return NodeFilter.FILTER_ACCEPT;
+              // Only include if it has meaningful text content
+              const text = el.textContent?.trim() || "";
+              if (text.length > 0 && !el.querySelector("script, style, canvas")) {
+                return NodeFilter.FILTER_ACCEPT;
+              }
             }
           }
 
           // Handle text nodes
           if (node.nodeType === 3) { // Node.TEXT_NODE
             const text = node.textContent?.trim() || "";
-            if (text.length > 10) {
-              // Only include substantial text nodes
+            if (text.length > 5) {
+              // Include substantial text nodes
               return NodeFilter.FILTER_ACCEPT;
             }
           }
@@ -118,17 +132,24 @@ export class ReadAloudEngine {
       if (node.nodeType === 1) { // Node.ELEMENT_NODE
         const el = node as Element;
         const text = el.textContent?.trim() || "";
+        // Only add if it's a direct text container or has no nested text containers
         if (text.length > 0) {
-          chunks.push(el);
+          const hasNestedTextElements = el.querySelector("h1, h2, h3, h4, h5, h6, p, li");
+          if (!hasNestedTextElements || ["h1", "h2", "h3", "h4", "h5", "h6", "p", "li"].includes(el.tagName.toLowerCase())) {
+            chunks.push(el);
+          }
         }
       } else if (node.nodeType === 3) { // Node.TEXT_NODE
         const text = node.textContent?.trim() || "";
-        if (text.length > 10) {
+        if (text.length > 5) {
           // Wrap text node in a span for highlighting
           const span = document.createElement("span");
           span.textContent = text;
-          node.parentNode?.replaceChild(span, node);
-          chunks.push(span);
+          const parent = node.parentNode;
+          if (parent) {
+            parent.replaceChild(span, node);
+            chunks.push(span);
+          }
         }
       }
     }

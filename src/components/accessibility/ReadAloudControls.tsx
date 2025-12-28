@@ -13,9 +13,6 @@ export default function ReadAloudControls() {
   const mainElementRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    // Find main content element
-    mainElementRef.current = document.getElementById("main-content");
-
     // Wait for voices to load
     const loadVoices = () => {
       const voices = window.speechSynthesis.getVoices();
@@ -64,8 +61,21 @@ export default function ReadAloudControls() {
       setIsPaused(false);
       setReadAloudEnabled(false);
     } else {
+      // Find main content element - try multiple selectors
+      let mainElement = document.getElementById("main-content");
+      if (!mainElement) {
+        mainElement = document.querySelector("main");
+      }
+      if (!mainElement) {
+        mainElement = document.querySelector("article");
+      }
+      if (!mainElement) {
+        // Fallback to body if no main content found
+        mainElement = document.body;
+      }
+
       setReadAloudEnabled(true);
-      await engineRef.current.readContent(mainElementRef.current, false);
+      await engineRef.current.readContent(mainElement as HTMLElement, false);
     }
   };
 
@@ -74,7 +84,8 @@ export default function ReadAloudControls() {
 
     const selection = window.getSelection();
     if (!selection || selection.toString().trim().length === 0) {
-      alert("Please select some text to read");
+      // If no selection, just start reading from top (same as play button)
+      handleToggle();
       return;
     }
 
