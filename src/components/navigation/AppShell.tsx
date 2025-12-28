@@ -44,9 +44,6 @@ export default function AppShell({ children }: AppShellProps) {
   return (
     <BreadcrumbsProvider>
       <div className="app-shell">
-        <a href="#main-content" className="skip-link">
-          Skip to content
-        </a>
         <Header />
         <div className="page-shell">
           <BreadcrumbsFallback />
