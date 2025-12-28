@@ -325,7 +325,7 @@ export async function POST(req: Request) {
                     urlOrPath: pageHit.href,
                     anchorOrHeading: pageHit.title,
                   });
-                } else if (top) {
+                } else if (top && (top.excerpt || top.text)) {
                   answer = `From the site content: ${top.excerpt || top.text || "Relevant content found."}\n\nVisit the linked pages below for more information.`;
                   citationsV2.push({
                     title: top.title,
