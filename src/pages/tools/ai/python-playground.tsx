@@ -32,6 +32,14 @@ doubled = [n * 2 for n in nums]
 print("Doubled:", doubled)`,
     },
   },
+  {
+    title: "Dictionary Fun",
+    inputs: {
+      code: `data = {"name": "Alice", "age": 30, "city": "NYC"}
+for key, value in data.items():
+    print(f"{key}: {value}")`,
+    },
+  },
 ];
 
 export default function PythonPlaygroundPage() {

@@ -9,6 +9,36 @@ import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
 
 const contract = getToolContract("data-classification-helper");
 
+const examples = [
+  {
+    title: "Customer PII (GDPR)",
+    inputs: {
+      assetName: "Customer Personal Identifiable Information",
+      sensitivity: "Confidential",
+      compliance: ["GDPR"],
+      impact: "High",
+    },
+  },
+  {
+    title: "Medical Records (HIPAA)",
+    inputs: {
+      assetName: "Patient Health Records",
+      sensitivity: "Restricted",
+      compliance: ["HIPAA"],
+      impact: "High",
+    },
+  },
+  {
+    title: "Public Marketing Content",
+    inputs: {
+      assetName: "Website Content and Blog Posts",
+      sensitivity: "Public",
+      compliance: [],
+      impact: "Low",
+    },
+  },
+];
+
 export default function DataClassificationHelperPage() {
   const [assetName, setAssetName] = useState("");
   const [sensitivity, setSensitivity] = useState<"Public" | "Internal" | "Confidential" | "Restricted">("Internal");
@@ -85,7 +115,7 @@ export default function DataClassificationHelperPage() {
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} initialInputs={{ assetName, sensitivity, compliance, impact }}>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ assetName, sensitivity, compliance, impact }}>
         <div className="space-y-4">
           <div>
             <label htmlFor="assetName" className="block text-sm font-semibold text-slate-900">

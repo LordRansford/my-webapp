@@ -11,6 +11,39 @@ import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
 
 const contract = getToolContract("js-sandbox");
 
+const examples = [
+  {
+    title: "Hello World",
+    inputs: { code: 'console.log("Hello, world!");' },
+  },
+  {
+    title: "Array Operations",
+    inputs: {
+      code: `const numbers = [1, 2, 3, 4, 5];
+const doubled = numbers.map(n => n * 2);
+const sum = numbers.reduce((acc, n) => acc + n, 0);
+console.log("Original:", numbers);
+console.log("Doubled:", doubled);
+console.log("Sum:", sum);`,
+    },
+  },
+  {
+    title: "Async/Await Example",
+    inputs: {
+      code: `async function fetchData() {
+  return new Promise(resolve => {
+    setTimeout(() => resolve("Data loaded!"), 100);
+  });
+}
+
+(async () => {
+  const result = await fetchData();
+  console.log(result);
+})();`,
+    },
+  },
+];
+
 function JsSandboxContent() {
   const [code, setCode] = useState('console.log("Hello, world!");');
 
@@ -82,7 +115,7 @@ function JsSandboxContent() {
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} initialInputs={{ code }} onInputsChange={handleInputsChange}>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ code }} onInputsChange={handleInputsChange}>
         <div className="space-y-4">
           <div>
             <label htmlFor="code" className="block text-sm font-semibold text-slate-900">

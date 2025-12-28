@@ -9,6 +9,36 @@ import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
 
 const contract = getToolContract("technical-debt-qualifier");
 
+const examples = [
+  {
+    title: "Legacy Authentication Code",
+    inputs: {
+      debtItem: "Authentication system uses deprecated SHA-1 hashing instead of bcrypt/Argon2",
+      impact: "High",
+      urgency: "High",
+      cost: "Medium",
+    },
+  },
+  {
+    title: "Monolithic Architecture",
+    inputs: {
+      debtItem: "Entire application is a monolith, making deployments risky and scaling difficult",
+      impact: "High",
+      urgency: "Medium",
+      cost: "High",
+    },
+  },
+  {
+    title: "Outdated Dependencies",
+    inputs: {
+      debtItem: "Several npm packages are 2+ years out of date with known security vulnerabilities",
+      impact: "Medium",
+      urgency: "High",
+      cost: "Low",
+    },
+  },
+];
+
 export default function TechnicalDebtQualifierPage() {
   const [debtItem, setDebtItem] = useState("");
   const [impact, setImpact] = useState<"High" | "Medium" | "Low">("Medium");
@@ -67,7 +97,7 @@ export default function TechnicalDebtQualifierPage() {
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} initialInputs={{ debtItem, impact, urgency, cost }}>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ debtItem, impact, urgency, cost }}>
         <div className="space-y-4">
           <div>
             <label htmlFor="debtItem" className="block text-sm font-semibold text-slate-900">

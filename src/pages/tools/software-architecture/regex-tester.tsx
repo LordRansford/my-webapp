@@ -24,6 +24,13 @@ const examples = [
       text: "The price is $42.99 and quantity is 5",
     },
   },
+  {
+    title: "Phone Number Pattern",
+    inputs: {
+      pattern: "\\(?\\d{3}\\)?[-.]?\\d{3}[-.]?\\d{4}",
+      text: "Call us at (555) 123-4567 or 555.987.6543",
+    },
+  },
 ];
 
 export default function RegexTesterPage() {

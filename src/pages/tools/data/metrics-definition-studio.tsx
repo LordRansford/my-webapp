@@ -9,6 +9,39 @@ import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
 
 const contract = getToolContract("metrics-definition-studio");
 
+const examples = [
+  {
+    title: "Daily Active Users",
+    inputs: {
+      metricName: "Daily Active Users (DAU)",
+      definition: "The number of unique users who logged in or performed any action on the platform in a 24-hour period",
+      calculation: "COUNT(DISTINCT user_id) WHERE action_timestamp >= CURRENT_DATE AND action_timestamp < CURRENT_DATE + INTERVAL '1 day'",
+      units: "Count",
+      source: "User activity events table",
+    },
+  },
+  {
+    title: "Error Rate",
+    inputs: {
+      metricName: "API Error Rate",
+      definition: "Percentage of API requests that result in an error (4xx or 5xx status codes)",
+      calculation: "(COUNT(*) WHERE status_code >= 400) / COUNT(*) * 100",
+      units: "Percentage (%)",
+      source: "API access logs",
+    },
+  },
+  {
+    title: "Customer Acquisition Cost",
+    inputs: {
+      metricName: "Customer Acquisition Cost (CAC)",
+      definition: "Average cost to acquire a new paying customer, calculated as total marketing spend divided by new customers acquired",
+      calculation: "SUM(marketing_spend) / COUNT(DISTINCT new_customer_id)",
+      units: "Currency (USD)",
+      source: "Marketing spend and customer signup tables",
+    },
+  },
+];
+
 export default function MetricsDefinitionStudioPage() {
   const [metricName, setMetricName] = useState("");
   const [definition, setDefinition] = useState("");
@@ -87,7 +120,7 @@ ${JSON.stringify(json, null, 2)}
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} initialInputs={{ metricName, definition, calculation, units, source }}>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ metricName, definition, calculation, units, source }}>
         <div className="space-y-4">
           <div>
             <label htmlFor="metricName" className="block text-sm font-semibold text-slate-900">

@@ -9,6 +9,70 @@ import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
 
 const contract = getToolContract("process-friction-mapper");
 
+const examples = [
+  {
+    title: "Employee Onboarding",
+    inputs: {
+      processSteps: [
+        "Submit application",
+        "HR review",
+        "Background check",
+        "Manager approval",
+        "IT account setup",
+        "Equipment procurement",
+        "First day orientation",
+      ],
+      actors: ["Candidate", "HR", "Manager", "IT", "Procurement"],
+      frictionPoints: [
+        "Manual email coordination between departments",
+        "Background check takes 2-3 weeks",
+        "IT account setup requires manager approval first",
+        "Equipment order requires multiple signatures",
+      ],
+    },
+  },
+  {
+    title: "Invoice Approval Process",
+    inputs: {
+      processSteps: [
+        "Submit invoice",
+        "Department review",
+        "Finance validation",
+        "Approver sign-off",
+        "Payment processing",
+      ],
+      actors: ["Vendor", "Department", "Finance", "Approver"],
+      frictionPoints: [
+        "Invoices stuck in email inboxes",
+        "Manual data entry into finance system",
+        "Approver availability delays",
+        "No visibility into approval status",
+      ],
+    },
+  },
+  {
+    title: "Software Deployment",
+    inputs: {
+      processSteps: [
+        "Code commit",
+        "Automated tests",
+        "Code review",
+        "QA testing",
+        "Deployment approval",
+        "Production deploy",
+        "Smoke tests",
+      ],
+      actors: ["Developer", "Reviewer", "QA", "DevOps"],
+      frictionPoints: [
+        "Code reviews bottlenecked by availability",
+        "Manual deployment approval required",
+        "QA environment differs from production",
+        "Rollback process is manual and slow",
+      ],
+    },
+  },
+];
+
 export default function ProcessFrictionMapperPage() {
   const [processSteps, setProcessSteps] = useState<string[]>(["", ""]);
   const [actors, setActors] = useState<string[]>([""]);
@@ -66,7 +130,7 @@ export default function ProcessFrictionMapperPage() {
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} initialInputs={{ processSteps, actors, frictionPoints }}>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ processSteps, actors, frictionPoints }}>
         <div className="space-y-6">
           <div>
             <label className="block text-sm font-semibold text-slate-900 mb-2">Process Steps (max 30)</label>

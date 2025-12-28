@@ -9,6 +9,79 @@ import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
 
 const contract = getToolContract("architecture-tradeoff-analysis");
 
+const examples = [
+  {
+    title: "Database Choice: SQL vs NoSQL",
+    inputs: {
+      options: [
+        "PostgreSQL (SQL database)",
+        "MongoDB (NoSQL document store)",
+        "DynamoDB (NoSQL key-value store)",
+      ],
+      constraints: [
+        "Must support complex queries",
+        "Must scale to 1M+ records",
+        "Team has strong SQL experience",
+        "Must support ACID transactions",
+      ],
+      criteria: [
+        "Query flexibility",
+        "Scalability",
+        "Team expertise",
+        "Consistency guarantees",
+        "Cost",
+        "Operational complexity",
+      ],
+    },
+  },
+  {
+    title: "Deployment Strategy",
+    inputs: {
+      options: [
+        "Blue-green deployment",
+        "Canary deployment",
+        "Rolling deployment",
+      ],
+      constraints: [
+        "Zero downtime required",
+        "Limited infrastructure capacity",
+        "Must support instant rollback",
+      ],
+      criteria: [
+        "Deployment speed",
+        "Risk mitigation",
+        "Resource efficiency",
+        "Rollback speed",
+        "Complexity",
+        "Cost",
+      ],
+    },
+  },
+  {
+    title: "Caching Strategy",
+    inputs: {
+      options: [
+        "In-memory cache (Redis)",
+        "CDN edge caching",
+        "Application-level caching",
+      ],
+      constraints: [
+        "Must reduce database load",
+        "Global user base",
+        "Budget limited",
+      ],
+      criteria: [
+        "Performance improvement",
+        "Cost",
+        "Complexity",
+        "Global coverage",
+        "Cache invalidation complexity",
+        "Maintenance overhead",
+      ],
+    },
+  },
+];
+
 export default function ArchitectureTradeoffAnalysisPage() {
   const [options, setOptions] = useState<string[]>(["", ""]);
   const [constraints, setConstraints] = useState<string[]>([""]);
@@ -76,7 +149,7 @@ export default function ArchitectureTradeoffAnalysisPage() {
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} initialInputs={{ options, constraints, criteria }}>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ options, constraints, criteria }}>
         <div className="space-y-6">
           <div>
             <label className="block text-sm font-semibold text-slate-900 mb-2">Options (2-3)</label>

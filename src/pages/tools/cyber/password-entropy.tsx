@@ -18,6 +18,10 @@ const examples = [
     title: "Strong Password",
     inputs: { password: "Tr0ub4dor&3" },
   },
+  {
+    title: "Passphrase Style",
+    inputs: { password: "correct-horse-battery-staple-2024!" },
+  },
 ];
 
 function calculateEntropy(password: string): { bits: number; strength: string; timeToCrack: string } {

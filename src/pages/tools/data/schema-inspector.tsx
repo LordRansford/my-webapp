@@ -9,6 +9,46 @@ import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
 
 const contract = getToolContract("schema-inspector");
 
+const examples = [
+  {
+    title: "User Table SQL Schema",
+    inputs: {
+      schema: `CREATE TABLE users (
+  id INTEGER PRIMARY KEY,
+  username VARCHAR(50) NOT NULL,
+  email VARCHAR(100) UNIQUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);`,
+    },
+  },
+  {
+    title: "JSON Schema Example",
+    inputs: {
+      schema: JSON.stringify({
+        type: "object",
+        properties: {
+          name: { type: "string" },
+          age: { type: "number" },
+          email: { type: "string", format: "email" },
+        },
+        required: ["name", "email"],
+      }, null, 2),
+    },
+  },
+  {
+    title: "Orders Table with Relationships",
+    inputs: {
+      schema: `CREATE TABLE orders (
+  order_id INTEGER PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  total_amount DECIMAL(10,2),
+  status VARCHAR(20),
+  created_at TIMESTAMP
+);`,
+    },
+  },
+];
+
 function parseSchema(schema: string) {
   // Try JSON schema first
   try {
@@ -92,7 +132,7 @@ export default function SchemaInspectorPage() {
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} initialInputs={{ schema }}>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ schema }}>
         <div className="space-y-4">
           <div>
             <label htmlFor="schema" className="block text-sm font-semibold text-slate-900">

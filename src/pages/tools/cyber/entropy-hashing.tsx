@@ -15,8 +15,12 @@ const examples = [
     inputs: { input: "hello world", algorithm: "SHA-256" },
   },
   {
-    title: "MD5 Hash",
-    inputs: { input: "test", algorithm: "MD5" },
+    title: "Hash Your Name",
+    inputs: { input: "Ransford's Notes", algorithm: "SHA-256" },
+  },
+  {
+    title: "See Avalanche Effect",
+    inputs: { input: "The quick brown fox jumps over the lazy dog", algorithm: "SHA-256" },
   },
 ];
 
