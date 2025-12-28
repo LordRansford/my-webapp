@@ -101,6 +101,36 @@ export default function GamesCards() {
         </div>
       </section>
 
+      <section aria-label="Campaign" className="space-y-4">
+        <div>
+          <h2 className="text-2xl font-semibold text-slate-900">Campaign</h2>
+          <p className="mt-2 text-base text-slate-700">12 missions dedicated to Charis Chung Amponsah. Choose your character, complete objectives, earn stars.</p>
+        </div>
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div 
+            className="group rounded-3xl border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50 p-6 shadow-sm hover:border-purple-300 hover:shadow-md transition-all duration-200"
+          >
+            <div className="flex items-start justify-between gap-3 mb-3">
+              <h3 className="text-xl font-semibold text-slate-900">Charis's Challenge</h3>
+              <span className="rounded-full bg-purple-100 px-3 py-1 text-xs font-semibold text-purple-700 whitespace-nowrap">
+                Campaign
+              </span>
+            </div>
+            <p className="text-sm text-slate-600 leading-relaxed mb-3">
+              12 mission-based levels with character selection, power-ups, collectibles, and side quests. Each mission takes ~5 minutes.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <Link 
+                className="button primary inline-flex items-center justify-center min-w-[100px]" 
+                href="/games/missions"
+              >
+                Play
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {rest.length > 0 && (
         <section aria-label="More games" className="space-y-4">
           <div>
