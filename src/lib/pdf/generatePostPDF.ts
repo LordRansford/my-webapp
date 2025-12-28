@@ -10,6 +10,71 @@ export async function generatePostPDF(
     throw new Error("Content element is required");
   }
 
+  // Temporarily replace unsupported CSS color functions (like lab(), lch(), oklab(), oklch())
+  // html2canvas doesn't support these modern color functions
+  const originalStyles: Map<HTMLElement, string> = new Map();
+  const allElements = contentElement.querySelectorAll("*");
+  
+  // Store and replace unsupported color functions
+  allElements.forEach((el) => {
+    const htmlEl = el as HTMLElement;
+    const computedStyle = window.getComputedStyle(htmlEl);
+    const styleProps = ["color", "backgroundColor", "borderColor", "borderTopColor", "borderRightColor", "borderBottomColor", "borderLeftColor", "outlineColor"];
+    
+    let needsReplacement = false;
+    const replacements: { prop: string; value: string }[] = [];
+    
+    styleProps.forEach((prop) => {
+      const value = computedStyle.getPropertyValue(prop);
+      if (value && (value.includes("lab(") || value.includes("lch(") || value.includes("oklab(") || value.includes("oklch("))) {
+        needsReplacement = true;
+        
+        // Try to convert to RGB using a temporary element
+        try {
+          const tempEl = document.createElement("div");
+          tempEl.style.setProperty(prop, value);
+          tempEl.style.position = "absolute";
+          tempEl.style.visibility = "hidden";
+          document.body.appendChild(tempEl);
+          const rgbValue = window.getComputedStyle(tempEl).getPropertyValue(prop);
+          document.body.removeChild(tempEl);
+          
+          if (rgbValue && !rgbValue.includes("lab(") && !rgbValue.includes("lch(")) {
+            replacements.push({ prop, value: rgbValue });
+          } else {
+            // Fallback to safe colors
+            if (prop === "color") {
+              replacements.push({ prop, value: "#000000" });
+            } else if (prop.includes("background")) {
+              replacements.push({ prop, value: "#ffffff" });
+            } else {
+              replacements.push({ prop, value: "#000000" });
+            }
+          }
+        } catch {
+          // Fallback to safe colors
+          if (prop === "color") {
+            replacements.push({ prop, value: "#000000" });
+          } else if (prop.includes("background")) {
+            replacements.push({ prop, value: "#ffffff" });
+          } else {
+            replacements.push({ prop, value: "#000000" });
+          }
+        }
+      }
+    });
+    
+    if (needsReplacement) {
+      // Store original inline style
+      originalStyles.set(htmlEl, htmlEl.getAttribute("style") || "");
+      
+      // Apply replacements
+      replacements.forEach(({ prop, value }) => {
+        htmlEl.style.setProperty(prop, value, "important");
+      });
+    }
+  });
+
   // Convert HTML content to canvas
   let canvas;
   try {
@@ -23,10 +88,23 @@ export async function generatePostPDF(
       height: contentElement.scrollHeight,
       windowWidth: contentElement.scrollWidth,
       windowHeight: contentElement.scrollHeight,
+      ignoreElements: (element) => {
+        // Ignore elements that might cause issues
+        return element.classList?.contains("blog-reading-progress") || false;
+      },
     });
   } catch (error) {
     console.error("html2canvas error:", error);
     throw new Error(`Failed to capture content: ${error instanceof Error ? error.message : "Unknown error"}`);
+  } finally {
+    // Restore original styles
+    originalStyles.forEach((style, element) => {
+      if (style) {
+        element.setAttribute("style", style);
+      } else {
+        element.removeAttribute("style");
+      }
+    });
   }
 
   const imgData = canvas.toDataURL("image/png");
