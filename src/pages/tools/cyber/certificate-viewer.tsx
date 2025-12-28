@@ -9,6 +9,56 @@ import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
 
 const contract = getToolContract("cert-viewer");
 
+const examples = [
+  {
+    title: "Example Self-Signed Cert",
+    inputs: {
+      certificate: `-----BEGIN CERTIFICATE-----
+MIICXDCCAUYCCQC6YNqVpJH8GjANBgkqhkiG9w0BAQsFADBkMQswCQYDVQQGEwJV
+UzELMAkGA1UECAwCQ0ExEjAQBgNVBAcMCVNhbiBGcmFuYzEPMA0GA1UECgwGRXhh
+bXBsZTERMA8GA1UECwwIRXhhbXBsZTEQMA4GA1UEAwwHZXhhbXBsZTAeFw0yNDAx
+MDEwMDAwMDBaFw0yNTAxMDEwMDAwMDBaMGQxCzAJBgNVBAYTAlVTMQswCQYDVQQI
+DAJDQTESMBAGA1UEBwwJU2FuIEZyYW5jMQ8wDQYDVQQKDAZFeGFtcGxlMREwDwYD
+VQQLDAhFeGFtcGxlMRAwDgYDVQQDDAdleGFtcGxlMIGfMA0GCSqGSIb3DQEBAQUA
+A4GNADCBiQKBgQC3vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6
+Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ
+6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6QIDAQABMA0GCSqGSIb3DQEBCwUA
+A4GBABQN8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8
+vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q
+8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6
+Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ
+6Q==
+-----END CERTIFICATE-----`,
+    },
+  },
+  {
+    title: "Try Your Own Certificate",
+    inputs: {
+      certificate: `-----BEGIN CERTIFICATE-----
+MIICXDCCAUYCCQC6YNqVpJH8GjANBgkqhkiG9w0BAQsFADBkMQswCQYDVQQGEwJV
+UzELMAkGA1UECAwCQ0ExEjAQBgNVBAcMCVNhbiBGcmFuYzEPMA0GA1UECgwGRXhh
+bXBsZTERMA8GA1UECwwIRXhhbXBsZTEQMA4GA1UEAwwHZXhhbXBsZTAeFw0yNDAx
+MDEwMDAwMDBaFw0yNTAxMDEwMDAwMDBaMGQxCzAJBgNVBAYTAlVTMQswCQYDVQQI
+DAJDQTESMBAGA1UEBwwJU2FuIEZyYW5jMQ8wDQYDVQQKDAZFeGFtcGxlMREwDwYD
+VQQLDAhFeGFtcGxlMRAwDgYDVQQDDAdleGFtcGxlMIGfMA0GCSqGSIb3DQEBAQUA
+A4GNADCBiQKBgQC3vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6
+Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ
+6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6Q8vJ6QIDAQABMA0GCSqGSIb3DQEBCwUAA4GB
+-----END CERTIFICATE-----`,
+    },
+  },
+  {
+    title: "Minimal Test Cert",
+    inputs: {
+      certificate: `-----BEGIN CERTIFICATE-----
+MIICXDCCAUYCCQC6YNqVpJH8GjANBgkqhkiG9w0BAQsFADBkMQswCQYDVQQGEwJV
+UzELMAkGA1UECAwCQ0ExEjAQBgNVBAcMCVNhbiBGcmFuYzEPMA0GA1UECgwGRXhh
+bXBsZTERMA8GA1UECwwIRXhhbXBsZTEQMA4GA1UEAwwHZXhhbXBsZTAeFw0yNDAx
+-----END CERTIFICATE-----`,
+    },
+  },
+];
+
 function parsePEMCertificate(pem: string) {
   // Basic PEM parsing (educational - not production-grade)
   const lines = pem.split("\n");
@@ -80,7 +130,7 @@ export default function CertificateViewerPage() {
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} initialInputs={{ certificate }}>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ certificate }}>
         <div className="space-y-4">
           <div>
             <label htmlFor="certificate" className="block text-sm font-semibold text-slate-900">

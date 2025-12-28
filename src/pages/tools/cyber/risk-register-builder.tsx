@@ -9,6 +9,79 @@ import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
 
 const contract = getToolContract("risk-register-builder");
 
+const examples = [
+  {
+    title: "Data Breach Risk",
+    inputs: {
+      risks: [
+        {
+          id: "1",
+          description: "Unauthorized access to customer PII database",
+          likelihood: "Medium",
+          impact: "High",
+          mitigations: "Encryption at rest, access controls, audit logging, regular security audits",
+        },
+        {
+          id: "2",
+          description: "Third-party vendor data breach",
+          likelihood: "Low",
+          impact: "High",
+          mitigations: "Vendor security assessments, contractual requirements, monitoring",
+        },
+        {
+          id: "3",
+          description: "Employee accidentally shares sensitive data",
+          likelihood: "High",
+          impact: "Medium",
+          mitigations: "Data loss prevention tools, training, access controls",
+        },
+      ],
+    },
+  },
+  {
+    title: "System Availability Risks",
+    inputs: {
+      risks: [
+        {
+          id: "1",
+          description: "Cloud provider outage affecting production",
+          likelihood: "Low",
+          impact: "High",
+          mitigations: "Multi-region deployment, disaster recovery plan",
+        },
+        {
+          id: "2",
+          description: "Database performance degradation",
+          likelihood: "Medium",
+          impact: "Medium",
+          mitigations: "Performance monitoring, query optimization, capacity planning",
+        },
+      ],
+    },
+  },
+  {
+    title: "Compliance Risks",
+    inputs: {
+      risks: [
+        {
+          id: "1",
+          description: "GDPR compliance violation",
+          likelihood: "Medium",
+          impact: "High",
+          mitigations: "Regular compliance audits, data protection impact assessments, privacy by design",
+        },
+        {
+          id: "2",
+          description: "PCI DSS non-compliance",
+          likelihood: "Low",
+          impact: "High",
+          mitigations: "Annual audits, secure payment processing, network segmentation",
+        },
+      ],
+    },
+  },
+];
+
 interface Risk {
   id: string;
   description: string;
@@ -88,7 +161,7 @@ export default function RiskRegisterBuilderPage() {
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} initialInputs={{ risks }}>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ risks }}>
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-semibold text-slate-900">Risks</h3>

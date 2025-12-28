@@ -9,6 +9,48 @@ import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
 
 const contract = getToolContract("decision-log-generator");
 
+const examples = [
+  {
+    title: "API Framework Selection",
+    inputs: {
+      decision: "Use Express.js for REST API framework",
+      context: "Building a new microservice that needs to handle 10k requests/second. Team is familiar with Node.js. Need fast development velocity.",
+      options: [
+        "Express.js - Simple, widely used, large ecosystem",
+        "Fastify - Faster performance, less middleware",
+        "NestJS - Full framework, TypeScript-first, more structure",
+      ],
+      rationale: "Express.js chosen for team familiarity and rapid development. Performance is acceptable for current scale. Can migrate to Fastify if needed later.",
+    },
+  },
+  {
+    title: "Database Migration Strategy",
+    inputs: {
+      decision: "Use database migrations instead of schema sync",
+      context: "Need to manage database schema changes across multiple environments (dev, staging, production). Team of 5 developers making frequent changes.",
+      options: [
+        "Database migrations (version controlled)",
+        "Auto-sync schema on application startup",
+        "Manual SQL scripts",
+      ],
+      rationale: "Migrations provide version control, rollback capability, and clear history. Auto-sync is too risky for production. Manual scripts lack versioning.",
+    },
+  },
+  {
+    title: "Authentication Approach",
+    inputs: {
+      decision: "Use OAuth 2.0 with JWT tokens",
+      context: "Building a SaaS application that needs to support SSO from customer identity providers. Need stateless authentication for scalability.",
+      options: [
+        "OAuth 2.0 with JWT",
+        "Session-based authentication",
+        "API keys only",
+      ],
+      rationale: "OAuth 2.0 supports SSO requirements. JWT enables stateless, scalable auth. Session-based would require shared session store. API keys insufficient for user auth.",
+    },
+  },
+];
+
 export default function DecisionLogGeneratorPage() {
   const [decision, setDecision] = useState("");
   const [context, setContext] = useState("");
@@ -108,7 +150,7 @@ ${new Date().toISOString().split("T")[0]}
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} initialInputs={{ decision, context, options, rationale }}>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ decision, context, options, rationale }}>
         <div className="space-y-4">
           <div>
             <label htmlFor="decision" className="block text-sm font-semibold text-slate-900">

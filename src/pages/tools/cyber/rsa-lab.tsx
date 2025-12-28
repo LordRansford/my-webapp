@@ -9,6 +9,21 @@ import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
 
 const contract = getToolContract("rsa-oaep");
 
+const examples = [
+  {
+    title: "Simple Demo (p=3, q=11, message=7)",
+    inputs: { p: 3, q: 11, message: "7" },
+  },
+  {
+    title: "Larger Primes (p=7, q=13, message=42)",
+    inputs: { p: 7, q: 13, message: "42" },
+  },
+  {
+    title: "Try Your Own (p=5, q=17, message=15)",
+    inputs: { p: 5, q: 17, message: "15" },
+  },
+];
+
 // Educational RSA implementation (small primes only)
 function modPow(base: number, exp: number, mod: number): number {
   let result = 1;
@@ -117,7 +132,7 @@ export default function RsaLabPage() {
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} initialInputs={{ p, q, message }}>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ p, q, message }}>
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>

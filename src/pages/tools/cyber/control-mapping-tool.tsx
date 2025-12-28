@@ -9,6 +9,33 @@ import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
 
 const contract = getToolContract("control-mapping-tool");
 
+const examples = [
+  {
+    title: "MFA Control → NIST CSF",
+    inputs: {
+      controlDescription: "Multi-factor authentication for all users",
+      framework: "NIST_CSF",
+      mapping: "PR.AC-7",
+    },
+  },
+  {
+    title: "Encryption Control → ISO 27001",
+    inputs: {
+      controlDescription: "Encryption at rest for sensitive data",
+      framework: "ISO_27001",
+      mapping: "A.10.1.1",
+    },
+  },
+  {
+    title: "Access Control → CIS Controls",
+    inputs: {
+      controlDescription: "Access control policies",
+      framework: "CIS_Controls",
+      mapping: "CIS 5.1",
+    },
+  },
+];
+
 const frameworkMappings: Record<string, Record<string, string>> = {
   NIST_CSF: {
     "Multi-factor authentication": "PR.AC-7",
@@ -84,7 +111,7 @@ export default function ControlMappingToolPage() {
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} initialInputs={{ controlDescription, framework, mapping }}>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ controlDescription, framework, mapping }}>
         <div className="space-y-4">
           <div>
             <label htmlFor="controlDescription" className="block text-sm font-semibold text-slate-900">

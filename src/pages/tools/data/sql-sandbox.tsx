@@ -32,6 +32,16 @@ LEFT JOIN orders o ON u.id = o.user_id
 GROUP BY u.id, u.name;`,
     },
   },
+  {
+    title: "Filter and Sort",
+    inputs: {
+      query: `SELECT name, email 
+FROM users 
+WHERE created_at > '2024-01-01'
+ORDER BY name ASC
+LIMIT 10;`,
+    },
+  },
 ];
 
 export default function SqlSandboxPage() {

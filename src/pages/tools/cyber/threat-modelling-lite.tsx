@@ -9,6 +9,74 @@ import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
 
 const contract = getToolContract("threat-modelling-lite");
 
+const examples = [
+  {
+    title: "E-Commerce API",
+    inputs: {
+      systemName: "Payment Processing API",
+      assets: [
+        "Customer payment data",
+        "Credit card numbers",
+        "User authentication tokens",
+        "Order information",
+      ],
+      trustBoundaries: [
+        "Public internet to API gateway",
+        "API gateway to payment service",
+        "Payment service to database",
+      ],
+      threats: [
+        "Man-in-the-middle attack intercepting payment data",
+        "SQL injection in order queries",
+        "Authentication token theft",
+        "DoS attack on payment endpoint",
+      ],
+    },
+  },
+  {
+    title: "User Authentication System",
+    inputs: {
+      systemName: "User Login Service",
+      assets: [
+        "User passwords (hashed)",
+        "Session tokens",
+        "User profile data",
+      ],
+      trustBoundaries: [
+        "Client browser to authentication server",
+        "Authentication server to database",
+      ],
+      threats: [
+        "Password brute force attack",
+        "Session hijacking",
+        "Credential stuffing",
+        "Phishing attacks",
+      ],
+    },
+  },
+  {
+    title: "File Upload System",
+    inputs: {
+      systemName: "Document Storage Service",
+      assets: [
+        "Uploaded documents",
+        "User metadata",
+        "Storage infrastructure",
+      ],
+      trustBoundaries: [
+        "User browser to upload endpoint",
+        "Upload endpoint to storage",
+      ],
+      threats: [
+        "Malicious file upload (malware)",
+        "Path traversal attack",
+        "Storage quota exhaustion",
+        "Unauthorized access to documents",
+      ],
+    },
+  },
+];
+
 export default function ThreatModellingLitePage() {
   const [systemName, setSystemName] = useState("");
   const [assets, setAssets] = useState<string[]>([""]);
@@ -99,7 +167,7 @@ ${strideThreats.map((t, i) => `${i + 1}. ${t}`).join("\n")}
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} initialInputs={{ systemName, assets, trustBoundaries, threats }}>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ systemName, assets, trustBoundaries, threats }}>
         <div className="space-y-6">
           <div>
             <label htmlFor="systemName" className="block text-sm font-semibold text-slate-900">

@@ -9,6 +9,82 @@ import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
 
 const contract = getToolContract("incident-postmortem-builder");
 
+const examples = [
+  {
+    title: "Database Outage Example",
+    inputs: {
+      title: "Production Database Outage",
+      dateTime: new Date(Date.now() - 86400000).toISOString().slice(0, 16),
+      impact: "Service unavailable for 2 hours, affecting 15,000 users",
+      timeline: [
+        "10:30 AM - Database connection pool exhausted",
+        "10:35 AM - Alert triggered, on-call engineer notified",
+        "10:45 AM - Identified runaway query consuming all connections",
+        "11:15 AM - Query killed, connection pool restored",
+        "11:30 AM - Service fully recovered",
+      ],
+      rootCauses: [
+        "Missing query timeout configuration",
+        "No connection pool monitoring alerts",
+        "Query optimization skipped during last release",
+      ],
+      actionItems: [
+        "Add query timeout of 30 seconds",
+        "Implement connection pool monitoring",
+        "Review and optimize slow queries in next sprint",
+      ],
+    },
+  },
+  {
+    title: "API Rate Limit Incident",
+    inputs: {
+      title: "Third-Party API Rate Limit Exceeded",
+      dateTime: new Date(Date.now() - 172800000).toISOString().slice(0, 16),
+      impact: "Payment processing delayed for 1 hour",
+      timeline: [
+        "2:00 PM - Payment API returns 429 errors",
+        "2:05 PM - Checked rate limit dashboard",
+        "2:10 PM - Identified burst of requests from retry logic",
+        "2:30 PM - Implemented exponential backoff",
+        "3:00 PM - All pending payments processed",
+      ],
+      rootCauses: [
+        "Aggressive retry logic without backoff",
+        "No rate limit monitoring",
+        "Missing circuit breaker pattern",
+      ],
+      actionItems: [
+        "Implement exponential backoff for retries",
+        "Add rate limit monitoring dashboard",
+        "Implement circuit breaker for external APIs",
+      ],
+    },
+  },
+  {
+    title: "Security Breach Exercise",
+    inputs: {
+      title: "Unauthorized Access Attempt",
+      dateTime: new Date().toISOString().slice(0, 16),
+      impact: "Attempted unauthorized access detected and blocked",
+      timeline: [
+        "9:00 AM - Unusual login patterns detected",
+        "9:05 AM - Security team notified",
+        "9:10 AM - Access blocked, user account suspended",
+        "9:15 AM - Logs reviewed, confirmed attack vector",
+      ],
+      rootCauses: [
+        "Weak password policy",
+        "No MFA enforcement for admin accounts",
+      ],
+      actionItems: [
+        "Enforce stronger password requirements",
+        "Require MFA for all admin accounts",
+        "Review access logs weekly",
+      ],
+    },
+  },
+];
+
 export default function IncidentPostMortemBuilderPage() {
   const [title, setTitle] = useState("");
   const [dateTime, setDateTime] = useState(new Date().toISOString().slice(0, 16));
@@ -83,7 +159,7 @@ ${validActionItems.length > 0 ? validActionItems.map((a, i) => `${i + 1}. ${a}`)
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} initialInputs={{ title, dateTime, impact, timeline, rootCauses, actionItems }}>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ title, dateTime, impact, timeline, rootCauses, actionItems }}>
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
