@@ -5,7 +5,7 @@ import DedicationBanner from "./DedicationBanner.client";
 import GamesCards from "./GamesCards.client";
 import LegacyGames from "./LegacyGames.client";
 import { GameHubTemplate } from "@/components/templates/PageTemplates";
-import ErrorBoundary from "@/components/notes/ErrorBoundary";
+import { ErrorBoundary } from "@/components/notes/ErrorBoundary";
 
 function GamesErrorFallback({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) {
   return (
