@@ -35,9 +35,9 @@ function GamesErrorFallback({ error, resetErrorBoundary }: { error: Error; reset
   );
 }
 
-export default function GamesHubPage() {
+export default function GamesPageClient() {
   return (
-    <GameHubTemplate>
+    <>
       <header className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -58,8 +58,7 @@ export default function GamesHubPage() {
       <ErrorBoundary FallbackComponent={GamesErrorFallback}>
         <LegacyGames />
       </ErrorBoundary>
-    </GameHubTemplate>
+    </>
   );
 }
-
 
