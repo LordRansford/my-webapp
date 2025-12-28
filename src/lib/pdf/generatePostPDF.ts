@@ -87,5 +87,6 @@ export async function generatePostPDF(
   });
 
   const pdfBytes = await pdfDoc.save();
-  return new Blob([pdfBytes.buffer], { type: "application/pdf" });
+  // Convert Uint8Array to Blob - pdfBytes is already compatible
+  return new Blob([pdfBytes as any], { type: "application/pdf" });
 }
