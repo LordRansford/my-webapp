@@ -40,7 +40,7 @@ const chip = (item) => (
   <Link
     key={item.label}
     href={item.href}
-    className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-2.5 text-xs sm:text-sm font-medium text-slate-700 ring-1 ring-slate-200 hover:bg-slate-200 active:bg-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 min-h-[44px] touch-manipulation"
+    className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-2 sm:px-3 sm:py-2.5 text-xs sm:text-sm font-medium text-slate-700 ring-1 ring-slate-200 hover:bg-slate-200 active:bg-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 min-h-[40px] sm:min-h-[44px] touch-manipulation flex-shrink-0"
     role="tab"
     aria-selected="false"
   >
@@ -64,8 +64,8 @@ export default function StudiosPage() {
   );
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-6 space-y-8 sm:px-6 sm:py-10 text-sm sm:text-base leading-relaxed">
-      <div className="rounded-3xl bg-gradient-to-br from-slate-50 via-emerald-50/50 to-slate-50 ring-1 ring-slate-100 px-4 py-5 sm:px-6 sm:py-6 md:px-8 md:py-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
+    <div className="mx-auto w-full max-w-5xl px-3 py-4 space-y-6 sm:px-4 sm:py-6 md:px-6 md:py-8 lg:px-8 lg:py-10 text-sm sm:text-base leading-relaxed overflow-x-hidden">
+      <div className="rounded-2xl sm:rounded-3xl bg-gradient-to-br from-slate-50 via-emerald-50/50 to-slate-50 ring-1 ring-slate-100 px-3 py-4 sm:px-4 sm:py-5 md:px-6 md:py-6 lg:px-8 lg:py-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
         <div className="flex flex-col gap-3">
           <div className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-emerald-700">
             <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700 ring-1 ring-slate-200">
@@ -74,10 +74,10 @@ export default function StudiosPage() {
             <span>Studios</span>
           </div>
           <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-slate-900">Studios and labs</h1>
-          <p className="text-sm sm:text-base text-slate-700 max-w-3xl leading-relaxed">
+          <p className="text-xs sm:text-sm md:text-base text-slate-700 max-w-3xl leading-relaxed">
             Studios are guided workspaces where you build a real project in small, safe steps. Labs are focused tools for drilling one skill.
           </p>
-          <div className="flex flex-wrap gap-2" role="tablist" aria-label="Studios navigation">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2 overflow-x-auto -mx-3 px-3 sm:mx-0 sm:px-0" role="tablist" aria-label="Studios navigation">
             {navChips.map((item) => chip(item))}
           </div>
         </div>
@@ -86,7 +86,7 @@ export default function StudiosPage() {
       <SecurityNotice />
       <SecurityBanner />
 
-      <section className="grid gap-6 md:grid-cols-2" aria-label="Core studios">
+      <section className="grid gap-4 sm:gap-6 md:grid-cols-2" aria-label="Core studios">
         <StudioCard>
           <header className="space-y-2">
             <div className="inline-flex items-center gap-2 rounded-2xl bg-slate-900 px-3 py-1 text-xs font-semibold text-white ring-1 ring-slate-900">
@@ -189,7 +189,7 @@ export default function StudiosPage() {
         </StudioCard>
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-2" aria-label="AI labs and specialist tools">
+      <section className="grid gap-4 sm:gap-6 xl:grid-cols-2" aria-label="AI labs and specialist tools">
         {/* AI Control Room */}
         <StudioCard>
           <header className="space-y-2">
