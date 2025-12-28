@@ -26,11 +26,11 @@ const chip = (item) => (
   <Link
     key={item.label}
     href={item.href}
-    className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 ring-1 ring-slate-200 hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
+    className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-2.5 text-xs sm:text-sm font-medium text-slate-700 ring-1 ring-slate-200 hover:bg-slate-200 active:bg-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 min-h-[44px] touch-manipulation"
     role="tab"
     aria-selected="false"
   >
-    {item.label}
+    <span className="whitespace-nowrap">{item.label}</span>
   </Link>
 );
 
@@ -50,17 +50,17 @@ export default function StudiosPage() {
   );
 
   return (
-    <div className="page-content space-y-10 text-base leading-relaxed max-w-5xl mx-auto">
-      <div className="rounded-3xl bg-gradient-to-br from-slate-50 via-emerald-50/50 to-slate-50 ring-1 ring-slate-100 px-6 py-6 sm:px-8 sm:py-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
+    <div className="mx-auto w-full max-w-5xl px-4 py-6 space-y-8 sm:px-6 sm:py-10 text-sm sm:text-base leading-relaxed">
+      <div className="rounded-3xl bg-gradient-to-br from-slate-50 via-emerald-50/50 to-slate-50 ring-1 ring-slate-100 px-4 py-5 sm:px-6 sm:py-6 md:px-8 md:py-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
         <div className="flex flex-col gap-3">
-          <div className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700">
+          <div className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-emerald-700">
             <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700 ring-1 ring-slate-200">
               New
             </span>
             <span>Studios</span>
           </div>
-          <h1 className="text-3xl font-semibold text-slate-900">Studios and labs</h1>
-          <p className="text-base text-slate-700 max-w-3xl">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-slate-900">Studios and labs</h1>
+          <p className="text-sm sm:text-base text-slate-700 max-w-3xl leading-relaxed">
             Studios are guided workspaces where you build a real project in small, safe steps. Labs are focused tools for drilling one skill.
           </p>
           <div className="flex flex-wrap gap-2" role="tablist" aria-label="Studios navigation">

@@ -59,27 +59,29 @@ export default function DevStudiosPage() {
   }, [router.isReady, router.query.tab]);
 
   return (
-    <div className="page-content max-w-6xl mx-auto space-y-8">
-      <div className="rounded-3xl bg-gradient-to-br from-slate-50 via-sky-50/60 to-slate-50 ring-1 ring-slate-100 px-6 py-6 sm:px-8 sm:py-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] space-y-3">
+    <div className="mx-auto w-full max-w-6xl px-4 py-6 space-y-6 sm:px-6 sm:py-8 md:space-y-8">
+      <div className="rounded-3xl bg-gradient-to-br from-slate-50 via-sky-50/60 to-slate-50 ring-1 ring-slate-100 px-4 py-5 sm:px-6 sm:py-6 md:px-8 md:py-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] space-y-3">
         <div className="inline-flex items-center gap-2 rounded-2xl bg-slate-900 text-white px-3 py-1 text-xs font-semibold">
           New
-          <span aria-hidden="true">·</span> Ransford&apos;s Software Development Studio
+          <span aria-hidden="true" className="hidden sm:inline">·</span>
+          <span className="hidden sm:inline">Ransford&apos;s Software Development Studio</span>
+          <span className="sm:hidden">Dev Studio</span>
         </div>
-        <h1 className="text-3xl font-semibold text-slate-900">Ransford&apos;s Software Development Studio</h1>
-        <p className="text-base text-slate-700 max-w-3xl leading-relaxed">
-          This is my workshop for shipping software safely. We sketch systems, pick stacks, check security, and get friendly nudges from a local “agent”. No cloud calls, no telemetry. Just guidance, templates and checklists that behave.
+        <h1 className="text-2xl sm:text-3xl font-semibold text-slate-900">Ransford&apos;s Software Development Studio</h1>
+        <p className="text-sm sm:text-base text-slate-700 max-w-3xl leading-relaxed">
+          This is my workshop for shipping software safely. We sketch systems, pick stacks, check security, and get friendly nudges from a local "agent". No cloud calls, no telemetry. Just guidance, templates and checklists that behave.
         </p>
-        <div className="flex flex-wrap items-center gap-2 text-sm">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-2 text-xs sm:text-sm">
           <Link href="/studios" className="font-semibold text-emerald-700 hover:underline">
             Back to studios hub
           </Link>
-          <span className="text-slate-300" aria-hidden="true">
+          <span className="hidden sm:inline text-slate-300" aria-hidden="true">
             |
           </span>
           <Link href="/software-architecture" className="font-semibold text-emerald-700 hover:underline">
             Back to software architecture notes
           </Link>
-          <span className="text-slate-300" aria-hidden="true">
+          <span className="hidden sm:inline text-slate-300" aria-hidden="true">
             |
           </span>
           <Link href="/cybersecurity" className="font-semibold text-emerald-700 hover:underline">
@@ -91,10 +93,10 @@ export default function DevStudiosPage() {
       <SecurityNotice />
       <SecurityBanner />
 
-      <section aria-label="Studio map" className="rounded-3xl bg-white ring-1 ring-slate-100 shadow-[0_12px_30px_rgba(15,23,42,0.06)] p-6 space-y-4">
+      <section aria-label="Studio map" className="rounded-3xl bg-white ring-1 ring-slate-100 shadow-[0_12px_30px_rgba(15,23,42,0.06)] p-4 sm:p-6 space-y-4">
         <div className="space-y-1">
           <p className="text-sm font-semibold text-slate-900">Studio map</p>
-          <p className="text-sm text-slate-700 max-w-3xl">
+          <p className="text-xs sm:text-sm text-slate-700 max-w-3xl">
             Jump straight to a lab. The URL updates, so you can share a specific view with learners or teammates.
           </p>
         </div>
@@ -106,15 +108,15 @@ export default function DevStudiosPage() {
                 key={t.id}
                 type="button"
                 onClick={() => selectTab(t.id)}
-                className={`rounded-2xl border px-4 py-3 text-left text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 ${
+                className={`rounded-2xl border px-3 py-3 sm:px-4 text-left text-xs sm:text-sm font-semibold transition min-h-[44px] touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 ${
                   activeTab === t.id
                     ? "border-slate-900 bg-slate-900 text-white"
-                    : "border-slate-200 bg-white text-slate-900 hover:bg-slate-50"
+                    : "border-slate-200 bg-white text-slate-900 hover:bg-slate-50 active:bg-slate-100"
                 }`}
               >
                 <div className="flex items-center justify-between gap-3">
-                  <span className="min-w-0 break-words">{t.label}</span>
-                  <span className="text-xs opacity-80">{activeTab === t.id ? "Open" : "Go"}</span>
+                  <span className="min-w-0 break-words flex-1">{t.label}</span>
+                  <span className="text-xs opacity-80 flex-shrink-0">{activeTab === t.id ? "Open" : "Go"}</span>
                 </div>
               </button>
             ))}
@@ -122,15 +124,15 @@ export default function DevStudiosPage() {
       </section>
 
       <section aria-labelledby="guided-journeys-title" className="space-y-3">
-        <div className="rounded-3xl bg-white ring-1 ring-slate-100 shadow-[0_12px_30px_rgba(15,23,42,0.06)] p-6 space-y-3">
-          <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-            <span className="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-3 py-1 text-xs font-semibold text-white">New</span>
+        <div className="rounded-3xl bg-white ring-1 ring-slate-100 shadow-[0_12px_30px_rgba(15,23,42,0.06)] p-4 sm:p-6 space-y-3">
+          <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-900">
+            <span className="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-2.5 py-1 sm:px-3 text-xs font-semibold text-white">New</span>
             <span>Guided journeys</span>
           </div>
-          <p id="guided-journeys-title" className="text-lg font-semibold text-slate-900">
+          <p id="guided-journeys-title" className="text-base sm:text-lg font-semibold text-slate-900">
             Walk BookTrack through the core labs
           </p>
-          <p className="text-sm text-slate-700">
+          <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
             Two guided runs for BookTrack. They are text-only, local-only, and point you at the existing labs so you can feel how architecture, backend, frontend, and
             delivery connect.
           </p>
@@ -143,14 +145,14 @@ export default function DevStudiosPage() {
                 content: (
                   <div className="space-y-4 text-sm text-slate-800">
                     <div className="space-y-1">
-                      <h3 className="text-base font-semibold text-slate-900">Who this is for</h3>
+                      <h3 className="text-sm sm:text-base font-semibold text-slate-900">Who this is for</h3>
                       <p>
                         Someone who wants to walk through the whole studio once and see how architecture, backend, frontend and delivery fit together for a small but real
                         product.
                       </p>
                     </div>
                     <div className="space-y-1">
-                      <h3 className="text-base font-semibold text-slate-900">Outcome</h3>
+                      <h3 className="text-sm sm:text-base font-semibold text-slate-900">Outcome</h3>
                       <ul className="list-disc pl-5 space-y-1">
                         <li>A clear BookTrack architecture with a few recorded decisions.</li>
                         <li>A simple but realistic API design with security and error behaviour.</li>
@@ -160,7 +162,7 @@ export default function DevStudiosPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <h3 className="text-base font-semibold text-slate-900">Step 1. Frame the system in Architecture Lab</h3>
+                      <h3 className="text-sm sm:text-base font-semibold text-slate-900">Step 1. Frame the system in Architecture Lab</h3>
                       <ol className="list-decimal pl-5 space-y-1">
                         <li>Open Architecture Lab.</li>
                         <li>
@@ -193,13 +195,13 @@ export default function DevStudiosPage() {
                           </ul>
                         </li>
                       </ol>
-                      <p className="italic text-slate-700">
+                      <p className="italic text-xs sm:text-sm text-slate-700">
                         Reflection: If this design fails in production, where will it fail first and what can you do now to make that failure graceful instead of dramatic?
                       </p>
                     </div>
 
                     <div className="space-y-2">
-                      <h3 className="text-base font-semibold text-slate-900">Step 2. Make the API feel real in Backend &amp; API Lab</h3>
+                      <h3 className="text-sm sm:text-base font-semibold text-slate-900">Step 2. Make the API feel real in Backend &amp; API Lab</h3>
                       <ol className="list-decimal pl-5 space-y-1">
                         <li>Open Backend &amp; API Lab.</li>
                         <li>
@@ -229,13 +231,13 @@ export default function DevStudiosPage() {
                         </li>
                         <li>Tick any relevant items in the Backend checklist once you feel you understand why they matter.</li>
                       </ol>
-                      <p className="italic text-slate-700">
+                      <p className="italic text-xs sm:text-sm text-slate-700">
                         Reflection: If someone abuses this API, which three logs would you want to see first and why?
                       </p>
                     </div>
 
                     <div className="space-y-2">
-                      <h3 className="text-base font-semibold text-slate-900">Step 3. Shape the experience in Frontend Lab</h3>
+                      <h3 className="text-sm sm:text-base font-semibold text-slate-900">Step 3. Shape the experience in Frontend Lab</h3>
                       <ol className="list-decimal pl-5 space-y-1">
                         <li>Open Frontend Lab.</li>
                         <li>
@@ -268,13 +270,13 @@ export default function DevStudiosPage() {
                         </li>
                         <li>Read the What could go wrong callout and identify one risk that your own projects have probably had before.</li>
                       </ol>
-                      <p className="italic text-slate-700">
+                      <p className="italic text-xs sm:text-sm text-slate-700">
                         Reflection: If the API is slow or fails, what will the user actually see and remember about your product in that moment?
                       </p>
                     </div>
 
                     <div className="space-y-2">
-                      <h3 className="text-base font-semibold text-slate-900">Step 4. Plan a safe release in Delivery &amp; Ops Lab</h3>
+                      <h3 className="text-sm sm:text-base font-semibold text-slate-900">Step 4. Plan a safe release in Delivery &amp; Ops Lab</h3>
                       <ol className="list-decimal pl-5 space-y-1">
                         <li>Open Delivery &amp; Ops Lab.</li>
                         <li>
@@ -299,7 +301,7 @@ export default function DevStudiosPage() {
                         </li>
                         <li>Read the Incident drill teaser and decide which part of your design from Step 1 would help you respond fastest.</li>
                       </ol>
-                      <p className="italic text-slate-700">
+                      <p className="italic text-xs sm:text-sm text-slate-700">
                         Reflection: Something will always go wrong. Did you design BookTrack so that it fails loudly and clearly, or silently and expensively?
                       </p>
                     </div>
@@ -312,7 +314,7 @@ export default function DevStudiosPage() {
                 content: (
                   <div className="space-y-4 text-sm text-slate-800">
                     <div className="space-y-1">
-                      <h3 className="text-base font-semibold text-slate-900">Outcome</h3>
+                      <h3 className="text-sm sm:text-base font-semibold text-slate-900">Outcome</h3>
                       <ul className="list-disc pl-5 space-y-1">
                         <li>Stress tested their architecture for peak load.</li>
                         <li>Tightened API behaviours under pressure.</li>
@@ -322,7 +324,7 @@ export default function DevStudiosPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <h3 className="text-base font-semibold text-slate-900">Step 1. Stress the design in Architecture Lab</h3>
+                      <h3 className="text-sm sm:text-base font-semibold text-slate-900">Step 1. Stress the design in Architecture Lab</h3>
                       <ol className="list-decimal pl-5 space-y-1">
                         <li>In Architecture Lab, imagine BookTrack is being promoted by a big influencer tomorrow.</li>
                         <li>
@@ -350,7 +352,7 @@ export default function DevStudiosPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <h3 className="text-base font-semibold text-slate-900">Step 2. Hard mode for the API</h3>
+                      <h3 className="text-sm sm:text-base font-semibold text-slate-900">Step 2. Hard mode for the API</h3>
                       <ol className="list-decimal pl-5 space-y-1">
                         <li>In Backend &amp; API Lab, treat every request as if it might be part of a flood.</li>
                         <li>
@@ -373,7 +375,7 @@ export default function DevStudiosPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <h3 className="text-base font-semibold text-slate-900">Step 3. Hard mode for the frontend</h3>
+                      <h3 className="text-sm sm:text-base font-semibold text-slate-900">Step 3. Hard mode for the frontend</h3>
                       <ol className="list-decimal pl-5 space-y-1">
                         <li>In Frontend Lab, switch to mobile view again.</li>
                         <li>
@@ -396,7 +398,7 @@ export default function DevStudiosPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <h3 className="text-base font-semibold text-slate-900">Step 4. Release with a safety net</h3>
+                      <h3 className="text-sm sm:text-base font-semibold text-slate-900">Step 4. Release with a safety net</h3>
                       <ol className="list-decimal pl-5 space-y-1">
                         <li>In Delivery &amp; Ops Lab, imagine this is a high risk release.</li>
                         <li>
@@ -418,16 +420,16 @@ export default function DevStudiosPage() {
                 <div key={journey.id} className="rounded-2xl border border-slate-100 bg-slate-50/70">
                   <button
                     type="button"
-                    className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm font-semibold text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
+                    className="flex w-full items-center justify-between gap-3 px-3 py-3 sm:px-4 text-left text-xs sm:text-sm font-semibold text-slate-900 min-h-[44px] touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 active:bg-slate-100/50"
                     aria-expanded={isOpen}
                     aria-controls={`${journey.id}-panel`}
                     onClick={() => setOpenJourney(isOpen ? null : journey.id)}
                   >
-                    <span>{journey.title}</span>
-                    <span className="text-xs text-slate-600">{isOpen ? "Hide" : "Show"}</span>
+                    <span className="flex-1 min-w-0 pr-2">{journey.title}</span>
+                    <span className="text-xs text-slate-600 flex-shrink-0">{isOpen ? "Hide" : "Show"}</span>
                   </button>
                   {isOpen && (
-                    <div id={`${journey.id}-panel`} className="border-t border-slate-100 px-4 py-3">
+                    <div id={`${journey.id}-panel`} className="border-t border-slate-100 px-3 py-3 sm:px-4 overflow-x-auto">
                       {journey.content}
                     </div>
                   )}
@@ -438,8 +440,8 @@ export default function DevStudiosPage() {
         </div>
       </section>
 
-      <div className="overflow-x-auto">
-        <div className="flex min-w-full gap-2" role="tablist" aria-label="Development Studios">
+      <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+        <div className="flex gap-2 min-w-max sm:min-w-0 sm:flex-wrap" role="tablist" aria-label="Development Studios">
           {tabs.filter((t) => t.id !== "agent").map((tab) => (
             <button
               key={tab.id}
@@ -447,13 +449,13 @@ export default function DevStudiosPage() {
               aria-selected={activeTab === tab.id}
               aria-controls={`panel-${tab.id}`}
               onClick={() => selectTab(tab.id)}
-              className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 ${
+              className={`flex-shrink-0 rounded-full border px-3 py-2.5 sm:px-4 text-xs sm:text-sm font-semibold transition min-h-[44px] touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 ${
                 activeTab === tab.id
                   ? "bg-slate-900 text-white border-slate-900"
-                  : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
+                  : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50 active:bg-slate-100"
               }`}
             >
-              {tab.label}
+              <span className="whitespace-nowrap">{tab.label}</span>
             </button>
           ))}
         </div>

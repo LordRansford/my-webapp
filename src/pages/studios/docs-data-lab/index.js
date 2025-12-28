@@ -323,12 +323,12 @@ export default function DocsDataLabPage() {
   };
 
   return (
-    <div className="page-content space-y-8">
-      <div className="rounded-3xl bg-white p-6 sm:p-8 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-3">
+    <div className="mx-auto w-full max-w-5xl px-4 py-6 space-y-6 sm:px-6 sm:py-8 md:space-y-8">
+      <div className="rounded-3xl bg-white p-4 sm:p-6 md:p-8 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-3">
         <div className="inline-flex items-center gap-2 rounded-2xl bg-purple-50 px-3 py-1 text-xs font-semibold text-purple-800 ring-1 ring-purple-100">
           Docs &amp; Data Lab
         </div>
-        <h1 className="text-2xl sm:text-3xl font-semibold text-slate-900">Docs &amp; Data Lab</h1>
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-slate-900">Docs &amp; Data Lab</h1>
         <p className="text-sm text-slate-700 max-w-3xl">
           This is the reading room. Feed it PDFs, Word files and tables, see what structure the machine finds and build a tiny search
           index so you can question your own documents.
@@ -340,10 +340,10 @@ export default function DocsDataLabPage() {
       {/* 1. Upload and inspect documents */}
       <section
         id="upload-inspect"
-        className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
+        className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
       >
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="text-lg font-semibold text-slate-900">1. Upload and inspect documents</h2>
+          <h2 className="text-base sm:text-lg font-semibold text-slate-900">1. Upload and inspect documents</h2>
           <label className="cursor-pointer rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:border-sky-300 hover:text-sky-700">
             <input
               type="file"
@@ -461,9 +461,9 @@ export default function DocsDataLabPage() {
       {/* 2. Text and entity explorer */}
       <section
         id="text-entities"
-        className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
+        className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
       >
-        <h2 className="text-lg font-semibold text-slate-900">2. Text and entity explorer</h2>
+        <h2 className="text-base sm:text-lg font-semibold text-slate-900">2. Text and entity explorer</h2>
         {!selectedDoc && <p className="text-sm text-slate-600">Upload and select a document first.</p>}
         {selectedDoc && selectedStats && (
           <div className="space-y-4">
@@ -512,12 +512,12 @@ export default function DocsDataLabPage() {
       <section
         id="retrieval"
         ref={indexSectionRef}
-        className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
+        className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
       >
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">3. Build a retrieval index</h2>
-            <p className="text-sm text-slate-700">Select documents, build a tiny index, then ask questions against your own content.</p>
+            <h2 className="text-base sm:text-lg font-semibold text-slate-900">3. Build a retrieval index</h2>
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">Select documents, build a tiny index, then ask questions against your own content.</p>
           </div>
           <button
             onClick={buildIndex}
@@ -600,10 +600,10 @@ export default function DocsDataLabPage() {
       {/* 4. Schema and field mapper */}
       <section
         id="schema-mapper"
-        className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
+        className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
       >
-        <h2 className="text-lg font-semibold text-slate-900">4. Schema and field mapper</h2>
-        <p className="text-sm text-slate-700">
+        <h2 className="text-base sm:text-lg font-semibold text-slate-900">4. Schema and field mapper</h2>
+        <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
           Paste two sets of headers or keys. We will suggest simple matches to show how schema alignment feels in integration work.
         </p>
         <div className="grid gap-4 lg:grid-cols-2">
@@ -649,7 +649,7 @@ export default function DocsDataLabPage() {
           </div>
           <div className="rounded-2xl border border-slate-100 bg-slate-50/60 p-3 text-sm text-slate-800">
             <p className="text-xs font-semibold text-slate-900 mb-1">How to use this</p>
-            <p className="text-sm text-slate-700">
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
               This is a sketch of schema alignment. Adjust field names and confirm mappings manually. Unmapped fields highlight gaps to
               address before integration.
             </p>
@@ -660,12 +660,12 @@ export default function DocsDataLabPage() {
       {/* 5. Recent docs runs */}
       <section
         id="docs-runs"
-        className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
+        className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
       >
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">5. Recent docs runs</h2>
-            <p className="text-sm text-slate-700">Latest index builds and document actions. Open Control Room for the full view.</p>
+            <h2 className="text-base sm:text-lg font-semibold text-slate-900">5. Recent docs runs</h2>
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">Latest index builds and document actions. Open Control Room for the full view.</p>
           </div>
           <Link href="/studios" className="text-xs font-semibold text-emerald-700 hover:underline">
             Open Control Room

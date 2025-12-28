@@ -197,13 +197,13 @@ export default function SpeechLabPage() {
   };
 
   return (
-    <div className="page-content space-y-8">
-      <div className="rounded-3xl bg-white p-6 sm:p-8 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-3">
+    <div className="mx-auto w-full max-w-5xl px-4 py-6 space-y-6 sm:px-6 sm:py-8 md:space-y-8">
+      <div className="rounded-3xl bg-white p-4 sm:p-6 md:p-8 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-3">
         <div className="inline-flex items-center gap-2 rounded-2xl bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-800 ring-1 ring-indigo-100">
           Speech & Sound Lab
         </div>
-        <h1 className="text-2xl sm:text-3xl font-semibold text-slate-900">Speech and Sound Lab</h1>
-        <p className="text-sm text-slate-700 max-w-3xl">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-slate-900">Speech and Sound Lab</h1>
+        <p className="text-xs sm:text-sm text-slate-700 max-w-3xl leading-relaxed">
           This is the sound room. Record short clips, turn speech into text, let text talk back, and get a feel for emotion and timing
           in real audio.
         </p>
@@ -214,12 +214,12 @@ export default function SpeechLabPage() {
       {/* 1. Record or upload audio */}
       <section
         id="record-upload"
-        className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
+        className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
       >
-        <h2 className="text-lg font-semibold text-slate-900">1. Record or upload audio</h2>
+        <h2 className="text-base sm:text-lg font-semibold text-slate-900">1. Record or upload audio</h2>
         <div className="grid gap-4 lg:grid-cols-2">
           <div className="space-y-2">
-            <p className="text-sm text-slate-700">
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
               Keep clips short - think thirty seconds, not a podcast. Everything stays in your browser by default so you can experiment safely.
             </p>
             {!recorderSupported && (
@@ -263,12 +263,12 @@ export default function SpeechLabPage() {
       {/* 2. Speech to text timeline */}
       <section
         id="speech-to-text"
-        className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
+        className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
       >
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">2. Speech to text timeline</h2>
-            <p className="text-sm text-slate-700">Transcribe your current clip and view a simple timeline of segments.</p>
+            <h2 className="text-base sm:text-lg font-semibold text-slate-900">2. Speech to text timeline</h2>
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">Transcribe your current clip and view a simple timeline of segments.</p>
           </div>
           <button
             onClick={handleTranscribe}
@@ -331,10 +331,10 @@ export default function SpeechLabPage() {
       {/* 3. Text to speech voice box */}
       <section
         id="tts"
-        className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
+        className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
       >
-        <h2 className="text-lg font-semibold text-slate-900">3. Text to speech voice box</h2>
-        <p className="text-sm text-slate-700">Type a short sentence, pick a voice style, and let the browser read it aloud.</p>
+        <h2 className="text-base sm:text-lg font-semibold text-slate-900">3. Text to speech voice box</h2>
+        <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">Type a short sentence, pick a voice style, and let the browser read it aloud.</p>
         <textarea
           value={ttsText}
           onChange={(e) => setTtsText(e.target.value)}
@@ -366,10 +366,10 @@ export default function SpeechLabPage() {
       {/* 4. Emotion and sentiment sketch */}
       <section
         id="sentiment"
-        className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
+        className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
       >
-        <h2 className="text-lg font-semibold text-slate-900">4. Emotion and sentiment sketch</h2>
-        <p className="text-sm text-slate-700">
+        <h2 className="text-base sm:text-lg font-semibold text-slate-900">4. Emotion and sentiment sketch</h2>
+        <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
           A lightweight text-based view of how your transcript feels. This is for intuition, not production safety analysis.
         </p>
         {!segments.length && <p className="text-sm text-slate-600">Transcribe a clip first to see sentiment.</p>}
@@ -403,12 +403,12 @@ export default function SpeechLabPage() {
       {/* 5. Recent speech runs */}
       <section
         id="speech-runs"
-        className="rounded-3xl bg-white p-6 sm:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
+        className="rounded-3xl bg-white p-4 sm:p-6 md:p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-4"
       >
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">5. Recent speech runs</h2>
-            <p className="text-sm text-slate-700">Your latest transcriptions appear here. Open Control Room for the full list.</p>
+            <h2 className="text-base sm:text-lg font-semibold text-slate-900">5. Recent speech runs</h2>
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">Your latest transcriptions appear here. Open Control Room for the full list.</p>
           </div>
           <Link href="/studios" className="text-xs font-semibold text-emerald-700 hover:underline">
             Open Control Room
