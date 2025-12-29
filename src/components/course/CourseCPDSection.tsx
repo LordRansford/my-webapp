@@ -6,6 +6,7 @@ import SectionHeader from "./SectionHeader";
 interface CourseCPDSectionProps {
   title?: string;
   subtitle?: string;
+  emoji?: string;
   description?: string;
   trackHref?: string;
   evidenceHref?: string;
@@ -19,6 +20,7 @@ interface CourseCPDSectionProps {
 export default function CourseCPDSection({
   title = "CPD",
   subtitle,
+  emoji = "📚",
   description = "Log minutes as you study and practise. Your records stay in this browser. Use the export view when you need a clean summary for your CPD system.",
   trackHref = "/my-cpd",
   evidenceHref = "/my-cpd/evidence",
@@ -26,7 +28,7 @@ export default function CourseCPDSection({
 }: CourseCPDSectionProps) {
   return (
     <section className={`course-section-spacing ${className}`}>
-      <SectionHeader subtitle={subtitle}>{title}</SectionHeader>
+      <SectionHeader variant="content" emoji={emoji} subtitle={subtitle}>{title}</SectionHeader>
       <p className="course-body-text text-base text-slate-800 dark:text-slate-300">
         {description}
       </p>

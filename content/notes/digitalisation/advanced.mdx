@@ -13,6 +13,9 @@ import QuizBlock from "@/components/notes/QuizBlock"
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
+import SectionHeader from "@/components/course/SectionHeader"
+import SubsectionHeader from "@/components/course/SubsectionHeader"
+import BodyText from "@/components/course/BodyText"
 import { digitalisationSectionManifest } from "@/lib/digitalisationSections"
 
 import DigitalisationDashboard from "@/components/dashboards/DigitalisationDashboard"
@@ -31,13 +34,17 @@ import ScenarioSimulator from "@/components/notes/tools/digitalisation/advanced/
 
 <CPDTracker courseId="digitalisation" levelId="practice-strategy" estimatedHours={12} />
 
-This page assumes the foundations from Beginner and the design mindset from Intermediate. At the advanced level, digitalisation moves from one organisation to ecosystems, regulation, shared platforms, and long-term stewardship.
+<BodyText>
+  This page assumes the foundations from Beginner and the design mindset from Intermediate. At the advanced level, digitalisation moves from one organisation to ecosystems, regulation, shared platforms, and long-term stewardship.
+</BodyText>
 
 <PageNav prevHref="/digitalisation/intermediate" prevLabel="Intermediate" nextHref="/digitalisation/summary" nextLabel="Summary" showTop showBottom />
 
 ---
 
-## From organisation to ecosystem
+<SectionHeader variant="content" emoji="🌐" id="organisation-to-ecosystem">
+  From organisation to ecosystem
+</SectionHeader>
 
 <SectionProgressToggle courseId="digitalisation" levelId="practice-strategy" sectionId="dig-advanced-ecosystems-and-standards" />
 
@@ -58,7 +65,9 @@ Advanced digitalisation is about shaping and surviving in a digital ecosystem, n
 
 ---
 
-## Regulation, policy, and trust
+<SectionHeader variant="content" emoji="⚖️" id="regulation-policy">
+  Regulation, policy, and trust
+</SectionHeader>
 
 <SectionProgressToggle courseId="digitalisation" levelId="practice-strategy" sectionId="dig-advanced-governance-and-operating-models" />
 
@@ -85,7 +94,9 @@ If digitalisation reduces trust, it will eventually be stopped by politics, regu
 
 ---
 
-## Interoperability and cross-border thinking
+<SectionHeader variant="content" emoji="🔗" id="interoperability">
+  Interoperability and cross-border thinking
+</SectionHeader>
 
 <SectionProgressToggle courseId="digitalisation" levelId="practice-strategy" sectionId="dig-advanced-strategy-and-roadmaps" />
 
@@ -104,7 +115,9 @@ Cross-border digitalisation adds data localisation rules, transfer mechanisms, c
 
 ---
 
-## Funding models and economic reality
+<SectionHeader variant="content" emoji="💰" id="funding-models">
+  Funding models and economic reality
+</SectionHeader>
 
 Ambitious digitalisation needs realistic funding. The funding model is an architectural choice: project funding versus product and platform funding, central versus distributed investment, and charging models for platforms and data.
 
@@ -121,7 +134,9 @@ If funding is entirely project based, platforms decay. If funding is entirely ce
 
 ---
 
-## Risk, resilience, and learning from failure
+<SectionHeader variant="content" emoji="⚠️" id="risk-resilience">
+  Risk, resilience, and learning from failure
+</SectionHeader>
 
 At this level we assume things will go wrong: systems fail, partners are compromised, regulations change, and some projects miss targets. The question is how we design for resilience and how we learn.
 
@@ -138,7 +153,9 @@ Incidents become data, not embarrassment: record and analyse them, share lessons
 
 ---
 
-## Stewardship and long-term digital health
+<SectionHeader variant="content" emoji="🌱" id="stewardship">
+  Stewardship and long-term digital health
+</SectionHeader>
 
 <SectionProgressToggle courseId="digitalisation" levelId="practice-strategy" sectionId="dig-advanced-long-term-challenges" />
 
@@ -158,7 +175,9 @@ Dashboards like this become part of stewardship: they show patterns, slow declin
 
 ---
 
-## Practice and reflection
+<SectionHeader variant="practice" emoji="🛠️" id="practice-reflection">
+  Practice and reflection
+</SectionHeader>
 
 <ToolCard title="Ecosystem scenario simulator" description="Choose a digital ecosystem scenario, adjust regulation, funding, platform choices, and risk appetite, and see how outcomes change.">
 <ScenarioSimulator mode="ecosystem" />

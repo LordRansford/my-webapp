@@ -92,6 +92,7 @@ export default function DataHub() {
         <section id="path">
           <CoursePathSection
             title="Core path"
+            emoji="📊"
             levels={corePath}
           />
         </section>
@@ -100,6 +101,7 @@ export default function DataHub() {
           <CourseResourcesSection
             title="Further practice"
             subtitle="Hands-on labs and tools to make data concepts concrete."
+            emoji="🛠️"
             toolsHref="/tools"
           />
         </section>

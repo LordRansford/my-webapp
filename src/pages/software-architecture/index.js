@@ -115,6 +115,7 @@ export default function ArchitectureHub() {
         <section id="path">
           <CoursePathSection
             title="Core path"
+            emoji="🏗️"
             levels={corePath}
           />
         </section>
@@ -123,6 +124,7 @@ export default function ArchitectureHub() {
           <CourseResourcesSection
             title="Further practice"
             subtitle="Dashboards and labs to make latency, availability, and trade-offs concrete."
+            emoji="🛠️"
             dashboardHref="/dashboards/architecture"
           />
         </section>
@@ -130,6 +132,7 @@ export default function ArchitectureHub() {
         <section id="capstones">
           <CourseCapstonesSection
             title="Capstones"
+            emoji="🏗️"
             capstones={capstones}
           />
         </section>

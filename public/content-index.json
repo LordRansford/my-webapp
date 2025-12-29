@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-12-29T05:22:39.722Z",
+  "generatedAt": "2025-12-29T09:31:11.587Z",
   "pages": [
     {
       "route": "/courses/ai/advanced",
@@ -316,44 +316,7 @@
       "route": "/courses/data/advanced",
       "title": "Data Advanced",
       "sourcePath": "/content/courses/data/advanced.mdx",
-      "sections": [
-        {
-          "depth": 2,
-          "title": "Mathematical foundations of data systems",
-          "anchor": "mathematical-foundations-of-data-systems",
-          "excerpt": "Maths in data systems describes patterns, uncertainty, and change. Abstraction turns messy reality into numbers we can reason about. At small scale numbers feel friendly. At large scale tiny errors compound and variation matters more than single values."
-        },
-        {
-          "depth": 2,
-          "title": "Data models and abstraction at scale",
-          "anchor": "data-models-and-abstraction-at-scale",
-          "excerpt": "Models are simplified representations of reality. They exist so teams can agree on how data fits together. Abstraction hides detail to make systems manageable. The risk is that hidden detail was needed for a decision you care about."
-        },
-        {
-          "depth": 2,
-          "title": "Advanced analytics and inference",
-          "anchor": "advanced-analytics-and-inference",
-          "excerpt": "Inference is about drawing conclusions while admitting uncertainty. Correlation means two things move together; causation means one affects the other. Mistaking correlation for causation leads to confident but wrong decisions."
-        },
-        {
-          "depth": 2,
-          "title": "Data platforms and distributed systems",
-          "anchor": "data-platforms-and-distributed-systems",
-          "excerpt": "Data systems distribute to handle scale and resilience. Latency is the time it takes to respond. Consistency is how aligned copies of data are. Failures are normal in distributed systems, so we plan for them instead of hoping they do not happen."
-        },
-        {
-          "depth": 2,
-          "title": "Governance, regulation and accountability",
-          "anchor": "governance-regulation-and-accountability",
-          "excerpt": "Regulation exists to protect people and markets. Accountability means someone can explain what data is used, why, and with what safeguards. Auditability means we can trace who did what and when. These are not just legal boxes; they build trust with users and stakeholders."
-        },
-        {
-          "depth": 2,
-          "title": "Data as a strategic and economic asset",
-          "anchor": "data-as-a-strategic-and-economic-asset",
-          "excerpt": "Data creates value when it improves decisions, products, and relationships. Network effects appear when sharing makes each participant better off. Competitive advantage comes from combining quality data with disciplined execution, not from hoarding alone."
-        }
-      ]
+      "sections": []
     },
     {
       "route": "/courses/data/course",
@@ -405,64 +368,10 @@
       "sourcePath": "/content/courses/data/foundations.mdx",
       "sections": [
         {
-          "depth": 2,
-          "title": "What data is and why it matters",
-          "anchor": "what-data-is-and-why-it-matters",
-          "excerpt": "Data starts as recorded observations: numbers on a meter, text in a form, or pixels in a photo. When we add structure it becomes information that people can read. When we apply it to decisions it becomes knowledge. Data existed long before computers: bank ledgers, census books, medical charts. Modern systems are data driven because every click, sensor, and t"
-        },
-        {
-          "depth": 2,
-          "title": "Data representation and formats",
-          "anchor": "data-representation-and-formats",
-          "excerpt": "Computers store everything using bits (binary digits) because hardware can reliably tell two states apart. A byte is eight bits, which can represent 256 distinct values. Encoding maps symbols to numbers, while a file format adds structure on top. CSV is plain text with commas, JSON wraps name value pairs, XML uses nested tags, images store grids of pixels, a"
-        },
-        {
-          "depth": 2,
-          "title": "Data quality and meaning",
-          "anchor": "data-quality-and-meaning",
-          "excerpt": "Quality means data is accurate (close to the truth), complete (not missing key pieces), and timely (fresh enough to be useful). A sensor reading of 21°C is useless if the timestamp is missing. Noise is random variation that hides patterns, while signal is the meaningful part. Bias creeps in when some groups are missing or when measurements are skewed. Models"
-        },
-        {
-          "depth": 2,
-          "title": "Data lifecycle and flow",
-          "anchor": "data-lifecycle-and-flow",
-          "excerpt": "Data starts at collection, gets stored, processed, shared, and eventually archived or deleted. Each step has design choices: where to store, how to process, how to secure, and when to retire. Software architecture cares about where components sit. Cybersecurity cares about protection at each hop. AI pipelines care about how raw data becomes features."
-        },
-        {
-          "depth": 2,
-          "title": "Data roles and responsibilities",
-          "anchor": "data-roles-and-responsibilities",
-          "excerpt": "Roles exist so someone is accountable for quality, access, and change. Data owners make decisions about purpose and access. Data stewards guard definitions, metadata, and policy. Data engineers build and maintain pipelines. Data analysts turn data into insights. Data consumers use the outputs responsibly. When roles blur, pipelines stall, privacy is ignored,"
-        },
-        {
-          "depth": 2,
-          "title": "Foundations of data ethics and trust",
-          "anchor": "foundations-of-data-ethics-and-trust",
-          "excerpt": "Ethics matters from the first data point. Consent means people know and agree to how their data is used. Privacy keeps personal details safe. Transparency builds trust because people can see what is collected and why. Misuse often starts with shortcuts: copying data to test faster or sharing beyond the agreed purpose. Trust erodes slowly and is hard to rebui"
-        },
-        {
-          "depth": 2,
-          "title": "How data connects everything you learn next",
-          "anchor": "how-data-connects-everything-you-learn-next",
-          "excerpt": "Data is the common thread across the other courses. AI models are only as good as the data they learn from. Cybersecurity controls protect data wherever it sits or moves. Software systems are structured flows of data shaped by design choices. Digital transformation is largely about improving how data is collected, shared, and trusted across journeys. Think o"
-        },
-        {
           "depth": 3,
           "title": "Shared practice exercises",
           "anchor": "shared-practice-exercises",
           "excerpt": "These exercises appear across courses so you build one habit: always question how data is used, protected, and interpreted."
-        },
-        {
-          "depth": 2,
-          "title": "Data dashboards you will use throughout the site",
-          "anchor": "data-dashboards-you-will-use-throughout-the-site",
-          "excerpt": "These starter dashboards will grow with you. They stay simple now so you can focus on concepts, then expand in Intermediate and Advanced levels."
-        },
-        {
-          "depth": 2,
-          "title": "Where this takes you next",
-          "anchor": "where-this-takes-you-next",
-          "excerpt": "Data Intermediate digs into architecture, governance, and analytics that build on these habits. If you want to see how data powers other domains right away, jump to:"
         }
       ]
     },
@@ -470,44 +379,7 @@
       "route": "/courses/data/intermediate",
       "title": "Data Intermediate",
       "sourcePath": "/content/courses/data/intermediate.mdx",
-      "sections": [
-        {
-          "depth": 2,
-          "title": "Data architectures and pipelines",
-          "anchor": "data-architectures-and-pipelines",
-          "excerpt": "Data architecture is how data is organised, moved, and protected across systems. It sets the lanes so teams can build without tripping over each other. Pipelines exist because raw data is messy and scattered. They pull from sources, clean and combine, and land it where people and products can use it."
-        },
-        {
-          "depth": 2,
-          "title": "Data governance and stewardship",
-          "anchor": "data-governance-and-stewardship",
-          "excerpt": "Governance is agreeing how data is handled so people can work quickly without being reckless. Ownership is the person or team that decides purpose and access. Stewardship is the day to day care of definitions, quality, and metadata. Accountability means someone can explain how a change was made and why."
-        },
-        {
-          "depth": 2,
-          "title": "Interoperability and standards",
-          "anchor": "interoperability-and-standards",
-          "excerpt": "Interoperability means systems understand each other. It is shared meaning, not just shared pipes. Standards help: common formats, schemas, and naming. A schema is the agreed structure and data types. When systems misalign, data lands in the wrong fields, numbers become strings, or meaning gets lost."
-        },
-        {
-          "depth": 2,
-          "title": "Data analysis and insight generation",
-          "anchor": "data-analysis-and-insight-generation",
-          "excerpt": "Analysis is asking good questions of data and checking that the answers hold up. Descriptive thinking asks what happened. Diagnostic thinking asks why. Statistics exist to separate signal from noise: averages summarise, distributions show spread, trends show direction."
-        },
-        {
-          "depth": 2,
-          "title": "Risk, ethics and strategic value",
-          "anchor": "risk-ethics-and-strategic-value",
-          "excerpt": "Data risk is broader than security. Misuse, misinterpretation, and neglect can harm people and decisions. Ethics asks whether we should use data in a certain way, not just whether we can. Strategic value comes from using data to improve services, not just to collect more of it."
-        },
-        {
-          "depth": 2,
-          "title": "Shared dashboards you already know",
-          "anchor": "shared-dashboards-you-already-know",
-          "excerpt": "Intermediate will reuse the data quality sandbox, the data flow visualiser, and the data interpretation exercises introduced in Foundations. They will gain more options, but the familiar interfaces stay so you can focus on thinking, not navigation."
-        }
-      ]
+      "sections": []
     },
     {
       "route": "/courses/data/summary",
@@ -1019,173 +891,25 @@
       "route": "/ai/advanced",
       "title": "AI Notes, Advanced",
       "sourcePath": "/content/notes/ai/advanced.mdx",
-      "sections": [
-        {
-          "depth": 2,
-          "title": "Transformers and attention as information routing",
-          "anchor": "transformers-and-attention-as-information-routing",
-          "excerpt": "Attention is weighted routing, not memory. The context window is a hard wall, not a soft suggestion."
-        },
-        {
-          "depth": 2,
-          "title": "Large language models as probabilistic systems",
-          "anchor": "large-language-models-as-probabilistic-systems",
-          "excerpt": "LLMs optimise likelihood, not truth. Fluency is not reliability."
-        },
-        {
-          "depth": 2,
-          "title": "Retrieval, grounding, and embeddings",
-          "anchor": "retrieval-grounding-and-embeddings",
-          "excerpt": "Grounding reduces hallucination; it does not erase it. Retrieval quality matters more than model size."
-        },
-        {
-          "depth": 2,
-          "title": "Agentic systems and tool use",
-          "anchor": "agentic-systems-and-tool-use",
-          "excerpt": "An agent is a loop: observe, plan, act, observe. Each loop compounds error."
-        },
-        {
-          "depth": 2,
-          "title": "Detection and operations at scale",
-          "anchor": "detection-and-operations-at-scale",
-          "excerpt": "Prevention fails. Detection and response decide whether failure becomes disaster."
-        },
-        {
-          "depth": 2,
-          "title": "Supply chain and systemic risk",
-          "anchor": "supply-chain-and-systemic-risk",
-          "excerpt": "Dependencies are attack paths. Trust is rarely isolated."
-        },
-        {
-          "depth": 2,
-          "title": "Governance, safety, and limits",
-          "anchor": "governance-safety-and-limits",
-          "excerpt": "Governance is not paperwork. It is how we make decisions under uncertainty and accept residual risk honestly."
-        }
-      ]
+      "sections": []
     },
     {
       "route": "/ai/beginner",
       "title": "AI Foundations",
       "sourcePath": "/content/notes/ai/beginner.mdx",
-      "sections": [
-        {
-          "depth": 2,
-          "title": "What AI is and why it matters now",
-          "anchor": "what-ai-is-and-why-it-matters-now",
-          "excerpt": "AI is a way of learning patterns from data so a system can make predictions, rank options, or automate decisions."
-        },
-        {
-          "depth": 3,
-          "title": "After this section you should be able to:",
-          "anchor": "after-this-section-you-should-be-able-to",
-          "excerpt": "- Explain what a model is and why it exists in a system - Explain what breaks when training data and real inputs diverge - Explain the trade off between automation speed and human judgement"
-        },
-        {
-          "depth": 2,
-          "title": "Data and representation",
-          "anchor": "data-and-representation",
-          "excerpt": "In AI, the word Data is recorded observations about the world. It is what the model learns from, not what we wish was true."
-        },
-        {
-          "depth": 3,
-          "title": "After this section you should be able to:",
-          "anchor": "after-this-section-you-should-be-able-to-2",
-          "excerpt": "- Explain why representation choices change what a model can learn - Explain what breaks when labels, groups, or context are missing from data - Explain the trade off between simple features and richer embeddings"
-        },
-        {
-          "depth": 2,
-          "title": "Supervised and unsupervised learning",
-          "anchor": "supervised-and-unsupervised-learning",
-          "excerpt": "When we say a model learns, we mean it changes its internal settings so it can make better guesses. It is not learning like a person learns. It is closer to practice. You show examples, it adjusts, and it gets less wrong over time."
-        },
-        {
-          "depth": 3,
-          "title": "After this section you should be able to:",
-          "anchor": "after-this-section-you-should-be-able-to-3",
-          "excerpt": "- Explain when supervised learning is appropriate and what it optimises for - Explain when unsupervised learning is useful and why evaluation is harder - Explain what breaks when people treat model outputs as understanding"
-        },
-        {
-          "depth": 2,
-          "title": "Responsible AI basics and limitations",
-          "anchor": "responsible-ai-basics-and-limitations",
-          "excerpt": "AI systems can cause harm even when everybody is trying to do the right thing. The harm is not always dramatic. Sometimes it is quiet and personal. Someone is incorrectly flagged as suspicious. Someone does not get offered an opportunity. Someone is pushed into a bubble of content that makes them angrier and more certain."
-        },
-        {
-          "depth": 3,
-          "title": "What this optimises for",
-          "anchor": "what-this-optimises-for",
-          "excerpt": "- Automation speed and consistency for low risk tasks - Scaled assistance when humans have time and context"
-        },
-        {
-          "depth": 3,
-          "title": "What this makes harder",
-          "anchor": "what-this-makes-harder",
-          "excerpt": "- Accountability if oversight is vague - Safe rollback when models drift or fail"
-        },
-        {
-          "depth": 3,
-          "title": "After this section you should be able to:",
-          "anchor": "after-this-section-you-should-be-able-to-4",
-          "excerpt": "- Explain why models do not understand intent or truth and what breaks if you trust them blindly - Explain why evaluation and monitoring are continuous, not a one time step - Explain the trade off between AI automation and human oversight in high impact decisions"
-        }
-      ]
+      "sections": []
     },
     {
       "route": "/ai/intermediate",
       "title": "AI Intermediate",
       "sourcePath": "/content/notes/ai/intermediate.mdx",
-      "sections": [
-        {
-          "depth": 2,
-          "title": "Prompts and patterns",
-          "anchor": "prompts-and-patterns",
-          "excerpt": "Prompts are not magic, they are instructions. A The instruction or input you give a model to get a response. works best when it is clear about the task, the format, and the boundaries. A A higher level instruction that sets the role, rules, and tone for the model. should be stable and reviewed, not improvised in production."
-        },
-        {
-          "depth": 2,
-          "title": "Embeddings and vector search",
-          "anchor": "embeddings-and-vector-search",
-          "excerpt": "Embeddings turn text, images, or audio into numeric vectors. A A numeric representation that keeps some meaning so similar items are close together. lets me compare ideas by distance. A A specialised database for storing vectors and searching them by similarity. powers semantic search, recommendation, and clustering."
-        },
-        {
-          "depth": 2,
-          "title": "Retrieval with your own documents",
-          "anchor": "retrieval-with-your-own-documents",
-          "excerpt": "Retrieval augmented generation, often called RAG, lets a model answer using your documents. It works by chunking documents, embedding the chunks, and retrieving the best matches for a query. The model then answers using the retrieved context."
-        },
-        {
-          "depth": 2,
-          "title": "Simple agents that use tools",
-          "anchor": "simple-agents-that-use-tools",
-          "excerpt": "An A model that plans a sequence of steps and can call tools to reach a goal. is useful for multi step tasks, but it needs guardrails. A A request from the model to run a function or external action. should be limited, logged, and reviewed when risk is high."
-        }
-      ]
+      "sections": []
     },
     {
       "route": "/notes/ai/overview",
       "title": "AI course overview",
       "sourcePath": "/content/notes/ai/overview.mdx",
-      "sections": [
-        {
-          "depth": 2,
-          "title": "Levels and routes",
-          "anchor": "levels-and-routes",
-          "excerpt": ""
-        },
-        {
-          "depth": 2,
-          "title": "How to use this track",
-          "anchor": "how-to-use-this-track",
-          "excerpt": "- Move through the four levels in order, or dip into a section you need for work right now. - Record a few minutes when you practise so CPD stays honest and local to your browser. - Share the labs with friends or a class and compare answers before you peek at mine. - Keep notes on what surprised you; that is where the real learning hides."
-        },
-        {
-          "depth": 2,
-          "title": "Quick practice",
-          "anchor": "quick-practice",
-          "excerpt": "title=\"Checkpoint\" questions={[ { q: \"Why keep AI notes plain and compact\", a: \"So non-specialists can apply the ideas quickly without jargon.\" }, { q: \"Which three stops does the track cover\", a: \"Foundations, intermediate pipelines and evaluation, and advanced models/agents.\" }, ]} />"
-        }
-      ]
+      "sections": []
     },
     {
       "route": "/notes/capstone/booktrack",
@@ -1297,30 +1021,6 @@
       "sourcePath": "/content/notes/cybersecurity/advanced.mdx",
       "sections": [
         {
-          "depth": 2,
-          "title": "Cryptography in practice",
-          "anchor": "cryptography-in-practice",
-          "excerpt": "Crypto is only useful when it is applied correctly. Most organisations do not lose because the maths was broken. They lose because assumptions drift, keys leak, validation gets skipped, or somebody treats \"encrypted\" as a risk stamp that means \"safe\"."
-        },
-        {
-          "depth": 2,
-          "title": "Secure architecture and zero trust thinking",
-          "anchor": "secure-architecture-and-zero-trust-thinking",
-          "excerpt": "Zero trust is simple: never assume the network is friendly, always verify access, limit blast radius. Design where no implicit trust is granted based on network location. Breaking systems into small zones with tight policy reduces how far an attacker can move. Defence in depth still matters: identity, network, application, and data controls should stack."
-        },
-        {
-          "depth": 2,
-          "title": "Detection, response and threat hunting",
-          "anchor": "detection-response-and-threat-hunting",
-          "excerpt": "Detection closes the gap between compromise and action. A Security information and event management (SIEM), a platform that collects and correlates security events feeds alerts to a security operations centre (SOC), a team that monitors and responds. Good detection reduces how long an attacker stays unnoticed. Response follows a loop: triage, contain, eradic"
-        },
-        {
-          "depth": 2,
-          "title": "Governance, frameworks and your career",
-          "anchor": "governance-frameworks-and-your-career",
-          "excerpt": "This section is the glue. It is temporary tooling in a way, because your first versions will be imperfect. That is normal. The point is to build a loop that makes the next version better."
-        },
-        {
           "depth": 3,
           "title": "Security as an organisational capability",
           "anchor": "security-as-an-organisational-capability",
@@ -1358,34 +1058,16 @@
       "sourcePath": "/content/notes/cybersecurity/ch1.mdx",
       "sections": [
         {
-          "depth": 2,
-          "title": "Foundations overview",
-          "anchor": "foundations-overview",
-          "excerpt": "Cybersecurity is about reducing real harm. It protects people, not just computers. It protects money, time, safety, privacy, and trust. When it goes wrong, it often looks ordinary at first. A bank transfer goes to the wrong place. A delivery address changes. A clinic cannot open a record. A small mistake becomes a big mess."
-        },
-        {
           "depth": 3,
           "title": "After this section you should be able to:",
           "anchor": "after-this-section-you-should-be-able-to",
           "excerpt": "- Explain what cybersecurity is protecting and why attackers often succeed - Explain the difference between threat, vulnerability, and risk in context - Explain what breaks when identity and process controls are treated as optional"
         },
         {
-          "depth": 2,
-          "title": "Assets, threats, and risk",
-          "anchor": "assets-threats-and-risk",
-          "excerpt": "An An asset is anything you care about enough to protect, like data, systems, people, time, and trust. It includes obvious things like customer records and laptops, but also things like staff time, reputation, and the ability to keep operating. If payroll fails on Friday, that is an availability problem. If a patient record is wrong, that is an integrity pro"
-        },
-        {
           "depth": 3,
           "title": "After this section you should be able to:",
           "anchor": "after-this-section-you-should-be-able-to-2",
           "excerpt": "- Explain why risk is contextual and what breaks when controls are applied blindly - Explain how assets, threats, and vulnerabilities connect to real decisions - Explain why Identify work comes before tool buying"
-        },
-        {
-          "depth": 2,
-          "title": "Identity, access, and trust",
-          "anchor": "identity-access-and-trust",
-          "excerpt": "Identity is now the security perimeter because work happens everywhere. Staff work from home. Phones are used for approvals. Vendors have access. Cloud services connect to other cloud services. The question is no longer only \"is the network safe\". The question is \"who is this, and what should they be allowed to do\"."
         },
         {
           "depth": 3,
@@ -1400,34 +1082,16 @@
           "excerpt": "- Explain why representation and parsing mistakes create security risk - Explain what breaks when systems disagree on how bytes should be interpreted - Explain why integrity controls depend on correct data handling"
         },
         {
-          "depth": 2,
-          "title": "Defence, detection, response",
-          "anchor": "defence-detection-response",
-          "excerpt": "Prevention alone fails. Not because people are lazy, but because systems are complex. Something will slip. A password will leak. A laptop will go missing. A supplier will get compromised. Defence needs layers, and it needs feedback."
-        },
-        {
           "depth": 3,
           "title": "After this section you should be able to:",
           "anchor": "after-this-section-you-should-be-able-to-5",
           "excerpt": "- Explain why trust boundaries exist and what breaks when networks are assumed safe - Explain how metadata can leak behaviour even when content is encrypted - Explain why monitoring often starts with patterns, not secrets"
         },
         {
-          "depth": 2,
-          "title": "Confidentiality, integrity, availability and simple attacks",
-          "anchor": "confidentiality-integrity-availability-and-simple-attacks",
-          "excerpt": "To keep this practical, we will use one simple frame: confidentiality, integrity, and availability, often shortened to CIA. Confidentiality means only the right people can see information. Integrity means changes are correct and visible. Availability means systems are there when needed. The purpose is not to memorise three words. The purpose is to ask better"
-        },
-        {
           "depth": 3,
           "title": "After this section you should be able to:",
           "anchor": "after-this-section-you-should-be-able-to-6",
           "excerpt": "- Explain CIA as decision questions, not memorised words - Explain what breaks when identity is weak or integrity is not monitored - Explain why availability needs planning, not hope"
-        },
-        {
-          "depth": 2,
-          "title": "Human factors and governance",
-          "anchor": "human-factors-and-governance",
-          "excerpt": "Humans are not the weakest link. Humans are the system. Most insecure behaviour is a rational response to a bad setup. If it takes five minutes to do the safe thing, people will do the fast thing. If approvals block urgent work, people will route around them. If security tools produce noise, people will ignore them."
         },
         {
           "depth": 3,
@@ -1628,87 +1292,13 @@
       "route": "/cybersecurity/intermediate",
       "title": "Applied Cybersecurity",
       "sourcePath": "/content/notes/cybersecurity/intermediate.mdx",
-      "sections": [
-        {
-          "depth": 2,
-          "title": "Threat modelling and attacker thinking",
-          "anchor": "threat-modelling-and-attacker-thinking",
-          "excerpt": "Security improves fastest when I can answer one question clearly: what matters, who might attack it, and how it could fail."
-        },
-        {
-          "depth": 2,
-          "title": "Attack surfaces and common failure classes",
-          "anchor": "attack-surfaces-and-common-failure-classes",
-          "excerpt": "Most breaches start with what is exposed, not with exotic zero days."
-        },
-        {
-          "depth": 2,
-          "title": "Authentication, sessions and access control",
-          "anchor": "authentication-sessions-and-access-control",
-          "excerpt": "Authentication answers who you are. Authorisation answers what you may do. Sessions remember you between requests. Mixing them up is why many breaches feel trivial."
-        },
-        {
-          "depth": 2,
-          "title": "Logging, monitoring and risk thinking",
-          "anchor": "logging-monitoring-and-risk-thinking",
-          "excerpt": "Prevention is never perfect. Good detection shortens the time between a bad action and your response."
-        }
-      ]
+      "sections": []
     },
     {
       "route": "/notes/cybersecurity/overview",
       "title": "Cybersecurity course overview",
       "sourcePath": "/content/notes/cybersecurity/overview.mdx",
-      "sections": [
-        {
-          "depth": 2,
-          "title": "How the course is structured",
-          "anchor": "how-the-course-is-structured",
-          "excerpt": "The core path looks like this."
-        },
-        {
-          "depth": 3,
-          "title": "Level 1 - Cybersecurity Foundations",
-          "anchor": "level-1---cybersecurity-foundations",
-          "excerpt": "This level is for children, beginners and anyone who does not see themselves as technical. We start with the basics:"
-        },
-        {
-          "depth": 3,
-          "title": "Level 2 - Applied Cybersecurity",
-          "anchor": "level-2---applied-cybersecurity",
-          "excerpt": "This level is for people who want to understand how systems fail and how we defend them. We build on the Foundations and start to think like attackers and defenders."
-        },
-        {
-          "depth": 3,
-          "title": "Level 3 - Cybersecurity Practice and Strategy",
-          "anchor": "level-3---cybersecurity-practice-and-strategy",
-          "excerpt": "This level is for people who want to think like security engineers, architects and leaders."
-        },
-        {
-          "depth": 2,
-          "title": "Alignment with CISSP, NIST CSF 2.0 and Cyber Essentials Plus",
-          "anchor": "alignment-with-cissp-nist-csf-20-and-cyber-essentials-plus",
-          "excerpt": "This course is not an official exam preparation course and it is not endorsed by any certification body."
-        },
-        {
-          "depth": 2,
-          "title": "CPD and professional development",
-          "anchor": "cpd-and-professional-development",
-          "excerpt": "I am writing these notes with Continuing Professional Development in mind."
-        },
-        {
-          "depth": 2,
-          "title": "How to use this course",
-          "anchor": "how-to-use-this-course",
-          "excerpt": "You can use the material in a few ways:"
-        },
-        {
-          "depth": 2,
-          "title": "Quick practice",
-          "anchor": "quick-practice",
-          "excerpt": "title=\"Checkpoint\" questions={[ { q: \"Why keep the course plain and structured\", a: \"So anyone can build intuition and defend real systems without hidden prerequisites.\" }, { q: \"How many core levels does the course have\", a: \"Three core levels plus a summary and games page.\" }, ]} />"
-        }
-      ]
+      "sections": []
     },
     {
       "route": "/notes/cybersecurity/practitioner/cloud_platform_security",
@@ -1893,160 +1483,19 @@
       "route": "/digitalisation/advanced",
       "title": "Digitalisation Strategy Notes - Advanced",
       "sourcePath": "/content/notes/digitalisation/advanced.mdx",
-      "sections": [
-        {
-          "depth": 2,
-          "title": "From organisation to ecosystem",
-          "anchor": "from-organisation-to-ecosystem",
-          "excerpt": "At earlier levels, digitalisation work was mostly inside one organisation. At this level it sits in ecosystems: supply chains, regulators, partners, platforms, and competitors share the same data flows and standards. A weak link in one place can hurt many others."
-        },
-        {
-          "depth": 2,
-          "title": "Regulation, policy, and trust",
-          "anchor": "regulation-policy-and-trust",
-          "excerpt": "Digitalisation at scale is shaped by regulation and policy. Regulation can enable change when guardrails are clear, or block it when rules are rigid or fragmented. Incentives can also push risk into the wrong places."
-        },
-        {
-          "depth": 2,
-          "title": "Interoperability and cross-border thinking",
-          "anchor": "interoperability-and-cross-border-thinking",
-          "excerpt": "As data, services, or platforms cross organisational or national boundaries, interoperability becomes central. It is not only technical; it involves shared meaning, process alignment, legal agreements, and operational coordination."
-        },
-        {
-          "depth": 2,
-          "title": "Funding models and economic reality",
-          "anchor": "funding-models-and-economic-reality",
-          "excerpt": "Ambitious digitalisation needs realistic funding. The funding model is an architectural choice: project funding versus product and platform funding, central versus distributed investment, and charging models for platforms and data."
-        },
-        {
-          "depth": 2,
-          "title": "Risk, resilience, and learning from failure",
-          "anchor": "risk-resilience-and-learning-from-failure",
-          "excerpt": "At this level we assume things will go wrong: systems fail, partners are compromised, regulations change, and some projects miss targets. The question is how we design for resilience and how we learn."
-        },
-        {
-          "depth": 2,
-          "title": "Stewardship and long-term digital health",
-          "anchor": "stewardship-and-long-term-digital-health",
-          "excerpt": "Stewardship recognises that digital choices today shape options for years. Data, platforms, and standards can become de facto public infrastructure. Skills, culture, and trust take time to build and can be lost quickly."
-        },
-        {
-          "depth": 2,
-          "title": "Practice and reflection",
-          "anchor": "practice-and-reflection",
-          "excerpt": "questions={[ { q: \"Why is it not enough to think about digitalisation within a single organisation at the advanced level?\", a: \"Because value, risk, and data flow across ecosystems, so a failure in one place can harm many others.\" }, { q: \"How do regulation and policy shape digitalisation rather than simply constrain it?\", a: \"They set guardrails, incentives"
-        }
-      ]
+      "sections": []
     },
     {
       "route": "/digitalisation/beginner",
       "title": "Digitalisation Strategy Notes - Beginner",
       "sourcePath": "/content/notes/digitalisation/beginner.mdx",
-      "sections": [
-        {
-          "depth": 2,
-          "title": "What digitalisation really is",
-          "anchor": "what-digitalisation-really-is",
-          "excerpt": "Digitalisation is the deliberate redesign of how an organisation creates value using digital technology, data, and new ways of working."
-        },
-        {
-          "depth": 2,
-          "title": "Why digitalisation matters",
-          "anchor": "why-digitalisation-matters",
-          "excerpt": "Digitalisation matters because expectations are higher, complexity is greater, and competition and scrutiny are sharper. People compare every service to the best digital products they use daily. Manual processes cannot keep up with data, regulation, and risk."
-        },
-        {
-          "depth": 2,
-          "title": "Digitisation vs digitalisation vs digital transformation",
-          "anchor": "digitisation-vs-digitalisation-vs-digital-transformation",
-          "excerpt": "Plain: Converting analogue information into digital form, such as scanning paper into PDF. Formal: Transforming analogue artefacts into digital representations without altering the underlying process."
-        },
-        {
-          "depth": 2,
-          "title": "Data as a strategic asset",
-          "anchor": "data-as-a-strategic-asset",
-          "excerpt": "Data becomes an asset when it is correct enough to trust, accessible enough to use, governed enough to protect, and connected enough to create insight. Treating data strategically means deciding who is responsible, how it is collected, stored, shared, measured, and used safely."
-        },
-        {
-          "depth": 2,
-          "title": "People and culture",
-          "anchor": "people-and-culture",
-          "excerpt": "Culture is the hard part. Systems succeed only when people trust them, know how to use them, and are supported to change habits. A digital culture shows up in the questions people ask: do we use data to decide, do we share information, do we test ideas, do we treat security and privacy as design constraints."
-        },
-        {
-          "depth": 2,
-          "title": "Processes and technology foundations",
-          "anchor": "processes-and-technology-foundations",
-          "excerpt": "If you automate a broken process, you get a faster broken process."
-        },
-        {
-          "depth": 2,
-          "title": "Planning and maturity",
-          "anchor": "planning-and-maturity",
-          "excerpt": "Digitalisation is a journey in three horizons: short term visible wins, medium term shared platforms and data foundations, long term operating model change. Maturity models help if used to decide realistic next steps, not to chase a score."
-        },
-        {
-          "depth": 2,
-          "title": "Observing digitalisation in practice",
-          "anchor": "observing-digitalisation-in-practice",
-          "excerpt": "Digitalisation must be observable. It should show up in usage of digital channels, time saved, platform adoption, and indicators of data quality. Measuring change is part of doing digitalisation well."
-        },
-        {
-          "depth": 2,
-          "title": "Practice and reflection",
-          "anchor": "practice-and-reflection",
-          "excerpt": "questions={[ { q: \"How is digitalisation different from putting forms online?\", a: \"It redesigns how work is done and how value is created, not just where forms live.\", }, { q: \"Why is data discipline essential?\", a: \"Without trustworthy, governed data, digital tools only automate confusion and error.\", }, { q: \"Why is culture difficult but critical?\", a: \"S"
-        }
-      ]
+      "sections": []
     },
     {
       "route": "/digitalisation/intermediate",
       "title": "Digitalisation Strategy Notes - Intermediate",
       "sourcePath": "/content/notes/digitalisation/intermediate.mdx",
-      "sections": [
-        {
-          "depth": 2,
-          "title": "From foundations to design",
-          "anchor": "from-foundations-to-design",
-          "excerpt": "The beginner page established that digitalisation is about value, people, process, data, and technology working together. At this level the questions change from “what is digitalisation” to:"
-        },
-        {
-          "depth": 2,
-          "title": "Vision, outcomes, and value",
-          "anchor": "vision-outcomes-and-value",
-          "excerpt": "A lot of strategies fail because they start with technology. I start with a small set of clear outcomes that matter to real people."
-        },
-        {
-          "depth": 2,
-          "title": "Operating model and capabilities",
-          "anchor": "operating-model-and-capabilities",
-          "excerpt": "Digitalisation changes how the organisation runs. An operating model describes how people, process, technology, and governance work together to deliver value."
-        },
-        {
-          "depth": 2,
-          "title": "Platforms, data, and architecture for digitalisation",
-          "anchor": "platforms-data-and-architecture-for-digitalisation",
-          "excerpt": "Technology now becomes more concrete but remains strategy led. The question is which shared platforms support the capabilities and outcomes we need, how data moves safely, and what architectural approach keeps change easier rather than harder."
-        },
-        {
-          "depth": 2,
-          "title": "Governance, funding, and risk",
-          "anchor": "governance-funding-and-risk",
-          "excerpt": "Digitalisation touches risk, money, and responsibility, so governance becomes central. Governance here is not long policy documents; it is clear answers to who owns the roadmap, who can approve platforms or major changes, how data and privacy decisions are made, and how security standards are enforced."
-        },
-        {
-          "depth": 2,
-          "title": "Roadmapping and prioritisation",
-          "anchor": "roadmapping-and-prioritisation",
-          "excerpt": "Even with a clear vision, operating model, and platform view, we cannot do everything at once. Roadmapping is the sequence of what changes when and why. Dependencies matter: analytics needs data quality first; identity should stabilise before modernising every small application."
-        },
-        {
-          "depth": 2,
-          "title": "Practice and reflection",
-          "anchor": "practice-and-reflection",
-          "excerpt": "This dashboard gives a feel for the signals a digital leader might track: adoption of digital channels, use of core platforms, progress against roadmap milestones, and basic quality indicators. Strategy and measurement belong together."
-        }
-      ]
+      "sections": []
     },
     {
       "route": "/digitalisation/summary",
@@ -2144,166 +1593,19 @@
       "route": "/software-architecture/advanced",
       "title": "Software Architecture Notes - Advanced",
       "sourcePath": "/content/notes/software-architecture/advanced.mdx",
-      "sections": [
-        {
-          "depth": 2,
-          "title": "Architecture beyond a single system",
-          "anchor": "architecture-beyond-a-single-system",
-          "excerpt": "At scale, architecture shapes organisations as much as it shapes software."
-        },
-        {
-          "depth": 2,
-          "title": "Architecture and organisational structure",
-          "anchor": "architecture-and-organisational-structure",
-          "excerpt": "Systems mirror communication paths."
-        },
-        {
-          "depth": 2,
-          "title": "Platforms, ecosystems, and digitalisation",
-          "anchor": "platforms-ecosystems-and-digitalisation",
-          "excerpt": "A platform is an architecture that enables others to build safely and quickly."
-        },
-        {
-          "depth": 2,
-          "title": "Resilience, failure, and risk",
-          "anchor": "resilience-failure-and-risk",
-          "excerpt": "Design for failure because it is inevitable at scale."
-        },
-        {
-          "depth": 2,
-          "title": "Governance without stagnation",
-          "anchor": "governance-without-stagnation",
-          "excerpt": "Too little governance creates chaos. Too much governance kills innovation."
-        },
-        {
-          "depth": 2,
-          "title": "Architecture as long-term stewardship",
-          "anchor": "architecture-as-long-term-stewardship",
-          "excerpt": "Good architecture leaves the system healthier than you found it."
-        },
-        {
-          "depth": 2,
-          "title": "Observing digitalisation in practice",
-          "anchor": "observing-digitalisation-in-practice",
-          "excerpt": "Architecture must be observable. Digitalisation is visible through delivery speed, stability, change failure rates, and operational cost trends. Without metrics, digitalisation is wishful thinking."
-        },
-        {
-          "depth": 2,
-          "title": "Practice and reflection",
-          "anchor": "practice-and-reflection",
-          "excerpt": "questions={[ { q: \"Why is architecture socio-technical at scale?\", a: \"Because system design is constrained by team structure, communication, and incentives.\", }, { q: \"What distinguishes a platform from a shared service?\", a: \"A platform enables others to build independently and safely by providing reusable capabilities.\", }, { q: \"Why is failure assumed in"
-        }
-      ]
+      "sections": []
     },
     {
       "route": "/software-architecture/beginner",
       "title": "Software Architecture Notes - Beginner",
       "sourcePath": "/content/notes/software-architecture/beginner.mdx",
-      "sections": [
-        {
-          "depth": 2,
-          "title": "Why software architecture exists",
-          "anchor": "why-software-architecture-exists",
-          "excerpt": "Architecture exists to manage complexity over time and keep change affordable."
-        },
-        {
-          "depth": 2,
-          "title": "What is a system",
-          "anchor": "what-is-a-system",
-          "excerpt": "A system is parts plus purpose plus constraints."
-        },
-        {
-          "depth": 2,
-          "title": "What software architecture is and is not",
-          "anchor": "what-software-architecture-is-and-is-not",
-          "excerpt": "Architecture is structure and principles for hard-to-change decisions, not low-level details."
-        },
-        {
-          "depth": 2,
-          "title": "Structure, components, and boundaries",
-          "anchor": "structure-components-and-boundaries",
-          "excerpt": "Boundaries fail quietly. Good architecture makes them explicit."
-        },
-        {
-          "depth": 2,
-          "title": "Quality attributes and constraints",
-          "anchor": "quality-attributes-and-constraints",
-          "excerpt": "Quality attributes shape structure more than features do."
-        },
-        {
-          "depth": 2,
-          "title": "Trade-offs and architectural decisions",
-          "anchor": "trade-offs-and-architectural-decisions",
-          "excerpt": "Every architectural decision is a trade-off. Be explicit."
-        },
-        {
-          "depth": 2,
-          "title": "Architecture as a living discipline",
-          "anchor": "architecture-as-a-living-discipline",
-          "excerpt": "Architecture evolves. Stasis is decay."
-        },
-        {
-          "depth": 2,
-          "title": "Observing systems in practice",
-          "anchor": "observing-systems-in-practice",
-          "excerpt": "If you cannot observe a system, you cannot govern or improve it."
-        },
-        {
-          "depth": 2,
-          "title": "Practice and reflection",
-          "anchor": "practice-and-reflection",
-          "excerpt": "title=\"Final check - foundations\" questions={[ { q: \"What makes architecture different from design details\", a: \"It governs structure and decisions that are hard to change.\" }, { q: \"Why do boundaries matter most\", a: \"They define ownership, limit coupling, and control change impact.\" }, { q: \"How do quality attributes shape design\", a: \"They force structura"
-        }
-      ]
+      "sections": []
     },
     {
       "route": "/software-architecture/intermediate",
       "title": "Software Architecture Notes - Intermediate",
       "sourcePath": "/content/notes/software-architecture/intermediate.mdx",
-      "sections": [
-        {
-          "depth": 2,
-          "title": "From understanding to design",
-          "anchor": "from-understanding-to-design",
-          "excerpt": "Designing architecture means: - Turning requirements into structure - Translating quality attributes into constraints - Making decisions with incomplete information - Accepting trade-offs explicitly"
-        },
-        {
-          "depth": 2,
-          "title": "Architectural styles and patterns",
-          "anchor": "architectural-styles-and-patterns",
-          "excerpt": "An **architectural style** is a named way of organising a system that reflects common solutions to recurring problems."
-        },
-        {
-          "depth": 2,
-          "title": "Decomposition and responsibility",
-          "anchor": "decomposition-and-responsibility",
-          "excerpt": "Decomposition is the process of breaking a system into parts. Good decomposition is the difference between a system that scales and one that collapses under its own weight."
-        },
-        {
-          "depth": 2,
-          "title": "Quality-driven architecture",
-          "anchor": "quality-driven-architecture",
-          "excerpt": "In real systems, architecture is driven by **quality attributes** more than features."
-        },
-        {
-          "depth": 2,
-          "title": "Making and recording decisions",
-          "anchor": "making-and-recording-decisions",
-          "excerpt": "Architecture is a decision-making discipline. Each decision has context, options, trade-offs, and consequences."
-        },
-        {
-          "depth": 2,
-          "title": "Documentation and architectural views",
-          "anchor": "documentation-and-architectural-views",
-          "excerpt": "Architecture must be communicated clearly. One diagram is never enough."
-        },
-        {
-          "depth": 2,
-          "title": "Practice and reflection",
-          "anchor": "practice-and-reflection",
-          "excerpt": "questions={[ { q: \"Why is architectural design fundamentally about trade-offs?\", a: \"Because improving one quality attribute usually degrades another.\" }, { q: \"Why should decomposition follow responsibility rather than technology?\", a: \"Because responsibilities change more slowly and align better with system intent.\" }, { q: \"Why are architectural decisions"
-        }
-      ]
+      "sections": []
     },
     {
       "route": "/software-architecture/summary",

@@ -21,6 +21,7 @@ interface Level {
 interface CoursePathSectionProps {
   title?: string;
   subtitle?: string;
+  emoji?: string;
   levels: Level[];
   className?: string;
 }
@@ -32,12 +33,13 @@ interface CoursePathSectionProps {
 export default function CoursePathSection({
   title = "Core path",
   subtitle,
+  emoji,
   levels,
   className = "",
 }: CoursePathSectionProps) {
   return (
     <section className={`course-section-spacing ${className}`}>
-      <SectionHeader subtitle={subtitle}>{title}</SectionHeader>
+      <SectionHeader variant="content" emoji={emoji} subtitle={subtitle}>{title}</SectionHeader>
       <div className="course-grid grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {levels.map((level) => (
           <CourseCard

@@ -20,6 +20,9 @@ import ProgressBar from "@/components/notes/ProgressBar";
 import CPDTracker from "@/components/CPDTracker";
 import LevelProgressBar from "@/components/course/LevelProgressBar";
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
+import SectionHeader from "@/components/course/SectionHeader";
+import SubsectionHeader from "@/components/course/SubsectionHeader";
+import BodyText from "@/components/course/BodyText";
 import { cyberSections } from "@/lib/cyberSections";
 import { safeAgentLog } from "@/lib/safeAgentLog";
 
@@ -77,6 +80,9 @@ export default function Page({ source, headings }) {
       CPDTracker,
       LevelProgressBar,
       SectionProgressToggle,
+      SectionHeader,
+      SubsectionHeader,
+      BodyText,
     }),
     []
   );

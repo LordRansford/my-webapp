@@ -22,6 +22,9 @@ import QuizBlock from '@/components/notes/QuizBlock'
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
+import SectionHeader from "@/components/course/SectionHeader"
+import SubsectionHeader from "@/components/course/SubsectionHeader"
+import BodyText from "@/components/course/BodyText"
 import { cyberSections } from "@/lib/cyberSections"
 
 import ThreatScenarioMapper from "@/components/dashboards/cybersecurity/intermediate/ThreatScenarioMapper"
@@ -39,11 +42,15 @@ import RiskTradeoffVisualizer from "@/components/dashboards/cybersecurity/interm
 
 <CPDTracker courseId="cybersecurity" levelId="applied" estimatedHours={12} />
 
-Applied is where we stop describing computers and start thinking like attackers and defenders. We keep the language human, but we anchor every idea to assets, entry points, and the controls that actually change outcomes.
+<BodyText>
+  Applied is where we stop describing computers and start thinking like attackers and defenders. We keep the language human, but we anchor every idea to assets, entry points, and the controls that actually change outcomes.
+</BodyText>
 
 ---
 
-## Threat modelling and attacker thinking
+<SectionHeader variant="content" emoji="🎯" id="threat-modelling">
+  Threat modelling and attacker thinking
+</SectionHeader>
 
 <SectionProgressToggle courseId="cybersecurity" levelId="applied" sectionId="applied-threat-modelling" />
 
@@ -102,7 +109,9 @@ After you use the tool: sanity check your output. Do your threats connect to rea
 
 ---
 
-## Attack surfaces and common failure classes
+<SectionHeader variant="content" emoji="🔍" id="attack-surfaces">
+  Attack surfaces and common failure classes
+</SectionHeader>
 
 <SectionProgressToggle courseId="cybersecurity" levelId="applied" sectionId="applied-attack-surfaces" />
 
@@ -163,7 +172,9 @@ After you use the tool: look for the "quiet" exposure. A lot of damage comes fro
 
 ---
 
-## Authentication, sessions and access control
+<SectionHeader variant="content" emoji="🔐" id="authentication-sessions">
+  Authentication, sessions and access control
+</SectionHeader>
 
 <SectionProgressToggle courseId="cybersecurity" levelId="applied" sectionId="applied-auth-sessions-access" />
 
@@ -234,7 +245,9 @@ After you use it: focus on the controls that break the replay. Short lifetimes, 
 
 ---
 
-## Logging, monitoring and risk thinking
+<SectionHeader variant="content" emoji="📊" id="logging-monitoring">
+  Logging, monitoring and risk thinking
+</SectionHeader>
 
 <SectionProgressToggle courseId="cybersecurity" levelId="applied" sectionId="applied-logging-and-risk" />
 

@@ -4,48 +4,50 @@ description: "How the three-level cybersecurity course works, why it exists, and
 level: "Overview"
 ---
 
-<div className="not-prose rounded-3xl border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-emerald-50/40 p-5 shadow-sm">
-  <div className="flex flex-wrap items-center gap-3">
-    <span
-      className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-emerald-100 bg-emerald-50 text-emerald-700"
-      role="img"
-      aria-label="Cybersecurity shield"
-    >
-      <SafeIcon name="shield" size={20} color="currentColor" style={{ marginRight: 0 }} />
-    </span>
-    <div>
-      <p className="eyebrow m-0 text-slate-600">Cybersecurity course</p>
-      <h1 className="text-2xl font-semibold text-slate-900">From foundations to practice</h1>
-    </div>
-    <span className="chip chip--mint">CPD support</span>
-  </div>
-  <p className="mt-3 text-base text-slate-700 leading-relaxed">
-    I built this course because I wanted a clear route from zero to confident. No hidden prerequisites, no secret handshake.
-  </p>
-  <p className="text-base text-slate-700 leading-relaxed">
-    We start with plain language and keep every idea tied to a real decision so you can explain security, not just repeat it.
-  </p>
-  <ul className="mt-4 grid gap-2 text-[0.98rem] text-slate-700 leading-relaxed">
-    <li className="flex items-center gap-2"><span className="chip chip--amber">Focus</span> Real systems and real habits, not theory alone.</li>
-    <li className="flex items-center gap-2"><span className="chip chip--accent">Tools</span> In browser labs you can reuse with a team.</li>
-  </ul>
-</div>
-
-<StartButton />
+<CourseHeroSection
+  eyebrow="Cybersecurity course"
+  title="From foundations to practice"
+  description="I built this course because I wanted a clear route from zero to confident. No hidden prerequisites, no secret handshake. We start with plain language and keep every idea tied to a real decision so you can explain security, not just repeat it."
+  highlights={[
+    { chip: "Focus", text: "Real systems and real habits, not theory alone." },
+    { chip: "Tools", text: "In browser labs you can reuse with a team." },
+  ]}
+  primaryAction={{
+    label: "Start with Foundations",
+    href: "/cybersecurity/beginner",
+  }}
+  secondaryActions={[
+    { label: "Track CPD", href: "/my-cpd" },
+    { label: "Export CPD evidence", href: "/my-cpd/evidence" },
+    { label: "Open dashboards", href: "/dashboards/cybersecurity" },
+    { label: "Open studios", href: "/cyber-studios" },
+    { label: "Open the labs", href: "/tools/cybersecurity" },
+  ]}
+  icon={<SafeIcon name="shield" size={20} color="currentColor" style={{ marginRight: 0 }} />}
+  gradient="green"
+/>
 
 <CourseProgressBar />
 
 <CPDHoursTotal />
 
-The course has three core levels plus a summary and games page. Move through them at your own pace and revisit the labs whenever you need a reset.
+<BodyText>
+  The course has three core levels plus a summary and games page. Move through them at your own pace and revisit the labs whenever you need a reset.
+</BodyText>
 
-## How the course is structured
+<SectionHeader variant="content" emoji="🛡️" id="course-structure">
+  How the course is structured
+</SectionHeader>
 
-The core path looks like this.
+<BodyText>
+  The core path looks like this.
+</BodyText>
 
 <LevelCards />
 
-### Level 1 - Cybersecurity Foundations
+<SubsectionHeader emoji="🛡️">
+  Level 1 - Cybersecurity Foundations
+</SubsectionHeader>
 
 This level is for children, beginners and anyone who does not see themselves as technical. We start with the basics:
 
@@ -65,7 +67,9 @@ You will spend a lot of time in visual tools that live in the browser. For examp
 
 The goal is to build intuition and habits without assuming any prior knowledge. The tone is friendly. I explain acronyms the first time they appear and I use short sentences.
 
-### Level 2 - Applied Cybersecurity
+<SubsectionHeader emoji="🎯">
+  Level 2 - Applied Cybersecurity
+</SubsectionHeader>
 
 This level is for people who want to understand how systems fail and how we defend them. We build on the Foundations and start to think like attackers and defenders.
 
@@ -87,7 +91,9 @@ Here you will see more schematic diagrams and flow diagrams. You also get intera
 
 The idea is to move from "I know the words" to "I can apply the ideas to real systems".
 
-### Level 3 - Cybersecurity Practice and Strategy
+<SubsectionHeader emoji="🏗️">
+  Level 3 - Cybersecurity Practice and Strategy
+</SubsectionHeader>
 
 This level is for people who want to think like security engineers, architects and leaders.
 
@@ -109,7 +115,9 @@ You will work with higher level diagrams and more complex labs, for example:
 
 By the end of this level you should be able to join up technical details with business and regulatory thinking and explain security decisions clearly.
 
-## Alignment with CISSP, NIST CSF 2.0 and Cyber Essentials Plus
+<SectionHeader variant="content" emoji="🛡️" id="alignment">
+  Alignment with CISSP, NIST CSF 2.0 and Cyber Essentials Plus
+</SectionHeader>
 
 This course is not an official exam preparation course and it is not endorsed by any certification body.
 
@@ -127,7 +135,9 @@ In the background I maintain a mapping between my learning outcomes and these fr
 
 When I say "aligned", I mean that the knowledge areas broadly match. I still avoid exam specific lists and memorisation. The focus is on deep understanding and real world reasoning.
 
-## CPD and professional development
+<SectionHeader variant="content" emoji="📚" id="cpd">
+  CPD and professional development
+</SectionHeader>
 
 I am writing these notes with Continuing Professional Development in mind.
 
@@ -140,7 +150,9 @@ For each level I define:
 
 This structure is suitable for CPD credit and for use alongside formal programmes in universities or professional training. As the course matures I plan to seek CPD accreditation. When that happens I will update this page with the details.
 
-## How to use this course
+<SectionHeader variant="guide" emoji="📚" id="how-to-use">
+  How to use this course
+</SectionHeader>
 
 You can use the material in a few ways:
 
@@ -152,13 +164,12 @@ If you are using the course with a team or a class, you can pair the notes and t
 
 The main thing is this. I want you to come away feeling that cybersecurity is understandable, that you can ask sensible questions, and that you can make better decisions about digital systems in your own context.
 
-## Quick practice
+<SectionHeader variant="practice" emoji="🛠️" id="quick-practice">
+  Quick practice
+</SectionHeader>
 
 <ToolCard title="Security habit drill" description="Pick one habit to reinforce this week.">
-  <ul>
-    <li>Select one flow (login, password reset, link inspection) you use daily.</li>
-    <li>Write one guardrail you will practise each time (e.g., check domain, avoid reuse).</li>
-  </ul>
+  <SecurityHabitPlannerTool />
 </ToolCard>
 
 <QuizBlock

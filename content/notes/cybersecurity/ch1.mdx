@@ -21,6 +21,9 @@ import QuizBlock from "@/components/notes/QuizBlock"
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
+import SectionHeader from "@/components/course/SectionHeader"
+import SubsectionHeader from "@/components/course/SubsectionHeader"
+import BodyText from "@/components/course/BodyText"
 import { cyberSections } from "@/lib/cyberSections"
 
 <ProgressBar mode="scroll" />
@@ -31,7 +34,9 @@ import { cyberSections } from "@/lib/cyberSections"
 
 <CPDTracker courseId="cybersecurity" levelId="foundations" estimatedHours={10} />
 
-## Foundations overview
+<SectionHeader variant="content" emoji="🛡️" id="foundations-overview">
+  Foundations overview
+</SectionHeader>
 
 <SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-why-cyber-matters" />
 
@@ -107,7 +112,9 @@ Cybersecurity is not only about stopping hackers. It is also about preventing ac
 - Explain the difference between threat, vulnerability, and risk in context
 - Explain what breaks when identity and process controls are treated as optional
 
-## Assets, threats, and risk
+<SectionHeader variant="content" emoji="⚠️" id="assets-threats-risk">
+  Assets, threats, and risk
+</SectionHeader>
 
 <SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-data-and-bits" />
 
@@ -133,7 +140,9 @@ Why it matters: when you get the asset and context right, you can spend effort w
 - Explain how assets, threats, and vulnerabilities connect to real decisions
 - Explain why Identify work comes before tool buying
 
-## Identity, access, and trust
+<SectionHeader variant="content" emoji="🔐" id="identity-access-trust">
+  Identity, access, and trust
+</SectionHeader>
 
 <SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-networks-and-packets" />
 
@@ -207,7 +216,9 @@ Why it matters: when identity is strong and access is narrow, a compromised acco
 - Explain what breaks when systems disagree on how bytes should be interpreted
 - Explain why integrity controls depend on correct data handling
 
-## Defence, detection, response
+<SectionHeader variant="content" emoji="🛡️" id="defence-detection-response">
+  Defence, detection, response
+</SectionHeader>
 
 Prevention alone fails. Not because people are lazy, but because systems are complex. Something will slip. A password will leak. A laptop will go missing. A supplier will get compromised. Defence needs layers, and it needs feedback.
 
@@ -312,7 +323,9 @@ Under the hood, data still moves as packets. A packet has a header and a payload
 - Explain how metadata can leak behaviour even when content is encrypted
 - Explain why monitoring often starts with patterns, not secrets
 
-## Confidentiality, integrity, availability and simple attacks
+<SectionHeader variant="content" emoji="🔒" id="cia-and-attacks">
+  Confidentiality, integrity, availability and simple attacks
+</SectionHeader>
 
 <SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-cia-and-simple-attacks" />
 
@@ -387,7 +400,9 @@ Why it matters: CIA is a simple way to reason about controls and to spot what ki
 - Explain what breaks when identity is weak or integrity is not monitored
 - Explain why availability needs planning, not hope
 
-## Human factors and governance
+<SectionHeader variant="content" emoji="👥" id="human-factors-governance">
+  Human factors and governance
+</SectionHeader>
 
 Humans are not the weakest link. Humans are the system. Most insecure behaviour is a rational response to a bad setup. If it takes five minutes to do the safe thing, people will do the fast thing. If approvals block urgent work, people will route around them. If security tools produce noise, people will ignore them.
 

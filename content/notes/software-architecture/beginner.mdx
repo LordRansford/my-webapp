@@ -14,6 +14,9 @@ import QuizBlock from "@/components/notes/QuizBlock"
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
+import SectionHeader from "@/components/course/SectionHeader"
+import SubsectionHeader from "@/components/course/SubsectionHeader"
+import BodyText from "@/components/course/BodyText"
 import { softwareArchitectureSectionManifest } from "@/lib/softwareArchitectureSections"
 
 import ArchitectureCanvas from "@/components/notes/tools/architecture/beginner/ArchitectureCanvas"
@@ -29,13 +32,17 @@ import SystemDashboard from "@/components/notes/tools/architecture/beginner/Syst
 
 <CPDTracker courseId="software-architecture" levelId="foundations" estimatedHours={10} />
 
-I wrote these notes because most failures I have seen were not one bad function but unclear purpose, porous boundaries, and decisions that became too expensive to change. The goal here is to see systems as a whole, not just code.
+<BodyText>
+  I wrote these notes because most failures I have seen were not one bad function but unclear purpose, porous boundaries, and decisions that became too expensive to change. The goal here is to see systems as a whole, not just code.
+</BodyText>
 
 <PageNav prevHref="/" prevLabel="Home" nextHref="/software-architecture/intermediate" nextLabel="Intermediate" showTop showBottom />
 
 ---
 
-## Why software architecture exists
+<SectionHeader variant="content" emoji="🏗️" id="why-architecture-exists">
+  Why software architecture exists
+</SectionHeader>
 
 <SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="sa-foundations-what-is-architecture" />
 
@@ -58,7 +65,9 @@ If changing a choice would force many teams to rewrite code, it is almost always
 
 ---
 
-## What is a system
+<SectionHeader variant="content" emoji="🔧" id="what-is-system">
+  What is a system
+</SectionHeader>
 
 <SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="sa-foundations-building-blocks" />
 
@@ -77,7 +86,9 @@ Purpose drives structure. If the purpose shifts, architecture must respond or it
 
 ---
 
-## What software architecture is and is not
+<SectionHeader variant="content" emoji="📐" id="what-architecture-is">
+  What software architecture is and is not
+</SectionHeader>
 
 <Callout variant="concept">
 Architecture is structure and principles for hard-to-change decisions, not low-level details.
@@ -95,7 +106,9 @@ Architecture is how the system is decomposed, how responsibilities are placed, h
 
 ---
 
-## Structure, components, and boundaries
+<SectionHeader variant="content" emoji="🧩" id="structure-components">
+  Structure, components, and boundaries
+</SectionHeader>
 
 <Callout variant="concept">
 Boundaries fail quietly. Good architecture makes them explicit.
@@ -126,7 +139,9 @@ Formal: A defined interface and responsibility line that constrains coupling and
 
 ---
 
-## Quality attributes and constraints
+<SectionHeader variant="content" emoji="⭐" id="quality-attributes">
+  Quality attributes and constraints
+</SectionHeader>
 
 <Callout variant="concept">
 Quality attributes shape structure more than features do.
@@ -144,7 +159,9 @@ Performance, security, availability, scalability, maintainability, and reliabili
 
 ---
 
-## Trade-offs and architectural decisions
+<SectionHeader variant="content" emoji="⚖️" id="trade-offs">
+  Trade-offs and architectural decisions
+</SectionHeader>
 
 <Callout variant="concept">
 Every architectural decision is a trade-off. Be explicit.
@@ -171,7 +188,9 @@ Formal: A decision where optimising one attribute degrades another due to shared
 
 ---
 
-## Architecture as a living discipline
+<SectionHeader variant="content" emoji="🌱" id="living-discipline">
+  Architecture as a living discipline
+</SectionHeader>
 
 <SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="sa-foundations-diagrams-and-views" />
 
@@ -191,7 +210,9 @@ Systems, requirements, and organisations change. Good architecture is revisited 
 
 ---
 
-## Observing systems in practice
+<SectionHeader variant="content" emoji="👀" id="observing-practice">
+  Observing systems in practice
+</SectionHeader>
 
 <Callout variant="concept">
 If you cannot observe a system, you cannot govern or improve it.
@@ -212,7 +233,9 @@ Observation reveals load behaviour, bottlenecks, and failures. It validates assu
 
 ---
 
-## Practice and reflection
+<SectionHeader variant="practice" emoji="🛠️" id="practice-reflection">
+  Practice and reflection
+</SectionHeader>
 
 <QuizBlock
   title="Final check - foundations"

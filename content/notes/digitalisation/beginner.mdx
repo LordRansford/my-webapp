@@ -13,6 +13,9 @@ import QuizBlock from "@/components/notes/QuizBlock"
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
+import SectionHeader from "@/components/course/SectionHeader"
+import SubsectionHeader from "@/components/course/SubsectionHeader"
+import BodyText from "@/components/course/BodyText"
 import { digitalisationSectionManifest } from "@/lib/digitalisationSections"
 
 import DigitalMaturityGauge from "@/components/notes/tools/digitalisation/beginner/DigitalMaturityGauge"
@@ -30,13 +33,17 @@ import DashboardFrame from "@/components/dashboards/DashboardFrame"
 
 <CPDTracker courseId="digitalisation" levelId="foundations" estimatedHours={8} />
 
-These notes are calm and honest. Digitalisation is not magic. It is the deliberate redesign of how an organisation creates value using digital technology, data, and new ways of working. The focus here is value, not tools, and people, not buzzwords.
+<BodyText>
+  These notes are calm and honest. Digitalisation is not magic. It is the deliberate redesign of how an organisation creates value using digital technology, data, and new ways of working. The focus here is value, not tools, and people, not buzzwords.
+</BodyText>
 
 <PageNav prevHref="/" prevLabel="Home" nextHref="/digitalisation/intermediate" nextLabel="Intermediate" showTop showBottom />
 
 ---
 
-## What digitalisation really is
+<SectionHeader variant="content" emoji="🌐" id="what-digitalisation-is">
+  What digitalisation really is
+</SectionHeader>
 
 <SectionProgressToggle courseId="digitalisation" levelId="foundations" sectionId="dig-foundations-what-is-digitalisation" />
 
@@ -48,7 +55,9 @@ Digitalisation is about value, how work is done, people and processes, and decis
 
 ---
 
-## Why digitalisation matters
+<SectionHeader variant="content" emoji="💡" id="why-digitalisation-matters">
+  Why digitalisation matters
+</SectionHeader>
 
 Digitalisation matters because expectations are higher, complexity is greater, and competition and scrutiny are sharper. People compare every service to the best digital products they use daily. Manual processes cannot keep up with data, regulation, and risk.
 
@@ -60,7 +69,9 @@ Digitalisation is not a one time project. It is an ongoing capability if an orga
 
 ---
 
-## Digitisation vs digitalisation vs digital transformation
+<SectionHeader variant="content" emoji="🔄" id="digitisation-vs-digitalisation">
+  Digitisation vs digitalisation vs digital transformation
+</SectionHeader>
 
 <GlossaryTip term="Digitisation">
 Plain: Converting analogue information into digital form, such as scanning paper into PDF.  
@@ -85,7 +96,9 @@ Digitisation without digitalisation gives the worst of both worlds. Digitalisati
 
 ---
 
-## Data as a strategic asset
+<SectionHeader variant="content" emoji="📊" id="data-strategic-asset">
+  Data as a strategic asset
+</SectionHeader>
 
 <SectionProgressToggle courseId="digitalisation" levelId="foundations" sectionId="dig-foundations-data-and-processes" />
 
@@ -101,7 +114,9 @@ Digitalisation without data discipline is automation of confusion.
 
 ---
 
-## People and culture
+<SectionHeader variant="content" emoji="👥" id="people-culture">
+  People and culture
+</SectionHeader>
 
 <SectionProgressToggle courseId="digitalisation" levelId="foundations" sectionId="dig-foundations-people-and-change" />
 
@@ -118,7 +133,9 @@ Formal: Collective attitudes, norms, and practices that enable adoption of digit
 
 ---
 
-## Processes and technology foundations
+<SectionHeader variant="content" emoji="⚙️" id="processes-technology">
+  Processes and technology foundations
+</SectionHeader>
 
 <SectionProgressToggle courseId="digitalisation" levelId="foundations" sectionId="dig-foundations-digital-building-blocks" />
 
@@ -134,7 +151,9 @@ Process first: understand real steps, delays, and bottlenecks; decide which step
 
 ---
 
-## Planning and maturity
+<SectionHeader variant="content" emoji="📈" id="planning-maturity">
+  Planning and maturity
+</SectionHeader>
 
 Digitalisation is a journey in three horizons: short term visible wins, medium term shared platforms and data foundations, long term operating model change. Maturity models help if used to decide realistic next steps, not to chase a score.
 
@@ -149,7 +168,9 @@ Formal: A staged description of capability and adoption of digital practices rel
 
 ---
 
-## Observing digitalisation in practice
+<SectionHeader variant="content" emoji="👀" id="observing-practice">
+  Observing digitalisation in practice
+</SectionHeader>
 
 Digitalisation must be observable. It should show up in usage of digital channels, time saved, platform adoption, and indicators of data quality. Measuring change is part of doing digitalisation well.
 
@@ -159,7 +180,9 @@ Digitalisation must be observable. It should show up in usage of digital channel
 
 ---
 
-## Practice and reflection
+<SectionHeader variant="practice" emoji="🛠️" id="practice-reflection">
+  Practice and reflection
+</SectionHeader>
 
 <QuizBlock
   questions={[

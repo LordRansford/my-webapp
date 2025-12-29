@@ -115,6 +115,7 @@ export default function DigitalisationHub() {
         <section id="path">
           <CoursePathSection
             title="Core path"
+            emoji="🌐"
             levels={corePath}
           />
         </section>
@@ -123,6 +124,7 @@ export default function DigitalisationHub() {
           <CourseResourcesSection
             title="Further practice"
             subtitle="Hands-on labs to make the strategy tangible before the summary."
+            emoji="🛠️"
             dashboardHref="/dashboards/digitalisation"
           />
         </section>
@@ -130,6 +132,7 @@ export default function DigitalisationHub() {
         <section id="capstones">
           <CourseCapstonesSection
             title="Capstones"
+            emoji="🏗️"
             capstones={capstones}
           />
         </section>

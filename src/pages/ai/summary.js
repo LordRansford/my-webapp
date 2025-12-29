@@ -11,6 +11,9 @@ import PageNav from "@/components/notes/PageNav";
 import LevelProgressBar from "@/components/course/LevelProgressBar";
 import CPDTracker from "@/components/CPDTracker";
 import DiagramBlock from "@/components/DiagramBlock";
+import SectionHeader from "@/components/course/SectionHeader";
+import SubsectionHeader from "@/components/course/SubsectionHeader";
+import BodyText from "@/components/course/BodyText";
 import { aiSectionManifest } from "@/lib/aiSections";
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
 
@@ -31,6 +34,9 @@ export default function AISummary({ source, headings }) {
       CPDTracker,
       DiagramBlock,
       SectionProgressToggle,
+      SectionHeader,
+      SubsectionHeader,
+      BodyText,
       ConceptMatchGame,
       OddOneOutGame,
       ScenarioClinicGame,

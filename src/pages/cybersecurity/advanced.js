@@ -17,6 +17,9 @@ import DiagramBlock from "@/components/DiagramBlock";
 import CPDTracker from "@/components/CPDTracker";
 import LevelProgressBar from "@/components/course/LevelProgressBar";
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
+import SectionHeader from "@/components/course/SectionHeader";
+import SubsectionHeader from "@/components/course/SubsectionHeader";
+import BodyText from "@/components/course/BodyText";
 import { cyberSections } from "@/lib/cyberSections";
 
 const TrustGraphTool = dynamic(() => import("@/components/notes/tools/cybersecurity/advanced/TrustGraphTool"), { ssr: false });
@@ -54,6 +57,9 @@ export default function Page({ source, headings }) {
       CPDTracker,
       LevelProgressBar,
       SectionProgressToggle,
+      SectionHeader,
+      SubsectionHeader,
+      BodyText,
       TrustGraphTool,
       ProtocolAssumptionsTool,
       CertificateChainTool,

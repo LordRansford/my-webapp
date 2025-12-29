@@ -13,6 +13,9 @@ import QuizBlock from "@/components/notes/QuizBlock"
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
+import SectionHeader from "@/components/course/SectionHeader"
+import SubsectionHeader from "@/components/course/SubsectionHeader"
+import BodyText from "@/components/course/BodyText"
 import { aiSectionManifest } from "@/lib/aiSections"
 import MathInline from "@/components/notes/MathInline"
 import MathBlock from "@/components/notes/MathBlock"
@@ -33,13 +36,17 @@ import IncidentTimelineTool from "@/components/notes/tools/ai/advanced/IncidentT
 
 <CPDTracker courseId="ai" levelId="practice-strategy" estimatedHours={12} />
 
-Intermediate covered evaluation, failure classes, sessions, leakage, and representation. Advanced is where I treat AI systems as living systems with constraints, trade offs, and people. My goal is not to list features. My goal is to explain why these systems break and how to design them so failure is contained, visible, and recoverable.
+<BodyText>
+  Intermediate covered evaluation, failure classes, sessions, leakage, and representation. Advanced is where I treat AI systems as living systems with constraints, trade offs, and people. My goal is not to list features. My goal is to explain why these systems break and how to design them so failure is contained, visible, and recoverable.
+</BodyText>
 
 <PageNav prevHref="/ai/intermediate" prevLabel="Intermediate" nextHref="/ai/summary" nextLabel="Summary" showTop showBottom />
 
 ---
 
-## Transformers and attention as information routing
+<SectionHeader variant="content" emoji="🔀" id="transformers-and-attention">
+  Transformers and attention as information routing
+</SectionHeader>
 
 <SectionProgressToggle courseId="ai" levelId="practice-strategy" sectionId="ai-advanced-transformers-and-agents" />
 
@@ -82,7 +89,9 @@ After using the tool, notice how a single trusted edge changes blast radius. In 
 
 ---
 
-## Large language models as probabilistic systems
+<SectionHeader variant="content" emoji="🎲" id="llms-as-probabilistic">
+  Large language models as probabilistic systems
+</SectionHeader>
 
 <SectionProgressToggle courseId="ai" levelId="practice-strategy" sectionId="ai-advanced-diffusion-and-generation" />
 
@@ -115,7 +124,9 @@ LLMs often miscalibrate. They sound certain on thin evidence. They hallucinate w
 
 ---
 
-## Retrieval, grounding, and embeddings
+<SectionHeader variant="content" emoji="🔗" id="retrieval-grounding">
+  Retrieval, grounding, and embeddings
+</SectionHeader>
 
 <Callout variant="concept">
 Grounding reduces hallucination; it does not erase it. Retrieval quality matters more than model size.
@@ -146,7 +157,9 @@ Embeddings power retrieval. They encode similarity. Similarity is an opinion der
 
 ---
 
-## Agentic systems and tool use
+<SectionHeader variant="content" emoji="🤖" id="agentic-systems">
+  Agentic systems and tool use
+</SectionHeader>
 
 <Callout variant="concept">
 An agent is a loop: observe, plan, act, observe. Each loop compounds error.
@@ -175,7 +188,9 @@ Example: An automated cleaner deleting resources faster after each “success”
 
 ---
 
-## Detection and operations at scale
+<SectionHeader variant="content" emoji="📊" id="detection-operations">
+  Detection and operations at scale
+</SectionHeader>
 
 <SectionProgressToggle courseId="ai" levelId="practice-strategy" sectionId="ai-advanced-production-and-monitoring" />
 
@@ -200,7 +215,9 @@ LLM-based systems need signals: unusual tool calls, spikes in refusals, unexpect
 
 ---
 
-## Supply chain and systemic risk
+<SectionHeader variant="content" emoji="⚠️" id="supply-chain-risk">
+  Supply chain and systemic risk
+</SectionHeader>
 
 <Callout variant="concept">
 Dependencies are attack paths. Trust is rarely isolated.
@@ -223,7 +240,9 @@ Modern AI stacks depend on packages, build systems, identity providers, and host
 
 ---
 
-## Governance, safety, and limits
+<SectionHeader variant="content" emoji="⚖️" id="governance-safety">
+  Governance, safety, and limits
+</SectionHeader>
 
 <SectionProgressToggle courseId="ai" levelId="practice-strategy" sectionId="ai-advanced-governance-and-strategy" />
 
