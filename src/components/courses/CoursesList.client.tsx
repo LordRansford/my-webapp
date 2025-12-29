@@ -2,8 +2,9 @@
 
 import { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, Clock3, Shield, Brain, Boxes, Database, Compass, Star, Filter, X } from "lucide-react";
+import { ArrowRight, Clock3, Shield, Brain, Boxes, Database, Compass, Star, Filter, X, Bookmark, BookmarkCheck, Wrench, FileText, Code } from "lucide-react";
 import CourseProgress from "@/components/course/CourseProgress";
+import { getResourceCountsForCourse, getToolRouteForCourse, getTemplateRouteForCourse, getStudioRouteForCourse } from "@/lib/courses/resourceCounts";
 
 const COURSE_ICONS: Record<string, typeof Shield> = {
   cybersecurity: Shield,
@@ -32,14 +33,57 @@ interface CoursesListProps {
 type CompletionStatus = "all" | "not_started" | "in_progress" | "completed";
 type HoursFilter = "all" | "short" | "medium" | "long";
 
+const FAVORITES_STORAGE_KEY = "ransfordsnotes-course-favorites";
+
+function useFavorites() {
+  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = window.localStorage.getItem(FAVORITES_STORAGE_KEY);
+        if (stored) {
+          setFavorites(new Set(JSON.parse(stored)));
+        }
+      } catch {
+        // Ignore errors
+      }
+    }
+  }, []);
+
+  const toggleFavorite = (courseSlug: string) => {
+    setFavorites((prev) => {
+      const next = new Set(prev);
+      if (next.has(courseSlug)) {
+        next.delete(courseSlug);
+      } else {
+        next.add(courseSlug);
+      }
+      if (typeof window !== "undefined") {
+        try {
+          window.localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(Array.from(next)));
+        } catch {
+          // Ignore errors
+        }
+      }
+      return next;
+    });
+  };
+
+  const isFavorite = (courseSlug: string) => favorites.has(courseSlug);
+
+  return { favorites, toggleFavorite, isFavorite };
+}
+
 export default function CoursesList({ courses }: CoursesListProps) {
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"name" | "hours-asc" | "hours-desc">("name");
   const [completionFilter, setCompletionFilter] = useState<CompletionStatus>("all");
   const [hoursFilter, setHoursFilter] = useState<HoursFilter>("all");
   const [showFilters, setShowFilters] = useState(false);
+  const { toggleFavorite, isFavorite } = useFavorites();
 
-  // Map courses to include level IDs for progress tracking and completion status
+  // Map courses to include level IDs, progress, completion status, and resource counts
   const coursesWithLevels = useMemo(() => {
     return courses.map((course) => {
       const levelIds = [
@@ -70,7 +114,19 @@ export default function CoursesList({ courses }: CoursesListProps) {
         }
       }
       
-      return { ...course, levelIds, progress, completionStatus };
+      // Get resource counts for the course
+      const resourceCounts = getResourceCountsForCourse(course.slug);
+      
+      return { 
+        ...course, 
+        levelIds, 
+        progress, 
+        completionStatus,
+        resourceCounts,
+        toolRoute: getToolRouteForCourse(course.slug),
+        templateRoute: getTemplateRouteForCourse(course.slug),
+        studioRoute: getStudioRouteForCourse(course.slug),
+      };
     });
   }, [courses]);
 
@@ -126,6 +182,23 @@ export default function CoursesList({ courses }: CoursesListProps) {
       .filter((c) => c.completionStatus === "not_started")
       .sort((a, b) => a.totalEstimatedHours - b.totalEstimatedHours)
       .slice(0, 3);
+  }, [coursesWithLevels]);
+
+  // Get favorite courses
+  const favoriteCourses = useMemo(() => {
+    return coursesWithLevels.filter((c) => {
+      if (typeof window === "undefined") return false;
+      try {
+        const stored = window.localStorage.getItem(FAVORITES_STORAGE_KEY);
+        if (stored) {
+          const favorites = new Set(JSON.parse(stored));
+          return favorites.has(c.slug);
+        }
+      } catch {
+        // Ignore errors
+      }
+      return false;
+    });
   }, [coursesWithLevels]);
 
   const totalHours = courses.reduce((sum, c) => sum + (c.totalEstimatedHours || 0), 0);
@@ -184,6 +257,43 @@ export default function CoursesList({ courses }: CoursesListProps) {
                             style={{ width: `${course.progress}%` }}
                           />
                         </div>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {/* Favorites Section */}
+      {favoriteCourses.length > 0 && (
+        <section className="mt-8" aria-labelledby="favorites-heading">
+          <h2 id="favorites-heading" className="text-xl font-semibold text-slate-900">Your favorites</h2>
+          <p className="mt-1 text-sm text-slate-700">Courses you've bookmarked</p>
+          <div className="mt-4 grid gap-4 lg:grid-cols-3">
+            {favoriteCourses.map((course) => {
+              const Icon = COURSE_ICONS[course.slug] || Boxes;
+              return (
+                <Link
+                  key={course.slug}
+                  href={course.startHref || course.overviewRoute}
+                  className="group rounded-3xl border border-amber-200 bg-amber-50/30 p-5 shadow-sm transition hover:border-amber-300 hover:shadow-md"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-amber-200 bg-amber-100">
+                      <Icon size={20} className="text-amber-700" aria-hidden="true" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-amber-900">{course.title}</p>
+                        <BookmarkCheck size={14} className="text-amber-600" aria-hidden="true" />
+                      </div>
+                      <p className="mt-2 text-sm text-slate-700">{course.description}</p>
+                      <div className="mt-3 flex items-center gap-2 text-xs text-slate-600">
+                        <Clock3 size={12} className="inline" aria-hidden="true" />
+                        <span>{course.totalEstimatedHours} hrs</span>
                       </div>
                     </div>
                   </div>
@@ -372,17 +482,35 @@ export default function CoursesList({ courses }: CoursesListProps) {
                         <p id={`course-title-${course.slug}`} className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                           {course.title}
                         </p>
-                        {course.completionStatus === "completed" && (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-700">
-                            <Star size={12} aria-hidden="true" />
-                            Completed
-                          </span>
-                        )}
-                        {course.completionStatus === "in_progress" && (
-                          <span className="inline-flex items-center rounded-full bg-sky-100 px-2 py-0.5 text-xs font-semibold text-sky-700">
-                            In progress
-                          </span>
-                        )}
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              toggleFavorite(course.slug);
+                            }}
+                            className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400"
+                            aria-label={isFavorite(course.slug) ? `Remove ${course.title} from favorites` : `Add ${course.title} to favorites`}
+                          >
+                            {isFavorite(course.slug) ? (
+                              <BookmarkCheck size={16} className="text-amber-600" aria-hidden="true" />
+                            ) : (
+                              <Bookmark size={16} aria-hidden="true" />
+                            )}
+                          </button>
+                          {course.completionStatus === "completed" && (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-700">
+                              <Star size={12} aria-hidden="true" />
+                              Completed
+                            </span>
+                          )}
+                          {course.completionStatus === "in_progress" && (
+                            <span className="inline-flex items-center rounded-full bg-sky-100 px-2 py-0.5 text-xs font-semibold text-sky-700">
+                              In progress
+                            </span>
+                          )}
+                        </div>
                       </div>
                       <p className="mt-2 text-sm text-slate-700">{course.description}</p>
                     </div>
@@ -396,6 +524,39 @@ export default function CoursesList({ courses }: CoursesListProps) {
                     <span className="rounded-full bg-slate-100 px-2 py-1 text-slate-600">
                       {levelCount} levels
                     </span>
+                    {course.resourceCounts.tools > 0 && (
+                      <Link
+                        href={course.toolRoute}
+                        className="rounded-full bg-blue-50 px-2 py-1 text-blue-700 hover:bg-blue-100"
+                        onClick={(e) => e.stopPropagation()}
+                        aria-label={`${course.resourceCounts.tools} tools for ${course.title}`}
+                      >
+                        <Wrench size={12} className="mr-1 inline" aria-hidden="true" />
+                        {course.resourceCounts.tools} tools
+                      </Link>
+                    )}
+                    {course.resourceCounts.templates > 0 && (
+                      <Link
+                        href={course.templateRoute}
+                        className="rounded-full bg-purple-50 px-2 py-1 text-purple-700 hover:bg-purple-100"
+                        onClick={(e) => e.stopPropagation()}
+                        aria-label={`${course.resourceCounts.templates} templates for ${course.title}`}
+                      >
+                        <FileText size={12} className="mr-1 inline" aria-hidden="true" />
+                        {course.resourceCounts.templates} templates
+                      </Link>
+                    )}
+                    {course.resourceCounts.studios > 0 && (
+                      <Link
+                        href={course.studioRoute}
+                        className="rounded-full bg-indigo-50 px-2 py-1 text-indigo-700 hover:bg-indigo-100"
+                        onClick={(e) => e.stopPropagation()}
+                        aria-label={`${course.resourceCounts.studios} studios for ${course.title}`}
+                      >
+                        <Code size={12} className="mr-1 inline" aria-hidden="true" />
+                        {course.resourceCounts.studios} studios
+                      </Link>
+                    )}
                   </div>
 
                   <div className="mt-3 flex flex-wrap gap-2">
@@ -419,6 +580,48 @@ export default function CoursesList({ courses }: CoursesListProps) {
                   </div>
 
                   <CourseProgress courseId={course.slug} levelIds={course.levelIds} />
+
+                  {/* Related Resources Links */}
+                  {(course.resourceCounts.tools > 0 || course.resourceCounts.templates > 0 || course.resourceCounts.studios > 0) && (
+                    <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50/50 p-3">
+                      <p className="text-xs font-semibold text-slate-700 mb-2">Related resources</p>
+                      <div className="flex flex-wrap gap-2">
+                        {course.resourceCounts.tools > 0 && (
+                          <Link
+                            href={course.toolRoute}
+                            className="inline-flex items-center gap-1 text-xs font-semibold text-blue-700 hover:text-blue-900 hover:underline"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <Wrench size={12} aria-hidden="true" />
+                            See all {course.resourceCounts.tools} tools
+                            <ArrowRight size={12} aria-hidden="true" />
+                          </Link>
+                        )}
+                        {course.resourceCounts.templates > 0 && (
+                          <Link
+                            href={course.templateRoute}
+                            className="inline-flex items-center gap-1 text-xs font-semibold text-purple-700 hover:text-purple-900 hover:underline"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <FileText size={12} aria-hidden="true" />
+                            See all {course.resourceCounts.templates} templates
+                            <ArrowRight size={12} aria-hidden="true" />
+                          </Link>
+                        )}
+                        {course.resourceCounts.studios > 0 && (
+                          <Link
+                            href={course.studioRoute}
+                            className="inline-flex items-center gap-1 text-xs font-semibold text-indigo-700 hover:text-indigo-900 hover:underline"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <Code size={12} aria-hidden="true" />
+                            See all {course.resourceCounts.studios} studios
+                            <ArrowRight size={12} aria-hidden="true" />
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  )}
 
                   <div className="mt-4 flex items-center justify-between">
                     <Link
