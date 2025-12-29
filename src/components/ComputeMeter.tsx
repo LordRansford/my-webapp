@@ -60,7 +60,7 @@ export default function ComputeMeter(props: {
       if ((actualCredits || 0) > 0) return "This run used free tier first, then used credits for the remainder.";
       return "This run stayed within the free tier.";
     }
-    return "This is an estimate based on your input size and the tool profile.";
+    return "This is an ESTIMATE based on your input size and the tool profile. Actual cost may be higher or lower.";
   })();
 
   return (
@@ -92,13 +92,23 @@ export default function ComputeMeter(props: {
           <div className="mt-1 text-sm font-semibold text-slate-900">{formatMsSafe(freeRemaining)}</div>
         </div>
         <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3">
-          <div className="text-xs font-semibold text-slate-800">Estimate</div>
+          <div className="flex items-center gap-2">
+            <div className="text-xs font-semibold text-slate-800">Estimate</div>
+            {estimate && estimateCredits && estimateCredits > 0 && (
+              <span className="text-xs font-semibold text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded">ESTIMATE</span>
+            )}
+          </div>
           <div className="mt-1 text-sm font-semibold text-slate-900">
             {estimate ? (estimateCredits && estimateCredits > 0 ? `${formatCreditsSafe(estimateCredits)} credits` : "0 credits") : "N/A"}
           </div>
           <div className="mt-1 text-xs text-slate-700">
             {estimate ? `Time: ${formatMsSafe(estimate?.estimatedWallTimeMs)}` : "No estimate yet"}
           </div>
+          {estimate && estimateCredits && estimateCredits > 0 && (
+            <div className="mt-2 text-xs font-medium text-amber-800 bg-amber-50 border border-amber-200 rounded px-2 py-1">
+              ⚠️ This is an estimate. Actual cost may be higher or lower.
+            </div>
+          )}
         </div>
         <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3">
           <div className="text-xs font-semibold text-slate-800">After run</div>

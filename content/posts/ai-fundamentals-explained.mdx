@@ -31,7 +31,7 @@ A model is just a function. It takes inputs and produces outputs. Training is th
 
 Think of it like tuning a radio. You turn knobs until the signal is clear. In machine learning, those knobs are numbers inside the model. Training adjusts those numbers. You keep adjusting until the model's predictions match your examples.
 
-The goal isn't to memorize your training examples. Anyone can do that. The goal is to learn a pattern that works on new examples the model has never seen. That's called generalization, and it's the whole point.
+The goal isn't to memorise your training examples. Anyone can do that. The goal is to learn a pattern that works on new examples the model has never seen. That's called generalisation, and it's the whole point.
 
 If your model only works on the data you trained it on, you've built a very expensive lookup table. That's not AI. That's just a database with extra steps.
 
@@ -41,9 +41,9 @@ You split your data into three sets. This sounds boring but it's actually import
 
 The training set is what you use to teach the model. The model sees these examples and adjusts its parameters. This is where the learning happens.
 
-The validation set is your reality check. You don't train on this. You use it to see how well the model is actually learning. If the model does great on training but terrible on validation, you've got a problem. The model is memorizing instead of learning.
+The validation set is your reality check. You don't train on this. You use it to see how well the model is actually learning. If the model does great on training but terrible on validation, you've got a problem. The model is memorising instead of learning.
 
-The test set is your final exam. You only use it once, at the very end, to measure how good the model really is. This is your honest assessment. If you use the test set during training, you're cheating. The model might memorize test examples instead of learning real patterns. I've seen this happen. It's embarrassing.
+The test set is your final exam. You only use it once, at the very end, to measure how good the model really is. This is your honest assessment. If you use the test set during training, you're cheating. The model might memorise test examples instead of learning real patterns. I've seen this happen. It's embarrassing.
 
 <ToolCard title="Dataset Split Lab" description="See how different splits affect what your model learns. Upload a CSV and experiment with training, validation, and test sizes.">
 <DatasetSplitLab />
@@ -125,7 +125,7 @@ AI is pattern learning from data. That's it. Everything else is implementation d
 
 Here's what I've learned. Data quality matters more than model complexity. A simple model with good data beats a complex model with bad data every time. Start with the data. Fix the data. Then worry about the model.
 
-Training teaches patterns. Testing measures real performance. If there's a big gap between training and testing performance, you've got a problem. The model is memorizing, not learning. Fix that before you deploy.
+Training teaches patterns. Testing measures real performance. If there's a big gap between training and testing performance, you've got a problem. The model is memorising, not learning. Fix that before you deploy.
 
 Metrics must match your problem. Accuracy is easy but often wrong. Pick the metric that matches what you actually care about. If you care about catching fraud, use recall. If you care about precision, use precision. Don't default to accuracy just because it's simple.
 

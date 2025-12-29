@@ -100,6 +100,10 @@
   color: var(--text-heading);
   margin: 0;
   letter-spacing: -0.02em;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  max-width: 100%;
 }
 
 .blog-post__excerpt {
@@ -154,47 +158,6 @@
   background: rgba(0, 122, 255, 0.1);
   color: var(--accent);
   border: 1px solid rgba(0, 122, 255, 0.2);
-}
-
-.blog-post__actions {
-  margin-top: 1.5rem;
-  display: flex;
-  gap: 1rem;
-}
-
-.blog-post__download-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  border-radius: 12px;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  color: white;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 2px 8px rgba(0, 122, 255, 0.2);
-}
-
-.blog-post__download-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
-}
-
-.blog-post__download-btn:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.blog-post__download-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.blog-post__download-icon {
-  width: 1.125rem;
-  height: 1.125rem;
 }
 
 /* Body Layout */
@@ -305,6 +268,9 @@
   line-height: 1.8;
   color: var(--text-body);
   font-size: 1.0625rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .blog-post-content > * {
@@ -331,6 +297,9 @@
   padding-top: 2rem;
   border-top: 1px solid var(--line);
   letter-spacing: -0.01em;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
 .blog-post-content h2:first-of-type {
@@ -347,6 +316,9 @@
   margin-top: 2.5rem;
   margin-bottom: 1rem;
   letter-spacing: -0.01em;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
 .blog-post-content h4 {
@@ -356,11 +328,16 @@
   color: var(--text-heading);
   margin-top: 2rem;
   margin-bottom: 0.75rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
 .blog-post-content p {
   margin-bottom: 1.5rem;
   line-height: 1.8;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .blog-post-content ul,

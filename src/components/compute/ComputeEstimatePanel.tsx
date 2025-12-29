@@ -27,10 +27,16 @@ export default function ComputeEstimatePanel({ estimate }: { estimate: ComputeCo
     <div className="rounded-2xl border border-slate-200 bg-white/80 p-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-700">Compute estimate</p>
+          <div className="flex items-center gap-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-700">Compute estimate</p>
+            <span className="text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded">ESTIMATE</span>
+          </div>
           <p className="mt-1 text-sm font-semibold text-slate-900">Before you run</p>
           <p className="mt-1 text-xs text-slate-700">
             Compute is an estimate of work. It depends on input size, run time, and how the tool executes.
+          </p>
+          <p className="mt-2 text-xs font-medium text-amber-800 bg-amber-50 border border-amber-200 rounded px-2 py-1">
+            ⚠️ This is an estimate. Actual compute usage may be higher or lower than estimated.
           </p>
         </div>
         <Link href="/compute" className="text-xs font-semibold text-slate-900 underline decoration-slate-300 underline-offset-4 hover:decoration-slate-600">
