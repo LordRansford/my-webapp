@@ -1,65 +1,39 @@
 "use client";
 
-import GameHub from "@/components/games/GameHub";
-import DigitalisationGameHub from "@/components/games/DigitalisationGameHub";
-import CrossDomainGames from "@/components/CrossDomainGames";
-import { Shield, TrendingUp, Network, Sparkles } from "lucide-react";
+/**
+ * LegacyGames Component
+ * 
+ * NOTE: This component has been migrated to /practice page.
+ * All practice games are now available at /practice with improved organization,
+ * error handling, loading states, and accessibility features.
+ * 
+ * This component is kept for backward compatibility and redirects users to the new location.
+ */
+
+import Link from "next/link";
+import { Sparkles, ArrowRight } from "lucide-react";
 
 export default function LegacyGames() {
   return (
-    <section aria-label="More practice games" className="mt-12 space-y-8">
-      <header className="relative overflow-hidden rounded-3xl border border-slate-200/80 bg-gradient-to-br from-white via-slate-50/50 to-white p-8 shadow-lg backdrop-blur-sm">
-        <div className="absolute top-0 right-0 -mt-4 -mr-4 h-32 w-32 rounded-full bg-gradient-to-br from-blue-400/20 to-purple-400/20 blur-2xl" />
-        <div className="relative">
-          <div className="mb-3 flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg">
-              <Sparkles className="h-6 w-6 text-white" aria-hidden="true" />
-            </div>
-            <h2 className="text-3xl font-bold text-slate-900">Practice Games</h2>
+    <section aria-label="Practice games" className="mt-12">
+      <div className="rounded-3xl border border-blue-200 bg-gradient-to-br from-blue-50/50 to-white p-8 shadow-lg">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg flex-shrink-0">
+            <Sparkles className="h-8 w-8 text-white" aria-hidden="true" />
           </div>
-          <p className="text-base leading-relaxed text-slate-700">
-            Lightweight interactive drills from across the site to reinforce learning. Build skills through hands-on practice.
-          </p>
-        </div>
-      </header>
-
-      <div className="space-y-8">
-        {/* Cybersecurity Section */}
-        <div className="group">
-          <div className="mb-5 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-red-500 to-orange-500 shadow-md transition-transform duration-300 group-hover:scale-110">
-              <Shield className="h-5 w-5 text-white" aria-hidden="true" />
-            </div>
-            <h3 className="text-2xl font-bold text-slate-900">Cybersecurity</h3>
-          </div>
-          <div className="rounded-2xl border border-slate-200/80 bg-gradient-to-br from-white via-red-50/30 to-white p-6 shadow-md transition-all duration-300 hover:shadow-lg">
-            <GameHub />
-          </div>
-        </div>
-
-        {/* Digitalisation Section */}
-        <div className="group">
-          <div className="mb-5 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 shadow-md transition-transform duration-300 group-hover:scale-110">
-              <TrendingUp className="h-5 w-5 text-white" aria-hidden="true" />
-            </div>
-            <h3 className="text-2xl font-bold text-slate-900">Digitalisation</h3>
-          </div>
-          <div className="rounded-2xl border border-slate-200/80 bg-gradient-to-br from-white via-emerald-50/30 to-white p-6 shadow-md transition-all duration-300 hover:shadow-lg">
-            <DigitalisationGameHub />
-          </div>
-        </div>
-
-        {/* Cross Topic Section */}
-        <div className="group">
-          <div className="mb-5 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 shadow-md transition-transform duration-300 group-hover:scale-110">
-              <Network className="h-5 w-5 text-white" aria-hidden="true" />
-            </div>
-            <h3 className="text-2xl font-bold text-slate-900">Cross Topic</h3>
-          </div>
-          <div className="rounded-2xl border border-slate-200/80 bg-gradient-to-br from-white via-indigo-50/30 to-white p-6 shadow-md transition-all duration-300 hover:shadow-lg">
-            <CrossDomainGames />
+          <div className="flex-1">
+            <h2 className="text-2xl font-bold text-slate-900 mb-2">Practice Games</h2>
+            <p className="text-base leading-relaxed text-slate-700 mb-4">
+              All practice games have been moved to a dedicated page with improved organization, error handling, and accessibility. 
+              Explore cybersecurity, digitalisation, data, software architecture, and cross-topic games in one place.
+            </p>
+            <Link
+              href="/practice"
+              className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2 transition-colors"
+            >
+              View All Practice Games
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
           </div>
         </div>
       </div>
