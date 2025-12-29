@@ -11,6 +11,9 @@ import PageNav from "@/components/notes/PageNav";
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
 import LevelProgressBar from "@/components/course/LevelProgressBar";
 import CPDTracker from "@/components/CPDTracker";
+import SectionHeader from "@/components/course/SectionHeader";
+import SubsectionHeader from "@/components/course/SubsectionHeader";
+import BodyText from "@/components/course/BodyText";
 import DiagramBlock from "@/components/DiagramBlock";
 import { softwareArchitectureSectionManifest } from "@/lib/softwareArchitectureSections";
 
@@ -47,6 +50,9 @@ export default function Page({ source, headings }) {
       SectionProgressToggle,
       LevelProgressBar,
       CPDTracker,
+      SectionHeader,
+      SubsectionHeader,
+      BodyText,
       DiagramBlock,
       ArchitectureCanvas,
       ArchitectureDecisionExplorerTool,

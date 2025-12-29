@@ -1,16 +1,22 @@
 import { useMemo } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import NotesLayout from "@/components/notes/Layout";
 import { MDXRenderer } from "@/components/notes/MDXRenderer";
 import { loadNote } from "@/lib/content/loadNote";
 import SafeIcon from "@/components/content/SafeIcon";
 import CPDHoursTotal from "@/components/course/CPDHoursTotal";
+import CourseHeroSection from "@/components/course/CourseHeroSection";
+import SectionHeader from "@/components/course/SectionHeader";
+import BodyText from "@/components/course/BodyText";
 import { aiSectionManifest } from "@/lib/aiSections";
 import { useCPD } from "@/hooks/useCPD";
 import { getCompletionForCourse, getCompletionForLevel } from "@/lib/cpd";
 import aiCourse from "../../../content/courses/ai.json";
 import ToolCard from "@/components/notes/ToolCard";
 import QuizBlock from "@/components/notes/QuizBlock";
+
+const AIHabitPlannerTool = dynamic(() => import("@/components/notes/tools/ai/overview/AIHabitPlannerTool"), { ssr: false });
 
 const AI_LEVEL_ORDER = ["foundations", "intermediate", "advanced", "summary"];
 
@@ -154,11 +160,15 @@ export default function AICourseOverviewPage({ source, headings }) {
     () => ({
       StartButton,
       SafeIcon,
+      CourseHeroSection,
+      SectionHeader,
+      BodyText,
       TrackProgressSummary,
       CPDHoursTotal: () => <CPDHoursTotal courseId="ai" courseName="AI" />,
       LevelCards: () => <LevelCards />,
       ToolCard,
       QuizBlock,
+      AIHabitPlannerTool,
     }),
     []
   );

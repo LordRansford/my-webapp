@@ -18,6 +18,9 @@ import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
 import DiagramBlock from "@/components/DiagramBlock"
+import SectionHeader from "@/components/course/SectionHeader"
+import SubsectionHeader from "@/components/course/SubsectionHeader"
+import BodyText from "@/components/course/BodyText"
 import { aiSectionManifest } from "@/lib/aiSections"
 import PromptPatternPlaygroundTool from "@/components/notes/tools/ai/intermediate/PromptPatternPlaygroundTool"
 import EmbeddingSearchLabTool from "@/components/notes/tools/ai/intermediate/EmbeddingSearchLabTool"
@@ -30,11 +33,15 @@ import AgentToyLabTool from "@/components/notes/tools/ai/intermediate/AgentToyLa
 
 <CPDTracker courseId="ai" levelId="intermediate" estimatedHours={10} />
 
-This level is about working AI, not just knowing definitions. I focus on the everyday workflows people use to get useful results while keeping control over quality and risk.
+<BodyText>
+  This level is about working AI, not just knowing definitions. I focus on the everyday workflows people use to get useful results while keeping control over quality and risk.
+</BodyText>
 
 ---
 
-## Prompts and patterns
+<SectionHeader variant="content" emoji="💬" id="prompts-and-patterns">
+  Prompts and patterns
+</SectionHeader>
 
 <SectionProgressToggle courseId="ai" levelId="intermediate" sectionId="ai-intermediate-prompts-and-patterns" />
 
@@ -76,7 +83,9 @@ Few shot prompts work because they show the model examples of what you expect. I
 
 ---
 
-## Embeddings and vector search
+<SectionHeader variant="content" emoji="🔍" id="embeddings-and-search">
+  Embeddings and vector search
+</SectionHeader>
 
 <SectionProgressToggle courseId="ai" levelId="intermediate" sectionId="ai-intermediate-embeddings-and-search" />
 
@@ -118,7 +127,9 @@ Vector search is useful because it finds meaning, not just exact words. It also 
 
 ---
 
-## Retrieval with your own documents
+<SectionHeader variant="content" emoji="📚" id="retrieval-with-documents">
+  Retrieval with your own documents
+</SectionHeader>
 
 <SectionProgressToggle courseId="ai" levelId="intermediate" sectionId="ai-intermediate-rag-with-docs" />
 
@@ -160,7 +171,9 @@ I watch the <GlossaryTip term="context window">The amount of text the model can 
 
 ---
 
-## Simple agents that use tools
+<SectionHeader variant="content" emoji="🤖" id="simple-agents">
+  Simple agents that use tools
+</SectionHeader>
 
 <SectionProgressToggle courseId="ai" levelId="intermediate" sectionId="ai-intermediate-simple-agents" />
 

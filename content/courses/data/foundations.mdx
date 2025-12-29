@@ -18,6 +18,9 @@ learningObjectives:
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import SectionHeader from "@/components/course/SectionHeader"
+import SubsectionHeader from "@/components/course/SubsectionHeader"
+import BodyText from "@/components/course/BodyText"
 import PageNav from "@/components/notes/PageNav"
 import ToolCard from "@/components/notes/ToolCard"
 import DiagramBlock from "@/components/DiagramBlock"
@@ -43,11 +46,15 @@ import { dataSectionManifest } from "@/lib/dataSections"
 
 <CPDTracker courseId="data" levelId="foundations" estimatedHours={8} />
 
-This level sets out how data exists, moves, and creates value before any heavy analysis or security work. It keeps the language simple, introduces light maths, and shows how real systems depend on data discipline.
+<BodyText>
+  This level sets out how data exists, moves, and creates value before any heavy analysis or security work. It keeps the language simple, introduces light maths, and shows how real systems depend on data discipline.
+</BodyText>
 
 ---
 
-## What data is and why it matters
+<SectionHeader variant="content" emoji="📊" id="what-data-is">
+  What data is and why it matters
+</SectionHeader>
 
 <SectionProgressToggle courseId="data" levelId="foundations" sectionId="data-foundations-what-is-data" />
 
@@ -103,7 +110,9 @@ Banking relies on clean transaction data to spot fraud. Energy grids depend on m
   ]}
 />
 
-## Data representation and formats
+<SectionHeader variant="content" emoji="📝" id="data-representation">
+  Data representation and formats
+</SectionHeader>
 
 <SectionProgressToggle courseId="data" levelId="foundations" sectionId="data-foundations-representation-and-formats" />
 
@@ -160,7 +169,9 @@ A byte can represent 0 to 255. Powers of two help size things: $2^3 = 8$ means t
   ]}
 />
 
-## Data quality and meaning
+<SectionHeader variant="content" emoji="✅" id="data-quality">
+  Data quality and meaning
+</SectionHeader>
 
 <SectionProgressToggle courseId="data" levelId="foundations" sectionId="data-foundations-quality-and-meaning" />
 
@@ -206,7 +217,9 @@ Context and metadata preserve meaning: units, collection methods, and who collec
   ]}
 />
 
-## Data lifecycle and flow
+<SectionHeader variant="content" emoji="🔄" id="data-lifecycle">
+  Data lifecycle and flow
+</SectionHeader>
 
 <SectionProgressToggle courseId="data" levelId="foundations" sectionId="data-foundations-lifecycle-and-flow" />
 
@@ -264,7 +277,9 @@ Deletion matters because stale data can mislead, cost money, or breach privacy. 
   ]}
 />
 
-## Data roles and responsibilities
+<SectionHeader variant="content" emoji="👥" id="data-roles">
+  Data roles and responsibilities
+</SectionHeader>
 
 <SectionProgressToggle courseId="data" levelId="foundations" sectionId="data-foundations-roles-and-responsibilities" />
 
@@ -315,7 +330,9 @@ Roles exist so someone is accountable for quality, access, and change. Data owne
   ]}
 />
 
-## Foundations of data ethics and trust
+<SectionHeader variant="content" emoji="⚖️" id="data-ethics">
+  Foundations of data ethics and trust
+</SectionHeader>
 
 <SectionProgressToggle courseId="data" levelId="foundations" sectionId="data-foundations-ethics-and-trust" />
 
@@ -364,7 +381,9 @@ Ethics matters from the first data point. Consent means people know and agree to
 
 {/* CPD alignment: data literacy fundamentals, governance and stewardship expectations, cross domain relevance to AI, cybersecurity, and software architecture. */}
 
-## How data connects everything you learn next
+<SectionHeader variant="content" emoji="🔗" id="data-connections">
+  How data connects everything you learn next
+</SectionHeader>
 
 Data is the common thread across the other courses. AI models are only as good as the data they learn from. Cybersecurity controls protect data wherever it sits or moves. Software systems are structured flows of data shaped by design choices. Digital transformation is largely about improving how data is collected, shared, and trusted across journeys. Think of this page as the root note; the other tracks are variations.
 
@@ -396,7 +415,9 @@ These exercises appear across courses so you build one habit: always question ho
   <SharedDataToDecisionTool />
 </ToolCard>
 
-## Data dashboards you will use throughout the site
+<SectionHeader variant="content" emoji="📊" id="data-dashboards">
+  Data dashboards you will use throughout the site
+</SectionHeader>
 
 These starter dashboards will grow with you. They stay simple now so you can focus on concepts, then expand in Intermediate and Advanced levels.
 
@@ -424,7 +445,9 @@ These starter dashboards will grow with you. They stay simple now so you can foc
   <DataFlowVisualizer />
 </ToolCard>
 
-## Where this takes you next
+<SectionHeader variant="content" emoji="➡️" id="where-next">
+  Where this takes you next
+</SectionHeader>
 
 Data Intermediate digs into architecture, governance, and analytics that build on these habits. If you want to see how data powers other domains right away, jump to:
 

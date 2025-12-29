@@ -14,6 +14,7 @@ interface ResourceLink {
 interface CourseResourcesSectionProps {
   title?: string;
   subtitle?: string;
+  emoji?: string;
   dashboardHref?: string;
   toolsHref?: string;
   studiosHref?: string;
@@ -34,6 +35,7 @@ const iconMap = {
 export default function CourseResourcesSection({
   title = "Further practice",
   subtitle,
+  emoji,
   dashboardHref,
   toolsHref,
   studiosHref,
@@ -77,7 +79,7 @@ export default function CourseResourcesSection({
 
   return (
     <section className={`course-section-spacing ${className}`}>
-      <SectionHeader subtitle={subtitle}>{title}</SectionHeader>
+      <SectionHeader variant="practice" emoji={emoji} subtitle={subtitle}>{title}</SectionHeader>
       <div className="course-grid grid gap-4 md:grid-cols-2">
         {resources.map((resource, index) => {
           const IconComponent = resource.icon ? iconMap[resource.icon] : null;

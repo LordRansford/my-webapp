@@ -16,6 +16,9 @@ learningObjectives:
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import SectionHeader from "@/components/course/SectionHeader"
+import SubsectionHeader from "@/components/course/SubsectionHeader"
+import BodyText from "@/components/course/BodyText"
 import PageNav from "@/components/notes/PageNav"
 import Callout from "@/components/Callout"
 import { dataSectionManifest } from "@/lib/dataSections"
@@ -26,7 +29,9 @@ import { dataSectionManifest } from "@/lib/dataSections"
 
 <CPDTracker courseId="data" levelId="intermediate" estimatedHours={10} />
 
-This level moves from concepts to systems. The focus is on design, governance, interoperability, and analysis that fit real organisations. The notes are written as my own checklist so you start thinking like a data professional, not just a tool user.
+<BodyText>
+  This level moves from concepts to systems. The focus is on design, governance, interoperability, and analysis that fit real organisations. The notes are written as my own checklist so you start thinking like a data professional, not just a tool user.
+</BodyText>
 
 <Callout type="info" title="Progression state">
 Foundations complete. You are on Intermediate. Advanced and Summary stay locked until this level is delivered.
@@ -34,7 +39,9 @@ Foundations complete. You are on Intermediate. Advanced and Summary stay locked 
 
 ---
 
-## Data architectures and pipelines
+<SectionHeader variant="content" emoji="🏗️" id="data-architectures">
+  Data architectures and pipelines
+</SectionHeader>
 
 <SectionProgressToggle courseId="data" levelId="intermediate" sectionId="data-intermediate-architectures-and-pipelines" />
 
@@ -93,7 +100,9 @@ When you design a pipeline, think about ownership at each hop, the contracts bet
   ]}
 />
 
-## Data governance and stewardship
+<SectionHeader variant="content" emoji="📋" id="data-governance">
+  Data governance and stewardship
+</SectionHeader>
 
 <SectionProgressToggle courseId="data" levelId="intermediate" sectionId="data-intermediate-governance-and-stewardship" />
 
@@ -147,7 +156,9 @@ Trust grows when policies are clear, controls are enforced, and feedback loops e
   ]}
 />
 
-## Interoperability and standards
+<SectionHeader variant="content" emoji="🔗" id="interoperability">
+  Interoperability and standards
+</SectionHeader>
 
 <SectionProgressToggle courseId="data" levelId="intermediate" sectionId="data-intermediate-interoperability-and-standards" />
 
@@ -193,7 +204,9 @@ Small mismatches cause big effects: dates in different orders, currencies missin
   ]}
 />
 
-## Data analysis and insight generation
+<SectionHeader variant="content" emoji="📊" id="data-analysis">
+  Data analysis and insight generation
+</SectionHeader>
 
 <SectionProgressToggle courseId="data" levelId="intermediate" sectionId="data-intermediate-analysis-and-insight" />
 
@@ -247,7 +260,9 @@ Insight is not a chart; it is a statement backed by data and understanding. Deci
   ]}
 />
 
-## Risk, ethics and strategic value
+<SectionHeader variant="content" emoji="⚖️" id="risk-ethics">
+  Risk, ethics and strategic value
+</SectionHeader>
 
 <SectionProgressToggle courseId="data" levelId="intermediate" sectionId="data-intermediate-risk-ethics-strategic-value" />
 
@@ -304,7 +319,9 @@ Treat data as a long term asset. Good stewardship, clear value cases, and honest
 
 ---
 
-## Shared dashboards you already know
+<SectionHeader variant="content" emoji="📊" id="shared-dashboards">
+  Shared dashboards you already know
+</SectionHeader>
 
 Intermediate will reuse the data quality sandbox, the data flow visualiser, and the data interpretation exercises introduced in Foundations. They will gain more options, but the familiar interfaces stay so you can focus on thinking, not navigation.
 

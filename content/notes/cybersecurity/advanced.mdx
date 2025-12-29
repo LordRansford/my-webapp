@@ -21,6 +21,9 @@ import GlossaryTip from "@/components/notes/GlossaryTip"
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
+import SectionHeader from "@/components/course/SectionHeader"
+import SubsectionHeader from "@/components/course/SubsectionHeader"
+import BodyText from "@/components/course/BodyText"
 import { cyberSections } from "@/lib/cyberSections"
 
 <ProgressBar mode="scroll" />
@@ -31,11 +34,15 @@ import { cyberSections } from "@/lib/cyberSections"
 
 <CPDTracker courseId="cybersecurity" levelId="practice" estimatedHours={14} />
 
-This level joins everything up: how crypto actually gets used, how secure architecture and zero trust feel in practice, how detection and response run, and how governance and career paths connect. Keep it concrete, keep it honest.
+<BodyText>
+  This level joins everything up: how crypto actually gets used, how secure architecture and zero trust feel in practice, how detection and response run, and how governance and career paths connect. Keep it concrete, keep it honest.
+</BodyText>
 
 ---
 
-## Cryptography in practice
+<SectionHeader variant="content" emoji="🔐" id="crypto-practice">
+  Cryptography in practice
+</SectionHeader>
 
 <SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="advanced-crypto-practice" />
 
@@ -117,7 +124,9 @@ One more leadership lens: weak crypto choices are often a symptom of rushed deli
 
 ---
 
-## Secure architecture and zero trust thinking
+<SectionHeader variant="content" emoji="🏗️" id="secure-architecture">
+  Secure architecture and zero trust thinking
+</SectionHeader>
 
 <SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="advanced-secure-architecture" />
 
@@ -195,7 +204,9 @@ After you run it, the lead move is to turn "nice to have" into "decided". Write 
 
 ---
 
-## Detection, response and threat hunting
+<SectionHeader variant="content" emoji="🔍" id="detection-response">
+  Detection, response and threat hunting
+</SectionHeader>
 
 <SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="advanced-detection-response" />
 
@@ -269,7 +280,9 @@ After you run it, document the judgement. Which threshold do you choose, why, an
 
 ---
 
-## Governance, frameworks and your career
+<SectionHeader variant="content" emoji="📋" id="governance-frameworks">
+  Governance, frameworks and your career
+</SectionHeader>
 
 <SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="advanced-governance-career" />
 

@@ -11,6 +11,9 @@ import QuizBlock from "@/components/notes/QuizBlock";
 import CPDTracker from "@/components/CPDTracker";
 import LevelProgressBar from "@/components/course/LevelProgressBar";
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
+import SectionHeader from "@/components/course/SectionHeader";
+import SubsectionHeader from "@/components/course/SubsectionHeader";
+import BodyText from "@/components/course/BodyText";
 import { aiSectionManifest } from "@/lib/aiSections";
 import DiagramBlock from "@/components/DiagramBlock";
 
@@ -31,6 +34,9 @@ export default function Page({ source, headings }) {
       CPDTracker,
       LevelProgressBar,
       SectionProgressToggle,
+      SectionHeader,
+      SubsectionHeader,
+      BodyText,
       DiagramBlock,
       DataProfilerTool,
       TrainingLoopVisualizerTool,

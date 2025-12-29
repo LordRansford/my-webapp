@@ -14,6 +14,7 @@ interface Capstone {
 interface CourseCapstonesSectionProps {
   title?: string;
   subtitle?: string;
+  emoji?: string;
   capstones: Capstone[];
   className?: string;
 }
@@ -25,6 +26,7 @@ interface CourseCapstonesSectionProps {
 export default function CourseCapstonesSection({
   title = "Capstones",
   subtitle,
+  emoji,
   capstones,
   className = "",
 }: CourseCapstonesSectionProps) {
@@ -34,7 +36,7 @@ export default function CourseCapstonesSection({
 
   return (
     <section className={`course-section-spacing ${className}`}>
-      <SectionHeader subtitle={subtitle}>{title}</SectionHeader>
+      <SectionHeader variant="content" emoji={emoji} subtitle={subtitle}>{title}</SectionHeader>
       <div className="course-grid grid gap-4 md:grid-cols-2">
         {capstones.map((capstone) => (
           <CourseCard

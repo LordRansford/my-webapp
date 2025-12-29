@@ -16,6 +16,9 @@ learningObjectives:
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import SectionHeader from "@/components/course/SectionHeader"
+import SubsectionHeader from "@/components/course/SubsectionHeader"
+import BodyText from "@/components/course/BodyText"
 import PageNav from "@/components/notes/PageNav"
 import ToolCard from "@/components/notes/ToolCard"
 import DiagramBlock from "@/components/DiagramBlock"
@@ -34,11 +37,15 @@ import { dataSectionManifest } from "@/lib/dataSections"
 
 <CPDTracker courseId="data" levelId="advanced" estimatedHours={12} />
 
-This level assumes you are comfortable with Foundations and Intermediate. The focus now is scale, complexity, mathematical reasoning, and strategic impact. The notes are written as my perspective on how senior data professionals and architects think when systems get serious.
+<BodyText>
+  This level assumes you are comfortable with Foundations and Intermediate. The focus now is scale, complexity, mathematical reasoning, and strategic impact. The notes are written as my perspective on how senior data professionals and architects think when systems get serious.
+</BodyText>
 
 ---
 
-## Mathematical foundations of data systems
+<SectionHeader variant="content" emoji="🔢" id="math-foundations">
+  Mathematical foundations of data systems
+</SectionHeader>
 
 <SectionProgressToggle courseId="data" levelId="advanced" sectionId="data-advanced-math-foundations" />
 
@@ -106,7 +113,9 @@ Probability distributions describe how likely values are. A fair coin has a dist
   ]}
 />
 
-## Data models and abstraction at scale
+<SectionHeader variant="content" emoji="🗄️" id="data-models">
+  Data models and abstraction at scale
+</SectionHeader>
 
 <SectionProgressToggle courseId="data" levelId="advanced" sectionId="data-advanced-models-and-abstraction" />
 
@@ -155,7 +164,9 @@ Design trade offs are unavoidable. A lean model may skip location because it is 
   ]}
 />
 
-## Advanced analytics and inference
+<SectionHeader variant="content" emoji="📈" id="advanced-analytics">
+  Advanced analytics and inference
+</SectionHeader>
 
 <SectionProgressToggle courseId="data" levelId="advanced" sectionId="data-advanced-analytics-and-inference" />
 
@@ -200,7 +211,9 @@ Statistics is humility with numbers. Every estimate should come with a range and
   ]}
 />
 
-## Data platforms and distributed systems
+<SectionHeader variant="content" emoji="☁️" id="data-platforms">
+  Data platforms and distributed systems
+</SectionHeader>
 
 <SectionProgressToggle courseId="data" levelId="advanced" sectionId="data-advanced-platforms-and-distributed" />
 
@@ -247,7 +260,9 @@ A simple intuition: you can respond fast by reading nearby copies, but those cop
   ]}
 />
 
-## Governance, regulation and accountability
+<SectionHeader variant="content" emoji="⚖️" id="governance-regulation">
+  Governance, regulation and accountability
+</SectionHeader>
 
 <SectionProgressToggle courseId="data" levelId="advanced" sectionId="data-advanced-governance-regulation" />
 
@@ -298,7 +313,9 @@ Ethics and trust sit beside regulation. If a decision harms people, compliance a
   ]}
 />
 
-## Data as a strategic and economic asset
+<SectionHeader variant="content" emoji="💼" id="data-strategy">
+  Data as a strategic and economic asset
+</SectionHeader>
 
 <SectionProgressToggle courseId="data" levelId="advanced" sectionId="data-advanced-strategic-asset" />
 

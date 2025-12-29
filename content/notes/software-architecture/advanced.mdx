@@ -13,6 +13,9 @@ import QuizBlock from "@/components/notes/QuizBlock"
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
+import SectionHeader from "@/components/course/SectionHeader"
+import SubsectionHeader from "@/components/course/SubsectionHeader"
+import BodyText from "@/components/course/BodyText"
 import { softwareArchitectureSectionManifest } from "@/lib/softwareArchitectureSections"
 
 import PlatformMap from "@/components/notes/tools/architecture/advanced/PlatformMap"
@@ -29,13 +32,17 @@ import DashboardFrame from "@/components/dashboards/DashboardFrame"
 
 <CPDTracker courseId="software-architecture" levelId="practice-strategy" estimatedHours={14} />
 
-Architecture at this level is about shaping organisations, platforms, and long-term resilience. It assumes the foundations from Beginner and the design skills from Intermediate are in place. The focus now is on portfolios, governance, platforms, and thinking in years rather than sprints.
+<BodyText>
+  Architecture at this level is about shaping organisations, platforms, and long-term resilience. It assumes the foundations from Beginner and the design skills from Intermediate are in place. The focus now is on portfolios, governance, platforms, and thinking in years rather than sprints.
+</BodyText>
 
 <PageNav prevHref="/software-architecture/intermediate" prevLabel="Intermediate" nextHref="/software-architecture/summary" nextLabel="Summary" showTop showBottom />
 
 ---
 
-## Architecture beyond a single system
+<SectionHeader variant="content" emoji="🌐" id="beyond-single-system">
+  Architecture beyond a single system
+</SectionHeader>
 
 <SectionProgressToggle courseId="software-architecture" levelId="practice-strategy" sectionId="sa-advanced-digitalisation-context" />
 
@@ -47,7 +54,9 @@ Advanced architecture deals with portfolios of systems, shared platforms, legacy
 
 ---
 
-## Architecture and organisational structure
+<SectionHeader variant="content" emoji="👥" id="architecture-organisation">
+  Architecture and organisational structure
+</SectionHeader>
 
 <Callout variant="concept">
 Systems mirror communication paths.
@@ -62,7 +71,9 @@ Formal: The design of a system mirrors the communication structure of the organi
 
 ---
 
-## Platforms, ecosystems, and digitalisation
+<SectionHeader variant="content" emoji="🏗️" id="platforms-ecosystems">
+  Platforms, ecosystems, and digitalisation
+</SectionHeader>
 
 <Callout variant="concept">
 A platform is an architecture that enables others to build safely and quickly.
@@ -76,7 +87,9 @@ Modern organisations build platforms: identity, data, integration, observability
 
 ---
 
-## Resilience, failure, and risk
+<SectionHeader variant="content" emoji="🛡️" id="resilience-failure">
+  Resilience, failure, and risk
+</SectionHeader>
 
 <Callout variant="concept">
 Design for failure because it is inevitable at scale.
@@ -95,7 +108,9 @@ Formal: The ability of a system to absorb disruptions and continue operating wit
 
 ---
 
-## Governance without stagnation
+<SectionHeader variant="content" emoji="📋" id="governance">
+  Governance without stagnation
+</SectionHeader>
 
 <SectionProgressToggle courseId="software-architecture" levelId="practice-strategy" sectionId="sa-advanced-architecture-governance" />
 
@@ -111,7 +126,9 @@ Effective governance sets clear constraints, encourages autonomy within boundari
 
 ---
 
-## Architecture as long-term stewardship
+<SectionHeader variant="content" emoji="🌱" id="long-term-stewardship">
+  Architecture as long-term stewardship
+</SectionHeader>
 
 <SectionProgressToggle courseId="software-architecture" levelId="practice-strategy" sectionId="sa-advanced-roadmaps-and-evolution" />
 
@@ -123,7 +140,9 @@ Advanced architects act as stewards. They think in years, focus on capability ra
 
 ---
 
-## Observing digitalisation in practice
+<SectionHeader variant="content" emoji="👀" id="observing-practice">
+  Observing digitalisation in practice
+</SectionHeader>
 
 <SectionProgressToggle courseId="software-architecture" levelId="practice-strategy" sectionId="sa-advanced-architecture-in-practice" />
 
@@ -135,7 +154,9 @@ Architecture must be observable. Digitalisation is visible through delivery spee
 
 ---
 
-## Practice and reflection
+<SectionHeader variant="practice" emoji="🛠️" id="practice-reflection">
+  Practice and reflection
+</SectionHeader>
 
 <QuizBlock
   questions={[

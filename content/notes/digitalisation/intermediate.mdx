@@ -13,6 +13,9 @@ import QuizBlock from "@/components/notes/QuizBlock"
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
+import SectionHeader from "@/components/course/SectionHeader"
+import SubsectionHeader from "@/components/course/SubsectionHeader"
+import BodyText from "@/components/course/BodyText"
 import { digitalisationSectionManifest } from "@/lib/digitalisationSections"
 
 import StrategyRoadmapCanvas from "@/components/notes/tools/digitalisation/beginner/StrategyRoadmapCanvas"
@@ -31,13 +34,17 @@ import DashboardFrame from "@/components/dashboards/DashboardFrame"
 
 <CPDTracker courseId="digitalisation" levelId="applied" estimatedHours={10} />
 
-These notes build on the beginner page. The language is now set. The aim here is to turn intent into design: vision into outcomes, operating models into capabilities, and realistic roadmaps instead of wish lists.
+<BodyText>
+  These notes build on the beginner page. The language is now set. The aim here is to turn intent into design: vision into outcomes, operating models into capabilities, and realistic roadmaps instead of wish lists.
+</BodyText>
 
 <PageNav prevHref="/digitalisation/beginner" prevLabel="Beginner" nextHref="/digitalisation/advanced" nextLabel="Advanced" showTop showBottom />
 
 ---
 
-## From foundations to design
+<SectionHeader variant="content" emoji="🎨" id="foundations-to-design">
+  From foundations to design
+</SectionHeader>
 
 The beginner page established that digitalisation is about value, people, process, data, and technology working together. At this level the questions change from “what is digitalisation” to:
 
@@ -52,7 +59,9 @@ Digitalisation strategy at this level is about turning intent into an operating 
 
 ---
 
-## Vision, outcomes, and value
+<SectionHeader variant="content" emoji="🎯" id="vision-outcomes">
+  Vision, outcomes, and value
+</SectionHeader>
 
 <SectionProgressToggle courseId="digitalisation" levelId="applied" sectionId="dig-intermediate-metrics-and-outcomes" />
 
@@ -73,7 +82,9 @@ A good vision is short, tied to real problems, measurable, and honest about what
 
 ---
 
-## Operating model and capabilities
+<SectionHeader variant="content" emoji="⚙️" id="operating-model">
+  Operating model and capabilities
+</SectionHeader>
 
 <SectionProgressToggle courseId="digitalisation" levelId="applied" sectionId="dig-intermediate-journeys-and-services" />
 
@@ -100,7 +111,9 @@ You cannot digitalise everything at once. Strengthen the capabilities that matte
 
 ---
 
-## Platforms, data, and architecture for digitalisation
+<SectionHeader variant="content" emoji="🏗️" id="platforms-data">
+  Platforms, data, and architecture for digitalisation
+</SectionHeader>
 
 <SectionProgressToggle courseId="digitalisation" levelId="applied" sectionId="dig-intermediate-platforms-and-integration" />
 
@@ -119,7 +132,9 @@ Platforms avoid rebuilding the same foundations in every service. Data and archi
 
 ---
 
-## Governance, funding, and risk
+<SectionHeader variant="content" emoji="📋" id="governance-funding">
+  Governance, funding, and risk
+</SectionHeader>
 
 <SectionProgressToggle courseId="digitalisation" levelId="applied" sectionId="dig-intermediate-risk-and-regulation" />
 
@@ -142,7 +157,9 @@ Too little governance creates chaos. Too much governance freezes useful change.
 
 ---
 
-## Roadmapping and prioritisation
+<SectionHeader variant="content" emoji="🗺️" id="roadmapping">
+  Roadmapping and prioritisation
+</SectionHeader>
 
 Even with a clear vision, operating model, and platform view, we cannot do everything at once. Roadmapping is the sequence of what changes when and why. Dependencies matter: analytics needs data quality first; identity should stabilise before modernising every small application.
 
@@ -163,7 +180,9 @@ Formal: A time based view of initiatives, dependencies, and outcomes needed to d
 
 ---
 
-## Practice and reflection
+<SectionHeader variant="practice" emoji="🛠️" id="practice-reflection">
+  Practice and reflection
+</SectionHeader>
 
 <DashboardFrame title="Digitalisation dashboard">
   <DigitalisationDashboard />

@@ -14,6 +14,9 @@ import QuizBlock from "@/components/notes/QuizBlock"
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
+import SectionHeader from "@/components/course/SectionHeader"
+import SubsectionHeader from "@/components/course/SubsectionHeader"
+import BodyText from "@/components/course/BodyText"
 import { softwareArchitectureSectionManifest } from "@/lib/softwareArchitectureSections"
 
 import StyleSelector from "@/components/notes/tools/architecture/intermediate/StyleSelector"
@@ -28,13 +31,17 @@ import DecisionRecordBuilder from "@/components/notes/tools/architecture/interme
 
 <CPDTracker courseId="software-architecture" levelId="applied" estimatedHours={12} />
 
-This page moves from understanding structure to designing real systems. The goal now is to turn quality goals and constraints into a structure that people can build and change safely. The rhythm stays the same as the beginner page: context first, definition second, practice and reflection always.
+<BodyText>
+  This page moves from understanding structure to designing real systems. The goal now is to turn quality goals and constraints into a structure that people can build and change safely. The rhythm stays the same as the beginner page: context first, definition second, practice and reflection always.
+</BodyText>
 
 <PageNav prevHref="/software-architecture/beginner" prevLabel="Beginner" nextHref="/software-architecture/advanced" nextLabel="Advanced" showTop showBottom />
 
 ---
 
-## From understanding to design
+<SectionHeader variant="content" emoji="🎨" id="understanding-to-design">
+  From understanding to design
+</SectionHeader>
 
 Designing architecture means:
 - Turning requirements into structure
@@ -50,7 +57,9 @@ Architecture design is the act of making informed trade-offs under uncertainty.
 
 ---
 
-## Architectural styles and patterns
+<SectionHeader variant="content" emoji="🏛️" id="architectural-styles">
+  Architectural styles and patterns
+</SectionHeader>
 
 <SectionProgressToggle courseId="software-architecture" levelId="applied" sectionId="sa-intermediate-architectural-styles" />
 
@@ -75,7 +84,9 @@ Choosing a style is architectural because it influences how the system evolves, 
 
 ---
 
-## Decomposition and responsibility
+<SectionHeader variant="content" emoji="🧩" id="decomposition">
+  Decomposition and responsibility
+</SectionHeader>
 
 <SectionProgressToggle courseId="software-architecture" levelId="applied" sectionId="sa-intermediate-microservices-and-integration" />
 
@@ -103,7 +114,9 @@ A quick test: if a component has more than one reason to change, its boundary is
 
 ---
 
-## Quality-driven architecture
+<SectionHeader variant="content" emoji="⭐" id="quality-driven">
+  Quality-driven architecture
+</SectionHeader>
 
 <SectionProgressToggle courseId="software-architecture" levelId="applied" sectionId="sa-intermediate-runtime-tradeoffs" />
 
@@ -121,7 +134,9 @@ Ignoring quality attributes early leads to expensive redesign later.
 
 ---
 
-## Making and recording decisions
+<SectionHeader variant="content" emoji="📝" id="making-decisions">
+  Making and recording decisions
+</SectionHeader>
 
 <SectionProgressToggle courseId="software-architecture" levelId="applied" sectionId="sa-intermediate-cqrs-event-sourcing" />
 
@@ -144,7 +159,9 @@ Undocumented decisions become hidden assumptions.
 
 ---
 
-## Documentation and architectural views
+<SectionHeader variant="content" emoji="📚" id="documentation-views">
+  Documentation and architectural views
+</SectionHeader>
 
 Architecture must be communicated clearly. One diagram is never enough.
 
@@ -161,7 +178,9 @@ Architecture diagrams exist to support understanding, not decoration.
 
 ---
 
-## Practice and reflection
+<SectionHeader variant="practice" emoji="🛠️" id="practice-reflection">
+  Practice and reflection
+</SectionHeader>
 
 <QuizBlock
   questions={[

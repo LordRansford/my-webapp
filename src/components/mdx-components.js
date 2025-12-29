@@ -11,6 +11,9 @@ import QuizBlock from "@/components/notes/QuizBlock";
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
 import LevelProgressBar from "@/components/course/LevelProgressBar";
 import CPDTracker from "@/components/CPDTracker";
+import SectionHeader from "@/components/course/SectionHeader";
+import SubsectionHeader from "@/components/course/SubsectionHeader";
+import BodyText from "@/components/course/BodyText";
 import PageNav from "@/components/notes/PageNav";
 import ConceptMapExplorer from "@/components/ConceptMapExplorer";
 import { ConceptBlock, WhyItMatters, HowItWorks, KeyTakeaways } from "@/components/notes/TeachingBlocks";
@@ -200,6 +203,9 @@ const mdxComponents = {
   SectionProgressToggle,
   LevelProgressBar,
   CPDTracker,
+  SectionHeader,
+  SubsectionHeader,
+  BodyText,
   PageNav,
   ConceptMapExplorer,
   Figure,

@@ -6,6 +6,9 @@ import { loadNote } from "@/lib/content/loadNote";
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
 import LevelProgressBar from "@/components/course/LevelProgressBar";
 import CPDTracker from "@/components/CPDTracker";
+import SectionHeader from "@/components/course/SectionHeader";
+import SubsectionHeader from "@/components/course/SubsectionHeader";
+import BodyText from "@/components/course/BodyText";
 import PageNav from "@/components/notes/PageNav";
 import Callout from "@/components/Callout";
 import ToolCard from "@/components/notes/ToolCard";
@@ -40,6 +43,9 @@ export default function Page({ source, headings }) {
       SectionProgressToggle,
       LevelProgressBar,
       CPDTracker,
+      SectionHeader,
+      SubsectionHeader,
+      BodyText,
       PageNav,
       Callout,
       ToolCard,

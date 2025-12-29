@@ -1,9 +1,14 @@
 import { useMemo } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import NotesLayout from "@/components/notes/Layout";
 import { MDXRenderer } from "@/components/notes/MDXRenderer";
 import { loadNote } from "@/lib/content/loadNote";
 import CourseProgressBar from "@/components/course/CourseProgressBar";
+import CourseHeroSection from "@/components/course/CourseHeroSection";
+import SectionHeader from "@/components/course/SectionHeader";
+import SubsectionHeader from "@/components/course/SubsectionHeader";
+import BodyText from "@/components/course/BodyText";
 import { cyberSections } from "@/lib/cyberSections";
 import { getTotalCpdHours } from "@/components/CPDTracker";
 import cybersecurityCourse from "../../../content/courses/cybersecurity.json";
@@ -12,6 +17,8 @@ import ToolCard from "@/components/notes/ToolCard";
 import QuizBlock from "@/components/notes/QuizBlock";
 import { ErrorBoundary } from "@/components/notes/ErrorBoundary";
 import CPDTracker from "@/components/CPDTracker";
+
+const SecurityHabitPlannerTool = dynamic(() => import("@/components/notes/tools/cybersecurity/overview/SecurityHabitPlannerTool"), { ssr: false });
 
 function StartButton() {
   return (
@@ -118,6 +125,10 @@ export default function CybersecurityOverviewPage({ source, headings }) {
     () => ({
       StartButton,
       SafeIcon,
+      CourseHeroSection,
+      SectionHeader,
+      SubsectionHeader,
+      BodyText,
       LevelCards: () => <LevelCards levels={cybersecurityCourse.levels} />,
       CourseProgressBar: () => <CourseProgressBar courseId="cybersecurity" manifest={cyberSections} />,
       CPDHoursTotal: () => {
@@ -135,6 +146,7 @@ export default function CybersecurityOverviewPage({ source, headings }) {
       CPDTracker,
       ToolCard,
       QuizBlock,
+      SecurityHabitPlannerTool,
     }),
     []
   );

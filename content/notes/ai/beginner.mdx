@@ -23,6 +23,9 @@ import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
 import DiagramBlock from "@/components/DiagramBlock"
+import SectionHeader from "@/components/course/SectionHeader"
+import SubsectionHeader from "@/components/course/SubsectionHeader"
+import BodyText from "@/components/course/BodyText"
 import { aiSectionManifest } from "@/lib/aiSections"
 import ClusteringIntuitionTool from "@/components/notes/tools/ai/beginner/ClusteringIntuitionTool"
 import ResponsibleAIPlannerTool from "@/components/notes/tools/ai/beginner/ResponsibleAIPlannerTool"
@@ -36,11 +39,15 @@ import TinyClassifierLabTool from "@/components/notes/tools/ai/beginner/TinyClas
 
 <CPDTracker courseId="ai" levelId="foundations" estimatedHours={8} />
 
-These notes are a calm path into AI. I focus on meaning first, numbers second, and practice always. The goal is not buzzwords. The goal is to build judgement you can use when you meet real systems.
+<BodyText>
+  These notes are a calm path into AI. I focus on meaning first, numbers second, and practice always. The goal is not buzzwords. The goal is to build judgement you can use when you meet real systems.
+</BodyText>
 
 ---
 
-## What AI is and why it matters now
+<SectionHeader variant="content" emoji="🧠" id="what-is-ai">
+  What AI is and why it matters now
+</SectionHeader>
 
 <SectionProgressToggle courseId="ai" levelId="foundations" sectionId="ai-foundations-what-is-ai" />
 
@@ -96,7 +103,9 @@ My calm view on hype is this. AI is not magic. It is applied statistics plus eng
   ]}
 />
 
-### After this section you should be able to:
+<SubsectionHeader emoji="✅">
+  After this section you should be able to:
+</SubsectionHeader>
 
 - Explain what a model is and why it exists in a system
 - Explain what breaks when training data and real inputs diverge
@@ -104,7 +113,9 @@ My calm view on hype is this. AI is not magic. It is applied statistics plus eng
 
 ---
 
-## Data and representation
+<SectionHeader variant="content" emoji="📊" id="data-and-representation">
+  Data and representation
+</SectionHeader>
 
 <SectionProgressToggle courseId="ai" levelId="foundations" sectionId="ai-foundations-data-and-representation" />
 
@@ -174,7 +185,9 @@ Splitting data matters because we want honest feedback. Training data is what th
   ]}
 />
 
-### After this section you should be able to:
+<SubsectionHeader emoji="✅">
+  After this section you should be able to:
+</SubsectionHeader>
 
 - Explain why representation choices change what a model can learn
 - Explain what breaks when labels, groups, or context are missing from data
@@ -182,7 +195,9 @@ Splitting data matters because we want honest feedback. Training data is what th
 
 ---
 
-## Supervised and unsupervised learning
+<SectionHeader variant="content" emoji="🎓" id="learning-paradigms">
+  Supervised and unsupervised learning
+</SectionHeader>
 
 <SectionProgressToggle courseId="ai" levelId="foundations" sectionId="ai-foundations-learning-paradigms" />
 
@@ -261,7 +276,9 @@ Here are a few beginner misconceptions to avoid. First, more data is not always 
   ]}
 />
 
-### After this section you should be able to:
+<SubsectionHeader emoji="✅">
+  After this section you should be able to:
+</SubsectionHeader>
 
 - Explain when supervised learning is appropriate and what it optimises for
 - Explain when unsupervised learning is useful and why evaluation is harder
@@ -269,7 +286,9 @@ Here are a few beginner misconceptions to avoid. First, more data is not always 
 
 ---
 
-## Responsible AI basics and limitations
+<SectionHeader variant="content" emoji="⚖️" id="responsible-ai">
+  Responsible AI basics and limitations
+</SectionHeader>
 
 <SectionProgressToggle courseId="ai" levelId="foundations" sectionId="ai-foundations-responsible-ai-basics" />
 
@@ -297,12 +316,16 @@ Explainability matters most when decisions affect real lives. An automated decis
 
 Bigger models do not automatically mean better or safer. They can be more capable and still be more confusing. They can also be more expensive to run, which encourages shortcuts. If it costs too much to monitor and evaluate, teams quietly stop doing it.
 
-### What this optimises for
+<SubsectionHeader emoji="🎯">
+  What this optimises for
+</SubsectionHeader>
 
 - Automation speed and consistency for low risk tasks
 - Scaled assistance when humans have time and context
 
-### What this makes harder
+<SubsectionHeader emoji="⚠️">
+  What this makes harder
+</SubsectionHeader>
 
 - Accountability if oversight is vague
 - Safe rollback when models drift or fail
@@ -357,13 +380,17 @@ Drift is not rare. It is normal. People change behaviour. Fraud patterns adapt. 
   ]}
 />
 
-### After this section you should be able to:
+<SubsectionHeader emoji="✅">
+  After this section you should be able to:
+</SubsectionHeader>
 
 - Explain why models do not understand intent or truth and what breaks if you trust them blindly
 - Explain why evaluation and monitoring are continuous, not a one time step
 - Explain the trade off between AI automation and human oversight in high impact decisions
 
-You now have the foundations to talk clearly about data, learning, and limits. Intermediate will build on this with evaluation, deployment, and system thinking. Foundations are about how you think, not which tool you use.
+<BodyText>
+  You now have the foundations to talk clearly about data, learning, and limits. Intermediate will build on this with evaluation, deployment, and system thinking. Foundations are about how you think, not which tool you use.
+</BodyText>
 
 ---
 
