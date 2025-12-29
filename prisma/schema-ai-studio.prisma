@@ -1,0 +1,511 @@
+// AI Studio Database Schema
+// This schema extends the existing Prisma schema with AI Studio tables
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Users table (if not already exists)
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  passwordHash  String
+  name          String?
+  avatarUrl     String?
+  tier          String   @default("free") // free, starter, professional, enterprise
+  status        String   @default("active") // active, suspended, deleted
+  preferences   Json     @default("{}")
+  metadata      Json     @default("{}")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  lastLoginAt   DateTime?
+
+  // Relations
+  datasets      Dataset[]
+  models        Model[]
+  trainingJobs  TrainingJob[]
+  agents        Agent[]
+  deployments   Deployment[]
+  computeUsage  ComputeUsage[]
+  subscriptions Subscription[]
+  invoices      Invoice[]
+  userProgress  UserProgress[]
+  auditLogs     AuditLog[]
+
+  @@index([email])
+  @@index([tier])
+  @@index([status])
+  @@map("users")
+}
+
+// Datasets
+model Dataset {
+  id              String   @id @default(uuid())
+  userId          String
+  name            String
+  description     String?
+  type            String   // csv, json, jsonl, parquet, hdf5
+  size            BigInt
+  rows            Int?
+  columns         Int?
+  filePath        String   @map("file_path")
+  license         String
+  licenseVerified Boolean  @default(false) @map("license_verified")
+  status          String   @default("uploading") // uploading, processing, verified, rejected, deleted
+  schema          Json?
+  statistics      Json?
+  qualityScore    Float?   @map("quality_score")
+  validationResult Json?   @map("validation_result")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  // Relations
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  versions        DatasetVersion[]
+  shares          DatasetShare[]
+  trainingJobs    TrainingJob[]
+  modelEvaluations ModelEvaluation[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([license])
+  @@index([createdAt])
+  @@map("datasets")
+}
+
+model DatasetVersion {
+  id         String   @id @default(uuid())
+  datasetId  String   @map("dataset_id")
+  version    Int
+  filePath   String   @map("file_path")
+  size       BigInt
+  checksum   String
+  changes    String?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  dataset    Dataset  @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@unique([datasetId, version])
+  @@index([datasetId])
+  @@map("dataset_versions")
+}
+
+model DatasetShare {
+  id              String   @id @default(uuid())
+  datasetId       String   @map("dataset_id")
+  sharedByUserId  String   @map("shared_by_user_id")
+  sharedWithUserId String? @map("shared_with_user_id")
+  permission      String   @default("read") // read, write, admin
+  public          Boolean  @default(false)
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  dataset         Dataset  @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+  sharedBy        User     @relation("SharedBy", fields: [sharedByUserId], references: [id], onDelete: Cascade)
+  sharedWith      User?    @relation("SharedWith", fields: [sharedWithUserId], references: [id], onDelete: Cascade)
+
+  @@unique([datasetId, sharedWithUserId])
+  @@index([datasetId])
+  @@index([sharedWithUserId])
+  @@map("dataset_shares")
+}
+
+// Models
+model Model {
+  id                String   @id @default(uuid())
+  userId            String   @map("user_id")
+  name              String
+  description       String?
+  type              String   // classification, regression, clustering, generation, other
+  architecture      Json
+  status            String   @default("created") // created, training, trained, failed, deployed, archived
+  version           String   @default("1.0.0")
+  trainingDatasetId String?  @map("training_dataset_id")
+  trainingConfig    Json?    @map("training_config")
+  metrics           Json?
+  modelPath         String?  @map("model_path")
+  modelSize         BigInt?  @map("model_size")
+  metadata          Json     @default("{}")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  trainedAt         DateTime? @map("trained_at")
+  deletedAt         DateTime? @map("deleted_at")
+
+  // Relations
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trainingDataset   Dataset? @relation(fields: [trainingDatasetId], references: [id])
+  versions          ModelVersion[]
+  evaluations       ModelEvaluation[]
+  trainingJobs      TrainingJob[]
+  deployments       Deployment[]
+
+  @@index([userId])
+  @@index([type])
+  @@index([status])
+  @@index([trainingDatasetId])
+  @@index([createdAt])
+  @@map("models")
+}
+
+model ModelVersion {
+  id            String   @id @default(uuid())
+  modelId       String   @map("model_id")
+  version       String
+  modelPath     String   @map("model_path")
+  modelSize     BigInt   @map("model_size")
+  checksum      String
+  trainingJobId String?  @map("training_job_id")
+  metrics       Json?
+  changelog     String?
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  model         Model    @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  trainingJob   TrainingJob? @relation(fields: [trainingJobId], references: [id])
+
+  @@unique([modelId, version])
+  @@index([modelId])
+  @@index([trainingJobId])
+  @@map("model_versions")
+}
+
+model ModelEvaluation {
+  id            String   @id @default(uuid())
+  modelId       String   @map("model_id")
+  datasetId     String   @map("dataset_id")
+  metrics       Json
+  confusionMatrix Json?  @map("confusion_matrix")
+  perClassMetrics Json? @map("per_class_metrics")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  model         Model    @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  dataset       Dataset  @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@index([modelId])
+  @@index([datasetId])
+  @@index([createdAt])
+  @@map("model_evaluations")
+}
+
+// Training Jobs
+model TrainingJob {
+  id              String   @id @default(uuid())
+  userId          String   @map("user_id")
+  modelId         String   @map("model_id")
+  datasetId       String   @map("dataset_id")
+  status          String   @default("queued") // queued, running, completed, failed, cancelled
+  computeType     String   @default("browser") @map("compute_type") // browser, backend
+  config          Json
+  progress        Float    @default(0)
+  currentEpoch    Int?     @map("current_epoch")
+  totalEpochs     Int?     @map("total_epochs")
+  metrics         Json?
+  metricsHistory  Json?    @map("metrics_history")
+  errorMessage    String?  @map("error_message")
+  workerId        String?  @map("worker_id")
+  startedAt       DateTime? @map("started_at")
+  completedAt     DateTime? @map("completed_at")
+  durationSeconds Int?     @map("duration_seconds")
+  cost            Decimal? @db.Decimal(10, 4)
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  model           Model    @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  dataset         Dataset  @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+  logs            TrainingJobLog[]
+  modelVersions   ModelVersion[]
+
+  @@index([userId])
+  @@index([modelId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("training_jobs")
+}
+
+model TrainingJobLog {
+  id        String   @id @default(uuid())
+  jobId     String   @map("job_id")
+  level     String   // debug, info, warning, error
+  message   String
+  metadata  Json?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  job       TrainingJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId])
+  @@index([level])
+  @@index([createdAt])
+  @@map("training_job_logs")
+}
+
+// Agents
+model Agent {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  name        String
+  description String?
+  type        String   // single, multi, hierarchical, collaborative
+  modelConfig Json     @map("model_config")
+  tools       Json
+  memoryConfig Json?   @map("memory_config")
+  systemPrompt String? @map("system_prompt")
+  workflow    Json?
+  status      String   @default("active") // active, paused, archived
+  metadata    Json     @default("{}")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  executions  AgentExecution[]
+
+  @@index([userId])
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
+  @@map("agents")
+}
+
+model AgentExecution {
+  id            String   @id @default(uuid())
+  agentId       String   @map("agent_id")
+  userId        String   @map("user_id")
+  input         String
+  output        String?
+  status        String   @default("running") // running, completed, failed, cancelled
+  steps         Json?
+  cost          Decimal? @db.Decimal(10, 4)
+  tokensUsed    Int?     @map("tokens_used")
+  durationSeconds Int?   @map("duration_seconds")
+  errorMessage  String?  @map("error_message")
+  startedAt     DateTime @default(now()) @map("started_at")
+  completedAt   DateTime? @map("completed_at")
+
+  agent         Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([agentId])
+  @@index([userId])
+  @@index([status])
+  @@index([startedAt])
+  @@map("agent_executions")
+}
+
+// Deployments
+model Deployment {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  modelId     String   @map("model_id")
+  name        String
+  target      String   // api, browser, container, edge
+  status      String   @default("deploying") // deploying, active, scaling, failed, stopped
+  url         String?
+  config      Json
+  replicas    Int      @default(1)
+  metrics     Json?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  model       Model    @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  deploymentMetrics DeploymentMetric[]
+
+  @@index([userId])
+  @@index([modelId])
+  @@index([status])
+  @@index([target])
+  @@map("deployments")
+}
+
+model DeploymentMetric {
+  id              String   @id @default(uuid())
+  deploymentId    String   @map("deployment_id")
+  timestamp       DateTime @default(now())
+  requests        Int      @default(0)
+  avgLatencyMs    Int?     @map("avg_latency_ms")
+  p50LatencyMs    Int?     @map("p50_latency_ms")
+  p95LatencyMs    Int?     @map("p95_latency_ms")
+  p99LatencyMs    Int?     @map("p99_latency_ms")
+  errorCount      Int      @default(0) @map("error_count")
+  errorRate       Decimal? @db.Decimal(5, 4) @map("error_rate")
+  throughputRps   Decimal? @db.Decimal(10, 2) @map("throughput_rps")
+  cpuUsagePercent Decimal? @db.Decimal(5, 2) @map("cpu_usage_percent")
+  memoryUsageMb   Int?     @map("memory_usage_mb")
+
+  deployment      Deployment @relation(fields: [deploymentId], references: [id], onDelete: Cascade)
+
+  @@index([deploymentId])
+  @@index([timestamp])
+  @@index([deploymentId, timestamp])
+  @@map("deployment_metrics")
+}
+
+// Compute & Billing
+model ComputeUsage {
+  id            String   @id @default(uuid())
+  userId        String   @map("user_id")
+  jobId         String?  @map("job_id")
+  deploymentId  String?  @map("deployment_id")
+  agentExecutionId String? @map("agent_execution_id")
+  resourceType  String   @map("resource_type") // gpu, cpu, storage, network
+  quantity      Decimal  @db.Decimal(10, 4)
+  unit          String
+  cost          Decimal  @db.Decimal(10, 4)
+  periodStart   DateTime @map("period_start")
+  periodEnd     DateTime @map("period_end")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([periodStart])
+  @@index([periodEnd])
+  @@index([userId, periodStart, periodEnd])
+  @@map("compute_usage")
+}
+
+model Subscription {
+  id                  String   @id @default(uuid())
+  userId              String   @map("user_id")
+  tier                String   // free, starter, professional, enterprise
+  status              String   @default("active") // active, cancelled, past_due, expired
+  currentPeriodStart  DateTime @map("current_period_start")
+  currentPeriodEnd    DateTime @map("current_period_end")
+  cancelAtPeriodEnd   Boolean  @default(false) @map("cancel_at_period_end")
+  stripeSubscriptionId String? @map("stripe_subscription_id")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  invoices            Invoice[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([stripeSubscriptionId])
+  @@map("subscriptions")
+}
+
+model Invoice {
+  id                String   @id @default(uuid())
+  userId            String   @map("user_id")
+  subscriptionId    String?  @map("subscription_id")
+  amount            Decimal  @db.Decimal(10, 2)
+  currency          String   @default("USD")
+  status            String   @default("draft") // draft, open, paid, void, uncollectible
+  periodStart       DateTime @map("period_start")
+  periodEnd         DateTime @map("period_end")
+  items             Json
+  stripeInvoiceId   String? @map("stripe_invoice_id")
+  pdfUrl            String?  @map("pdf_url")
+  createdAt         DateTime @default(now()) @map("created_at")
+  paidAt            DateTime? @map("paid_at")
+
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscription      Subscription? @relation(fields: [subscriptionId], references: [id])
+
+  @@index([userId])
+  @@index([status])
+  @@index([stripeInvoiceId])
+  @@map("invoices")
+}
+
+// Educational
+model LearningPath {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  audience    String   // children, students, professionals, experts
+  level       String   // beginner, intermediate, advanced
+  durationMinutes Int? @map("duration_minutes")
+  modulesCount Int    @default(0) @map("modules_count")
+  orderIndex  Int?     @map("order_index")
+  status      String   @default("active") // active, draft, archived
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  modules     LearningModule[]
+  userProgress UserProgress[]
+
+  @@index([audience])
+  @@index([level])
+  @@index([orderIndex])
+  @@map("learning_paths")
+}
+
+model LearningModule {
+  id            String   @id @default(uuid())
+  pathId        String   @map("path_id")
+  title         String
+  description   String?
+  type          String   // theory, tutorial, hands-on, project
+  durationMinutes Int?   @map("duration_minutes")
+  orderIndex    Int?     @map("order_index")
+  content       Json
+  prerequisites Json?
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  path          LearningPath @relation(fields: [pathId], references: [id], onDelete: Cascade)
+  userProgress  UserProgress[]
+
+  @@index([pathId])
+  @@index([pathId, orderIndex])
+  @@map("learning_modules")
+}
+
+model UserProgress {
+  id              String   @id @default(uuid())
+  userId          String   @map("user_id")
+  pathId          String?  @map("path_id")
+  moduleId        String?  @map("module_id")
+  completed       Boolean  @default(false)
+  score           Decimal? @db.Decimal(5, 2)
+  timeSpentMinutes Int?   @map("time_spent_minutes")
+  lastAccessedAt  DateTime? @map("last_accessed_at")
+  completedAt     DateTime? @map("completed_at")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  path            LearningPath? @relation(fields: [pathId], references: [id], onDelete: Cascade)
+  module          LearningModule? @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, moduleId])
+  @@index([userId])
+  @@index([pathId])
+  @@index([moduleId])
+  @@map("user_progress")
+}
+
+// System & Audit
+model AuditLog {
+  id          String   @id @default(uuid())
+  userId      String?  @map("user_id")
+  action      String
+  resourceType String? @map("resource_type")
+  resourceId  String?  @map("resource_id")
+  details     Json?
+  ipAddress   String?  @map("ip_address")
+  userAgent   String?  @map("user_agent")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([action])
+  @@index([resourceType, resourceId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
