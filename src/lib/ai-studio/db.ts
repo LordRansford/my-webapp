@@ -9,11 +9,15 @@
  * 3. Use the prisma client from @/lib/db/prisma or create a new instance
  */
 
-// TODO: Import Prisma client when database is set up
-// import { prisma } from "@/lib/db/prisma";
-// Or create a new instance:
-// import { PrismaClient } from "@prisma/client";
-// export const aiStudioDb = new PrismaClient();
+// Try to import Prisma client, fallback to simulated if not available
+let prisma: any = null;
+try {
+  const prismaModule = require("@/lib/db/prisma");
+  prisma = prismaModule.prisma;
+} catch (error) {
+  // Prisma not set up yet, will use simulated responses
+  console.warn("[AI Studio DB] Prisma not available, using simulated responses");
+}
 
 /**
  * Get dataset by ID
