@@ -303,6 +303,25 @@ export default function CyberSummary() {
           <div className="mt-4">
             <CybersecuritySummaryGameHub />
           </div>
+          <div className="mt-4 rounded-2xl border border-blue-200 bg-blue-50/50 p-4">
+            <div className="flex items-center gap-3">
+              <div className="flex-shrink-0">
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-blue-200 bg-white text-blue-700">
+                  <SafeIcon name="game" size={16} color="currentColor" style={{ marginRight: 0 }} />
+                </span>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-base font-semibold text-slate-900">More practice games</h3>
+                <p className="text-sm text-slate-700">Explore all practice games including cybersecurity, digitalisation, and cross-topic drills.</p>
+              </div>
+              <Link
+                href="/practice"
+                className="button secondary whitespace-nowrap"
+              >
+                View All Practice Games →
+              </Link>
+            </div>
+          </div>
           <div className="mt-4 rounded-2xl border border-slate-200 bg-white/80 p-4">
             <p className="text-base text-slate-800 leading-relaxed">
               Quick nudge: when a game result surprises you, that is not failure. It is a signal. Go find the assumption you were using, then decide what control, log, or process would protect you when that assumption is wrong.
