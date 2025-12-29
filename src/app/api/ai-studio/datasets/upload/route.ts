@@ -9,6 +9,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/ai-studio/auth";
 import { validateUpload } from "@/utils/validateUpload";
+import { uploadFile } from "@/lib/ai-studio/storage";
+import { createDataset } from "@/lib/ai-studio/db";
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 const ALLOWED_EXTENSIONS = [".csv", ".json", ".jsonl", ".parquet"];
@@ -68,31 +70,39 @@ export async function POST(request: NextRequest) {
 
     const uploadedFile = safeFiles[0];
 
-    // In production, this would:
-    // 1. Upload file to storage (S3, Vercel Blob, etc.)
-    // 2. Create dataset record in database
-    // 3. Trigger validation job
-    // 4. Return dataset ID
+    // Upload file to storage
+    const uploadResult = await uploadFile(uploadedFile, auth.user!.id, {
+      type: "datasets",
+    });
 
-    // For now, simulate upload
-    const datasetId = crypto.randomUUID();
-    const fileSize = uploadedFile.size;
-    const fileName = uploadedFile.name;
-    const fileType = fileName.split(".").pop()?.toLowerCase() || "unknown";
+    // Create dataset record in database
+    const dataset = await createDataset({
+      userId: auth.user!.id,
+      name: uploadedFile.name,
+      type: uploadedFile.name.split(".").pop()?.toLowerCase() || "unknown",
+      size: uploadedFile.size,
+      filePath: uploadResult.pathname,
+      license: "user-owned", // Default, can be updated later
+      status: "uploaded",
+    });
 
-    // Simulate file processing
-    const rows = fileType === "csv" ? Math.floor(fileSize / 100) : undefined;
+    // TODO: Trigger validation job asynchronously
+    // This would be done via a background job queue
+
+    const fileType = uploadedFile.name.split(".").pop()?.toLowerCase() || "unknown";
+    const rows = fileType === "csv" ? Math.floor(uploadedFile.size / 100) : undefined;
     const columns = fileType === "csv" ? 10 : undefined;
 
     return NextResponse.json(
       {
         data: {
-          datasetId,
-          fileName,
-          fileSize,
+          datasetId: (dataset as any).id,
+          fileName: uploadedFile.name,
+          fileSize: uploadedFile.size,
           fileType,
           rows,
           columns,
+          filePath: uploadResult.pathname,
           status: "uploaded",
           message: "File uploaded successfully. Validation will begin shortly.",
         },
