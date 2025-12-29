@@ -1,24 +1,26 @@
 /**
- * API Route: Agent Operations
+ * AI Studio Agent API
  * 
- * GET /api/ai-studio/agents/:id
- * PUT /api/ai-studio/agents/:id
- * DELETE /api/ai-studio/agents/:id
+ * GET /api/ai-studio/agents/[id] - Get agent
+ * PUT /api/ai-studio/agents/[id] - Update agent
+ * DELETE /api/ai-studio/agents/[id] - Delete agent
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { requireAuth, checkResourceAccess } from "@/lib/ai-studio/auth";
+import { requireAuth } from "@/lib/ai-studio/auth";
+import { getAgent, updateAgent, deleteAgent } from "@/lib/ai-studio/db";
 import { z } from "zod";
 
-const updateAgentSchema = z.object({
+const agentSchema = z.object({
   name: z.string().min(1).max(255).optional(),
   description: z.string().optional(),
-  modelConfig: z.record(z.string(), z.unknown()).optional(),
-  tools: z.array(z.record(z.string(), z.unknown())).optional(),
-  memoryConfig: z.record(z.string(), z.unknown()).optional(),
-  systemPrompt: z.string().optional(),
-  workflow: z.record(z.string(), z.unknown()).optional(),
-  status: z.enum(["active", "paused", "archived"]).optional(),
+  config: z.object({
+    model: z.string().optional(),
+    tools: z.array(z.string()).optional(),
+    memory: z.record(z.string(), z.unknown()).optional(),
+    temperature: z.number().min(0).max(2).optional(),
+    maxTokens: z.number().min(1).max(100000).optional(),
+  }).optional(),
 });
 
 export async function GET(
@@ -32,8 +34,7 @@ export async function GET(
     const { id } = await context.params;
     const agentId = id;
 
-    // TODO: Get agent from database
-    const agent: any = null;
+    const agent = await getAgent(agentId, auth.user!.id);
 
     if (!agent) {
       return NextResponse.json(
@@ -48,7 +49,7 @@ export async function GET(
     }
 
     // Verify access
-    if (!checkResourceAccess(auth.user!.id, agent.userId)) {
+    if ((agent as any).userId !== auth.user!.id) {
       return NextResponse.json(
         {
           error: {
@@ -94,10 +95,12 @@ export async function PUT(
     const { id } = await context.params;
     const agentId = id;
 
-    // TODO: Get agent from database
-    const agent: any = null;
+    const body = await request.json();
+    const validated = agentSchema.parse(body);
 
-    if (!agent) {
+    // Verify agent exists and user has access
+    const existingAgent = await getAgent(agentId, auth.user!.id);
+    if (!existingAgent) {
       return NextResponse.json(
         {
           error: {
@@ -109,8 +112,7 @@ export async function PUT(
       );
     }
 
-    // Verify access
-    if (!checkResourceAccess(auth.user!.id, agent.userId)) {
+    if ((existingAgent as any).userId !== auth.user!.id) {
       return NextResponse.json(
         {
           error: {
@@ -122,20 +124,12 @@ export async function PUT(
       );
     }
 
-    const body = await request.json();
-    const validated = updateAgentSchema.parse(body);
-
-    // TODO: Update agent in database
-    const updated = {
-      ...agent,
-      ...validated,
-      updatedAt: new Date().toISOString(),
-    };
+    const agent = await updateAgent(agentId, auth.user!.id, validated);
 
     return NextResponse.json(
       {
         data: {
-          agent: updated,
+          agent,
         },
         requestId: crypto.randomUUID(),
       },
@@ -179,10 +173,9 @@ export async function DELETE(
     const { id } = await context.params;
     const agentId = id;
 
-    // TODO: Get agent from database
-    const agent: any = null;
-
-    if (!agent) {
+    // Verify agent exists and user has access
+    const existingAgent = await getAgent(agentId, auth.user!.id);
+    if (!existingAgent) {
       return NextResponse.json(
         {
           error: {
@@ -194,8 +187,7 @@ export async function DELETE(
       );
     }
 
-    // Verify access
-    if (!checkResourceAccess(auth.user!.id, agent.userId)) {
+    if ((existingAgent as any).userId !== auth.user!.id) {
       return NextResponse.json(
         {
           error: {
@@ -207,7 +199,7 @@ export async function DELETE(
       );
     }
 
-    // TODO: Soft delete agent in database
+    await deleteAgent(agentId, auth.user!.id);
 
     return NextResponse.json(
       {
@@ -231,4 +223,3 @@ export async function DELETE(
     );
   }
 }
-

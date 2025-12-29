@@ -193,3 +193,183 @@ export async function listTrainingJobs(userId: string, options?: {
   return [];
 }
 
+/**
+ * Get agent by ID
+ */
+export async function getAgent(agentId: string, userId: string) {
+  if (USE_SIMULATED || !prisma) {
+    return null;
+  }
+
+  try {
+    // TODO: Uncomment when AI Studio schema is merged
+    // return await prisma.agent.findFirst({
+    //   where: {
+    //     id: agentId,
+    //     userId: userId,
+    //     deletedAt: null,
+    //   },
+    // });
+    return null;
+  } catch (error) {
+    console.error("[AI Studio DB] Error fetching agent:", error);
+    return null;
+  }
+}
+
+/**
+ * Create agent record
+ */
+export async function createAgent(data: {
+  userId: string;
+  name: string;
+  description?: string;
+  config: any;
+  status?: string;
+  version?: string;
+}) {
+  if (USE_SIMULATED || !prisma) {
+    return {
+      id: crypto.randomUUID(),
+      ...data,
+      status: data.status || "created",
+      version: data.version || "1.0.0",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+  }
+
+  try {
+    // TODO: Uncomment when AI Studio schema is merged
+    // return await prisma.agent.create({
+    //   data: {
+    //     userId: data.userId,
+    //     name: data.name,
+    //     description: data.description,
+    //     config: data.config,
+    //     status: data.status || "created",
+    //     version: data.version || "1.0.0",
+    //   },
+    // });
+    return {
+      id: crypto.randomUUID(),
+      ...data,
+      status: data.status || "created",
+      version: data.version || "1.0.0",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+  } catch (error) {
+    console.error("[AI Studio DB] Error creating agent:", error);
+    throw error;
+  }
+}
+
+/**
+ * Update agent record
+ */
+export async function updateAgent(
+  agentId: string,
+  userId: string,
+  updates: Partial<{
+    name: string;
+    description: string;
+    config: any;
+    status: string;
+  }>
+) {
+  if (USE_SIMULATED || !prisma) {
+    return {
+      id: agentId,
+      ...updates,
+      updatedAt: new Date(),
+    };
+  }
+
+  try {
+    // TODO: Uncomment when AI Studio schema is merged
+    // const agent = await prisma.agent.updateMany({
+    //   where: {
+    //     id: agentId,
+    //     userId: userId,
+    //     deletedAt: null,
+    //   },
+    //   data: {
+    //     ...updates,
+    //     updatedAt: new Date(),
+    //   },
+    // });
+    // if (agent.count === 0) return null;
+    // return getAgent(agentId, userId);
+    return {
+      id: agentId,
+      ...updates,
+      updatedAt: new Date(),
+    };
+  } catch (error) {
+    console.error("[AI Studio DB] Error updating agent:", error);
+    throw error;
+  }
+}
+
+/**
+ * Delete agent record (soft delete)
+ */
+export async function deleteAgent(agentId: string, userId: string) {
+  if (USE_SIMULATED || !prisma) {
+    return;
+  }
+
+  try {
+    // TODO: Uncomment when AI Studio schema is merged
+    // await prisma.agent.updateMany({
+    //   where: {
+    //     id: agentId,
+    //     userId: userId,
+    //     deletedAt: null,
+    //   },
+    //   data: {
+    //     deletedAt: new Date(),
+    //     status: "deleted",
+    //     updatedAt: new Date(),
+    //   },
+    // });
+  } catch (error) {
+    console.error("[AI Studio DB] Error deleting agent:", error);
+    throw error;
+  }
+}
+
+/**
+ * List agents for user
+ */
+export async function listAgents(userId: string, options?: {
+  limit?: number;
+  offset?: number;
+  status?: string;
+}) {
+  if (USE_SIMULATED || !prisma) {
+    return [];
+  }
+
+  try {
+    // TODO: Uncomment when AI Studio schema is merged
+    // return await prisma.agent.findMany({
+    //   where: {
+    //     userId: userId,
+    //     deletedAt: null,
+    //     ...(options?.status && { status: options.status }),
+    //   },
+    //   take: options?.limit || 50,
+    //   skip: options?.offset || 0,
+    //   orderBy: {
+    //     createdAt: "desc",
+    //   },
+    // });
+    return [];
+  } catch (error) {
+    console.error("[AI Studio DB] Error listing agents:", error);
+    return [];
+  }
+}
+

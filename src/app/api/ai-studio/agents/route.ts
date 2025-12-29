@@ -1,23 +1,25 @@
 /**
- * API Route: Agent Operations
+ * AI Studio Agents API
  * 
- * GET /api/ai-studio/agents
- * POST /api/ai-studio/agents
+ * GET /api/ai-studio/agents - List agents
+ * POST /api/ai-studio/agents - Create agent
  */
 
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/ai-studio/auth";
+import { listAgents, createAgent } from "@/lib/ai-studio/db";
 import { z } from "zod";
 
-const createAgentSchema = z.object({
+const agentSchema = z.object({
   name: z.string().min(1).max(255),
   description: z.string().optional(),
-  type: z.enum(["single", "multi", "hierarchical", "collaborative"]),
-  modelConfig: z.record(z.string(), z.unknown()),
-  tools: z.array(z.record(z.string(), z.unknown())),
-  memoryConfig: z.record(z.string(), z.unknown()).optional(),
-  systemPrompt: z.string().optional(),
-  workflow: z.record(z.string(), z.unknown()).optional(),
+  config: z.object({
+    model: z.string(),
+    tools: z.array(z.string()).optional(),
+    memory: z.record(z.string(), z.unknown()).optional(),
+    temperature: z.number().min(0).max(2).optional(),
+    maxTokens: z.number().min(1).max(100000).optional(),
+  }),
 });
 
 export async function GET(request: NextRequest) {
@@ -30,8 +32,11 @@ export async function GET(request: NextRequest) {
     const offset = parseInt(searchParams.get("offset") || "0");
     const status = searchParams.get("status") || undefined;
 
-    // TODO: List agents from database
-    const agents: any[] = [];
+    const agents = await listAgents(auth.user!.id, {
+      limit,
+      offset,
+      status,
+    });
 
     return NextResponse.json(
       {
@@ -40,7 +45,7 @@ export async function GET(request: NextRequest) {
           pagination: {
             limit,
             offset,
-            total: agents.length,
+            total: agents.length, // TODO: Get actual total from DB
           },
         },
         requestId: crypto.randomUUID(),
@@ -67,25 +72,16 @@ export async function POST(request: NextRequest) {
     if (!auth.ok) return auth.response!;
 
     const body = await request.json();
-    const validated = createAgentSchema.parse(body);
+    const validated = agentSchema.parse(body);
 
-    // TODO: Create agent in database
-    const agent = {
-      id: crypto.randomUUID(),
+    const agent = await createAgent({
       userId: auth.user!.id,
       name: validated.name,
       description: validated.description,
-      type: validated.type,
-      modelConfig: validated.modelConfig,
-      tools: validated.tools,
-      memoryConfig: validated.memoryConfig,
-      systemPrompt: validated.systemPrompt,
-      workflow: validated.workflow,
-      status: "active",
-      metadata: {},
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
+      config: validated.config,
+      status: "created",
+      version: "1.0.0",
+    });
 
     return NextResponse.json(
       {
@@ -122,4 +118,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
