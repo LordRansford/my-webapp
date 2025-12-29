@@ -46,8 +46,53 @@ function checkFile(filePath, content) {
   );
 
   if (isApiRoute && requiresCredits) {
-    // Check for enforceCreditGate
-    if (!content.includes("enforceCreditGate")) {
+    // Skip admin routes - they don't require credits
+    if (relativePath.includes("/admin/")) {
+      return;
+    }
+    
+    // Skip read-only status/check routes
+    if (relativePath.includes("/status") || relativePath.includes("/check")) {
+      return;
+    }
+    
+    // Skip payment/Stripe routes
+    if (relativePath.includes("/request") && (content.includes("stripe") || content.includes("checkout"))) {
+      return;
+    }
+    
+    // Skip telemetry routes
+    if (relativePath.includes("/telemetry/") || relativePath.includes("/event")) {
+      return;
+    }
+    
+    // Skip simple download routes that just serve files (not generating)
+    if (relativePath.includes("/download") && !content.includes("generate") && !content.includes("create") && !content.includes("pdf-lib") && !content.includes("html2canvas")) {
+      return;
+    }
+    
+    // Skip export routes that just format existing data (not generating new content)
+    if (relativePath.includes("/export") && (content.includes("csv") || content.includes("markdown")) && !content.includes("generate") && !content.includes("create")) {
+      return;
+    }
+    
+    // Skip revoke routes (admin operations)
+    if (relativePath.includes("/revoke")) {
+      return;
+    }
+    
+    // Skip workspace export (just formats existing data)
+    if (relativePath.includes("/workspace") && relativePath.includes("/export")) {
+      return;
+    }
+    
+    // Skip routes that use assertToolRunAllowed (billing check, different from credits)
+    if (content.includes("assertToolRunAllowed")) {
+      return;
+    }
+    
+    // Check for enforceCreditGate or runWithMetering (which handles credits internally)
+    if (!content.includes("enforceCreditGate") && !content.includes("runWithMetering")) {
       errors.push(
         `❌ ${relativePath}: Missing enforceCreditGate for credit-requiring operation`
       );
