@@ -19,25 +19,25 @@ interface ValidationResult {
   status: "pending" | "validating" | "valid" | "invalid" | "needs-review";
   checks: {
     license: {
-      status: "pass" | "fail" | "warning";
+      status: "pending" | "pass" | "fail" | "warning";
       detected: string | null;
       verified: boolean;
       message: string;
     };
     copyright: {
-      status: "pass" | "fail" | "warning";
+      status: "pending" | "pass" | "fail" | "warning";
       watermarks: boolean;
       knownContent: boolean;
       message: string;
     };
     quality: {
-      status: "pass" | "fail" | "warning";
+      status: "pending" | "pass" | "fail" | "warning";
       score: number;
       issues: string[];
       message: string;
     };
     pii: {
-      status: "pass" | "fail" | "warning";
+      status: "pending" | "pass" | "fail" | "warning";
       detected: boolean;
       types: string[];
       message: string;
@@ -147,12 +147,12 @@ export default function DataValidationPOC() {
 
     setIsValidating(true);
     setValidationResult({
-      status: "validating",
+      status: "validating" as const,
       checks: {
-        license: { status: "pending", detected: null, verified: false, message: "" },
-        copyright: { status: "pending", watermarks: false, knownContent: false, message: "" },
-        quality: { status: "pending", score: 0, issues: [], message: "" },
-        pii: { status: "pending", detected: false, types: [], message: "" },
+        license: { status: "pending" as const, detected: null, verified: false, message: "" },
+        copyright: { status: "pending" as const, watermarks: false, knownContent: false, message: "" },
+        quality: { status: "pending" as const, score: 0, issues: [], message: "" },
+        pii: { status: "pending" as const, detected: false, types: [], message: "" },
       },
       warnings: [],
       errors: [],
@@ -275,7 +275,7 @@ export default function DataValidationPOC() {
     }
   }, [file, attestation, detectLicense, checkCopyright, detectPII, scoreQuality]);
 
-  const getStatusIcon = (status: "pass" | "fail" | "warning" | "pending") => {
+  const getStatusIcon = (status: "pending" | "pass" | "fail" | "warning") => {
     switch (status) {
       case "pass":
         return <CheckCircle className="w-5 h-5 text-green-500" />;
@@ -288,7 +288,7 @@ export default function DataValidationPOC() {
     }
   };
 
-  const getStatusColor = (status: "pass" | "fail" | "warning" | "pending") => {
+  const getStatusColor = (status: "pending" | "pass" | "fail" | "warning") => {
     switch (status) {
       case "pass":
         return "bg-green-50 border-green-200";
