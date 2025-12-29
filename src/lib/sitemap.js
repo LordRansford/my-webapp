@@ -99,8 +99,9 @@ export const siteStructure = {
     { title: "Software Architecture Templates", href: "/templates/software-architecture" },
   ],
   games: [
-    { title: "Games Hub", href: "/games" },
-    { title: "Play Hub (Practice Games)", href: "/play" },
+    { title: "Action Games", href: "/games" },
+    { title: "Practice Games", href: "/practice" },
+    { title: "Play Hub", href: "/play" },
     { title: "Thinking Gym", href: "/thinking-gym" },
     { title: "Games Offline Mode", href: "/games/offline" },
   ],

@@ -1,11 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import SwStatusPill from "./SwStatus.client";
 import DedicationBanner from "./DedicationBanner.client";
 import GamesCards from "./GamesCards.client";
-import LegacyGames from "./LegacyGames.client";
 import { GameHubTemplate } from "@/components/templates/PageTemplates";
 import { ErrorBoundary } from "@/components/notes/ErrorBoundary";
+import { Sparkles } from "lucide-react";
 
 function GamesErrorFallback({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) {
   return (
@@ -42,9 +43,9 @@ export default function GamesPageClient() {
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="flex-1 min-w-0">
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Games</p>
-            <h1 className="text-4xl font-semibold text-slate-900 mb-3">Offline-friendly mini games</h1>
+            <h1 className="text-4xl font-semibold text-slate-900 mb-3">Canvas-based action games</h1>
             <p className="text-base text-slate-700 leading-relaxed max-w-2xl">
-              Load once, then play offline. Arrow keys and swipe gestures supported. Perfect for practicing on the go.
+              Offline-first PWA games with arrow keys and swipe support. Load once, then play offline. Perfect for practicing on the go.
             </p>
           </div>
           <div className="flex-shrink-0">
@@ -58,10 +59,28 @@ export default function GamesPageClient() {
       <ErrorBoundary FallbackComponent={GamesErrorFallback}>
         <GamesCards />
       </ErrorBoundary>
-      
-      <ErrorBoundary FallbackComponent={GamesErrorFallback}>
-        <LegacyGames />
-      </ErrorBoundary>
+
+      {/* Cross-link to practice games */}
+      <div className="mt-12 rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-6 shadow-sm">
+        <div className="flex items-start gap-4">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 shadow-md flex-shrink-0">
+            <Sparkles className="h-6 w-6 text-white" aria-hidden="true" />
+          </div>
+          <div className="flex-1">
+            <h3 className="text-lg font-semibold text-slate-900 mb-2">Looking for practice drills?</h3>
+            <p className="text-sm text-slate-700 mb-4">
+              Interactive drills to reinforce learning from courses. Build skills through hands-on practice.
+            </p>
+            <Link
+              href="/practice"
+              className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2"
+            >
+              View Practice Games
+              <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
