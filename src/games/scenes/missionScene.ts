@@ -481,7 +481,7 @@ export function createMissionScene(opts?: {
       // Difficulty-based spawn schedule
       const { phase, intensity } = getDifficultyPhase(runMs);
       if (t >= nextSpawnMs) {
-        const spawnMovementInfo = movementTracker.getTracker();
+        const spawnMovementInfo = movementTracker.update(px, py, runMs);
         spawnEnemy(ctx.width, ctx.height, intensity, spawnMovementInfo.isStationary, spawnMovementInfo.stationaryTime);
         const base = 400 + rand() * 300;
         const ramp = Math.max(150, 500 - (runMs / 1000) * 8 * intensity);
@@ -529,8 +529,7 @@ export function createMissionScene(opts?: {
       py = Math.max(14, Math.min(ctx.height - 14, py));
 
       // Movement tracking
-      movementTracker.update(px, py, runMs);
-      const movementInfo = movementTracker.getTracker();
+      const movementInfo = movementTracker.update(px, py, runMs);
       if (movementInfo.shouldSpawnDangerZone && dangerZones.length < 3) {
         dangerZones.push(createDangerZone(px, py, runMs));
       }

@@ -27,6 +27,8 @@ export function updateEnemyPattern(
       }
 
       const homing = enemy.patternData.homing;
+      if (!homing) break; // Safety check
+      
       // Update target with prediction
       const dx = playerX - enemy.x;
       const dy = playerY - enemy.y;
@@ -66,6 +68,8 @@ export function updateEnemyPattern(
       }
 
       const zigzag = enemy.patternData.zigzag;
+      if (!zigzag) break; // Safety check
+      
       const time = Date.now() / 1000;
       const horizontalOffset = Math.sin(time * zigzag.frequency * Math.PI * 2) * zigzag.amplitude;
       enemy.x += horizontalOffset * (dt / 1000) * zigzag.direction;
@@ -91,6 +95,8 @@ export function updateEnemyPattern(
       }
 
       const spiral = enemy.patternData.spiral;
+      if (!spiral) break; // Safety check
+      
       spiral.angle += (dt / 1000) * 3; // Rotate 3 radians per second
       spiral.radius += (dt / 1000) * 20; // Expand radius
 
