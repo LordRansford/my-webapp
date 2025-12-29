@@ -8,6 +8,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import AIStudioErrorBoundary from "@/components/ai-studio/AIStudioErrorBoundary";
 import {
   Sparkles,
   Database,
@@ -301,7 +302,9 @@ export default function AIStudioPage() {
         )}
 
         {/* Content */}
-        <main>{renderContent()}</main>
+        <main>
+          <AIStudioErrorBoundary>{renderContent()}</AIStudioErrorBoundary>
+        </main>
       </div>
     </div>
   );

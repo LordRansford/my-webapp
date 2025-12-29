@@ -6,6 +6,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { requireAuth } from "@/lib/ai-studio/auth";
 
 const agentRunRequestSchema = z.object({
   agentId: z.string().uuid(),
@@ -16,6 +17,10 @@ const agentRunRequestSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    // Authentication check
+    const auth = await requireAuth(request);
+    if (!auth.ok) return auth.response!;
+
     const body = await request.json();
     const validated = agentRunRequestSchema.parse(body);
 

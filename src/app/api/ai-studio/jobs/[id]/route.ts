@@ -6,14 +6,25 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { requireAuth, checkResourceAccess } from "@/lib/ai-studio/auth";
 
 export async function GET(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Authentication check
+    const auth = await requireAuth(request);
+    if (!auth.ok) return auth.response!;
+
     const { id } = await context.params;
     const jobId = id;
+
+    // In production, verify user has access to this job
+    // const job = await getJob(jobId);
+    // if (!checkResourceAccess(auth.user!.id, job.userId)) {
+    //   return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    // }
 
     // In production, this would:
     // 1. Verify user has access to job
