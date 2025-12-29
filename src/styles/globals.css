@@ -2814,3 +2814,106 @@ html.high-contrast .skip-link:focus {
     color: rgb(203, 213, 225);
   }
 }
+
+/* ============================================
+   Course Overview Pages - Premium Typography
+   ============================================ */
+
+/* Section Headers - Consistent h2 styling */
+.course-section-header {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: rgb(15, 23, 42);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid rgb(226, 232, 240);
+}
+
+html.dark .course-section-header {
+  color: rgb(241, 245, 249);
+  border-bottom-color: rgb(51, 65, 85);
+}
+
+/* Subsection Headers - Consistent h3 styling */
+.course-subsection-header {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: rgb(30, 41, 59);
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+html.dark .course-subsection-header {
+  color: rgb(226, 232, 240);
+}
+
+/* Course Body Text - Consistent paragraph styling */
+.course-body-text {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: rgb(51, 65, 85);
+  margin-bottom: 1rem;
+}
+
+html.dark .course-body-text {
+  color: rgb(203, 213, 225);
+}
+
+/* Course Lead Text - Larger intro text */
+.course-lead-text {
+  font-size: 1.125rem;
+  line-height: 1.75;
+  color: rgb(51, 65, 85);
+  margin-bottom: 1.25rem;
+}
+
+html.dark .course-lead-text {
+  color: rgb(203, 213, 225);
+}
+
+/* Course Card Enhancements */
+.course-card {
+  position: relative;
+}
+
+.course-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, rgb(59, 130, 246), rgb(99, 102, 241));
+  border-radius: 16px 16px 0 0;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.course-card:hover::before {
+  opacity: 1;
+}
+
+/* Premium spacing utilities for course pages */
+.course-section-spacing {
+  margin-bottom: 3rem;
+}
+
+.course-section-spacing:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .course-section-header {
+    font-size: 1.5rem;
+  }
+  
+  .course-subsection-header {
+    font-size: 1.125rem;
+  }
+  
+  .course-lead-text {
+    font-size: 1rem;
+  }
+}

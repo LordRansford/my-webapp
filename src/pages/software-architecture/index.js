@@ -1,5 +1,12 @@
-import Link from "next/link";
 import NotesLayout from "@/components/NotesLayout";
+import CourseHeroSection from "@/components/course/CourseHeroSection";
+import CoursePathSection from "@/components/course/CoursePathSection";
+import CourseResourcesSection from "@/components/course/CourseResourcesSection";
+import CourseCapstonesSection from "@/components/course/CourseCapstonesSection";
+import CourseCPDSection from "@/components/course/CourseCPDSection";
+import CourseReferencesSection from "@/components/course/CourseReferencesSection";
+import { Layers } from "lucide-react";
+import softwareArchitectureCourse from "../../../content/courses/software-architecture.json";
 
 const corePath = [
   {
@@ -8,6 +15,7 @@ const corePath = [
     title: "Architecture Foundations",
     summary: "Systems, boundaries, responsibilities, and diagrams you can explain with confidence.",
     href: "/software-architecture/beginner",
+    estimatedHours: softwareArchitectureCourse.levels?.find((l) => l.id === "foundations")?.estimatedHours || 10,
   },
   {
     id: "intermediate",
@@ -15,13 +23,15 @@ const corePath = [
     title: "Applied Architecture",
     summary: "Decomposition, styles, quality attributes, and decision making that stays practical.",
     href: "/software-architecture/intermediate",
+    estimatedHours: softwareArchitectureCourse.levels?.find((l) => l.id === "applied")?.estimatedHours || 12,
   },
   {
     id: "advanced",
     label: "Advanced",
-    title: "Architecture at scale",
-    summary: "Platforms, resilience, governance, and change that stays auditable and calm.",
+    title: "Digital and Cloud Scale Architecture",
+    summary: "Event driven systems, CQRS, integration patterns, observability and digitalisation strategy across whole organisations.",
     href: "/software-architecture/advanced",
+    estimatedHours: softwareArchitectureCourse.levels?.find((l) => l.id === "practice-strategy")?.estimatedHours || 14,
   },
   {
     id: "summary",
@@ -29,15 +39,7 @@ const corePath = [
     title: "Summary and games",
     summary: "Recap, games, dashboards, and reflection to consolidate architecture thinking.",
     href: "/software-architecture/summary",
-  },
-];
-
-const furtherPractice = [
-  {
-    id: "practice",
-    title: "Further practice",
-    summary: "Dashboards and labs to make latency, availability, and trade-offs concrete.",
-    href: "/software-architecture/dashboards",
+    estimatedHours: softwareArchitectureCourse.summaryPage?.estimatedHours || 3,
   },
 ];
 
@@ -54,6 +56,12 @@ const capstones = [
     summary: "A full journey that connects architecture, CIM based network data, cybersecurity, digitalisation and AI using GridLens.",
     href: "/notes/capstone/gridlens",
   },
+];
+
+const references = [
+  "Architecture handbooks and open course materials from recognised universities and industry leaders",
+  "Documentation and guidance on cloud architecture, reliability, and security from major vendors",
+  "Standards and playbooks on software design, observability, and operational excellence",
 ];
 
 export default function ArchitectureHub() {
@@ -79,110 +87,59 @@ export default function ArchitectureHub() {
       activeLevelId="overview"
     >
       <div className="space-y-8">
-        <section id="overview" className="space-y-3">
-          <p className="eyebrow">Software Architecture Notes</p>
-          <h1>Read, design, and steward systems</h1>
-          <p className="lead">
-            Follow the core path in order. Foundations, intermediate, advanced, then a short summary with games and practice.
-          </p>
-          <div className="actions">
-            <Link href="/software-architecture/beginner" className="button primary">
-              Start with Foundations
-            </Link>
-            <Link href="/my-cpd" className="button ghost">
-              Track CPD
-            </Link>
-            <Link href="/my-cpd/evidence" className="button ghost">
-              Export CPD evidence
-            </Link>
-            <Link href="/dashboards/architecture" className="button ghost">
-              Open dashboards
-            </Link>
-          </div>
+        <section id="overview">
+          <CourseHeroSection
+            eyebrow="Software Architecture Notes"
+            title="Read, design, and steward systems"
+            description="Follow the core path in order. Foundations, intermediate, advanced, then a short summary with games and practice."
+            highlights={[
+              { chip: "Foundations", text: "Systems, boundaries, responsibilities, and diagrams." },
+              { chip: "Intermediate", text: "Decomposition, styles, and quality attributes." },
+              { chip: "Advanced", text: "Platforms, resilience, governance, and change." },
+              { chip: "Summary", text: "Recap, games, dashboards, and reflection." },
+            ]}
+            primaryAction={{
+              label: "Start with Foundations",
+              href: "/software-architecture/beginner",
+            }}
+            secondaryActions={[
+              { label: "Track CPD", href: "/my-cpd" },
+              { label: "Export CPD evidence", href: "/my-cpd/evidence" },
+              { label: "Open dashboards", href: "/dashboards/architecture" },
+            ]}
+            icon={<Layers size={20} />}
+            gradient="purple"
+          />
         </section>
 
-        <section id="path" className="space-y-4">
-          <h2>Core path</h2>
-          <div className="course-grid">
-            {corePath.map((level) => (
-              <Link key={level.id} href={level.href} className="course-card">
-                <div className="course-card__meta">
-                  <span className="chip chip--accent">{level.label}</span>
-                </div>
-                <h3 className="text-xl font-semibold text-slate-900">{level.title}</h3>
-                <p className="text-base text-slate-800">{level.summary}</p>
-                <div className="course-card__footer">
-                  <span className="text-sm text-slate-700">Open notes</span>
-                  <span aria-hidden="true">{">"}</span>
-                </div>
-              </Link>
-            ))}
-          </div>
+        <section id="path">
+          <CoursePathSection
+            title="Core path"
+            levels={corePath}
+          />
         </section>
 
-        <section id="practice" className="space-y-4">
-          <h2>Further practice</h2>
-          <div className="course-grid">
-            {furtherPractice.map((item) => (
-              <Link key={item.id} href={item.href} className="course-card">
-                <div className="course-card__meta">
-                  <span className="chip chip--accent">Practice</span>
-                </div>
-                <h3 className="text-xl font-semibold text-slate-900">{item.title}</h3>
-                <p className="text-base text-slate-800">{item.summary}</p>
-                <div className="course-card__footer">
-                  <span className="text-sm text-slate-700">Open</span>
-                  <span aria-hidden="true">{">"}</span>
-                </div>
-              </Link>
-            ))}
-          </div>
+        <section id="practice">
+          <CourseResourcesSection
+            title="Further practice"
+            subtitle="Dashboards and labs to make latency, availability, and trade-offs concrete."
+            dashboardHref="/dashboards/architecture"
+          />
         </section>
 
-        <section id="capstones" className="space-y-4">
-          <h2>Capstones</h2>
-          <div className="course-grid">
-            {capstones.map((item) => (
-              <Link key={item.id} href={item.href} className="course-card">
-                <div className="course-card__meta">
-                  <span className="chip chip--accent">Capstone</span>
-                </div>
-                <h3 className="text-xl font-semibold text-slate-900">{item.title}</h3>
-                <p className="text-base text-slate-800">{item.summary}</p>
-                <div className="course-card__footer">
-                  <span className="text-sm text-slate-700">Open</span>
-                  <span aria-hidden="true">{">"}</span>
-                </div>
-              </Link>
-            ))}
-          </div>
+        <section id="capstones">
+          <CourseCapstonesSection
+            title="Capstones"
+            capstones={capstones}
+          />
         </section>
 
-        <section id="cpd" className="space-y-3">
-          <h2>CPD</h2>
-          <p className="text-base text-slate-800">
-            Log minutes as you study and practise. Your records stay in this browser. Use the export view when you need a clean summary for your CPD system.
-          </p>
-          <div className="actions">
-            <Link href="/my-cpd" className="button ghost">
-              Track CPD
-            </Link>
-            <Link href="/my-cpd/evidence" className="button ghost">
-              Export CPD evidence
-            </Link>
-          </div>
+        <section id="cpd">
+          <CourseCPDSection />
         </section>
 
-        <section id="references" className="space-y-3">
-          <h2>References and further reading</h2>
-          <p className="muted">
-            These notes draw on a wide range of sources. A few starting points are listed here so that you can explore the official material in more depth.
-          </p>
-          <ul className="list-disc space-y-2 pl-5 text-base text-slate-800">
-            <li>Architecture handbooks and open course materials from recognised universities and industry leaders</li>
-            <li>Documentation and guidance on cloud architecture, reliability, and security from major vendors</li>
-            <li>Standards and playbooks on software design, observability, and operational excellence</li>
-          </ul>
+        <section id="references">
+          <CourseReferencesSection references={references} />
         </section>
       </div>
     </NotesLayout>
