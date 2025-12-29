@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import AccessGate from "@/components/AccessGate";
-import CreditConsent from "@/components/credits/CreditConsent";
+import CreditConsent, { useCreditConsent } from "@/components/credits/CreditConsent";
 
 const OPTIONS = [
   { value: "internal_use", label: "Internal use", helper: "Personal or team use. You may remove the signature." },
@@ -53,6 +53,8 @@ export function DownloadOptionsModal({ open, onClose, template }) {
   const dialogRef = useFocusTrap(open);
   const previewEnabled = process.env.NEXT_PUBLIC_PREVIEW_MODE === "true";
   const [balance, setBalance] = useState(null);
+  const ESTIMATED_CREDITS = 2; // Template download cost
+  const { accepted, canProceed } = useCreditConsent(ESTIMATED_CREDITS, balance);
 
   useEffect(() => {
     if (open) {
@@ -69,10 +71,6 @@ export function DownloadOptionsModal({ open, onClose, template }) {
   }, [open]);
 
   if (!open) return null;
-
-  const requiredCredits = Math.ceil(ESTIMATED_CREDITS * 1.25);
-  const hasEnoughCredits = balance !== null && balance >= requiredCredits;
-  const canProceed = accepted && hasEnoughCredits;
 
   const submit = async () => {
     if (!template?.id) return;
@@ -169,8 +167,8 @@ export function DownloadOptionsModal({ open, onClose, template }) {
           <CreditConsent
             estimatedCredits={ESTIMATED_CREDITS}
             currentBalance={balance}
-            onAccept={() => setAccepted(true)}
-            onDecline={() => setAccepted(false)}
+            onAccept={() => {}}
+            onDecline={() => {}}
           />
           <div className="flex flex-wrap gap-3">
             {template?.gatingLevel && template.gatingLevel !== "none" ? (

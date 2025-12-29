@@ -1,5 +1,12 @@
-import Link from "next/link";
 import NotesLayout from "@/components/NotesLayout";
+import CourseHeroSection from "@/components/course/CourseHeroSection";
+import CoursePathSection from "@/components/course/CoursePathSection";
+import CourseResourcesSection from "@/components/course/CourseResourcesSection";
+import CourseCapstonesSection from "@/components/course/CourseCapstonesSection";
+import CourseCPDSection from "@/components/course/CourseCPDSection";
+import CourseReferencesSection from "@/components/course/CourseReferencesSection";
+import { Network } from "lucide-react";
+import digitalisationCourse from "../../../content/courses/digitalisation.json";
 
 const corePath = [
   {
@@ -8,6 +15,7 @@ const corePath = [
     title: "Digitalisation Foundations",
     summary: "Language, fundamentals, and the habits that keep delivery grounded in outcomes.",
     href: "/digitalisation/beginner",
+    estimatedHours: digitalisationCourse.levels?.find((l) => l.id === "foundations")?.estimatedHours || 8,
   },
   {
     id: "intermediate",
@@ -15,13 +23,15 @@ const corePath = [
     title: "Applied Digitalisation",
     summary: "Operating models, platforms, governance, and realistic roadmaps.",
     href: "/digitalisation/intermediate",
+    estimatedHours: digitalisationCourse.levels?.find((l) => l.id === "applied")?.estimatedHours || 10,
   },
   {
     id: "advanced",
     label: "Advanced",
-    title: "Digital strategy at scale",
+    title: "Digital Strategy and Enterprise Scale",
     summary: "Ecosystems, regulation, funding models, risk, and stewardship.",
     href: "/digitalisation/advanced",
+    estimatedHours: digitalisationCourse.levels?.find((l) => l.id === "practice-strategy")?.estimatedHours || 12,
   },
   {
     id: "summary",
@@ -29,15 +39,7 @@ const corePath = [
     title: "Summary and games",
     summary: "Recap, games, and dashboards to test strategy thinking.",
     href: "/digitalisation/summary",
-  },
-];
-
-const furtherPractice = [
-  {
-    id: "practice",
-    title: "Further practice",
-    summary: "Hands on labs to make the strategy tangible before the summary.",
-    href: "/digitalisation/dashboards",
+    estimatedHours: digitalisationCourse.summaryPage?.estimatedHours || 3,
   },
 ];
 
@@ -54,6 +56,12 @@ const capstones = [
     summary: "A full journey that connects architecture, CIM based network data, cybersecurity, digitalisation and AI using GridLens.",
     href: "/notes/capstone/gridlens",
   },
+];
+
+const references = [
+  "Official guidance from government digital services and sector regulators",
+  "Research and playbooks on digital operating models, platform thinking, and service design",
+  "Standards and textbooks on data governance, architecture, and programme delivery",
 ];
 
 export default function DigitalisationHub() {
@@ -79,110 +87,59 @@ export default function DigitalisationHub() {
       activeLevelId="overview"
     >
       <div className="space-y-8">
-        <section id="overview" className="space-y-3">
-          <p className="eyebrow">Digitalisation Strategy</p>
-          <h1>Read, design, and deliver</h1>
-          <p className="lead">
-            Follow the core path in order. Foundations, intermediate, advanced, then a short summary with games and practice.
-          </p>
-          <div className="actions">
-            <Link href="/digitalisation/beginner" className="button primary">
-              Start with Foundations
-            </Link>
-            <Link href="/my-cpd" className="button ghost">
-              Track CPD
-            </Link>
-            <Link href="/my-cpd/evidence" className="button ghost">
-              Export CPD evidence
-            </Link>
-            <Link href="/dashboards/digitalisation" className="button ghost">
-              Open dashboards
-            </Link>
-          </div>
+        <section id="overview">
+          <CourseHeroSection
+            eyebrow="Digitalisation Strategy"
+            title="Read, design, and deliver"
+            description="Follow the core path in order. Foundations, intermediate, advanced, then a short summary with games and practice."
+            highlights={[
+              { chip: "Foundations", text: "Language, fundamentals, and habits for grounded delivery." },
+              { chip: "Intermediate", text: "Operating models, platforms, and governance." },
+              { chip: "Advanced", text: "Ecosystems, regulation, and enterprise scale." },
+              { chip: "Summary", text: "Recap, games, and dashboards to test strategy thinking." },
+            ]}
+            primaryAction={{
+              label: "Start with Foundations",
+              href: "/digitalisation/beginner",
+            }}
+            secondaryActions={[
+              { label: "Track CPD", href: "/my-cpd" },
+              { label: "Export CPD evidence", href: "/my-cpd/evidence" },
+              { label: "Open dashboards", href: "/dashboards/digitalisation" },
+            ]}
+            icon={<Network size={20} />}
+            gradient="green"
+          />
         </section>
 
-        <section id="path" className="space-y-4">
-          <h2>Core path</h2>
-          <div className="course-grid">
-            {corePath.map((level) => (
-              <Link key={level.id} href={level.href} className="course-card">
-                <div className="course-card__meta">
-                  <span className="chip chip--accent">{level.label}</span>
-                </div>
-                <h3 className="text-xl font-semibold text-slate-900">{level.title}</h3>
-                <p className="text-base text-slate-800">{level.summary}</p>
-                <div className="course-card__footer">
-                  <span className="text-sm text-slate-700">Open notes</span>
-                  <span aria-hidden="true">{">"}</span>
-                </div>
-              </Link>
-            ))}
-          </div>
+        <section id="path">
+          <CoursePathSection
+            title="Core path"
+            levels={corePath}
+          />
         </section>
 
-        <section id="practice" className="space-y-4">
-          <h2>Further practice</h2>
-          <div className="course-grid">
-            {furtherPractice.map((item) => (
-              <Link key={item.id} href={item.href} className="course-card">
-                <div className="course-card__meta">
-                  <span className="chip chip--accent">Practice</span>
-                </div>
-                <h3 className="text-xl font-semibold text-slate-900">{item.title}</h3>
-                <p className="text-base text-slate-800">{item.summary}</p>
-                <div className="course-card__footer">
-                  <span className="text-sm text-slate-700">Open</span>
-                  <span aria-hidden="true">{">"}</span>
-                </div>
-              </Link>
-            ))}
-          </div>
+        <section id="practice">
+          <CourseResourcesSection
+            title="Further practice"
+            subtitle="Hands-on labs to make the strategy tangible before the summary."
+            dashboardHref="/dashboards/digitalisation"
+          />
         </section>
 
-        <section id="capstones" className="space-y-4">
-          <h2>Capstones</h2>
-          <div className="course-grid">
-            {capstones.map((item) => (
-              <Link key={item.id} href={item.href} className="course-card">
-                <div className="course-card__meta">
-                  <span className="chip chip--accent">Capstone</span>
-                </div>
-                <h3 className="text-xl font-semibold text-slate-900">{item.title}</h3>
-                <p className="text-base text-slate-800">{item.summary}</p>
-                <div className="course-card__footer">
-                  <span className="text-sm text-slate-700">Open</span>
-                  <span aria-hidden="true">{">"}</span>
-                </div>
-              </Link>
-            ))}
-          </div>
+        <section id="capstones">
+          <CourseCapstonesSection
+            title="Capstones"
+            capstones={capstones}
+          />
         </section>
 
-        <section id="cpd" className="space-y-3">
-          <h2>CPD</h2>
-          <p className="text-base text-slate-800">
-            Log minutes as you study and practise. Your records stay in this browser. Use the export view when you need a clean summary for your CPD system.
-          </p>
-          <div className="actions">
-            <Link href="/my-cpd" className="button ghost">
-              Track CPD
-            </Link>
-            <Link href="/my-cpd/evidence" className="button ghost">
-              Export CPD evidence
-            </Link>
-          </div>
+        <section id="cpd">
+          <CourseCPDSection />
         </section>
 
-        <section id="references" className="space-y-3">
-          <h2>References and further reading</h2>
-          <p className="muted">
-            These notes draw on a wide range of sources. A few starting points are listed here so that you can explore the official material in more depth.
-          </p>
-          <ul className="list-disc space-y-2 pl-5 text-base text-slate-800">
-            <li>Official guidance from government digital services and sector regulators</li>
-            <li>Research and playbooks on digital operating models, platform thinking, and service design</li>
-            <li>Standards and textbooks on data governance, architecture, and programme delivery</li>
-          </ul>
+        <section id="references">
+          <CourseReferencesSection references={references} />
         </section>
       </div>
     </NotesLayout>

@@ -66,6 +66,9 @@ function StartButton() {
       <Link href="/my-cpd/evidence" className="button ghost">
         Export CPD evidence
       </Link>
+      <Link href="/dashboards/ai" className="button ghost">
+        Open dashboards
+      </Link>
       <Link href="/tools" className="button ghost">
         Open the labs
       </Link>

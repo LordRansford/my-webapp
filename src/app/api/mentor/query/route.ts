@@ -179,6 +179,9 @@ export async function POST(req: Request) {
       const userId = session?.user?.id || null;
       const ws = await getWorkspaceIdentity(req);
 
+      // Note: Credit enforcement is handled by runWithMetering below, which checks credits
+      // before execution and returns appropriate error responses if insufficient.
+
       let runId: string | null = null;
       if (projectId) {
         const p = await getProject({ projectId });

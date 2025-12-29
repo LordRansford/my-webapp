@@ -1,5 +1,9 @@
-import Link from "next/link";
 import NotesLayout from "@/components/NotesLayout";
+import CourseHeroSection from "@/components/course/CourseHeroSection";
+import CoursePathSection from "@/components/course/CoursePathSection";
+import CourseResourcesSection from "@/components/course/CourseResourcesSection";
+import CourseCPDSection from "@/components/course/CourseCPDSection";
+import { Database } from "lucide-react";
 import dataCourse from "../../../content/courses/data.json";
 
 const corePath = [
@@ -9,6 +13,7 @@ const corePath = [
     title: "Data Foundations",
     summary: "Start with the language, formats, and habits that make data useful across teams.",
     href: "/data/foundations",
+    estimatedHours: dataCourse.levels?.find((l) => l.id === "foundations")?.estimatedHours || 8,
   },
   {
     id: "intermediate",
@@ -16,6 +21,7 @@ const corePath = [
     title: "Applied Data",
     summary: "Models, pipelines, and analytics that keep data reliable and ready for use.",
     href: "/data/intermediate",
+    estimatedHours: dataCourse.levels?.find((l) => l.id === "intermediate")?.estimatedHours || 10,
   },
   {
     id: "advanced",
@@ -23,6 +29,7 @@ const corePath = [
     title: "Advanced Data Systems",
     summary: "Architecture, streaming, governance, and data products at scale.",
     href: "/data/advanced",
+    estimatedHours: dataCourse.levels?.find((l) => l.id === "advanced")?.estimatedHours || 10,
   },
   {
     id: "summary",
@@ -30,6 +37,7 @@ const corePath = [
     title: "Summary and games",
     summary: "Recap, scenarios, and playful practice for the data course.",
     href: "/data/summary",
+    estimatedHours: dataCourse.summaryPage?.estimatedHours || 3,
   },
 ];
 
@@ -37,6 +45,7 @@ export default function DataHub() {
   const headings = [
     { id: "overview", title: "Overview", depth: 2 },
     { id: "path", title: "Core path", depth: 2 },
+    { id: "resources", title: "Further practice", depth: 2 },
     { id: "cpd", title: "CPD", depth: 2 },
   ];
 
@@ -55,61 +64,47 @@ export default function DataHub() {
       activeLevelId="overview"
     >
       <div className="space-y-8">
-        <section id="overview" className="space-y-3">
-          <p className="eyebrow">Data course</p>
-          <h1>Data as a practice</h1>
-          <p className="lead">
-            Follow the core path in order. Foundations, intermediate, advanced, then a short summary with games and practice.
-          </p>
-          <div className="actions">
-            <Link href="/data/foundations" className="button primary">
-              Start with Foundations
-            </Link>
-            <Link href="/my-cpd" className="button ghost">
-              Track CPD
-            </Link>
-            <Link href="/my-cpd/evidence" className="button ghost">
-              Export CPD evidence
-            </Link>
-            <Link href="/tools" className="button ghost">
-              Open the labs
-            </Link>
-          </div>
+        <section id="overview">
+          <CourseHeroSection
+            eyebrow="Data course"
+            title="Data as a practice"
+            description="Follow the core path in order. Foundations, intermediate, advanced, then a short summary with games and practice."
+            highlights={[
+              { chip: "Foundations", text: "Language, formats, and habits that make data useful." },
+              { chip: "Intermediate", text: "Models, pipelines, and analytics for reliability." },
+              { chip: "Advanced", text: "Architecture, streaming, and governance at scale." },
+              { chip: "Summary", text: "Recap, scenarios, and playful practice." },
+            ]}
+            primaryAction={{
+              label: "Start with Foundations",
+              href: "/data/foundations",
+            }}
+            secondaryActions={[
+              { label: "Track CPD", href: "/my-cpd" },
+              { label: "Export CPD evidence", href: "/my-cpd/evidence" },
+              { label: "Open the labs", href: "/tools" },
+            ]}
+            icon={<Database size={20} />}
+            gradient="indigo"
+          />
         </section>
 
-        <section id="path" className="space-y-4">
-          <h2>Core path</h2>
-          <div className="course-grid">
-            {corePath.map((level) => (
-              <Link key={level.id} href={level.href} className="course-card">
-                <div className="course-card__meta">
-                  <span className="chip chip--accent">{level.label}</span>
-                </div>
-                <h3 className="text-xl font-semibold text-slate-900">{level.title}</h3>
-                <p className="text-base text-slate-800">{level.summary}</p>
-                <div className="course-card__footer">
-                  <span className="text-sm text-slate-700">Open notes</span>
-                  <span aria-hidden="true">{">"}</span>
-                </div>
-              </Link>
-            ))}
-          </div>
+        <section id="path">
+          <CoursePathSection
+            title="Core path"
+            levels={corePath}
+          />
         </section>
 
-        <section id="cpd" className="space-y-3">
-          <h2>CPD</h2>
-          <p className="text-base text-slate-800">
-            Log minutes as you study and practise. Your records stay in this browser. Use the export view when you need a clean summary for your CPD system.
-          </p>
-          <div className="actions">
-            <Link href="/my-cpd" className="button ghost">
-              Track CPD
-            </Link>
-            <Link href="/my-cpd/evidence" className="button ghost">
-              Export CPD evidence
-            </Link>
-          </div>
+        <section id="resources">
+          <CourseResourcesSection
+            title="Further practice"
+            subtitle="Hands-on labs and tools to make data concepts concrete."
+            toolsHref="/tools"
+          />
         </section>
+
+        <CourseCPDSection id="cpd" />
       </div>
     </NotesLayout>
   );

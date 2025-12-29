@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { GraduationCap, X } from "lucide-react";
 import CitationChip from "@/components/assistants/CitationChip";
 import ComputeMeter from "@/components/ComputeMeter";
+import CreditConsent, { useCreditConsent } from "@/components/credits/CreditConsent";
 import type { ComputeActual, ComputeEstimate } from "@/lib/contracts/compute";
 
 type MentorCitation = { title: string; href: string; why?: string };
@@ -110,10 +111,23 @@ export default function MentorAssistant({
   const [actual, setActual] = useState<ComputeActual | null>(null);
   const [remainingCredits, setRemainingCredits] = useState<number | null>(null);
   const [costHints, setCostHints] = useState<string[]>([]);
+  const [balance, setBalance] = useState<number | null>(null);
+
+  // Estimate credits based on query complexity (variable, but use a base estimate)
+  // Use estimate if available, otherwise default to 0 (will be updated when estimate loads)
+  const estimatedCredits = estimate?.estimatedCreditCost || 0;
+  const { accepted, canProceed } = useCreditConsent(estimatedCredits, balance);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     setMessages(readMsgs(storageKey));
+    // Fetch credit balance
+    fetch("/api/credits/status")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        setBalance(typeof d?.balance === "number" ? d.balance : 0);
+      })
+      .catch(() => setBalance(0));
   }, [storageKey]);
 
   useEffect(() => {
@@ -124,6 +138,19 @@ export default function MentorAssistant({
   const ask = async () => {
     const question = sanitizeText(input, 320);
     if (!question) return;
+    
+    // Check credit consent if estimate is available and requires credits
+    if (estimatedCredits > 0 && !canProceed) {
+      setMessages((m) => [
+        ...m,
+        {
+          role: "mentor",
+          content: "Please accept the credit estimate and ensure sufficient credits before submitting your question.",
+        },
+      ]);
+      return;
+    }
+    
     setStatus("loading");
     setActual(null);
     setRemainingCredits(null);
@@ -342,6 +369,17 @@ export default function MentorAssistant({
           />
         </div>
 
+        {estimatedCredits > 0 && estimate && (
+          <div className="mt-4">
+            <CreditConsent
+              estimatedCredits={estimatedCredits}
+              currentBalance={balance}
+              onAccept={() => {}}
+              onDecline={() => {}}
+            />
+          </div>
+        )}
+
         <div className="mt-4 flex flex-col gap-2">
           <label className="text-sm font-semibold text-slate-800" htmlFor="mentor-question">
                 Ask about this page
@@ -360,7 +398,12 @@ export default function MentorAssistant({
             placeholder="Ask about the notes or tools"
             maxLength={320}
           />
-          <button type="button" className="button primary" onClick={ask} disabled={!input.trim() || status === "loading"}>
+          <button 
+            type="button" 
+            className="button primary" 
+            onClick={ask} 
+            disabled={!input.trim() || status === "loading" || (estimatedCredits > 0 && !canProceed)}
+          >
             {status === "loading" ? "Thinking..." : "Send"}
           </button>
         </div>
