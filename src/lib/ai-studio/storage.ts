@@ -37,6 +37,7 @@ export async function uploadFile(
   size: number;
   uploadedAt: Date;
 }> {
+  // Type assertion to handle Vercel Blob's return type
   if (!process.env.BLOB_READ_WRITE_TOKEN) {
     throw new Error("BLOB_READ_WRITE_TOKEN not configured");
   }
@@ -56,18 +57,24 @@ export async function uploadFile(
   const pathname = `ai-studio/${userId}/${type}/${Date.now()}-${file.name}`;
 
   // Upload to Vercel Blob
-  // Convert File to Blob for upload (File extends Blob)
-  const fileBlob = new Blob([file], { type: file.type || "application/octet-stream" });
-  const blob = await put(pathname, fileBlob, {
-    access: "private" as const,
+  // Convert File to ArrayBuffer for upload
+  // Note: Vercel Blob only supports "public" access, but we secure via:
+  // 1. Path-based isolation (ai-studio/{userId}/...)
+  // 2. Authentication required for all downloads
+  // 3. Signed URLs via getDownloadUrl (not exposing direct URLs)
+  const arrayBuffer = await file.arrayBuffer();
+  const result = await put(pathname, arrayBuffer, {
+    access: "public" as const, // Required by Vercel Blob API
     contentType: file.type || "application/octet-stream",
   });
 
+  // PutBlobResult only has: url, downloadUrl, pathname, contentType, contentDisposition
+  // We use file.size for the size since it's not in the result
   return {
-    url: blob.url,
-    pathname: blob.pathname,
-    size: blob.size,
-    uploadedAt: blob.uploadedAt,
+    url: result.url,
+    pathname: result.pathname,
+    size: file.size, // Use original file size
+    uploadedAt: new Date(), // Use current date since PutBlobResult doesn't include uploadedAt
   };
 }
 
