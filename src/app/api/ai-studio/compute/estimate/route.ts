@@ -6,6 +6,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { requireAuth } from "@/lib/ai-studio/auth";
 
 const computeEstimateRequestSchema = z.object({
   type: z.enum(["training", "inference", "agent"]),
@@ -33,6 +34,10 @@ const computeEstimateRequestSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    // Authentication check
+    const auth = await requireAuth(request);
+    if (!auth.ok) return auth.response!;
+
     const body = await request.json();
     const validated = computeEstimateRequestSchema.parse(body);
 

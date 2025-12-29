@@ -7,6 +7,7 @@
  */
 
 import React, { useState } from "react";
+import AIStudioErrorBoundary from "@/components/ai-studio/AIStudioErrorBoundary";
 import BrowserTrainingPOC from "@/components/ai-studio/poc/BrowserTrainingPOC";
 import DataValidationPOC from "@/components/ai-studio/poc/DataValidationPOC";
 import ModelBuilderPOC from "@/components/ai-studio/poc/ModelBuilderPOC";
@@ -127,7 +128,9 @@ export default function AISStudioPOCShowcase() {
         </div>
 
         {/* Active POC Display */}
-        <div className="mb-8">{renderPOC()}</div>
+        <div className="mb-8">
+          <AIStudioErrorBoundary>{renderPOC()}</AIStudioErrorBoundary>
+        </div>
 
         {/* Documentation Link */}
         <div className="rounded-2xl bg-white border border-slate-200 p-6 shadow-sm">

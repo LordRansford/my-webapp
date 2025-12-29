@@ -8,6 +8,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { requireAuth } from "@/lib/ai-studio/auth";
 
 const trainingRequestSchema = z.object({
   modelId: z.string().uuid(),
@@ -26,11 +27,9 @@ const trainingRequestSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    // TODO: Add authentication check
-    // const session = await getServerSession();
-    // if (!session) {
-    //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    // }
+    // Authentication check
+    const auth = await requireAuth(request);
+    if (!auth.ok) return auth.response!;
 
     const body = await request.json();
     const validated = trainingRequestSchema.parse(body);
