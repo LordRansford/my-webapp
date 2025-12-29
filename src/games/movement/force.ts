@@ -42,6 +42,7 @@ export function createMovementTracker() {
       isStationary: boolean;
       shouldSpawnDangerZone: boolean;
       movementBonus: number;
+      stationaryTime: number;
     } {
       const dx = currentX - tracker.lastPosition.x;
       const dy = currentY - tracker.lastPosition.y;
@@ -75,6 +76,7 @@ export function createMovementTracker() {
         isStationary,
         shouldSpawnDangerZone,
         movementBonus: tracker.movementBonus,
+        stationaryTime: tracker.stationaryTime,
       };
     },
 

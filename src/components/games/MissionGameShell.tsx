@@ -6,7 +6,7 @@ import { createFixedTimestepLoop } from "@/games/engine/loop";
 import { createInputController } from "@/games/engine/input";
 import { createAudioController } from "@/games/engine/audio";
 import { PersistStore } from "@/games/engine/persist";
-import type { GameSettings } from "@/games/engine/types";
+import type { GameSettings, InputState } from "@/games/engine/types";
 import type { MissionId } from "@/games/missions/types";
 import type { PlayerChoice } from "@/games/characters/types";
 import { createMissionScene } from "@/games/scenes/missionScene";
@@ -48,7 +48,7 @@ export function MissionGameShell({ missionId, playerChoice, onComplete, onCancel
     const canvasInput = createInputController(canvas);
     const windowInput = createInputController(window);
     const input = {
-      getState: () => {
+      getState: (): InputState => {
         const canvasState = canvasInput.getState();
         const windowState = windowInput.getState();
         return {
@@ -56,6 +56,8 @@ export function MissionGameShell({ missionId, playerChoice, onComplete, onCancel
           moveY: canvasState.moveY || windowState.moveY,
           pausePressed: canvasState.pausePressed || windowState.pausePressed,
           actionPressed: canvasState.actionPressed || windowState.actionPressed,
+          shootPressed: canvasState.shootPressed || windowState.shootPressed,
+          shootJustPressed: canvasState.shootJustPressed || windowState.shootJustPressed,
         };
       },
       resetFrame: () => {
