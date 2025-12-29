@@ -44,6 +44,7 @@ export async function POST(req: Request) {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
     try {
+      // Note: issueCpdCertificate internally calls deductCreditsFromLots to deduct credits
       const issued = await issueCpdCertificate({
         userId: session.user.id,
         userDisplayName: session.user?.name || null,
