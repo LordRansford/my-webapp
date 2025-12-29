@@ -15,6 +15,24 @@ The canonical scope and architecture constraints live in `docs/scope.md`.
 - Prefer small, reversible changes with clear acceptance checks (lint, build, and mobile usability).
 - If in doubt, update `docs/scope.md` first and propose a bounded plan.
 
+## Development Guidelines
+
+**Before contributing, please read:**
+
+- **[Development Guidelines](docs/development/DEVELOPMENT_GUIDELINES.md)** - Comprehensive guide for maintaining consistency
+- **[Code Review Checklist](docs/development/CODE_REVIEW_CHECKLIST.md)** - Use this for all code reviews
+- **[Credit Enforcement Patterns](docs/development/credit-enforcement.md)** - How to properly implement credit gates
+- **[Enforcement Patterns](docs/development/ENFORCEMENT_PATTERNS.md)** - TypeScript patterns and utilities
+
+### Key Requirements
+
+- ✅ **Credit System**: All server-side operations MUST use `enforceCreditGate` and show `CreditConsent` UI
+- ✅ **Accessibility**: All features MUST be keyboard accessible and screen reader friendly
+- ✅ **TypeScript**: All code MUST be properly typed
+- ✅ **Testing**: Manual testing required before committing
+
+See the [Code Review Checklist](docs/development/CODE_REVIEW_CHECKLIST.md) for complete requirements.
+
 ## Security and data handling
 
 - Dev and AI studios are educational sandboxes, not production. Do not upload real customer data or secrets.
