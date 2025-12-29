@@ -1,8 +1,9 @@
 import Link from "next/link";
 import Layout from "@/components/Layout";
-import { ArrowRight, Clock3 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { getCourseTracks } from "@/lib/courses";
 import { MarketingPageTemplate } from "@/components/templates/PageTemplates";
+import CoursesList from "@/components/courses/CoursesList.client";
 
 export async function getStaticProps() {
   const courses = getCourseTracks();
@@ -12,130 +13,109 @@ export async function getStaticProps() {
   };
 }
 
-function CourseTrackCard({ course }) {
-  const levelCount = (course?.bands?.length || 0) + 1;
-  const hours = Number(course?.totalEstimatedHours || 0);
-  const firstLabel = course.bands?.[0]?.label || "Foundations";
-
-  return (
-    <div className="course-card">
-      <div className="course-card__meta">
-        <span className="chip chip--accent">{levelCount} levels</span>
-        {hours ? (
-          <span className="chip chip--ghost">
-            <Clock3 size={14} aria-hidden="true" />
-            {hours} hrs
-          </span>
-        ) : null}
-      </div>
-
-      <h3 className="text-xl font-semibold">
-        <Link href={course.overviewRoute} className="hover:underline">
-          {course.title}
-        </Link>
-      </h3>
-
-      {course.description ? <p className="muted">{course.description}</p> : null}
-
-      <div className="course-card__tags">
-        {course.bands?.map((level) => (
-          <Link key={level.key} href={level.href} className="pill pill--accent">
-            {level.label}
-          </Link>
-        ))}
-        <Link href={course.summary?.href || course.overviewRoute} className="pill pill--ghost">
-          {course.summary?.label || "Summary"}
-        </Link>
-      </div>
-
-      <div className="course-card__footer">
-        <Link
-          href={course.startHref || course.overviewRoute}
-          className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 hover:underline focus:outline-none focus:ring-2 focus:ring-emerald-200"
-        >
-          Start with {firstLabel}
-          <ArrowRight size={16} aria-hidden="true" />
-        </Link>
-        <Link
-          href={course.overviewRoute}
-          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:underline focus:outline-none focus:ring-2 focus:ring-slate-200"
-        >
-          Overview
-          <ArrowRight size={16} aria-hidden="true" />
-        </Link>
-      </div>
-    </div>
-  );
-}
-
 export default function CoursesPage({ courses }) {
+  const totalHours = courses.reduce((sum, c) => sum + (c.totalEstimatedHours || 0), 0);
+  const totalLevels = courses.reduce((sum, c) => sum + (c.bands.length + 1), 0);
+
   return (
     <Layout
       title="Courses - Ransford's Notes"
       description="Notes with browser practice for cybersecurity, data, software architecture, digitalisation, and AI."
     >
       <MarketingPageTemplate breadcrumbs={[{ label: "Home", href: "/" }, { label: "Courses" }]}>
-        <div className="hero">
-          <div className="hero__copy">
-            <p className="eyebrow">Courses</p>
-            <h1>Notes that build from foundations to advanced practice.</h1>
-            <p className="lead">
+        {/* Hero Section */}
+        <section className="space-y-5 rounded-3xl bg-gradient-to-r from-slate-50 via-sky-50/60 to-slate-50 p-8 shadow-sm ring-1 ring-slate-100">
+          <div className="inline-flex items-center gap-2 rounded-2xl bg-slate-900 px-3 py-1 text-xs font-semibold text-white">
+            Courses
+          </div>
+          <div className="space-y-2">
+            <h1 className="text-4xl font-semibold leading-tight text-slate-900">
+              Notes that build from foundations to advanced practice
+            </h1>
+            <p className="max-w-3xl text-base text-slate-700">
               Five focused tracks. Cybersecurity, AI, Software Architecture, Data, and Digitalisation. Each track has a
               clear path from foundations to advanced practice, plus a summary with games and practical tools.
             </p>
-            <div className="actions">
-              <Link href="/tools" className="button primary">
-                Open the labs
-              </Link>
-              <Link href="/studios" className="button ghost">
-                Open studios
-              </Link>
-              <Link href="/about" className="button ghost">
-                Meet the author
-              </Link>
-              <Link href="/my-cpd" className="button ghost">
-                Open My CPD
-              </Link>
-              <Link href="/templates" className="button ghost">
-                Explore templates
-              </Link>
-            </div>
-            <Link href="/my-cpd/evidence" className="text-link">
-              Need evidence for work or accreditation? Open the CPD evidence view.
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/my-cpd"
+              className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-2 text-sm font-semibold text-white hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400"
+            >
+              Track your CPD
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+            <Link
+              href="/tools"
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-400"
+            >
+              Open the labs
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
-          <div className="hero__panel">
-            <p className="eyebrow">Learning flow</p>
-            <ul className="hero-list">
-              <li>
-                <span className="dot dot--accent" />
-                Clear intent and scope
-              </li>
-              <li>
-                <span className="dot dot--accent" />
-                Data clarity (front matter + MDX)
-              </li>
-              <li>
-                <span className="dot dot--accent" />
-                Application guardrails (React/Next)
-              </li>
-              <li>
-                <span className="dot dot--accent" />
-                Technology controls (headers, client-side tools)
-              </li>
-            </ul>
-          </div>
-        </div>
+          <Link href="/my-cpd/evidence" className="text-sm text-slate-600 underline hover:text-slate-900">
+            Need evidence for work or accreditation? Open the CPD evidence view.
+          </Link>
+        </section>
 
-        <section className="section">
-          <div className="section-heading">
-            <h2>Choose a track</h2>
-            <span className="hint">Notes with embedded, browser-safe tooling</span>
-          </div>
-          <div className="course-grid">
-            {courses.map((course) => (
-              <CourseTrackCard key={course.slug} course={course} />
-            ))}
+        {/* Learning Flow Section */}
+        <section className="mt-8 rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Learning flow</p>
+          <ul className="mt-4 space-y-2 text-sm text-slate-700">
+            <li className="flex items-start gap-2">
+              <span className="mt-0.5 inline-block h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true" />
+              Clear intent and scope
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="mt-0.5 inline-block h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true" />
+              Data clarity (front matter + MDX)
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="mt-0.5 inline-block h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true" />
+              Application guardrails (React/Next)
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="mt-0.5 inline-block h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true" />
+              Technology controls (headers, client-side tools)
+            </li>
+          </ul>
+        </section>
+
+        {/* Courses List with Search and Filtering */}
+        <CoursesList courses={courses} />
+
+        {/* Quick Links Section */}
+        <section className="mt-8 rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Quick links</p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <Link
+              href="/tools"
+              className="rounded-xl border border-slate-200 bg-slate-50/60 p-4 text-sm text-slate-800 hover:bg-slate-100 transition"
+            >
+              <span className="font-semibold text-slate-900">Open the labs</span>
+              <p className="mt-1 text-xs text-slate-600">Interactive tools and experiments</p>
+            </Link>
+            <Link
+              href="/studios"
+              className="rounded-xl border border-slate-200 bg-slate-50/60 p-4 text-sm text-slate-800 hover:bg-slate-100 transition"
+            >
+              <span className="font-semibold text-slate-900">Open studios</span>
+              <p className="mt-1 text-xs text-slate-600">Guided workspaces</p>
+            </Link>
+            <Link
+              href="/templates"
+              className="rounded-xl border border-slate-200 bg-slate-50/60 p-4 text-sm text-slate-800 hover:bg-slate-100 transition"
+            >
+              <span className="font-semibold text-slate-900">Explore templates</span>
+              <p className="mt-1 text-xs text-slate-600">Evidence-friendly outputs</p>
+            </Link>
+            <Link
+              href="/about"
+              className="rounded-xl border border-slate-200 bg-slate-50/60 p-4 text-sm text-slate-800 hover:bg-slate-100 transition"
+            >
+              <span className="font-semibold text-slate-900">Meet the author</span>
+              <p className="mt-1 text-xs text-slate-600">Learn about Ransford</p>
+            </Link>
           </div>
         </section>
       </MarketingPageTemplate>

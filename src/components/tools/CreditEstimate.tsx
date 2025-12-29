@@ -101,16 +101,26 @@ export default function CreditEstimate({ contract, mode, inputs }: CreditEstimat
   return (
     <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
       <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-semibold text-slate-900">
-            Estimated credits this run: <span className="text-lg">{estimatedCredits}</span>
-          </p>
+        <div className="flex-1">
+          <div className="flex items-center gap-2">
+            <p className="text-sm font-semibold text-slate-900">
+              Estimated credits this run: <span className="text-lg">{estimatedCredits}</span>
+            </p>
+            {mode === "compute" && estimatedCredits > 0 && (
+              <span className="text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded">ESTIMATE</span>
+            )}
+          </div>
           <p className="mt-1 text-xs text-slate-600">{explanation}</p>
+          {mode === "compute" && estimatedCredits > 0 && (
+            <p className="mt-2 text-xs font-medium text-amber-800 bg-amber-50 border border-amber-200 rounded px-2 py-1">
+              ⚠️ This is an estimate. Actual cost may be higher or lower depending on actual execution time and complexity.
+            </p>
+          )}
         </div>
         {mode === "compute" && estimatedCredits > 0 && (
           <button
             type="button"
-            className="text-xs text-slate-600 underline hover:text-slate-900"
+            className="text-xs text-slate-600 underline hover:text-slate-900 ml-2"
             title="Why this estimate"
             onClick={(e) => {
               e.preventDefault();

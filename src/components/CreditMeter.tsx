@@ -119,7 +119,12 @@ export function CreditMeter({
           </div>
         </div>
         <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3">
-          <div className="text-xs font-semibold text-slate-800">Estimated cost</div>
+          <div className="flex items-center gap-2">
+            <div className="text-xs font-semibold text-slate-800">Estimated cost</div>
+            {estimate && estimate.willChargeCredits && (
+              <span className="text-xs font-semibold text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded">ESTIMATE</span>
+            )}
+          </div>
           {estimateStatus === "loading" ? (
             <div className="mt-1 text-sm text-slate-700">Loading estimate…</div>
           ) : estimate ? (
@@ -128,6 +133,11 @@ export function CreditMeter({
                 {estimate.willChargeCredits ? `${formatCreditsSafe(estimate.estimatedCredits) ?? "N/A"} credits` : "0 credits"}
               </div>
               <div className="mt-1 text-xs text-slate-700">Estimated duration: {formatMsSafe(estimate.estimatedDurationMs) ?? "N/A"}</div>
+              {estimate.willChargeCredits && (
+                <div className="mt-2 text-xs font-medium text-amber-800 bg-amber-50 border border-amber-200 rounded px-2 py-1">
+                  ⚠️ This is an estimate. Actual cost may be higher or lower.
+                </div>
+              )}
             </>
           ) : (
             <div className="mt-1 text-sm text-slate-700">Estimate unavailable</div>
