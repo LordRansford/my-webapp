@@ -1,11 +1,14 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { downloadSvg } from "@/lib/architecture-diagrams/export/svg";
 import { downloadPng } from "@/lib/architecture-diagrams/export/png";
 import { openPrintPreview } from "./PrintView";
 import { emitArchitectureTelemetry } from "@/lib/architecture-diagrams/telemetry/client";
 import SwitchRow from "@/components/ui/SwitchRow";
+import CreditConsent, { useCreditConsent } from "@/components/credits/CreditConsent";
+
+const ESTIMATED_CREDITS = 4; // PDF generation cost
 
 export default function ExportPanel({
   svgText,
@@ -26,6 +29,17 @@ export default function ExportPanel({
   const [pdfBusy, setPdfBusy] = useState(false);
   const [includeWatermark, setIncludeWatermark] = useState(true);
   const [includeAppendix, setIncludeAppendix] = useState(true);
+  const [balance, setBalance] = useState<number | null>(null);
+  const { accepted, canProceed } = useCreditConsent(ESTIMATED_CREDITS, balance);
+
+  useEffect(() => {
+    fetch("/api/credits/status")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        setBalance(typeof d?.balance === "number" ? d.balance : 0);
+      })
+      .catch(() => setBalance(0));
+  }, []);
 
   const disabledReason = useMemo(() => {
     if (!svgText) return "Render the diagram first.";
@@ -43,6 +57,10 @@ export default function ExportPanel({
 
   const downloadPdf = async () => {
     if (!svgText) return { ok: false, reason: "Render the diagram first." };
+    if (!canProceed) {
+      setStatus("Please accept the credit estimate and ensure sufficient credits.");
+      return { ok: false, reason: "Credit consent required." };
+    }
     setPdfBusy(true);
     setStatus("Preparing PDF...");
 
@@ -218,10 +236,10 @@ export default function ExportPanel({
           </button>
           <button
             type="button"
-            disabled={disabled || pdfBusy}
+            disabled={disabled || pdfBusy || !canProceed}
             onClick={() => run(downloadPdf)}
             className={`rounded-full px-4 py-2 text-sm font-semibold shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 ${
-              disabled || pdfBusy ? "bg-slate-200 text-slate-500 cursor-not-allowed" : "border border-slate-200 bg-white text-slate-800 hover:bg-slate-50"
+              disabled || pdfBusy || !canProceed ? "bg-slate-200 text-slate-500 cursor-not-allowed" : "border border-slate-200 bg-white text-slate-800 hover:bg-slate-50"
             }`}
           >
             Download PDF
@@ -257,6 +275,14 @@ export default function ExportPanel({
 
       {disabledReason ? <p className="mt-3 text-xs font-semibold text-slate-600">{disabledReason}</p> : null}
       {status ? <p className="mt-3 text-xs font-semibold text-slate-700">{status}</p> : null}
+
+      <div className="mt-4">
+        <CreditConsent
+          estimatedCredits={ESTIMATED_CREDITS}
+          currentBalance={balance}
+          onAccept={() => {}}
+        />
+      </div>
 
       <div className="mt-4">
         <div className="grid gap-2 sm:grid-cols-2">

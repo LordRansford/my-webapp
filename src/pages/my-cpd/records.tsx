@@ -3,6 +3,7 @@ import Layout from "@/components/Layout";
 import Link from "next/link";
 import AccessGate from "@/components/AccessGate";
 import { getCpdCertificateCredits } from "@/lib/cpd/certificateCredits";
+import CreditConsent, { useCreditConsent } from "@/components/credits/CreditConsent";
 
 type LearningRecord = {
   userId: string;
@@ -22,6 +23,7 @@ export default function LearningRecordsPage() {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
   const [issuing, setIssuing] = useState<string | null>(null);
+  const [balance, setBalance] = useState<number | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -40,6 +42,15 @@ export default function LearningRecordsPage() {
         setLoading(false);
       }
     })();
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/credits/status")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        setBalance(typeof d?.balance === "number" ? d.balance : 0);
+      })
+      .catch(() => setBalance(0));
   }, []);
 
   const totalHours = useMemo(() => {
@@ -121,14 +132,14 @@ export default function LearningRecordsPage() {
                           <p className="muted" style={{ marginTop: 0 }}>
                             You are purchasing certificate issuance. This covers identity linked issuance, a downloadable PDF, and a public verification page.
                           </p>
-                          <button
-                            type="button"
-                            className="button"
-                            disabled={r.completionStatus !== "completed" || issuing === `${r.courseId}:${r.levelId}`}
-                            onClick={() => issueCertificate(r.courseId, r.levelId)}
-                          >
-                            {issuing === `${r.courseId}:${r.levelId}` ? "Issuing..." : `Get CPD certificate (${getCpdCertificateCredits(r.courseId)} credits)`}
-                          </button>
+                          <CertificateIssuanceButton
+                            courseId={r.courseId}
+                            levelId={r.levelId}
+                            completionStatus={r.completionStatus}
+                            issuing={issuing}
+                            balance={balance}
+                            onIssue={issueCertificate}
+                          />
                         </AccessGate>
                       </div>
                     </div>
@@ -143,4 +154,41 @@ export default function LearningRecordsPage() {
   );
 }
 
+function CertificateIssuanceButton({
+  courseId,
+  levelId,
+  completionStatus,
+  issuing,
+  balance,
+  onIssue,
+}: {
+  courseId: string;
+  levelId: string;
+  completionStatus: string;
+  issuing: string | null;
+  balance: number | null;
+  onIssue: (courseId: string, levelId: string) => void;
+}) {
+  const estimatedCredits = getCpdCertificateCredits(courseId);
+  const { accepted, canProceed } = useCreditConsent(estimatedCredits, balance);
+  const isIssuing = issuing === `${courseId}:${levelId}`;
+
+  return (
+    <div className="space-y-3">
+      <CreditConsent
+        estimatedCredits={estimatedCredits}
+        currentBalance={balance}
+        onAccept={() => {}}
+      />
+      <button
+        type="button"
+        className="button"
+        disabled={completionStatus !== "completed" || isIssuing || !canProceed}
+        onClick={() => onIssue(courseId, levelId)}
+      >
+        {isIssuing ? "Issuing..." : `Get CPD certificate (${estimatedCredits} credits)`}
+      </button>
+    </div>
+  );
+}
 

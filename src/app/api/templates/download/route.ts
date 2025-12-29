@@ -5,6 +5,10 @@ import { requireSameOrigin } from "@/lib/security/origin";
 import { withRequestLogging } from "@/lib/security/requestLog";
 import fs from "fs";
 import path from "path";
+import { enforceCreditGate, creditGateErrorResponse } from "@/lib/credits/enforceCreditGate";
+import { deductCredits } from "@/lib/credits/deductCredits";
+
+const ESTIMATED_CREDITS = 2; // Template download cost
 
 type Body = {
   templateId?: string;
@@ -92,6 +96,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: "Certificates require explicit permission" }, { status: 403 });
     }
 
+    // Enforce credit gate before template processing
+    const gateResult = await enforceCreditGate(ESTIMATED_CREDITS);
+    if (!gateResult.ok) {
+      return creditGateErrorResponse(gateResult);
+    }
+
     // All other templates are freely downloadable
     let signaturePolicy: "kept" | "removed" = body?.keepSignature ? "kept" : "removed";
     if (licenseChoice === "commercial_use") {
@@ -99,15 +109,28 @@ export async function POST(req: Request) {
       signaturePolicy = "kept";
     }
 
-    const content = buildTemplateText({ templateId, licenseChoice, signaturePolicy });
-    const filename = `ransfords-notes-${safeFilename(templateId)}-${licenseChoice}-${signaturePolicy}.${format}`;
+    try {
+      const content = buildTemplateText({ templateId, licenseChoice, signaturePolicy });
+      const filename = `ransfords-notes-${safeFilename(templateId)}-${licenseChoice}-${signaturePolicy}.${format}`;
 
-    return new NextResponse(content, {
-      headers: {
-        "content-type": format === "json" ? "application/json" : format === "markdown" ? "text/markdown" : "text/plain; charset=utf-8",
-        "content-disposition": `attachment; filename="${filename}"`,
-        "cache-control": "no-store",
-      },
-    });
+      // Deduct credits after successful template generation
+      await deductCredits({
+        userId: gateResult.userId,
+        credits: ESTIMATED_CREDITS,
+        toolId: "template-download",
+      });
+
+      return new NextResponse(content, {
+        headers: {
+          "content-type": format === "json" ? "application/json" : format === "markdown" ? "text/markdown" : "text/plain; charset=utf-8",
+          "content-disposition": `attachment; filename="${filename}"`,
+          "cache-control": "no-store",
+        },
+      });
+    } catch (error) {
+      // If template generation fails, don't deduct credits
+      console.error("[template-download] Error generating template:", error);
+      return NextResponse.json({ message: "Failed to generate template" }, { status: 500 });
+    }
   });
 }

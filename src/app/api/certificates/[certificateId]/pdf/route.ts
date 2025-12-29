@@ -5,6 +5,10 @@ import { prisma } from "@/lib/db/prisma";
 import { getCertificatePdfBytes } from "@/lib/storage/certificates";
 import { withRequestLogging } from "@/lib/security/requestLog";
 import { rateLimit } from "@/lib/security/rateLimit";
+import { enforceCreditGate, creditGateErrorResponse } from "@/lib/credits/enforceCreditGate";
+import { deductCredits } from "@/lib/credits/deductCredits";
+
+const ESTIMATED_CREDITS = 5; // PDF generation cost
 
 export async function GET(req: Request, ctx: { params: Promise<{ certificateId: string }> }) {
   return withRequestLogging(req, { route: "GET /api/certificates/[certificateId]/pdf" }, async () => {
@@ -19,20 +23,40 @@ export async function GET(req: Request, ctx: { params: Promise<{ certificateId: 
     const id = String(certificateId || "").trim();
     if (!id) return NextResponse.json({ message: "Missing certificateId" }, { status: 400 });
 
+    // Enforce credit gate before operation
+    const gateResult = await enforceCreditGate(ESTIMATED_CREDITS);
+    if (!gateResult.ok) {
+      return creditGateErrorResponse(gateResult);
+    }
+
     const cert = await (prisma as any).certificate.findUnique({ where: { id } });
     if (!cert || cert.userId !== userId) {
       return NextResponse.json({ message: "Not found" }, { status: 404 });
     }
 
-    const bytes = await getCertificatePdfBytes({ key: cert.pdfKey });
-    return new NextResponse(bytes as any, {
-      status: 200,
-      headers: {
-        "content-type": "application/pdf",
-        "content-disposition": `attachment; filename="${id}.pdf"`,
-        "cache-control": "private, max-age=0, no-store",
-      },
-    });
+    try {
+      const bytes = await getCertificatePdfBytes({ key: cert.pdfKey });
+      
+      // Deduct credits after successful PDF retrieval
+      await deductCredits({
+        userId: gateResult.userId,
+        credits: ESTIMATED_CREDITS,
+        toolId: "certificate-pdf",
+      });
+
+      return new NextResponse(bytes as any, {
+        status: 200,
+        headers: {
+          "content-type": "application/pdf",
+          "content-disposition": `attachment; filename="${id}.pdf"`,
+          "cache-control": "private, max-age=0, no-store",
+        },
+      });
+    } catch (error) {
+      // If PDF retrieval fails, don't deduct credits
+      console.error("[cert-pdf] Error retrieving PDF:", error);
+      return NextResponse.json({ message: "Failed to retrieve certificate PDF" }, { status: 500 });
+    }
   });
 }
 
