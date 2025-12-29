@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, useEffect } from "react";
 import TemplateLayout from "@/components/templates/TemplateLayout";
 import TemplateExportPanel from "@/components/templates/TemplateExportPanel";
 import { useTemplateState } from "@/hooks/useTemplateState";
@@ -10,6 +10,7 @@ import { postJson } from "@/lib/tooling/http";
 import ComputeEstimatePanel from "@/components/compute/ComputeEstimatePanel";
 import ComputeSummaryPanel from "@/components/compute/ComputeSummaryPanel";
 import ComputeMeter from "@/components/ComputeMeter";
+import CreditConsent, { useCreditConsent } from "@/components/credits/CreditConsent";
 
 const attribution =
   "Created by Ransford for Ransfords Notes. Internal use allowed. Commercial use requires visible attribution. Exports are gated per policy.";
@@ -44,6 +45,24 @@ function useNetworkTool(storageKey, apiPath) {
   const [serverFreeRemainingMs, setServerFreeRemainingMs] = useState(null);
   const [serverHints, setServerHints] = useState([]);
   const [serverStatus, setServerStatus] = useState("success");
+  // Check if this tool requires credits (DNS lookup and IP reputation do)
+  const requiresCredits = apiPath === "dns-lookup" || apiPath === "ip-reputation";
+  const estimatedCredits = requiresCredits ? 1 : 0;
+  const [balance, setBalance] = useState(null);
+  
+  // Fetch credit balance for tools that require credits
+  useEffect(() => {
+    if (requiresCredits && typeof window !== "undefined") {
+      fetch("/api/credits/status")
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d) => {
+          setBalance(typeof d?.balance === "number" ? d.balance : 0);
+        })
+        .catch(() => setBalance(0));
+    }
+  }, [requiresCredits]);
+  
+  const { accepted: creditAccepted, canProceed: creditCanProceed } = useCreditConsent(estimatedCredits, balance);
 
   const validateTarget = useCallback((targetRaw) => {
     const t = safeTrim(targetRaw, 253);
@@ -78,6 +97,12 @@ function useNetworkTool(storageKey, apiPath) {
 
     if (!state.consent) {
       updateState((prev) => ({ ...prev, error: "Please confirm you have permission to inspect this target." }));
+      return;
+    }
+    
+    // Check credit consent for tools that require credits
+    if (requiresCredits && !creditCanProceed) {
+      updateState((prev) => ({ ...prev, error: "Please accept the credit estimate and ensure sufficient credits." }));
       return;
     }
 
@@ -138,6 +163,11 @@ function useNetworkTool(storageKey, apiPath) {
     serverFreeRemainingMs,
     serverHints,
     serverStatus,
+    requiresCredits,
+    estimatedCredits,
+    balance,
+    creditAccepted,
+    creditCanProceed,
   };
 }
 
@@ -195,6 +225,13 @@ function NetworkTemplate({
       <div className="mt-4 space-y-3">
         <ComputeEstimatePanel estimate={tool.runner.compute.pre || tool.runner.compute.live} />
         <ComputeSummaryPanel toolId={storageKey} summary={tool.runner.compute.post} />
+        {tool.requiresCredits && (
+          <CreditConsent
+            estimatedCredits={tool.estimatedCredits}
+            currentBalance={tool.balance}
+            onAccept={() => {}}
+          />
+        )}
         <ComputeMeter
           estimate={
             tool.serverEstimate?.ok
@@ -230,7 +267,7 @@ function NetworkTemplate({
           </button>
           <button
             type="button"
-            disabled={!tool.state.consent || !tool.state.target || tool.loading}
+            disabled={!tool.state.consent || !tool.state.target || tool.loading || (tool.requiresCredits && !tool.creditCanProceed)}
             onClick={tool.runLookup}
             className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 disabled:cursor-not-allowed disabled:bg-slate-400"
           >
