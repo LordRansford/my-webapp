@@ -11,35 +11,52 @@
 
 // Try to import Prisma client, fallback to simulated if not available
 let prisma: any = null;
+let prismaAvailable = false;
+
 try {
   const prismaModule = require("@/lib/db/prisma");
   prisma = prismaModule.prisma;
+  prismaAvailable = !!prisma;
 } catch (error) {
   // Prisma not set up yet, will use simulated responses
-  console.warn("[AI Studio DB] Prisma not available, using simulated responses");
+  if (process.env.NODE_ENV !== "production") {
+    console.warn("[AI Studio DB] Prisma not available, using simulated responses");
+  }
 }
+
+// Check if AI Studio tables exist (they would be in a separate schema or merged)
+// For now, we'll use simulated responses until the schema is merged
+const USE_SIMULATED = !prismaAvailable;
 
 /**
  * Get dataset by ID
  */
 export async function getDataset(datasetId: string, userId: string) {
-  // TODO: Replace with actual Prisma query
-  // return await prisma.dataset.findFirst({
-  //   where: {
-  //     id: datasetId,
-  //     userId: userId,
-  //     deletedAt: null,
-  //   },
-  //   include: {
-  //     versions: {
-  //       orderBy: { version: "desc" },
-  //       take: 1,
-  //     },
-  //   },
-  // });
+  if (USE_SIMULATED || !prisma) {
+    // Simulated response for now
+    return null;
+  }
 
-  // Simulated response for now
-  return null;
+  try {
+    // TODO: Uncomment when AI Studio schema is merged with main schema
+    // return await prisma.dataset.findFirst({
+    //   where: {
+    //     id: datasetId,
+    //     userId: userId,
+    //     deletedAt: null,
+    //   },
+    //   include: {
+    //     versions: {
+    //       orderBy: { version: "desc" },
+    //       take: 1,
+    //     },
+    //   },
+    // });
+    return null;
+  } catch (error) {
+    console.error("[AI Studio DB] Error fetching dataset:", error);
+    return null;
+  }
 }
 
 /**
