@@ -56,28 +56,29 @@ export {
 } from "./storage";
 export type { StorageConfig } from "./storage";
 
-// Database
-export {
-  getDataset,
-  createDataset,
-  updateDataset,
-  deleteDataset,
-  listDatasets,
-  getModel,
-  createModel,
-  updateModel,
-  deleteModel,
-  listModels,
-  getTrainingJob,
-  createTrainingJob,
-  updateTrainingJob,
-  listTrainingJobs,
-  getAgent,
-  createAgent,
-  updateAgent,
-  deleteAgent,
-  listAgents,
-} from "./db";
+// Database - Note: These are internal functions, typically accessed via API routes
+// Uncomment if you need direct access to database functions
+// export {
+//   getDataset,
+//   createDataset,
+//   updateDataset,
+//   deleteDataset,
+//   listDatasets,
+//   getModel,
+//   createModel,
+//   updateModel,
+//   deleteModel,
+//   listModels,
+//   getTrainingJob,
+//   createTrainingJob,
+//   updateTrainingJob,
+//   listTrainingJobs,
+//   getAgent,
+//   createAgent,
+//   updateAgent,
+//   deleteAgent,
+//   listAgents,
+// } from "./db";
 
 // Performance
 export {
