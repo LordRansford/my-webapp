@@ -5,6 +5,8 @@ import { withRequestLogging } from "@/lib/security/requestLog";
 import { requireSameOrigin } from "@/lib/security/origin";
 import { rateLimit } from "@/lib/security/rateLimit";
 import { issueCpdCertificate } from "@/lib/cpd/issueCertificate";
+import { enforceCreditGate, creditGateErrorResponse } from "@/lib/credits/enforceCreditGate";
+import { getCpdCertificateCredits } from "@/lib/cpd/certificateCredits";
 
 export async function POST(req: Request) {
   return withRequestLogging(req, { route: "POST /api/certificates/issue" }, async () => {
@@ -27,6 +29,16 @@ export async function POST(req: Request) {
     const courseId = (body as any).courseId.trim();
     if (!courseId) {
       return NextResponse.json({ code: "COURSE_ID_REQUIRED", message: "courseId is required." }, { status: 400 });
+    }
+
+    // Extract base course ID for credit calculation
+    const [baseCourseId] = courseId.split(":");
+    const estimatedCredits = getCpdCertificateCredits(baseCourseId || courseId);
+
+    // Enforce credit gate before operation
+    const gateResult = await enforceCreditGate(estimatedCredits);
+    if (!gateResult.ok) {
+      return creditGateErrorResponse(gateResult);
     }
 
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";

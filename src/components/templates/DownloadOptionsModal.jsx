@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import AccessGate from "@/components/AccessGate";
+import CreditConsent from "@/components/credits/CreditConsent";
 
 const OPTIONS = [
   { value: "internal_use", label: "Internal use", helper: "Personal or team use. You may remove the signature." },
@@ -51,18 +52,34 @@ export function DownloadOptionsModal({ open, onClose, template }) {
   const [loading, setLoading] = useState(false);
   const dialogRef = useFocusTrap(open);
   const previewEnabled = process.env.NEXT_PUBLIC_PREVIEW_MODE === "true";
+  const [balance, setBalance] = useState(null);
 
   useEffect(() => {
     if (open) {
       setStatus(null);
       setRequestedUse("internal_use");
+      // Fetch credit balance
+      fetch("/api/credits/status")
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d) => {
+          setBalance(typeof d?.balance === "number" ? d.balance : 0);
+        })
+        .catch(() => setBalance(0));
     }
   }, [open]);
 
   if (!open) return null;
 
+  const requiredCredits = Math.ceil(ESTIMATED_CREDITS * 1.25);
+  const hasEnoughCredits = balance !== null && balance >= requiredCredits;
+  const canProceed = accepted && hasEnoughCredits;
+
   const submit = async () => {
     if (!template?.id) return;
+    if (!canProceed) {
+      setStatus({ type: "error", message: "Please accept the credit estimate and ensure sufficient credits." });
+      return;
+    }
     setLoading(true);
     setStatus(null);
     try {
@@ -148,31 +165,38 @@ export function DownloadOptionsModal({ open, onClose, template }) {
           </ul>
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-3">
-          {template?.gatingLevel && template.gatingLevel !== "none" ? (
-            <AccessGate
-              requiredLevel="supporter"
-              fallbackMessage="Supporters can download templates. Browsing stays open for everyone."
-            >
+        <div className="mt-4 space-y-3">
+          <CreditConsent
+            estimatedCredits={ESTIMATED_CREDITS}
+            currentBalance={balance}
+            onAccept={() => setAccepted(true)}
+            onDecline={() => setAccepted(false)}
+          />
+          <div className="flex flex-wrap gap-3">
+            {template?.gatingLevel && template.gatingLevel !== "none" ? (
+              <AccessGate
+                requiredLevel="supporter"
+                fallbackMessage="Supporters can download templates. Browsing stays open for everyone."
+              >
+                <button
+                  type="button"
+                  onClick={submit}
+                  className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
+                  disabled={loading || !canProceed}
+                >
+                  {loading ? "Preparing..." : "Download"}
+                </button>
+              </AccessGate>
+            ) : (
               <button
                 type="button"
                 onClick={submit}
                 className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
-                disabled={loading}
+                disabled={loading || !canProceed}
               >
                 {loading ? "Preparing..." : "Download"}
               </button>
-            </AccessGate>
-          ) : (
-            <button
-              type="button"
-              onClick={submit}
-              className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
-              disabled={loading}
-            >
-              {loading ? "Preparing..." : "Download"}
-            </button>
-          )}
+            )}
           <Link
             className="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
             href="/support"

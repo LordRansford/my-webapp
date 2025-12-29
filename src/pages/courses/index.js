@@ -1,3 +1,4 @@
+import Head from "next/head";
 import Link from "next/link";
 import Layout from "@/components/Layout";
 import { ArrowRight } from "lucide-react";
@@ -16,12 +17,88 @@ export async function getStaticProps() {
 export default function CoursesPage({ courses }) {
   const totalHours = courses.reduce((sum, c) => sum + (c.totalEstimatedHours || 0), 0);
   const totalLevels = courses.reduce((sum, c) => sum + (c.bands.length + 1), 0);
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.ransfordsnotes.com";
+
+  // Generate structured data for courses
+  const courseSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Ransford's Notes Courses",
+    "description": "Notes with browser practice for cybersecurity, data, software architecture, digitalisation, and AI.",
+    "numberOfItems": courses.length,
+    "itemListElement": courses.map((course, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "Course",
+        "name": course.title,
+        "description": course.description,
+        "provider": {
+          "@type": "Organization",
+          "name": "Ransford's Notes",
+          "url": siteUrl,
+        },
+        "timeRequired": `PT${course.totalEstimatedHours}H`,
+        "educationalLevel": "Professional",
+        "courseCode": course.slug,
+        "url": `${siteUrl}${course.overviewRoute}`,
+      },
+    })),
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Courses",
+        "item": `${siteUrl}/courses`,
+      },
+    ],
+  };
 
   return (
-    <Layout
-      title="Courses - Ransford's Notes"
-      description="Notes with browser practice for cybersecurity, data, software architecture, digitalisation, and AI."
-    >
+    <>
+      <Head>
+        <title>Courses - Ransford&apos;s Notes</title>
+        <meta
+          name="description"
+          content="Notes with browser practice for cybersecurity, data, software architecture, digitalisation, and AI. Five focused tracks from foundations to advanced practice."
+        />
+        <meta property="og:title" content="Courses - Ransford's Notes" />
+        <meta
+          property="og:description"
+          content="Notes with browser practice for cybersecurity, data, software architecture, digitalisation, and AI. Five focused tracks from foundations to advanced practice."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`${siteUrl}/courses`} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Courses - Ransford's Notes" />
+        <meta
+          name="twitter:description"
+          content="Notes with browser practice for cybersecurity, data, software architecture, digitalisation, and AI."
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(courseSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        />
+      </Head>
+      <Layout
+        title="Courses - Ransford's Notes"
+        description="Notes with browser practice for cybersecurity, data, software architecture, digitalisation, and AI."
+      >
       <MarketingPageTemplate breadcrumbs={[{ label: "Home", href: "/" }, { label: "Courses" }]}>
         {/* Hero Section */}
         <section className="space-y-5 rounded-3xl bg-gradient-to-r from-slate-50 via-sky-50/60 to-slate-50 p-8 shadow-sm ring-1 ring-slate-100">
@@ -120,5 +197,6 @@ export default function CoursesPage({ courses }) {
         </section>
       </MarketingPageTemplate>
     </Layout>
+    </>
   );
 }

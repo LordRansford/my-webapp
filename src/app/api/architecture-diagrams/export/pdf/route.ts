@@ -7,6 +7,10 @@ import { requireSameOrigin } from "@/lib/security/origin";
 import { withRequestLogging } from "@/lib/security/requestLog";
 import { sanitiseSvgStrict } from "@/lib/security/svgSanitise";
 import { svgToPdf } from "@/lib/architecture-diagrams/export/pdf";
+import { enforceCreditGate, creditGateErrorResponse } from "@/lib/credits/enforceCreditGate";
+import { deductCredits } from "@/lib/credits/deductCredits";
+
+const ESTIMATED_CREDITS = 4; // PDF generation cost (3-5 credits, using 4 as average)
 
 const BodySchema = z
   .object({
@@ -71,40 +75,90 @@ export async function POST(req: Request) {
 
     const { svg, systemName, diagramType, variant, pageSize, orientation } = parsed.data;
 
-    // Re-sanitise server-side (do not trust client claims).
-    const safeSvg = sanitiseSvgStrict(svg);
-    if (!safeSvg.ok) {
-      console.info("[arch-pdf] reject", { diagramType, pageSize, outcome: "reject" });
-      return NextResponse.json({ error: safeSvg.reason }, { status: 400 });
+    // Enforce credit gate before operation (only for authenticated users)
+    if (userId) {
+      const gateResult = await enforceCreditGate(ESTIMATED_CREDITS);
+      if (!gateResult.ok) {
+        return creditGateErrorResponse(gateResult);
+      }
+
+      // Re-sanitise server-side (do not trust client claims).
+      const safeSvg = sanitiseSvgStrict(svg);
+      if (!safeSvg.ok) {
+        console.info("[arch-pdf] reject", { diagramType, pageSize, outcome: "reject" });
+        return NextResponse.json({ error: safeSvg.reason }, { status: 400 });
+      }
+
+      const timeoutMs = 10_000;
+      const started = Date.now();
+
+      const result = await Promise.race([
+        svgToPdf(safeSvg.svg, { systemName, diagramType, variant, pageSize, orientation }),
+        new Promise<{ ok: false; reason: string }>((resolve) =>
+          setTimeout(() => resolve({ ok: false, reason: "PDF export timed out. Please try again." }), timeoutMs)
+        ),
+      ]);
+
+      const durationMs = Date.now() - started;
+
+      if (!result.ok) {
+        console.info("[arch-pdf] fail", { diagramType, pageSize, outcome: "fail", durationMs });
+        return NextResponse.json({ error: result.reason }, { status: 400 });
+      }
+
+      // Deduct credits after successful PDF generation
+      await deductCredits({
+        userId: gateResult.userId,
+        credits: ESTIMATED_CREDITS,
+        toolId: "architecture-diagram-pdf",
+      });
+
+      console.info("[arch-pdf] ok", { diagramType, pageSize, outcome: "success", durationMs });
+
+      return new NextResponse(Buffer.from(result.bytes), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/pdf",
+          "Content-Disposition": `attachment; filename="${filename(systemName, diagramType, variant)}"`,
+          "Cache-Control": "no-store",
+        },
+      });
+    } else {
+      // Anonymous users: allow but no credit deduction
+      const safeSvg = sanitiseSvgStrict(svg);
+      if (!safeSvg.ok) {
+        console.info("[arch-pdf] reject", { diagramType, pageSize, outcome: "reject" });
+        return NextResponse.json({ error: safeSvg.reason }, { status: 400 });
+      }
+
+      const timeoutMs = 10_000;
+      const started = Date.now();
+
+      const result = await Promise.race([
+        svgToPdf(safeSvg.svg, { systemName, diagramType, variant, pageSize, orientation }),
+        new Promise<{ ok: false; reason: string }>((resolve) =>
+          setTimeout(() => resolve({ ok: false, reason: "PDF export timed out. Please try again." }), timeoutMs)
+        ),
+      ]);
+
+      const durationMs = Date.now() - started;
+
+      if (!result.ok) {
+        console.info("[arch-pdf] fail", { diagramType, pageSize, outcome: "fail", durationMs });
+        return NextResponse.json({ error: result.reason }, { status: 400 });
+      }
+
+      console.info("[arch-pdf] ok", { diagramType, pageSize, outcome: "success", durationMs });
+
+      return new NextResponse(Buffer.from(result.bytes), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/pdf",
+          "Content-Disposition": `attachment; filename="${filename(systemName, diagramType, variant)}"`,
+          "Cache-Control": "no-store",
+        },
+      });
     }
-
-    const timeoutMs = 10_000;
-    const started = Date.now();
-
-    const result = await Promise.race([
-      svgToPdf(safeSvg.svg, { systemName, diagramType, variant, pageSize, orientation }),
-      new Promise<{ ok: false; reason: string }>((resolve) =>
-        setTimeout(() => resolve({ ok: false, reason: "PDF export timed out. Please try again." }), timeoutMs)
-      ),
-    ]);
-
-    const durationMs = Date.now() - started;
-
-    if (!result.ok) {
-      console.info("[arch-pdf] fail", { diagramType, pageSize, outcome: "fail", durationMs });
-      return NextResponse.json({ error: result.reason }, { status: 400 });
-    }
-
-    console.info("[arch-pdf] ok", { diagramType, pageSize, outcome: "success", durationMs });
-
-    return new NextResponse(Buffer.from(result.bytes), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="${filename(systemName, diagramType, variant)}"`,
-        "Cache-Control": "no-store",
-      },
-    });
   });
 }
 

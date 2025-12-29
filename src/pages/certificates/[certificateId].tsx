@@ -1,6 +1,7 @@
 import type { GetServerSideProps } from "next";
 import Head from "next/head";
 import { getCertificateById } from "@/lib/certificates/store";
+import CertificateDownload from "@/components/certificates/CertificateDownload.client";
 
 type Props = {
   found: boolean;
@@ -68,9 +69,12 @@ export default function CertificatePage({ found, certificate }: Props) {
             {certificate?.status === "revoked" ? (
               <p className="muted">Status: revoked. This certificate is no longer valid.</p>
             ) : null}
-            <button type="button" className="button" onClick={() => window.print()}>
-              Print / Save as PDF
-            </button>
+            <div className="space-y-3">
+              <button type="button" className="button" onClick={() => window.print()}>
+                Print / Save as PDF
+              </button>
+              <CertificateDownload certificateId={certificate?.certificateId || ""} />
+            </div>
           </footer>
         </section>
         <style jsx>{`

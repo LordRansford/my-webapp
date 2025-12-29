@@ -76,61 +76,94 @@ export async function POST(req) {
 
   const session = await getServerSession(authOptions).catch(() => null);
   const userId = session?.user?.id || null;
-  const ws = await getWorkspaceIdentity(req);
-
-  let runId = null;
-  if (projectId) {
-    const p = await getProject({ projectId });
-    const allowed = userId ? p?.ownerId === userId : p?.ownerId == null && p?.workspaceSessionId === ws.workspaceSessionId;
-    if (p && allowed) {
-      const run = await createRun({ projectId, toolId: "dns-lookup", status: "running", inputJson: { target } });
-      runId = String(run.id);
+  
+  // Enforce credit gate for authenticated users
+  if (userId) {
+    const { enforceCreditGate, creditGateErrorResponse } = await import("@/lib/credits/enforceCreditGate");
+    const { deductCredits } = await import("@/lib/credits/deductCredits");
+    const ESTIMATED_CREDITS = 1;
+    
+    const gateResult = await enforceCreditGate(ESTIMATED_CREDITS);
+    if (!gateResult.ok) {
+      return creditGateErrorResponse(gateResult);
     }
-  }
+    
+    const ws = await getWorkspaceIdentity(req);
 
-  try {
-    const records = await withTimeout(dns.promises.resolveAny(target)).catch(() => null);
-    if (!records) {
-      const payload = {
-        fallback: true,
-        message: "Could not resolve. Use external DNS tools or verify the domain exists.",
-      };
+    let runId = null;
+    if (projectId) {
+      const p = await getProject({ projectId });
+      const allowed = userId ? p?.ownerId === userId : p?.ownerId == null && p?.workspaceSessionId === ws.workspaceSessionId;
+      if (p && allowed) {
+        const run = await createRun({ projectId, toolId: "dns-lookup", status: "running", inputJson: { target } });
+        runId = String(run.id);
+      }
+    }
+
+    try {
+      const records = await withTimeout(dns.promises.resolveAny(target)).catch(() => null);
+      if (!records) {
+        const payload = {
+          fallback: true,
+          message: "Could not resolve. Use external DNS tools or verify the domain exists.",
+        };
+        if (runId && projectId) {
+          await updateRun({
+            runId,
+            status: "succeeded",
+            outputJson: payload,
+            metricsJson: { durationMs: Date.now() - started, chargedCredits: ESTIMATED_CREDITS },
+          }).catch(() => null);
+          if (note.trim()) await createNote({ projectId, runId, content: note.trim() }).catch(() => null);
+        }
+        
+        // Deduct credits after successful lookup (even if no records found)
+        await deductCredits({
+          userId: gateResult.userId,
+          credits: ESTIMATED_CREDITS,
+          toolId: "dns-lookup",
+        });
+        
+        const res = NextResponse.json(payload);
+        return attachWorkspaceCookie(res, ws.setCookieValue);
+      }
+      const payload = { target, records };
       if (runId && projectId) {
         await updateRun({
           runId,
           status: "succeeded",
           outputJson: payload,
-          metricsJson: { durationMs: Date.now() - started, chargedCredits: 0 },
+          metricsJson: { durationMs: Date.now() - started, chargedCredits: ESTIMATED_CREDITS },
         }).catch(() => null);
         if (note.trim()) await createNote({ projectId, runId, content: note.trim() }).catch(() => null);
       }
+      
+      // Deduct credits after successful lookup
+      await deductCredits({
+        userId: gateResult.userId,
+        credits: ESTIMATED_CREDITS,
+        toolId: "dns-lookup",
+      });
+      
       const res = NextResponse.json(payload);
       return attachWorkspaceCookie(res, ws.setCookieValue);
+    } catch (error) {
+      // Don't deduct credits if lookup fails
+      if (runId && projectId) {
+        await updateRun({
+          runId,
+          status: "failed",
+          outputJson: null,
+          metricsJson: { durationMs: Date.now() - started, chargedCredits: 0 },
+          errorJson: { code: "DNS_LOOKUP_FAILED", message: String(error?.message || "Lookup failed").slice(0, 500) },
+        }).catch(() => null);
+        if (note.trim()) await createNote({ projectId, runId, content: note.trim() }).catch(() => null);
+      }
+      const res = NextResponse.json({ message: error.message || "Lookup failed" }, { status: 500 });
+      return attachWorkspaceCookie(res, ws.setCookieValue);
     }
-    const payload = { target, records };
-    if (runId && projectId) {
-      await updateRun({
-        runId,
-        status: "succeeded",
-        outputJson: payload,
-        metricsJson: { durationMs: Date.now() - started, chargedCredits: 0 },
-      }).catch(() => null);
-      if (note.trim()) await createNote({ projectId, runId, content: note.trim() }).catch(() => null);
-    }
-    const res = NextResponse.json(payload);
-    return attachWorkspaceCookie(res, ws.setCookieValue);
-  } catch (error) {
-    if (runId && projectId) {
-      await updateRun({
-        runId,
-        status: "failed",
-        outputJson: null,
-        metricsJson: { durationMs: Date.now() - started, chargedCredits: 0 },
-        errorJson: { code: "DNS_LOOKUP_FAILED", message: String(error?.message || "Lookup failed").slice(0, 500) },
-      }).catch(() => null);
-      if (note.trim()) await createNote({ projectId, runId, content: note.trim() }).catch(() => null);
-    }
-    const res = NextResponse.json({ message: error.message || "Lookup failed" }, { status: 500 });
-    return attachWorkspaceCookie(res, ws.setCookieValue);
+  } else {
+    // Anonymous users: require authentication
+    return NextResponse.json({ message: "Authentication required. Please sign in to use this tool." }, { status: 401 });
   }
 }

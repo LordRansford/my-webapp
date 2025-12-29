@@ -2,6 +2,12 @@ import { NextResponse } from "next/server";
 import net from "net";
 import { z } from "zod";
 import { assertToolRunAllowed } from "@/lib/billing/toolUsage";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth/options";
+import { enforceCreditGate, creditGateErrorResponse } from "@/lib/credits/enforceCreditGate";
+import { deductCredits } from "@/lib/credits/deductCredits";
+
+const ESTIMATED_CREDITS = 1; // IP reputation check cost
 
 const limiter = new Map();
 const windowMs = 60 * 1000;
@@ -54,10 +60,36 @@ export async function POST(req) {
     return NextResponse.json({ message: "Provide a valid public IP address" }, { status: 400 });
   }
 
-  return NextResponse.json({
-    target,
-    fallback: true,
-    reputation: "No automated reputation feed configured. Check trusted threat intel sources.",
-    guidance: "Combine IP checks with context, logs, and behavioural indicators."
-  });
+  // Enforce credit gate (requires authentication)
+  const session = await getServerSession(authOptions).catch(() => null);
+  if (!session?.user?.id) {
+    return NextResponse.json({ message: "Authentication required. Please sign in to use this tool." }, { status: 401 });
+  }
+
+  const gateResult = await enforceCreditGate(ESTIMATED_CREDITS);
+  if (!gateResult.ok) {
+    return creditGateErrorResponse(gateResult);
+  }
+
+  try {
+    const payload = {
+      target,
+      fallback: true,
+      reputation: "No automated reputation feed configured. Check trusted threat intel sources.",
+      guidance: "Combine IP checks with context, logs, and behavioural indicators."
+    };
+
+    // Deduct credits after successful check
+    await deductCredits({
+      userId: gateResult.userId,
+      credits: ESTIMATED_CREDITS,
+      toolId: "ip-reputation",
+    });
+
+    return NextResponse.json(payload);
+  } catch (error) {
+    // Don't deduct credits if check fails
+    console.error("[ip-reputation] Error:", error);
+    return NextResponse.json({ message: "Failed to check IP reputation" }, { status: 500 });
+  }
 }
