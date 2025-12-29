@@ -14,9 +14,17 @@ let prisma: any = null;
 let prismaAvailable = false;
 
 try {
-  const prismaModule = require("@/lib/db/prisma");
-  prisma = prismaModule.prisma;
-  prismaAvailable = !!prisma;
+  // Try multiple possible import paths
+  try {
+    const prismaModule = require("@/lib/db/prisma");
+    prisma = prismaModule.prisma || prismaModule.default?.prisma || prismaModule.default;
+    prismaAvailable = !!prisma;
+  } catch {
+    // Try direct Prisma client import
+    const { PrismaClient } = require("@prisma/client");
+    prisma = new PrismaClient();
+    prismaAvailable = !!prisma;
+  }
 } catch (error) {
   // Prisma not set up yet, will use simulated responses
   if (process.env.NODE_ENV !== "production") {
@@ -26,7 +34,8 @@ try {
 
 // Check if AI Studio tables exist (they would be in a separate schema or merged)
 // For now, we'll use simulated responses until the schema is merged
-const USE_SIMULATED = !prismaAvailable;
+// Set to false to enable Prisma queries when schema is ready
+const USE_SIMULATED = !prismaAvailable || process.env.AI_STUDIO_USE_SIMULATED === "true";
 
 /**
  * Get dataset by ID
