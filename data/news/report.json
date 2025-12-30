@@ -1,0 +1,14 @@
+{
+  "run_at": "2024-01-01T00:00:00.000Z",
+  "duration_ms": 0,
+  "sources_processed": 0,
+  "sources_succeeded": 0,
+  "sources_failed": 0,
+  "items_added": 0,
+  "items_updated": 0,
+  "items_removed": 0,
+  "validation_passed": true,
+  "snapshot_written": false,
+  "per_source_results": {},
+  "errors": []
+}

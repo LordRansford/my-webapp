@@ -9,7 +9,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import AIStudioErrorBoundary from "@/components/ai-studio/AIStudioErrorBoundary";
+import SecureErrorBoundary from "@/components/studios/SecureErrorBoundary";
 import {
   Sparkles,
   Database,
@@ -30,9 +30,9 @@ import {
 import dynamic from "next/dynamic";
 import ExampleGallery from "@/components/ai-studio/ExampleGallery";
 import ContextualHelp from "@/components/ai-studio/ContextualHelp";
-import ErrorBoundaryWrapper from "@/components/ai-studio/ErrorBoundaryWrapper";
 import LoadingSpinner from "@/components/ai-studio/LoadingSpinner";
 import { Suspense } from "react";
+import { auditLogger, AuditActions } from "@/lib/studios/security/auditLogger";
 
 // Lazy load heavy POC components
 const BrowserTrainingPOC = dynamic(
@@ -390,9 +390,14 @@ export default function AIStudioPage() {
     }
   };
 
+  useEffect(() => {
+    auditLogger.log(AuditActions.TOOL_OPENED, "ai-studio", { page: "dashboard", view: activeView });
+  }, [activeView]);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <SecureErrorBoundary studio="ai-studio">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50">
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Header */}
         <header className="mb-8">
           <div className="rounded-3xl bg-gradient-to-br from-white to-slate-50/50 border border-slate-200 p-8 shadow-lg">
@@ -496,32 +501,29 @@ export default function AIStudioPage() {
 
         {/* Content */}
         <main>
-          <AIStudioErrorBoundary>
-            <ErrorBoundaryWrapper>
-              <Suspense fallback={<LoadingSpinner message="Loading..." />}>
-                {showExamples ? (
-                  <div className="space-y-6">
-                    <div className="flex items-center justify-between">
-                      <h2 className="text-2xl font-bold text-slate-900">Examples & Templates</h2>
-                      <button
-                        onClick={() => setShowExamples(false)}
-                        className="px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
-                        aria-label="Back to dashboard"
-                      >
-                        Back to Dashboard
-                      </button>
-                    </div>
-                    <ExampleGallery />
-                  </div>
-                ) : (
-                  renderContent()
-                )}
-              </Suspense>
-            </ErrorBoundaryWrapper>
-          </AIStudioErrorBoundary>
+          <Suspense fallback={<LoadingSpinner message="Loading..." />}>
+            {showExamples ? (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-2xl font-bold text-slate-900">Examples & Templates</h2>
+                  <button
+                    onClick={() => setShowExamples(false)}
+                    className="px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
+                    aria-label="Back to dashboard"
+                  >
+                    Back to Dashboard
+                  </button>
+                </div>
+                <ExampleGallery />
+              </div>
+            ) : (
+              renderContent()
+            )}
+          </Suspense>
         </main>
+        </div>
       </div>
-    </div>
+    </SecureErrorBoundary>
   );
 }
 

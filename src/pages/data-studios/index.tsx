@@ -12,6 +12,10 @@ import DataEthicsLab from "./sections/DataEthicsLab";
 import DigitalisationRoadmapLab from "./sections/DigitalisationRoadmapLab";
 import DataStudioReflection from "./sections/DataStudioReflection";
 import StudioTabs from "@/components/studios/StudioTabs";
+import StudioNavigation from "@/components/studios/StudioNavigation";
+import TryItLiveButton from "@/components/ai-studio/TryItLiveButton";
+import ReadyToBuildCTA from "@/components/ai-studio/ReadyToBuildCTA";
+import ErrorBoundaryWrapper from "@/components/ai-studio/ErrorBoundaryWrapper";
 
 const tabs = [
   { id: "overview", label: "Overview", component: DataStudioOverview },
@@ -30,7 +34,8 @@ export default function DataStudiosPage() {
   const ActiveComp = useMemo(() => tabs.find((t) => t.id === activeTab)?.component || DataStrategyLab, [activeTab]);
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-6 space-y-6 sm:px-6 sm:py-8 md:space-y-8">
+    <ErrorBoundaryWrapper>
+      <div className="mx-auto w-full max-w-6xl px-4 py-6 space-y-6 sm:px-6 sm:py-8 md:space-y-8">
       <header className="rounded-3xl bg-gradient-to-br from-slate-50 via-amber-50/60 to-slate-50 ring-1 ring-slate-100 px-4 py-5 sm:px-6 sm:py-6 md:px-8 md:py-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] space-y-3">
         <div className="inline-flex items-center gap-2 rounded-2xl bg-slate-900 text-white px-3 py-1 text-xs font-semibold">
           Studio
@@ -61,6 +66,18 @@ export default function DataStudiosPage() {
         </div>
       </header>
 
+      {/* Studio Navigation */}
+      <div className="flex justify-center">
+        <StudioNavigation studioType="data" />
+      </div>
+
+      {/* Ready to Build CTA */}
+      <ReadyToBuildCTA 
+        studioName="Data Studio"
+        buildHref="/data-studio"
+        description="Ready to build data systems? Try the live Data Studio with production data tools."
+      />
+
       <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
         <StudioTabs ariaLabel="Data and Digitalisation Studio sections" tabs={tabs} activeId={activeTab} onSelect={setActiveTab} />
       </div>
@@ -68,7 +85,8 @@ export default function DataStudiosPage() {
       <section id={`panel-${activeTab}`} role="tabpanel" aria-label={tabs.find((t) => t.id === activeTab)?.label} className="space-y-3">
         <ActiveComp />
       </section>
-    </div>
+      </div>
+    </ErrorBoundaryWrapper>
   );
 }
 

@@ -22,6 +22,7 @@ import { SecurityBanner } from "@/components/dev-studios/SecurityBanner";
 import { StudioCard } from "@/components/studios/StudioCard";
 
 const navChips = [
+  { label: "Unified Studios Hub", href: "/studios/hub" },
   { label: "Software Development Studio", href: "/dev-studios" },
   { label: "Cybersecurity Studio", href: "/cyber-studios" },
   { label: "Data and Digitalisation Studio", href: "/data-studios" },

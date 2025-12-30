@@ -8,6 +8,8 @@
 
 import React, { useState, useCallback } from "react";
 import { Upload, CheckCircle, XCircle, Loader2 } from "lucide-react";
+import { sanitizeFileName, validateFileType } from "@/lib/studios/security/inputSanitizer";
+import { auditLogger, AuditActions } from "@/lib/studios/security/auditLogger";
 
 interface DatasetUploadProps {
   onUploadComplete?: (dataset: any) => void;
@@ -35,24 +37,59 @@ export default function DatasetUpload({
       setError(null);
       setSuccess(false);
 
+      // Sanitize file name to prevent path traversal attacks
+      const sanitizedName = sanitizeFileName(file.name);
+      const sanitizedFile = sanitizedName !== file.name 
+        ? new File([file], sanitizedName, { type: file.type })
+        : file;
+
       // Validate file size
-      if (file.size > maxSize) {
+      if (sanitizedFile.size > maxSize) {
         const errorMsg = `File size exceeds maximum of ${maxSize / (1024 * 1024)}MB`;
         setError(errorMsg);
         if (onError) {
           onError(new Error(errorMsg));
         }
+        auditLogger.log(AuditActions.ERROR_OCCURRED, "ai-studio", {
+          error: "file_too_large",
+          fileName: sanitizedName,
+          fileSize: sanitizedFile.size,
+          maxSize
+        });
         return;
       }
 
       // Validate file type
-      const ext = file.name.split(".").pop()?.toLowerCase() || "";
-      if (!allowedTypes.includes(`.${ext}`)) {
-        const errorMsg = `File type .${ext} not allowed. Allowed types: ${allowedTypes.join(", ")}`;
+      const ext = "." + sanitizedFile.name.split(".").pop()?.toLowerCase();
+      const validation = validateFileType(sanitizedFile, [], allowedTypes);
+      if (!validation.valid) {
+        const errorMsg = validation.error || `File type ${ext} not allowed. Allowed types: ${allowedTypes.join(", ")}`;
         setError(errorMsg);
         if (onError) {
           onError(new Error(errorMsg));
         }
+        auditLogger.log(AuditActions.ERROR_OCCURRED, "ai-studio", {
+          error: "invalid_file_type",
+          fileName: sanitizedName,
+          fileType: sanitizedFile.type,
+          extension: ext
+        });
+        return;
+      }
+
+      // Additional security: Check for dangerous file types
+      const dangerousExtensions = [".exe", ".bat", ".cmd", ".com", ".pif", ".scr", ".vbs", ".js", ".jar"];
+      if (dangerousExtensions.includes(ext)) {
+        const errorMsg = "This file type is not allowed for security reasons.";
+        setError(errorMsg);
+        if (onError) {
+          onError(new Error(errorMsg));
+        }
+        auditLogger.log(AuditActions.ERROR_OCCURRED, "ai-studio", {
+          error: "dangerous_file_type",
+          fileName: sanitizedName,
+          extension: ext
+        });
         return;
       }
 
@@ -61,8 +98,16 @@ export default function DatasetUpload({
       setProgress(0);
 
       try {
+        // Log file upload for audit
+        auditLogger.log(AuditActions.FILE_UPLOADED, "ai-studio", {
+          fileName: sanitizedName,
+          fileSize: sanitizedFile.size,
+          fileType: sanitizedFile.type,
+          extension: ext
+        });
+
         const formData = new FormData();
-        formData.append("file", file);
+        formData.append("file", sanitizedFile);
 
         // Simulate progress (in production, use XMLHttpRequest for real progress)
         const progressInterval = setInterval(() => {

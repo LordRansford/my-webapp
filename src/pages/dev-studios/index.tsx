@@ -17,6 +17,11 @@ import TradeoffSimulatorLab from "./sections/TradeoffSimulatorLab";
 import ReflectionNextSteps from "./sections/ReflectionNextSteps";
 import { SecurityNotice } from "@/components/SecurityNotice";
 import { SecurityBanner } from "@/components/dev-studios/SecurityBanner";
+import TryItLiveButton from "@/components/ai-studio/TryItLiveButton";
+import ProgressBadge from "@/components/ai-studio/ProgressBadge";
+import ReadyToBuildCTA from "@/components/ai-studio/ReadyToBuildCTA";
+import StudioNavigation from "@/components/studios/StudioNavigation";
+import ErrorBoundaryWrapper from "@/components/ai-studio/ErrorBoundaryWrapper";
 
 const tabs = [
   { id: "overview", label: "Overview", component: ControlRoom },
@@ -59,7 +64,8 @@ export default function DevStudiosPage() {
   }, [router.isReady, router.query.tab]);
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-6 space-y-6 sm:px-6 sm:py-8 md:space-y-8">
+    <ErrorBoundaryWrapper>
+      <div className="mx-auto w-full max-w-6xl px-4 py-6 space-y-6 sm:px-6 sm:py-8 md:space-y-8">
       <div className="rounded-3xl bg-gradient-to-br from-slate-50 via-sky-50/60 to-slate-50 ring-1 ring-slate-100 px-4 py-5 sm:px-6 sm:py-6 md:px-8 md:py-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] space-y-3">
         <div className="inline-flex items-center gap-2 rounded-2xl bg-slate-900 text-white px-3 py-1 text-xs font-semibold">
           New
@@ -92,6 +98,18 @@ export default function DevStudiosPage() {
 
       <SecurityNotice />
       <SecurityBanner />
+
+      {/* Studio Navigation */}
+      <div className="flex justify-center">
+        <StudioNavigation studioType="dev" />
+      </div>
+
+      {/* Ready to Build CTA */}
+      <ReadyToBuildCTA 
+        studioName="Dev Studio"
+        buildHref="/dev-studio"
+        description="Ready to build real projects? Try the live Dev Studio with production tools."
+      />
 
       <section aria-label="Studio map" className="rounded-3xl bg-white ring-1 ring-slate-100 shadow-[0_12px_30px_rgba(15,23,42,0.06)] p-4 sm:p-6 space-y-4">
         <div className="space-y-1">
@@ -464,6 +482,7 @@ export default function DevStudiosPage() {
       <div id={`panel-${activeTab}`} role="tabpanel" aria-label={tabs.find((t) => t.id === activeTab)?.label}>
         <ActiveComp />
       </div>
-    </div>
+      </div>
+    </ErrorBoundaryWrapper>
   );
 }

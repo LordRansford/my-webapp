@@ -2,6 +2,8 @@
 
 import React, { Component, ErrorInfo, ReactNode } from "react";
 import { AlertTriangle, RefreshCw } from "lucide-react";
+import { studioErrorHandler } from "@/lib/studios/security/errorHandler";
+import { auditLogger, AuditActions } from "@/lib/studios/security/auditLogger";
 
 interface Props {
   children: ReactNode;
@@ -25,7 +27,19 @@ export class ErrorBoundaryWrapper extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("[ErrorBoundaryWrapper]", error, errorInfo);
+    // Handle error securely
+    const studioError = studioErrorHandler.handleError(error, "ErrorBoundaryWrapper", "ai-studio");
+    
+    // Log to audit
+    auditLogger.log(AuditActions.ERROR_OCCURRED, "ai-studio", {
+      error: {
+        code: studioError.code,
+        message: studioError.message
+      },
+      componentStack: errorInfo.componentStack
+    });
+
+    // Call custom error handler if provided
     if (this.props.onError) {
       this.props.onError(error, errorInfo);
     }
@@ -52,7 +66,11 @@ export class ErrorBoundaryWrapper extends Component<Props, State> {
             <div className="flex-1">
               <h3 className="font-semibold text-red-900 mb-2">Something went wrong</h3>
               <p className="text-sm text-red-800 mb-4">
-                An error occurred while loading this component. Please try again.
+                {this.state.error
+                  ? studioErrorHandler.getUserFriendlyMessage(
+                      studioErrorHandler.handleError(this.state.error, "Render", "ai-studio")
+                    )
+                  : "An error occurred while loading this component. Please try again."}
               </p>
               {process.env.NODE_ENV === "development" && this.state.error && (
                 <details className="mb-4">
