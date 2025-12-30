@@ -27,11 +27,20 @@ export default function LoadingSpinner({
   };
 
   return (
-    <div className={`flex flex-col items-center justify-center gap-3 ${className}`}>
-      <Loader2 className={`${sizeClasses[size]} animate-spin text-primary-600`} />
+    <div 
+      className={`flex flex-col items-center justify-center gap-3 ${className}`}
+      role="status"
+      aria-live="polite"
+      aria-busy="true"
+    >
+      <Loader2 
+        className={`${sizeClasses[size]} animate-spin text-primary-600`} 
+        aria-hidden="true"
+      />
       {message && (
         <p className="text-sm text-slate-600">{message}</p>
       )}
+      <span className="sr-only">{message || "Loading"}</span>
     </div>
   );
 }
