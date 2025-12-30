@@ -56,6 +56,18 @@ export default function AiStudiosPage() {
           <span className="hidden sm:inline text-slate-300" aria-hidden="true">
             |
           </span>
+          <Link href="/studios/ai-hub" className="font-semibold text-emerald-700 hover:underline">
+            Studio Hub
+          </Link>
+          <span className="hidden sm:inline text-slate-300" aria-hidden="true">
+            |
+          </span>
+          <Link href="/ai-studio" className="font-semibold text-emerald-700 hover:underline">
+            Try It Live
+          </Link>
+          <span className="hidden sm:inline text-slate-300" aria-hidden="true">
+            |
+          </span>
           <Link href="/studios/model-forge" className="font-semibold text-emerald-700 hover:underline">
             Open Model Forge
           </Link>

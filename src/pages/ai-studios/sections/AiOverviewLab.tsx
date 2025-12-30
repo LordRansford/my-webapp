@@ -3,6 +3,8 @@
 import React from "react";
 import Link from "next/link";
 import { Compass, ShieldCheck, ArrowUpRight } from "lucide-react";
+import TryItLiveButton from "@/components/ai-studio/TryItLiveButton";
+import ReadyToBuildCTA from "@/components/ai-studio/ReadyToBuildCTA";
 
 export default function AiOverviewLab() {
   return (
@@ -36,6 +38,9 @@ export default function AiOverviewLab() {
               Start with fundamentals, then move through model types, data, inference, evaluation, and responsibility. Use the tools to see behaviours. Treat tool outputs as
               illustrative unless you have a real dataset and a real evaluation plan.
             </p>
+            <div className="mt-4">
+              <TryItLiveButton href="/ai-studio" feature="Dashboard" />
+            </div>
           </div>
         </div>
 
@@ -69,6 +74,8 @@ export default function AiOverviewLab() {
           </div>
         </aside>
       </div>
+
+      <ReadyToBuildCTA section="the basics" />
     </section>
   );
 }

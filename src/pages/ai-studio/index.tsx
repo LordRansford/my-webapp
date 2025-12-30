@@ -6,8 +6,9 @@
  * Central hub for all AI Studio features
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import AIStudioErrorBoundary from "@/components/ai-studio/AIStudioErrorBoundary";
 import {
   Sparkles,
@@ -20,20 +21,88 @@ import {
   FileText,
   Settings,
   BarChart3,
+  ArrowRight,
+  BookOpen,
+  Rocket,
+  Users,
+  HelpCircle,
 } from "lucide-react";
-import BrowserTrainingPOC from "@/components/ai-studio/poc/BrowserTrainingPOC";
-import DataValidationPOC from "@/components/ai-studio/poc/DataValidationPOC";
-import ModelBuilderPOC from "@/components/ai-studio/poc/ModelBuilderPOC";
-import AgentOrchestratorPOC from "@/components/ai-studio/poc/AgentOrchestratorPOC";
-import DatasetExplorer from "@/components/ai-studio/DatasetExplorer";
-import TrainingJobMonitor from "@/components/ai-studio/TrainingJobMonitor";
+import dynamic from "next/dynamic";
+import ExampleGallery from "@/components/ai-studio/ExampleGallery";
+import ContextualHelp from "@/components/ai-studio/ContextualHelp";
+import ErrorBoundaryWrapper from "@/components/ai-studio/ErrorBoundaryWrapper";
+import LoadingSpinner from "@/components/ai-studio/LoadingSpinner";
+import { Suspense } from "react";
+
+// Lazy load heavy POC components
+const BrowserTrainingPOC = dynamic(
+  () => import("@/components/ai-studio/poc/BrowserTrainingPOC"),
+  {
+    loading: () => <LoadingSpinner message="Loading training interface..." />,
+    ssr: false,
+  }
+);
+
+const DataValidationPOC = dynamic(
+  () => import("@/components/ai-studio/poc/DataValidationPOC"),
+  {
+    loading: () => <LoadingSpinner message="Loading validation tool..." />,
+    ssr: false,
+  }
+);
+
+const ModelBuilderPOC = dynamic(
+  () => import("@/components/ai-studio/poc/ModelBuilderPOC"),
+  {
+    loading: () => <LoadingSpinner message="Loading model builder..." />,
+    ssr: false,
+  }
+);
+
+const AgentOrchestratorPOC = dynamic(
+  () => import("@/components/ai-studio/poc/AgentOrchestratorPOC"),
+  {
+    loading: () => <LoadingSpinner message="Loading agent orchestrator..." />,
+    ssr: false,
+  }
+);
+
+const DatasetExplorer = dynamic(
+  () => import("@/components/ai-studio/DatasetExplorer"),
+  {
+    loading: () => <LoadingSpinner message="Loading dataset explorer..." />,
+    ssr: false,
+  }
+);
+
+const TrainingJobMonitor = dynamic(
+  () => import("@/components/ai-studio/TrainingJobMonitor"),
+  {
+    loading: () => <LoadingSpinner message="Loading job monitor..." />,
+    ssr: false,
+  }
+);
 
 type ViewMode = "dashboard" | "training" | "validation" | "builder" | "orchestrator" | "datasets" | "jobs";
 
 export default function AIStudioPage() {
+  const router = useRouter();
   const [activeView, setActiveView] = useState<ViewMode>("dashboard");
   const [selectedDataset, setSelectedDataset] = useState<string | null>(null);
   const [selectedJob, setSelectedJob] = useState<string | null>(null);
+  const [showExamples, setShowExamples] = useState(false);
+  const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
+
+  useEffect(() => {
+    const completed = localStorage.getItem("ai-studio-onboarding-completed");
+    setHasCompletedOnboarding(completed === "true");
+    
+    // Show onboarding if not completed
+    if (!completed) {
+      // Optionally auto-redirect to onboarding
+      // router.push("/ai-studio/onboarding");
+    }
+  }, [router]);
 
   const quickStats = [
     { label: "Models", value: "12", icon: Layers, color: "blue" },
@@ -51,41 +120,61 @@ export default function AIStudioPage() {
   const renderContent = () => {
     switch (activeView) {
       case "training":
-        return <BrowserTrainingPOC />;
+        return (
+          <Suspense fallback={<LoadingSpinner message="Loading training interface..." />}>
+            <BrowserTrainingPOC />
+          </Suspense>
+        );
       case "validation":
-        return <DataValidationPOC />;
+        return (
+          <Suspense fallback={<LoadingSpinner message="Loading validation tool..." />}>
+            <DataValidationPOC />
+          </Suspense>
+        );
       case "builder":
-        return <ModelBuilderPOC />;
+        return (
+          <Suspense fallback={<LoadingSpinner message="Loading model builder..." />}>
+            <ModelBuilderPOC />
+          </Suspense>
+        );
       case "orchestrator":
-        return <AgentOrchestratorPOC />;
+        return (
+          <Suspense fallback={<LoadingSpinner message="Loading agent orchestrator..." />}>
+            <AgentOrchestratorPOC />
+          </Suspense>
+        );
       case "datasets":
         return selectedDataset ? (
-          <DatasetExplorer
-            dataset={{
-              id: selectedDataset,
-              name: "Sample Dataset",
-              type: "csv",
-              size: 1048576,
-              rows: 10000,
-              columns: 15,
-              license: "user-owned",
-              status: "verified",
-              qualityScore: 0.95,
-            }}
-            onSelect={setSelectedDataset}
-          />
+          <Suspense fallback={<LoadingSpinner message="Loading dataset explorer..." />}>
+            <DatasetExplorer
+              dataset={{
+                id: selectedDataset,
+                name: "Sample Dataset",
+                type: "csv",
+                size: 1048576,
+                rows: 10000,
+                columns: 15,
+                license: "user-owned",
+                status: "verified",
+                qualityScore: 0.95,
+              }}
+              onSelect={setSelectedDataset}
+            />
+          </Suspense>
         ) : (
           <div className="p-8 bg-white rounded-2xl border border-slate-200 text-center text-slate-500">
-            <Database className="w-12 h-12 mx-auto mb-4 opacity-50" />
+            <Database className="w-12 h-12 mx-auto mb-4 opacity-50" aria-hidden="true" />
             <p>Select a dataset to explore</p>
           </div>
         );
       case "jobs":
         return selectedJob ? (
-          <TrainingJobMonitor jobId={selectedJob} onCancel={() => setSelectedJob(null)} />
+          <Suspense fallback={<LoadingSpinner message="Loading job monitor..." />}>
+            <TrainingJobMonitor jobId={selectedJob} onCancel={() => setSelectedJob(null)} />
+          </Suspense>
         ) : (
           <div className="p-8 bg-white rounded-2xl border border-slate-200 text-center text-slate-500">
-            <Play className="w-12 h-12 mx-auto mb-4 opacity-50" />
+            <Play className="w-12 h-12 mx-auto mb-4 opacity-50" aria-hidden="true" />
             <p>Select a training job to monitor</p>
           </div>
         );
@@ -93,7 +182,7 @@ export default function AIStudioPage() {
         return (
           <div className="space-y-6">
             {/* Quick Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
               {quickStats.map((stat) => {
                 const Icon = stat.icon;
                 return (
@@ -114,7 +203,7 @@ export default function AIStudioPage() {
             </div>
 
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <button
                 onClick={() => setActiveView("training")}
                 className="p-6 bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-2xl hover:shadow-md transition-all text-left group"
@@ -222,6 +311,56 @@ export default function AIStudioPage() {
               </div>
             </div>
 
+            {/* Examples & Templates Section */}
+            <div className="p-6 bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-2xl">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-start gap-4 flex-1">
+                  <div className="p-3 bg-amber-500 rounded-xl">
+                    <Sparkles className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                      Examples & Templates
+                    </h3>
+                    <p className="text-sm text-slate-700 mb-4">
+                      Get started quickly with pre-built examples. Perfect for learning and as a starting point for your projects.
+                    </p>
+                    <button
+                      onClick={() => setShowExamples(true)}
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors font-semibold text-sm"
+                    >
+                      Browse Examples
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Continue Learning Section */}
+            <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl">
+              <div className="flex items-start gap-4">
+                <div className="p-3 bg-blue-500 rounded-xl">
+                  <BookOpen className="w-6 h-6 text-white" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                    Continue Learning
+                  </h3>
+                  <p className="text-sm text-slate-700 mb-4">
+                    New to AI concepts? Learn the fundamentals in our safe, browser-only Learning Studio.
+                  </p>
+                  <Link
+                    href="/ai-studios"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold text-sm"
+                  >
+                    Open Learning Studio
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+
             {/* Documentation Link */}
             <div className="p-6 bg-gradient-to-br from-primary-50 to-primary-100 border border-primary-200 rounded-2xl">
               <div className="flex items-start gap-4">
@@ -257,7 +396,7 @@ export default function AIStudioPage() {
         {/* Header */}
         <header className="mb-8">
           <div className="rounded-3xl bg-gradient-to-br from-white to-slate-50/50 border border-slate-200 p-8 shadow-lg">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-4">
                 <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 shadow-lg">
                   <Sparkles className="h-8 w-8 text-white" />
@@ -270,6 +409,29 @@ export default function AIStudioPage() {
                 </div>
               </div>
               <div className="flex items-center gap-2">
+                <ContextualHelp
+                  sections={[
+                    {
+                      title: "Getting Started",
+                      content: (
+                        <div>
+                          <p>Welcome to AI Studio! Here's how to get started:</p>
+                          <ol className="list-decimal pl-5 mt-2 space-y-1">
+                            <li>Explore examples to see what's possible</li>
+                            <li>Follow the guided workflow to build your first model</li>
+                            <li>Use the learning studio to understand concepts</li>
+                            <li>Deploy your models to production</li>
+                          </ol>
+                        </div>
+                      ),
+                      links: [
+                        { label: "Learning Studio", href: "/ai-studios" },
+                        { label: "Onboarding", href: "/ai-studio/onboarding" },
+                      ],
+                    },
+                  ]}
+                  feature="AI Studio Dashboard"
+                />
                 <Link
                   href="/ai-studio/poc-showcase"
                   className="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors font-semibold text-sm"
@@ -282,6 +444,37 @@ export default function AIStudioPage() {
                 </button>
               </div>
             </div>
+            
+            {/* Hero Section */}
+            {!hasCompletedOnboarding && (
+              <div className="mt-6 p-6 bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200 rounded-2xl">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <h2 className="text-xl font-semibold text-slate-900 mb-2">
+                      New to AI Studio?
+                    </h2>
+                    <p className="text-slate-700 mb-4">
+                      Take our quick onboarding tour to learn how to build your first AI model, or explore examples to see what's possible.
+                    </p>
+                    <div className="flex gap-3">
+                      <Link
+                        href="/ai-studio/onboarding"
+                        className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-semibold text-sm flex items-center gap-2"
+                      >
+                        Start Onboarding
+                        <ArrowRight className="w-4 h-4" />
+                      </Link>
+                      <button
+                        onClick={() => setShowExamples(true)}
+                        className="px-4 py-2 bg-white border border-purple-300 text-purple-700 rounded-lg hover:bg-purple-50 transition-colors font-semibold text-sm"
+                      >
+                        Browse Examples
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </header>
 
@@ -303,7 +496,29 @@ export default function AIStudioPage() {
 
         {/* Content */}
         <main>
-          <AIStudioErrorBoundary>{renderContent()}</AIStudioErrorBoundary>
+          <AIStudioErrorBoundary>
+            <ErrorBoundaryWrapper>
+              <Suspense fallback={<LoadingSpinner message="Loading..." />}>
+                {showExamples ? (
+                  <div className="space-y-6">
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-2xl font-bold text-slate-900">Examples & Templates</h2>
+                      <button
+                        onClick={() => setShowExamples(false)}
+                        className="px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
+                        aria-label="Back to dashboard"
+                      >
+                        Back to Dashboard
+                      </button>
+                    </div>
+                    <ExampleGallery />
+                  </div>
+                ) : (
+                  renderContent()
+                )}
+              </Suspense>
+            </ErrorBoundaryWrapper>
+          </AIStudioErrorBoundary>
         </main>
       </div>
     </div>

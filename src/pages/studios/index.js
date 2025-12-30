@@ -25,7 +25,7 @@ const navChips = [
   { label: "Software Development Studio", href: "/dev-studios" },
   { label: "Cybersecurity Studio", href: "/cyber-studios" },
   { label: "Data and Digitalisation Studio", href: "/data-studios" },
-  { label: "AI Studio", href: "/ai-studios" },
+  { label: "AI Studio", href: "/studios/ai-hub" },
   { label: "Architecture Diagram Studio", href: "/studios/architecture-diagram-studio" },
   { label: "Model Forge", href: "/studios/model-forge" },
   { label: "Vision Lab", href: "/studios/vision-lab" },

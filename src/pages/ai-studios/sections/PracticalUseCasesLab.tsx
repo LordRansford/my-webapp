@@ -3,6 +3,8 @@
 import React, { useMemo, useState } from "react";
 import { Search, ThumbsUp, Shield, Workflow } from "lucide-react";
 import SwitchRow from "@/components/ui/SwitchRow";
+import TryItLiveButton from "@/components/ai-studio/TryItLiveButton";
+import ReadyToBuildCTA from "@/components/ai-studio/ReadyToBuildCTA";
 
 type UseCase = "Search" | "Recommendation" | "Moderation" | "Automation";
 
@@ -126,6 +128,12 @@ export default function PracticalUseCasesLab() {
           </div>
         </aside>
       </div>
+
+      <div className="mt-6">
+        <TryItLiveButton href="/ai-studio" feature="Use Cases" />
+      </div>
+
+      <ReadyToBuildCTA section="practical use cases" />
     </section>
   );
 }
