@@ -2,10 +2,14 @@
 
 import Link from "next/link";
 import { StudioLandingTemplate } from "@/components/templates/PageTemplates";
+import StudioNavigation from "@/components/studios/StudioNavigation";
+import ReadyToBuildCTA from "@/components/ai-studio/ReadyToBuildCTA";
+import SecureErrorBoundary from "@/components/studios/SecureErrorBoundary";
 
 export default function ArchitectureDiagramStudioClient() {
   return (
-    <StudioLandingTemplate breadcrumbs={[{ label: "Home", href: "/" }, { label: "Studios", href: "/studios" }, { label: "Architecture Diagram Studio" }]} backHref="/studios">
+    <SecureErrorBoundary studio="architecture-diagram-studio">
+      <StudioLandingTemplate breadcrumbs={[{ label: "Home", href: "/" }, { label: "Studios", href: "/studios" }, { label: "Architecture Diagram Studio" }]} backHref="/studios">
       <header className="space-y-3 rounded-3xl bg-gradient-to-br from-slate-50 via-sky-50/60 to-slate-50 p-8 shadow-sm ring-1 ring-slate-100">
         <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Studio</p>
         <h1 className="text-4xl font-semibold leading-tight text-slate-900">Architecture Diagram Studio</h1>
@@ -13,6 +17,20 @@ export default function ArchitectureDiagramStudioClient() {
           Describe your system and generate clear, printable architecture diagrams.
         </p>
       </header>
+
+      {/* Studio Navigation */}
+      <div className="flex justify-center mt-6">
+        <StudioNavigation studioType="architecture" showHub={true} />
+      </div>
+
+      {/* Ready to Build CTA */}
+      <div className="mt-6">
+        <ReadyToBuildCTA 
+          studioName="Architecture Diagram Studio"
+          buildHref="/studios/architecture-diagram-studio/editor"
+          description="Ready to create professional diagrams? Try the live editor with advanced features."
+        />
+      </div>
 
       <section className="mt-8 grid gap-4 lg:grid-cols-3" aria-label="Studio introduction">
         <div className="lg:col-span-2 rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
@@ -91,7 +109,8 @@ export default function ArchitectureDiagramStudioClient() {
           Back to studios
         </Link>
       </section>
-    </StudioLandingTemplate>
+      </StudioLandingTemplate>
+    </SecureErrorBoundary>
   );
 }
 

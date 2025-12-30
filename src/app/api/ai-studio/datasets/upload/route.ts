@@ -11,6 +11,8 @@ import { requireAuth } from "@/lib/ai-studio/auth";
 import { validateUpload } from "@/utils/validateUpload";
 import { uploadFile } from "@/lib/ai-studio/storage";
 import { createDataset } from "@/lib/ai-studio/db";
+import { sanitizeFileName } from "@/lib/studios/security/inputSanitizer";
+import { auditLogger, AuditActions } from "@/lib/studios/security/auditLogger";
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 const ALLOWED_EXTENSIONS = [".csv", ".json", ".jsonl", ".parquet"];
@@ -70,17 +72,31 @@ export async function POST(request: NextRequest) {
 
     const uploadedFile = safeFiles[0];
 
+    // Sanitize file name server-side (defense in depth)
+    const sanitizedName = sanitizeFileName(uploadedFile.name);
+    const sanitizedFile = sanitizedName !== uploadedFile.name
+      ? new File([uploadedFile], sanitizedName, { type: uploadedFile.type })
+      : uploadedFile;
+
     // Upload file to storage
-    const uploadResult = await uploadFile(uploadedFile, auth.user!.id, {
+    const uploadResult = await uploadFile(sanitizedFile, auth.user!.id, {
       type: "datasets",
+    });
+
+    // Log upload for audit
+    auditLogger.log(AuditActions.FILE_UPLOADED, "ai-studio", {
+      fileName: sanitizedName,
+      fileSize: sanitizedFile.size,
+      fileType: sanitizedFile.type,
+      userId: auth.user!.id
     });
 
     // Create dataset record in database
     const dataset = await createDataset({
       userId: auth.user!.id,
-      name: uploadedFile.name,
-      type: uploadedFile.name.split(".").pop()?.toLowerCase() || "unknown",
-      size: uploadedFile.size,
+      name: sanitizedName,
+      type: sanitizedName.split(".").pop()?.toLowerCase() || "unknown",
+      size: sanitizedFile.size,
       filePath: uploadResult.pathname,
       license: "user-owned", // Default, can be updated later
       status: "uploaded",
@@ -89,16 +105,16 @@ export async function POST(request: NextRequest) {
     // TODO: Trigger validation job asynchronously
     // This would be done via a background job queue
 
-    const fileType = uploadedFile.name.split(".").pop()?.toLowerCase() || "unknown";
-    const rows = fileType === "csv" ? Math.floor(uploadedFile.size / 100) : undefined;
+    const fileType = sanitizedName.split(".").pop()?.toLowerCase() || "unknown";
+    const rows = fileType === "csv" ? Math.floor(sanitizedFile.size / 100) : undefined;
     const columns = fileType === "csv" ? 10 : undefined;
 
     return NextResponse.json(
       {
         data: {
           datasetId: (dataset as any).id,
-          fileName: uploadedFile.name,
-          fileSize: uploadedFile.size,
+          fileName: sanitizedName,
+          fileSize: sanitizedFile.size,
           fileType,
           rows,
           columns,
@@ -112,6 +128,13 @@ export async function POST(request: NextRequest) {
     );
   } catch (error) {
     console.error("Dataset upload error:", error);
+    
+    // Log error for audit
+    auditLogger.log(AuditActions.ERROR_OCCURRED, "ai-studio", {
+      error: "dataset_upload_failed",
+      errorMessage: error instanceof Error ? error.message : "Unknown error"
+    });
+    
     return NextResponse.json(
       {
         error: {

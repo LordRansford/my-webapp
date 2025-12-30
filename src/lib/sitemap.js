@@ -72,6 +72,7 @@ export const siteStructure = {
     },
   ],
   studios: [
+    { title: "Unified Studios Hub", href: "/studios/hub" },
     { title: "Software Development Studio", href: "/dev-studios" },
     { title: "Cybersecurity Studio", href: "/cyber-studios" },
     { title: "Data and Digitalisation Studio", href: "/data-studios" },

@@ -199,6 +199,12 @@ export function FieldDate(props: BaseProps) {
 
 export function FieldFileUpload(props: BaseProps & { accept?: string; onSafeParse?: (text: string) => void }) {
   const { id, label, onChange, help, example, required, validationMessage, why, accept = ".txt,.csv,.json", onSafeParse } = props;
+  const { sanitizeFileName, validateFileType } = require("@/lib/studios/security/inputSanitizer");
+  const { auditLogger, AuditActions } = require("@/lib/studios/security/auditLogger");
+  
+  // Parse allowed extensions from accept string
+  const allowedExtensions = accept.split(",").map(ext => ext.trim().startsWith(".") ? ext.trim() : `.${ext.trim()}`);
+  
   return (
     <FieldWrapper id={id} label={label} help={help} example={example} required={required} validationMessage={validationMessage} why={why}>
       <input
@@ -210,12 +216,56 @@ export function FieldFileUpload(props: BaseProps & { accept?: string; onSafePars
         onChange={async (e) => {
           const file = e.target.files?.[0];
           if (!file) return;
-          if (file.size > 2 * 1024 * 1024) {
+
+          // Sanitize file name
+          const sanitizedName = sanitizeFileName(file.name);
+          const sanitizedFile = sanitizedName !== file.name 
+            ? new File([file], sanitizedName, { type: file.type })
+            : file;
+
+          // Validate file size
+          if (sanitizedFile.size > 2 * 1024 * 1024) {
+            auditLogger.log(AuditActions.ERROR_OCCURRED, "template-field", {
+              error: "file_too_large",
+              fileName: sanitizedName,
+              fileSize: sanitizedFile.size
+            });
             onChange(null);
             return;
           }
-          const text = await file.text();
-          onChange(file.name);
+
+          // Validate file type
+          const ext = "." + sanitizedFile.name.split(".").pop()?.toLowerCase();
+          const validation = validateFileType(sanitizedFile, [], allowedExtensions);
+          if (!validation.valid) {
+            auditLogger.log(AuditActions.ERROR_OCCURRED, "template-field", {
+              error: "invalid_file_type",
+              fileName: sanitizedName,
+              extension: ext
+            });
+            onChange(null);
+            return;
+          }
+
+          // Check for dangerous file types
+          const dangerousExtensions = [".exe", ".bat", ".cmd", ".com", ".pif", ".scr", ".vbs", ".js", ".jar"];
+          if (dangerousExtensions.includes(ext)) {
+            auditLogger.log(AuditActions.ERROR_OCCURRED, "template-field", {
+              error: "dangerous_file_type",
+              fileName: sanitizedName,
+              extension: ext
+            });
+            onChange(null);
+            return;
+          }
+
+          auditLogger.log(AuditActions.FILE_UPLOADED, "template-field", {
+            fileName: sanitizedName,
+            fileSize: sanitizedFile.size
+          });
+
+          const text = await sanitizedFile.text();
+          onChange(sanitizedName);
           onSafeParse?.(text);
         }}
       />

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, Suspense } from "react";
+import React, { useState, useMemo, Suspense, useCallback } from "react";
 import { 
   Search, 
   Filter, 
@@ -16,6 +16,7 @@ import { AIStudioExample } from "@/lib/ai-studio/examples/types";
 import ExampleLoader from "./ExampleLoader";
 import ErrorBoundaryWrapper from "./ErrorBoundaryWrapper";
 import LoadingSpinner from "./LoadingSpinner";
+import { debounce } from "@/lib/studios/performance/optimizations";
 
 interface ExampleGalleryProps {
   onLoadExample?: (example: AIStudioExample) => void;
@@ -24,10 +25,24 @@ interface ExampleGalleryProps {
 
 export default function ExampleGallery({ onLoadExample, selectedAudience }: ExampleGalleryProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchInput, setSearchInput] = useState("");
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedExample, setSelectedExample] = useState<AIStudioExample | null>(null);
   const [showPreview, setShowPreview] = useState(false);
+
+  // Debounce search to improve performance
+  const debouncedSearch = useCallback(
+    debounce((value: string) => {
+      setSearchQuery(value);
+    }, 300),
+    []
+  );
+
+  const handleSearchChange = (value: string) => {
+    setSearchInput(value);
+    debouncedSearch(value);
+  };
 
   const filteredExamples = useMemo(() => {
     let filtered = selectedAudience 
@@ -104,8 +119,8 @@ export default function ExampleGallery({ onLoadExample, selectedAudience }: Exam
           <input
             type="text"
             placeholder="Search examples..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={searchInput}
+            onChange={(e) => handleSearchChange(e.target.value)}
             className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             aria-label="Search examples"
           />
@@ -172,6 +187,7 @@ export default function ExampleGallery({ onLoadExample, selectedAudience }: Exam
           <p>No examples found matching your criteria.</p>
           <button
             onClick={() => {
+              setSearchInput("");
               setSearchQuery("");
               setSelectedDifficulty("all");
               setSelectedCategory("all");

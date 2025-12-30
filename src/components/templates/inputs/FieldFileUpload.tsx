@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import FieldWrapper from "./FieldWrapper";
+import { sanitizeFileName, validateFileType } from "@/lib/studios/security/inputSanitizer";
+import { auditLogger, AuditActions } from "@/lib/studios/security/auditLogger";
 
 type Props = {
   id: string;
@@ -45,13 +47,71 @@ export default function FieldFileUpload({
         accept={accept}
         onChange={(e) => {
           const file = e.target.files?.[0] || null;
-          if (file && file.size > maxBytes) {
-            setLocalError(`That file is too large for this tool right now. Max is ${formatMb(maxBytes)}.`);
+          if (!file) {
             onChange(null);
             return;
           }
+
+          // Sanitize file name
+          const sanitizedName = sanitizeFileName(file.name);
+          const sanitizedFile = sanitizedName !== file.name 
+            ? new File([file], sanitizedName, { type: file.type })
+            : file;
+
+          // Validate file size
+          if (sanitizedFile.size > maxBytes) {
+            const errorMsg = `That file is too large for this tool right now. Max is ${formatMb(maxBytes)}.`;
+            setLocalError(errorMsg);
+            onChange(null);
+            auditLogger.log(AuditActions.ERROR_OCCURRED, "template-tool", {
+              error: "file_too_large",
+              fileName: sanitizedName,
+              fileSize: sanitizedFile.size,
+              maxSize: maxBytes
+            });
+            return;
+          }
+
+          // Validate file type if extensions are specified
+          if (allowedExtensions.length > 0) {
+            const ext = "." + sanitizedFile.name.split(".").pop()?.toLowerCase();
+            const validation = validateFileType(sanitizedFile, [], allowedExtensions);
+            if (!validation.valid) {
+              const errorMsg = validation.error || `File type ${ext} is not allowed. Allowed types: ${allowedExtensions.join(", ")}.`;
+              setLocalError(errorMsg);
+              onChange(null);
+              auditLogger.log(AuditActions.ERROR_OCCURRED, "template-tool", {
+                error: "invalid_file_type",
+                fileName: sanitizedName,
+                fileType: sanitizedFile.type,
+                extension: ext
+              });
+              return;
+            }
+          }
+
+          // Check for dangerous file types
+          const ext = "." + sanitizedFile.name.split(".").pop()?.toLowerCase();
+          const dangerousExtensions = [".exe", ".bat", ".cmd", ".com", ".pif", ".scr", ".vbs", ".js", ".jar"];
+          if (dangerousExtensions.includes(ext)) {
+            const errorMsg = "This file type is not allowed for security reasons.";
+            setLocalError(errorMsg);
+            onChange(null);
+            auditLogger.log(AuditActions.ERROR_OCCURRED, "template-tool", {
+              error: "dangerous_file_type",
+              fileName: sanitizedName,
+              extension: ext
+            });
+            return;
+          }
+
           setLocalError(null);
-          onChange(file);
+          auditLogger.log(AuditActions.FILE_UPLOADED, "template-tool", {
+            fileName: sanitizedName,
+            fileSize: sanitizedFile.size,
+            fileType: sanitizedFile.type
+          });
+          onChange(sanitizedFile);
         }}
         className="w-full text-sm text-slate-800"
       />

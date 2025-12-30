@@ -10,9 +10,8 @@ import {
   BookOpen,
   Palette
 } from "lucide-react";
-import AIStudioErrorBoundary from "@/components/ai-studio/AIStudioErrorBoundary";
+import SecureErrorBoundary from "@/components/studios/SecureErrorBoundary";
 import ExampleGallery from "@/components/ai-studio/ExampleGallery";
-import ErrorBoundaryWrapper from "@/components/ai-studio/ErrorBoundaryWrapper";
 import { Suspense } from "react";
 import LoadingSpinner from "@/components/ai-studio/LoadingSpinner";
 
@@ -20,7 +19,7 @@ export default function ChildrenModePage() {
   const [selectedExample, setSelectedExample] = useState<string | null>(null);
 
   return (
-    <AIStudioErrorBoundary>
+    <SecureErrorBoundary studio="ai-studio">
       <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50/30 to-blue-50">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           {/* Header */}
@@ -99,15 +98,13 @@ export default function ChildrenModePage() {
           {/* Examples */}
           <div className="rounded-2xl bg-white border border-slate-200 p-6 shadow-sm">
             <h2 className="text-2xl font-bold text-slate-900 mb-6">Fun Projects to Try</h2>
-            <ErrorBoundaryWrapper>
-              <Suspense fallback={<LoadingSpinner message="Loading fun projects..." />}>
-                <ExampleGallery selectedAudience="children" />
-              </Suspense>
-            </ErrorBoundaryWrapper>
+            <Suspense fallback={<LoadingSpinner message="Loading fun projects..." />}>
+              <ExampleGallery selectedAudience="children" />
+            </Suspense>
           </div>
         </div>
       </div>
-    </AIStudioErrorBoundary>
+    </SecureErrorBoundary>
   );
 }
 
