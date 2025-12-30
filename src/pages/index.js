@@ -65,7 +65,7 @@ const platformItems = [
   { title: "Dashboards", description: "Interactive boards that turn concepts into decisions.", href: "/dashboards/ai", Icon: LayoutDashboard, cta: "Try" },
   { title: "Templates", description: "Evidence-friendly templates for planning and reporting.", href: "/templates", Icon: FileText, cta: "Browse" },
   { title: "Tools", description: "Small labs and helpers you can run quickly.", href: "/tools", Icon: Wrench, cta: "Open" },
-  { title: "Games", description: "Offline-friendly mini games for practice and fun.", href: "/games", Icon: Gamepad2, cta: "Play" },
+  { title: "Games", description: "Offline-friendly mini games for practice and fun.", href: "/games/hub", Icon: Gamepad2, cta: "Play" },
 ];
 
 const audiences = [
@@ -404,7 +404,7 @@ export default function Home({ posts }) {
               <p className="mt-2 text-sm text-slate-700">Explore interactive workspaces and labs.</p>
             </Link>
             <Link
-              href="/games"
+              href="/games/hub"
               className="rounded-2xl border border-slate-200 bg-slate-50/60 p-5 hover:border-slate-300 hover:bg-slate-100 transition"
             >
               <Gamepad2 className="h-6 w-6 text-slate-900 mb-3" aria-hidden="true" />

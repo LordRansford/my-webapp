@@ -13,9 +13,7 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  { label: "Site Map", href: "/sitemap" },
   { label: "Courses", href: "/courses" },
-  { label: "Tools", href: "/tools" },
   { 
     label: "Studios", 
     href: "/studios/hub",
@@ -28,9 +26,17 @@ const navItems: NavItem[] = [
       { label: "Architecture Studio", href: "/studios/architecture-diagram-studio" },
     ]
   },
+  { label: "Tools", href: "/tools" },
+  { 
+    label: "Games", 
+    href: "/games",
+    submenu: [
+      { label: "All Games", href: "/games" },
+      { label: "Practice Games", href: "/practice" },
+      { label: "Thinking Gym", href: "/thinking-gym" },
+    ]
+  },
   { label: "Updates", href: "/updates" },
-  { label: "Games", href: "/games" },
-  { label: "Practice", href: "/practice" },
   { label: "About", href: "/about" },
 ];
 

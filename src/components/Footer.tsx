@@ -56,32 +56,39 @@ export default function Footer() {
     {
       title: "Learn",
       links: [
-        { label: "Courses", href: "/courses" },
-        { label: "CPD", href: "/cpd" },
+        { label: "All Courses", href: "/courses" },
+        { label: "Cybersecurity", href: "/cybersecurity" },
+        { label: "AI", href: "/ai" },
+        { label: "Software Architecture", href: "/software-architecture" },
+        { label: "Data", href: "/data" },
+        { label: "Digitalisation", href: "/digitalisation" },
+        { label: "CPD Tracking", href: "/cpd" },
         { label: "My CPD", href: "/my-cpd" },
         { label: "Blog Posts", href: "/posts" },
       ],
     },
     {
-      title: "Tools",
+      title: "Build",
       links: [
+        { label: "Studios Hub", href: "/studios/hub" },
         { label: "All Tools", href: "/tools" },
-        { label: "Studios", href: "/studios" },
-        { label: "Dashboards", href: "/dashboards/ai" },
+        { label: "Dashboards", href: "/dashboards" },
         { label: "Templates", href: "/templates" },
       ],
     },
     {
       title: "Play",
       links: [
-        { label: "Games", href: "/games" },
+        { label: "All Games", href: "/games" },
+        { label: "Practice Games", href: "/practice" },
         { label: "Play Hub", href: "/play" },
         { label: "Thinking Gym", href: "/thinking-gym" },
       ],
     },
     {
-      title: "Support",
+      title: "Resources",
       links: [
+        { label: "News & Updates", href: "/updates" },
         { label: "About", href: "/about" },
         { label: "Contact", href: "/contact" },
         { label: "Accessibility", href: "/accessibility" },

@@ -1,82 +1,143 @@
-import GameShellClient from "./GameShell.client";
-import SwStatusPill from "../SwStatus.client";
-import { getGameMeta } from "@/games/registry";
-import { GameCanvasTemplate } from "@/components/templates/PageTemplates";
-import type { BreadcrumbItem } from "@/components/navigation/Breadcrumbs";
+/**
+ * Dynamic game route handler
+ * 
+ * Provides a unified route for all games with proper error boundaries
+ * and metadata handling
+ */
 
-export const dynamic = "force-static";
+"use client";
 
-export default async function GamePage(props: { params: Promise<{ slug: string }> }) {
-  const { slug } = await props.params;
-  const safe = String(slug || "").trim();
-  const meta = getGameMeta(safe);
+import { notFound, useParams } from "next/navigation";
+import { GameErrorBoundary } from "@/lib/games/framework/GameErrorBoundary";
+import { Suspense } from "react";
+import dynamic from "next/dynamic";
 
-  const title = meta?.title ?? "Game not found";
-  const description = meta?.blurb ?? "This route is not available yet. Pick another game from the hub while we finish this one.";
-  const breadcrumbs: BreadcrumbItem[] = [
-    { label: "Home", href: "/" },
-    { label: "Games", href: "/games" },
-    { label: title },
-  ];
+// Game registry - maps slug to component
+const GAME_REGISTRY: Record<
+  string,
+  {
+    component: () => Promise<{ default: React.ComponentType }>;
+    metadata: {
+      title: string;
+      description: string;
+      keywords?: string[];
+      openGraph?: {
+        title: string;
+        description: string;
+        type: string;
+      };
+    };
+  }
+> = {
+  "daily-logic-gauntlet": {
+    component: () => import("@/lib/games/games/daily-logic-gauntlet/DailyLogicGauntlet"),
+    metadata: {
+      title: "Daily Logic Gauntlet | Games",
+      description: "Multi-puzzle challenge with daily seeded challenges. Same seed for all users on the same day.",
+      keywords: ["logic", "puzzle", "daily challenge", "brain training"],
+      openGraph: {
+        title: "Daily Logic Gauntlet",
+        description: "Test your logical reasoning with daily puzzles.",
+        type: "website",
+      },
+    },
+  },
+  "grid-racer": {
+    component: () => import("@/lib/games/games/grid-racer/GridRacer"),
+    metadata: {
+      title: "Grid Racer Time Trial | Games",
+      description: "Time trial racing with customizable loadouts. Navigate through obstacles and beat your best time.",
+      keywords: ["racing", "arcade", "time trial", "obstacle course"],
+      openGraph: {
+        title: "Grid Racer Time Trial",
+        description: "Navigate through obstacles and beat your best time.",
+        type: "website",
+      },
+    },
+  },
+  "draft-duel": {
+    component: () => import("@/lib/games/games/draft-duel/DraftDuel"),
+    metadata: {
+      title: "Draft Duel Card Battler | Games",
+      description: "Strategic card game with drafting mechanics. Build your deck and battle opponents.",
+      keywords: ["card game", "strategy", "deck building", "multiplayer"],
+      openGraph: {
+        title: "Draft Duel Card Battler",
+        description: "Build your deck and battle opponents in strategic card battles.",
+        type: "website",
+      },
+    },
+  },
+  hex: {
+    component: () => import("@/lib/games/games/hex/Hex"),
+    metadata: {
+      title: "Hex | Games",
+      description: "Classic connection game on hexagonal board. Connect your sides to win.",
+      keywords: ["hex", "board game", "strategy", "connection game"],
+      openGraph: {
+        title: "Hex",
+        description: "Classic connection game on hexagonal board.",
+        type: "website",
+      },
+    },
+  },
+  "systems-mastery": {
+    component: () => import("@/lib/games/games/systems-mastery/SystemsMastery"),
+    metadata: {
+      title: "Systems Mastery Game | Games",
+      description: "Flagship game for understanding complex systems. Learn systems thinking through interactive scenarios.",
+      keywords: ["systems thinking", "education", "simulation", "learning"],
+      openGraph: {
+        title: "Systems Mastery Game",
+        description: "Learn systems thinking through interactive scenarios.",
+        type: "website",
+      },
+    },
+  },
+};
 
+function LoadingFallback() {
   return (
-    <GameCanvasTemplate breadcrumbs={breadcrumbs}>
-      <section className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Game</p>
-            <h1 className="mt-2 text-3xl font-semibold text-slate-900">{title}</h1>
-            <p className="mt-2 text-slate-700">{description}</p>
-            <div className="mt-3 flex flex-wrap items-center gap-2">
-              <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700">
-                Difficulty: {meta?.difficulty ?? "Unavailable"}
-              </span>
-              <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700">
-                Keyboard + touch
-              </span>
-              <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700">
-                Offline after first load
-              </span>
-              <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700">
-                Progressive difficulty
-              </span>
-            </div>
-          </div>
-          <SwStatusPill />
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="text-center">
+        <div
+          className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"
+          role="status"
+          aria-label="Loading game"
+        >
+          <span className="sr-only">Loading game...</span>
         </div>
-      </section>
-
-      <section className="mt-4 grid gap-4 lg:grid-cols-[1.1fr,0.9fr]">
-        <div className="rounded-2xl border border-slate-200 bg-white p-4">
-          <p className="m-0 text-sm font-semibold text-slate-900">What this game is for</p>
-          <p className="mt-2 text-sm text-slate-700">
-            {meta
-              ? "Playable offline with keyboard and touch controls so you can keep practising without a connection."
-              : "This route currently has no playable game. Pick another game from the hub while we finish this one."}
-          </p>
-          <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-slate-700">
-            <li>Clear inputs: arrow keys / WASD and swipe gestures.</li>
-            <li>Outputs: run stats, intensity cues, and skill review after every run.</li>
-            <li>Limits: Escape or the Pause control to stop; reduce motion in settings.</li>
-            <li>Errors explain themselves: locked routes tell you why and how to unlock.</li>
-          </ul>
-        </div>
-        <div className="rounded-2xl border border-slate-200 bg-white p-4">
-          <p className="m-0 text-sm font-semibold text-slate-900">What to do next</p>
-          <ol className="mt-2 list-decimal space-y-2 pl-5 text-sm text-slate-700">
-            <li>Scroll to the canvas and start the run.</li>
-            <li>Use keyboard or touch to move; press Escape or Pause to take a break.</li>
-            <li>Review the run summary for feedback on control habits.</li>
-            <li>If the route is locked, follow the unlock instructions on this page.</li>
-          </ol>
-        </div>
-      </section>
-
-      <section className="mt-6">
-        <GameShellClient slug={safe} />
-      </section>
-    </GameCanvasTemplate>
+        <p className="mt-4 text-slate-600">Loading game...</p>
+      </div>
+    </div>
   );
 }
 
+export default function GamePage() {
+  const params = useParams();
+  const slug = params?.slug as string;
 
+  if (!slug) {
+    notFound();
+  }
+
+  const game = GAME_REGISTRY[slug];
+  if (!game) {
+    notFound();
+  }
+
+  const GameComponent = dynamic(() => game.component(), {
+    loading: LoadingFallback,
+    ssr: false,
+  });
+
+  const gameName = game.metadata.title || "Game";
+
+  return (
+    <GameErrorBoundary gameName={gameName}>
+      <Suspense fallback={<LoadingFallback />}>
+        <GameComponent />
+      </Suspense>
+    </GameErrorBoundary>
+  );
+}
