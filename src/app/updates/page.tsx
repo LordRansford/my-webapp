@@ -391,7 +391,20 @@ export default function UpdatesPage() {
               <div className="space-y-4">
                 {paginatedItems.length === 0 ? (
                   <div className="rounded-2xl bg-white border border-slate-200 p-8 text-center">
-                    <p className="text-slate-600">No updates found matching your filters.</p>
+                    {snapshot.metadata.item_count === 0 ? (
+                      <>
+                        <Info className="w-12 h-12 text-slate-400 mx-auto mb-4" />
+                        <h3 className="text-lg font-semibold text-slate-900 mb-2">No Updates Available Yet</h3>
+                        <p className="text-slate-600 mb-4">
+                          The news ingestion system is still initializing. Updates will appear here once the ingestion process completes.
+                        </p>
+                        <p className="text-sm text-slate-500">
+                          Last check: {new Date(snapshot.metadata.generated_at).toLocaleString()}
+                        </p>
+                      </>
+                    ) : (
+                      <p className="text-slate-600">No updates found matching your filters.</p>
+                    )}
                   </div>
                 ) : (
                   <>
