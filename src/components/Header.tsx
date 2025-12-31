@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import BrandLogo from "@/components/BrandLogo";
 import { signIn, useSession } from "next-auth/react";
+import CreditBalanceWidget from "@/components/studios/CreditBalanceWidget";
 
 type NavItem = { 
   label: string; 
@@ -268,7 +269,8 @@ export default function Header() {
 
         <NavLinks pathname={pathname} onLinkClick={() => setMobileOpen(false)} />
 
-        <div className="hidden items-center gap-2 lg:flex">
+        <div className="hidden items-center gap-3 lg:flex">
+          {isSignedIn && <CreditBalanceWidget compact />}
           <AccountAction variant="desktop" isSignedIn={isSignedIn} onActionClick={() => setMobileOpen(false)} />
         </div>
       </div>

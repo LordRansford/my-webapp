@@ -6,6 +6,7 @@ import { ArrowLeft, Code, HelpCircle } from "lucide-react";
 import SecureErrorBoundary from "@/components/studios/SecureErrorBoundary";
 import StudioNavigation from "@/components/studios/StudioNavigation";
 import HelpTooltip from "@/components/studios/HelpTooltip";
+import CreditEstimate from "@/components/studios/CreditEstimate";
 
 export default function ProjectsPage() {
   return (
@@ -57,15 +58,20 @@ export default function ProjectsPage() {
             </div>
           </header>
 
-          {/* Main Content */}
-          <div className="rounded-3xl bg-white border border-slate-200 p-8 shadow-sm">
-            <div className="text-center py-12">
-              <Code className="w-16 h-16 text-slate-400 mx-auto mb-4" />
-              <h2 className="text-2xl font-semibold text-slate-900 mb-2">Project Builder</h2>
-              <p className="text-slate-600 mb-6 max-w-2xl mx-auto">
-                This tool is currently under development. It will allow you to create new projects with 
-                pre-configured templates and technology stacks.
-              </p>
+            {/* Main Content */}
+            <div className="rounded-3xl bg-white border border-slate-200 p-8 shadow-sm">
+              {/* Credit Estimate */}
+              <div className="mb-6">
+                <CreditEstimate toolId="dev-studio-projects" />
+              </div>
+
+              <div className="text-center py-12">
+                <Code className="w-16 h-16 text-slate-400 mx-auto mb-4" />
+                <h2 className="text-2xl font-semibold text-slate-900 mb-2">Project Builder</h2>
+                <p className="text-slate-600 mb-6 max-w-2xl mx-auto">
+                  This tool is currently under development. It will allow you to create new projects with 
+                  pre-configured templates and technology stacks.
+                </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   href="/dev-studio"
