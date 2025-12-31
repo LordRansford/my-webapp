@@ -1,0 +1,41 @@
+/**
+ * Design System - Central Import
+ * 
+ * This file imports all design system modules in the correct order.
+ * Import this file in globals.css to get the complete visual system.
+ * 
+ * Order matters:
+ * 1. Spacing (defines --space-* variables used by typography)
+ * 2. Colors (defines --color-* variables used everywhere)
+ * 3. Typography (uses spacing and colors)
+ * 4. Shadows (uses colors)
+ * 5. Motion (uses spacing and colors)
+ */
+
+/* 1. Spacing System - Foundation for all layout */
+@import "./spacing.css";
+
+/* 2. Color System - Foundation for all visual elements */
+@import "./colors.css";
+
+/* 3. Typography System - Uses spacing and colors */
+@import "./typography.css";
+
+/* 4. Shadow and Depth System - Uses colors */
+@import "./shadows.css";
+
+/* 5. Motion System - Uses spacing and colors */
+@import "./motion.css";
+
+/**
+ * Design System Principles:
+ * 
+ * 1. All spacing must be multiples of 4px (0.25rem)
+ * 2. All colors must use design tokens (no hardcoded values)
+ * 3. All typography must use the typography scale
+ * 4. All shadows must use the shadow system
+ * 5. All animations must be GPU-optimized
+ * 6. All components must respect reduced-motion preferences
+ * 7. All images must use OptimizedImage component
+ * 8. All text must render sharply on high-DPI displays
+ */

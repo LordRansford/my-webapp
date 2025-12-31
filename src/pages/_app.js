@@ -16,6 +16,7 @@ const display = Space_Grotesk({
   variable: "--font-display",
   display: "swap",
   preload: true,
+  adjustFontFallback: true,
   weight: ["400", "500", "600", "700"],
 });
 
@@ -24,6 +25,7 @@ const body = Manrope({
   variable: "--font-body",
   display: "swap",
   preload: true,
+  adjustFontFallback: true,
   weight: ["400", "500", "600", "700", "800"],
 });
 
@@ -32,6 +34,7 @@ const mono = JetBrains_Mono({
   variable: "--font-mono",
   display: "swap",
   preload: true,
+  adjustFontFallback: true,
   weight: ["400", "500", "600", "700"],
 });
 
@@ -40,6 +43,7 @@ const inter = Inter({
   variable: "--font-inter",
   display: "swap",
   preload: true,
+  adjustFontFallback: true,
   weight: ["400", "500", "600", "700"],
 });
 

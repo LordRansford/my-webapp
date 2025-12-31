@@ -1,0 +1,146 @@
+/**
+ * Shadow and Depth System
+ * 
+ * Subtle, physically plausible shadows that create clear depth hierarchy
+ * without visual noise. Shadows work in both light and dark modes.
+ */
+
+:root {
+  /* Shadow System - Subtle and layered */
+  --shadow-xs: 0 1px 2px var(--color-shadow-light);
+  --shadow-sm: 0 2px 4px var(--color-shadow-light),
+               0 1px 2px var(--color-shadow-light);
+  --shadow-md: 0 4px 8px var(--color-shadow-light),
+               0 2px 4px var(--color-shadow-light);
+  --shadow-lg: 0 8px 16px var(--color-shadow-medium),
+               0 4px 8px var(--color-shadow-light);
+  --shadow-xl: 0 12px 24px var(--color-shadow-medium),
+               0 6px 12px var(--color-shadow-light);
+  --shadow-2xl: 0 20px 40px var(--color-shadow-heavy),
+                0 10px 20px var(--color-shadow-medium);
+
+  /* Inset Shadows - For depth */
+  --shadow-inner: inset 0 2px 4px var(--color-shadow-light);
+
+  /* Border System - Subtle and consistent */
+  --border-width-none: 0;
+  --border-width-sm: 1px;
+  --border-width-md: 2px;
+  --border-width-lg: 3px;
+
+  /* Border Radius - Consistent with spacing */
+  --radius-none: 0;
+  --radius-sm: 0.5rem;    /* 8px */
+  --radius-md: 0.75rem;    /* 12px */
+  --radius-lg: 1rem;       /* 16px */
+  --radius-xl: 1.5rem;     /* 24px */
+  --radius-2xl: 2rem;      /* 32px */
+  --radius-full: 9999px;   /* Pill shape */
+}
+
+/* Dark Mode Shadow Adjustments */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --shadow-xs: 0 1px 2px var(--color-shadow-light);
+    --shadow-sm: 0 2px 4px var(--color-shadow-light),
+                 0 1px 2px var(--color-shadow-light);
+    --shadow-md: 0 4px 8px var(--color-shadow-medium),
+                 0 2px 4px var(--color-shadow-light);
+    --shadow-lg: 0 8px 16px var(--color-shadow-medium),
+                 0 4px 8px var(--color-shadow-light);
+    --shadow-xl: 0 12px 24px var(--color-shadow-medium),
+                 0 6px 12px var(--color-shadow-light);
+    --shadow-2xl: 0 20px 40px var(--color-shadow-heavy),
+                  0 10px 20px var(--color-shadow-medium);
+  }
+}
+
+html.dark {
+  --shadow-xs: 0 1px 2px var(--color-shadow-light);
+  --shadow-sm: 0 2px 4px var(--color-shadow-light),
+               0 1px 2px var(--color-shadow-light);
+  --shadow-md: 0 4px 8px var(--color-shadow-medium),
+               0 2px 4px var(--color-shadow-light);
+  --shadow-lg: 0 8px 16px var(--color-shadow-medium),
+               0 4px 8px var(--color-shadow-light);
+  --shadow-xl: 0 12px 24px var(--color-shadow-medium),
+               0 6px 12px var(--color-shadow-light);
+  --shadow-2xl: 0 20px 40px var(--color-shadow-heavy),
+                0 10px 20px var(--color-shadow-medium);
+}
+
+/* Legacy Shadow Variable Mapping */
+:root {
+  --shadow: var(--shadow-lg);
+}
+
+/* Shadow Utilities */
+.shadow-xs { box-shadow: var(--shadow-xs); }
+.shadow-sm { box-shadow: var(--shadow-sm); }
+.shadow-md { box-shadow: var(--shadow-md); }
+.shadow-lg { box-shadow: var(--shadow-lg); }
+.shadow-xl { box-shadow: var(--shadow-xl); }
+.shadow-2xl { box-shadow: var(--shadow-2xl); }
+.shadow-inner { box-shadow: var(--shadow-inner); }
+.shadow-none { box-shadow: none; }
+
+/* Border Utilities */
+.border-sm { border-width: var(--border-width-sm); }
+.border-md { border-width: var(--border-width-md); }
+.border-lg { border-width: var(--border-width-lg); }
+
+/* Radius Utilities */
+.rounded-sm { border-radius: var(--radius-sm); }
+.rounded-md { border-radius: var(--radius-md); }
+.rounded-lg { border-radius: var(--radius-lg); }
+.rounded-xl { border-radius: var(--radius-xl); }
+.rounded-2xl { border-radius: var(--radius-2xl); }
+.rounded-full { border-radius: var(--radius-full); }
+
+/* Depth Hierarchy - Apply shadows based on elevation */
+.elevation-0 { box-shadow: none; }
+.elevation-1 { box-shadow: var(--shadow-xs); }
+.elevation-2 { box-shadow: var(--shadow-sm); }
+.elevation-3 { box-shadow: var(--shadow-md); }
+.elevation-4 { box-shadow: var(--shadow-lg); }
+.elevation-5 { box-shadow: var(--shadow-xl); }
+
+/* Cards and Panels - Default elevation */
+.card,
+.panel,
+[class*="card"],
+[class*="panel"] {
+  box-shadow: var(--shadow-md);
+  border: var(--border-width-sm) solid var(--color-border-primary);
+  border-radius: var(--radius-lg);
+}
+
+/* Modals and Overlays - Higher elevation */
+.modal,
+.overlay,
+[class*="modal"],
+[class*="overlay"] {
+  box-shadow: var(--shadow-2xl);
+  border-radius: var(--radius-xl);
+}
+
+/* Buttons - Subtle elevation on hover */
+button:not(:disabled):hover,
+[role="button"]:not(:disabled):hover {
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+  transition: box-shadow 150ms ease, transform 150ms ease;
+}
+
+button:not(:disabled):active,
+[role="button"]:not(:disabled):active {
+  box-shadow: var(--shadow-xs);
+  transform: translateY(0);
+}
+
+/* Focus States - Use shadow for focus ring */
+:focus-visible {
+  outline: var(--border-width-md) solid var(--color-border-focus);
+  outline-offset: var(--space-1);
+  box-shadow: 0 0 0 var(--space-1) var(--color-accent-primary);
+}

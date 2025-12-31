@@ -1,0 +1,259 @@
+/**
+ * Typography System
+ * 
+ * Comprehensive typography scale with explicit sizes, line-heights,
+ * letter-spacing, and font rendering optimizations for maximum sharpness.
+ */
+
+:root {
+  /* Typography Scale - Explicit sizes with consistent ratios */
+  --font-size-xs: 0.75rem;      /* 12px */
+  --font-size-sm: 0.875rem;     /* 14px */
+  --font-size-base: 1rem;       /* 16px */
+  --font-size-lg: 1.125rem;      /* 18px */
+  --font-size-xl: 1.25rem;       /* 20px */
+  --font-size-2xl: 1.5rem;       /* 24px */
+  --font-size-3xl: 1.875rem;     /* 30px */
+  --font-size-4xl: 2.25rem;      /* 36px */
+  --font-size-5xl: 3rem;         /* 48px */
+  --font-size-6xl: 3.75rem;      /* 60px */
+
+  /* Line Heights - Intentional and consistent */
+  --line-height-none: 1;
+  --line-height-tight: 1.2;      /* Headings */
+  --line-height-snug: 1.375;     /* Tight body */
+  --line-height-normal: 1.5;     /* Standard */
+  --line-height-relaxed: 1.75;   /* Body text */
+  --line-height-loose: 2;        /* Loose spacing */
+
+  /* Letter Spacing - Optimized for readability */
+  --letter-spacing-tighter: -0.05em;
+  --letter-spacing-tight: -0.02em;   /* Headings */
+  --letter-spacing-normal: -0.01em;  /* Body text */
+  --letter-spacing-wide: 0.01em;      /* Small text */
+  --letter-spacing-wider: 0.05em;     /* Uppercase labels */
+
+  /* Font Weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+}
+
+/* Base Typography - Applied to body */
+body {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-normal);
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-variant-ligatures: common-ligatures;
+  font-kerning: normal;
+}
+
+/* Heading Scale - Systematic and consistent */
+h1,
+.h1 {
+  font-size: clamp(var(--font-size-4xl), 5vw, var(--font-size-6xl));
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  font-weight: var(--font-weight-bold);
+  margin-top: 0;
+  margin-bottom: var(--space-4);
+}
+
+h2,
+.h2 {
+  font-size: clamp(var(--font-size-3xl), 4vw, var(--font-size-4xl));
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  font-weight: var(--font-weight-bold);
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-4);
+}
+
+h3,
+.h3 {
+  font-size: clamp(var(--font-size-2xl), 3vw, var(--font-size-3xl));
+  line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-semibold);
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-3);
+}
+
+h4,
+.h4 {
+  font-size: clamp(var(--font-size-xl), 2.5vw, var(--font-size-2xl));
+  line-height: var(--line-height-normal);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-semibold);
+  margin-top: var(--space-5);
+  margin-bottom: var(--space-2);
+}
+
+h5,
+.h5 {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-normal);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-semibold);
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-2);
+}
+
+h6,
+.h6 {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  letter-spacing: var(--letter-spacing-wide);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-2);
+}
+
+/* Paragraph Typography */
+p {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  letter-spacing: var(--letter-spacing-normal);
+  margin-top: 0;
+  margin-bottom: var(--space-5);
+}
+
+/* Small Text */
+small,
+.text-sm {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+/* Extra Small Text */
+.text-xs {
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+  letter-spacing: var(--letter-spacing-wider);
+}
+
+/* Large Text */
+.text-lg {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
+}
+
+.text-xl {
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-relaxed);
+}
+
+/* Monospace Typography */
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--font-mono), "JetBrains Mono", "Fira Code", "Consolas", "Monaco", monospace;
+  font-feature-settings: "liga" 1, "calt" 1;
+  font-variant-ligatures: common-ligatures;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-size: 0.9em;
+  line-height: var(--line-height-normal);
+}
+
+pre {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  letter-spacing: 0;
+}
+
+/* Link Typography */
+a {
+  letter-spacing: inherit;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* List Typography */
+ul,
+ol {
+  line-height: var(--line-height-relaxed);
+  letter-spacing: var(--letter-spacing-normal);
+}
+
+li {
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+/* Blockquote Typography */
+blockquote {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
+  letter-spacing: var(--letter-spacing-normal);
+  font-style: italic;
+  margin: var(--space-6) 0;
+  padding-left: var(--space-4);
+  border-left: 3px solid var(--line);
+}
+
+/* Label Typography */
+label {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  letter-spacing: var(--letter-spacing-wide);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Button Typography */
+button {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Input Typography */
+input,
+textarea,
+select {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  letter-spacing: var(--letter-spacing-normal);
+  font-family: inherit;
+}
+
+/* High-DPI Display Optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  body {
+    /* Enhanced rendering for Retina displays */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Print Optimizations */
+@media print {
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+}

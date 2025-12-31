@@ -1,13 +1,26 @@
 "use client";
 
-import Image from "next/image";
+import { OptimizedImage } from "@/components/media/OptimizedImage";
 
 export function NoteImage({ src, alt = "", caption, width = 1200, height = 800 }) {
+  const aspectRatio = width && height ? `${width}/${height}` : "16/9";
+  
   return (
     <figure className="panel">
-      <Image src={src} alt={alt} width={width} height={height} style={{ width: "100%", height: "auto", borderRadius: "12px" }} />
+      <OptimizedImage
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        aspectRatio={aspectRatio}
+        quality={90}
+        priority={false}
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px"
+        className="rounded-lg"
+        style={{ width: "100%", height: "auto" }}
+      />
       {caption && (
-        <figcaption className="muted" style={{ marginTop: "0.4rem" }}>
+        <figcaption className="muted" style={{ marginTop: "var(--space-2)" }}>
           {caption}
         </figcaption>
       )}
