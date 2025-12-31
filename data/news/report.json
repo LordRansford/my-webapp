@@ -1,14 +1,40 @@
 {
-  "run_at": "2024-01-01T00:00:00.000Z",
-  "duration_ms": 0,
-  "sources_processed": 0,
-  "sources_succeeded": 0,
+  "run_at": "2025-12-31T00:19:25.263Z",
+  "duration_ms": 15245,
+  "sources_processed": 5,
+  "sources_succeeded": 5,
   "sources_failed": 0,
-  "items_added": 0,
+  "items_added": 1534,
   "items_updated": 0,
   "items_removed": 0,
   "validation_passed": true,
-  "snapshot_written": false,
-  "per_source_results": {},
+  "snapshot_written": true,
+  "per_source_results": {
+    "nvd": {
+      "success": true,
+      "items_fetched": 0,
+      "items_normalised": 0
+    },
+    "cisa-kev": {
+      "success": true,
+      "items_fetched": 1484,
+      "items_normalised": 1484
+    },
+    "govuk-ai": {
+      "success": true,
+      "items_fetched": 0,
+      "items_normalised": 0
+    },
+    "ncsc-advisories": {
+      "success": true,
+      "items_fetched": 0,
+      "items_normalised": 0
+    },
+    "arxiv-cs-ai": {
+      "success": true,
+      "items_fetched": 50,
+      "items_normalised": 50
+    }
+  },
   "errors": []
 }
