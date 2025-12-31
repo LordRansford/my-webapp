@@ -32,8 +32,11 @@ export async function assertToolRunAllowed(toolId: string) {
   startOfDay.setHours(0, 0, 0, 0);
   const sinceIso = startOfDay.toISOString();
 
+  // TODO: Replace with credit-based limits
+  // For now, keep tool run counting but migrate to credits
   const used = countToolRunsSince({ userId, anonymousUserId }, sinceIso);
-  const limit = PLANS[plan].limits.maxToolRunsPerDay;
+  // Temporary: use daily credit cap as approximate tool run limit
+  const limit = Math.floor(PLANS[plan].limits.dailyCreditCap / 3); // Assume ~3 credits per run average
   if (used >= limit) {
     const err = new Error("Daily tool run limit reached");
     (err as any).status = 429;

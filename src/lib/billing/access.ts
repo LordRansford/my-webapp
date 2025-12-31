@@ -65,7 +65,8 @@ export async function assertFeatureOrThrow(feature: FeatureKey) {
 export function getRateLimitConfig(plan: PlanKey) {
   const limits = PLANS[plan].limits;
   return {
-    maxToolRunsPerDay: limits.maxToolRunsPerDay,
+    monthlyCredits: limits.monthlyCredits,
+    dailyCreditCap: limits.dailyCreditCap,
     maxUploadBytes: limits.maxUploadBytes,
     maxExportsPerDay: limits.maxExportsPerDay,
   };
