@@ -50,7 +50,7 @@ function analyzeSchema(data: unknown[]): Record<string, FieldInfo> {
       }
 
       const field = schemaMap[key];
-      const value = item[key as keyof typeof item];
+      const value = (item as Record<string, unknown>)[key];
 
       // Update type if more specific
       const inferredType = inferType(value);
@@ -78,7 +78,7 @@ function analyzeSchema(data: unknown[]): Record<string, FieldInfo> {
 
       // Update string length constraints
       if (typeof value === "string") {
-        const len = value.length;
+        const len: number = value.length;
         if (field.minLength === undefined || len < field.minLength) {
           field.minLength = len;
         }
@@ -89,11 +89,12 @@ function analyzeSchema(data: unknown[]): Record<string, FieldInfo> {
 
       // Update numeric constraints
       if (typeof value === "number") {
-        if (field.minValue === undefined || value < field.minValue) {
-          field.minValue = value;
+        const numValue: number = value;
+        if (field.minValue === undefined || numValue < field.minValue) {
+          field.minValue = numValue;
         }
-        if (field.maxValue === undefined || value > field.maxValue) {
-          field.maxValue = value;
+        if (field.maxValue === undefined || numValue > field.maxValue) {
+          field.maxValue = numValue;
         }
       }
     });
