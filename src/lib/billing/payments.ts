@@ -2,13 +2,16 @@
  * Payment Processing
  * 
  * Handles credit purchase checkout sessions and webhook processing.
- * This is a stub implementation - integrate with your payment provider.
+ * Integrated with Stripe for secure payment processing.
  */
 
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/options";
 import { CREDIT_PACKS, CREDIT_PRICE } from "@/lib/billing/plans";
-import { requireAuth } from "@/lib/studios/auth-gating";
+import { getUserIdFromSession } from "@/lib/studios/auth-gating";
+import { getStripeClient } from "@/lib/stripe";
+import { getStripeEnv } from "@/lib/stripe/config";
+import { addCredits } from "@/lib/billing/creditStore";
 
 export interface CheckoutSession {
   sessionId: string;
@@ -27,14 +30,9 @@ export async function createCheckoutSession(
   packId: string
 ): Promise<CheckoutSession | { error: string; code: string }> {
   // Require authentication
-  const authResult = await requireAuth("Credit purchases require an account");
-  if (authResult instanceof Response) {
-    return { error: "Authentication required", code: "AUTH_REQUIRED" };
-  }
-
-  const userId = authResult.userId;
+  const userId = await getUserIdFromSession();
   if (!userId) {
-    return { error: "User not found", code: "USER_NOT_FOUND" };
+    return { error: "Authentication required", code: "AUTH_REQUIRED" };
   }
 
   // Find pack
@@ -43,37 +41,129 @@ export async function createCheckoutSession(
     return { error: "Credit pack not found", code: "PACK_NOT_FOUND" };
   }
 
-  // TODO: Integrate with payment provider (Stripe, etc.)
-  // For now, return stub response
-  const sessionId = `checkout_${Date.now()}_${userId}`;
-  const url = `/account/credits/checkout?session=${sessionId}&pack=${packId}`;
+  // Check if Stripe is enabled
+  const stripeEnv = getStripeEnv();
+  if (!stripeEnv) {
+    // Fallback to stub for development
+    const sessionId = `checkout_${Date.now()}_${userId}`;
+    const url = `/account/credits/checkout?session=${sessionId}&pack=${packId}`;
+    return {
+      sessionId,
+      url,
+      packId: pack.id,
+      credits: pack.credits,
+      price: pack.price,
+    };
+  }
 
-  return {
-    sessionId,
-    url,
-    packId: pack.id,
-    credits: pack.credits,
-    price: pack.price,
-  };
+  try {
+    const stripe = getStripeClient();
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}` 
+      : "http://localhost:3000";
+
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price_data: {
+            currency: "gbp",
+            product_data: {
+              name: `${pack.label} Credit Pack`,
+              description: `${pack.credits.toLocaleString()} credits`,
+            },
+            unit_amount: Math.round(pack.price * 100), // Convert to pence
+          },
+          quantity: 1,
+        },
+      ],
+      metadata: {
+        userId,
+        packId: pack.id,
+        credits: pack.credits.toString(),
+        type: "credit_purchase",
+      },
+      success_url: `${baseUrl}/account/credits/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/account/credits?canceled=true`,
+      customer_email: undefined, // Will be collected during checkout
+    });
+
+    return {
+      sessionId: session.id,
+      url: session.url || `${baseUrl}/account/credits`,
+      packId: pack.id,
+      credits: pack.credits,
+      price: pack.price,
+    };
+  } catch (error) {
+    console.error("Stripe checkout session creation failed:", error);
+    return {
+      error: "Failed to create checkout session",
+      code: "CHECKOUT_FAILED",
+    };
+  }
 }
 
 /**
- * Handle payment webhook
+ * Handle payment webhook for credit purchases
  * 
  * Processes payment completion and credits the user's account.
+ * This should be called from the Stripe webhook handler.
  */
-export async function handleWebhook(
-  event: string,
-  data: Record<string, unknown>
-): Promise<{ success: boolean; error?: string }> {
-  // TODO: Implement webhook signature verification
-  // TODO: Process payment events
-  // TODO: Credit user account
-  // TODO: Send confirmation email
+export async function handleCreditPurchaseWebhook(
+  session: { id: string; metadata?: Record<string, string>; amount_total?: number }
+): Promise<{ success: boolean; error?: string; creditsGranted?: number }> {
+  const userId = session.metadata?.userId;
+  const packId = session.metadata?.packId;
+  const creditsStr = session.metadata?.credits;
 
-  console.log("Payment webhook received:", event, data);
+  if (!userId || !packId || !creditsStr) {
+    return {
+      success: false,
+      error: "Missing required metadata in checkout session",
+    };
+  }
 
-  return { success: true };
+  const credits = parseInt(creditsStr, 10);
+  if (isNaN(credits) || credits <= 0) {
+    return {
+      success: false,
+      error: "Invalid credits amount in metadata",
+    };
+  }
+
+  try {
+    // Grant credits to user
+    const result = await addCredits(
+      userId,
+      credits,
+      "purchase",
+      {
+        packId,
+        stripeSessionId: session.id,
+        amountPaid: session.amount_total ? session.amount_total / 100 : undefined, // Convert from pence
+      }
+    );
+
+    if (result.success) {
+      return {
+        success: true,
+        creditsGranted: credits,
+      };
+    } else {
+      return {
+        success: false,
+        error: "Failed to grant credits",
+      };
+    }
+  } catch (error) {
+    console.error("Credit purchase webhook processing failed:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
 }
 
 /**

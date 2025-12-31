@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { prisma } from "@/lib/db/prisma";
 import { logInfo, logWarn } from "@/lib/telemetry/log";
+import { handleCreditPurchaseWebhook } from "@/lib/billing/payments";
 
 export async function POST(req: Request) {
   const secretKey = process.env.STRIPE_SECRET_KEY || "";
@@ -51,6 +52,44 @@ export async function POST(req: Request) {
     // Intentionally ignore. Webhook must remain replay-safe and never crash on retries.
   }
 
+  // Handle credit purchase webhooks
+  if (event.type === "checkout.session.completed" && "data" in event) {
+    const session = event.data.object as Stripe.Checkout.Session;
+    const type = typeof session.metadata?.type === "string" ? session.metadata.type : "";
+
+    // Handle credit purchases
+    if (type === "credit_purchase") {
+      try {
+        const result = await handleCreditPurchaseWebhook({
+          id: session.id,
+          metadata: session.metadata || {},
+          amount_total: session.amount_total || undefined,
+        });
+
+        if (result.success) {
+          logInfo("stripe.credit_purchase.completed", {
+            userId: session.metadata?.userId || null,
+            credits: result.creditsGranted || 0,
+            sessionId: session.id,
+          });
+        } else {
+          logWarn("stripe.credit_purchase.failed", {
+            userId: session.metadata?.userId || null,
+            error: result.error || "Unknown error",
+            sessionId: session.id,
+          });
+        }
+      } catch (error) {
+        logWarn("stripe.credit_purchase.error", {
+          error: error instanceof Error ? error.message : "Unknown error",
+          sessionId: session.id,
+        });
+        // Continue processing other webhook types
+      }
+    }
+  }
+
+  // Continue with existing certificate/purchase handling
   if (event.type !== "checkout.session.completed") {
     return new NextResponse("ok", { status: 200 });
   }

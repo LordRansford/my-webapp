@@ -78,19 +78,30 @@ export default function PurchaseCreditsPage() {
     setError(null);
 
     try {
-      // TODO: Integrate with actual payment provider
-      // For now, show a message that this is a stub
-      alert(
-        `Purchase flow for ${packId} pack would be initiated here.\n\n` +
-        "This requires integration with your payment provider (Stripe, etc.).\n\n" +
-        "The checkout session would be created and user redirected to payment."
-      );
-      
-      // After successful payment, refresh balance
-      // await fetchBalance();
+      // Create checkout session
+      const response = await fetch("/api/billing/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ packId }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to create checkout session");
+      }
+
+      const data = await response.json();
+
+      // Redirect to Stripe checkout or success page
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error("No checkout URL returned");
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Purchase failed");
-    } finally {
       setPurchasing(false);
     }
   }
