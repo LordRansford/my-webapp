@@ -12,11 +12,12 @@ export async function GET() {
     const latestPath = join(process.cwd(), "data", "news", "latest.json");
     
     const fs = await import("fs");
+    const { existsSync } = fs;
     
     let report: any = null;
     let latest: any = null;
     
-    if (fs.existsSync(reportPath)) {
+    if (existsSync(reportPath)) {
       try {
         const reportData = readFileSync(reportPath, "utf8");
         report = JSON.parse(reportData);
@@ -25,7 +26,7 @@ export async function GET() {
       }
     }
     
-    if (fs.existsSync(latestPath)) {
+    if (existsSync(latestPath)) {
       try {
         const latestData = readFileSync(latestPath, "utf8");
         latest = JSON.parse(latestData);
