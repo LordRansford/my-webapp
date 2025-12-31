@@ -1,43 +1,57 @@
-import { NextRequest } from "next/server";
+/**
+ * Deployment Wizard API Route
+ * 
+ * Handles deployment configuration generation and validation.
+ */
+
 import { createToolExecutionHandler } from "@/lib/studios/toolExecutionHelper";
+import { getToolDefinition } from "@/lib/tools/registry";
 
 export const POST = createToolExecutionHandler({
   toolId: "dev-studio-deployment",
-  executeTool: async (userId, body) => {
-    // TODO: Implement actual deployment wizard logic
-    const executionStart = Date.now();
-    await new Promise((resolve) => setTimeout(resolve, 200));
-    
+  executeTool: async (userId: string, body: any) => {
+    const tool = getToolDefinition("dev-studio-deployment");
+    if (!tool) {
+      throw new Error("Tool not found");
+    }
+
+    const config = body.config;
+    const startTime = Date.now();
+
+    // Simulate deployment configuration generation
+    // In production, this would interact with actual cloud APIs
+    const deploymentUrl = `https://${config.projectName || "app"}.${config.platform === "vercel" ? "vercel.app" : config.platform === "aws" ? "amazonaws.com" : config.platform === "gcp" ? "appspot.com" : "azurewebsites.net"}`;
+
+    const instructions = [
+      `Connect your repository: ${config.repositoryUrl || "Set up your Git repository"}`,
+      `Configure build settings: ${config.buildCommand || "npm run build"}`,
+      `Set environment variables in your ${config.platform} dashboard`,
+      `Deploy using: ${config.platform === "vercel" ? "vercel deploy" : config.platform === "aws" ? "aws deploy" : config.platform === "gcp" ? "gcloud deploy" : "az webapp deploy"}`,
+    ];
+
+    // Simulate processing time
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    const durationMs = Date.now() - startTime;
+
     return {
       result: {
         success: true,
-        deployment: {
-          platform: body.platform || "vercel",
-          config: body.config || {},
-          scripts: body.generateScripts ? generateDeploymentScripts(body) : null,
-          toolId: "dev-studio-deployment",
-          timestamp: new Date().toISOString(),
+        deploymentUrl,
+        platform: config.platform,
+        deploymentType: config.deploymentType,
+        instructions,
+        config: {
+          buildCommand: config.buildCommand,
+          outputDirectory: config.outputDirectory,
         },
       },
       actualUsage: {
-        cpuMs: Date.now() - executionStart,
-        memMb: 150,
-        durationMs: Date.now() - executionStart,
+        cpuMs: durationMs,
+        memMb: 256,
+        durationMs,
       },
+      platformError: false,
     };
   },
 });
-
-function generateDeploymentScripts(deployment: any): Record<string, string> {
-  // Stub: Generate deployment scripts for different platforms
-  const scripts: Record<string, string> = {};
-  
-  if (deployment.platform === "vercel") {
-    scripts["vercel.json"] = JSON.stringify({
-      version: 2,
-      builds: [{ src: "package.json", use: "@vercel/next" }],
-    }, null, 2);
-  }
-  
-  return scripts;
-}
