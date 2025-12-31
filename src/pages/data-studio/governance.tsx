@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { ArrowLeft, FileText } from "lucide-react";
 import SecureErrorBoundary from "@/components/studios/SecureErrorBoundary";
+import CreditEstimate from "@/components/studios/CreditEstimate";
 import StudioNavigation from "@/components/studios/StudioNavigation";
 
 export default function GovernancePage() {
@@ -29,6 +30,12 @@ export default function GovernancePage() {
             </div>
           </header>
           <div className="rounded-3xl bg-white border border-slate-200 p-8 shadow-sm">
+            {/* Credit Estimate */}
+            <div className="mb-6">
+              <CreditEstimate toolId="data-studio-governance" />
+            </div>
+
+
             <div className="text-center py-12">
               <FileText className="w-16 h-16 text-slate-400 mx-auto mb-4" />
               <h2 className="text-2xl font-semibold text-slate-900 mb-2">Data Governance Framework</h2>
