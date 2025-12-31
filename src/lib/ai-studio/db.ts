@@ -9,6 +9,8 @@
  * 3. Use the prisma client from @/lib/db/prisma or create a new instance
  */
 
+import crypto from "crypto";
+
 // Try to import Prisma client, fallback to simulated if not available
 let prisma: any = null;
 let prismaAvailable = false;
@@ -131,8 +133,27 @@ export async function createDataset(data: {
  * Get model by ID
  */
 export async function getModel(modelId: string, userId: string) {
-  // TODO: Replace with actual Prisma query
-  return null;
+  if (USE_SIMULATED || !prisma) {
+    return null;
+  }
+
+  try {
+    if (prisma.model) {
+      return await prisma.model.findFirst({
+        where: {
+          id: modelId,
+          userId: userId,
+          deletedAt: null,
+        },
+      });
+    }
+    return null;
+  } catch (error) {
+    if (process.env.NODE_ENV !== "production") {
+      console.warn("[AI Studio DB] Model not found, using simulated response");
+    }
+    return null;
+  }
 }
 
 /**
@@ -146,16 +167,59 @@ export async function createTrainingJob(data: {
   computeType?: string;
   config: any;
 }) {
-  // TODO: Replace with actual Prisma query
-  return {
-    id: crypto.randomUUID(),
-    ...data,
-    status: data.status || "queued",
-    computeType: data.computeType || "browser",
-    progress: 0,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
+  if (USE_SIMULATED || !prisma) {
+    return {
+      id: crypto.randomUUID(),
+      ...data,
+      status: data.status || "queued",
+      computeType: data.computeType || "browser",
+      progress: 0,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+  }
+
+  try {
+    // Try to use Prisma Job model if available (generic job model)
+    if (prisma.job) {
+      return await prisma.job.create({
+        data: {
+          userId: data.userId,
+          toolId: "ai-studio-training",
+          status: data.status || "queued",
+          inputJson: {
+            modelId: data.modelId,
+            datasetId: data.datasetId,
+            computeType: data.computeType || "browser",
+            config: data.config,
+          } as any,
+        },
+      });
+    }
+    
+    // Fallback to simulated
+    return {
+      id: crypto.randomUUID(),
+      ...data,
+      status: data.status || "queued",
+      computeType: data.computeType || "browser",
+      progress: 0,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+  } catch (error) {
+    console.error("[AI Studio DB] Error creating training job:", error);
+    // Fallback to simulated on error
+    return {
+      id: crypto.randomUUID(),
+      ...data,
+      status: data.status || "queued",
+      computeType: data.computeType || "browser",
+      progress: 0,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+  }
 }
 
 /**
@@ -173,20 +237,78 @@ export async function updateTrainingJob(
     completedAt?: Date;
   }
 ) {
-  // TODO: Replace with actual Prisma query
-  return {
-    id: jobId,
-    ...updates,
-    updatedAt: new Date(),
-  };
+  if (USE_SIMULATED || !prisma) {
+    return {
+      id: jobId,
+      ...updates,
+      updatedAt: new Date(),
+    };
+  }
+
+  try {
+    if (prisma.job) {
+      const job = await prisma.job.updateMany({
+        where: {
+          id: jobId,
+          userId: userId,
+          toolId: "ai-studio-training",
+        },
+        data: {
+          status: updates.status,
+          outputJson: {
+            progress: updates.progress,
+            currentEpoch: updates.currentEpoch,
+            metrics: updates.metrics,
+            errorMessage: updates.errorMessage,
+            completedAt: updates.completedAt,
+          } as any,
+          finishedAt: updates.completedAt || (updates.status === "succeeded" || updates.status === "failed" ? new Date() : undefined),
+        },
+      });
+      if (job.count === 0) return null;
+      return getTrainingJob(jobId, userId);
+    }
+    
+    return {
+      id: jobId,
+      ...updates,
+      updatedAt: new Date(),
+    };
+  } catch (error) {
+    console.error("[AI Studio DB] Error updating training job:", error);
+    return {
+      id: jobId,
+      ...updates,
+      updatedAt: new Date(),
+    };
+  }
 }
 
 /**
  * Get training job by ID
  */
 export async function getTrainingJob(jobId: string, userId: string) {
-  // TODO: Replace with actual Prisma query
-  return null;
+  if (USE_SIMULATED || !prisma) {
+    return null;
+  }
+
+  try {
+    if (prisma.job) {
+      return await prisma.job.findFirst({
+        where: {
+          id: jobId,
+          userId: userId,
+          toolId: "ai-studio-training",
+        },
+      });
+    }
+    return null;
+  } catch (error) {
+    if (process.env.NODE_ENV !== "production") {
+      console.warn("[AI Studio DB] Training job not found, using simulated response");
+    }
+    return null;
+  }
 }
 
 /**
@@ -231,8 +353,30 @@ export async function listModels(userId: string, options?: {
   offset?: number;
   status?: string;
 }) {
-  // TODO: Replace with actual Prisma query
-  return [];
+  if (USE_SIMULATED || !prisma) {
+    return [];
+  }
+
+  try {
+    if (prisma.model) {
+      return await prisma.model.findMany({
+        where: {
+          userId: userId,
+          deletedAt: null,
+          ...(options?.status && { status: options.status }),
+        },
+        take: options?.limit || 50,
+        skip: options?.offset || 0,
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    }
+    return [];
+  } catch (error) {
+    console.error("[AI Studio DB] Error listing models:", error);
+    return [];
+  }
 }
 
 /**
@@ -243,8 +387,30 @@ export async function listTrainingJobs(userId: string, options?: {
   offset?: number;
   status?: string;
 }) {
-  // TODO: Replace with actual Prisma query
-  return [];
+  if (USE_SIMULATED || !prisma) {
+    return [];
+  }
+
+  try {
+    if (prisma.job) {
+      return await prisma.job.findMany({
+        where: {
+          userId: userId,
+          toolId: "ai-studio-training",
+          ...(options?.status && { status: options.status }),
+        },
+        take: options?.limit || 50,
+        skip: options?.offset || 0,
+        orderBy: {
+          startedAt: "desc",
+        },
+      });
+    }
+    return [];
+  } catch (error) {
+    console.error("[AI Studio DB] Error listing training jobs:", error);
+    return [];
+  }
 }
 
 /**
