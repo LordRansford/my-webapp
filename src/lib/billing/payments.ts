@@ -12,6 +12,7 @@ import { getUserIdFromSession } from "@/lib/studios/auth-gating";
 import { getStripeClient } from "@/lib/stripe";
 import { getStripeEnv } from "@/lib/stripe/config";
 import { addCredits } from "@/lib/billing/creditStore";
+import { logCreditEvent } from "@/lib/audit/creditAudit";
 
 export interface CheckoutSession {
   sessionId: string;
@@ -61,6 +62,14 @@ export async function createCheckoutSession(
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL 
       ? `https://${process.env.VERCEL_URL}` 
       : "http://localhost:3000";
+
+    // Audit log: purchase initiated
+    logCreditEvent({
+      type: "credit_purchase_initiated",
+      userId,
+      credits: pack.credits,
+      metadata: { packId: pack.id, price: pack.price },
+    });
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -147,11 +156,27 @@ export async function handleCreditPurchaseWebhook(
     );
 
     if (result.success) {
+      // Audit log: purchase completed
+      logCreditEvent({
+        type: "credit_purchase_completed",
+        userId,
+        credits,
+        balance: result.newBalance,
+        metadata: { packId, stripeSessionId: session.id },
+      });
+
       return {
         success: true,
         creditsGranted: credits,
       };
     } else {
+      // Audit log: purchase failed
+      logCreditEvent({
+        type: "credit_purchase_failed",
+        userId,
+        metadata: { packId, stripeSessionId: session.id, error: "Failed to grant credits" },
+      });
+
       return {
         success: false,
         error: "Failed to grant credits",
@@ -159,6 +184,14 @@ export async function handleCreditPurchaseWebhook(
     }
   } catch (error) {
     console.error("Credit purchase webhook processing failed:", error);
+    
+    // Audit log: purchase failed
+    logCreditEvent({
+      type: "credit_purchase_failed",
+      userId,
+      metadata: { packId, stripeSessionId: session.id, error: error instanceof Error ? error.message : "Unknown error" },
+    });
+
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",

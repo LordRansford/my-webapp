@@ -18,6 +18,7 @@ import {
   hasSufficientCredits,
 } from "@/lib/billing/credits";
 import { getCreditBalance, consumeCredits } from "@/lib/billing/creditStore";
+import { logCreditEvent } from "@/lib/audit/creditAudit";
 
 export interface ToolExecutionOptions {
   toolId: string;
@@ -102,9 +103,28 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
         );
       }
 
+      // Audit log: estimate requested
+      logCreditEvent({
+        type: "credit_estimate_requested",
+        userId,
+        toolId,
+        credits: estimate.typical,
+        metadata: { min: estimate.min, max: estimate.max, explanation: estimate.explanation },
+      });
+
       // Check if user has sufficient credits
       const creditCheck = await hasSufficientCredits(userId, estimate.max);
       if (!creditCheck.sufficient) {
+        // Audit log: insufficient credits
+        logCreditEvent({
+          type: "insufficient_credits",
+          userId,
+          toolId,
+          credits: estimate.max,
+          balance: creditCheck.balance,
+          metadata: { shortfall: creditCheck.shortfall },
+        });
+
         return NextResponse.json(
           {
             error: "Insufficient credits",
@@ -123,6 +143,15 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
       const limits = await getUserSpendLimits(userId);
       const spendCheck = await validateSpendLimits(userId, estimate.max, limits);
       if (!spendCheck.allowed) {
+        // Audit log: spend limit exceeded
+        logCreditEvent({
+          type: "spend_limit_exceeded",
+          userId,
+          toolId,
+          credits: estimate.max,
+          metadata: { reason: spendCheck.reason, limits },
+        });
+
         return NextResponse.json(
           {
             error: "Spend limit exceeded",
@@ -133,6 +162,15 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
           { status: 429 }
         );
       }
+
+      // Audit log: tool execution allowed
+      logCreditEvent({
+        type: "tool_execution_allowed",
+        userId,
+        toolId,
+        credits: estimate.typical,
+        metadata: { estimatedMax: estimate.max },
+      });
 
       // Execute tool
       let platformError = false;
@@ -146,6 +184,13 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
         platformError = executionResult.platformError || false;
       } catch (execError) {
         platformError = true; // Platform error = refund
+        // Audit log: tool execution failed
+        logCreditEvent({
+          type: "tool_execution_failed",
+          userId,
+          toolId,
+          metadata: { error: execError instanceof Error ? execError.message : "Unknown error" },
+        });
         throw execError;
       }
 
@@ -175,6 +220,13 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
           });
         } catch (creditError) {
           // If credit consumption fails, this is a platform error - refund
+          logCreditEvent({
+            type: "tool_execution_failed",
+            userId,
+            toolId,
+            runId,
+            metadata: { error: "Credit processing failed" },
+          });
           return NextResponse.json(
             {
               error: "Credit processing failed",
@@ -188,6 +240,17 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
 
       // Get updated balance
       const balance = await getCreditBalance(userId);
+
+      // Audit log: tool execution completed
+      logCreditEvent({
+        type: "tool_execution_completed",
+        userId,
+        toolId,
+        runId,
+        credits: chargeResult.charge,
+        balance,
+        metadata: { usage: actualUsage, estimated: estimate.typical },
+      });
 
       // Return result
       return NextResponse.json({

@@ -354,16 +354,22 @@ export default function PurchaseCreditsPage() {
                   Account Settings →
                 </Link>
                 <Link
-                  href="/account/upgrade"
+                  href="/account/settings/credits"
                   className="block text-sm text-sky-600 hover:text-sky-700 font-medium"
                 >
-                  Upgrade Plan →
+                  Credit Settings →
                 </Link>
                 <Link
                   href="/account/usage"
                   className="block text-sm text-sky-600 hover:text-sky-700 font-medium"
                 >
-                  Usage History →
+                  Usage Analytics →
+                </Link>
+                <Link
+                  href="/account/upgrade"
+                  className="block text-sm text-sky-600 hover:text-sky-700 font-medium"
+                >
+                  Upgrade Plan →
                 </Link>
               </div>
             </div>

@@ -8,6 +8,7 @@
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
+import { logCreditEvent } from "@/lib/audit/creditAudit";
 
 const CREDITS_FILE = path.join(process.cwd(), "data", "credits.json");
 
@@ -149,6 +150,15 @@ export function addCredits(
 
   saveStore(store);
 
+  // Audit log
+  logCreditEvent({
+    type: type === "purchase" ? "credit_granted" : "credit_granted",
+    userId,
+    credits: amount,
+    balance: user.balance,
+    metadata: { type, ...metadata },
+  });
+
   return {
     success: true,
     newBalance: user.balance,
@@ -229,17 +239,28 @@ export async function consumeCredits(
     metadata,
   };
 
-  user.balance -= amount;
-  user.transactions.push(transaction);
-  user.lastUpdated = new Date().toISOString();
+      user.balance -= amount;
+      user.transactions.push(transaction);
+      user.lastUpdated = new Date().toISOString();
 
-  saveStore(store);
+      saveStore(store);
 
-  return {
-    success: true,
-    newBalance: user.balance,
-    transactionId: transaction.id,
-  };
+      // Audit log
+      logCreditEvent({
+        type: "credit_charged",
+        userId,
+        toolId,
+        runId,
+        credits: amount,
+        balance: user.balance,
+        metadata,
+      });
+
+      return {
+        success: true,
+        newBalance: user.balance,
+        transactionId: transaction.id,
+      };
 }
 
 /**
