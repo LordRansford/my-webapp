@@ -18,6 +18,7 @@ export interface KeyboardShortcutsConfig {
   onShowHelp?: () => void;
   onNavigateNext?: () => void;
   onNavigatePrev?: () => void;
+  onRefresh?: () => void;
   enabled?: boolean;
 }
 
@@ -29,6 +30,7 @@ export function useKeyboardShortcuts(config: KeyboardShortcutsConfig) {
     onShowHelp,
     onNavigateNext,
     onNavigatePrev,
+    onRefresh,
     enabled = true,
   } = config;
 
@@ -79,6 +81,13 @@ export function useKeyboardShortcuts(config: KeyboardShortcutsConfig) {
           e.preventDefault();
           onNavigatePrev?.();
           break;
+        case "r":
+          // Only refresh if not in input (r is common in text fields)
+          if (!isInputFocused.current) {
+            e.preventDefault();
+            onRefresh?.();
+          }
+          break;
       }
     };
 
@@ -97,5 +106,5 @@ export function useKeyboardShortcuts(config: KeyboardShortcutsConfig) {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("focusin", handleFocusIn);
     };
-  }, [enabled, onFocusSearch, onFocusFilters, onExport, onShowHelp, onNavigateNext, onNavigatePrev]);
+  }, [enabled, onFocusSearch, onFocusFilters, onExport, onShowHelp, onNavigateNext, onNavigatePrev, onRefresh]);
 }

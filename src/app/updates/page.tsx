@@ -189,6 +189,9 @@ export default function UpdatesPage() {
     onShowHelp: () => {
       setShowHelp((prev) => !prev);
     },
+    onRefresh: () => {
+      handleRefresh();
+    },
     onNavigateNext: () => {
       if (currentItemRef.current < paginatedItems.length - 1) {
         currentItemRef.current++;
@@ -358,6 +361,7 @@ export default function UpdatesPage() {
                 <div><kbd className="px-2 py-1 bg-white rounded border">/</kbd> Focus search</div>
                 <div><kbd className="px-2 py-1 bg-white rounded border">f</kbd> Focus filters</div>
                 <div><kbd className="px-2 py-1 bg-white rounded border">e</kbd> Export</div>
+                <div><kbd className="px-2 py-1 bg-white rounded border">r</kbd> Refresh updates</div>
                 <div><kbd className="px-2 py-1 bg-white rounded border">?</kbd> Show/hide help</div>
                 <div><kbd className="px-2 py-1 bg-white rounded border">j</kbd> Next item</div>
                 <div><kbd className="px-2 py-1 bg-white rounded border">k</kbd> Previous item</div>
