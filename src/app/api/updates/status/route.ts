@@ -13,8 +13,8 @@ export async function GET() {
     
     const fs = await import("fs");
     
-    let report = null;
-    let latest = null;
+    let report: any = null;
+    let latest: any = null;
     
     if (fs.existsSync(reportPath)) {
       try {
@@ -36,7 +36,7 @@ export async function GET() {
     
     return NextResponse.json({
       report,
-      latest: latest && latest.metadata ? {
+      latest: latest && typeof latest === "object" && latest.metadata ? {
         item_count: latest.metadata.item_count || 0,
         generated_at: latest.metadata.generated_at,
         source_count: latest.metadata.source_count || 0,
