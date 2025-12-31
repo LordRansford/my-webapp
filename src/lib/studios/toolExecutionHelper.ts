@@ -29,6 +29,7 @@ import { getCreditBalance, consumeCredits } from "@/lib/billing/creditStore";
 import { logCreditEvent } from "@/lib/audit/creditAudit";
 import { logger } from "@/server/logger";
 import { recordToolMetric } from "@/lib/studios/toolMetrics";
+import { generateCacheKey, getCached, setCached, shouldCache } from "@/lib/studios/responseCache";
 
 export interface ToolExecutionOptions {
   toolId: string;
@@ -248,8 +249,35 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
 
       userId = authCheck.userId!;
       metrics = createMetrics(requestId, toolId, userId);
-      recordPhase(metrics, "credit_check");
+      
       const body = await req.json().catch(() => null);
+      
+      // Check cache for read-only operations
+      const cacheKey = generateCacheKey(toolId, body);
+      const cachedResult = getCached(cacheKey);
+      if (cachedResult) {
+        logger.info("cache_hit", { requestId, route: `/api/tools/${toolId}` }, {
+          toolId,
+          userId,
+          cacheKey,
+        });
+        
+        return NextResponse.json({
+          success: true,
+          runId: crypto.randomUUID(),
+          requestId,
+          result: cachedResult,
+          credits: {
+            estimated: 0,
+            charged: 0,
+            balance: await getCreditBalance(userId),
+          },
+          executionTime: Date.now() - startTime,
+          cached: true,
+        });
+      }
+      
+      recordPhase(metrics, "credit_check");
       if (!body || typeof body !== "object") {
         if (metrics) {
           metrics.errorType = "validation";
@@ -540,6 +568,15 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
         creditEstimate: estimate.typical,
         creditCharged: chargeResult.charge,
       });
+
+      // Cache result if appropriate (for read-only tools)
+      if (shouldCache(toolId, result)) {
+        setCached(cacheKey, result, 5 * 60 * 1000); // 5 minute TTL
+        logger.debug("cache_set", { requestId, route: `/api/tools/${toolId}` }, {
+          toolId,
+          cacheKey,
+        });
+      }
 
       // Return result
       return NextResponse.json({
