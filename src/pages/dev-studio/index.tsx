@@ -106,10 +106,27 @@ export default function DevStudioPage() {
   const [audience, setAudience] = useState<"enterprise" | "professional" | "student" | "child">("professional");
   
   useEffect(() => {
+    // Always set loading to false after mount, even if there's an error
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 100);
+    
     if (typeof window !== "undefined") {
-      setAudience(getDefaultAudience());
+      try {
+        setAudience(getDefaultAudience());
+        setIsLoading(false);
+        clearTimeout(timer);
+      } catch (error) {
+        console.error("Error loading audience profile:", error);
+        setIsLoading(false);
+        clearTimeout(timer);
+      }
+    } else {
+      clearTimeout(timer);
       setIsLoading(false);
     }
+    
+    return () => clearTimeout(timer);
   }, []);
   
   const profile = getAudienceProfile(audience);

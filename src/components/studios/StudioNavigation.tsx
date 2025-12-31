@@ -1,8 +1,7 @@
 "use client";
 
-import React, { memo, useMemo } from "react";
+import React, { memo, useMemo, useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { 
   BookOpen, 
   Rocket, 
@@ -69,12 +68,63 @@ const colorClasses = {
   indigo: "bg-indigo-600"
 };
 
+// Hook to get pathname that works with both App Router and Pages Router
+function usePathnameCompat(): string {
+  const [pathname, setPathname] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      return window.location.pathname;
+    }
+    return "";
+  });
+  
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    
+    // Update pathname on route changes
+    const updatePathname = () => {
+      setPathname(window.location.pathname);
+    };
+    
+    // Listen to browser navigation (back/forward buttons)
+    window.addEventListener("popstate", updatePathname);
+    
+    // Try to listen to Next.js router events (Pages Router)
+    // This is a workaround since we can't conditionally use hooks
+    let routerEvents: any = null;
+    try {
+      // Check if we can access Next.js router
+      if (typeof window !== "undefined" && (window as any).__NEXT_DATA__) {
+        // Try to get router from Next.js
+        const Router = require("next/router");
+        if (Router?.default?.events) {
+          routerEvents = Router.default.events;
+          routerEvents.on("routeChangeComplete", updatePathname);
+        }
+      }
+    } catch {
+      // Router not available or not Pages Router, that's fine
+    }
+    
+    // Initial update
+    updatePathname();
+    
+    return () => {
+      window.removeEventListener("popstate", updatePathname);
+      if (routerEvents) {
+        routerEvents.off("routeChangeComplete", updatePathname);
+      }
+    };
+  }, []);
+  
+  return pathname;
+}
+
 function StudioNavigation({ 
   studioType, 
   showHub = true,
   additionalLinks = []
 }: StudioNavigationProps) {
-  const pathname = usePathname();
+  const pathname = usePathnameCompat();
   const config = studioConfigs[studioType];
   const activeColor = colorClasses[config.color as keyof typeof colorClasses];
 
