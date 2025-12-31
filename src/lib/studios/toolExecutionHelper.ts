@@ -30,6 +30,8 @@ import { logCreditEvent } from "@/lib/audit/creditAudit";
 import { logger } from "@/server/logger";
 import { recordToolMetric } from "@/lib/studios/toolMetrics";
 import { generateCacheKey, getCached, setCached, shouldCache } from "@/lib/studios/responseCache";
+import { applySecurityHeaders } from "@/lib/security/headers";
+import { getCircuitBreaker } from "@/lib/studios/circuitBreaker";
 
 export interface ToolExecutionOptions {
   toolId: string;
@@ -220,16 +222,16 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
       const tool = getToolDefinition(toolId);
       if (!tool) {
         logger.error("tool_not_found", { requestId, route: `/api/tools/${toolId}` }, { toolId });
-        return NextResponse.json(
+        return applySecurityHeaders(NextResponse.json(
           { error: "Tool not found", code: "TOOL_NOT_FOUND", requestId },
           { status: 404 }
-        );
+        ));
       }
 
       // Client-side only tools don't need server execution
       if (isClientSideOnly(toolId)) {
         logger.warn("client_side_only_tool", { requestId, route: `/api/tools/${toolId}` }, { toolId });
-        return NextResponse.json(
+        return applySecurityHeaders(NextResponse.json(
           {
             error: "This tool runs client-side only",
             code: "CLIENT_SIDE_ONLY",
@@ -237,7 +239,7 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
             requestId,
           },
           { status: 400 }
-        );
+        ));
       }
 
       // Check auth requirements
@@ -262,7 +264,7 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
           cacheKey,
         });
         
-        return NextResponse.json({
+        return applySecurityHeaders(NextResponse.json({
           success: true,
           runId: crypto.randomUUID(),
           requestId,
@@ -274,7 +276,7 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
           },
           executionTime: Date.now() - startTime,
           cached: true,
-        });
+        }));
       }
       
       recordPhase(metrics, "credit_check");
@@ -286,10 +288,10 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
           logExecutionMetrics(metrics, false);
         }
         logger.warn("invalid_request_body", { requestId, route: `/api/tools/${toolId}` }, { toolId });
-        return NextResponse.json(
+        return applySecurityHeaders(NextResponse.json(
           { error: "Invalid request body", code: "INVALID_BODY", requestId },
           { status: 400 }
-        );
+        ));
       }
 
       // Estimate credits before execution
@@ -302,10 +304,10 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
           logExecutionMetrics(metrics, false);
         }
         logger.error("credit_estimate_failed", { requestId, route: `/api/tools/${toolId}` }, { toolId, userId });
-        return NextResponse.json(
+        return applySecurityHeaders(NextResponse.json(
           { error: "Failed to estimate credits", code: "ESTIMATE_FAILED", requestId },
           { status: 500 }
-        );
+        ));
       }
 
       if (metrics) {
@@ -334,7 +336,7 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
           metadata: { shortfall: creditCheck.shortfall },
         });
 
-        return NextResponse.json(
+        return applySecurityHeaders(NextResponse.json(
           {
             error: "Insufficient credits",
             code: "INSUFFICIENT_CREDITS",
@@ -345,7 +347,7 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
             purchaseUrl: "/account/credits",
           },
           { status: 402 }
-        );
+        ));
       }
 
       // Validate spend limits
@@ -361,7 +363,7 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
           metadata: { reason: spendCheck.reason, limits },
         });
 
-        return NextResponse.json(
+        return applySecurityHeaders(NextResponse.json(
           {
             error: "Spend limit exceeded",
             code: "SPEND_LIMIT_EXCEEDED",
@@ -369,7 +371,7 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
             action: spendCheck.action,
           },
           { status: 429 }
-        );
+        ));
       }
 
       // Audit log: tool execution allowed
@@ -393,15 +395,56 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
       }
 
       try {
-        const executionFn = () => withTimeout(
-          executeTool(userId!, body),
-          timeoutMs,
-          `Tool execution exceeded timeout`
+        // Use circuit breaker for tool execution
+        const circuitBreaker = getCircuitBreaker(`tool:${toolId}`, {
+          failureThreshold: 5,
+          timeoutMs: 60000, // 1 minute before attempting half-open
+        });
+
+        const executionFn = () => circuitBreaker.execute(() =>
+          withTimeout(
+            executeTool(userId!, body),
+            timeoutMs,
+            `Tool execution exceeded timeout`
+          )
         );
 
-        const executionResult = enableRetry
-          ? await withRetry(executionFn, maxRetries)
-          : await executionFn();
+        let executionResult;
+        try {
+          executionResult = enableRetry
+            ? await withRetry(executionFn, maxRetries)
+            : await executionFn();
+        } catch (circuitError: any) {
+          // Handle circuit breaker errors
+          if (circuitError.name === "CircuitBreakerOpenError") {
+            if (metrics) {
+              metrics.errorType = "system";
+              metrics.errorCode = "CIRCUIT_BREAKER_OPEN";
+              finalizeMetrics(metrics);
+              logExecutionMetrics(metrics, false);
+            }
+            logger.warn("circuit_breaker_open", { requestId, route: `/api/tools/${toolId}` }, {
+              toolId,
+              userId,
+            });
+            return applySecurityHeaders(NextResponse.json(
+              {
+                error: "Service temporarily unavailable",
+                code: "CIRCUIT_BREAKER_OPEN",
+                message: circuitError.message,
+                requestId,
+                retryAfter: Math.ceil(circuitBreaker.getRetryAfter() / 1000),
+              },
+              {
+                status: 503,
+                headers: {
+                  "Retry-After": String(Math.ceil(circuitBreaker.getRetryAfter() / 1000)),
+                },
+              }
+            ));
+          }
+          throw circuitError;
+        }
 
         result = executionResult.result;
         actualUsage = executionResult.actualUsage;
@@ -477,7 +520,7 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
           userId,
           reason: chargeResult.reason,
         });
-        return NextResponse.json(
+        return applySecurityHeaders(NextResponse.json(
           {
             error: "Platform error",
             code: "PLATFORM_ERROR",
@@ -486,7 +529,7 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
             requestId,
           },
           { status: 500 }
-        );
+        ));
       }
 
       if (chargeResult.charge > 0) {
@@ -521,7 +564,7 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
             runId,
             error: creditError instanceof Error ? creditError.message : "Unknown error",
           });
-          return NextResponse.json(
+          return applySecurityHeaders(NextResponse.json(
             {
               error: "Credit processing failed",
               code: "CREDIT_PROCESSING_ERROR",
@@ -529,7 +572,7 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
               requestId,
             },
             { status: 500 }
-          );
+          ));
         }
       }
 
@@ -578,8 +621,8 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
         });
       }
 
-      // Return result
-      return NextResponse.json({
+      // Return result with security headers
+      return applySecurityHeaders(NextResponse.json({
         success: true,
         runId,
         requestId,
@@ -594,7 +637,7 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
           phaseDurations: metrics!.phaseDurations,
           totalDuration: metrics!.durationMs,
         },
-      });
+      }));
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
       const errorCode = error instanceof Error && (error as any).code ? (error as any).code : "INTERNAL_ERROR";
@@ -613,7 +656,7 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
         errorCode,
       });
       
-      return NextResponse.json(
+      return applySecurityHeaders(NextResponse.json(
         {
           error: "Internal server error",
           code: errorCode,
@@ -621,7 +664,7 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
           requestId,
         },
         { status: error instanceof Error && (error as any).status ? (error as any).status : 500 }
-      );
+      ));
     }
   };
 }
