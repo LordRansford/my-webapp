@@ -8,7 +8,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import SecureErrorBoundary from "@/components/studios/SecureErrorBoundary";
 import {
   Sparkles,
