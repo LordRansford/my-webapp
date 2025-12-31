@@ -11,6 +11,7 @@ import { getUserIdFromSession } from "@/lib/studios/auth-gating";
 import { getUserPlan } from "@/lib/billing/access";
 import { PLANS } from "@/lib/billing/plans";
 import { getUserCredits, updateUserPlanLimits } from "@/lib/billing/creditStore";
+import { getCreditSettings, updateCreditSettings } from "@/lib/billing/creditSettings";
 
 export async function GET(req: NextRequest) {
   // Rate limiting
@@ -150,7 +151,13 @@ export async function PUT(req: NextRequest) {
 
     updateUserPlanLimits(userId, monthlyAllocation, dailyCap);
 
-    // TODO: Save alert thresholds and notification preferences to database
+    // Save alert thresholds and notification preferences
+    if (controls.alertThresholds || controls.notifications) {
+      updateCreditSettings(userId, {
+        ...(controls.alertThresholds && { alertThresholds: controls.alertThresholds }),
+        ...(controls.notifications && { notifications: controls.notifications }),
+      });
+    }
 
     return NextResponse.json({
       success: true,
