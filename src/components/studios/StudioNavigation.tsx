@@ -145,7 +145,11 @@ function StudioNavigation({
   };
 
   return (
-    <nav className="flex items-center gap-1 p-2 bg-white rounded-full border border-slate-200 shadow-sm overflow-x-auto">
+    <nav 
+      className="flex items-center gap-1 p-2 bg-white rounded-full border border-slate-200 shadow-sm overflow-x-auto"
+      role="navigation"
+      aria-label="Studio navigation"
+    >
       {baseLinks.map((link) => {
         const Icon = link.icon;
         const active = isActive(link.href);
@@ -153,14 +157,17 @@ function StudioNavigation({
           <Link
             key={link.href}
             href={link.href}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-sky-500 ${
               active
                 ? `${activeColor} text-white`
                 : "text-slate-700 hover:bg-slate-100"
             }`}
+            aria-current={active ? "page" : undefined}
+            aria-label={link.label}
           >
-            <Icon className="w-4 h-4 flex-shrink-0" />
+            <Icon className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
             <span className="hidden sm:inline">{link.label}</span>
+            <span className="sr-only sm:hidden">{link.label}</span>
           </Link>
         );
       })}
