@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
-import { AlertCircle, CheckCircle2, Clock, Info, HelpCircle, Rss } from "lucide-react";
+import { AlertCircle, CheckCircle2, Clock, Info, HelpCircle, Rss, RefreshCw, AlertTriangle } from "lucide-react";
 import { loadSnapshot } from "@/lib/updates/load";
 import type { NewsSnapshot, NormalisedItem } from "@/lib/updates/types";
 import UpdateCard from "@/components/updates/UpdateCard";
@@ -33,6 +33,9 @@ export default function UpdatesPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [showHelp, setShowHelp] = useState(false);
   const [liveMessage, setLiveMessage] = useState("");
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [refreshError, setRefreshError] = useState<string | null>(null);
+  const [lastRefreshTime, setLastRefreshTime] = useState<Date | null>(null);
   
   const searchInputRef = useRef<HTMLInputElement>(null);
   const filtersRef = useRef<HTMLDivElement>(null);
@@ -41,27 +44,46 @@ export default function UpdatesPage() {
 
   const { savedFilters, saveFilter, loadFilter } = useSavedFilters();
 
+  // Load snapshot function (reusable)
+  const loadData = useCallback(async (showRefreshing = false) => {
+    if (showRefreshing) {
+      setIsRefreshing(true);
+      setRefreshError(null);
+    }
+    
+    try {
+      const result = await loadSnapshot();
+      if (result.success && result.snapshot) {
+        setSnapshot(result.snapshot);
+        setIsFallback(result.isFallback);
+        setError(null);
+        setLastRefreshTime(new Date());
+        setLiveMessage(`Loaded ${result.snapshot.items.length} updates from ${result.snapshot.metadata.source_count} sources`);
+      } else {
+        setError(result.error || "Failed to load updates");
+        setRefreshError(result.error || "Failed to load updates");
+        setLiveMessage("Failed to load updates");
+      }
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : "Unknown error";
+      setError(errorMsg);
+      setRefreshError(errorMsg);
+      setLiveMessage("Error loading updates");
+    } finally {
+      setLoading(false);
+      setIsRefreshing(false);
+    }
+  }, []);
+
   // Load snapshot on mount
   useEffect(() => {
-    loadSnapshot()
-      .then((result) => {
-        if (result.success && result.snapshot) {
-          setSnapshot(result.snapshot);
-          setIsFallback(result.isFallback);
-          setLiveMessage(`Loaded ${result.snapshot.items.length} updates from ${result.snapshot.metadata.source_count} sources`);
-        } else {
-          setError(result.error || "Failed to load updates");
-          setLiveMessage("Failed to load updates");
-        }
-      })
-      .catch((err) => {
-        setError(err instanceof Error ? err.message : "Unknown error");
-        setLiveMessage("Error loading updates");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+    loadData();
+  }, [loadData]);
+
+  // Manual refresh handler
+  const handleRefresh = useCallback(() => {
+    loadData(true);
+  }, [loadData]);
 
   // Get items for current tab
   const tabItems = useMemo(() => {
@@ -287,6 +309,16 @@ export default function UpdatesPage() {
                 <div className="flex items-center gap-4">
                   <AudienceModeToggle mode={audienceMode} onChange={setAudienceMode} />
                   <ExportButton items={displayItems} />
+                  <button
+                    onClick={handleRefresh}
+                    disabled={isRefreshing}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-400 disabled:cursor-not-allowed text-white rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                    aria-label="Refresh updates"
+                    type="button"
+                  >
+                    <RefreshCw className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`} aria-hidden="true" />
+                    <span className="hidden sm:inline">{isRefreshing ? "Refreshing..." : "Refresh"}</span>
+                  </button>
                   <a
                     href="/api/updates/rss"
                     className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-medium transition-colors"
@@ -304,8 +336,15 @@ export default function UpdatesPage() {
                     <HelpCircle className="w-5 h-5" aria-hidden="true" />
                   </button>
                 </div>
-                <div className="text-sm text-slate-600">
-                  {snapshot.metadata.item_count} items from {snapshot.metadata.source_count} sources
+                <div className="flex items-center gap-4 text-sm text-slate-600">
+                  <span>
+                    {snapshot.metadata.item_count} items from {snapshot.metadata.source_count} sources
+                  </span>
+                  {lastRefreshTime && (
+                    <span className="text-xs text-slate-500">
+                      Last refreshed: {lastRefreshTime.toLocaleTimeString()}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -326,6 +365,34 @@ export default function UpdatesPage() {
             </div>
           )}
           
+          {/* Refresh error banner */}
+          {refreshError && (
+            <div className="mb-6 rounded-2xl bg-rose-50 border border-rose-200 p-4 print:hidden">
+              <div className="flex items-start gap-3">
+                <AlertTriangle className="w-5 h-5 text-rose-600 mt-0.5 flex-shrink-0" aria-hidden="true" />
+                <div className="flex-1">
+                  <h3 className="font-semibold text-rose-900 mb-1">Refresh Failed</h3>
+                  <p className="text-sm text-rose-700 mb-2">{refreshError}</p>
+                  <button
+                    onClick={handleRefresh}
+                    className="text-sm text-rose-700 hover:text-rose-900 underline font-medium"
+                    type="button"
+                  >
+                    Try again
+                  </button>
+                </div>
+                <button
+                  onClick={() => setRefreshError(null)}
+                  className="text-rose-600 hover:text-rose-800"
+                  aria-label="Dismiss error"
+                  type="button"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* About section */}
           <div className="mb-8 rounded-2xl bg-blue-50 border border-blue-200 p-6 print:hidden">
             <div className="flex items-start gap-3">
@@ -398,7 +465,26 @@ export default function UpdatesPage() {
                         <p className="text-slate-600 mb-4">
                           The news ingestion system is still initializing. Updates will appear here once the ingestion process completes.
                         </p>
-                        <p className="text-sm text-slate-500">
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-4">
+                          <button
+                            onClick={handleRefresh}
+                            disabled={isRefreshing}
+                            className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-400 disabled:cursor-not-allowed text-white rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                            type="button"
+                          >
+                            <RefreshCw className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`} aria-hidden="true" />
+                            {isRefreshing ? "Checking for updates..." : "Check for updates"}
+                          </button>
+                          <a
+                            href="https://github.com/LordRansford/my-webapp/actions/workflows/news-ingest.yml"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm text-blue-600 hover:text-blue-700 underline"
+                          >
+                            View ingestion status
+                          </a>
+                        </div>
+                        <p className="text-sm text-slate-500 mt-4">
                           Last check: {new Date(snapshot.metadata.generated_at).toLocaleString()}
                         </p>
                       </>
