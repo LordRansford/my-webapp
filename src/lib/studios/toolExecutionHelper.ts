@@ -2,7 +2,15 @@
  * Tool Execution Route Helper
  * 
  * Provides a reusable pattern for creating tool execution API routes
- * with credit enforcement, auth gating, and error handling.
+ * with credit enforcement, auth gating, error handling, and comprehensive observability.
+ * 
+ * Features:
+ * - Structured logging with request IDs
+ * - Performance metrics and timing
+ * - Timeout handling
+ * - Error categorization and recovery
+ * - Credit audit trail
+ * - Request/response logging
  */
 
 import { NextRequest, NextResponse } from "next/server";
@@ -19,6 +27,8 @@ import {
 } from "@/lib/billing/credits";
 import { getCreditBalance, consumeCredits } from "@/lib/billing/creditStore";
 import { logCreditEvent } from "@/lib/audit/creditAudit";
+import { logger } from "@/server/logger";
+import { recordToolMetric } from "@/lib/studios/toolMetrics";
 
 export interface ToolExecutionOptions {
   toolId: string;
@@ -29,6 +39,135 @@ export interface ToolExecutionOptions {
   }>;
   rateLimitKey?: string;
   rateLimitWindow?: number;
+  timeoutMs?: number; // Execution timeout (default: 30s)
+  enableRetry?: boolean; // Enable retry for transient failures
+  maxRetries?: number; // Maximum retry attempts (default: 1)
+}
+
+interface ExecutionMetrics {
+  requestId: string;
+  toolId: string;
+  userId: string;
+  startTime: number;
+  endTime?: number;
+  durationMs?: number;
+  phase: "rate_limit" | "auth" | "credit_check" | "execution" | "charging" | "complete" | "error";
+  phaseStartTime: number;
+  phaseDurations: Record<string, number>;
+  creditEstimate?: number;
+  creditCharged?: number;
+  errorType?: string;
+  errorCode?: string;
+}
+
+function createMetrics(requestId: string, toolId: string, userId: string): ExecutionMetrics {
+  const now = Date.now();
+  return {
+    requestId,
+    toolId,
+    userId,
+    startTime: now,
+    phase: "rate_limit",
+    phaseStartTime: now,
+    phaseDurations: {},
+  };
+}
+
+function recordPhase(metrics: ExecutionMetrics, phase: ExecutionMetrics["phase"]): void {
+  const now = Date.now();
+  const duration = now - metrics.phaseStartTime;
+  metrics.phaseDurations[metrics.phase] = duration;
+  metrics.phase = phase;
+  metrics.phaseStartTime = now;
+}
+
+function finalizeMetrics(metrics: ExecutionMetrics): void {
+  metrics.endTime = Date.now();
+  metrics.durationMs = metrics.endTime - metrics.startTime;
+  recordPhase(metrics, metrics.phase); // Record final phase
+}
+
+function logExecutionMetrics(metrics: ExecutionMetrics, success: boolean): void {
+  const logCtx = {
+    requestId: metrics.requestId,
+    route: `/api/tools/${metrics.toolId}`,
+  };
+
+  const logPayload = {
+    toolId: metrics.toolId,
+    userId: metrics.userId,
+    durationMs: metrics.durationMs,
+    phaseDurations: metrics.phaseDurations,
+    creditEstimate: metrics.creditEstimate,
+    creditCharged: metrics.creditCharged,
+    success,
+    errorType: metrics.errorType,
+    errorCode: metrics.errorCode,
+  };
+
+  if (success) {
+    logger.info("tool_execution_completed", logCtx, logPayload);
+  } else {
+    logger.error("tool_execution_failed", logCtx, logPayload);
+  }
+}
+
+/**
+ * Execute with timeout
+ */
+async function withTimeout<T>(
+  promise: Promise<T>,
+  timeoutMs: number,
+  errorMessage: string
+): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) =>
+      setTimeout(() => reject(new Error(`${errorMessage} (timeout: ${timeoutMs}ms)`)), timeoutMs)
+    ),
+  ]);
+}
+
+/**
+ * Retry logic for transient failures
+ */
+async function withRetry<T>(
+  fn: () => Promise<T>,
+  maxRetries: number,
+  retryDelayMs: number = 100
+): Promise<T> {
+  let lastError: Error | null = null;
+  
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error(String(error));
+      
+      // Don't retry on non-transient errors
+      const errorMessage = lastError.message.toLowerCase();
+      if (
+        errorMessage.includes("invalid") ||
+        errorMessage.includes("not found") ||
+        errorMessage.includes("unauthorized") ||
+        errorMessage.includes("forbidden") ||
+        errorMessage.includes("insufficient") ||
+        errorMessage.includes("limit exceeded")
+      ) {
+        throw lastError;
+      }
+      
+      // Last attempt, throw the error
+      if (attempt === maxRetries) {
+        throw lastError;
+      }
+      
+      // Wait before retry
+      await new Promise((resolve) => setTimeout(resolve, retryDelayMs * (attempt + 1)));
+    }
+  }
+  
+  throw lastError || new Error("Retry failed");
 }
 
 /**
@@ -46,8 +185,20 @@ export interface ToolExecutionOptions {
  */
 export function createToolExecutionHandler(options: ToolExecutionOptions) {
   return async function handler(req: NextRequest) {
-    const { toolId, executeTool, rateLimitKey, rateLimitWindow } = options;
+    const {
+      toolId,
+      executeTool,
+      rateLimitKey,
+      rateLimitWindow,
+      timeoutMs = 30_000, // 30s default
+      enableRetry = false,
+      maxRetries = 1,
+    } = options;
+    
+    const requestId = crypto.randomUUID();
     const startTime = Date.now();
+    let metrics: ExecutionMetrics | null = null;
+    let userId: string | null = null;
 
     // Rate limiting
     const rateLimitResult = rateLimit(req, {
@@ -55,25 +206,34 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
       limit: 10,
       windowMs: rateLimitWindow || 60_000,
     });
-    if (rateLimitResult) return rateLimitResult;
+    if (rateLimitResult) {
+      logger.warn("rate_limit_exceeded", { requestId, route: `/api/tools/${toolId}` }, {
+        toolId,
+        ip: req.headers.get("x-forwarded-for") || "unknown",
+      });
+      return rateLimitResult;
+    }
 
     try {
       // Check if tool exists
       const tool = getToolDefinition(toolId);
       if (!tool) {
+        logger.error("tool_not_found", { requestId, route: `/api/tools/${toolId}` }, { toolId });
         return NextResponse.json(
-          { error: "Tool not found", code: "TOOL_NOT_FOUND" },
+          { error: "Tool not found", code: "TOOL_NOT_FOUND", requestId },
           { status: 404 }
         );
       }
 
       // Client-side only tools don't need server execution
       if (isClientSideOnly(toolId)) {
+        logger.warn("client_side_only_tool", { requestId, route: `/api/tools/${toolId}` }, { toolId });
         return NextResponse.json(
           {
             error: "This tool runs client-side only",
             code: "CLIENT_SIDE_ONLY",
             message: "No server execution needed for this tool",
+            requestId,
           },
           { status: 400 }
         );
@@ -82,14 +242,24 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
       // Check auth requirements
       const authCheck = await requireAuthForServerTools(toolId);
       if (authCheck instanceof NextResponse) {
+        logger.warn("auth_required", { requestId, route: `/api/tools/${toolId}` }, { toolId });
         return authCheck; // Error response
       }
 
-      const userId = authCheck.userId!;
+      userId = authCheck.userId!;
+      metrics = createMetrics(requestId, toolId, userId);
+      recordPhase(metrics, "credit_check");
       const body = await req.json().catch(() => null);
       if (!body || typeof body !== "object") {
+        if (metrics) {
+          metrics.errorType = "validation";
+          metrics.errorCode = "INVALID_BODY";
+          finalizeMetrics(metrics);
+          logExecutionMetrics(metrics, false);
+        }
+        logger.warn("invalid_request_body", { requestId, route: `/api/tools/${toolId}` }, { toolId });
         return NextResponse.json(
-          { error: "Invalid request body", code: "INVALID_BODY" },
+          { error: "Invalid request body", code: "INVALID_BODY", requestId },
           { status: 400 }
         );
       }
@@ -97,10 +267,21 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
       // Estimate credits before execution
       const estimate = await estimateCredits(toolId, body.requestedLimits);
       if (!estimate) {
+        if (metrics) {
+          metrics.errorType = "system";
+          metrics.errorCode = "ESTIMATE_FAILED";
+          finalizeMetrics(metrics);
+          logExecutionMetrics(metrics, false);
+        }
+        logger.error("credit_estimate_failed", { requestId, route: `/api/tools/${toolId}` }, { toolId, userId });
         return NextResponse.json(
-          { error: "Failed to estimate credits", code: "ESTIMATE_FAILED" },
+          { error: "Failed to estimate credits", code: "ESTIMATE_FAILED", requestId },
           { status: 500 }
         );
+      }
+
+      if (metrics) {
+        metrics.creditEstimate = estimate.typical;
       }
 
       // Audit log: estimate requested
@@ -172,40 +353,109 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
         metadata: { estimatedMax: estimate.max },
       });
 
-      // Execute tool
+      // Execute tool with timeout and optional retry
+      recordPhase(metrics!, "execution");
       let platformError = false;
       let actualUsage = { cpuMs: 0, memMb: 0, durationMs: 0 };
       let result: unknown = null;
 
+      // userId is guaranteed to be non-null at this point due to auth check
+      if (!userId) {
+        throw new Error("User ID is required but was not found");
+      }
+
       try {
-        const executionResult = await executeTool(userId, body);
+        const executionFn = () => withTimeout(
+          executeTool(userId!, body),
+          timeoutMs,
+          `Tool execution exceeded timeout`
+        );
+
+        const executionResult = enableRetry
+          ? await withRetry(executionFn, maxRetries)
+          : await executionFn();
+
         result = executionResult.result;
         actualUsage = executionResult.actualUsage;
         platformError = executionResult.platformError || false;
       } catch (execError) {
         platformError = true; // Platform error = refund
+        
+        const errorMessage = execError instanceof Error ? execError.message : "Unknown error";
+        const isTimeout = errorMessage.includes("timeout");
+        
+        if (metrics) {
+          metrics.errorType = isTimeout ? "timeout" : "execution";
+          metrics.errorCode = isTimeout ? "EXECUTION_TIMEOUT" : "EXECUTION_FAILED";
+          finalizeMetrics(metrics);
+          
+          // Record failed metric
+          recordToolMetric({
+            toolId,
+            userId,
+            requestId,
+            success: false,
+            durationMs: metrics.durationMs || Date.now() - startTime,
+            phaseDurations: metrics.phaseDurations,
+            creditEstimate: estimate.typical,
+            creditCharged: 0,
+            errorType: metrics.errorType,
+            errorCode: metrics.errorCode,
+            timeout: isTimeout,
+          });
+        }
+        
         // Audit log: tool execution failed
         logCreditEvent({
           type: "tool_execution_failed",
           userId,
           toolId,
-          metadata: { error: execError instanceof Error ? execError.message : "Unknown error" },
+          metadata: {
+            error: errorMessage,
+            timeout: isTimeout,
+            requestId,
+          },
         });
+        
+        logger.error("tool_execution_error", { requestId, route: `/api/tools/${toolId}` }, {
+          toolId,
+          userId,
+          error: errorMessage,
+          isTimeout,
+        });
+        
         throw execError;
       }
 
       // Calculate authoritative charge
+      recordPhase(metrics!, "charging");
       const chargeResult = computeAuthoritativeCharge(toolId, actualUsage, platformError);
       const runId = crypto.randomUUID();
 
+      if (metrics) {
+        metrics.creditCharged = chargeResult.charge;
+      }
+
       // Charge or refund credits
       if (chargeResult.refunded) {
+        if (metrics) {
+          metrics.errorType = "platform";
+          metrics.errorCode = "PLATFORM_ERROR";
+          finalizeMetrics(metrics);
+          logExecutionMetrics(metrics, false);
+        }
+        logger.error("platform_error_refund", { requestId, route: `/api/tools/${toolId}` }, {
+          toolId,
+          userId,
+          reason: chargeResult.reason,
+        });
         return NextResponse.json(
           {
             error: "Platform error",
             code: "PLATFORM_ERROR",
             message: chargeResult.reason,
             refunded: true,
+            requestId,
           },
           { status: 500 }
         );
@@ -217,21 +467,38 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
             estimated: estimate.typical,
             actual: chargeResult.charge,
             usage: actualUsage,
+            requestId,
           });
         } catch (creditError) {
           // If credit consumption fails, this is a platform error - refund
+          if (metrics) {
+            metrics.errorType = "system";
+            metrics.errorCode = "CREDIT_PROCESSING_ERROR";
+            finalizeMetrics(metrics);
+            logExecutionMetrics(metrics, false);
+          }
           logCreditEvent({
             type: "tool_execution_failed",
             userId,
             toolId,
             runId,
-            metadata: { error: "Credit processing failed" },
+            metadata: {
+              error: "Credit processing failed",
+              requestId,
+            },
+          });
+          logger.error("credit_processing_failed", { requestId, route: `/api/tools/${toolId}` }, {
+            toolId,
+            userId,
+            runId,
+            error: creditError instanceof Error ? creditError.message : "Unknown error",
           });
           return NextResponse.json(
             {
               error: "Credit processing failed",
               code: "CREDIT_PROCESSING_ERROR",
               message: "Your credits were not charged. Please try again.",
+              requestId,
             },
             { status: 500 }
           );
@@ -249,13 +516,36 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
         runId,
         credits: chargeResult.charge,
         balance,
-        metadata: { usage: actualUsage, estimated: estimate.typical },
+        metadata: {
+          usage: actualUsage,
+          estimated: estimate.typical,
+          requestId,
+          durationMs: Date.now() - startTime,
+        },
+      });
+
+      // Finalize metrics and log
+      recordPhase(metrics!, "complete");
+      finalizeMetrics(metrics!);
+      logExecutionMetrics(metrics!, true);
+
+      // Record performance metric
+      recordToolMetric({
+        toolId,
+        userId,
+        requestId,
+        success: true,
+        durationMs: metrics!.durationMs!,
+        phaseDurations: metrics!.phaseDurations,
+        creditEstimate: estimate.typical,
+        creditCharged: chargeResult.charge,
       });
 
       // Return result
       return NextResponse.json({
         success: true,
         runId,
+        requestId,
         result,
         credits: {
           estimated: estimate.typical,
@@ -263,16 +553,37 @@ export function createToolExecutionHandler(options: ToolExecutionOptions) {
           balance,
         },
         executionTime: Date.now() - startTime,
+        metrics: {
+          phaseDurations: metrics!.phaseDurations,
+          totalDuration: metrics!.durationMs,
+        },
       });
     } catch (error) {
-      console.error(`Tool execution error (${toolId}):`, error);
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      const errorCode = error instanceof Error && (error as any).code ? (error as any).code : "INTERNAL_ERROR";
+      
+      if (metrics) {
+        metrics.errorType = "unhandled";
+        metrics.errorCode = errorCode;
+        finalizeMetrics(metrics);
+        logExecutionMetrics(metrics, false);
+      }
+      
+      logger.error("tool_execution_unhandled_error", { requestId, route: `/api/tools/${toolId}` }, {
+        toolId,
+        userId: userId || "unknown",
+        error: errorMessage,
+        errorCode,
+      });
+      
       return NextResponse.json(
         {
           error: "Internal server error",
-          code: "INTERNAL_ERROR",
-          message: error instanceof Error ? error.message : "Unknown error",
+          code: errorCode,
+          message: errorMessage,
+          requestId,
         },
-        { status: 500 }
+        { status: error instanceof Error && (error as any).status ? (error as any).status : 500 }
       );
     }
   };
