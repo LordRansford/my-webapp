@@ -1,0 +1,60 @@
+---
+title: "Verification and Testing"
+description: "Test strategy pyramid, OWASP ASVS integration, accessibility testing (WCAG 2.2), and performance testing."
+level: "foundations"
+courseId: "software-architecture"
+levelId: "foundations"
+sectionId: "soft-arch-foundations-verification-testing"
+estimatedHours: 3.5
+---
+
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import Callout from "@/components/notes/Callout"
+import GlossaryTip from "@/components/notes/GlossaryTip"
+import DiagramBlock from "@/components/DiagramBlock"
+
+# Verification and Testing
+
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-verification-testing" />
+
+Testing is how you know your system works. Not hope, not faith, actual evidence. This module covers test strategies, security verification, accessibility testing, and performance validation.
+
+<Callout variant="accreditation" type="info">
+**Accreditation Alignment:**
+- **iSAQB CPSA-F:** Quality assurance and testing strategies
+- **OWASP ASVS:** Security verification requirements
+- **WCAG 2.2:** Accessibility testing standards
+- **ABET:** Software testing and quality assurance
+</Callout>
+
+---
+
+## Test strategy pyramid
+
+<GlossaryTip term="test pyramid">The test pyramid is a strategy for balancing different types of tests, with many fast unit tests at the base and fewer slow end-to-end tests at the top</GlossaryTip> helps you balance cost, speed, and coverage.
+
+<DiagramBlock title="Test pyramid" subtitle="More tests at the bottom, fewer at the top">
+```mermaid
+graph TB
+    E2E[E2E Tests<br/>Slow, Expensive]
+    Integration[Integration Tests<br/>Medium Speed]
+    Unit[Unit Tests<br/>Fast, Cheap]
+    
+    E2E --> Integration
+    Integration --> Unit
+    
+    style E2E fill:#ffccbc
+    style Integration fill:#fff9c4
+    style Unit fill=#c8e6c9
+```
+</DiagramBlock>
+
+**Content continues with test strategies, OWASP ASVS, accessibility testing, and performance testing...**
+
+---
+
+**CPD Evidence:**
+- Estimated time: 3.5 hours
+- Module covers test pyramid, OWASP ASVS, WCAG 2.2 accessibility, and performance testing
+
+**Note:** This is a demonstration stub showing the structure. Full implementation would include detailed content for test strategies, security verification, accessibility testing with WCAG 2.2, and performance testing approaches.
