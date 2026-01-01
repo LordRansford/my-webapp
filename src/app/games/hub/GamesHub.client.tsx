@@ -8,7 +8,7 @@ import {
   X, ArrowRight, PlayCircle
 } from "lucide-react";
 import type { GameCategory, GameMode, DifficultyLevel } from "@/lib/games/framework/types";
-import { ACTION_GAMES, PRACTICE_GAMES } from "@/lib/games-registry";
+import { ACTION_GAMES, PRACTICE_GAMES, type GameCategory as RegistryGameCategory } from "@/lib/games-registry";
 
 // Re-export types for convenience
 export type { GameCategory, GameMode, DifficultyLevel };
@@ -249,7 +249,7 @@ const ALL_GAMES: GamePreview[] = [
   ...PRACTICE_GAMES_PREVIEW,
 ];
 
-const CATEGORY_LABELS: Record<GameCategory | "action" | "practice", string> = {
+const CATEGORY_LABELS: Record<string, string> = {
   strategy: "Strategy",
   puzzle: "Puzzle",
   logic: "Logic",
@@ -260,6 +260,13 @@ const CATEGORY_LABELS: Record<GameCategory | "action" | "practice", string> = {
   educational: "Educational",
   action: "Action",
   practice: "Practice",
+  cybersecurity: "Cybersecurity",
+  digitalisation: "Digitalisation",
+  "cross-topic": "Cross-Topic",
+  ai: "AI",
+  data: "Data",
+  "software-architecture": "Software Architecture",
+  general: "General",
 };
 
 const DIFFICULTY_LABELS: Record<DifficultyLevel | "easy" | "medium" | "hard", string> = {
