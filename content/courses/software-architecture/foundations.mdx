@@ -1,562 +1,189 @@
 ---
-title: "Software Development and Architecture Foundations"
-description: "A practical tour of how we design and build software that is simple, secure and kind to future you."
+title: "Software Architecture Foundations - Complete Lifecycle Coverage"
+description: "Comprehensive 24-hour foundation tier covering the complete software development lifecycle with systematic security integration."
 level: "foundations"
 courseId: "software-architecture"
 levelId: "foundations"
-summary: "A practical tour of how we design and build software that is simple, secure and kind to future you."
-estimatedHours: 10
+summary: "Master software architecture foundations through the complete lifecycle from discovery to operations, with security integrated at every stage."
+estimatedHours: 24
 stepIndex: 0
 learningObjectives:
-  - "Understand core architecture vocabulary (components, boundaries, interfaces) well enough to explain it clearly."
-  - "Explain how architecture decisions relate to reliability, security, and performance."
-  - "Apply simple diagramming and role mapping to make a design discussable."
-  - "Evaluate basic trade offs in a small system design."
+  - "Map user journeys, define NFRs, and apply threat modelling fundamentals."
+  - "Document architecture using C4 models, ADRs, and security by design principles."
+  - "Implement secure coding practices including input validation and session management."
+  - "Apply comprehensive testing strategies including OWASP ASVS and accessibility testing."
+  - "Design CI/CD pipelines with DevSecOps integration."
+  - "Apply SRE principles for reliable operations and incident response."
+  - "Use OSI model and diagnostic tools for troubleshooting."
+  - "Evaluate systems across multiple quality attributes (the \"ilities\")."
 ---
 
 import ToolCard from "@/components/notes/ToolCard"
 import Callout from "@/components/notes/Callout"
-import GlossaryTip from "@/components/notes/GlossaryTip"
-import QuizBlock from "@/components/notes/QuizBlock"
 import PageNav from "@/components/notes/PageNav"
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
-import DiagramBlock from "@/components/DiagramBlock"
 import { softwareArchitectureSectionManifest } from "@/lib/softwareArchitectureSections"
-import ArchitectureCanvas from "@/components/notes/tools/architecture/beginner/ArchitectureCanvas"
-import ArchitectureDecisionExplorerTool from "@/components/notes/tools/architecture/beginner/ArchitectureDecisionExplorerTool"
-import QualityAttributeTradeoffSandboxTool from "@/components/notes/tools/architecture/beginner/QualityAttributeTradeoffSandboxTool"
-import ComponentBoundaryMapperTool from "@/components/notes/tools/architecture/beginner/ComponentBoundaryMapperTool"
-import RoleMapTool from "@/components/notes/tools/architecture/beginner/RoleMapTool"
-import DesignKataTool from "@/components/notes/tools/architecture/beginner/DesignKataTool"
-import DeploySafetySandbox from "@/components/notes/tools/architecture/beginner/DeploySafetySandbox"
-import SystemFailureWalkthroughTool from "@/components/notes/tools/architecture/beginner/SystemFailureWalkthroughTool"
-import RealitySurvivalDesignTool from "@/components/notes/tools/architecture/beginner/RealitySurvivalDesignTool"
 
-# Software Development and Architecture Foundations
+# Software Architecture Foundations
 
 <LevelProgressBar courseId="software-architecture" levelId="foundations" sectionIds={softwareArchitectureSectionManifest.foundations} />
 
-<CPDTracker courseId="software-architecture" levelId="foundations" estimatedHours={10} />
+<CPDTracker courseId="software-architecture" levelId="foundations" estimatedHours={24} showMilestones={true} enableEvidence={true} />
 
-These foundations are about clear thinking. Software fails more often from unclear purpose and blurry boundaries than from one bad line of code.
+Welcome to the comprehensive foundations tier of the Software Architecture course. This 24-hour programme takes you through the complete software development lifecycle with systematic security integration at every stage.
 
----
+<Callout variant="accreditation" type="info">
+**CPD Accreditation:**
 
-## What software architecture actually is
-
-<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-mindset-roles" />
-
-Architecture is decision making under constraints. You are deciding what the system is allowed to do, what it must never do, and what it will trade to get there. The work is not drawing boxes. The work is picking the decisions that keep change affordable later.
-
-<GlossaryTip term="architecture">
-Architecture is the set of system level decisions that shape structure, responsibilities, and how change stays affordable over time.
-</GlossaryTip>
-
-It helps to separate architecture from design. Design is the local shape of a solution, like a class, a schema, or a UI flow. Architecture is the bigger set of decisions that constrain many designs. The boundary is fuzzy, but the clue is cost to change. If changing it later is expensive, risky, or political, it is probably architectural.
-
-<GlossaryTip term="architectural decision">
-An architectural decision is a choice that strongly shapes the system and is expensive to change later.
-</GlossaryTip>
-
-Architecture exists even for small systems because small systems grow, change owners, and accumulate accidental complexity. A clear early decision about boundaries and responsibilities can save months of confusion later. A messy early decision can lock in a whole category of pain.
-
-Constraints are part of the job. You rarely get perfect choices. You get budgets, deadlines, legacy systems, regulations, teams, and production realities.
-
-<GlossaryTip term="constraint">
-A constraint is a limit you must respect, like budget, time, regulation, platform, or legacy dependencies.
-</GlossaryTip>
-
-Architecture is also communication. It helps a team agree on what is true. It gives people a shared map so they can reason about trade offs without arguing from assumptions. If you cannot explain the architecture in plain language, you do not have an architecture yet.
-
-<Callout variant="concept" type="info">
-Architecture is a shared decision record. The diagrams are just one way of making that record visible.
+This Foundation tier delivers **24 CPD hours** of structured learning, aligned with:
+- **iSAQB CPSA-F:** Methods for designing architectures
+- **ISO/IEC/IEEE 42010:** Architecture viewpoints and views
+- **TOGAF Foundation:** Architecture Development Method
+- **ABET:** Software design fundamentals
+- **OWASP:** Secure development lifecycle practices
+- **Microsoft SDL:** Security Development Lifecycle
+- **NIST SSDF:** Secure Software Development Framework
 </Callout>
 
-### What this optimises for
+---
 
-- Shared understanding across a team
-- Cheaper change later through explicit decisions
-- Fewer surprises when systems grow or change hands
+## Course structure
 
-### What this makes harder
+This foundation tier is organised around the software development lifecycle with security integrated throughout.
 
-- You have to write decisions down and defend them
-- You might slow short term delivery to reduce long term risk
+### Module 1: Discovery and Requirements (2.4 hours)
 
-<DiagramBlock title="Architecture as decisions" subtitle="From requirements to a system you can actually ship.">
-  <div className="grid gap-2 sm:grid-cols-4">
-    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
-      <p className="font-semibold text-slate-900">Requirements</p>
-      <p className="mt-1">What must be true for users.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
-      <p className="font-semibold text-slate-900">Constraints</p>
-      <p className="mt-1">Limits you cannot ignore.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
-      <p className="font-semibold text-slate-900">Decisions</p>
-      <p className="mt-1">Trade offs you commit to.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-700">
-      <p className="font-semibold text-slate-900">System</p>
-      <p className="mt-1">Structure you can build and run.</p>
-    </div>
-  </div>
-</DiagramBlock>
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-discovery-requirements" />
+
+Learn to identify what you're building and what could go wrong. Covers user journeys, non-functional requirements, threat modelling fundamentals with STRIDE, and abuse cases mapped to OWASP Top 10.
 
 <ToolCard
-  id="soft-arch-decision-explorer"
-  title="Architecture decision explorer"
-  description="Explore how different constraints lead to different architecture decisions. Change one constraint and see what shifts."
->
-  <p className="text-sm text-slate-700">
-    This exercise demonstrates architectural decision making under constraints, a core professional skill.
-  </p>
-  <ArchitectureDecisionExplorerTool />
-</ToolCard>
-
-<ToolCard
-  id="soft-arch-role-map"
-  title="Map your team"
-  description="Mark which roles are owned, shared, or missing for a typical product."
->
-  <RoleMapTool />
-</ToolCard>
-
-<QuizBlock
-  id="soft-arch-foundations-mindset-quiz"
-  courseId="software-architecture"
-  levelId="foundations"
-  sectionId="soft-arch-foundations-mindset-roles"
-  title="Quick check: what architecture is"
-  questions={[
-    { q: "What is architecture primarily about", a: "Making system level decisions under constraints so change stays affordable." },
-    { q: "What makes a decision architectural", a: "It shapes many parts of the system and is expensive to change later." },
-    { q: "Why does architecture exist for small systems", a: "Small systems grow and change owners, and early boundary decisions prevent later confusion and cost." },
-    { q: "How is architecture different from design", a: "Design is local solution shape, architecture is the broader decisions that constrain many designs." },
-    { q: "Give an example of a constraint", a: "Budget, deadlines, regulation, platform limits, or legacy dependencies." },
-    { q: "Scenario: budget is tight and the team is small. What is a sensible first architectural move", a: "Keep the system simple but make boundaries and interfaces clear so change stays affordable." },
-    { q: "Why is architecture also communication", a: "It creates a shared map so teams reason about trade offs from the same assumptions." },
-  ]}
+  title="Discovery and Requirements"
+  description="User journeys, NFRs, threat modelling, and abuse cases"
+  href="/courses/software-architecture/foundations/discovery-requirements"
+  difficulty="Foundation"
+  estimatedTime="2.4 hours"
 />
 
-### After this section you should be able to:
+### Module 2: Architecture and Design (2.8 hours)
 
-- Explain what decision is being made in an architecture discussion, not just the diagram
-- Explain the trade off being accepted and what constraint caused it
-- Explain why clear decisions reduce risk for security, data, and AI systems
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-architecture-design" />
+
+Document and communicate architectural decisions using C4 models, Architecture Decision Records, API contracts, and security by design principles.
+
+<ToolCard
+  title="Architecture and Design"
+  description="C4 models, ADRs, API contracts, and security by design"
+  href="/courses/software-architecture/foundations/architecture-design"
+  difficulty="Foundation"
+  estimatedTime="2.8 hours"
+/>
+
+### Module 3: Implementation (Build) (3.0 hours)
+
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-implementation" />
+
+Write secure, maintainable code with proper input validation, output encoding, session management, error handling, and supply chain security.
+
+<ToolCard
+  title="Implementation (Build)"
+  description="Secure coding, session management, error handling, and supply chain security"
+  href="/courses/software-architecture/foundations/implementation"
+  difficulty="Foundation"
+  estimatedTime="3.0 hours"
+/>
+
+### Module 4: Verification and Testing (3.5 hours)
+
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-verification-testing" />
+
+Ensure quality and security through comprehensive testing strategies, OWASP ASVS integration, accessibility testing with WCAG 2.2, and performance testing.
+
+<ToolCard
+  title="Verification and Testing"
+  description="Test strategies, OWASP ASVS, accessibility testing, and performance validation"
+  href="/courses/software-architecture/foundations/verification-testing"
+  difficulty="Foundation"
+  estimatedTime="3.5 hours"
+/>
+
+### Module 5: Deployment and CI/CD (2.5 hours)
+
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-deployment-cicd" />
+
+Automate secure deployments with CI/CD pipelines, DevSecOps integration, deployment strategies, and Infrastructure as Code basics.
+
+<ToolCard
+  title="Deployment and CI/CD"
+  description="CI/CD pipelines, DevSecOps, deployment strategies, and IaC basics"
+  href="/courses/software-architecture/foundations/deployment-cicd"
+  difficulty="Foundation"
+  estimatedTime="2.5 hours"
+/>
+
+### Module 6: Operations (3.2 hours)
+
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-operations" />
+
+Run systems reliably in production with Google SRE principles, four golden signals, observability triad, and effective incident response.
+
+<ToolCard
+  title="Operations"
+  description="SRE principles, golden signals, observability, and incident response"
+  href="/courses/software-architecture/foundations/operations"
+  difficulty="Foundation"
+  estimatedTime="3.2 hours"
+/>
+
+### Module 7: OSI Model and Browser/Terminal Diagnostics (1.8 hours)
+
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-osi-diagnostics" />
+
+Master troubleshooting tools and techniques using OSI layers, browser DevTools, command-line diagnostics, and TLS certificate inspection.
+
+<ToolCard
+  title="OSI Model and Diagnostics"
+  description="Network fundamentals, browser DevTools, and command-line diagnostics"
+  href="/courses/software-architecture/foundations/osi-diagnostics"
+  difficulty="Foundation"
+  estimatedTime="1.8 hours"
+/>
+
+### Module 8: The "Ilities" Framework (2.0 hours)
+
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-ilities-framework" />
+
+Evaluate systems across quality attributes including security, privacy, accessibility, performance, reliability, scalability, maintainability, and more.
+
+<ToolCard
+  title="The \"Ilities\" Framework"
+  description="Comprehensive quality attributes for system evaluation"
+  href="/courses/software-architecture/foundations/ilities-framework"
+  difficulty="Foundation"
+  estimatedTime="2.0 hours"
+/>
 
 ---
 
-## Components, boundaries and interfaces
+## Assessment and certification
 
-<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-building-blocks" />
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-assessment" />
 
-Architecture starts to become real when you can name the parts and explain how they talk. A component is not just a folder. It is a unit of responsibility with a purpose and a shape that can be explained.
-
-<GlossaryTip term="component">
-A component is a unit of responsibility, such as a module, service, or external system, that owns behaviour and the data it needs.
-</GlossaryTip>
-
-Boundaries matter more than code structure. A boundary is the line where you decide what is inside and what is outside. It is where you control coupling, permissions, and failure handling.
-
-<GlossaryTip term="boundary">
-A boundary is the separation line between responsibilities where you control what can depend on what.
-</GlossaryTip>
-
-Interfaces are the contracts at those boundaries. They define what is allowed, what is not, and what errors look like. Good interfaces make change safer because they make assumptions explicit.
-
-<GlossaryTip term="interface">
-An interface is a contract for how a boundary is used, including inputs, outputs, and failure behaviour.
-</GlossaryTip>
-
-Coupling and cohesion are the two signals you watch. Loose coupling means parts can change without breaking each other. High cohesion means each part has one clear purpose instead of being a grab bag.
-
-<GlossaryTip term="coupling">
-Coupling is how strongly one part depends on the internal details of another part.
-</GlossaryTip>
-
-<GlossaryTip term="cohesion">
-Cohesion is how well the responsibilities inside a component belong together.
-</GlossaryTip>
-
-<DiagramBlock title="Boundaries with explicit interfaces" subtitle="Arrows only cross through contracts.">
-  <div className="grid gap-2 sm:grid-cols-3 text-xs text-slate-700">
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Orders</p>
-      <p className="mt-1">Owns order state.</p>
-      <p className="mt-2 text-slate-500">Interface: createOrder, cancelOrder</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Payments</p>
-      <p className="mt-1">Owns payment attempts.</p>
-      <p className="mt-2 text-slate-500">Interface: charge, refund</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Notifications</p>
-      <p className="mt-1">Owns message sending.</p>
-      <p className="mt-2 text-slate-500">Interface: sendEmail, sendSms</p>
-    </div>
-  </div>
-  <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-xs text-slate-700">
-    Dependencies are allowed only through the interface. No direct database reads across boundaries.
-  </div>
-</DiagramBlock>
-
-### Layered architecture
-
-Layering is common because it controls dependency direction. It reduces blast radius by keeping low level details from leaking into core logic. It also improves auditability because you can reason about where checks and decisions happen.
-
-What breaks if you ignore it is usually slow and then sudden. Business logic spreads into UI code, database queries appear everywhere, and a change in one place causes surprises in three others. This is often where systems fail in practice when teams move fast without a dependency rule.
-
-#### What this optimises for
-
-- Clear dependency direction
-- Safer change and easier review
-- Easier testing of core logic
-
-#### What this makes harder
-
-- Some work feels slower because you have to respect boundaries
-- Quick hacks become harder to justify because they cross layers
-
-### Microservices vs monolith
-
-This is not a morality contest. A monolith can be a good architecture if boundaries are clear and the deployment is reliable. Microservices can be a good architecture when independent scaling, team autonomy, or regulatory separation genuinely matter.
-
-What breaks if you pick microservices too early is operability. You create more network calls, more partial failures, and more deployment coordination. What breaks if you avoid separation forever is change cost. Too many responsibilities in one place makes teams step on each other.
-
-#### What this optimises for
-
-- Monolith: simpler operations and fewer failure modes
-- Microservices: independent scaling and clearer organisational ownership
-
-#### What this makes harder
-
-- Monolith: parallel work and isolated scaling can be harder
-- Microservices: testing and incident response become more complex
-
-<ToolCard
-  id="soft-arch-boundary-mapper"
-  title="Component boundary mapper"
-  description="Practice splitting a system into components and defining clear boundaries."
->
-  <p className="text-sm text-slate-700">
-    This exercise demonstrates decomposition and interface thinking, a core professional skill for safer system change.
-  </p>
-  <ComponentBoundaryMapperTool />
-</ToolCard>
-
-<ToolCard
-  id="soft-arch-system-canvas"
-  title="System landscape canvas"
-  description="Sketch your system with layers, components, and key data flows."
->
-  <ArchitectureCanvas />
-</ToolCard>
-
-<Callout variant="concept" title="Data architecture lives inside software architecture">
-Data ownership follows component boundaries. If it is not clear who owns a dataset, it becomes unclear who is allowed to change it, who is responsible for quality, and who is accountable when it breaks.
-
-Poor data boundaries cause governance problems. Multiple writers, unclear contracts, and hidden coupling turn a technical issue into an organisational one. The Data course continues this thread, but the architectural starting point is ownership, interfaces, and traceability.
-</Callout>
-
-### Centralised vs decentralised data
-
-Centralised data can reduce duplication and make reporting easier. Decentralised data can reduce coupling and allow components to evolve independently. The decision is not abstract. It changes who owns quality, who approves schema changes, and how incidents are investigated.
-
-This assumption breaks at scale when ownership is unclear. If multiple components write the same dataset, governance becomes negotiation and debugging becomes archaeology.
-
-#### What this optimises for
-
-- Centralised: simpler analytics and one source of truth
-- Decentralised: clearer component ownership and fewer cross team dependencies
-
-#### What this makes harder
-
-- Centralised: change coordination and boundary pressure increases
-- Decentralised: consistency, reporting, and reconciliation become work you must budget for
-
-<QuizBlock
-  id="soft-arch-foundations-building-quiz"
-  courseId="software-architecture"
-  levelId="foundations"
-  sectionId="soft-arch-foundations-building-blocks"
-  title="Quick check: boundaries and interfaces"
-  questions={[
-    { q: "What makes something a component", a: "It owns a responsibility and the data and behaviour needed to deliver it." },
-    { q: "Why do boundaries matter more than folders", a: "Because boundaries control dependencies, permissions, and failure handling." },
-    { q: "What is an interface in architecture", a: "A contract for inputs, outputs, and failure behaviour across a boundary." },
-    { q: "What is coupling", a: "How strongly one part depends on another part’s internal details." },
-    { q: "What is cohesion", a: "How well the responsibilities inside a component belong together." },
-    { q: "Name one sign of a blurry boundary", a: "One component reaches into another component’s database or private state." },
-    { q: "Scenario: the Orders service reads the Payments database directly. What architectural problem is this", a: "A boundary violation that increases coupling and makes change risky." },
-  ]}
-/>
-
-<Callout variant="concept" title="Architecture and security are inseparable">
-Component boundaries reduce attack surface because they limit what can be reached and what can be trusted. If a boundary is clear, you can enforce authentication, authorization, validation, and logging consistently at that boundary. If the boundary is blurry, controls leak.
-
-Trust boundaries exist because of architecture. The moment you cross process, network, or privilege boundaries, you are in a different threat model. Cyber Foundations goes deeper on how attackers move and why controls are layered, but the practical point here is simple.
-
-Security controls are easier to apply when architecture is clear.
-</Callout>
-
-### After this section you should be able to:
-
-- Explain why boundaries reduce change cost and security risk
-- Explain what breaks when interfaces are implicit or data ownership is unclear
-- Explain the trade off behind layering, microservices, and data ownership decisions
+Complete a comprehensive 50-question assessment (80% pass threshold, 120 minutes) plus a reflection portfolio to earn your blockchain-verified certificate with 24 CPD hours.
 
 ---
 
-## Thinking in systems, not code
+## Next steps
 
-<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-code-design" />
+After completing this Foundation tier, progress to the Intermediate tier (30 CPD hours) for advanced topics in security architecture, cloud-native patterns, performance engineering, and more.
 
-Most real failures are not inside one function. They happen in interactions: timeouts, retries, queue backlogs, and assumptions between services. A system can be correct in each part and still fail as a whole.
-
-Feedback loops are a common cause. When a dependency slows down, callers retry. Retries increase load. Load increases latency. Latency triggers more retries. The loop becomes the incident. You did not write a bug. You designed a loop without brakes.
-
-Cascading failures are how small faults become outages. One database is slow, so an API thread pool fills up. The API starts timing out. Upstream services get slow and start failing health checks. Suddenly everything looks broken, even though the original issue was small.
-
-Emergent behaviour is the uncomfortable part. It is behaviour that appears when parts interact, even if no part intended it. Microservices make this easier to trigger because network boundaries introduce partial failure by default. Distributed systems make it worse because clocks, retries, and queues behave differently under load.
-
-### What this optimises for
-
-- Predictable behaviour under failure
-- Smaller incidents with clearer blast radius
-
-### What this makes harder
-
-- You must invest in guardrails, monitoring, and practice
-- Some optimisations are constrained by safety budgets
-
-<DiagramBlock title="Failure propagation with feedback" subtitle="A small slowdown can turn into a loop without guardrails.">
-  <div className="grid gap-2 sm:grid-cols-4 text-xs text-slate-700">
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Service A</p>
-      <p className="mt-1">Calls Service B.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Service B</p>
-      <p className="mt-1">Calls Database.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Database</p>
-      <p className="mt-1">Gets slow under load.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Retry loop</p>
-      <p className="mt-1">Timeouts trigger more calls.</p>
-    </div>
-  </div>
-  <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-xs text-slate-700">
-    Guardrails like timeouts, bulkheads, and backoff break the feedback loop before it becomes an incident.
-  </div>
-</DiagramBlock>
-
-<ToolCard
-  id="soft-arch-failure-walkthrough"
-  title="System failure walkthrough"
-  description="Step through how a small failure can cascade through a system."
->
-  <p className="text-sm text-slate-700">
-    This exercise demonstrates incident reasoning and resilience thinking, which supports CPD evidence for operational maturity.
-  </p>
-  <SystemFailureWalkthroughTool />
-</ToolCard>
-
-<ToolCard
-  id="soft-arch-design-kata"
-  title="Design a tiny feature"
-  description="Walk from user story to functions and tests in four steps."
->
-  <DesignKataTool />
-</ToolCard>
-
-<QuizBlock
-  id="soft-arch-foundations-code-quiz"
-  courseId="software-architecture"
-  levelId="foundations"
-  sectionId="soft-arch-foundations-code-design"
-  title="Quick check: system thinking"
-  questions={[
-    { q: "Why do real incidents often happen between services", a: "Because timeouts, retries, queues, and assumptions interact under load." },
-    { q: "What is a feedback loop in an incident", a: "A response like retries increases load and makes the original problem worse." },
-    { q: "What is a cascading failure", a: "A small fault spreads across dependencies until many parts appear broken." },
-    { q: "Why do microservices increase partial failure risk", a: "Network boundaries and independent scaling create more timeout and dependency paths." },
-    { q: "Name one guardrail that can reduce blast radius", a: "Timeouts, backoff, bulkheads, or circuit breakers." },
-    { q: "Scenario: a dependency gets slow and clients retry immediately. What is the likely outcome", a: "Load increases and the slowdown can turn into a larger outage without backoff and limits." },
-    { q: "What is emergent behaviour", a: "Unexpected system behaviour that appears from interactions between parts." },
-  ]}
+<PageNav
+  prev="/courses/software-architecture/course"
+  next="/courses/software-architecture/foundations/discovery-requirements"
 />
-
-<Callout variant="concept" title="AI systems amplify architectural decisions">
-AI adds new failure modes on top of the usual distributed system problems. Outputs can be plausible and wrong. Inputs drift over time. Models change behaviour when you change data, prompts, or dependencies.
-
-That is why monitoring, versioning, and rollback are architectural concerns. You need clear ownership, explicit release paths, and a safe fallback when the model misbehaves. AI Foundations introduces the basics of how models work, but the architectural point is that you must be able to operate the system under uncertainty.
-</Callout>
-
-### AI automation vs human oversight
-
-Automation can reduce workload and improve consistency. Oversight keeps accountability with people and catches failures before they scale. In real systems you usually want both: automation for low risk cases, and human review where the cost of a mistake is high.
-
-This is why many mature organisations enforce staged rollout, monitoring, and shutdown paths for automation. The goal is not to avoid AI. The goal is to operate it safely.
-
-#### What this optimises for
-
-- Faster decisions with bounded risk
-- Accountability and auditability for sensitive actions
-
-#### What this makes harder
-
-- You have to design workflows, not just models
-- Human review adds cost and needs good tooling to avoid rubber stamping
-
-### After this section you should be able to:
-
-- Explain how feedback loops create incidents without any single bug
-- Explain why retries and timeouts are architectural decisions
-- Explain why AI monitoring, versioning, and rollback are part of system design
 
 ---
 
-## Quality attributes and trade offs
-
-<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-delivery-and-safety" />
-
-Quality attributes are the "how" of a system, not the "what". The what is features. The how is performance, reliability, security, and everything that decides whether the system is usable and safe in real life.
-
-<GlossaryTip term="quality attribute">
-A quality attribute is a property of the system that affects how it behaves, such as reliability, security, or maintainability.
-</GlossaryTip>
-
-Systems fail when quality attributes are ignored because users do not experience code. They experience latency, errors, downtime, confusing behaviour, and lost trust. Many teams discover this too late because quality problems are slower to build and faster to explode.
-
-You should be able to reason about at least these attributes:
-
-- performance
-- scalability
-- reliability
-- security
-- maintainability
-- operability
-- testability
-
-The hard part is that improving one usually hurts another. This is the essence of architecture. You are choosing what to sacrifice, and you are doing it under constraints.
-
-<GlossaryTip term="trade off">
-A trade off is a deliberate choice to improve one thing while accepting a cost in another.
-</GlossaryTip>
-
-For example, strong security can add friction and latency. High reliability often adds complexity and cost. Great performance may reduce debuggability if you cut observability. Scalability can push you toward distributed systems, which can hurt testability and operability if you are not careful.
-
-The goal is not to maximise every attribute. The goal is to be explicit about which attributes matter most for the business and the risk profile. If you cannot say what you are optimising for, you will optimise for whatever is loudest this week.
-
-This is often where systems fail in practice. Teams ship features until the first serious incident, then they discover reliability and operability were never designed. It is cheaper to name priorities early than to retrofit them during an outage.
-
-### What this optimises for
-
-- Decisions aligned to business and risk priorities
-- Clear justification for cost and complexity
-
-### What this makes harder
-
-- You have to say no to some goals and features
-- You must budget time for non feature work like testing and observability
-
-<DiagramBlock title="Balancing quality attributes" subtitle="Arrows show tension you must manage.">
-  <div className="grid gap-2 sm:grid-cols-2 text-xs text-slate-700">
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Performance</p>
-      <p className="mt-1">Fast responses and efficient work.</p>
-      <p className="mt-2 text-slate-500">Tension: observability and safety checks.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Security</p>
-      <p className="mt-1">Protect users, data, and access.</p>
-      <p className="mt-2 text-slate-500">Tension: friction and latency.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Reliability</p>
-      <p className="mt-1">Predictable behaviour under failure.</p>
-      <p className="mt-2 text-slate-500">Tension: complexity and cost.</p>
-    </div>
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
-      <p className="font-semibold text-slate-900">Maintainability</p>
-      <p className="mt-1">Safe change over time.</p>
-      <p className="mt-2 text-slate-500">Tension: speed of initial delivery.</p>
-    </div>
-  </div>
-  <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-xs text-slate-700">
-    When you push one corner, something else usually moves. Architecture is choosing which movement is acceptable.
-  </div>
-</DiagramBlock>
-
-<ToolCard
-  id="soft-arch-tradeoff-sandbox"
-  title="Quality attribute trade off sandbox"
-  description="Pick one attribute to optimise and observe which others are affected."
->
-  <p className="text-sm text-slate-700">
-    This exercise demonstrates trade off reasoning and prioritisation, which is expected in professional architecture work.
-  </p>
-  <QualityAttributeTradeoffSandboxTool />
-</ToolCard>
-
-<ToolCard
-  id="soft-arch-deploy-sandbox"
-  title="Deployment and safety sandbox"
-  description="Toggle pipeline settings and see how delivery risk changes."
->
-  <DeploySafetySandbox />
-</ToolCard>
-
-<QuizBlock
-  id="soft-arch-foundations-delivery-quiz"
-  courseId="software-architecture"
-  levelId="foundations"
-  sectionId="soft-arch-foundations-delivery-and-safety"
-  title="Quick check: quality attributes and trade offs"
-  questions={[
-    { q: "A system must respond in 200ms and handle a 10x traffic spike. Which attributes are most stressed", a: "Performance and scalability, with reliability also stressed under load." },
-    { q: "You add strong encryption and extra checks. What might you hurt", a: "Performance and latency, sometimes usability." },
-    { q: "You split into many services to scale teams. What tends to get harder", a: "Operability, reliability, and testability due to distributed complexity." },
-    { q: "Scenario: you optimise for reliability. Name one cost you should expect", a: "More complexity and cost from redundancy, failover, and extra safety checks." },
-    { q: "What is a trade off in architecture", a: "Choosing to improve one attribute while accepting cost in another." },
-    { q: "Why do systems fail when quality attributes are ignored", a: "Users experience latency, errors, downtime, and trust loss, not code quality." },
-    { q: "What is a practical way to decide what to sacrifice", a: "Align on the top attributes based on business goals and risk profile, then design for them explicitly." },
-  ]}
-/>
-
-### After this section you should be able to:
-
-- Explain what a design is optimising for and what it makes harder
-- Explain how the same decision affects security posture and data governance
-- Explain why operability and testability are part of professional accountability
-
-### Architecture as a professional discipline
-
-Architecture is about trade offs. You are making choices under constraints and living with the consequences. The job is not to pick trendy patterns. The job is to make the system understandable, operable, and safe for its context.
-
-Architecture decisions outlive code. Code is rewritten, teams change, and vendors come and go. The boundary decisions, data ownership, and operational habits tend to stick. That is why architecture is a senior discipline. It is where you reduce long term risk, not just deliver features.
-
-This matters for regulators and risk owners because software is part of critical workflows. If you cannot explain how decisions are made, how data is protected, and how failures are handled, you are not ready for scrutiny.
-
-<ToolCard
-  id="soft-arch-survive-reality"
-  title="Design a system that survives reality"
-  description="Walk through a simple system and make architecture decisions while balancing security, data and AI concerns."
->
-  <p className="text-sm text-slate-700">
-    This exercise demonstrates cross discipline reasoning: architecture choices that change security posture, data governance, and operational risk.
-  </p>
-  <RealitySurvivalDesignTool />
-</ToolCard>
-
----
-
-<PageNav prevHref="/" prevLabel="Home" nextHref="/software-architecture/intermediate" nextLabel="Intermediate" showTop showBottom />
+**Total CPD hours:** 24 hours (content) + 1.9 hours (assessment) + 0.9 hours (portfolio) = **26.8 hours**
