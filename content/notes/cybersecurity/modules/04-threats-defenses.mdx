@@ -1,0 +1,393 @@
+---
+title: "Threats and Defenses"
+description: "Common cybersecurity threats, attack methods, and practical defense strategies with real-world breach analysis."
+moduleNumber: 4
+sectionId: "foundations-threats-and-defenses"
+---
+
+import SectionHeader from "@/components/course/SectionHeader"
+import SubsectionHeader from "@/components/course/SubsectionHeader"
+import BodyText from "@/components/course/BodyText"
+import Callout from "@/components/notes/Callout"
+import ToolCard from "@/components/notes/ToolCard"
+import QuizBlock from "@/components/notes/QuizBlock"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import MermaidDiagram from "@/components/notes/MermaidDiagram"
+
+<SectionHeader variant="content" emoji="🛡️" id="foundations-threats-and-defenses">
+  Threats and Defenses
+</SectionHeader>
+
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-threats-and-defenses" />
+
+<BodyText>
+Understanding threats is not about fear—it's about informed decision-making. Most successful attacks exploit predictable human behavior and common technical weaknesses, not advanced hacking techniques.
+
+This module covers the threats you'll actually encounter: phishing, social engineering, weak passwords, and malware. More importantly, you'll learn practical defenses that work.
+</BodyText>
+
+<SubsectionHeader emoji="🎣" id="phishing-attacks">
+  Phishing and Email Threats
+</SubsectionHeader>
+
+<BodyText>
+Phishing is the most common cyberattack method. It's cheap, scalable, and effective. Attackers send fraudulent emails or messages pretending to be trustworthy entities to steal credentials, distribute malware, or manipulate victims into taking harmful actions.
+
+**Why phishing works:**
+- **Authority**: "Your IT department requires action"
+- **Urgency**: "Account will be closed in 24 hours"
+- **Fear**: "Suspicious activity detected"
+- **Curiosity**: "You've won a prize!"
+- **Trust**: Using familiar logos and language
+</BodyText>
+
+<MermaidDiagram caption="Phishing attack flow" ariaLabel="Phishing attack process diagram">
+{`flowchart LR
+    A[Attacker] -->|Crafts email| B[Phishing Email]
+    B -->|Targets victim| C[Employee]
+    C -->|Clicks link| D[Fake Login Page]
+    C -->|Opens attachment| E[Malware]
+    D -->|Enters credentials| F[Stolen Account]
+    E -->|Executes| G[System Compromise]
+    F --> H[Data Breach]
+    G --> H
+    
+    style B fill:#ffcccc
+    style D fill:#ffcccc
+    style E fill:#ffcccc
+    style H fill:#ff6666`}
+</MermaidDiagram>
+
+<Callout title="Real Example: CEO Fraud" type="concept">
+An employee receives an email that appears to be from the CEO asking for an urgent wire transfer. The email address looks legitimate at first glance (e.g., ceo@company-inc.com instead of ceo@company.com). The employee, wanting to be responsive, processes the transfer without verifying through another channel. This is "business email compromise" (BEC) and costs organizations billions annually.
+</Callout>
+
+<ToolCard
+  id="phishing-detection-trainer"
+  title="Phishing Detection Training"
+  subtitle="Practice identifying phishing emails"
+  description="Review 8 realistic email examples and test your ability to distinguish legitimate messages from phishing attempts. Aim for 90% accuracy."
+>
+  <PhishingDetectionTrainer />
+</ToolCard>
+
+<BodyText>
+**Key phishing indicators:**
+- **Sender address mismatch**: Check the actual email address, not just the display name
+- **Generic greetings**: "Dear Customer" instead of your name
+- **Spelling/grammar errors**: Professional organizations proofread
+- **Suspicious links**: Hover to preview URL before clicking
+- **Unusual requests**: Legitimate companies rarely ask for passwords via email
+- **Urgency tactics**: Artificial deadlines to prevent verification
+- **Unexpected attachments**: Especially executable files (.exe, .zip, .scr)
+</BodyText>
+
+<SubsectionHeader emoji="🎭" id="social-engineering">
+  Social Engineering Tactics
+</SubsectionHeader>
+
+<BodyText>
+Social engineering exploits human psychology rather than technical vulnerabilities. It's often easier to trick a person than to hack a system.
+
+**Common techniques:**
+
+**Pretexting**: Creating a fabricated scenario to obtain information
+- Example: Calling as "IT support" to reset someone's password
+
+**Baiting**: Offering something enticing to trick victims
+- Example: Leaving USB drives labeled "Salary Information" in a parking lot
+
+**Tailgating**: Following authorized person through secure door
+- Example: Carrying boxes and asking someone to hold the door
+
+**Quid Pro Quo**: Offering a service in exchange for information
+- Example: "Free tech support" calls that install malware
+
+**Phishing variants:**
+- **Spear phishing**: Targeted at specific individuals with personalized information
+- **Whaling**: Targeting high-profile individuals (executives, politicians)
+- **Smishing**: Phishing via SMS text messages
+- **Vishing**: Voice phishing via phone calls
+</BodyText>
+
+<ToolCard
+  id="social-engineering-simulator"
+  title="Social Engineering Simulator"
+  subtitle="Make decisions in realistic scenarios"
+  description="Navigate through pretexting, baiting, and tailgating scenarios. Learn to recognize manipulation tactics and make safe choices."
+>
+  <SocialEngineeringSimulator />
+</ToolCard>
+
+<Callout title="Defense: Verify, Don't Trust" type="info">
+The best defense against social engineering is verification through independent channels. If IT calls asking for your password, hang up and call IT directly using the official number. If an email requests unusual action, verify with the sender through a different method (phone, in-person, separate email thread).
+</Callout>
+
+<SubsectionHeader emoji="🔐" id="password-attacks">
+  Password Attacks and Credential Theft
+</SubsectionHeader>
+
+<BodyText>
+Weak passwords remain one of the easiest ways for attackers to gain access. Understanding how passwords are attacked helps you create better defenses.
+
+**Attack methods:**
+
+**Brute Force**: Trying every possible combination
+- Fast for short passwords: 6-character password = minutes to crack
+- Slow for long passwords: 16-character password = years to crack
+
+**Dictionary Attack**: Trying common words and phrases
+- "password", "123456", "qwerty", "admin" cracked instantly
+- Adding "123" or "!" to end doesn't help much
+
+**Credential Stuffing**: Using breached credentials from one site on others
+- If your LinkedIn password was breached, attackers try it on your email, bank, etc.
+- Why password reuse is catastrophic
+
+**Rainbow Tables**: Pre-computed hashes of common passwords
+- Why unsalted password hashes are dangerous
+- Why modern systems use bcrypt/Argon2 with unique salts
+
+**Keylogging**: Recording keystrokes to capture passwords
+- Malware running on compromised systems
+- Hardware keyloggers on public computers
+</BodyText>
+
+<ToolCard
+  id="password-strength-lab"
+  title="Password Strength Reality Check"
+  subtitle="See how quickly passwords can be cracked"
+  description="Test password strength with realistic crack time estimates. Understand why length matters more than complexity."
+>
+  <PasswordStrengthLab />
+</ToolCard>
+
+<BodyText>
+**Password best practices:**
+- **Length over complexity**: "correct horse battery staple" beats "P@ssw0rd1!"
+- **Unique passwords**: Never reuse passwords across accounts
+- **Password manager**: Generate and store strong, unique passwords
+- **Check for breaches**: Use "Have I Been Pwned" to check if credentials leaked
+- **Multi-factor authentication**: Password alone is insufficient for critical accounts
+</BodyText>
+
+<SubsectionHeader emoji="🦠" id="malware-threats">
+  Malware and Ransomware
+</SubsectionHeader>
+
+<BodyText>
+Malware (malicious software) comes in many forms, each with different goals and behaviors.
+
+**Types of malware:**
+
+**Ransomware**: Encrypts files and demands payment
+- Recent examples: WannaCry, Colonial Pipeline, Ryuk
+- Prevention: Backups, patching, email filtering
+- Response: Never pay (usually), restore from backups
+
+**Trojan**: Disguises itself as legitimate software
+- Example: "Free PDF converter" that installs backdoor
+- Spreads through software downloads, email attachments
+
+**Worm**: Self-replicating malware that spreads across networks
+- Example: Conficker, Stuxnet
+- Can spread without user interaction
+
+**Spyware**: Monitors activity and steals information
+- Keyloggers, screen capture, webcam access
+- Often bundled with "free" software
+
+**Adware**: Displays unwanted advertisements
+- Less harmful but annoying and privacy-invasive
+- Can slow system performance
+
+**Rootkit**: Hides malware presence from detection
+- Operates at system/kernel level
+- Very difficult to detect and remove
+</BodyText>
+
+<Callout title="Ransomware: Colonial Pipeline 2021" type="concept">
+A single compromised VPN password (with no MFA) led to ransomware that shut down 45% of the East Coast's fuel supply for 6 days. The company paid $4.4 million ransom. The attack was preventable with basic security hygiene: multi-factor authentication, network segmentation, and proper access management.
+
+**Lesson**: Catastrophic failures often result from basic security gaps, not sophisticated attacks.
+</Callout>
+
+<BodyText>
+**Malware infection vectors:**
+- Email attachments (most common)
+- Malicious downloads
+- Drive-by downloads (visiting compromised websites)
+- Removable media (USB drives)
+- Software vulnerabilities
+- Malicious ads (malvertising)
+
+**Defense strategies:**
+- **Antivirus/EDR**: Endpoint detection and response tools
+- **Patch management**: Keep software updated
+- **Email filtering**: Block malicious attachments
+- **Application whitelisting**: Only allow approved software
+- **User training**: Recognize suspicious files/links
+- **Backups**: Regular, tested, offline backups
+- **Network segmentation**: Limit malware spread
+</BodyText>
+
+<SubsectionHeader emoji="📊" id="breach-analysis">
+  Real Breach Case Studies
+</SubsectionHeader>
+
+<BodyText>
+Learning from real breaches helps you understand how theoretical threats become real incidents. Each case study demonstrates specific failures and lessons learned.
+</BodyText>
+
+<Callout title="Case Study 1: Target 2013" type="info">
+**What happened**: 40 million payment cards and 70 million customer records stolen during holiday shopping season.
+
+**How**: Attackers phished HVAC contractor's credentials, used vendor VPN to access Target's network, deployed memory-scraping malware on POS systems.
+
+**What failed**:
+- No MFA on vendor VPN access
+- Poor network segmentation (vendor zone → payment systems)
+- Intrusion detection alerts ignored
+- No monitoring of data exfiltration
+
+**Key lesson**: Third-party vendors are part of your attack surface. Security is only as strong as the weakest link in your supply chain.
+
+[Full case study →](/notes/cybersecurity/case-studies/target-2013)
+</Callout>
+
+<Callout title="Case Study 2: Twitter 2020" type="info">
+**What happened**: 130 high-profile accounts compromised (Obama, Biden, Musk, Gates) to post Bitcoin scam.
+
+**How**: Coordinated social engineering via phone targeted employees with access to internal admin tools. Multiple employees gave credentials to attackers posing as IT support.
+
+**What failed**:
+- Insufficient social engineering training
+- No MFA on internal admin tools
+- Admin tools had excessive privileges
+- No monitoring of unusual admin activity
+
+**Key lesson**: The human element is often the weakest link. Technical controls are useless if employees can be manipulated into giving away credentials.
+
+[Full case study →](/notes/cybersecurity/case-studies/twitter-2020)
+</Callout>
+
+<Callout title="Case Study 3: Colonial Pipeline 2021" type="info">
+**What happened**: Ransomware shut down 5,500-mile pipeline supplying 45% of East Coast fuel for 6 days. Company paid $4.4 million ransom.
+
+**How**: Attackers used compromised password (from previous breach) to access legacy VPN account with no MFA. Deployed ransomware across IT network.
+
+**What failed**:
+- No MFA on VPN access
+- Legacy account not decommissioned
+- Poor IT/OT network segmentation
+- Insufficient backup/recovery capabilities
+
+**Key lesson**: Basic security hygiene failures have catastrophic consequences for critical infrastructure. MFA is not optional.
+
+[Full case study →](/notes/cybersecurity/case-studies/colonial-pipeline-2021)
+</Callout>
+
+<BodyText>
+**Common patterns across breaches:**
+1. **Basic controls missing**: MFA, patching, segmentation
+2. **Human factors**: Social engineering, password reuse, ignored alerts
+3. **Third-party risk**: Vendors, contractors, supply chain
+4. **Detection failures**: Alerts missed or ignored, slow response
+5. **Inadequate backups**: No recovery plan or untested backups
+</BodyText>
+
+<SubsectionHeader emoji="✅" id="practical-defenses">
+  Practical Defense Strategies
+</SubsectionHeader>
+
+<BodyText>
+Effective security doesn't require expensive tools or expertise—it requires consistent application of proven controls.
+
+**Defense in Depth**: Layer multiple controls so single failure doesn't lead to breach
+- Physical security + network security + application security + data security
+- Preventive + detective + corrective controls
+- Technical + administrative + physical controls
+
+**Essential controls for individuals:**
+1. **Strong, unique passwords** with password manager
+2. **Multi-factor authentication** on critical accounts
+3. **Software updates** enabled and applied promptly
+4. **Email vigilance** - verify before clicking or downloading
+5. **Regular backups** of important data
+6. **Privacy settings** reviewed and configured
+7. **Security awareness** - stay informed about current threats
+
+**Essential controls for organizations:**
+1. **Access management** - least privilege, regular review
+2. **MFA enforcement** - required for remote access and admin functions
+3. **Patch management** - automated where possible, tested
+4. **Email security** - filtering, SPF/DKIM/DMARC, user training
+5. **Endpoint protection** - antivirus, EDR, configuration management
+6. **Network segmentation** - separate trust zones
+7. **Logging and monitoring** - collect, alert, respond
+8. **Incident response plan** - documented, tested, practiced
+9. **Backup and recovery** - automated, tested, offline copies
+10. **Security awareness training** - regular, tested, cultural
+</BodyText>
+
+<MermaidDiagram caption="Defense in depth layers" ariaLabel="Defense in depth security model">
+{`flowchart TB
+    A[Perimeter Security] --> B[Network Security]
+    B --> C[Host Security]
+    C --> D[Application Security]
+    D --> E[Data Security]
+    
+    A1[Firewall, IDS/IPS] -.-> A
+    B1[Segmentation, VPN, MFA] -.-> B
+    C1[Antivirus, EDR, Patching] -.-> C
+    D1[Secure coding, WAF, Authentication] -.-> D
+    E1[Encryption, DLP, Access Control] -.-> E
+    
+    style A fill:#e3f2fd
+    style B fill:#e8f5e9
+    style C fill:#fff3e0
+    style D fill:#fce4ec
+    style E fill:#f3e5f5`}
+</MermaidDiagram>
+
+<SubsectionHeader emoji="🎯" id="assessment">
+  Knowledge Check
+</SubsectionHeader>
+
+<QuizBlock
+  id="foundations-threats-defenses"
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-threats-and-defenses"
+  title="Threats and Defenses Assessment"
+  questions={[
+    { q: "What is phishing?", a: "A social engineering attack using fraudulent communications (usually email) to trick victims into revealing sensitive information or taking harmful actions." },
+    { q: "Why is password reuse dangerous?", a: "If one account is breached, attackers can access all accounts using the same password through credential stuffing attacks." },
+    { q: "What is the primary lesson from the Target 2013 breach?", a: "Third-party vendors are part of your attack surface. Security requires proper vendor risk management and network segmentation." },
+    { q: "What is ransomware?", a: "Malware that encrypts files and demands payment for decryption. Prevention includes backups, patching, and email filtering." },
+    { q: "What is social engineering?", a: "Manipulation techniques that exploit human psychology to trick people into revealing information or taking actions that compromise security." },
+    { q: "Why did the Colonial Pipeline breach succeed?", a: "A compromised VPN password with no multi-factor authentication provided attackers access to deploy ransomware." },
+    { q: "What is defense in depth?", a: "Security strategy using multiple layers of controls so that failure of one control doesn't lead to a breach." },
+    { q: "What makes a password strong?", a: "Length is most important—12+ characters. Uniqueness across accounts. Use of a password manager to generate and store random passwords." },
+    { q: "What is the best defense against social engineering?", a: "Verification through independent channels. If someone calls requesting sensitive information, hang up and call back using an official number." },
+    { q: "What should you do if you receive a suspicious email?", a: "Do not click links or open attachments. Verify sender through alternative channel. Report to IT/security team. Delete if confirmed malicious." },
+  ]}
+/>
+
+<SubsectionHeader emoji="📝" id="next-steps">
+  After this module
+</SubsectionHeader>
+
+<BodyText>
+You should now be able to:
+- Identify common phishing indicators with 90% accuracy
+- Recognize social engineering tactics (pretexting, baiting, tailgating)
+- Explain why password length matters more than complexity
+- Describe how ransomware attacks work and how to prevent them
+- Analyze breach case studies to identify failed controls
+- Apply defense in depth principles to protect systems and data
+
+**Next module**: Authentication & Privacy—deep dive into passwords, multi-factor authentication, and personal privacy protection strategies.
+
+Complete the section progress toggle above to mark this module complete.
+</BodyText>

@@ -1,0 +1,310 @@
+---
+title: "Welcome to Cybersecurity Foundations"
+description: "Introduction to the cybersecurity journey with career paths, course structure, and your first security habits."
+moduleNumber: 1
+sectionId: "foundations-welcome"
+---
+
+import SectionHeader from "@/components/course/SectionHeader"
+import SubsectionHeader from "@/components/course/SubsectionHeader"
+import BodyText from "@/components/course/BodyText"
+import Callout from "@/components/notes/Callout"
+import DiagramBlock from "@/components/DiagramBlock"
+import ToolCard from "@/components/notes/ToolCard"
+import QuizBlock from "@/components/notes/QuizBlock"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import MermaidDiagram from "@/components/notes/MermaidDiagram"
+
+<SectionHeader variant="content" emoji="👋" id="foundations-welcome">
+  Welcome to Cybersecurity Foundations
+</SectionHeader>
+
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-welcome" />
+
+<BodyText>
+Welcome to your cybersecurity journey. Whether you are here to protect yourself online, advance your career, or build a foundation for professional certifications, you are in the right place.
+
+Cybersecurity is not just about technology—it is about people, processes, and practical thinking. It is about understanding how systems work, where they break, and how to reduce real harm. Most importantly, it is a skill you can learn, regardless of your background.
+</BodyText>
+
+<SubsectionHeader emoji="🎯" id="why-this-course">
+  Why this course exists
+</SubsectionHeader>
+
+<BodyText>
+This course takes a different approach from traditional cybersecurity training:
+
+- **Plain language**: No unnecessary jargon. When technical terms are needed, they are explained clearly.
+- **Practical focus**: Every concept connects to real-world scenarios you can apply immediately.
+- **Interactive labs**: Learn by doing with browser-based tools that require no setup.
+- **Progressive depth**: Start with foundations, build to applied skills, advance to strategic thinking.
+- **CPD accredited**: Track your professional development hours with integrated evidence collection.
+</BodyText>
+
+<Callout title="Course philosophy" type="concept">
+Security is not about being paranoid—it is about being prepared. It is not about perfect defense—it is about reducing risk to acceptable levels. It is not about blocking everything—it is about making informed trade-offs.
+</Callout>
+
+<SubsectionHeader emoji="🛤️" id="career-paths">
+  Cybersecurity career paths
+</SubsectionHeader>
+
+<BodyText>
+Cybersecurity offers diverse career opportunities. Here are the main paths:
+</BodyText>
+
+<MermaidDiagram caption="Cybersecurity career landscape" ariaLabel="Cybersecurity career paths diagram">
+{`flowchart TB
+    Start[Cybersecurity Foundations] --> Paths{Career Direction}
+    
+    Paths -->|Technical| Tech[Technical Roles]
+    Paths -->|Management| Mgmt[Leadership Roles]
+    Paths -->|Specialist| Spec[Specialist Roles]
+    
+    Tech --> SecEng[Security Engineer]
+    Tech --> PenTest[Penetration Tester]
+    Tech --> IncResp[Incident Responder]
+    Tech --> SecArch[Security Architect]
+    
+    Mgmt --> CISO[CISO]
+    Mgmt --> SecMgr[Security Manager]
+    Mgmt --> GRC[GRC Manager]
+    
+    Spec --> Forensics[Digital Forensics]
+    Spec --> ThreatIntel[Threat Intelligence]
+    Spec --> AppSec[Application Security]
+    Spec --> CloudSec[Cloud Security]
+    
+    style Start fill:#e3f2fd
+    style Paths fill:#fff3e0
+    style Tech fill:#e8f5e9
+    style Mgmt fill:#fce4ec
+    style Spec fill:#f3e5f5`}
+</MermaidDiagram>
+
+<BodyText>
+**Common entry points:**
+
+- **Security Analyst**: Monitor systems, investigate alerts, respond to incidents. Entry-level role that builds broad understanding.
+- **Security Engineer**: Implement and maintain security tools, configure controls, automate tasks. Technical focus.
+- **GRC Analyst**: Governance, risk, and compliance. Policy writing, audit support, risk assessment. Less technical, more process-focused.
+
+**Typical progression:**
+Junior Analyst → Senior Analyst → Lead/Architect or Manager → Director → CISO
+
+**Alternative paths:**
+- Start in IT/networking and transition to security
+- Move from development to application security
+- Shift from auditing to GRC leadership
+</BodyText>
+
+<Callout title="Reality check" type="info">
+Most cybersecurity roles are not like movies. You will spend time on documentation, meetings, risk assessments, and process improvement. The "hacking" stereotype represents a tiny fraction of actual security work.
+</Callout>
+
+<SubsectionHeader emoji="📚" id="how-course-works">
+  How this course works
+</SubsectionHeader>
+
+<BodyText>
+This Foundations level is structured into 7 modules:
+
+1. **Welcome** (this module) - Course introduction and your security baseline
+2. **Why Cyber Matters** - Understanding real-world threats and impacts
+3. **Data & Bits** - How information is represented and why it matters for security
+4. **Networks & Packets** - How data moves and where vulnerabilities exist
+5. **Threats & Defenses** - Common attacks and practical protection strategies
+6. **Authentication & Privacy** - Identity, passwords, MFA, and personal data protection
+7. **Checkpoint & Capstone** - Assessment, practical exam, and portfolio project
+
+**Expected time commitment:**
+- Total: 15 CPD hours (Continuing Professional Development)
+- Per module: 1-3 hours depending on depth
+- Labs and exercises: Approximately 40% of time
+- Reading and quizzes: Approximately 60% of time
+
+**How to succeed:**
+- Complete modules in order—each builds on previous concepts
+- Do not skip the interactive labs—hands-on practice is essential
+- Take notes on concepts you find challenging
+- Revisit sections that feel unclear before moving on
+- Complete the quizzes honestly—they identify gaps in understanding
+</BodyText>
+
+<SubsectionHeader emoji="✅" id="first-security-habits">
+  Your first security habits checklist
+</SubsectionHeader>
+
+<BodyText>
+Before diving into technical content, let's establish baseline security practices. These are simple actions that reduce immediate risk:
+</BodyText>
+
+<ToolCard
+  id="first-security-habits"
+  title="First Security Habits Checklist"
+  subtitle="Essential practices to implement now"
+  description="Review and check off these foundational security practices. Aim to complete at least 5 by the end of this module."
+>
+  <div className="space-y-3 text-sm">
+    <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
+      <h4 className="font-semibold mb-3">Account Security</h4>
+      <div className="space-y-2">
+        <label className="flex items-start gap-2 cursor-pointer">
+          <input type="checkbox" className="mt-1" />
+          <span>Use unique passwords for important accounts (email, banking, work)</span>
+        </label>
+        <label className="flex items-start gap-2 cursor-pointer">
+          <input type="checkbox" className="mt-1" />
+          <span>Enable two-factor authentication (2FA) on email and banking</span>
+        </label>
+        <label className="flex items-start gap-2 cursor-pointer">
+          <input type="checkbox" className="mt-1" />
+          <span>Use a password manager to store credentials securely</span>
+        </label>
+      </div>
+    </div>
+    
+    <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
+      <h4 className="font-semibold mb-3">Device Security</h4>
+      <div className="space-y-2">
+        <label className="flex items-start gap-2 cursor-pointer">
+          <input type="checkbox" className="mt-1" />
+          <span>Enable automatic updates for operating system and applications</span>
+        </label>
+        <label className="flex items-start gap-2 cursor-pointer">
+          <input type="checkbox" className="mt-1" />
+          <span>Use screen lock with PIN/password (not just swipe)</span>
+        </label>
+        <label className="flex items-start gap-2 cursor-pointer">
+          <input type="checkbox" className="mt-1" />
+          <span>Install antivirus/endpoint protection if not already present</span>
+        </label>
+      </div>
+    </div>
+    
+    <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
+      <h4 className="font-semibold mb-3">Communication Security</h4>
+      <div className="space-y-2">
+        <label className="flex items-start gap-2 cursor-pointer">
+          <input type="checkbox" className="mt-1" />
+          <span>Verify sender identity before clicking links in emails</span>
+        </label>
+        <label className="flex items-start gap-2 cursor-pointer">
+          <input type="checkbox" className="mt-1" />
+          <span>Check for HTTPS (padlock icon) on websites before entering sensitive data</span>
+        </label>
+        <label className="flex items-start gap-2 cursor-pointer">
+          <input type="checkbox" className="mt-1" />
+          <span>Think before sharing personal information on social media</span>
+        </label>
+      </div>
+    </div>
+    
+    <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
+      <h4 className="font-semibold mb-3">Data Security</h4>
+      <div className="space-y-2">
+        <label className="flex items-start gap-2 cursor-pointer">
+          <input type="checkbox" className="mt-1" />
+          <span>Back up important files to a separate location (cloud or external drive)</span>
+        </label>
+        <label className="flex items-start gap-2 cursor-pointer">
+          <input type="checkbox" className="mt-1" />
+          <span>Review app permissions and revoke unnecessary access</span>
+        </label>
+        <label className="flex items-start gap-2 cursor-pointer">
+          <input type="checkbox" className="mt-1" />
+          <span>Delete old accounts you no longer use</span>
+        </label>
+      </div>
+    </div>
+    
+    <p className="text-xs text-slate-600 mt-4 italic">
+      Note: This checklist is for awareness. In Module 5, you will use interactive tools to audit and implement these practices systematically.
+    </p>
+  </div>
+</ToolCard>
+
+<Callout title="Why these habits matter" type="concept">
+These practices follow the principle of "defense in depth"—multiple layers of protection. If one control fails, others remain. Security is not about perfection; it is about raising the cost and effort required for an attacker to succeed.
+</Callout>
+
+<SubsectionHeader emoji="📊" id="pre-assessment">
+  Pre-course self-assessment
+</SubsectionHeader>
+
+<BodyText>
+Before starting the technical content, let's establish your baseline knowledge. This is not graded—it helps you identify areas to focus on and measure your progress.
+</BodyText>
+
+<QuizBlock
+  id="foundations-welcome-pre-assessment"
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-welcome"
+  title="Pre-course knowledge check"
+  questions={[
+    { q: "What does the 'C' in CIA triad stand for in cybersecurity?", a: "Confidentiality - protecting information from unauthorized access." },
+    { q: "What is two-factor authentication (2FA)?", a: "A security method requiring two different forms of verification to access an account." },
+    { q: "What is phishing?", a: "A social engineering attack using fraudulent emails or messages to trick people into revealing sensitive information." },
+    { q: "What is encryption?", a: "Converting information into a coded format that can only be read with the correct decryption key." },
+    { q: "What is a firewall?", a: "A security system that monitors and controls incoming and outgoing network traffic based on predetermined security rules." },
+    { q: "What does HTTPS indicate about a website?", a: "The connection is encrypted using TLS/SSL, protecting data in transit from eavesdropping." },
+    { q: "What is malware?", a: "Malicious software designed to damage, disrupt, or gain unauthorized access to computer systems." },
+    { q: "Why is password reuse dangerous?", a: "If one account is compromised, attackers can access all accounts using the same password." },
+    { q: "What is a security vulnerability?", a: "A weakness in a system that could be exploited to cause harm or unauthorized access." },
+    { q: "What is the purpose of software updates?", a: "To fix security vulnerabilities, bugs, and add new features." },
+  ]}
+/>
+
+<SubsectionHeader emoji="🎯" id="learning-goals">
+  Set your personal learning goals
+</SubsectionHeader>
+
+<BodyText>
+Research shows that setting clear goals improves learning outcomes. Take a moment to define what you want to achieve:
+
+**Questions to consider:**
+- Why are you taking this course? (Career change, upskilling, personal protection, certification prep?)
+- What specific skills do you want to develop?
+- How will you apply this knowledge in the next 3 months?
+- What success looks like for you by the end of this course?
+
+**Write 2-3 specific, measurable goals:**
+
+Examples:
+- "Enable 2FA on all critical accounts within 2 weeks"
+- "Complete a personal security audit using the tools in Module 6"
+- "Explain common threats to my team in non-technical language"
+- "Build foundation for CompTIA Security+ certification"
+- "Transition from IT support to security analyst role within 6 months"
+
+**Reflection prompt** (optional, for your notes):
+Write down your goals now. Revisit them in Module 7 to measure progress and celebrate achievements.
+</BodyText>
+
+<Callout title="Adult learning principle" type="info">
+Adults learn best when they understand the relevance to their goals. Throughout this course, actively connect concepts to your specific context—whether that's home, work, or a future role.
+</Callout>
+
+<SubsectionHeader emoji="🚀" id="next-steps">
+  Ready to begin
+</SubsectionHeader>
+
+<BodyText>
+You now understand:
+- The structure and philosophy of this course
+- Career paths in cybersecurity
+- Your first security habits baseline
+- Your personal learning goals
+
+**Next module:** Why Cyber Matters—understanding real-world impact, threat vs vulnerability vs risk, and the CIA triad through everyday examples.
+
+Complete the section progress toggle above to mark this module complete and continue to Module 2.
+</BodyText>
+
+### After this module you should be able to:
+
+- Describe the structure and learning approach of this course
+- Identify major cybersecurity career paths and typical progressions
+- Implement baseline security practices for accounts, devices, and communication
+- Articulate personal learning goals aligned with career or security improvement objectives

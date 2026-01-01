@@ -1,0 +1,687 @@
+# Threat Modeling in Practice
+
+<SectionProgressToggle sectionId="applied-threat-modeling-practice" />
+
+## From Attack Surfaces to Systematic Threat Analysis
+
+<SectionHeader 
+  variant="content"
+  emoji="🎯"
+  title="Building on Foundations: Attack Surfaces → Threat Models"
+  subtitle="Learn STRIDE and systematic threat analysis for real systems"
+/>
+
+### What You Already Know (Foundations Recap)
+
+In Foundations, you learned:
+- **CIA Triad**: Confidentiality, Integrity, Availability as security goals
+- **Attack Surface**: Entry points where attackers can interact with your system
+- **Trust Boundaries**: Where data moves between different security contexts
+- **Real Breaches**: Target (HVAC vendor), Twitter (social engineering), Colonial Pipeline (no MFA on VPN)
+
+**Applied Level Deepens This**: Now you'll systematically identify threats using STRIDE, map data flows, build attack trees, and create actionable threat models for real systems.
+
+---
+
+## Why Threat Modeling Matters
+
+<Callout variant="concept" title="The Core Problem">
+**Without threat modeling**: You defend everything equally (or nothing systematically)
+
+**With threat modeling**: You focus effort where it reduces harm the most, given your constraints
+</Callout>
+
+### Real-World Impact
+
+**Scenario 1: E-commerce Checkout**
+- Without threat model: "Let's add security features"
+- With threat model: "Card data crosses 3 trust boundaries. Boundary 2 (payment processor API) is highest risk. We'll focus logging and validation there."
+
+**Scenario 2: File Upload Feature**
+- Without threat model: "Check file size limit"
+- With threat model: "Uploaded files can be executed (STRIDE: Tampering + Elevation of Privilege). We need: file type validation, content scanning, sandboxed storage, and execution prevention."
+
+### What Threat Modeling Produces
+
+A good threat model delivers:
+1. **System boundary definition** - What's in scope, what's not
+2. **Asset inventory** - What needs protection and why
+3. **Data flow diagram** - How data moves between components
+4. **Threat list** - Specific failure scenarios using STRIDE
+5. **Risk-prioritized controls** - What to implement first
+6. **Monitoring plan** - How you'll detect if threats materialize
+
+---
+
+## STRIDE: Your Threat Analysis Framework
+
+**STRIDE** is a mnemonic for six threat categories developed by Microsoft. It builds directly on CIA triad from Foundations:
+
+### S - Spoofing (Identity)
+**Attacks**: Confidentiality via fake identity
+**Foundations connection**: Remember phishing emails with fake sender addresses? That's spoofing.
+**Applied examples**:
+- Attacker impersonates legitimate user with stolen credentials
+- API requests with forged authentication tokens
+- Email sender spoofing (SPF/DKIM failures)
+- Session hijacking with stolen cookies
+
+**Questions to ask**:
+- How do we verify identity?
+- What happens if authentication is bypassed?
+- Can one user impersonate another?
+
+### T - Tampering (Data Modification)
+**Attacks**: Integrity violations
+**Foundations connection**: Remember hashing for file integrity? Tampering is what hashing prevents.
+**Applied examples**:
+- Modified database records (SQL injection)
+- Intercepted and altered API requests (man-in-the-middle)
+- Tampered log files to hide evidence
+- Modified configuration files to bypass security
+
+**Questions to ask**:
+- What data could be modified in transit or at rest?
+- How do we detect unauthorized changes?
+- Is data integrity validated before use?
+
+### R - Repudiation (Denial of Actions)
+**Attacks**: Accountability failures
+**Foundations connection**: Logs and audit trails prove actions happened.
+**Applied examples**:
+- User denies making a fraudulent transaction (no audit trail)
+- Admin denies deleting data (insufficient logging)
+- Attacker covers tracks by deleting logs
+- No proof of who accessed sensitive data
+
+**Questions to ask**:
+- Can we prove who did what and when?
+- Are logs tamper-resistant?
+- What actions are NOT logged?
+
+### I - Information Disclosure (Data Leaks)
+**Attacks**: Confidentiality violations
+**Foundations connection**: Remember encryption for data protection? This is what you're protecting against.
+**Applied examples**:
+- Exposed API keys in GitHub repositories
+- Database backup files accessible on public S3 bucket
+- Verbose error messages revealing system internals
+- Unencrypted traffic captured on network
+
+**Questions to ask**:
+- What data is sensitive?
+- Where could data leak unintentionally?
+- Is data encrypted in transit AND at rest?
+
+### D - Denial of Service (Availability)
+**Attacks**: Availability violations
+**Foundations connection**: The "A" in CIA triad.
+**Applied examples**:
+- Resource exhaustion (CPU, memory, disk, network)
+- Application-level DoS (expensive queries, infinite loops)
+- Distributed DoS (DDoS) overwhelming infrastructure
+- Lockout mechanisms abused to deny legitimate access
+
+**Questions to ask**:
+- What could make the system unavailable?
+- Are there rate limits on expensive operations?
+- How do we handle resource exhaustion?
+
+### E - Elevation of Privilege (Unauthorized Access)
+**Attacks**: Authorization bypasses
+**Foundations connection**: Remember password attacks and lateral movement from Target breach?
+**Applied examples**:
+- SQL injection leading to admin access
+- Path traversal reading files outside allowed directory
+- Insecure direct object references (change URL to access other users' data)
+- Privilege escalation via unpatched vulnerabilities
+
+**Questions to ask**:
+- Can users access resources they shouldn't?
+- How is authorization enforced?
+- What happens if authorization checks fail?
+
+<Callout variant="insight" title="STRIDE Maps to CIA Triad">
+**Confidentiality** ← Spoofing, Information Disclosure
+**Integrity** ← Tampering, Repudiation
+**Availability** ← Denial of Service
+**Plus**: Elevation of Privilege (Authorization)
+
+STRIDE expands CIA from 3 goals to 6 specific threat types you can systematically analyze.
+</Callout>
+
+---
+
+## Threat Modeling Process: Step-by-Step
+
+### Step 1: Define System Boundary
+
+**What it means**: Draw a line around what you're analyzing. Everything inside is in scope. Everything outside is a dependency or external entity.
+
+**Example - Login System**:
+- **In scope**: Web application, authentication service, session management, database
+- **Out of scope**: User's device security, browser vulnerabilities, network infrastructure (but document as dependencies)
+
+**Why it matters**: Prevents scope creep. You can't threat model "everything."
+
+### Step 2: Identify Assets
+
+**What it means**: List what needs protection and why.
+
+**Example - E-commerce System**:
+- Customer credit card data (PCI DSS compliance, reputation)
+- User accounts (privacy, trust)
+- Product inventory data (business operations)
+- Admin access (system control)
+
+**Asset classification**:
+- **Critical**: Loss causes severe harm (e.g., payment data)
+- **High**: Loss causes significant harm (e.g., customer PII)
+- **Medium**: Loss causes moderate harm (e.g., product descriptions)
+- **Low**: Loss causes minimal harm (e.g., marketing images)
+
+### Step 3: Create Data Flow Diagram (DFD)
+
+**DFD Elements**:
+- **External Entity** (square): User, external service, admin
+- **Process** (circle): Application code, API, authentication service
+- **Data Store** (parallel lines): Database, cache, file system
+- **Data Flow** (arrow): HTTP request, database query, file read
+
+**Example - Simple Login Flow**:
+```
+[User] --username/password--> [Web App] --query--> [Database]
+                                   |
+                              [Session Store]
+```
+
+**Trust boundaries** (dotted lines):
+- Between user and web app (untrusted → trusted)
+- Between web app and database (trusted → highly trusted)
+
+### Step 4: Apply STRIDE to Each Element
+
+**For each data flow, ask**:
+- **S**: Can the source be spoofed?
+- **T**: Can the data be tampered with?
+- **R**: Can actions be denied?
+- **I**: Can data be disclosed?
+- **D**: Can the flow be disrupted?
+- **E**: Can privileges be escalated?
+
+**Example - User → Web App (login request)**:
+- **S**: Yes - credential stuffing, phishing
+- **T**: Yes - MITM if not HTTPS
+- **R**: Maybe - need login attempt logs
+- **I**: Yes - password sent in cleartext if not HTTPS
+- **D**: Yes - rate limiting needed to prevent DoS
+- **E**: Yes - SQL injection in login form
+
+### Step 5: Identify and Document Threats
+
+**Format**: "An attacker could [action] by [method] which would result in [impact]"
+
+**Examples**:
+- "An attacker could access other users' data by modifying the user_id parameter in the URL, which would result in unauthorized information disclosure"
+- "An attacker could exhaust server resources by sending thousands of login requests, which would result in denial of service for legitimate users"
+- "An attacker could gain admin access by exploiting SQL injection in the login form, which would result in elevation of privilege and full system compromise"
+
+### Step 6: Rate Threats (Risk = Likelihood × Impact)
+
+**DREAD Framework** (subset of risk assessment):
+- **D**amage potential (1-10)
+- **R**eproducibility (1-10)
+- **E**xploitability (1-10)
+- **A**ffected users (1-10)
+- **D**iscoverability (1-10)
+
+**Simple Risk Matrix**:
+| Impact → | Low | Medium | High | Critical |
+|----------|-----|--------|------|----------|
+| **Likely** | Medium | High | Critical | Critical |
+| **Possible** | Low | Medium | High | Critical |
+| **Unlikely** | Low | Low | Medium | High |
+| **Rare** | Low | Low | Low | Medium |
+
+### Step 7: Choose and Document Controls
+
+**For each threat, decide**:
+1. **Mitigate**: Implement controls to reduce risk
+2. **Transfer**: Use insurance, outsource to third party
+3. **Accept**: Document and accept the risk
+4. **Avoid**: Remove the feature or change approach
+
+**Control types** (builds on Foundations "defense in depth"):
+- **Preventive**: Stop threats before they occur (input validation, authentication)
+- **Detective**: Identify threats as they occur (logging, monitoring, IDS)
+- **Corrective**: Respond after threats occur (incident response, backups)
+
+---
+
+## Hands-On: Threat Model a File Upload Feature
+
+Let's apply STRIDE to a common feature.
+
+### System Description
+
+**Feature**: Users can upload profile pictures (JPEG, PNG, up to 5MB)
+
+**Components**:
+- Web application (frontend)
+- API endpoint `/api/upload` (backend)
+- File storage (S3-like object storage)
+- Database (stores file metadata: filename, URL, user_id)
+
+### Data Flow Diagram
+
+```
+[User] --upload file--> [Web App] --HTTP POST--> [API Server] --save--> [File Storage]
+                                                       |
+                                                   [Database]
+                                               (stores metadata)
+```
+
+### Trust Boundaries
+
+1. **User ↔ Web App**: Untrusted to semi-trusted
+2. **Web App ↔ API Server**: Semi-trusted to trusted
+3. **API Server ↔ Storage/DB**: Trusted to highly trusted
+
+### STRIDE Analysis
+
+**Threat 1: Spoofing**
+- **Threat**: Attacker uploads file as another user
+- **Control**: Authenticate API requests, tie uploads to session user_id
+- **Risk**: High likelihood, High impact = **Critical**
+
+**Threat 2: Tampering**
+- **Threat**: Attacker modifies file after upload (e.g., replace with malicious file)
+- **Control**: File integrity hashes, access control on storage
+- **Risk**: Low likelihood (if permissions correct), Medium impact = **Low**
+
+**Threat 3: Repudiation**
+- **Threat**: User uploads illegal content, denies doing it
+- **Control**: Log uploads with user_id, IP, timestamp
+- **Risk**: Medium likelihood, High impact = **High**
+
+**Threat 4: Information Disclosure**
+- **Threat 1**: Uploaded files accessible without authentication
+- **Control**: Authenticated URLs, signed S3 URLs with expiration
+- **Risk**: High likelihood (default S3 is private), High impact = **Critical**
+
+- **Threat 2**: Filenames reveal user data
+- **Control**: Use random UUIDs for filenames, store original name in DB only
+- **Risk**: Medium likelihood, Low impact = **Low**
+
+**Threat 5: Denial of Service**
+- **Threat 1**: Attacker uploads many large files to exhaust storage
+- **Control**: Rate limiting, storage quotas per user, file size validation
+- **Risk**: High likelihood (easy attack), Medium impact = **High**
+
+- **Threat 2**: Attacker uploads files with expensive processing (e.g., zip bombs)
+- **Control**: File type validation, content scanning, size checks BEFORE decompression
+- **Risk**: Medium likelihood, Medium impact = **Medium**
+
+**Threat 6: Elevation of Privilege**
+- **Threat 1**: Attacker uploads executable disguised as image (e.g., `image.png.exe`)
+- **Control**: Validate file content (magic bytes), not just extension. Store with forced content-type. Never execute uploaded files.
+- **Risk**: High likelihood (common attack), Critical impact = **Critical**
+
+- **Threat 2**: Attacker uploads malicious image with embedded exploit (ImageTragick, etc.)
+- **Control**: Use image processing libraries with known vulnerabilities patched. Run processing in sandbox.
+- **Risk**: Low likelihood (requires specific vuln), Critical impact = **Medium**
+
+- **Threat 3**: Path traversal - upload to `../../../../etc/passwd`
+- **Control**: Never use user-provided filename directly. Generate safe filenames server-side.
+- **Risk**: High likelihood (common mistake), Critical impact = **Critical**
+
+### Prioritized Control Implementation
+
+**Phase 1 (Must-Have - Critical Risks)**:
+1. ✅ Authenticate all uploads (tied to session user_id)
+2. ✅ Generate random UUID filenames (prevent path traversal, info disclosure)
+3. ✅ Validate file content via magic bytes (prevent executable uploads)
+4. ✅ Signed URLs for file access (prevent unauthorized disclosure)
+
+**Phase 2 (Should-Have - High Risks)**:
+5. ✅ Rate limiting (10 uploads/hour per user)
+6. ✅ Storage quotas (100MB per user)
+7. ✅ Audit logging (user_id, IP, timestamp, filename, size)
+
+**Phase 3 (Nice-to-Have - Medium Risks)**:
+8. ⚠️ Malware scanning with ClamAV or cloud service
+9. ⚠️ Image processing in isolated container
+10. ⚠️ File integrity monitoring
+
+**Accepted Risks**:
+- Users can upload inappropriate (but non-malicious) content → Manual review/reporting system
+- Sophisticated image exploits requiring 0-days → Accept (low likelihood, expensive to prevent)
+
+<ToolCard 
+  toolId="threat-model-canvas"
+  title="Interactive Threat Model Canvas"
+  variant="practice"
+  cpd_minutes={30}
+>
+Practice threat modeling with STRIDE on three scenarios:
+1. Login system
+2. File upload (guided walkthrough)
+3. API endpoint (your own analysis)
+
+The tool provides hints using STRIDE and shows example threats for each component.
+</ToolCard>
+
+---
+
+## Attack Trees: Visualizing Attack Paths
+
+**Attack trees** complement STRIDE by showing how threats connect into attack chains (builds on Foundations breach case studies).
+
+### Attack Tree Structure
+
+**Root**: Attacker goal (e.g., "Steal customer data")
+
+**Branches**: Ways to achieve that goal
+
+**Leaves**: Specific actions
+
+### Example: Compromise Web Application
+
+```
+Goal: Gain unauthorized admin access
+├── Exploit authentication
+│   ├── Credential stuffing (AND: obtain leaked passwords, no rate limiting)
+│   ├── SQL injection in login form
+│   └── Session hijacking (AND: steal session cookie, no HTTP-only flag)
+├── Exploit authorization
+│   ├── Insecure direct object reference (change user_id in URL)
+│   └── Privilege escalation via API (missing role checks)
+└── Social engineering
+    ├── Phish admin credentials
+    └── Insider threat (bribe/coerce employee)
+```
+
+**AND vs OR gates**:
+- **OR**: Any child succeeds → parent succeeds (easier for attacker)
+- **AND**: All children must succeed → parent succeeds (harder for attacker)
+
+### How This Connects to Foundations
+
+**Foundations: Target Breach (2013)**
+- Initial access: HVAC vendor credentials (social engineering)
+- Lateral movement: Vendor network → Target network
+- Privilege escalation: Access payment systems
+- Collection: Scrape credit card data
+- Exfiltration: Send data to external servers
+
+**Attack Tree for Target Breach**:
+```
+Steal credit card data
+├── Gain initial access [achieved via HVAC vendor]
+├── Pivot to internal network [achieved via lateral movement]
+├── Locate payment systems [achieved via network reconnaissance]
+├── Access payment databases [achieved via credential theft]
+└── Exfiltrate data [achieved via external FTP]
+```
+
+**Defense**: Each branch is a detection opportunity. Target failed at "Pivot to internal network" (no network segmentation) and "Exfiltrate data" (no egress monitoring).
+
+<Callout variant="insight" title="Attack Trees Show Defense Priorities">
+**Branches with many OR gates**: Easier to attack → Higher priority to defend
+
+**Branches with many AND gates**: Harder to attack → Lower priority (but don't ignore)
+
+**Deep trees**: More steps = more detection opportunities = defense in depth works here
+</Callout>
+
+---
+
+## Real-World Threat Modeling Scenarios
+
+### Scenario 1: SaaS Application Login System
+
+**System**: Multi-tenant SaaS with username/password + optional MFA
+
+**Key Threats (STRIDE)**:
+- **Spoofing**: Credential stuffing, phishing, account takeover
+- **Tampering**: Session token manipulation, JWT forgery
+- **Repudiation**: No login attempt logs
+- **Information Disclosure**: Session tokens in URL parameters
+- **Denial of Service**: Brute force login attempts
+- **Elevation of Privilege**: Horizontal (access other tenant's data) and vertical (regular user → admin)
+
+**Critical Control**: Tenant isolation (data partitioned by tenant_id) with row-level security
+
+### Scenario 2: Payment Processing API
+
+**System**: REST API accepting credit card data, calling payment gateway
+
+**Key Threats**:
+- **Information Disclosure**: Card data logged, stored in plaintext, transmitted over HTTP
+- **Tampering**: Transaction amount modified in transit
+- **Repudiation**: No transaction audit trail
+- **Elevation of Privilege**: Process refunds without authorization
+
+**Critical Control**: PCI DSS compliance (encrypt card data, never log, secure transmission, strict access control)
+
+### Scenario 3: Internal Admin Dashboard
+
+**System**: Web interface for admins to manage users, view analytics
+
+**Key Threats**:
+- **Elevation of Privilege**: Regular users accessing admin panel (broken access control)
+- **Information Disclosure**: Analytics data leaking to unauthorized users
+- **Denial of Service**: Admin dashboard crashes under load, blocks all admin access
+
+**Critical Control**: Role-based access control (RBAC) enforced at API level (not just UI)
+
+---
+
+## Common Threat Modeling Mistakes
+
+### Mistake 1: Too Broad or Too Narrow
+
+**Too broad**: "Threat model our entire company"
+- Unmanageable, never finishes
+- **Fix**: Start with one system, one feature
+
+**Too narrow**: "Threat model only the login button"
+- Misses context and data flows
+- **Fix**: Include entire authentication flow (login + session + logout)
+
+### Mistake 2: Listing Every Possible Threat
+
+**Problem**: 500-item threat list that's never acted on
+
+**Fix**: Focus on realistic, high-impact threats. Use risk prioritization.
+
+### Mistake 3: Threat Modeling After Building
+
+**Problem**: Finding architectural flaws when code is already written
+
+**Fix**: Threat model during design phase. Iterate as system evolves.
+
+### Mistake 4: No Threat Ownership
+
+**Problem**: Threats documented but no one responsible for mitigation
+
+**Fix**: Assign owner and deadline to each mitigated threat. Track in backlog.
+
+### Mistake 5: Ignoring Accepted Risks
+
+**Problem**: Accepting risks without documentation
+
+**Fix**: Document accepted risks with business justification. Review quarterly.
+
+---
+
+## Knowledge Check
+
+<QuizBlock 
+  quizId="applied-threat-modeling"
+  title="Threat Modeling in Practice"
+  passingScore={70}
+  questions={[
+    {
+      id: "tm-1",
+      question: "Which STRIDE category does 'user modifies order_id parameter in URL to view someone else's order' belong to?",
+      options: [
+        "Spoofing (impersonating another user)",
+        "Information Disclosure (unauthorized data access)",
+        "Elevation of Privilege (accessing unauthorized resources)",
+        "Tampering (modifying URL)"
+      ],
+      correctIndex: 2,
+      explanation: "This is Elevation of Privilege - the user is accessing a resource (order) they shouldn't have access to by modifying a parameter. Builds on Foundations: IDOR (Insecure Direct Object Reference) is a form of authorization bypass."
+    },
+    {
+      id: "tm-2",
+      question: "You're threat modeling a login system. Under STRIDE 'Repudiation', what's the key concern?",
+      options: [
+        "Users can brute force passwords",
+        "Users can deny performing login actions if there are no logs",
+        "Passwords might be intercepted",
+        "Users might forget their passwords"
+      ],
+      correctIndex: 1,
+      explanation: "Repudiation is about denying actions. Without logs, you can't prove who logged in when. Builds on Foundations: audit trails and logging."
+    },
+    {
+      id: "tm-3",
+      question: "In a data flow diagram, what does a 'trust boundary' represent?",
+      options: [
+        "The edge of your network firewall",
+        "A point where data moves between different security contexts (e.g., public internet to private network)",
+        "The boundary of your code repository",
+        "Physical security perimeter"
+      ],
+      correctIndex: 1,
+      explanation: "Trust boundaries mark where data crosses security contexts - untrusted to trusted, or between privilege levels. Builds on Foundations: attack surface concept."
+    },
+    {
+      id: "tm-4",
+      question: "An attacker uploads a file named '../../../../etc/passwd'. Which STRIDE threat is this?",
+      options: [
+        "Spoofing",
+        "Tampering",
+        "Information Disclosure + Elevation of Privilege",
+        "Denial of Service"
+      ],
+      correctIndex: 2,
+      explanation: "Path traversal attempts to read files outside allowed directory (Information Disclosure) and potentially escalate privileges. Builds on Foundations: input validation and file system security."
+    },
+    {
+      id: "tm-5",
+      question: "What makes a threat 'critical' risk in a risk matrix?",
+      options: [
+        "It's technically complex",
+        "High likelihood AND high impact",
+        "It was in the news",
+        "The CEO is worried about it"
+      ],
+      correctIndex: 1,
+      explanation: "Risk = Likelihood × Impact. Critical means both are high. Builds on Foundations: prioritization and risk-based decision making."
+    },
+    {
+      id: "tm-6",
+      question: "You discover a threat but decide not to mitigate it. What MUST you do?",
+      options: [
+        "Nothing - it's your decision",
+        "Document the accepted risk with business justification and review periodically",
+        "Tell the CEO",
+        "Implement partial mitigation"
+      ],
+      correctIndex: 1,
+      explanation: "Accepting risks is valid IF documented and reviewed. Undocumented accepted risks can become liabilities. This is risk management practice."
+    },
+    {
+      id: "tm-7",
+      question: "In an attack tree, what does an 'AND' gate mean?",
+      options: [
+        "The attacker can choose any path",
+        "The attacker must successfully complete ALL child nodes",
+        "The attack is impossible",
+        "Multiple attackers are required"
+      ],
+      correctIndex: 1,
+      explanation: "AND gate means all conditions must be met. This makes attacks harder. OR gate means any path succeeds (easier). Builds on Foundations: attack chain thinking."
+    },
+    {
+      id: "tm-8",
+      question: "Why should threat modeling happen during the DESIGN phase?",
+      options: [
+        "It's cheaper to fix architectural flaws before code is written",
+        "Developers don't understand security",
+        "It's a compliance requirement",
+        "It's easier to document"
+      ],
+      correctIndex: 0,
+      explanation: "Fixing design flaws in production is 10-100x more expensive than during design. Shift-left security principle: catch issues early."
+    },
+    {
+      id: "tm-9",
+      question: "A threat model identifies 50 threats. What's the FIRST thing to do?",
+      options: [
+        "Fix all of them immediately",
+        "Prioritize by risk (likelihood × impact)",
+        "Ignore most of them",
+        "Ask for more budget"
+      ],
+      correctIndex: 1,
+      explanation: "Not all threats are equal. Use risk matrix to prioritize. Focus on high-impact, high-likelihood threats first. This is practical risk management."
+    },
+    {
+      id: "tm-10",
+      question: "How does STRIDE relate to the CIA triad (from Foundations)?",
+      options: [
+        "STRIDE replaces CIA triad",
+        "STRIDE expands CIA from 3 security goals to 6 specific threat types",
+        "They're unrelated",
+        "STRIDE is for networks only"
+      ],
+      correctIndex: 1,
+      explanation: "STRIDE maps to CIA: Confidentiality (Spoofing, Info Disclosure), Integrity (Tampering, Repudiation), Availability (DoS), plus Authorization (Elevation of Privilege). Builds on Foundations CIA triad."
+    }
+  ]}
+/>
+
+---
+
+## Practical Exercise: Build Your First Threat Model
+
+**Choose one system to threat model**:
+1. A password reset flow
+2. An API endpoint that returns user profile data
+3. A commenting system on a blog
+
+**Steps**:
+1. Draw data flow diagram (use paper or tool)
+2. Mark trust boundaries
+3. List assets
+4. Apply STRIDE to each data flow
+5. Create 5-10 threat statements
+6. Prioritize with risk matrix
+7. Propose controls for top 3 threats
+
+**Time**: 45-60 minutes
+
+**Deliverable**: One-page threat model with diagram, threat list, and control recommendations
+
+<Callout variant="action" title="What's Next">
+**Module 3: Vulnerability Classes & Exploitation** builds on this threat modeling foundation.
+
+You'll learn:
+- OWASP Top 10 in detail (the most common vulnerabilities found via threat modeling)
+- How SQL injection, XSS, and CSRF work (expanding Foundations encoding attacks)
+- How to exploit and defend against each vulnerability class
+- Real CVE analysis and exploit chains
+
+The threats you identified in this module will have concrete names and mitigation patterns in Module 3.
+</Callout>
+
+<SectionProgressToggle sectionId="applied-threat-modeling-practice" />
+
+---
+
+**Next Module**: [Vulnerability Classes & Exploitation →](#)
+

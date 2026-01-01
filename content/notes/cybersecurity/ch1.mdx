@@ -5,12 +5,15 @@ level: "foundations"
 courseId: "cybersecurity"
 levelId: "foundations"
 summary: "Data, networks, attackers, and everyday defences with hands-on labs."
-estimatedHours: 10
+estimatedHours: 15
 learningObjectives:
   - "Explain the CIA triad (confidentiality, integrity, availability) with concrete everyday examples."
   - "Explain how data representation (bits, bytes, encodings) affects security outcomes."
   - "Apply simple checks to passwords, links, and basic account hygiene using the labs."
   - "Analyse a small system to identify trust boundaries and obvious attack surface."
+  - "Demonstrate ability to detect phishing attempts with 90% accuracy."
+  - "Create a personal security improvement plan with evidence of implementation."
+  - "Evaluate breach scenarios and recommend preventive controls."
 ---
 
 import ProgressBar from "@/components/notes/ProgressBar"
@@ -32,7 +35,7 @@ import { cyberSections } from "@/lib/cyberSections"
 
 <LevelProgressBar courseId="cybersecurity" levelId="foundations" sectionIds={cyberSections.foundations} />
 
-<CPDTracker courseId="cybersecurity" levelId="foundations" estimatedHours={10} />
+<CPDTracker courseId="cybersecurity" levelId="foundations" estimatedHours={15} />
 
 <SectionHeader variant="content" emoji="🛡️" id="foundations-overview">
   Foundations overview
@@ -191,6 +194,62 @@ Why it matters: when identity is strong and access is narrow, a compromised acco
   <BitChangeTool />
 </ToolCard>
 
+<ToolCard
+  id="encoding-playground"
+  title="Encoding Playground"
+  subtitle="Explore ASCII, UTF-8, Base64, and Hex"
+  description="See how the same text is represented in different encoding schemes. Understand why encoding matters for security—attackers sometimes use encoding to bypass filters."
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-data-and-bits"
+  cpdMinutesOnUse={5}
+>
+  <EncodingPlayground />
+</ToolCard>
+
+**Why encoding matters for security:**
+
+Attackers often use encoding to hide malicious payloads from simple filters. For example, SQL injection attempts might be URL-encoded or hex-encoded to bypass security controls that only look for plain-text patterns. Understanding how data can be represented in multiple ways helps you recognize obfuscation techniques.
+
+Real example: The SQL command `SELECT * FROM users` could be encoded as:
+- URL encoding: `%53%45%4C%45%43%54%20%2A%20%46%52%4F%4D%20%75%73%65%72%73`
+- Hex encoding: `53454C454354202A2046524F4D207573657273`
+- Base64: `U0VMRUNUICogRlJPTSB1c2Vycw==`
+
+Simple keyword filters looking for "SELECT" would miss these encoded versions, but the server still interprets them correctly.
+
+<ToolCard
+  id="hashing-encryption-lab"
+  title="Hashing vs Encryption Lab"
+  subtitle="Understand the critical difference"
+  description="Compare one-way hashing (MD5, SHA-1, SHA-256, bcrypt) with two-way encryption. Learn why MD5 is broken, why bcrypt is better than SHA-256 for passwords, and how rainbow tables work."
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-data-and-bits"
+  cpdMinutesOnUse={10}
+>
+  <HashingEncryptionLab />
+</ToolCard>
+
+**Hashing vs Encryption - Key Differences:**
+
+**Hashing (One-Way):**
+- Cannot be reversed—you cannot get the original data back
+- Used for integrity verification and password storage
+- Same input always produces same output
+- Tiny input change creates completely different hash (avalanche effect)
+- Examples: MD5 (broken), SHA-1 (weak), SHA-256 (strong), bcrypt (password-specific)
+
+**Encryption (Two-Way):**
+- Can be decrypted with the correct key
+- Used for confidentiality—protecting data in transit or at rest
+- Same plaintext can produce different ciphertext (with different keys/IVs)
+- Examples: AES, RSA, TLS/HTTPS
+
+**Common mistake:** Storing passwords with SHA-256 instead of bcrypt/Argon2. SHA-256 is fast (good for file integrity, bad for passwords). Fast hashing enables brute-force attacks. bcrypt is intentionally slow with unique salts per password, making attacks impractical.
+
+**Rainbow tables:** Pre-computed hashes of common passwords. If you hash "password123" with SHA-256, an attacker can instantly look it up in a rainbow table. Defense: use a salt (random data added before hashing) so the same password produces different hashes for different users. bcrypt does this automatically.
+
 <QuizBlock
   id="foundations-data-and-bits"
   courseId="cybersecurity"
@@ -298,6 +357,71 @@ Under the hood, data still moves as packets. A packet has a header and a payload
 >
   <MetadataLeakTool />
 </ToolCard>
+
+<ToolCard
+  id="wireshark-intro"
+  title="Network Analysis Introduction"
+  subtitle="Understanding packet capture and analysis"
+  description="Learn about Wireshark and network protocol analysis. Explore resources for analyzing real network traffic and identifying security issues."
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-networks-and-packets"
+  cpdMinutesOnUse={5}
+>
+  <WiresharkIntro />
+</ToolCard>
+
+**Network security concepts:**
+
+**HTTPS (HTTP + TLS):** Encrypts web traffic between browser and server. Without HTTPS, passwords, credit cards, and personal data travel in plain text across the network—visible to anyone along the path. Look for the padlock icon in your browser. Never enter sensitive information on HTTP sites.
+
+**DNS (Domain Name System):** Translates human-readable names (google.com) to IP addresses (142.250.185.78). DNS is often unencrypted, revealing which sites you visit even if HTTPS encrypts the page content. DNS can be hijacked to redirect users to fake sites (phishing). Defense: Use DNS-over-HTTPS (DoH) or DNS-over-TLS (DoT) when possible.
+
+**VPN (Virtual Private Network):** Creates encrypted tunnel between your device and VPN server. Hides your traffic from local network observers (coffee shop WiFi, ISP). But the VPN provider can still see your traffic—choose carefully. Not all VPNs are equal in security or privacy.
+
+**Network Segmentation:** Separating networks by trust level or function. Example: Guest WiFi separate from corporate network, payment systems separate from general business network. If one zone is compromised, attackers can't easily reach other zones. Critical lesson from Target breach: vendor access wasn't segmented from payment systems.
+
+**Common network attacks:**
+- **Man-in-the-Middle (MitM):** Attacker intercepts traffic between two parties. Defense: HTTPS, certificate validation.
+- **DNS Hijacking:** Attacker redirects DNS queries to malicious servers. Defense: DNSSEC, DNS-over-HTTPS.
+- **Packet Sniffing:** Capturing network traffic to steal credentials or sensitive data. Defense: Encryption (HTTPS, VPN).
+- **ARP Spoofing:** Attacker tricks devices into sending traffic to wrong destination. Defense: Network monitoring, static ARP entries.
+
+<ToolCard
+  id="dns-trust-lab"
+  title="DNS Trust and Security"
+  subtitle="Explore DNS vulnerabilities and defenses"
+  description="Learn about DNS queries, DNS hijacking, DNSSEC, and how to identify typosquatting domains used in phishing."
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-networks-and-packets"
+  cpdMinutesOnUse={5}
+>
+  <DnsTrustLab />
+</ToolCard>
+
+<ToolCard
+  id="attack-surface-mapper"
+  title="Attack Surface Mapper"
+  subtitle="Identify network entry points and trust boundaries"
+  description="Practice mapping network architecture to identify where attackers might gain access and where trust boundaries should exist."
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-networks-and-packets"
+  cpdMinutesOnUse={10}
+>
+  <AttackSurfaceMapper />
+</ToolCard>
+
+**Real-world scenario: Home Network Security**
+
+Your home network is an attack surface too. Consider:
+- **Router:** Default passwords? Firmware updated? Guest network enabled for visitors?
+- **IoT devices:** Smart speakers, cameras, thermostats often have weak security
+- **WiFi:** WPA3 encryption (not WPA2 or WEP)? Strong password? Hidden SSID doesn't add much security
+- **Devices:** Phones, laptops, tablets all need updates and protection
+
+A compromised smart camera can be used to spy on you, launch attacks on other devices, or join a botnet for distributed denial-of-service (DDoS) attacks. Security isn't just about corporate networks.
 
 <QuizBlock
   id="foundations-networks-and-packets"

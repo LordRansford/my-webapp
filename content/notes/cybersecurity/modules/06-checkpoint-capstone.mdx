@@ -1,0 +1,439 @@
+---
+title: "Checkpoint and Capstone"
+description: "Comprehensive assessment, practical exam, and capstone project to demonstrate Foundations mastery."
+moduleNumber: 6
+sectionId: "foundations-checkpoint-capstone"
+---
+
+import SectionHeader from "@/components/course/SectionHeader"
+import SubsectionHeader from "@/components/course/SubsectionHeader"
+import BodyText from "@/components/course/BodyText"
+import Callout from "@/components/notes/Callout"
+import ToolCard from "@/components/notes/ToolCard"
+import QuizBlock from "@/components/notes/QuizBlock"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+
+<SectionHeader variant="content" emoji="🎓" id="foundations-checkpoint-capstone">
+  Checkpoint and Capstone
+</SectionHeader>
+
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-checkpoint-capstone" />
+
+<BodyText>
+Congratulations on reaching the final module of Cybersecurity Foundations! This checkpoint assesses your understanding and gives you the opportunity to demonstrate practical application through a capstone project.
+
+This module consists of three components:
+1. **Knowledge Check** - 50-question comprehensive assessment
+2. **Practical Exam** - Hands-on tasks applying what you've learned
+3. **Capstone Project** - Portfolio-worthy demonstration of your skills
+
+All three components must be completed to earn your Foundations certificate.
+</BodyText>
+
+<SubsectionHeader emoji="📝" id="knowledge-check">
+  Comprehensive Knowledge Check
+</SubsectionHeader>
+
+<BodyText>
+This assessment covers all modules in Cybersecurity Foundations. Take your time and answer thoughtfully. You need 70% (35/50 correct) to pass.
+
+**Topics covered:**
+- Module 1: Welcome & Security Habits
+- Module 2: Why Cyber Matters (CIA Triad, Risk)
+- Module 3: Data & Bits (Encoding, Hashing, Integrity)
+- Module 4: Networks & Packets (Protocols, Layers, Metadata)
+- Module 5: Threats & Defenses (Phishing, Social Engineering, Malware, Breaches)
+- Module 6: Authentication & Privacy (Passwords, MFA, Privacy, Account Hygiene)
+
+You may reference course materials during this assessment (open book). However, understanding the concepts is essential—simply searching for answers will not be effective given the scenario-based nature of the questions.
+</BodyText>
+
+<QuizBlock
+  id="foundations-comprehensive-check"
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-checkpoint-capstone"
+  title="Foundations Comprehensive Knowledge Check"
+  questions={[
+    // CIA Triad & Core Concepts
+    { q: "A hospital's patient records are encrypted but the system crashes and data is unavailable for 24 hours. Which part of the CIA triad failed?", a: "Availability - the data exists and is protected (confidentiality, integrity) but cannot be accessed when needed." },
+    { q: "You discover someone read your private messages but didn't change anything. Which CIA principle was violated?", a: "Confidentiality - unauthorized access to information even without modification violates confidentiality." },
+    { q: "An attacker modifies financial transactions in transit without detection. Which CIA principle failed?", a: "Integrity - data was changed without authorization or detection, even if still confidential and available." },
+    
+    // Data & Encoding
+    { q: "Why might SQL injection use URL encoding like %27 instead of a plain single quote?", a: "To bypass simple filters looking for literal quotes. Encoding obfuscates the payload while the server still interprets it correctly." },
+    { q: "What's the key difference between hashing and encryption?", a: "Hashing is one-way (cannot be reversed), used for integrity. Encryption is two-way (can be decrypted with key), used for confidentiality." },
+    { q: "Why is SHA-1 no longer recommended for security purposes?", a: "Collision attacks are practical - attackers can create two different inputs that produce the same hash, breaking integrity verification." },
+    { q: "What makes bcrypt better than SHA-256 for storing passwords?", a: "bcrypt is intentionally slow and includes salt automatically. SHA-256 is fast, making brute-force attacks practical. Slow hashing protects passwords." },
+    { q: "Why does changing one bit in input completely change a hash output?", a: "Avalanche effect - cryptographic hashes are designed so small input changes create unpredictable, large output changes to detect any modification." },
+    
+    // Networks & Protocols
+    { q: "Why can metadata reveal sensitive information even when payload is encrypted?", a: "Metadata shows who communicated with whom, when, how much data, and access patterns - revealing behavior even without reading content." },
+    { q: "What security problem does HTTPS solve that HTTP doesn't address?", a: "HTTPS encrypts data in transit, protecting confidentiality and integrity from eavesdropping and tampering between client and server." },
+    { q: "Why is DNS a common target for attackers?", a: "DNS translates domain names to IPs. Attackers can redirect users to fake sites (DNS hijacking) or use DNS for data exfiltration." },
+    { q: "What's the purpose of network segmentation?", a: "Separating networks by trust level limits lateral movement. If one zone is compromised, attackers can't easily reach other zones." },
+    
+    // Phishing & Social Engineering
+    { q: "You receive an email from your bank with correct logo but URL is 'secure-bankofamerica-login.com'. Why is this phishing?", a: "The domain is not bankofamerica.com. Attackers register similar domains (typosquatting) with correct branding to fool victims." },
+    { q: "What's the difference between phishing and spear phishing?", a: "Phishing is mass-sent generic attacks. Spear phishing is targeted at specific individuals using personalized information, making it more convincing." },
+    { q: "Why is 'verify through independent channels' the best defense against social engineering?", a: "Attackers control the communication channel they initiated. Using a different channel (call official number, check in-person) confirms authenticity." },
+    { q: "An email says 'Your account will be closed in 24 hours unless you verify immediately.' What social engineering tactic is this?", a: "Urgency - creating artificial time pressure to prevent verification and rational decision-making." },
+    
+    // Passwords & Authentication
+    { q: "Why is 'correct horse battery staple' stronger than 'P@ssw0rd1!'?", a: "Length matters more than complexity. 25 characters of lowercase is harder to crack than 11 characters of mixed symbols. Entropy increases with length." },
+    { q: "What's a rainbow table attack and how does salt prevent it?", a: "Rainbow tables are precomputed hashes of common passwords. Salt adds random data before hashing, making precomputed tables useless - each password gets unique hash." },
+    { q: "Why should you never reuse passwords across accounts?", a: "When one service is breached, attackers use credential stuffing to try those credentials on other services. Unique passwords limit damage to single account." },
+    { q: "What's the risk of using SMS for two-factor authentication?", a: "SIM swap attacks - attacker transfers your number to their SIM card, intercepting all SMS codes including 2FA." },
+    { q: "Why are hardware security keys more secure than authenticator apps?", a: "Hardware keys are phishing-resistant - they verify the actual website domain. Fake sites can't intercept codes like they can with manually-entered TOTP." },
+    
+    // Malware & Threats
+    { q: "What's the primary defense against ransomware?", a: "Regular, tested backups stored offline or immutably. If you can restore from backup, ransomware loses leverage and you don't pay." },
+    { q: "How does a keylogger steal information?", a: "Malware records keystrokes, capturing passwords, messages, and other typed information which is sent to the attacker." },
+    { q: "What's the difference between a virus and a worm?", a: "A virus requires user action to spread (opening file). A worm self-replicates across networks without user interaction." },
+    { q: "Why is ransomware particularly effective against organizations?", a: "Downtime costs are high, data is critical, backups may be inadequate. Organizations face pressure to restore operations quickly, making ransom payment tempting." },
+    
+    // Breach Case Studies
+    { q: "What was the primary entry point in the Target 2013 breach?", a: "Compromised credentials from a third-party HVAC contractor who had VPN access to Target's network without MFA." },
+    { q: "What failed control could have prevented the Target breach from reaching payment systems?", a: "Network segmentation - vendor access zone should have been isolated from payment card systems, blocking lateral movement." },
+    { q: "How did attackers compromise Twitter accounts in 2020?", a: "Social engineering multiple employees via phone to obtain credentials for internal admin tools that could take over any account." },
+    { q: "What single control would have prevented the Colonial Pipeline ransomware attack?", a: "Multi-factor authentication (MFA) on VPN access. Attackers used a compromised password with no second factor required." },
+    { q: "What pattern do Target, Twitter, and Colonial Pipeline breaches share?", a: "Basic security controls were missing (MFA, segmentation, training). Sophisticated attacks weren't needed - fundamental gaps were exploited." },
+    
+    // Privacy & Data Protection
+    { q: "What is data minimization and why does it matter?", a: "Only providing necessary information. Less data shared = smaller privacy risk and less value to attackers if breached." },
+    { q: "Why should you delete unused online accounts?", a: "Old accounts remain vulnerable to breaches, may contain reused passwords, and continue to expose personal data without benefit." },
+    { q: "What does 'Have I Been Pwned' tell you?", a: "Whether your email or passwords appear in known data breaches, alerting you to change compromised credentials." },
+    { q: "Why is it risky to post vacation photos in real-time on social media?", a: "Advertising an empty home invites burglary. Broadcasting location reveals patterns useful for physical or digital targeting." },
+    
+    // Defense & Controls
+    { q: "What is defense in depth?", a: "Layering multiple security controls so single failure doesn't cause a breach. If one layer fails, others still provide protection." },
+    { q: "Why is patching/updating software a critical security control?", a: "Updates fix known vulnerabilities. Unpatched systems are easy targets since exploit methods are public after vulnerability disclosure." },
+    { q: "What's the difference between preventive and detective controls?", a: "Preventive controls stop attacks before they succeed (firewall, MFA). Detective controls identify attacks in progress or after (logging, monitoring, alerts)." },
+    { q: "Why must backups be offline or immutable to protect against ransomware?", a: "Ransomware targets accessible backups. Offline/immutable backups can't be encrypted by attackers, enabling recovery." },
+    
+    // Risk & Decision-Making
+    { q: "What's the difference between a threat and a vulnerability?", a: "Threat is what could cause harm (attacker, malware). Vulnerability is weakness that makes threat more likely to succeed (missing patch, weak password)." },
+    { q: "Why might a high-threat scenario have low risk?", a: "Risk = likelihood × impact in YOUR context. High threat with low likelihood (strong controls) or low impact (minimal data value) = lower risk." },
+    { q: "What does 'acceptable risk' mean in security decision-making?", a: "Risk level you're willing to tolerate given costs of controls, business needs, and likelihood/impact assessment. Not all risks can or should be eliminated." },
+    
+    // Practical Application
+    { q: "You're asked to urgently wire $50,000 in an email appearing to be from your CEO. What should you do?", a: "Verify through independent channel - call the CEO directly using known number. Urgency is a red flag. CEO fraud/BEC attacks are common." },
+    { q: "Your personal laptop's antivirus finds malware. What's your first priority?", a: "Disconnect from network to prevent spread or data exfiltration. Then assess damage and clean/restore system." },
+    { q: "You receive a text saying your package couldn't be delivered with a tracking link. You didn't order anything. What is this?", a: "Smishing (SMS phishing) - attackers send fake delivery notifications to trick victims into clicking malicious links or revealing information." },
+    { q: "A website you visit regularly suddenly shows an invalid certificate warning. What should you do?", a: "Do NOT proceed. Could indicate man-in-the-middle attack. Verify through different network or contact site directly. Never ignore certificate warnings." },
+    { q: "You want to check email while at a coffee shop. What's the safest approach?", a: "Use cellular data instead of public WiFi, or use a VPN if you must use WiFi. Avoid accessing sensitive accounts on untrusted networks." },
+    
+    // Career & Industry
+    { q: "What's the most common entry-level cybersecurity role?", a: "Security Analyst - monitors systems, investigates alerts, responds to incidents. Builds broad understanding before specialization." },
+    { q: "Why do organizations need both technical security and security awareness training?", a: "Technical controls fail when humans are tricked. Social engineering bypasses firewalls. People are both weakness and strength in security." },
+  ]}
+/>
+
+<BodyText>
+**Passing Score**: 70% (35/50 correct)
+
+If you score below 70%, review the modules where you missed questions and retake the assessment. This is a learning tool, not a punishment—use it to identify gaps in your understanding.
+</BodyText>
+
+<SubsectionHeader emoji="💼" id="practical-exam">
+  Practical Exam
+</SubsectionHeader>
+
+<BodyText>
+The practical exam consists of three hands-on tasks that apply your Foundations knowledge. You have 90 minutes (suggested) to complete all tasks. This is an open-book assessment.
+
+**Task 1: Phishing Email Analysis (30 points)**
+
+You will analyze 3 email examples (provided separately) and for each:
+- Classify as phishing or legitimate
+- Identify specific indicators (sender domain, urgency tactics, link analysis)
+- Explain the attack vector and potential impact
+- Recommend response actions
+
+**Task 2: Attack Surface Diagram (35 points)**
+
+Given a scenario (small business with website, email, file sharing, and remote workers), you will:
+- Create a visual diagram showing all components
+- Identify and mark entry points
+- Draw trust boundaries
+- Highlight data flows
+- List 5 key vulnerabilities with risk ratings
+
+**Task 3: Breach Incident Report (35 points)**
+
+Read a provided breach scenario (200-300 words) and write a 2-page incident report covering:
+- **What happened**: Clear timeline and summary
+- **How it happened**: Attack vector analysis
+- **What failed**: Identify 3+ failed security controls
+- **Recommendations**: 3 specific, feasible preventive controls
+
+**Deliverables:**
+- Submit as single PDF document
+- Include your name and completion date
+- Label each task clearly
+- Show your work and reasoning
+
+**Grading Rubric**: [View detailed rubric →](/docs/courses/rubrics/foundations-practical-exam)
+
+**Passing Score**: 70/100 points
+
+**Retake Policy**: If you score below 70%, you may retake once after reviewing feedback and relevant modules.
+</BodyText>
+
+<Callout title="Practical Exam Purpose" type="info">
+The practical exam tests your ability to apply concepts, not just recall facts. In real cybersecurity work, you'll analyze threats, assess systems, and communicate findings. These tasks simulate activities you'll perform in security roles.
+
+Take the exam seriously, but don't stress—it's designed to reinforce learning, not trick you.
+</Callout>
+
+<SubsectionHeader emoji="🏆" id="capstone-project">
+  Capstone Project
+</SubsectionHeader>
+
+<BodyText>
+The capstone project is your opportunity to demonstrate mastery and create a portfolio piece. Choose ONE of three options based on your interests and goals.
+
+**Estimated time**: 2 weeks (3-5 hours of work)
+
+**All projects require:**
+- Original work (no AI-generated content)
+- Professional presentation
+- Evidence of implementation or research
+- Reflection on learning
+
+**Choose your project:**
+</BodyText>
+
+<SubsectionHeader emoji="📋" id="option-a">
+  Option A: Personal Security Improvement Plan
+</SubsectionHeader>
+
+<BodyText>
+Create and implement a comprehensive 20-point security improvement plan for your personal digital life.
+
+**Deliverables:**
+1. **Current State Assessment** (1-2 pages)
+   - Audit of devices, accounts, and current practices
+   - Honest assessment of vulnerabilities
+   - Risk prioritization
+
+2. **Improvement Checklist** (20 items minimum)
+   - Specific, measurable actions
+   - Prioritized by risk and feasibility
+   - Timeline for implementation
+
+3. **Implementation Evidence** (screenshots, descriptions)
+   - Proof of completion for 18+ items
+   - Before/after comparisons where relevant
+   - Redact sensitive information
+
+4. **Reflection Essay** (500 words)
+   - Challenges encountered
+   - Surprises or unexpected learnings
+   - How habits have changed
+   - Future security goals
+
+**Example checklist items:**
+- Enable 2FA on 10 critical accounts
+- Migrate 50 passwords to password manager
+- Delete 15 unused online accounts
+- Review and update privacy settings on 5 services
+- Set up automatic backups
+- Enable full-disk encryption
+- Configure firewall rules
+- Audit app permissions on mobile devices
+
+**Grading Rubric**: [View detailed rubric →](/docs/courses/rubrics/foundations-capstone-projects#option-a)
+
+**Success Indicator**: You've made measurable improvements to your security posture with evidence to prove it.
+</BodyText>
+
+<SubsectionHeader emoji="👨‍👩‍👧" id="option-b">
+  Option B: Family/Friends Security Guide
+</SubsectionHeader>
+
+<BodyText>
+Create a practical, beginner-friendly security guide for a specific audience (family member, small business owner, elderly relative, etc.).
+
+**Deliverables:**
+1. **1-Page Guide** (front and back allowed)
+   - Designed for specific audience
+   - 10+ actionable tips
+   - Visual elements (icons, charts, diagrams)
+   - Plain language (no jargon)
+   - Printable and shareable
+
+2. **Design Brief** (1 page)
+   - Audience description and needs
+   - Goals and success criteria
+   - Design choices rationale
+   - Distribution plan
+
+3. **Test Evidence** (feedback summary)
+   - 3+ people from target audience reviewed guide
+   - Feedback collected and summarized
+   - Iterations based on feedback documented
+
+**Content focus areas:**
+- Password security
+- Phishing recognition
+- Device security
+- Safe browsing
+- Privacy basics
+- Emergency contacts
+- When to ask for help
+
+**Grading Rubric**: [View detailed rubric →](/docs/courses/rubrics/foundations-capstone-projects#option-b)
+
+**Success Indicator**: Your guide is clear, actionable, and tested with real users from your target audience.
+</BodyText>
+
+<SubsectionHeader emoji="🔍" id="option-c">
+  Option C: Breach Case Study Deep Dive
+</SubsectionHeader>
+
+<BodyText>
+Select a major cybersecurity breach (NOT Target, Twitter, or Colonial Pipeline) and write a comprehensive 1500-word analysis.
+
+**Deliverables:**
+1. **Written Report** (1500 words ±10%)
+   - Professional formatting
+   - Clear structure with sections
+   - Properly cited sources (3+ reputable sources)
+   - Executive summary
+
+2. **Timeline Visualization**
+   - Visual representation of attack progression
+   - Key dates and milestones
+   - Can be diagram, infographic, or timeline chart
+
+3. **Prevention Plan** (2-3 pages)
+   - 3 specific preventive controls
+   - Implementation details
+   - Cost-benefit analysis
+   - Priority justification
+
+**Report sections:**
+- Executive Summary
+- Background and Context
+- Timeline of Events
+- Technical Attack Analysis
+- Failed Controls Identification
+- Impact Assessment
+- Lessons Learned
+- Prevention Recommendations
+- References
+
+**Suggested breaches to research:**
+- Equifax (2017)
+- Yahoo (2013-2014)
+- Marriott/Starwood (2018)
+- SolarWinds (2020)
+- Uber (2016)
+- Anthem (2015)
+- Office of Personnel Management (2015)
+- NotPetya (2017)
+- WannaCry (2017)
+
+**Grading Rubric**: [View detailed rubric →](/docs/courses/rubrics/foundations-capstone-projects#option-c)
+
+**Success Indicator**: Deep analysis demonstrating you understand not just what happened, but why it happened and how to prevent it.
+</BodyText>
+
+<SubsectionHeader emoji="📜" id="certification">
+  Certification and Portfolio
+</SubsectionHeader>
+
+<BodyText>
+Upon successful completion of all three components (Knowledge Check, Practical Exam, Capstone Project), you will receive:
+
+**1. Certificate of Completion**
+- Official Cybersecurity Foundations certificate
+- 15 CPD hours documented
+- Verifiable credential (unique ID)
+- Suitable for professional development records
+
+**2. Digital Skills Badge**
+- Shareable credential for LinkedIn, resume
+- Integration with Badgr/Credly (planned)
+- Demonstrates verified skill completion
+
+**3. CPD Evidence Package**
+- Downloadable PDF with:
+  - Course outline and learning objectives
+  - Assessment scores and completion dates
+  - Capstone project summary
+  - CPD hour breakdown
+- Suitable for professional body submissions (e.g., BCS, CISP, ISC2)
+
+**4. Portfolio Materials**
+- Your capstone project (showcase work)
+- Breach case studies reviewed
+- Tools and labs completed
+- Progress tracking records
+
+**Using Your Certificate:**
+- Add to resume/CV under Education or Professional Development
+- Share on LinkedIn and professional profiles
+- Include in job applications for security roles
+- Use as evidence for certification prerequisites (CompTIA Security+, etc.)
+- Submit for CPD requirements with professional bodies
+</BodyText>
+
+<Callout title="What's Next After Foundations?" type="info">
+Congratulations on completing Cybersecurity Foundations! You now have a solid understanding of core security concepts and practical skills.
+
+**Next steps:**
+- **Intermediate (Applied) Level**: Threat modeling, secure architecture, authentication deep dive
+- **Advanced (Practice) Level**: Cryptography, incident response, governance, career planning
+- **Specialization**: Choose a focus area (AppSec, Cloud Security, GRC, Pentesting)
+- **Certifications**: Consider CompTIA Security+, ISC2 CC, or other entry-level certs
+- **Practice**: Apply skills in your current role or personal projects
+- **Community**: Join security communities, attend meetups, follow security researchers
+
+The journey doesn't end here—continuous learning is essential in cybersecurity. Keep building on this foundation!
+</Callout>
+
+<SubsectionHeader emoji="🎯" id="final-checklist">
+  Final Checklist
+</SubsectionHeader>
+
+<BodyText>
+Before submitting for certification, ensure you have completed:
+
+- [ ] All 6 module sections marked complete
+- [ ] All module quizzes passed
+- [ ] All interactive labs completed
+- [ ] Knowledge Check passed (70%+)
+- [ ] Practical Exam submitted (70%+ score)
+- [ ] Capstone Project submitted and approved
+- [ ] CPD hours tracked and exported
+- [ ] Reflection on learning journey documented
+
+**Submission Process:**
+1. Complete all requirements above
+2. Submit practical exam and capstone project as PDF
+3. Instructor review (5 business days)
+4. Feedback provided if revisions needed
+5. Certificate issued upon approval
+
+**Questions?**
+- Review module content you found challenging
+- Consult the course specification document
+- Check the FAQ section
+- Contact instructor for clarification
+
+**Mark this section complete when ALL requirements are fulfilled.**
+</BodyText>
+
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-checkpoint-capstone" />
+
+<BodyText>
+**Thank you for your dedication to learning cybersecurity!**
+
+Your commitment to understanding these concepts makes the digital world safer for everyone. Whether you're protecting yourself, your family, your organization, or pursuing a cybersecurity career, the knowledge you've gained here provides a strong foundation.
+
+Security is a journey, not a destination. Continue learning, stay curious, and never stop questioning assumptions.
+
+**Good luck on your assessment and capstone!** 🎓🔐
+</BodyText>

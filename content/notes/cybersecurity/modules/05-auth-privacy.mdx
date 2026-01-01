@@ -1,0 +1,400 @@
+---
+title: "Authentication and Privacy"
+description: "Password management, multi-factor authentication, privacy threat modeling, and account hygiene best practices."
+moduleNumber: 5
+sectionId: "foundations-authentication-privacy"
+---
+
+import SectionHeader from "@/components/course/SectionHeader"
+import SubsectionHeader from "@/components/course/SubsectionHeader"
+import BodyText from "@/components/course/BodyText"
+import Callout from "@/components/notes/Callout"
+import ToolCard from "@/components/notes/ToolCard"
+import QuizBlock from "@/components/notes/QuizBlock"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+
+<SectionHeader variant="content" emoji="🔐" id="foundations-authentication-privacy">
+  Authentication and Privacy
+</SectionHeader>
+
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-authentication-privacy" />
+
+<BodyText>
+Authentication proves who you are. Privacy protects what others know about you. Both are fundamental to security, yet most people underestimate their importance until after a breach.
+
+This module provides practical guidance on password management, multi-factor authentication, privacy protection, and account hygiene that you can implement immediately.
+</BodyText>
+
+<SubsectionHeader emoji="🔑" id="password-management">
+  Password Management Fundamentals
+</SubsectionHeader>
+
+<BodyText>
+Passwords remain the primary authentication method despite their weaknesses. The key is not to make passwords perfect—it's to make them good enough while using additional defenses.
+
+**The password problem:**
+- **Memorability vs Security**: Memorable passwords are guessable; secure passwords are hard to remember
+- **Reuse temptation**: Easier to reuse one password than remember many unique ones
+- **Breaches**: Your strong password is useless if the service stores it insecurely
+- **Phishing**: Even perfect passwords can be stolen through social engineering
+
+**The password manager solution:**
+- Generates strong, random passwords for each account
+- Stores passwords encrypted with a master password
+- Auto-fills credentials securely
+- Syncs across devices
+- Reduces password reuse to zero
+</BodyText>
+
+<Callout title="Why password managers are essential" type="concept">
+Human memory cannot reliably store 50+ unique, strong passwords. Password managers solve this by requiring you to remember only ONE strong master password while generating and storing unique passwords for everything else. This is not a luxury—it's the only practical way to maintain strong, unique passwords across all accounts.
+</Callout>
+
+<ToolCard
+  id="password-manager-workshop"
+  title="Password Manager Implementation Workshop"
+  subtitle="7-step guided setup"
+  description="Follow this checklist to install a password manager, migrate existing passwords, and establish secure password practices."
+>
+  <PasswordManagerWorkshop />
+</ToolCard>
+
+<BodyText>
+**Choosing a password manager:**
+
+**Bitwarden** (Recommended for most users)
+- Free tier includes all essential features
+- Open-source and audited
+- Cloud sync or self-hosted option
+- Browser extensions and mobile apps
+
+**1Password** (Premium option)
+- Excellent user experience
+- Family sharing features
+- Travel mode (hide sensitive vaults)
+- Paid only ($2.99/month individual)
+
+**KeePass** (Technical users)
+- Completely free and open-source
+- Offline-only (you manage sync)
+- Highly customizable
+- Steeper learning curve
+
+**Avoid**: Browser-only password storage (no encryption at rest), password notebooks (physical security risk), spreadsheets (no encryption)
+</BodyText>
+
+<SubsectionHeader emoji="🛡️" id="multi-factor-authentication">
+  Multi-Factor Authentication (MFA)
+</SubsectionHeader>
+
+<BodyText>
+Multi-factor authentication requires two or more verification factors to prove identity:
+- **Something you know**: Password, PIN
+- **Something you have**: Phone, hardware token, smart card
+- **Something you are**: Fingerprint, face recognition
+
+**Why MFA matters:**
+Even if attackers steal your password (phishing, breach, keylogger), they cannot access your account without the second factor. MFA blocks the vast majority of account takeover attempts.
+</BodyText>
+
+<ToolCard
+  id="mfa-deep-dive"
+  title="MFA Methods Comparison"
+  subtitle="Understand the security differences"
+  description="Compare SMS, authenticator apps, hardware tokens, and biometrics. Learn which methods provide the best protection."
+>
+  <MfaDeepDiveLab />
+</ToolCard>
+
+<BodyText>
+**MFA method security ranking:**
+
+**1. Hardware Security Keys (Best)**
+- YubiKey, Titan Security Key, Thetis
+- Phishing-resistant (requires physical presence)
+- No batteries, no app, works offline
+- Small investment ($25-50) for maximum security
+- **Use for**: Critical accounts (email, banking, work)
+
+**2. Authenticator Apps (Strong)**
+- Google Authenticator, Microsoft Authenticator, Authy
+- Time-based one-time passwords (TOTP)
+- Works offline, not vulnerable to SIM swap
+- Free and widely supported
+- **Use for**: All accounts that support it
+
+**3. Push Notifications (Moderate)**
+- Approve/deny on your phone
+- Convenient but vulnerable to MFA fatigue attacks
+- Attacker can spam requests until you accidentally approve
+- **Use for**: Lower-risk accounts, but verify each request
+
+**4. SMS/Text Message (Weak - avoid if possible)**
+- Vulnerable to SIM swap attacks
+- Can be intercepted
+- Better than nothing, but not recommended for critical accounts
+- **Use for**: Last resort only when no other options available
+
+**5. Email-based codes (Weakest)**
+- If email is compromised, MFA is bypassed
+- Only acceptable for very low-risk accounts
+- **Avoid** for anything important
+</BodyText>
+
+<Callout title="Real Attack: Uber MFA Fatigue (2022)" type="concept">
+An attacker repeatedly sent MFA push notifications to an Uber employee throughout the day. Eventually, the tired employee approved one notification—giving the attacker full access. The attacker then compromised internal systems and stole sensitive data.
+
+**Defense**: Use TOTP apps or hardware keys that require active verification, not just clicking "approve." Be suspicious of unexpected MFA requests and report them immediately.
+</Callout>
+
+<BodyText>
+**Implementing MFA: Priority Order**
+
+**Critical (Enable immediately):**
+1. Email accounts (primary and recovery)
+2. Banking and financial accounts
+3. Work/business accounts
+4. Password manager
+5. Cloud storage with sensitive data
+
+**High Priority (Enable this week):**
+6. Social media accounts
+7. Payment services (PayPal, Venmo, etc.)
+8. Healthcare portals
+9. Government accounts (taxes, benefits)
+10. Domain registrars
+
+**Standard (Enable as you use):**
+11. Shopping accounts with stored payment methods
+12. Any account with personal information
+13. Services you rely on daily
+
+**Low Priority:**
+14. Accounts with no sensitive data
+15. Accounts you rarely use
+16. Test/demo accounts
+</BodyText>
+
+<SubsectionHeader emoji="🕵️" id="privacy-threats">
+  Privacy Threats and Data Protection
+</SubsectionHeader>
+
+<BodyText>
+Privacy is about controlling what information about you is collected, stored, and shared. Every online service you use collects data about you—the question is what they do with it.
+
+**Common privacy threats:**
+
+**Data Brokers**: Companies that collect and sell personal information
+- Sources: Public records, website tracking, app data, purchase history
+- Impact: Targeted ads, insurance rates, employment decisions, identity theft
+- Defense: Opt-out requests, privacy-focused tools, data minimization
+
+**Tracking and Profiling**: Websites and apps monitor your behavior
+- Cookies, pixels, fingerprinting, device IDs
+- Build detailed profiles of interests, locations, relationships
+- Defense: Ad blockers, privacy browsers, cookie auto-delete
+
+**Oversharing on Social Media**: Voluntary disclosure of sensitive information
+- Location check-ins, vacation photos (empty home), personal details
+- Used for social engineering, physical security threats
+- Defense: Privacy settings, think before posting, separate personal/professional
+
+**App Permissions**: Mobile apps requesting excessive access
+- Contacts, location, camera, microphone, files
+- Often more than needed for app function
+- Defense: Review and revoke unnecessary permissions
+
+**Data Breaches**: Services you trust get compromised
+- Your data ends up on dark web marketplaces
+- Used for identity theft, account takeover, extortion
+- Defense: Minimize data shared, use breach notification services
+</BodyText>
+
+<ToolCard
+  id="privacy-threat-modeler"
+  title="Privacy Threat Modeling"
+  subtitle="Map your digital footprint"
+  description="Identify online services you use, data they collect, privacy risks, and mitigation strategies."
+>
+  <PrivacyThreatModeler />
+</ToolCard>
+
+<Callout title="Cambridge Analytica Scandal (2018)" type="info">
+Facebook allowed third-party apps to collect not just user data, but also data about users' friends—without consent. Cambridge Analytica harvested data from 87 million Facebook users through a personality quiz app. This data was then used for political microtargeting.
+
+**Lesson**: Free services monetize your data. What you share can be used in ways you never imagined. Privacy policies matter, but so does limiting what you share in the first place.
+</Callout>
+
+<BodyText>
+**Privacy best practices:**
+
+**Data Minimization**:
+- Only provide information that's truly necessary
+- Use separate email addresses for different purposes
+- Consider privacy-respecting alternatives (DuckDuckGo vs Google, Signal vs WhatsApp)
+
+**Privacy Settings**:
+- Review and restrict data sharing on social media
+- Disable ad personalization where possible
+- Opt out of data broker listings
+
+**Browser Privacy**:
+- Use privacy-focused browsers (Firefox, Brave)
+- Install ad blockers (uBlock Origin)
+- Enable tracking protection
+- Use private/incognito mode for sensitive searches
+- Consider VPN for public WiFi
+
+**Communication Privacy**:
+- Use end-to-end encrypted messaging (Signal, WhatsApp)
+- Be cautious with work email for personal communications
+- Assume anything posted online is permanent
+</BodyText>
+
+<SubsectionHeader emoji="🧹" id="account-hygiene">
+  Account Hygiene and Cleanup
+</SubsectionHeader>
+
+<BodyText>
+Over time, we accumulate dozens or hundreds of accounts across websites and services. Many are forgotten, rarely used, or no longer needed. Each represents a potential security and privacy risk.
+
+**Why old accounts matter:**
+- Breaches expose credentials for accounts you've forgotten
+- Services with lax security become entry points
+- Data continues to be stored and potentially sold
+- Password reuse from years ago may still haunt you
+- Old recovery emails may be compromised
+
+**Account hygiene checklist:**
+1. **Identify all accounts** - Check password manager, email history, bank statements
+2. **Delete unused accounts** - Close accounts you no longer need
+3. **Update critical accounts** - Ensure strong passwords and MFA
+4. **Review app permissions** - Revoke unnecessary access
+5. **Check for breaches** - Use "Have I Been Pwned"
+6. **Update recovery information** - Ensure recovery email/phone current
+7. **Document important accounts** - List of critical accounts in secure location
+</BodyText>
+
+<ToolCard
+  id="account-hygiene-audit"
+  title="Account Hygiene Audit"
+  subtitle="Review and clean up digital accounts"
+  description="Systematic approach to identifying, auditing, and managing all your online accounts."
+>
+  <AccountHygieneAudit />
+</ToolCard>
+
+<BodyText>
+**Have I Been Pwned - Breach Monitoring**
+
+Visit [haveibeenpwned.com](https://haveibeenpwned.com) to check if your email or passwords appear in known data breaches.
+
+**What to do if you're in a breach:**
+1. Change password on affected account immediately
+2. Change password on any other account using same password
+3. Enable MFA if not already enabled
+4. Monitor account for suspicious activity
+5. Consider freezing credit if SSN or financial data exposed
+
+**Ongoing monitoring:**
+- Sign up for breach notifications
+- Check quarterly for new breaches
+- Update passwords when breaches occur
+</BodyText>
+
+<Callout title="LastPass Breach (2022)" type="concept">
+LastPass, a popular password manager, suffered a breach where encrypted password vaults were stolen. While passwords were encrypted, attackers could attempt to crack weak master passwords offline. Users with strong master passwords remained protected, but those with weak ones were vulnerable.
+
+**Lesson**: Even password managers can be breached. Your master password must be exceptionally strong (16+ characters, truly random). This incident reinforced why password manager choice matters—open-source options like Bitwarden undergo independent audits.
+</Callout>
+
+<SubsectionHeader emoji="📱" id="mobile-security">
+  Mobile Device Security
+</SubsectionHeader>
+
+<BodyText>
+Smartphones contain more sensitive data than most computers—email, banking apps, photos, messages, location history. Yet many people use minimal security on their phones.
+
+**Essential mobile security:**
+
+**Strong Device Lock**:
+- PIN: 6+ digits (not 1234, birthday, repeated digits)
+- Pattern: Complex pattern, not simple L-shape
+- Biometrics: Fingerprint or face as convenience layer
+- Auto-lock: 1-2 minutes maximum
+
+**App Permissions**:
+- Review which apps access location, camera, microphone, contacts
+- Grant permissions only when necessary
+- Revoke permissions for unused apps
+
+**App Sources**:
+- Download only from official stores (App Store, Google Play)
+- Read reviews and check developer reputation
+- Be skeptical of apps requesting excessive permissions
+
+**Backups and Encryption**:
+- Enable automatic encrypted backups
+- Full device encryption (usually default on modern devices)
+- Remote wipe capability enabled
+
+**Public WiFi Risks**:
+- Avoid accessing sensitive accounts on public WiFi
+- Use VPN when necessary
+- Prefer cellular data for financial transactions
+- Disable auto-connect to open networks
+</BodyText>
+
+<SubsectionHeader emoji="🎯" id="assessment">
+  Knowledge Check
+</SubsectionHeader>
+
+<QuizBlock
+  id="foundations-authentication-privacy"
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-authentication-privacy"
+  title="Authentication & Privacy Assessment"
+  questions={[
+    { q: "What is the primary advantage of using a password manager?", a: "It allows you to use strong, unique passwords for every account while only remembering one master password." },
+    { q: "Which MFA method provides the strongest security?", a: "Hardware security keys (like YubiKey) are phishing-resistant and provide the strongest protection." },
+    { q: "Why is SMS-based 2FA considered weak?", a: "It's vulnerable to SIM swap attacks where attackers transfer your phone number to their device, intercepting your codes." },
+    { q: "What should you do if you discover your credentials in a data breach?", a: "Change the password immediately on the affected account and any other accounts using the same password. Enable MFA." },
+    { q: "What is data minimization?", a: "Only providing information that's truly necessary, limiting what services know about you to reduce privacy risks." },
+    { q: "Why should you delete unused accounts?", a: "Old accounts remain vulnerable to breaches and may contain reused passwords or personal data, creating ongoing security and privacy risks." },
+    { q: "What is MFA fatigue?", a: "Attack method where attacker spams MFA push notifications hoping victim eventually approves one out of annoyance or confusion." },
+    { q: "What makes a strong master password?", a: "16+ characters, truly random or a long passphrase, never reused elsewhere, protected from phishing." },
+    { q: "What is the Cambridge Analytica lesson?", a: "Free services monetize your data. What you share can be used in ways you never expected. Privacy policies matter." },
+    { q: "Why is public WiFi risky?", a: "Traffic can be intercepted by attackers on the same network. Use VPN or cellular data for sensitive activities." },
+  ]}
+/>
+
+<SubsectionHeader emoji="📝" id="action-plan">
+  Your Authentication & Privacy Action Plan
+</SubsectionHeader>
+
+<BodyText>
+**This Week:**
+- [ ] Install password manager and create strong master password
+- [ ] Enable MFA on email and banking (minimum)
+- [ ] Check Have I Been Pwned for your email addresses
+- [ ] Review and revoke unnecessary app permissions on your phone
+
+**This Month:**
+- [ ] Migrate 20+ most important accounts to password manager with unique passwords
+- [ ] Enable MFA on 10+ critical accounts
+- [ ] Delete 5+ unused online accounts
+- [ ] Review and update social media privacy settings
+- [ ] Set up breach monitoring notifications
+
+**Ongoing:**
+- [ ] Generate new unique password for each new account
+- [ ] Enable MFA by default when available
+- [ ] Quarterly account hygiene audit
+- [ ] Stay informed about major breaches affecting your services
+- [ ] Update emergency access and recovery information
+
+**Next module**: Checkpoint & Capstone—comprehensive assessment to demonstrate your Foundations mastery and create a portfolio-worthy security project.
+
+Complete the section progress toggle above to mark this module complete.
+</BodyText>

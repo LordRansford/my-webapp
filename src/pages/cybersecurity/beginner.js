@@ -40,6 +40,20 @@ const HashFingerprintTool = dynamic(() => import("@/components/notes/tools/cyber
 const RiskDial = dynamic(() => import("@/components/notes/tools/cybersecurity/ch1/RiskDial"), { ssr: false });
 const Quiz = dynamic(() => import("@/components/Quiz"), { ssr: false });
 
+// New Foundation Tools
+const EncodingPlayground = dynamic(() => import("@/components/notes/tools/cybersecurity/foundations/EncodingPlayground"), { ssr: false });
+const HashingEncryptionLab = dynamic(() => import("@/components/notes/tools/cybersecurity/foundations/HashingEncryptionLab"), { ssr: false });
+const PhishingDetectionTrainer = dynamic(() => import("@/components/notes/tools/cybersecurity/foundations/PhishingDetectionTrainer"), { ssr: false });
+const PasswordStrengthLab = dynamic(() => import("@/components/notes/tools/cybersecurity/foundations/PasswordStrengthLab"), { ssr: false });
+const PasswordManagerWorkshop = dynamic(() => import("@/components/notes/tools/cybersecurity/foundations/PasswordManagerWorkshop"), { ssr: false });
+const MfaDeepDiveLab = dynamic(() => import("@/components/notes/tools/cybersecurity/foundations/MfaDeepDiveLab"), { ssr: false });
+const SocialEngineeringSimulator = dynamic(() => import("@/components/notes/tools/cybersecurity/foundations/SocialEngineeringSimulator"), { ssr: false });
+const WiresharkIntro = dynamic(() => import("@/components/notes/tools/cybersecurity/foundations/WiresharkIntro"), { ssr: false });
+const AttackSurfaceMapper = dynamic(() => import("@/components/notes/tools/cybersecurity/foundations/AttackSurfaceMapper"), { ssr: false });
+const DnsTrustLab = dynamic(() => import("@/components/notes/tools/cybersecurity/foundations/DnsTrustLab"), { ssr: false });
+const PrivacyThreatModeler = dynamic(() => import("@/components/notes/tools/cybersecurity/foundations/PrivacyThreatModeler"), { ssr: false });
+const AccountHygieneAudit = dynamic(() => import("@/components/notes/tools/cybersecurity/foundations/AccountHygieneAudit"), { ssr: false });
+
 export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
     () => ({
@@ -72,6 +86,19 @@ export default function Page({ source, headings }) {
       HashFingerprintTool,
       RiskDial,
       Quiz,
+      // New Foundation Tools
+      EncodingPlayground,
+      HashingEncryptionLab,
+      PhishingDetectionTrainer,
+      PasswordStrengthLab,
+      PasswordManagerWorkshop,
+      MfaDeepDiveLab,
+      SocialEngineeringSimulator,
+      WiresharkIntro,
+      AttackSurfaceMapper,
+      DnsTrustLab,
+      PrivacyThreatModeler,
+      AccountHygieneAudit,
       Recap,
       PageNav,
       GlossaryTip,

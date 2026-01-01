@@ -5,7 +5,7 @@
 **Course name:** Cybersecurity Foundations  
 **Level:** 1 of 3 in the Cybersecurity Notes course  
 **Delivery mode:** Self paced online notes with embedded tools and labs  
-**Estimated guided learning hours:** 10  
+**Estimated guided learning hours:** 15  
 
 This level is designed for learners who are new to technical topics. It introduces core cybersecurity ideas using simple language, everyday examples, basic maths and interactive browser based tools.
 
@@ -30,16 +30,21 @@ By the end of Cybersecurity Foundations, learners will be able to:
 6. Use the password and URL tools to judge the strength of passwords and the safety of basic links or emails.
 7. Describe preventive, detective and corrective controls and give examples of each.
 8. Record simple risks and controls in a risk matrix and justify chosen likelihood and impact in plain terms.
+9. Demonstrate ability to detect phishing attempts with 90% accuracy using the phishing detection trainer.
+10. Create and implement a personal security improvement plan with evidence of completion.
+11. Evaluate breach scenarios and recommend preventive controls based on case study analysis.
 
 ## Module structure
 
-The Foundations content is organised into five modules on a single page:
+The Foundations content is organised into seven modules:
 
-1. Module 1: Data, bits, bytes and encoding  
-2. Module 2: Devices, networks and basic plumbing  
-3. Module 3: Threats, attackers and basic defences  
-4. Module 4: Authentication, passwords and everyday privacy  
-5. Module 5: Foundations checkpoint and labs  
+1. Module 1: Welcome - Course introduction, career paths, security habits baseline  
+2. Module 2: Why Cyber Matters - Understanding real-world impact and the CIA triad
+3. Module 3: Data and Bits - Data representation, encoding, hashing, and integrity  
+4. Module 4: Networks and Packets - How data moves, protocols, and network security
+5. Module 5: Threats and Defenses - Phishing, social engineering, malware, breach analysis  
+6. Module 6: Authentication and Privacy - Passwords, MFA, privacy threat modeling
+7. Module 7: Checkpoint and Capstone - Comprehensive assessment and portfolio project  
 
 Each module combines short explanatory sections with at least one embedded interactive tool and a short lab.
 

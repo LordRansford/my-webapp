@@ -1,6 +1,12 @@
 {
-  "generatedAt": "2026-01-01T10:25:01.003Z",
+  "generatedAt": "2026-01-01T21:21:53.695Z",
   "pages": [
+    {
+      "route": "/courses/_cpd-checklist",
+      "title": "CPD readiness checklist",
+      "sourcePath": "/content/courses/_cpd-checklist.mdx",
+      "sections": []
+    },
     {
       "route": "/courses/ai/advanced",
       "title": "AI Advanced",
@@ -882,12 +888,6 @@
       ]
     },
     {
-      "route": "/courses/_cpd-checklist",
-      "title": "CPD readiness checklist",
-      "sourcePath": "/content/courses/_cpd-checklist.mdx",
-      "sections": []
-    },
-    {
       "route": "/ai/advanced",
       "title": "AI Notes, Advanced",
       "sourcePath": "/content/notes/ai/advanced.mdx",
@@ -1293,6 +1293,19 @@
       "title": "Applied Cybersecurity",
       "sourcePath": "/content/notes/cybersecurity/intermediate.mdx",
       "sections": []
+    },
+    {
+      "route": "/notes/cybersecurity/modules/01-welcome",
+      "title": "Welcome to Cybersecurity Foundations",
+      "sourcePath": "/content/notes/cybersecurity/modules/01-welcome.mdx",
+      "sections": [
+        {
+          "depth": 3,
+          "title": "After this module you should be able to:",
+          "anchor": "after-this-module-you-should-be-able-to",
+          "excerpt": "- Describe the structure and learning approach of this course - Identify major cybersecurity career paths and typical progressions - Implement baseline security practices for accounts, devices, and communication - Articulate personal learning goals aligned with career or security improvement objectives"
+        }
+      ]
     },
     {
       "route": "/notes/cybersecurity/overview",
