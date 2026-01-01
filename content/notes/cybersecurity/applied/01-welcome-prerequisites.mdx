@@ -1,0 +1,362 @@
+# Applied Cybersecurity: Welcome & Prerequisites
+
+<SectionProgressToggle sectionId="applied-welcome-prerequisites" />
+
+## Welcome to Applied Cybersecurity
+
+<SectionHeader 
+  variant="content"
+  emoji="🎯"
+  title="From Personal to Professional Security"
+  subtitle="Taking your foundations knowledge into real-world application"
+/>
+
+### Building on What You Know
+
+In the Foundations level, you learned:
+- **Personal security**: Password managers, MFA, phishing detection
+- **Core concepts**: CIA triad, encoding, hashing vs encryption
+- **Basic threats**: Social engineering, malware, breach patterns
+- **Network fundamentals**: DNS, HTTPS, attack surfaces
+
+This Applied level deepens those concepts for **team and organizational security**. You'll learn:
+- How to apply threat modeling to real systems
+- How vulnerabilities connect into attack chains
+- How authentication works at scale (JWT, OAuth2, sessions)
+- How to detect and respond to incidents using logs
+- How to make risk-based security decisions
+
+**Key Shift**: From "How do I stay safe?" to "How do we build systems that resist attacks?"
+
+<Callout variant="concept" title="Career Progression">
+**Foundations** prepared you for: Junior analyst, Security awareness roles, Personal security improvement
+
+**Applied** prepares you for: Security analyst, Junior engineer, Application security, SOC analyst (Tier 1-2)
+
+**Practice** (Advanced) prepares you for: Security architect, Senior engineer, Security lead, CISO track
+</Callout>
+
+---
+
+## Prerequisites Check
+
+### Required Knowledge from Foundations
+
+Before continuing, you should be comfortable with:
+
+**Core Concepts (from Foundations):**
+- [ ] CIA triad (Confidentiality, Integrity, Availability)
+- [ ] Hashing vs Encryption (one-way vs two-way)
+- [ ] Password strength and entropy basics
+- [ ] MFA types (SMS, TOTP, hardware keys)
+- [ ] Phishing indicators and social engineering tactics
+
+**Network Basics (from Foundations):**
+- [ ] How DNS works and DNS security concerns
+- [ ] HTTPS vs HTTP and why it matters
+- [ ] Basic network concepts (packets, IP addresses, ports)
+- [ ] Attack surface identification
+
+**Threat Awareness (from Foundations):**
+- [ ] Common malware types (ransomware, trojans, spyware)
+- [ ] Real breach patterns (Target, Twitter, Colonial Pipeline)
+- [ ] Defense in depth concept
+- [ ] Basic incident response thinking
+
+<ToolCard 
+  toolId="foundations-prerequisite-quiz"
+  title="Foundations Review Quiz"
+  variant="practice"
+  cpd_minutes={15}
+>
+Test your Foundations knowledge before proceeding. You should score 80% or higher to ensure you're ready for Applied concepts.
+</ToolCard>
+
+<QuizBlock 
+  quizId="applied-prereq-check"
+  title="Applied Cybersecurity Prerequisites"
+  passingScore={80}
+  questions={[
+    {
+      id: "prereq-1",
+      question: "You're designing a login system. Which hash algorithm should you use for password storage?",
+      options: [
+        "SHA-256 (fast cryptographic hash)",
+        "MD5 (widely compatible)",
+        "bcrypt or Argon2 (slow, salted, adaptive)",
+        "Base64 encoding"
+      ],
+      correctIndex: 2,
+      explanation: "Password hashing must be SLOW to resist brute force. bcrypt/Argon2 are designed for passwords with built-in salting and adjustable work factors. SHA-256 is too fast, MD5 is broken, and Base64 is encoding (not hashing)."
+    },
+    {
+      id: "prereq-2",
+      question: "An attacker sends users to `paypa1.com` (with a '1' instead of 'l'). What is this attack called?",
+      options: [
+        "SQL injection",
+        "Typosquatting / Homograph attack",
+        "Man-in-the-Middle",
+        "Session hijacking"
+      ],
+      correctIndex: 1,
+      explanation: "Typosquatting uses similar-looking domains to trick users. This builds on Foundations phishing concepts and leads into Applied domain spoofing attacks."
+    },
+    {
+      id: "prereq-3",
+      question: "What does the 'Integrity' in CIA triad protect against?",
+      options: [
+        "Unauthorized disclosure of data",
+        "Unauthorized modification of data",
+        "Denial of service",
+        "Weak passwords"
+      ],
+      correctIndex: 1,
+      explanation: "Integrity ensures data hasn't been tampered with. Foundations covered this with hashing for file integrity. Applied level uses integrity for session tokens, API calls, and database transactions."
+    },
+    {
+      id: "prereq-4",
+      question: "Why is SMS 2FA considered weaker than TOTP (authenticator app)?",
+      options: [
+        "SMS requires internet connection",
+        "SMS is vulnerable to SIM swapping and interception",
+        "TOTP is encrypted by default",
+        "SMS doesn't work internationally"
+      ],
+      correctIndex: 1,
+      explanation: "Foundations covered this: SMS 2FA can be intercepted via SIM swapping, SS7 attacks, or social engineering mobile carriers. Applied level explores session security where MFA matters even more."
+    },
+    {
+      id: "prereq-5",
+      question: "In the Target 2013 breach (Foundations case study), what was the initial entry point?",
+      options: [
+        "Stolen admin credentials",
+        "SQL injection on the website",
+        "Compromised HVAC vendor credentials",
+        "Malicious insider"
+      ],
+      correctIndex: 2,
+      explanation: "Target breach started with an HVAC vendor. Applied level focuses on these third-party risks, supply chain attacks, and lateral movement patterns."
+    },
+    {
+      id: "prereq-6",
+      question: "What is 'defense in depth'?",
+      options: [
+        "Using the strongest possible single control",
+        "Layering multiple security controls so failure of one doesn't compromise the system",
+        "Deep packet inspection at the firewall",
+        "Penetration testing methodology"
+      ],
+      correctIndex: 1,
+      explanation: "Defense in depth means multiple layers (firewall + IDS + endpoint protection + logging). Applied level implements this across authentication, network segmentation, and monitoring."
+    },
+    {
+      id: "prereq-7",
+      question: "An attacker sends you a link: `http://bank.com?redirect=evil.com`. This could be a:",
+      options: [
+        "Buffer overflow",
+        "Open redirect vulnerability",
+        "DNS poisoning",
+        "XSS attack"
+      ],
+      correctIndex: 1,
+      explanation: "Open redirect uses legitimate domains to redirect to malicious sites. Foundations covered URL inspection. Applied level explores how this enables phishing and session theft."
+    },
+    {
+      id: "prereq-8",
+      question: "What does HTTPS (not HTTP) primarily protect?",
+      options: [
+        "Server from DDoS attacks",
+        "Confidentiality and integrity of data in transit",
+        "Password strength on login forms",
+        "SQL injection vulnerabilities"
+      ],
+      correctIndex: 1,
+      explanation: "HTTPS encrypts data between client and server, preventing eavesdropping and tampering. Applied level covers certificate validation, TLS versions, and man-in-the-middle attacks."
+    },
+    {
+      id: "prereq-9",
+      question: "You receive an urgent email from 'IT Support' asking for your password. This is:",
+      options: [
+        "Standard security practice",
+        "Phishing / Social engineering",
+        "Account verification",
+        "Mandatory compliance"
+      ],
+      correctIndex: 1,
+      explanation: "Legitimate IT never asks for passwords. Foundations covered phishing detection. Applied level covers how attackers use stolen credentials for lateral movement."
+    },
+    {
+      id: "prereq-10",
+      question: "What makes rainbow tables effective against unsalted password hashes?",
+      options: [
+        "They guess passwords quickly",
+        "They contain precomputed hashes for common passwords",
+        "They bypass encryption",
+        "They exploit SQL injection"
+      ],
+      correctIndex: 1,
+      explanation: "Rainbow tables are precomputed hash lookups. Salting defeats them by making each hash unique. Applied level covers how session tokens and API keys also need randomness."
+    }
+  ]}
+/>
+
+---
+
+## What Changes from Foundations to Applied?
+
+### 1. Scale: Individual → Team/Organization
+
+**Foundations Example**: "I use a password manager for my 20 accounts"
+
+**Applied Example**: "How do we enforce MFA for 500 employees across 15 applications with SSO?"
+
+### 2. Complexity: Single Control → Systems Thinking
+
+**Foundations Example**: "Strong passwords resist brute force"
+
+**Applied Example**: "How do we handle password resets securely? What if email is compromised? What's the account recovery flow? Where do we log failed attempts?"
+
+### 3. Responsibility: Personal Safety → Protecting Others
+
+**Foundations Example**: "I detect phishing to protect myself"
+
+**Applied Example**: "How do I configure email filters to protect 1,000 users? What's the incident response if someone clicks?"
+
+### 4. Trade-offs: Best Practice → Risk-Based Decisions
+
+**Foundations Example**: "Always use the strongest encryption"
+
+**Applied Example**: "Encryption adds latency. For this system, do we need encryption at rest? In transit? Both? What's the business impact of each choice?"
+
+<Callout variant="insight" title="The Applied Mindset">
+**Foundations asks**: "What's the right thing to do?"
+
+**Applied asks**: "What's the right thing to do *in this context*, with *these constraints*, for *this risk level*, and how do we *verify it's working*?"
+</Callout>
+
+---
+
+## Career Paths: Where Applied Skills Lead
+
+### Security Analyst
+**What you do**: Monitor alerts, investigate incidents, recommend fixes
+**Applied skills used**: Log analysis, threat modeling, vulnerability assessment
+**Typical journey**: Junior analyst (Foundations) → Analyst (Applied) → Senior analyst (Practice)
+
+### Application Security Engineer
+**What you do**: Review code for vulnerabilities, implement secure authentication, run security testing
+**Applied skills used**: OWASP Top 10, session management, secure SDLC
+**Typical journey**: Developer with security interest → AppSec engineer (Applied) → AppSec lead (Practice)
+
+### SOC Analyst (Security Operations Center)
+**What you do**: Monitor SIEM, triage alerts, escalate incidents, create detections
+**Applied skills used**: Log analysis, attack chain recognition, incident timelines
+**Typical journey**: IT support → SOC Tier 1 (Foundations) → SOC Tier 2 (Applied) → SOC Tier 3 / Threat Hunter (Practice)
+
+### Security Consultant
+**What you do**: Assess client security, conduct audits, recommend improvements
+**Applied skills used**: Threat modeling, risk assessment, control recommendations
+**Typical journey**: Technical role → Junior consultant (Applied) → Senior consultant (Practice)
+
+### Cloud Security Specialist
+**What you do**: Secure cloud infrastructure, implement IAM, configure security services
+**Applied skills used**: Network segmentation, identity architecture, secure configuration
+**Typical journey**: Cloud engineer → Cloud security (Applied) → Cloud security architect (Practice)
+
+---
+
+## How This Course Works: Applied Level Structure
+
+### Module 1: Welcome & Prerequisites ← You are here
+- Understand the progression from Foundations
+- Verify prerequisite knowledge
+- Set career expectations
+
+### Module 2: Threat Modeling in Practice
+- **Builds on**: Foundations CIA triad, attack surfaces
+- **Adds**: STRIDE methodology, attack trees, data flow diagrams
+- **Real-world**: Threat model a login system, file upload, API endpoint
+
+### Module 3: Vulnerability Classes & Exploitation
+- **Builds on**: Foundations encoding attacks, SQL injection basics
+- **Adds**: OWASP Top 10 deep dive, XSS, CSRF, injection patterns
+- **Real-world**: Analyze real CVEs, understand exploit chains
+
+### Module 4: Authentication & Sessions Deep Dive
+- **Builds on**: Foundations passwords, MFA, account security
+- **Adds**: JWT structure, OAuth2 flows, session hijacking, token security
+- **Real-world**: Design secure authentication for web apps
+
+### Module 5: Detection & Response Fundamentals
+- **Builds on**: Foundations breach case studies
+- **Adds**: Log analysis, SIEM queries, incident timelines, alert correlation
+- **Real-world**: Investigate a simulated breach using logs
+
+### Module 6: Risk Management & Attack Chains
+- **Builds on**: Foundations threats and defenses
+- **Adds**: Risk matrices (likelihood × impact), multi-stage attacks, kill chain
+- **Real-world**: Build attack chains for real breaches, prioritize fixes
+
+### Module 7: Applied Checkpoint & Labs
+- Comprehensive 40-question assessment (70% to pass)
+- 3 practical labs: Threat model, vulnerability analysis, incident response
+- Capstone project: Secure a real application scenario
+
+---
+
+## Study Recommendations
+
+### Time Commitment
+- **Estimated**: 18 CPD hours total
+- **Suggested pace**: 2-3 hours per week = 6-9 weeks
+- **Intensive option**: 3-4 hours per week = 4-6 weeks
+
+### Learning Approach
+
+**1. Active Practice (Not Passive Reading)**
+- Complete every interactive tool
+- Write out threat models by hand first, then use the tools
+- Pause videos to predict what happens next
+
+**2. Connect to Foundations**
+- When you see "JWT", recall "Foundations: hashing vs encryption"
+- When you see "lateral movement", recall "Foundations: Target breach via HVAC vendor"
+- Each Applied concept deepens a Foundations concept
+
+**3. Apply to Your Context**
+- If you work in development: Focus on Module 3 (vulnerabilities) and Module 4 (auth)
+- If you work in operations: Focus on Module 5 (detection) and Module 6 (risk)
+- If you're transitioning careers: Complete everything in order
+
+**4. Use the Case Studies**
+- Real breaches teach more than hypotheticals
+- For each breach: Draw the attack chain, identify failed controls, propose fixes
+
+### Success Metrics
+
+You're ready for Practice (Advanced) level when you can:
+- ✅ Threat model a system in 30 minutes using STRIDE
+- ✅ Explain 5+ OWASP Top 10 vulnerabilities with examples
+- ✅ Design secure authentication with JWT + refresh tokens
+- ✅ Investigate an incident by analyzing logs
+- ✅ Build risk matrices and prioritize vulnerabilities
+- ✅ Explain security trade-offs to non-technical stakeholders
+
+---
+
+## Ready to Begin?
+
+<Callout variant="action" title="Next Steps">
+1. **If you scored 80%+ on the Prerequisites Quiz**: Proceed to Module 2 (Threat Modeling)
+2. **If you scored 60-79%**: Review specific Foundations topics, then retake quiz
+3. **If you scored below 60%**: Complete Foundations level first, then return here
+
+**Remember**: Applied level assumes you're solid on Foundations concepts. It's okay to review!
+</Callout>
+
+<SectionProgressToggle sectionId="applied-welcome-prerequisites" />
+
+---
+
+**Next Module**: [Threat Modeling in Practice →](#)
+
