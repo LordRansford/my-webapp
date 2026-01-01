@@ -1,12 +1,6 @@
 {
-  "generatedAt": "2026-01-01T20:54:04.045Z",
+  "generatedAt": "2026-01-01T23:33:53.386Z",
   "pages": [
-    {
-      "route": "/courses/_cpd-checklist",
-      "title": "CPD readiness checklist",
-      "sourcePath": "/content/courses/_cpd-checklist.mdx",
-      "sections": []
-    },
     {
       "route": "/courses/ai/advanced",
       "title": "AI Advanced",
@@ -582,6 +576,327 @@
           "title": "Next steps, CPD and further learning",
           "anchor": "next-steps-cpd-and-further-learning",
           "excerpt": "Use the tools below to plan your next learning sprint and log the hours for CPD."
+        }
+      ]
+    },
+    {
+      "route": "/courses/software-architecture/advanced/compliance-architectures",
+      "title": "Regulatory Compliance Architectures",
+      "sourcePath": "/content/courses/software-architecture/advanced/compliance-architectures.mdx",
+      "sections": [
+        {
+          "depth": 2,
+          "title": "Introduction",
+          "anchor": "introduction",
+          "excerpt": "Here's the uncomfortable truth about compliance: it's not optional, it's not just paperwork, and getting it wrong can literally bankrupt your organisation. A single GDPR fine can be up to 4% of global annual revenue or €20 million (whichever is higher). One PCI-DSS breach can cost millions in fines plus the"
+        },
+        {
+          "depth": 2,
+          "title": "GDPR: General Data Protection Regulation",
+          "anchor": "gdpr-general-data-protection-regulation",
+          "excerpt": "The GDPR is the EU's comprehensive data protection law affecting any organization processing EU residents' data, regardless of where the organization is located."
+        },
+        {
+          "depth": 3,
+          "title": "Core Principles",
+          "anchor": "core-principles",
+          "excerpt": "**1. Lawfulness, Fairness, Transparency** - Must have a legal basis for processing - Communicate clearly about data use - No hidden processing"
+        },
+        {
+          "depth": 3,
+          "title": "Legal Bases for Processing",
+          "anchor": "legal-bases-for-processing",
+          "excerpt": "You need at least one of these to process personal data:"
+        },
+        {
+          "depth": 3,
+          "title": "Data Subject Rights",
+          "anchor": "data-subject-rights",
+          "excerpt": "GDPR grants individuals eight key rights:"
+        },
+        {
+          "depth": 3,
+          "title": "GDPR-Compliant Architecture Pattern",
+          "anchor": "gdpr-compliant-architecture-pattern",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Cross-Border Data Transfers",
+          "anchor": "cross-border-data-transfers",
+          "excerpt": "GDPR restricts data transfers outside the EU/EEA. You need one of these mechanisms:"
+        },
+        {
+          "depth": 2,
+          "title": "PCI-DSS: Payment Card Industry Data Security Standard",
+          "anchor": "pci-dss-payment-card-industry-data-security-standard",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "The 12 Requirements (6 Control Objectives)",
+          "anchor": "the-12-requirements-6-control-objectives",
+          "excerpt": "**Build and Maintain a Secure Network:** 1. Install and maintain firewall configuration 2. Don't use vendor-supplied defaults for passwords"
+        },
+        {
+          "depth": 3,
+          "title": "PCI-DSS Compliant Payment Flow",
+          "anchor": "pci-dss-compliant-payment-flow",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Network Segmentation for PCI-DSS",
+          "anchor": "network-segmentation-for-pci-dss",
+          "excerpt": ""
+        },
+        {
+          "depth": 2,
+          "title": "HIPAA: Health Insurance Portability and Accountability Act",
+          "anchor": "hipaa-health-insurance-portability-and-accountability-act",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Three Types of Safeguards",
+          "anchor": "three-types-of-safeguards",
+          "excerpt": "**1. Administrative Safeguards** - Security management process - Workforce security procedures - Information access management - Security awareness training - Business associate agreements"
+        },
+        {
+          "depth": 3,
+          "title": "HIPAA-Compliant Architecture",
+          "anchor": "hipaa-compliant-architecture",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "HL7 FHIR for Interoperability",
+          "anchor": "hl7-fhir-for-interoperability",
+          "excerpt": ""
+        },
+        {
+          "depth": 2,
+          "title": "SOC 2: System and Organization Controls",
+          "anchor": "soc-2-system-and-organization-controls",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "The Five Trust Service Criteria",
+          "anchor": "the-five-trust-service-criteria",
+          "excerpt": "**1. Security**: Protection against unauthorized access - Firewall and network security - Intrusion detection - Multi-factor authentication"
+        },
+        {
+          "depth": 3,
+          "title": "SOC 2 Compliant Architecture",
+          "anchor": "soc-2-compliant-architecture",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Compliance Automation",
+          "anchor": "compliance-automation",
+          "excerpt": ""
+        },
+        {
+          "depth": 2,
+          "title": "Multi-Regulation Compliance Strategy",
+          "anchor": "multi-regulation-compliance-strategy",
+          "excerpt": "Many organizations must comply with multiple regulations. Here's how to handle overlap:"
+        },
+        {
+          "depth": 2,
+          "title": "CPD Evidence Summary",
+          "anchor": "cpd-evidence-summary",
+          "excerpt": "For your CPD log, record: - **Learning Activity:** Regulatory compliance architectures (GDPR, PCI-DSS, HIPAA, SOC 2) - **Duration:** 6.0 hours - **Key Concepts:** GDPR data subject rights, PCI-DSS tokenization, HIPAA safeguards, SOC 2 Trust Service Criteria, cross-border data transfers - **Practical Application:** Designed compliance controls for multi-regul"
+        }
+      ]
+    },
+    {
+      "route": "/courses/software-architecture/advanced/enterprise-frameworks",
+      "title": "Enterprise Architecture Frameworks",
+      "sourcePath": "/content/courses/software-architecture/advanced/enterprise-frameworks.mdx",
+      "sections": [
+        {
+          "depth": 2,
+          "title": "Introduction",
+          "anchor": "introduction",
+          "excerpt": "Here's the thing about enterprise architecture. Most people think it's just \"big company stuff\" with lots of PowerPoint slides and meetings. But proper enterprise architecture frameworks are what separate organisations that can actually execute their digital transformation from those that spend millions and achieve nothing."
+        },
+        {
+          "depth": 2,
+          "title": "TOGAF Architecture Development Method (ADM)",
+          "anchor": "togaf-architecture-development-method-adm",
+          "excerpt": "The TOGAF ADM is a comprehensive method for developing enterprise architectures. It's like a recipe book for architecture work, with nine phases that cycle continuously."
+        },
+        {
+          "depth": 3,
+          "title": "The ADM Lifecycle",
+          "anchor": "the-adm-lifecycle",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Phase-by-Phase Breakdown",
+          "anchor": "phase-by-phase-breakdown",
+          "excerpt": "**Preliminary Phase: Framework and Principles** - Establish architecture capability - Define principles, standards, frameworks - Tailor TOGAF to your organisation"
+        },
+        {
+          "depth": 3,
+          "title": "TOGAF Artifacts",
+          "anchor": "togaf-artifacts",
+          "excerpt": "Key deliverables from the ADM:"
+        },
+        {
+          "depth": 3,
+          "title": "Architecture Repository and Enterprise Continuum",
+          "anchor": "architecture-repository-and-enterprise-continuum",
+          "excerpt": "The Architecture Repository stores all architecture assets:"
+        },
+        {
+          "depth": 2,
+          "title": "Zachman Framework",
+          "anchor": "zachman-framework",
+          "excerpt": "The Zachman Framework is a schema for organizing architectural artifacts. Think of it as a periodic table for enterprise architecture."
+        },
+        {
+          "depth": 3,
+          "title": "The 6x6 Matrix",
+          "anchor": "the-6x6-matrix",
+          "excerpt": "The framework asks six questions (columns) from six perspectives (rows):"
+        },
+        {
+          "depth": 3,
+          "title": "Example: E-commerce Platform Using Zachman",
+          "anchor": "example-e-commerce-platform-using-zachman",
+          "excerpt": "Let's fill in some cells for an e-commerce system:"
+        },
+        {
+          "depth": 2,
+          "title": "Architecture Governance",
+          "anchor": "architecture-governance",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Governance Processes",
+          "anchor": "governance-processes",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Stakeholder Management",
+          "anchor": "stakeholder-management",
+          "excerpt": "Different stakeholders care about different things:"
+        },
+        {
+          "depth": 2,
+          "title": "Practical Application: Healthcare System Architecture",
+          "anchor": "practical-application-healthcare-system-architecture",
+          "excerpt": "Let's apply TOGAF ADM to a healthcare system modernisation:"
+        },
+        {
+          "depth": 2,
+          "title": "CPD Evidence Summary",
+          "anchor": "cpd-evidence-summary",
+          "excerpt": "For your CPD log, record: - **Learning Activity:** Advanced enterprise architecture frameworks (TOGAF, Zachman) - **Duration:** 5.5 hours - **Key Concepts:** TOGAF ADM phases, Architecture Repository, Zachman Framework 6x6 matrix, architecture governance, stakeholder management - **Practical Application:** Applied ADM to healthcare system modernisation scena"
+        }
+      ]
+    },
+    {
+      "route": "/courses/software-architecture/advanced/finops",
+      "title": "FinOps & Cost Engineering",
+      "sourcePath": "/content/courses/software-architecture/advanced/finops.mdx",
+      "sections": [
+        {
+          "depth": 2,
+          "title": "Introduction",
+          "anchor": "introduction",
+          "excerpt": "Here's a painful truth: most organisations have absolutely no idea what they're actually spending on cloud services or why. They get a monthly AWS bill for £200,000 and everyone just shrugs and pays it. Then six months later it's £400,000 and suddenly the CFO is asking questions nobody can answer."
+        },
+        {
+          "depth": 2,
+          "title": "The FinOps Framework",
+          "anchor": "the-finops-framework",
+          "excerpt": "The FinOps Foundation defines three phases:"
+        },
+        {
+          "depth": 2,
+          "title": "Showback vs Chargeback",
+          "anchor": "showback-vs-chargeback",
+          "excerpt": "**Showback**: Report costs to teams without actually charging them - Pro: Builds awareness without friction - Con: No financial consequences"
+        },
+        {
+          "depth": 2,
+          "title": "Cost Allocation Strategies",
+          "anchor": "cost-allocation-strategies",
+          "excerpt": "**Tag-Based Allocation** - Pros: Flexible, granular, supports multiple dimensions - Cons: Requires discipline, tags can be missing/wrong"
+        },
+        {
+          "depth": 2,
+          "title": "Cost Optimization Strategies",
+          "anchor": "cost-optimization-strategies",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "1. Right-Sizing",
+          "anchor": "1-right-sizing",
+          "excerpt": "Match instance sizes to actual usage:"
+        },
+        {
+          "depth": 3,
+          "title": "2. Reserved Instances & Savings Plans",
+          "anchor": "2-reserved-instances-savings-plans",
+          "excerpt": "Commit to usage for 1-3 years in exchange for discounts:"
+        },
+        {
+          "depth": 3,
+          "title": "3. Spot Instances & Preemptible VMs",
+          "anchor": "3-spot-instances-preemptible-vms",
+          "excerpt": "Use spare capacity at up to 90% discount:"
+        },
+        {
+          "depth": 3,
+          "title": "4. Storage Optimization",
+          "anchor": "4-storage-optimization",
+          "excerpt": ""
+        },
+        {
+          "depth": 2,
+          "title": "Cost-Aware Architecture Design",
+          "anchor": "cost-aware-architecture-design",
+          "excerpt": "Design systems with cost as a first-class consideration:"
+        },
+        {
+          "depth": 3,
+          "title": "Serverless for Variable Workloads",
+          "anchor": "serverless-for-variable-workloads",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Auto-Scaling Policies",
+          "anchor": "auto-scaling-policies",
+          "excerpt": ""
+        },
+        {
+          "depth": 2,
+          "title": "Case Study: Lyft's $100M Cloud Cost Reduction",
+          "anchor": "case-study-lyfts-100m-cloud-cost-reduction",
+          "excerpt": "Lyft reduced their cloud costs by over $100 million annually through systematic FinOps practices:"
+        },
+        {
+          "depth": 2,
+          "title": "FinOps Metrics & KPIs",
+          "anchor": "finops-metrics-kpis",
+          "excerpt": "**Unit Economics** - Cost per transaction - Cost per user - Cost per API call - Revenue per dollar spent"
+        },
+        {
+          "depth": 2,
+          "title": "CPD Evidence Summary",
+          "anchor": "cpd-evidence-summary",
+          "excerpt": "For your CPD log, record: - **Learning Activity:** FinOps and cost engineering for cloud architectures - **Duration:** 4.0 hours - **Key Concepts:** Showback/chargeback models, right-sizing, reserved instances, savings plans, spot instances, cost-aware architecture design, unit economics - **Practical Application:** Analyzed cost optimization strategies, stu"
         }
       ]
     },
@@ -2378,6 +2693,12 @@
       ]
     },
     {
+      "route": "/courses/_cpd-checklist",
+      "title": "CPD readiness checklist",
+      "sourcePath": "/content/courses/_cpd-checklist.mdx",
+      "sections": []
+    },
+    {
       "route": "/ai/advanced",
       "title": "AI Notes, Advanced",
       "sourcePath": "/content/notes/ai/advanced.mdx",
@@ -2539,6 +2860,440 @@
           "title": "Ethics, trust, and long term resilience",
           "anchor": "ethics-trust-and-long-term-resilience",
           "excerpt": "Security decisions affect people. Privacy is not a feature. It is a power question. Consent matters because users rarely have equal bargaining power. A short term win that surprises users can become a long term trust loss. Trust is slow to earn and fast to burn."
+        }
+      ]
+    },
+    {
+      "route": "/notes/cybersecurity/applied/01-welcome-prerequisites",
+      "title": "01-welcome-prerequisites.mdx",
+      "sourcePath": "/content/notes/cybersecurity/applied/01-welcome-prerequisites.mdx",
+      "sections": [
+        {
+          "depth": 2,
+          "title": "Welcome to Applied Cybersecurity",
+          "anchor": "welcome-to-applied-cybersecurity",
+          "excerpt": "variant=\"content\" emoji=\"🎯\" title=\"From Personal to Professional Security\" subtitle=\"Taking your foundations knowledge into real-world application\" />"
+        },
+        {
+          "depth": 3,
+          "title": "Building on What You Know",
+          "anchor": "building-on-what-you-know",
+          "excerpt": "In the Foundations level, you learned: - **Personal security**: Password managers, MFA, phishing detection - **Core concepts**: CIA triad, encoding, hashing vs encryption - **Basic threats**: Social engineering, malware, breach patterns - **Network fundamentals**: DNS, HTTPS, attack surfaces"
+        },
+        {
+          "depth": 2,
+          "title": "Prerequisites Check",
+          "anchor": "prerequisites-check",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Required Knowledge from Foundations",
+          "anchor": "required-knowledge-from-foundations",
+          "excerpt": "Before continuing, you should be comfortable with:"
+        },
+        {
+          "depth": 2,
+          "title": "What Changes from Foundations to Applied?",
+          "anchor": "what-changes-from-foundations-to-applied",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "1. Scale: Individual → Team/Organization",
+          "anchor": "1-scale-individual-teamorganization",
+          "excerpt": "**Foundations Example**: \"I use a password manager for my 20 accounts\""
+        },
+        {
+          "depth": 3,
+          "title": "2. Complexity: Single Control → Systems Thinking",
+          "anchor": "2-complexity-single-control-systems-thinking",
+          "excerpt": "**Foundations Example**: \"Strong passwords resist brute force\""
+        },
+        {
+          "depth": 3,
+          "title": "3. Responsibility: Personal Safety → Protecting Others",
+          "anchor": "3-responsibility-personal-safety-protecting-others",
+          "excerpt": "**Foundations Example**: \"I detect phishing to protect myself\""
+        },
+        {
+          "depth": 3,
+          "title": "4. Trade-offs: Best Practice → Risk-Based Decisions",
+          "anchor": "4-trade-offs-best-practice-risk-based-decisions",
+          "excerpt": "**Foundations Example**: \"Always use the strongest encryption\""
+        },
+        {
+          "depth": 2,
+          "title": "Career Paths: Where Applied Skills Lead",
+          "anchor": "career-paths-where-applied-skills-lead",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Security Analyst",
+          "anchor": "security-analyst",
+          "excerpt": "**What you do**: Monitor alerts, investigate incidents, recommend fixes **Applied skills used**: Log analysis, threat modeling, vulnerability assessment **Typical journey**: Junior analyst (Foundations) → Analyst (Applied) → Senior analyst (Practice)"
+        },
+        {
+          "depth": 3,
+          "title": "Application Security Engineer",
+          "anchor": "application-security-engineer",
+          "excerpt": "**What you do**: Review code for vulnerabilities, implement secure authentication, run security testing **Applied skills used**: OWASP Top 10, session management, secure SDLC **Typical journey**: Developer with security interest → AppSec engineer (Applied) → AppSec lead (Practice)"
+        },
+        {
+          "depth": 3,
+          "title": "SOC Analyst (Security Operations Center)",
+          "anchor": "soc-analyst-security-operations-center",
+          "excerpt": "**What you do**: Monitor SIEM, triage alerts, escalate incidents, create detections **Applied skills used**: Log analysis, attack chain recognition, incident timelines **Typical journey**: IT support → SOC Tier 1 (Foundations) → SOC Tier 2 (Applied) → SOC Tier 3 / Threat Hunter (Practice)"
+        },
+        {
+          "depth": 3,
+          "title": "Security Consultant",
+          "anchor": "security-consultant",
+          "excerpt": "**What you do**: Assess client security, conduct audits, recommend improvements **Applied skills used**: Threat modeling, risk assessment, control recommendations **Typical journey**: Technical role → Junior consultant (Applied) → Senior consultant (Practice)"
+        },
+        {
+          "depth": 3,
+          "title": "Cloud Security Specialist",
+          "anchor": "cloud-security-specialist",
+          "excerpt": "**What you do**: Secure cloud infrastructure, implement IAM, configure security services **Applied skills used**: Network segmentation, identity architecture, secure configuration **Typical journey**: Cloud engineer → Cloud security (Applied) → Cloud security architect (Practice)"
+        },
+        {
+          "depth": 2,
+          "title": "How This Course Works: Applied Level Structure",
+          "anchor": "how-this-course-works-applied-level-structure",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Module 1: Welcome & Prerequisites ← You are here",
+          "anchor": "module-1-welcome-prerequisites-you-are-here",
+          "excerpt": "- Understand the progression from Foundations - Verify prerequisite knowledge - Set career expectations"
+        },
+        {
+          "depth": 3,
+          "title": "Module 2: Threat Modeling in Practice",
+          "anchor": "module-2-threat-modeling-in-practice",
+          "excerpt": "- **Builds on**: Foundations CIA triad, attack surfaces - **Adds**: STRIDE methodology, attack trees, data flow diagrams - **Real-world**: Threat model a login system, file upload, API endpoint"
+        },
+        {
+          "depth": 3,
+          "title": "Module 3: Vulnerability Classes & Exploitation",
+          "anchor": "module-3-vulnerability-classes-exploitation",
+          "excerpt": "- **Builds on**: Foundations encoding attacks, SQL injection basics - **Adds**: OWASP Top 10 deep dive, XSS, CSRF, injection patterns - **Real-world**: Analyze real CVEs, understand exploit chains"
+        },
+        {
+          "depth": 3,
+          "title": "Module 4: Authentication & Sessions Deep Dive",
+          "anchor": "module-4-authentication-sessions-deep-dive",
+          "excerpt": "- **Builds on**: Foundations passwords, MFA, account security - **Adds**: JWT structure, OAuth2 flows, session hijacking, token security - **Real-world**: Design secure authentication for web apps"
+        },
+        {
+          "depth": 3,
+          "title": "Module 5: Detection & Response Fundamentals",
+          "anchor": "module-5-detection-response-fundamentals",
+          "excerpt": "- **Builds on**: Foundations breach case studies - **Adds**: Log analysis, SIEM queries, incident timelines, alert correlation - **Real-world**: Investigate a simulated breach using logs"
+        },
+        {
+          "depth": 3,
+          "title": "Module 6: Risk Management & Attack Chains",
+          "anchor": "module-6-risk-management-attack-chains",
+          "excerpt": "- **Builds on**: Foundations threats and defenses - **Adds**: Risk matrices (likelihood × impact), multi-stage attacks, kill chain - **Real-world**: Build attack chains for real breaches, prioritize fixes"
+        },
+        {
+          "depth": 3,
+          "title": "Module 7: Applied Checkpoint & Labs",
+          "anchor": "module-7-applied-checkpoint-labs",
+          "excerpt": "- Comprehensive 40-question assessment (70% to pass) - 3 practical labs: Threat model, vulnerability analysis, incident response - Capstone project: Secure a real application scenario"
+        },
+        {
+          "depth": 2,
+          "title": "Study Recommendations",
+          "anchor": "study-recommendations",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Time Commitment",
+          "anchor": "time-commitment",
+          "excerpt": "- **Estimated**: 18 CPD hours total - **Suggested pace**: 2-3 hours per week = 6-9 weeks - **Intensive option**: 3-4 hours per week = 4-6 weeks"
+        },
+        {
+          "depth": 3,
+          "title": "Learning Approach",
+          "anchor": "learning-approach",
+          "excerpt": "**1. Active Practice (Not Passive Reading)** - Complete every interactive tool - Write out threat models by hand first, then use the tools - Pause videos to predict what happens next"
+        },
+        {
+          "depth": 3,
+          "title": "Success Metrics",
+          "anchor": "success-metrics",
+          "excerpt": "You're ready for Practice (Advanced) level when you can: - ✅ Threat model a system in 30 minutes using STRIDE - ✅ Explain 5+ OWASP Top 10 vulnerabilities with examples - ✅ Design secure authentication with JWT + refresh tokens - ✅ Investigate an incident by analyzing logs - ✅ Build risk matrices and prioritize vulnerabilities - ✅ Explain security trade-offs"
+        },
+        {
+          "depth": 2,
+          "title": "Ready to Begin?",
+          "anchor": "ready-to-begin",
+          "excerpt": "1. **If you scored 80%+ on the Prerequisites Quiz**: Proceed to Module 2 (Threat Modeling) 2. **If you scored 60-79%**: Review specific Foundations topics, then retake quiz 3. **If you scored below 60%**: Complete Foundations level first, then return here"
+        }
+      ]
+    },
+    {
+      "route": "/notes/cybersecurity/applied/02-threat-modeling-practice",
+      "title": "02-threat-modeling-practice.mdx",
+      "sourcePath": "/content/notes/cybersecurity/applied/02-threat-modeling-practice.mdx",
+      "sections": [
+        {
+          "depth": 2,
+          "title": "From Attack Surfaces to Systematic Threat Analysis",
+          "anchor": "from-attack-surfaces-to-systematic-threat-analysis",
+          "excerpt": "variant=\"content\" emoji=\"🎯\" title=\"Building on Foundations: Attack Surfaces → Threat Models\" subtitle=\"Learn STRIDE and systematic threat analysis for real systems\" />"
+        },
+        {
+          "depth": 3,
+          "title": "What You Already Know (Foundations Recap)",
+          "anchor": "what-you-already-know-foundations-recap",
+          "excerpt": "In Foundations, you learned: - **CIA Triad**: Confidentiality, Integrity, Availability as security goals - **Attack Surface**: Entry points where attackers can interact with your system - **Trust Boundaries**: Where data moves between different security contexts - **Real Breaches**: Target (HVAC vendor), Twitter (social engineering), Colonial Pipeline (no MF"
+        },
+        {
+          "depth": 2,
+          "title": "Why Threat Modeling Matters",
+          "anchor": "why-threat-modeling-matters",
+          "excerpt": "**Without threat modeling**: You defend everything equally (or nothing systematically)"
+        },
+        {
+          "depth": 3,
+          "title": "Real-World Impact",
+          "anchor": "real-world-impact",
+          "excerpt": "**Scenario 1: E-commerce Checkout** - Without threat model: \"Let's add security features\" - With threat model: \"Card data crosses 3 trust boundaries. Boundary 2 (payment processor API) is highest risk. We'll focus logging and validation there.\""
+        },
+        {
+          "depth": 3,
+          "title": "What Threat Modeling Produces",
+          "anchor": "what-threat-modeling-produces",
+          "excerpt": "A good threat model delivers: 1. **System boundary definition** - What's in scope, what's not 2. **Asset inventory** - What needs protection and why 3. **Data flow diagram** - How data moves between components 4. **Threat list** - Specific failure scenarios using STRIDE 5. **Risk-prioritized controls** - What to implement first 6. **Monitoring plan** - How y"
+        },
+        {
+          "depth": 2,
+          "title": "STRIDE: Your Threat Analysis Framework",
+          "anchor": "stride-your-threat-analysis-framework",
+          "excerpt": "**STRIDE** is a mnemonic for six threat categories developed by Microsoft. It builds directly on CIA triad from Foundations:"
+        },
+        {
+          "depth": 3,
+          "title": "S - Spoofing (Identity)",
+          "anchor": "s---spoofing-identity",
+          "excerpt": "**Attacks**: Confidentiality via fake identity **Foundations connection**: Remember phishing emails with fake sender addresses? That's spoofing. **Applied examples**: - Attacker impersonates legitimate user with stolen credentials - API requests with forged authentication tokens - Email sender spoofing (SPF/DKIM failures) - Session hijacking with stolen cook"
+        },
+        {
+          "depth": 3,
+          "title": "T - Tampering (Data Modification)",
+          "anchor": "t---tampering-data-modification",
+          "excerpt": "**Attacks**: Integrity violations **Foundations connection**: Remember hashing for file integrity? Tampering is what hashing prevents. **Applied examples**: - Modified database records (SQL injection) - Intercepted and altered API requests (man-in-the-middle) - Tampered log files to hide evidence - Modified configuration files to bypass security"
+        },
+        {
+          "depth": 3,
+          "title": "R - Repudiation (Denial of Actions)",
+          "anchor": "r---repudiation-denial-of-actions",
+          "excerpt": "**Attacks**: Accountability failures **Foundations connection**: Logs and audit trails prove actions happened. **Applied examples**: - User denies making a fraudulent transaction (no audit trail) - Admin denies deleting data (insufficient logging) - Attacker covers tracks by deleting logs - No proof of who accessed sensitive data"
+        },
+        {
+          "depth": 3,
+          "title": "I - Information Disclosure (Data Leaks)",
+          "anchor": "i---information-disclosure-data-leaks",
+          "excerpt": "**Attacks**: Confidentiality violations **Foundations connection**: Remember encryption for data protection? This is what you're protecting against. **Applied examples**: - Exposed API keys in GitHub repositories - Database backup files accessible on public S3 bucket - Verbose error messages revealing system internals - Unencrypted traffic captured on networ"
+        },
+        {
+          "depth": 3,
+          "title": "D - Denial of Service (Availability)",
+          "anchor": "d---denial-of-service-availability",
+          "excerpt": "**Attacks**: Availability violations **Foundations connection**: The \"A\" in CIA triad. **Applied examples**: - Resource exhaustion (CPU, memory, disk, network) - Application-level DoS (expensive queries, infinite loops) - Distributed DoS (DDoS) overwhelming infrastructure - Lockout mechanisms abused to deny legitimate access"
+        },
+        {
+          "depth": 3,
+          "title": "E - Elevation of Privilege (Unauthorized Access)",
+          "anchor": "e---elevation-of-privilege-unauthorized-access",
+          "excerpt": "**Attacks**: Authorization bypasses **Foundations connection**: Remember password attacks and lateral movement from Target breach? **Applied examples**: - SQL injection leading to admin access - Path traversal reading files outside allowed directory - Insecure direct object references (change URL to access other users' data) - Privilege escalation via unpatc"
+        },
+        {
+          "depth": 2,
+          "title": "Threat Modeling Process: Step-by-Step",
+          "anchor": "threat-modeling-process-step-by-step",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Step 1: Define System Boundary",
+          "anchor": "step-1-define-system-boundary",
+          "excerpt": "**What it means**: Draw a line around what you're analyzing. Everything inside is in scope. Everything outside is a dependency or external entity."
+        },
+        {
+          "depth": 3,
+          "title": "Step 2: Identify Assets",
+          "anchor": "step-2-identify-assets",
+          "excerpt": "**What it means**: List what needs protection and why."
+        },
+        {
+          "depth": 3,
+          "title": "Step 3: Create Data Flow Diagram (DFD)",
+          "anchor": "step-3-create-data-flow-diagram-dfd",
+          "excerpt": "**DFD Elements**: - **External Entity** (square): User, external service, admin - **Process** (circle): Application code, API, authentication service - **Data Store** (parallel lines): Database, cache, file system - **Data Flow** (arrow): HTTP request, database query, file read"
+        },
+        {
+          "depth": 3,
+          "title": "Step 4: Apply STRIDE to Each Element",
+          "anchor": "step-4-apply-stride-to-each-element",
+          "excerpt": "**For each data flow, ask**: - **S**: Can the source be spoofed? - **T**: Can the data be tampered with? - **R**: Can actions be denied? - **I**: Can data be disclosed? - **D**: Can the flow be disrupted? - **E**: Can privileges be escalated?"
+        },
+        {
+          "depth": 3,
+          "title": "Step 5: Identify and Document Threats",
+          "anchor": "step-5-identify-and-document-threats",
+          "excerpt": "**Format**: \"An attacker could [action] by [method] which would result in [impact]\""
+        },
+        {
+          "depth": 3,
+          "title": "Step 6: Rate Threats (Risk = Likelihood × Impact)",
+          "anchor": "step-6-rate-threats-risk-likelihood-impact",
+          "excerpt": "**DREAD Framework** (subset of risk assessment): - **D**amage potential (1-10) - **R**eproducibility (1-10) - **E**xploitability (1-10) - **A**ffected users (1-10) - **D**iscoverability (1-10)"
+        },
+        {
+          "depth": 3,
+          "title": "Step 7: Choose and Document Controls",
+          "anchor": "step-7-choose-and-document-controls",
+          "excerpt": "**For each threat, decide**: 1. **Mitigate**: Implement controls to reduce risk 2. **Transfer**: Use insurance, outsource to third party 3. **Accept**: Document and accept the risk 4. **Avoid**: Remove the feature or change approach"
+        },
+        {
+          "depth": 2,
+          "title": "Hands-On: Threat Model a File Upload Feature",
+          "anchor": "hands-on-threat-model-a-file-upload-feature",
+          "excerpt": "Let's apply STRIDE to a common feature."
+        },
+        {
+          "depth": 3,
+          "title": "System Description",
+          "anchor": "system-description",
+          "excerpt": "**Feature**: Users can upload profile pictures (JPEG, PNG, up to 5MB)"
+        },
+        {
+          "depth": 3,
+          "title": "Data Flow Diagram",
+          "anchor": "data-flow-diagram",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Trust Boundaries",
+          "anchor": "trust-boundaries",
+          "excerpt": "1. **User ↔ Web App**: Untrusted to semi-trusted 2. **Web App ↔ API Server**: Semi-trusted to trusted 3. **API Server ↔ Storage/DB**: Trusted to highly trusted"
+        },
+        {
+          "depth": 3,
+          "title": "STRIDE Analysis",
+          "anchor": "stride-analysis",
+          "excerpt": "**Threat 1: Spoofing** - **Threat**: Attacker uploads file as another user - **Control**: Authenticate API requests, tie uploads to session user_id - **Risk**: High likelihood, High impact = **Critical**"
+        },
+        {
+          "depth": 3,
+          "title": "Prioritized Control Implementation",
+          "anchor": "prioritized-control-implementation",
+          "excerpt": "**Phase 1 (Must-Have - Critical Risks)**: 1. ✅ Authenticate all uploads (tied to session user_id) 2. ✅ Generate random UUID filenames (prevent path traversal, info disclosure) 3. ✅ Validate file content via magic bytes (prevent executable uploads) 4. ✅ Signed URLs for file access (prevent unauthorized disclosure)"
+        },
+        {
+          "depth": 2,
+          "title": "Attack Trees: Visualizing Attack Paths",
+          "anchor": "attack-trees-visualizing-attack-paths",
+          "excerpt": "**Attack trees** complement STRIDE by showing how threats connect into attack chains (builds on Foundations breach case studies)."
+        },
+        {
+          "depth": 3,
+          "title": "Attack Tree Structure",
+          "anchor": "attack-tree-structure",
+          "excerpt": "**Root**: Attacker goal (e.g., \"Steal customer data\")"
+        },
+        {
+          "depth": 3,
+          "title": "Example: Compromise Web Application",
+          "anchor": "example-compromise-web-application",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "How This Connects to Foundations",
+          "anchor": "how-this-connects-to-foundations",
+          "excerpt": "**Foundations: Target Breach (2013)** - Initial access: HVAC vendor credentials (social engineering) - Lateral movement: Vendor network → Target network - Privilege escalation: Access payment systems - Collection: Scrape credit card data - Exfiltration: Send data to external servers"
+        },
+        {
+          "depth": 2,
+          "title": "Real-World Threat Modeling Scenarios",
+          "anchor": "real-world-threat-modeling-scenarios",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Scenario 1: SaaS Application Login System",
+          "anchor": "scenario-1-saas-application-login-system",
+          "excerpt": "**System**: Multi-tenant SaaS with username/password + optional MFA"
+        },
+        {
+          "depth": 3,
+          "title": "Scenario 2: Payment Processing API",
+          "anchor": "scenario-2-payment-processing-api",
+          "excerpt": "**System**: REST API accepting credit card data, calling payment gateway"
+        },
+        {
+          "depth": 3,
+          "title": "Scenario 3: Internal Admin Dashboard",
+          "anchor": "scenario-3-internal-admin-dashboard",
+          "excerpt": "**System**: Web interface for admins to manage users, view analytics"
+        },
+        {
+          "depth": 2,
+          "title": "Common Threat Modeling Mistakes",
+          "anchor": "common-threat-modeling-mistakes",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Mistake 1: Too Broad or Too Narrow",
+          "anchor": "mistake-1-too-broad-or-too-narrow",
+          "excerpt": "**Too broad**: \"Threat model our entire company\" - Unmanageable, never finishes - **Fix**: Start with one system, one feature"
+        },
+        {
+          "depth": 3,
+          "title": "Mistake 2: Listing Every Possible Threat",
+          "anchor": "mistake-2-listing-every-possible-threat",
+          "excerpt": "**Problem**: 500-item threat list that's never acted on"
+        },
+        {
+          "depth": 3,
+          "title": "Mistake 3: Threat Modeling After Building",
+          "anchor": "mistake-3-threat-modeling-after-building",
+          "excerpt": "**Problem**: Finding architectural flaws when code is already written"
+        },
+        {
+          "depth": 3,
+          "title": "Mistake 4: No Threat Ownership",
+          "anchor": "mistake-4-no-threat-ownership",
+          "excerpt": "**Problem**: Threats documented but no one responsible for mitigation"
+        },
+        {
+          "depth": 3,
+          "title": "Mistake 5: Ignoring Accepted Risks",
+          "anchor": "mistake-5-ignoring-accepted-risks",
+          "excerpt": "**Problem**: Accepting risks without documentation"
+        },
+        {
+          "depth": 2,
+          "title": "Knowledge Check",
+          "anchor": "knowledge-check",
+          "excerpt": "quizId=\"applied-threat-modeling\" title=\"Threat Modeling in Practice\" passingScore={70} questions={[ { id: \"tm-1\", question: \"Which STRIDE category does 'user modifies order_id parameter in URL to view someone else's order' belong to?\", options: [ \"Spoofing (impersonating another user)\", \"Information Disclosure (unauthorized data access)\", \"Elevation of Privi"
+        },
+        {
+          "depth": 2,
+          "title": "Practical Exercise: Build Your First Threat Model",
+          "anchor": "practical-exercise-build-your-first-threat-model",
+          "excerpt": "**Choose one system to threat model**: 1. A password reset flow 2. An API endpoint that returns user profile data 3. A commenting system on a blog"
         }
       ]
     },
@@ -2782,6 +3537,37 @@
       "route": "/cybersecurity/intermediate",
       "title": "Applied Cybersecurity",
       "sourcePath": "/content/notes/cybersecurity/intermediate.mdx",
+      "sections": []
+    },
+    {
+      "route": "/notes/cybersecurity/modules/01-welcome",
+      "title": "Welcome to Cybersecurity Foundations",
+      "sourcePath": "/content/notes/cybersecurity/modules/01-welcome.mdx",
+      "sections": [
+        {
+          "depth": 3,
+          "title": "After this module you should be able to:",
+          "anchor": "after-this-module-you-should-be-able-to",
+          "excerpt": "- Describe the structure and learning approach of this course - Identify major cybersecurity career paths and typical progressions - Implement baseline security practices for accounts, devices, and communication - Articulate personal learning goals aligned with career or security improvement objectives"
+        }
+      ]
+    },
+    {
+      "route": "/notes/cybersecurity/modules/04-threats-defenses",
+      "title": "Threats and Defenses",
+      "sourcePath": "/content/notes/cybersecurity/modules/04-threats-defenses.mdx",
+      "sections": []
+    },
+    {
+      "route": "/notes/cybersecurity/modules/05-auth-privacy",
+      "title": "Authentication and Privacy",
+      "sourcePath": "/content/notes/cybersecurity/modules/05-auth-privacy.mdx",
+      "sections": []
+    },
+    {
+      "route": "/notes/cybersecurity/modules/06-checkpoint-capstone",
+      "title": "Checkpoint and Capstone",
+      "sourcePath": "/content/notes/cybersecurity/modules/06-checkpoint-capstone.mdx",
       "sections": []
     },
     {
