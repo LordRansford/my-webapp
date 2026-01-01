@@ -19,7 +19,7 @@ interface NavLink {
 }
 
 interface StudioNavigationProps {
-  studioType: "dev" | "cyber" | "data" | "ai" | "architecture";
+  studioType: "dev" | "cyber" | "data" | "ai" | "architecture" | "lab";
   showHub?: boolean;
   additionalLinks?: NavLink[];
 }
