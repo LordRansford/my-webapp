@@ -19,12 +19,12 @@ export default function GamesCards() {
   useEffect(() => {
     const t = utcDateId();
     setToday(t);
-    setUnlocked(progress.get().masterTrophyUnlocked);
+    setUnlocked(progress.get().charisTrophyUnlocked);
     setTodayDaily(progress.getDaily(t));
     setHydrated(true);
 
     const refresh = () => {
-      setUnlocked(progress.get().masterTrophyUnlocked);
+      setUnlocked(progress.get().charisTrophyUnlocked);
       setTodayDaily(progress.getDaily(t));
     };
     window.addEventListener("focus", refresh);
