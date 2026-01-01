@@ -10,7 +10,7 @@
     "validate:tool-contracts": "node scripts/validate-tool-contracts.mjs",
     "validate:env": "node scripts/validate-env.mjs",
     "start": "next start --hostname 0.0.0.0 --port 3000",
-    "postinstall": "prisma generate",
+    "postinstall": "npx prisma generate",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "lint": "eslint && npm run lint:auth && npm run lint:monetization && npm run lint:stripe && npm run lint:access && npm run lint:cpd && npm run lint:templates",
