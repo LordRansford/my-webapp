@@ -1,3 +1,29 @@
+# Dependencies
+node_modules/
+
+# Next.js build output
+. next/
+out/
+build/
+dist/
+
+# Build info
+tsconfig.tsbuildinfo
+
+# Testing
+test-results/
+
+# Environment files (if they contain secrets)
+.env.local
+
+# IDE
+.vscode/
+. cursor/
+
+# Vercel
+.vercel/
+
+# Existing content below... 
 # ... existing content ...
 
 # News ingestion temporary files
