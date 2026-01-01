@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-01T19:57:50.674Z",
+  "generatedAt": "2026-01-01T20:26:21.873Z",
   "pages": [
     {
       "route": "/courses/_cpd-checklist",
@@ -851,7 +851,80 @@
       "route": "/courses/software-architecture/foundations/deployment-cicd",
       "title": "Deployment and CI/CD",
       "sourcePath": "/content/courses/software-architecture/foundations/deployment-cicd.mdx",
-      "sections": []
+      "sections": [
+        {
+          "depth": 2,
+          "title": "CI/CD pipeline anatomy",
+          "anchor": "cicd-pipeline-anatomy",
+          "excerpt": "A CI/CD pipeline is an automated sequence of steps that builds, tests, and deploys code changes turns commits into production deployments without human intervention."
+        },
+        {
+          "depth": 2,
+          "title": "DevSecOps integration",
+          "anchor": "devsecops-integration",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "SAST (Static Application Security Testing)",
+          "anchor": "sast-static-application-security-testing",
+          "excerpt": "Analyses source code without running it."
+        },
+        {
+          "depth": 3,
+          "title": "DAST (Dynamic Application Security Testing)",
+          "anchor": "dast-dynamic-application-security-testing",
+          "excerpt": "Tests running applications for vulnerabilities."
+        },
+        {
+          "depth": 3,
+          "title": "Secret scanning",
+          "anchor": "secret-scanning",
+          "excerpt": "Prevents credentials from being committed."
+        },
+        {
+          "depth": 2,
+          "title": "Deployment strategies",
+          "anchor": "deployment-strategies",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Blue-green deployment",
+          "anchor": "blue-green-deployment",
+          "excerpt": "Two identical environments. Switch traffic instantly."
+        },
+        {
+          "depth": 3,
+          "title": "Canary deployment",
+          "anchor": "canary-deployment",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Feature flags",
+          "anchor": "feature-flags",
+          "excerpt": "---"
+        },
+        {
+          "depth": 2,
+          "title": "Infrastructure as Code basics",
+          "anchor": "infrastructure-as-code-basics",
+          "excerpt": "**Example Terraform:**"
+        },
+        {
+          "depth": 3,
+          "title": "Practice: Design a CI/CD pipeline",
+          "anchor": "practice-design-a-cicd-pipeline",
+          "excerpt": "**Exercise (25 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "Summary and next steps",
+          "anchor": "summary-and-next-steps",
+          "excerpt": "You have learned about CI/CD pipeline anatomy, DevSecOps integration with SAST/DAST/secret scanning, deployment strategies, and Infrastructure as Code basics."
+        }
+      ]
     },
     {
       "route": "/courses/software-architecture/foundations/discovery-requirements",
@@ -990,7 +1063,116 @@
       "route": "/courses/software-architecture/foundations/ilities-framework",
       "title": "The \"Ilities\" Framework",
       "sourcePath": "/content/courses/software-architecture/foundations/ilities-framework.mdx",
-      "sections": []
+      "sections": [
+        {
+          "depth": 2,
+          "title": "Core quality attributes",
+          "anchor": "core-quality-attributes",
+          "excerpt": ""
+        },
+        {
+          "depth": 2,
+          "title": "Security",
+          "anchor": "security",
+          "excerpt": "**Key principles:** - Least privilege - Defence in depth - Fail securely - Never trust user input"
+        },
+        {
+          "depth": 2,
+          "title": "Privacy",
+          "anchor": "privacy",
+          "excerpt": "**Key principles:** - Data minimisation (collect only what you need) - Purpose limitation (use data only for stated purposes) - Transparency (tell users what you collect and why) - User rights (access, correction, deletion)"
+        },
+        {
+          "depth": 2,
+          "title": "Accessibility",
+          "anchor": "accessibility",
+          "excerpt": "**WCAG 2.2 Level AA** is the standard target."
+        },
+        {
+          "depth": 2,
+          "title": "Performance",
+          "anchor": "performance",
+          "excerpt": "**Core Web Vitals:** - LCP (Largest Contentful Paint) < 2.5s - FID (First Input Delay) < 100ms - CLS (Cumulative Layout Shift) < 0.1"
+        },
+        {
+          "depth": 2,
+          "title": "Reliability",
+          "anchor": "reliability",
+          "excerpt": "**Patterns:** - Graceful degradation - Circuit breakers - Retry with exponential backoff - Bulkheads (isolate failures)"
+        },
+        {
+          "depth": 2,
+          "title": "Other key ilities",
+          "anchor": "other-key-ilities",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Scalability",
+          "anchor": "scalability",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Maintainability",
+          "anchor": "maintainability",
+          "excerpt": "**Factors:** - Code clarity - Documentation - Test coverage - Modularity"
+        },
+        {
+          "depth": 3,
+          "title": "Testability",
+          "anchor": "testability",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Observability",
+          "anchor": "observability",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Portability",
+          "anchor": "portability",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Interoperability",
+          "anchor": "interoperability",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Compliance",
+          "anchor": "compliance",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Cost efficiency",
+          "anchor": "cost-efficiency",
+          "excerpt": "---"
+        },
+        {
+          "depth": 2,
+          "title": "Trade-off analysis",
+          "anchor": "trade-off-analysis",
+          "excerpt": "You cannot optimise everything. Architecture is about choosing which quality attributes matter most."
+        },
+        {
+          "depth": 3,
+          "title": "Practice: Quality attribute evaluation",
+          "anchor": "practice-quality-attribute-evaluation",
+          "excerpt": "**Exercise (25 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "Summary and next steps",
+          "anchor": "summary-and-next-steps",
+          "excerpt": "You have learned to evaluate systems across multiple quality attributes: security, privacy, accessibility, performance, reliability, scalability, maintainability, testability, observability, portability, interoperability, compliance, and cost efficiency. You understand that architecture involves trade-off analysis."
+        }
+      ]
     },
     {
       "route": "/courses/software-architecture/foundations/implementation",
@@ -1129,13 +1311,201 @@
       "route": "/courses/software-architecture/foundations/operations",
       "title": "Operations",
       "sourcePath": "/content/courses/software-architecture/foundations/operations.mdx",
-      "sections": []
+      "sections": [
+        {
+          "depth": 2,
+          "title": "Google SRE principles",
+          "anchor": "google-sre-principles",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Error budgets",
+          "anchor": "error-budgets",
+          "excerpt": "An An error budget is the acceptable amount of downtime or errors, calculated from the SLO target balances reliability with innovation."
+        },
+        {
+          "depth": 3,
+          "title": "SLOs (Service Level Objectives)",
+          "anchor": "slos-service-level-objectives",
+          "excerpt": "**Example SLO:** - 99.9% of API requests return in < 500ms - 99.95% of requests return successfully (non-5xx)"
+        },
+        {
+          "depth": 3,
+          "title": "Toil reduction",
+          "anchor": "toil-reduction",
+          "excerpt": "**Examples of toil:** - Manually restarting servers - Copying files between environments - Running the same SQL query daily"
+        },
+        {
+          "depth": 2,
+          "title": "Four golden signals",
+          "anchor": "four-golden-signals",
+          "excerpt": "Google's four metrics that matter most for monitoring:"
+        },
+        {
+          "depth": 3,
+          "title": "1. Latency",
+          "anchor": "1-latency",
+          "excerpt": "How long requests take."
+        },
+        {
+          "depth": 3,
+          "title": "2. Traffic",
+          "anchor": "2-traffic",
+          "excerpt": "How much demand your system is handling."
+        },
+        {
+          "depth": 3,
+          "title": "3. Errors",
+          "anchor": "3-errors",
+          "excerpt": "Rate of failed requests."
+        },
+        {
+          "depth": 3,
+          "title": "4. Saturation",
+          "anchor": "4-saturation",
+          "excerpt": "How full your resources are."
+        },
+        {
+          "depth": 2,
+          "title": "Observability triad",
+          "anchor": "observability-triad",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Logs",
+          "anchor": "logs",
+          "excerpt": "Discrete events with timestamps."
+        },
+        {
+          "depth": 3,
+          "title": "Metrics",
+          "anchor": "metrics",
+          "excerpt": "Numerical measurements over time."
+        },
+        {
+          "depth": 3,
+          "title": "Traces",
+          "anchor": "traces",
+          "excerpt": "Request paths through distributed systems."
+        },
+        {
+          "depth": 2,
+          "title": "Incident response",
+          "anchor": "incident-response",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Severity classification",
+          "anchor": "severity-classification",
+          "excerpt": "| Level | Impact | Response Time | Example | |-------|--------|---------------|---------| | P0 (Critical) | Service down | Immediate | Database outage | | P1 (High) | Major feature broken | < 1 hour | Payment failing | | P2 (Medium) | Minor feature broken | < 4 hours | Search slow | | P3 (Low) | Cosmetic issue | Next business day | Button misaligned |"
+        },
+        {
+          "depth": 3,
+          "title": "Blameless post-mortems",
+          "anchor": "blameless-post-mortems",
+          "excerpt": "**Structure:** 1. Timeline of events 2. Root cause analysis 3. What went well 4. What went poorly 5. Action items with owners"
+        },
+        {
+          "depth": 3,
+          "title": "Practice: Incident response planning",
+          "anchor": "practice-incident-response-planning",
+          "excerpt": "**Exercise (25 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "Summary and next steps",
+          "anchor": "summary-and-next-steps",
+          "excerpt": "You have learned Google SRE principles (error budgets, SLOs, toil), four golden signals for monitoring, observability triad (logs, metrics, traces), and incident response with blameless post-mortems."
+        }
+      ]
     },
     {
       "route": "/courses/software-architecture/foundations/osi-diagnostics",
       "title": "OSI Model and Browser/Terminal Diagnostics",
       "sourcePath": "/content/courses/software-architecture/foundations/osi-diagnostics.mdx",
-      "sections": []
+      "sections": [
+        {
+          "depth": 2,
+          "title": "OSI layers 1-7",
+          "anchor": "osi-layers-1-7",
+          "excerpt": "The The OSI model is a conceptual framework that divides network communication into seven layers helps you think systematically about where problems occur."
+        },
+        {
+          "depth": 2,
+          "title": "Browser DevTools mastery",
+          "anchor": "browser-devtools-mastery",
+          "excerpt": "Modern browsers have powerful diagnostic tools built in."
+        },
+        {
+          "depth": 3,
+          "title": "Network tab",
+          "anchor": "network-tab",
+          "excerpt": "See all HTTP requests with timing breakdown."
+        },
+        {
+          "depth": 3,
+          "title": "Security tab",
+          "anchor": "security-tab",
+          "excerpt": "Check TLS certificate details."
+        },
+        {
+          "depth": 3,
+          "title": "Application tab",
+          "anchor": "application-tab",
+          "excerpt": "Inspect storage and service workers."
+        },
+        {
+          "depth": 2,
+          "title": "Command-line diagnostics",
+          "anchor": "command-line-diagnostics",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "curl with timing",
+          "anchor": "curl-with-timing",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "openssl for TLS",
+          "anchor": "openssl-for-tls",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "traceroute",
+          "anchor": "traceroute",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "dig for DNS",
+          "anchor": "dig-for-dns",
+          "excerpt": ""
+        },
+        {
+          "depth": 2,
+          "title": "TLS certificate inspection",
+          "anchor": "tls-certificate-inspection",
+          "excerpt": "**Common issues:** - Expired certificate - Wrong hostname (name mismatch) - Untrusted CA - Weak cipher suite"
+        },
+        {
+          "depth": 3,
+          "title": "Practice: Diagnostic troubleshooting",
+          "anchor": "practice-diagnostic-troubleshooting",
+          "excerpt": "**Exercise (20 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "Summary and next steps",
+          "anchor": "summary-and-next-steps",
+          "excerpt": "You have learned the OSI model layers, browser DevTools (Network, Security, Application tabs), CLI diagnostics (curl, openssl, traceroute, dig), and TLS certificate inspection."
+        }
+      ]
     },
     {
       "route": "/courses/software-architecture/foundations/verification-testing",
@@ -1146,7 +1516,61 @@
           "depth": 2,
           "title": "Test strategy pyramid",
           "anchor": "test-strategy-pyramid",
+          "excerpt": "The The test pyramid is a testing strategy with many fast unit tests at the base, fewer integration tests in the middle, and even fewer slow end-to-end tests at the top tells you how to balance different types of tests. Get it wrong, and you will either have slow flaky tests that nobody runs or fast tests that miss real bugs."
+        },
+        {
+          "depth": 3,
+          "title": "Unit tests",
+          "anchor": "unit-tests",
+          "excerpt": "**Characteristics:** - Test one thing at a time - No network calls, no database, no file system - Run in milliseconds - Easy to debug when they fail"
+        },
+        {
+          "depth": 3,
+          "title": "Integration tests",
+          "anchor": "integration-tests",
           "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Practice: Design a test strategy",
+          "anchor": "practice-design-a-test-strategy",
+          "excerpt": "**Exercise (25 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "OWASP ASVS integration",
+          "anchor": "owasp-asvs-integration",
+          "excerpt": "The OWASP Application Security Verification Standard is a framework for testing web application security across three verification levels gives you a checklist of security controls to verify."
+        },
+        {
+          "depth": 2,
+          "title": "Accessibility testing",
+          "anchor": "accessibility-testing",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "WCAG 2.2 levels",
+          "anchor": "wcag-22-levels",
+          "excerpt": "**Level AA:** Standard target for most organisations and legal requirements."
+        },
+        {
+          "depth": 3,
+          "title": "Practice: Accessibility audit",
+          "anchor": "practice-accessibility-audit",
+          "excerpt": "**Exercise (30 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "Performance testing",
+          "anchor": "performance-testing",
+          "excerpt": "---"
+        },
+        {
+          "depth": 2,
+          "title": "Summary and next steps",
+          "anchor": "summary-and-next-steps",
+          "excerpt": "You have learned how to apply the test pyramid strategy, integrate OWASP ASVS security verification, test accessibility with WCAG 2.2 standards, and perform load testing."
         }
       ]
     },
