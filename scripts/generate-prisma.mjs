@@ -32,15 +32,12 @@ try {
       });
       process.exit(0);
     } catch (nodeError) {
-      // Last resort: try direct binary execution (may work on some systems)
-      console.warn('Standard methods failed, trying direct binary execution...');
+      // Last resort: use explicit node path to avoid permission issues
+      console.warn('Standard methods failed, trying with explicit node path...');
       try {
-        const { platform } = process;
-        const binPath = platform === 'win32' 
-          ? join(projectRoot, 'node_modules', '.bin', 'prisma.cmd')
-          : join(projectRoot, 'node_modules', '.bin', 'prisma');
-        
-        execSync(`node "${binPath}" generate`, {
+        const nodePath = process.execPath;
+        const prismaPath = join(projectRoot, 'node_modules', 'prisma', 'build', 'index.js');
+        execSync(`"${nodePath}" "${prismaPath}" generate`, {
           cwd: projectRoot,
           stdio: 'inherit',
           env: { ...process.env, PRISMA_GENERATE_DATAPROXY: 'false' }
