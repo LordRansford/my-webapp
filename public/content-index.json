@@ -1,6 +1,12 @@
 {
-  "generatedAt": "2026-01-01T10:25:01.003Z",
+  "generatedAt": "2026-01-01T21:05:39.915Z",
   "pages": [
+    {
+      "route": "/courses/_cpd-checklist",
+      "title": "CPD readiness checklist",
+      "sourcePath": "/content/courses/_cpd-checklist.mdx",
+      "sections": []
+    },
     {
       "route": "/courses/ai/advanced",
       "title": "AI Advanced",
@@ -880,12 +886,6 @@
           "excerpt": "If diagrams still feel fuzzy, revisit Foundations. If integration or data felt heavy, revisit Intermediate. If domains and distributed patterns need time, revisit Advanced and pick one topic to go deeper on."
         }
       ]
-    },
-    {
-      "route": "/courses/_cpd-checklist",
-      "title": "CPD readiness checklist",
-      "sourcePath": "/content/courses/_cpd-checklist.mdx",
-      "sections": []
     },
     {
       "route": "/ai/advanced",
