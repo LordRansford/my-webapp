@@ -34,6 +34,14 @@ model UserIdentity {
   creditUsage CreditUsageEvent[]
   creditLots CreditLot[]
   projects  Project[]
+  
+  // AI Studio relations
+  datasets  Dataset[]
+  models    Model[]
+  trainingJobs TrainingJob[]
+  agents    Agent[]
+  agentExecutions AgentExecution[]
+  deployments Deployment[]
 
   @@index([provider, providerAccountId])
 }
@@ -490,6 +498,198 @@ model Progress {
 
   @@unique([userId, courseId, levelId, sectionId])
   @@index([userId, courseId, levelId])
+}
+
+// ============================================================================
+// AI Studio Models
+// ============================================================================
+
+model Dataset {
+  id              String   @id @default(cuid())
+  userId          String
+  name            String
+  description     String?
+  type            String   // csv, json, jsonl, parquet, hdf5
+  size            Int      // Using Int instead of BigInt for SQLite compatibility
+  rows            Int?
+  columns         Int?
+  filePath        String
+  license         String
+  licenseVerified Boolean  @default(false)
+  status          String   @default("uploading") // uploading, processing, verified, rejected, deleted
+  schema          Json?
+  statistics      Json?
+  qualityScore    Float?
+  validationResult Json?
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  deletedAt       DateTime?
+
+  user            UserIdentity @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trainingJobs    TrainingJob[]
+  modelEvaluations ModelEvaluation[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([license])
+  @@index([createdAt])
+}
+
+model Model {
+  id                String   @id @default(cuid())
+  userId            String
+  name              String
+  description       String?
+  type              String   // classification, regression, clustering, generation, other
+  architecture      Json
+  status            String   @default("created") // created, training, trained, failed, deployed, archived
+  version           String   @default("1.0.0")
+  trainingDatasetId String?
+  trainingConfig    Json?
+  metrics           Json?
+  modelPath         String?
+  modelSize         Int?      // Using Int instead of BigInt for SQLite compatibility
+  metadata          Json     @default("{}")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  trainedAt         DateTime?
+  deletedAt         DateTime?
+
+  user              UserIdentity @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trainingDataset   Dataset? @relation(fields: [trainingDatasetId], references: [id])
+  evaluations       ModelEvaluation[]
+  trainingJobs      TrainingJob[]
+  deployments       Deployment[]
+
+  @@index([userId])
+  @@index([type])
+  @@index([status])
+  @@index([trainingDatasetId])
+  @@index([createdAt])
+}
+
+model TrainingJob {
+  id              String   @id @default(cuid())
+  userId          String
+  modelId         String
+  datasetId       String
+  status          String   @default("queued") // queued, running, completed, failed, cancelled
+  computeType     String   @default("browser") // browser, backend
+  config          Json
+  progress        Float    @default(0)
+  currentEpoch    Int?
+  totalEpochs     Int?
+  metrics         Json?
+  metricsHistory  Json?
+  errorMessage    String?
+  workerId        String?
+  startedAt       DateTime?
+  completedAt     DateTime?
+  durationSeconds Int?
+  cost            Float?   // Using Float instead of Decimal for SQLite compatibility
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user            UserIdentity @relation(fields: [userId], references: [id], onDelete: Cascade)
+  model           Model @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  dataset         Dataset @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([modelId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model ModelEvaluation {
+  id            String   @id @default(cuid())
+  modelId       String
+  datasetId     String
+  metrics       Json
+  confusionMatrix Json?
+  perClassMetrics Json?
+  createdAt     DateTime @default(now())
+
+  model         Model    @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  dataset       Dataset  @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@index([modelId])
+  @@index([datasetId])
+  @@index([createdAt])
+}
+
+model Agent {
+  id          String   @id @default(cuid())
+  userId      String
+  name        String
+  description String?
+  type        String   // single, multi, hierarchical, collaborative
+  modelConfig Json
+  tools       Json
+  memoryConfig Json?
+  systemPrompt String?
+  workflow    Json?
+  status      String   @default("active") // active, paused, archived
+  metadata    Json     @default("{}")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  user        UserIdentity @relation(fields: [userId], references: [id], onDelete: Cascade)
+  executions  AgentExecution[]
+
+  @@index([userId])
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model AgentExecution {
+  id            String   @id @default(cuid())
+  agentId       String
+  userId        String
+  input         String
+  output        String?
+  status        String   @default("running") // running, completed, failed, cancelled
+  steps         Json?
+  cost          Float?   // Using Float instead of Decimal for SQLite compatibility
+  tokensUsed    Int?
+  durationSeconds Int?
+  errorMessage  String?
+  startedAt     DateTime @default(now())
+  completedAt   DateTime?
+
+  agent         Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  user          UserIdentity @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([agentId])
+  @@index([userId])
+  @@index([status])
+  @@index([startedAt])
+}
+
+model Deployment {
+  id          String   @id @default(cuid())
+  userId      String
+  modelId     String
+  name        String
+  target      String   // api, browser, container, edge
+  status      String   @default("deploying") // deploying, active, scaling, failed, stopped
+  url         String?
+  config      Json
+  replicas    Int      @default(1)
+  metrics     Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  user        UserIdentity @relation(fields: [userId], references: [id], onDelete: Cascade)
+  model       Model    @relation(fields: [modelId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([modelId])
+  @@index([status])
+  @@index([target])
 }
 
 

@@ -21,6 +21,10 @@ export const tokens = {
     16: "4rem",    // 64px
     20: "5rem",    // 80px
     24: "6rem",    // 96px
+    32: "8rem",    // 128px
+    40: "10rem",   // 160px
+    48: "12rem",   // 192px
+    64: "16rem",   // 256px
     xs: "var(--space-xs)",
     sm: "var(--space-sm)",
     md: "var(--space-md)",
@@ -29,6 +33,34 @@ export const tokens = {
     "2xl": "var(--space-2xl)",
     "3xl": "var(--space-3xl)",
     "4xl": "var(--space-4xl)",
+    // Component-specific spacing
+    cardPadding: "var(--space-card-padding)",
+    sectionGap: "var(--space-section-gap)",
+    pagePadding: "var(--space-page-padding)",
+    contentGap: "var(--space-content-gap)",
+    formGap: "var(--space-form-gap)",
+    navGap: "var(--space-nav-gap)",
+    // Grid gaps
+    gridGap: {
+      sm: "var(--grid-gap-sm)",
+      md: "var(--grid-gap-md)",
+      lg: "var(--grid-gap-lg)",
+      xl: "var(--grid-gap-xl)",
+    },
+    // Container sizes
+    container: {
+      sm: "var(--container-sm)",
+      md: "var(--container-md)",
+      lg: "var(--container-lg)",
+      xl: "var(--container-xl)",
+      "2xl": "var(--container-2xl)",
+    },
+    // Container padding
+    containerPadding: {
+      base: "var(--container-padding)",
+      sm: "var(--container-padding-sm)",
+      lg: "var(--container-padding-lg)",
+    },
   },
   radius: {
     none: "0",
@@ -38,6 +70,14 @@ export const tokens = {
     xl: "1.5rem",    // 24px
     "2xl": "2rem",   // 32px
     full: "9999px",
+  },
+  border: {
+    width: {
+      none: "var(--border-width-none)",
+      sm: "var(--border-width-sm)",
+      md: "var(--border-width-md)",
+      lg: "var(--border-width-lg)",
+    },
   },
   shadow: {
     xs: "var(--shadow-xs)",

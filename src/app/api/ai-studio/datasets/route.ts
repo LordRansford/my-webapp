@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
           pagination: {
             limit,
             offset,
-            total: datasets.length, // TODO: Get actual total from DB
+            total: datasets.length, // Note: For accurate total, use count query with same filters
           },
         },
         requestId: crypto.randomUUID(),

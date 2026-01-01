@@ -58,15 +58,15 @@ export default function GameShell({
       {/* Header */}
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div>
-                <h1 className="text-xl font-semibold text-slate-900">{config.title}</h1>
-                <p className="text-sm text-slate-600">{config.description}</p>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-4 flex-1 min-w-0">
+              <div className="min-w-0 flex-1">
+                <h1 className="text-xl font-semibold text-slate-900 truncate">{config.title}</h1>
+                <p className="text-sm text-slate-600 hidden sm:block">{config.description}</p>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-shrink-0">
                 <span
-                  className={`rounded-full px-3 py-1 text-xs font-medium ${
+                  className={`rounded-full px-3 py-1 text-xs font-medium whitespace-nowrap ${
                     status === "playing"
                       ? "bg-green-100 text-green-800"
                       : status === "paused"
@@ -92,7 +92,7 @@ export default function GameShell({
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               {onToggleHelp && (
                 <button
                   onClick={onToggleHelp}
@@ -187,10 +187,10 @@ export default function GameShell({
       {/* Footer - Accessibility Controls */}
       <footer className="border-t border-slate-200 bg-white" role="contentinfo">
         <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap items-center justify-between gap-4 text-xs text-slate-600">
-            <div className="flex items-center gap-2">
-              <Keyboard className="h-4 w-4" aria-hidden="true" />
-              <span>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 text-xs text-slate-600">
+            <div className="flex items-start gap-2 flex-wrap">
+              <Keyboard className="h-4 w-4 mt-0.5 flex-shrink-0" aria-hidden="true" />
+              <span className="flex flex-wrap gap-x-1.5 gap-y-1">
                 <kbd className="px-1.5 py-0.5 bg-slate-100 rounded text-xs">Arrow keys</kbd> to move,{" "}
                 <kbd className="px-1.5 py-0.5 bg-slate-100 rounded text-xs">Space</kbd> to action,{" "}
                 <kbd className="px-1.5 py-0.5 bg-slate-100 rounded text-xs">P</kbd> to pause,{" "}
@@ -198,7 +198,7 @@ export default function GameShell({
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <MousePointer2 className="h-4 w-4" aria-hidden="true" />
+              <MousePointer2 className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
               <span>Touch: Swipe to move, Tap to action</span>
             </div>
           </div>

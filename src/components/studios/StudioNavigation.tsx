@@ -7,7 +7,9 @@ import {
   Rocket, 
   Layout,
   Settings,
-  HelpCircle
+  HelpCircle,
+  Home,
+  ChevronRight
 } from "lucide-react";
 
 interface NavLink {
@@ -57,6 +59,13 @@ const studioConfigs = {
     build: "/studios/architecture-diagram-studio",
     settings: "/studios/architecture-diagram-studio/settings",
     color: "indigo"
+  },
+  lab: {
+    hub: "/studios/hub",
+    learn: "/studios",
+    build: "/studios",
+    settings: "/studios",
+    color: "slate"
   }
 };
 
@@ -120,23 +129,30 @@ function usePathnameCompat(): string {
 }
 
 function StudioNavigation({ 
-  studioType, 
+  studioType = "lab", 
   showHub = true,
-  additionalLinks = []
+  showHome = true,
+  additionalLinks = [],
+  currentStudio,
+  currentStudioHref
 }: StudioNavigationProps) {
   const pathname = usePathnameCompat();
-  const config = studioConfigs[studioType];
+  const config = studioConfigs[studioType] || studioConfigs.lab;
   const activeColor = colorClasses[config.color as keyof typeof colorClasses];
 
   // Memoize links to prevent unnecessary re-renders
   const baseLinks: NavLink[] = useMemo(() => [
-    ...(showHub ? [{ label: "Hub", href: config.hub, icon: Layout }] : []),
-    { label: "Learn", href: config.learn, icon: BookOpen },
-    { label: "Build", href: config.build, icon: Rocket },
+    ...(showHome ? [{ label: "Home", href: "/", icon: Home }] : []),
+    ...(showHub ? [{ label: "Studios Hub", href: "/studios/hub", icon: Layout }] : []),
+    ...(currentStudio && currentStudioHref ? [{ label: currentStudio, href: currentStudioHref, icon: Layout }] : []),
+    ...(studioType !== "lab" ? [
+      { label: "Learn", href: config.learn, icon: BookOpen },
+      { label: "Build", href: config.build, icon: Rocket },
+    ] : []),
     ...additionalLinks,
-    { label: "Settings", href: config.settings, icon: Settings },
+    ...(studioType !== "lab" ? [{ label: "Settings", href: config.settings, icon: Settings }] : []),
     { label: "Help", href: "/help", icon: HelpCircle },
-  ], [showHub, config.hub, config.learn, config.build, config.settings, additionalLinks]);
+  ], [showHome, showHub, studioType, config.hub, config.learn, config.build, config.settings, additionalLinks, currentStudio, currentStudioHref]);
 
   const isActive = (href: string) => {
     if (pathname === href) return true;

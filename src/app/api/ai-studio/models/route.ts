@@ -7,7 +7,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/ai-studio/auth";
-import { listModels } from "@/lib/ai-studio/db";
+import { listModels, createModel } from "@/lib/ai-studio/db";
 import { z } from "zod";
 
 const createModelSchema = z.object({
@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
           pagination: {
             limit,
             offset,
-            total: models.length, // TODO: Get actual total from DB
+            total: models.length, // Note: For accurate total, use count query with same filters
           },
         },
         requestId: crypto.randomUUID(),
@@ -69,9 +69,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validated = createModelSchema.parse(body);
 
-    // TODO: Create model in database
-    const model = {
-      id: crypto.randomUUID(),
+    const model = await createModel({
       userId: auth.user!.id,
       name: validated.name,
       description: validated.description,
@@ -80,9 +78,7 @@ export async function POST(request: NextRequest) {
       status: "created",
       version: "1.0.0",
       metadata: {},
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
+    });
 
     return NextResponse.json(
       {

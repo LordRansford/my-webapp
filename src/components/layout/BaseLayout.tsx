@@ -9,6 +9,7 @@
 "use client";
 
 import { ReactNode } from "react";
+import type { ShadowElevation, RadiusKey } from "@/types/design-system";
 
 interface BaseLayoutProps {
   children: ReactNode;
@@ -92,11 +93,31 @@ export function Section({ children, className = "", gap = "var(--space-8)" }: Se
 interface CardProps {
   children: ReactNode;
   className?: string;
-  elevation?: 1 | 2 | 3 | 4 | 5;
+  elevation?: ShadowElevation;
+  /**
+   * Border radius using design tokens
+   */
+  radius?: RadiusKey;
+  /**
+   * Custom padding (uses design tokens)
+   */
+  padding?: string;
+  /**
+   * Hover effect enabled
+   */
+  hover?: boolean;
 }
 
-export function Card({ children, className = "", elevation = 3 }: CardProps) {
+export function Card({ 
+  children, 
+  className = "", 
+  elevation = 3,
+  radius = "lg",
+  padding = "var(--space-5)",
+  hover = true,
+}: CardProps) {
   const elevationClass = `elevation-${elevation}`;
+  const radiusValue = `var(--radius-${radius})`;
   
   return (
     <div
@@ -104,9 +125,130 @@ export function Card({ children, className = "", elevation = 3 }: CardProps) {
       style={{
         background: "var(--color-surface)",
         border: "var(--border-width-sm) solid var(--color-border-primary)",
-        borderRadius: "var(--radius-lg)",
-        padding: "var(--space-5)",
+        borderRadius: radiusValue,
+        padding,
+        transition: hover 
+          ? "var(--transition-transform), var(--transition-shadow), var(--transition-border)"
+          : undefined,
+        cursor: hover ? "pointer" : undefined,
       }}
+    >
+      {children}
+    </div>
+  );
+}
+
+/**
+ * Stack - Vertical stack with consistent spacing
+ */
+interface StackProps {
+  children: ReactNode;
+  gap?: string;
+  className?: string;
+  align?: "start" | "center" | "end" | "stretch";
+}
+
+export function Stack({ 
+  children, 
+  gap = "var(--space-4)",
+  className = "",
+  align = "stretch",
+}: StackProps) {
+  return (
+    <div
+      className={className}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap,
+        alignItems: align === "stretch" ? "stretch" : align,
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+/**
+ * Inline - Horizontal layout with consistent spacing
+ */
+interface InlineProps {
+  children: ReactNode;
+  gap?: string;
+  className?: string;
+  align?: "start" | "center" | "end" | "baseline";
+  wrap?: boolean;
+}
+
+export function Inline({ 
+  children, 
+  gap = "var(--space-4)",
+  className = "",
+  align = "start",
+  wrap = false,
+}: InlineProps) {
+  return (
+    <div
+      className={className}
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        gap,
+        alignItems: align,
+        flexWrap: wrap ? "wrap" : "nowrap",
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+/**
+ * Grid - Responsive grid layout with design system spacing
+ * 
+ * Uses CSS Grid with responsive column configuration.
+ * For responsive breakpoints, use the object syntax with mobile/tablet/desktop keys.
+ * 
+ * Note: For enhanced responsive behavior, consider using the ResponsiveGrid component
+ * from "./Grid" which uses CSS classes for better performance.
+ */
+interface GridProps {
+  children: ReactNode;
+  columns?: number | { mobile?: number; tablet?: number; desktop?: number };
+  gap?: string;
+  className?: string;
+}
+
+export function Grid({ 
+  children, 
+  columns = 1,
+  gap = "var(--space-4)",
+  className = "",
+}: GridProps) {
+  // Determine column count based on type
+  const gridColumns = typeof columns === "number"
+    ? columns
+    : columns.mobile || 1;
+
+  // For responsive grids, use data attributes with CSS
+  const gridStyle: React.CSSProperties = {
+    display: "grid",
+    gridTemplateColumns: `repeat(${gridColumns}, 1fr)`,
+    gap,
+  };
+
+  // Add data attributes for CSS-based responsive handling
+  const responsiveAttrs = typeof columns === "object" ? {
+    "data-grid-mobile": String(columns.mobile || 1),
+    "data-grid-tablet": String(columns.tablet || columns.mobile || 2),
+    "data-grid-desktop": String(columns.desktop || columns.tablet || columns.mobile || 3),
+  } : {};
+
+  return (
+    <div
+      className={className}
+      style={gridStyle}
+      {...responsiveAttrs}
     >
       {children}
     </div>

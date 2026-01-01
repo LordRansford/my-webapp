@@ -30,7 +30,7 @@ const GAME_REGISTRY: Record<
   }
 > = {
   "daily-logic-gauntlet": {
-    component: () => import("@/lib/games/games/daily-logic-gauntlet/DailyLogicGauntlet"),
+    component: () => import("@/lib/games/games/daily-logic-gauntlet/DailyLogicGauntletEnhanced"),
     metadata: {
       title: "Daily Logic Gauntlet | Games",
       description: "Multi-puzzle challenge with daily seeded challenges. Same seed for all users on the same day.",
@@ -90,6 +90,84 @@ const GAME_REGISTRY: Record<
       openGraph: {
         title: "Systems Mastery Game",
         description: "Learn systems thinking through interactive scenarios.",
+        type: "website",
+      },
+    },
+  },
+  "constraint-optimizer": {
+    component: () => import("@/lib/games/games/constraint-optimizer/ConstraintOptimizer"),
+    metadata: {
+      title: "Constraint Optimizer | Games",
+      description: "Optimize resource allocation under constraints. Balance multiple objectives for maximum efficiency.",
+      keywords: ["optimization", "constraints", "puzzle", "daily challenge"],
+      openGraph: {
+        title: "Constraint Optimizer",
+        description: "Optimize resource allocation under constraints.",
+        type: "website",
+      },
+    },
+  },
+  "pattern-architect": {
+    component: () => import("@/lib/games/games/pattern-architect/PatternArchitect"),
+    metadata: {
+      title: "Pattern Architect | Games",
+      description: "Create beautiful symmetric patterns. Build visual patterns following rules and symmetry requirements.",
+      keywords: ["pattern", "symmetry", "visual", "puzzle", "daily challenge"],
+      openGraph: {
+        title: "Pattern Architect",
+        description: "Create beautiful symmetric patterns.",
+        type: "website",
+      },
+    },
+  },
+  "deduction-grid": {
+    component: () => import("@/lib/games/games/deduction-grid/DeductionGrid"),
+    metadata: {
+      title: "Deduction Grid | Games",
+      description: "Solve logic grid puzzles using deduction. Build logical inference chains from clues.",
+      keywords: ["logic", "deduction", "puzzle", "daily challenge"],
+      openGraph: {
+        title: "Deduction Grid",
+        description: "Solve logic grid puzzles using deduction.",
+        type: "website",
+      },
+    },
+  },
+  "flow-planner": {
+    component: () => import("@/lib/games/games/flow-planner/FlowPlanner"),
+    metadata: {
+      title: "Flow Planner | Games",
+      description: "Optimize flow through networks. Plan resource flows and manage dependencies.",
+      keywords: ["optimization", "flow", "network", "strategy", "daily challenge"],
+      openGraph: {
+        title: "Flow Planner",
+        description: "Optimize flow through networks.",
+        type: "website",
+      },
+    },
+  },
+  "memory-palace": {
+    component: () => import("@/lib/games/games/memory-palace/MemoryPalace"),
+    metadata: {
+      title: "Memory Palace | Games",
+      description: "Train your memory with proven techniques. Learn evidence-based memory methods through practice.",
+      keywords: ["memory", "learning", "training", "educational", "daily challenge"],
+      openGraph: {
+        title: "Memory Palace",
+        description: "Train your memory with proven techniques.",
+        type: "website",
+      },
+    },
+  },
+  "allocation-architect": {
+    component: () => import("@/lib/games/games/allocation-architect/AllocationArchitect"),
+    metadata: {
+      title: "Allocation Architect | Games",
+      description: "Build optimal resource allocation plans under constraints. Balance multiple objectives while managing risk events.",
+      keywords: ["allocation", "optimization", "strategy", "planning", "daily challenge"],
+      openGraph: {
+        title: "Allocation Architect",
+        description: "Build optimal resource allocation plans under constraints.",
         type: "website",
       },
     },

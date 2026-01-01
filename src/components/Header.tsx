@@ -29,7 +29,7 @@ const navItems: NavItem[] = [
   },
   { label: "Tools", href: "/tools" },
   { 
-    label: "Games", 
+    label: "Games hub", 
     href: "/games/hub",
     submenu: [
       { label: "Games Hub", href: "/games/hub" },

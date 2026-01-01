@@ -8,7 +8,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuth, checkResourceAccess } from "@/lib/ai-studio/auth";
-import { getModel } from "@/lib/ai-studio/db";
+import { getModel, updateModel, deleteModel } from "@/lib/ai-studio/db";
 import { z } from "zod";
 
 const updateModelSchema = z.object({
@@ -121,12 +121,23 @@ export async function PUT(
     const body = await request.json();
     const validated = updateModelSchema.parse(body);
 
-    // TODO: Update model in database
-    const updated = {
-      ...modelObj,
-      ...validated,
-      updatedAt: new Date().toISOString(),
-    };
+    const updated = await updateModel(modelId, auth.user!.id, {
+      ...(validated.name && { name: validated.name }),
+      ...(validated.description !== undefined && { description: validated.description }),
+      ...(validated.architecture && { architecture: validated.architecture }),
+    });
+    
+    if (!updated) {
+      return NextResponse.json(
+        {
+          error: {
+            code: "NOT_FOUND",
+            message: "Model not found",
+          },
+        },
+        { status: 404 }
+      );
+    }
 
     return NextResponse.json(
       {
@@ -202,11 +213,7 @@ export async function DELETE(
       );
     }
 
-    // TODO: Soft delete model in database
-    // await prisma.model.update({
-    //   where: { id: modelId },
-    //   data: { deletedAt: new Date() },
-    // });
+    await deleteModel(modelId, auth.user!.id);
 
     return NextResponse.json(
       {

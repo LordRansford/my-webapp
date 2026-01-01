@@ -18,6 +18,8 @@ import {
 import { useStudiosStore } from "@/stores/useStudiosStore";
 import { SecurityBanner } from "@/components/dev-studios/SecurityBanner";
 import { validateUpload } from "@/utils/validateUpload";
+import StudioNavigation from "@/components/studios/StudioNavigation";
+import { StudioBreadcrumbs } from "@/components/studios/StudioBreadcrumbs";
 
 const loadMobileNet = (() => {
   let cached = null;
@@ -272,6 +274,23 @@ export default function VisionLabPage() {
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-6 space-y-6 sm:px-6 sm:py-8 md:space-y-8">
+      {/* Navigation */}
+      <div className="space-y-3">
+        <StudioBreadcrumbs
+          items={[
+            { label: "Studios Hub", href: "/studios/hub" },
+            { label: "Vision Lab" }
+          ]}
+        />
+        <StudioNavigation
+          studioType="lab"
+          showHome={true}
+          showHub={true}
+          currentStudio="Vision Lab"
+          currentStudioHref="/studios/vision-lab"
+        />
+      </div>
+
       <div className="rounded-3xl bg-white p-4 sm:p-6 md:p-8 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-3">
         <div className="inline-flex items-center gap-2 rounded-2xl bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800 ring-1 ring-sky-100">
           Vision Lab

@@ -16,6 +16,8 @@ import {
 } from "recharts";
 import { useStudiosStore } from "@/stores/useStudiosStore";
 import { SecurityBanner } from "@/components/dev-studios/SecurityBanner";
+import StudioNavigation from "@/components/studios/StudioNavigation";
+import { StudioBreadcrumbs } from "@/components/studios/StudioBreadcrumbs";
 
 const studioFilters = [
   { id: "all", label: "All studios" },
@@ -287,6 +289,23 @@ export default function EvalGovernanceLabPage() {
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-6 space-y-6 sm:px-6 sm:py-8 md:space-y-8">
+      {/* Navigation */}
+      <div className="space-y-3">
+        <StudioBreadcrumbs
+          items={[
+            { label: "Studios Hub", href: "/studios/hub" },
+            { label: "Evaluation & Governance Lab" }
+          ]}
+        />
+        <StudioNavigation
+          studioType="lab"
+          showHome={true}
+          showHub={true}
+          currentStudio="Evaluation & Governance Lab"
+          currentStudioHref="/studios/eval-governance-lab"
+        />
+      </div>
+
       <div className="rounded-3xl bg-white p-4 sm:p-6 md:p-8 shadow-[0_18px_45px_rgba(15,23,42,0.06)] ring-1 ring-slate-100/80 space-y-3">
         <div className="inline-flex items-center gap-2 rounded-2xl bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-800 ring-1 ring-rose-100">
           Evaluation &amp; Governance Lab

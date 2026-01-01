@@ -47,20 +47,14 @@ export async function GET(req: NextRequest) {
         }
       : { maxDailyCredits: null, maxMonthlyCredits: null };
 
-    // TODO: Retrieve alert thresholds and notification preferences from database
-    // For now, return defaults
+    // Retrieve alert thresholds and notification preferences
+    const creditSettings = getCreditSettings(userId);
     const controls = {
       maxDailyCredits: customLimits.maxDailyCredits,
       maxMonthlyCredits: customLimits.maxMonthlyCredits,
       perRunMaxCredits: null, // Not implemented yet
-      alertThresholds: {
-        daily: [50, 80, 100],
-        monthly: [50, 80, 100],
-      },
-      notifications: {
-        email: true,
-        inApp: true,
-      },
+      alertThresholds: creditSettings.alertThresholds,
+      notifications: creditSettings.notifications,
     };
 
     return NextResponse.json({

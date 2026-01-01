@@ -14,9 +14,25 @@ import { isBillingEnabled, BILLING_DISABLED_MESSAGE } from "@/lib/billing/billin
 
 type Body = { courseId?: string };
 
-function isCourseCompleted(params: { userId: string; courseId: string }): boolean {
-  // TODO: Replace with authoritative completion tracking in DB once course completion is formalized.
-  // For now, we use existing learning records if available.
+async function isCourseCompleted(params: { userId: string; courseId: string }): Promise<boolean> {
+  // Check CourseCompletion table for authoritative completion record
+  const courseCompletion = (prisma as any).courseCompletion as {
+    findFirst: (args: any) => Promise<any>;
+  };
+  
+  const completion = await courseCompletion.findFirst({
+    where: {
+      userId: params.userId,
+      courseId: params.courseId,
+      passed: true,
+    },
+  });
+  
+  if (completion) {
+    return true;
+  }
+  
+  // Fallback: Check learning records if CourseCompletion not available
   const records = listLearningRecordsForUser(params.userId);
   return records.some((r) => r.courseId === params.courseId && r.completionStatus === "completed");
 }
@@ -54,9 +70,9 @@ export async function POST(req: Request) {
   }
 
   // Eligibility rules:
-  // - Completion required (or stubbed via TODO above)
+  // - Completion required
   // - AND payment complete OR course is free-certificate
-  const completed = isCourseCompleted({ userId, courseId });
+  const completed = await isCourseCompleted({ userId, courseId });
   const freeCert = isFreeCertificateCourse(courseId);
 
   if (freeCert && completed) {

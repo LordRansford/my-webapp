@@ -10,6 +10,7 @@
  * 3. Typography (uses spacing and colors)
  * 4. Shadows (uses colors)
  * 5. Motion (uses spacing and colors)
+ * 6. Grid Utilities (uses spacing)
  */
 
 /* 1. Spacing System - Foundation for all layout */
@@ -27,6 +28,9 @@
 /* 5. Motion System - Uses spacing and colors */
 @import "./motion.css";
 
+/* 6. Grid Utilities - Responsive grid patterns */
+@import "./grid-utilities.css";
+
 /**
  * Design System Principles:
  * 
@@ -38,4 +42,9 @@
  * 6. All components must respect reduced-motion preferences
  * 7. All images must use OptimizedImage component
  * 8. All text must render sharply on high-DPI displays
+ * 
+ * For usage guidelines, see:
+ * - docs/design-system-best-practices.md
+ * - docs/design-system-examples.md
+ * - docs/design-system-quick-reference.md
  */

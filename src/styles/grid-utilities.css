@@ -1,0 +1,83 @@
+/**
+ * Grid Utilities
+ * 
+ * Responsive grid utilities that work with the Grid component
+ * and design system spacing tokens.
+ */
+
+/* Responsive grid using data attributes with CSS custom properties */
+[data-grid-mobile] {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(1, 1fr);
+}
+
+/* Use CSS custom properties for responsive columns */
+[data-grid-mobile][data-grid-mobile="1"] { grid-template-columns: repeat(1, 1fr); }
+[data-grid-mobile][data-grid-mobile="2"] { grid-template-columns: repeat(2, 1fr); }
+[data-grid-mobile][data-grid-mobile="3"] { grid-template-columns: repeat(3, 1fr); }
+[data-grid-mobile][data-grid-mobile="4"] { grid-template-columns: repeat(4, 1fr); }
+
+/* Tablet breakpoint */
+@media (min-width: 768px) {
+  [data-grid-tablet] {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  
+  [data-grid-tablet][data-grid-tablet="1"] { grid-template-columns: repeat(1, 1fr); }
+  [data-grid-tablet][data-grid-tablet="2"] { grid-template-columns: repeat(2, 1fr); }
+  [data-grid-tablet][data-grid-tablet="3"] { grid-template-columns: repeat(3, 1fr); }
+  [data-grid-tablet][data-grid-tablet="4"] { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Desktop breakpoint */
+@media (min-width: 1024px) {
+  [data-grid-desktop] {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  
+  [data-grid-desktop][data-grid-desktop="1"] { grid-template-columns: repeat(1, 1fr); }
+  [data-grid-desktop][data-grid-desktop="2"] { grid-template-columns: repeat(2, 1fr); }
+  [data-grid-desktop][data-grid-desktop="3"] { grid-template-columns: repeat(3, 1fr); }
+  [data-grid-desktop][data-grid-desktop="4"] { grid-template-columns: repeat(4, 1fr); }
+  [data-grid-desktop][data-grid-desktop="5"] { grid-template-columns: repeat(5, 1fr); }
+  [data-grid-desktop][data-grid-desktop="6"] { grid-template-columns: repeat(6, 1fr); }
+}
+
+/* Utility classes for common grid patterns */
+.grid-auto-fit {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+
+.grid-auto-fill {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+
+/* Responsive grid with design system spacing */
+.grid-responsive {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .grid-responsive {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-responsive {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .grid-responsive {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

@@ -8,7 +8,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuth, checkResourceAccess } from "@/lib/ai-studio/auth";
-import { getDataset } from "@/lib/ai-studio/db";
+import { getDataset, updateDataset, deleteDataset } from "@/lib/ai-studio/db";
 import { z } from "zod";
 
 const updateDatasetSchema = z.object({
@@ -121,12 +121,23 @@ export async function PUT(
     const body = await request.json();
     const validated = updateDatasetSchema.parse(body);
 
-    // TODO: Update dataset in database
-    const updated = {
-      ...datasetObj,
-      ...validated,
-      updatedAt: new Date().toISOString(),
-    };
+    const updated = await updateDataset(datasetId, auth.user!.id, {
+      ...(validated.name && { name: validated.name }),
+      ...(validated.description !== undefined && { description: validated.description }),
+      ...(validated.license && { license: validated.license }),
+    });
+    
+    if (!updated) {
+      return NextResponse.json(
+        {
+          error: {
+            code: "NOT_FOUND",
+            message: "Dataset not found",
+          },
+        },
+        { status: 404 }
+      );
+    }
 
     return NextResponse.json(
       {
@@ -202,11 +213,7 @@ export async function DELETE(
       );
     }
 
-    // TODO: Soft delete dataset in database
-    // await prisma.dataset.update({
-    //   where: { id: datasetId },
-    //   data: { deletedAt: new Date() },
-    // });
+    await deleteDataset(datasetId, auth.user!.id);
 
     return NextResponse.json(
       {

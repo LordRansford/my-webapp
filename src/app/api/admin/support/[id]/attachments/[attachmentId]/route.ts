@@ -31,8 +31,62 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string; att
     return NextResponse.json({ error: "Attachment storage is not configured for this environment." }, { status: 501 });
   }
 
-  // TODO: integrate with external object storage (Vercel Blob, S3, etc) and stream bytes.
-  return NextResponse.json({ error: "Attachment download not implemented yet." }, { status: 501 });
+  // Download from object storage (Vercel Blob or S3)
+  try {
+    // Try Vercel Blob first
+    if (process.env.BLOB_READ_WRITE_TOKEN) {
+      const { get } = require('@vercel/blob');
+      const blob = await get(att.storageKey, {
+        token: process.env.BLOB_READ_WRITE_TOKEN,
+      });
+      
+      return new NextResponse(blob, {
+        headers: {
+          'Content-Type': att.mimeType,
+          'Content-Disposition': `attachment; filename="${att.fileName}"`,
+        },
+      });
+    }
+    
+    // Try AWS S3 as fallback
+    if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
+      const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3');
+      const s3Client = new S3Client({
+        region: process.env.AWS_REGION || 'us-east-1',
+        credentials: {
+          accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+        },
+      });
+      
+      const command = new GetObjectCommand({
+        Bucket: process.env.AWS_S3_BUCKET_NAME,
+        Key: att.storageKey,
+      });
+      
+      const response = await s3Client.send(command);
+      const body = await response.Body.transformToByteArray();
+      
+      return new NextResponse(body, {
+        headers: {
+          'Content-Type': att.mimeType,
+          'Content-Disposition': `attachment; filename="${att.fileName}"`,
+        },
+      });
+    }
+    
+    // No storage configured
+    return NextResponse.json(
+      { error: "Attachment storage is not configured. Please set up Vercel Blob or AWS S3." },
+      { status: 501 }
+    );
+  } catch (error) {
+    console.error('Failed to download attachment:', error);
+    return NextResponse.json(
+      { error: "Failed to download attachment" },
+      { status: 500 }
+    );
+  }
 }
 
 

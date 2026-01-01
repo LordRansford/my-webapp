@@ -242,3 +242,24 @@ button:active:not(:disabled),
     animation: none;
   }
 }
+
+/* Image loading fade-in animation */
+@keyframes imageFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.image-loading {
+  animation: imageFadeIn var(--duration-normal) var(--ease-out);
+}
+
+/* Smooth scroll with offset for fixed headers */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-padding-top: 80px; /* Account for fixed header */
+  }
+}

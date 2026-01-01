@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import TemplateGrid from "@/components/templates/TemplateGrid";
 import TemplateFilters from "@/components/templates/TemplateFilters";
+import { TemplateSelector } from "@/components/templates/TemplateSelector";
 import { getFavourites, toggleFavourite } from "@/lib/templates/favourites";
 
 export default function AiTemplatesClient({ templates, areas }) {
@@ -73,21 +74,57 @@ export default function AiTemplatesClient({ templates, areas }) {
           </Link>
         </div>
 
-        <TemplateFilters
-          search={search}
-          setSearch={setSearch}
-          area={area}
-          setArea={setArea}
-          difficulty={difficulty}
-          setDifficulty={setDifficulty}
-          sortBy={sortBy}
-          setSortBy={setSortBy}
-          showFavouritesOnly={showFavouritesOnly}
-          setShowFavouritesOnly={setShowFavouritesOnly}
-          areas={areas}
-        />
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex gap-2">
+            <button
+              onClick={() => setViewMode("grid")}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                viewMode === "grid"
+                  ? "bg-sky-600 text-white"
+                  : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+              }`}
+            >
+              Grid View
+            </button>
+            <button
+              onClick={() => setViewMode("selector")}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                viewMode === "selector"
+                  ? "bg-sky-600 text-white"
+                  : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+              }`}
+            >
+              Interactive Selector
+            </button>
+          </div>
+        </div>
 
-        <TemplateGrid templates={filtered} favourites={favourites} onToggleFavourite={handleToggleFavourite} />
+        {viewMode === "selector" ? (
+          <TemplateSelector
+            templates={filtered}
+            showPreview={true}
+            showUpload={true}
+            mode="grid"
+          />
+        ) : (
+          <>
+            <TemplateFilters
+              search={search}
+              setSearch={setSearch}
+              area={area}
+              setArea={setArea}
+              difficulty={difficulty}
+              setDifficulty={setDifficulty}
+              sortBy={sortBy}
+              setSortBy={setSortBy}
+              showFavouritesOnly={showFavouritesOnly}
+              setShowFavouritesOnly={setShowFavouritesOnly}
+              areas={areas}
+            />
+
+            <TemplateGrid templates={filtered} favourites={favourites} onToggleFavourite={handleToggleFavourite} />
+          </>
+        )}
       </section>
     </main>
   );

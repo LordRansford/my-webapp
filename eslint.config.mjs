@@ -24,6 +24,25 @@ const eslintConfig = defineConfig([
           ],
         },
       ],
+      // Design System Enforcement
+      // Warn against hardcoded spacing values (should use design tokens)
+      "no-magic-numbers": [
+        "warn",
+        {
+          ignore: [0, 1, -1, 2, 4, 8, 16, 24, 32, 48, 64, 100, 360, 720], // Common CSS values
+          ignoreArrayIndexes: true,
+          ignoreDefaultValues: true,
+          detectObjects: false,
+        },
+      ],
+      // Encourage use of CSS variables for colors
+      "no-restricted-syntax": [
+        "warn",
+        {
+          selector: "Literal[value=/^#[0-9a-fA-F]{3,6}$/]",
+          message: "Prefer design system color tokens (e.g., var(--color-text-primary)) over hardcoded hex colors for consistency and theme support.",
+        },
+      ],
     },
   },
   // Allow fs/path in server-only files

@@ -2,11 +2,6 @@
  * AI Studio Database Utilities
  * 
  * Database helpers and Prisma client for AI Studio
- * 
- * Note: This assumes Prisma is set up. In production, you would:
- * 1. Run: npx prisma migrate dev
- * 2. Generate client: npx prisma generate
- * 3. Use the prisma client from @/lib/db/prisma or create a new instance
  */
 
 import crypto from "crypto";
@@ -16,41 +11,33 @@ let prisma: any = null;
 let prismaAvailable = false;
 
 try {
-  // Try multiple possible import paths
   try {
     const prismaModule = require("@/lib/db/prisma");
     prisma = prismaModule.prisma || prismaModule.default?.prisma || prismaModule.default;
     prismaAvailable = !!prisma;
   } catch {
-    // Try direct Prisma client import
     const { PrismaClient } = require("@prisma/client");
     prisma = new PrismaClient();
     prismaAvailable = !!prisma;
   }
 } catch (error) {
-  // Prisma not set up yet, will use simulated responses
   if (process.env.NODE_ENV !== "production") {
     console.warn("[AI Studio DB] Prisma not available, using simulated responses");
   }
 }
 
-// Check if AI Studio tables exist (they would be in a separate schema or merged)
-// For now, we'll use simulated responses until the schema is merged
-// Set to false to enable Prisma queries when schema is ready
 const USE_SIMULATED = !prismaAvailable || process.env.AI_STUDIO_USE_SIMULATED === "true";
 
-/**
- * Get dataset by ID
- */
+// ============================================================================
+// Dataset Functions
+// ============================================================================
+
 export async function getDataset(datasetId: string, userId: string) {
   if (USE_SIMULATED || !prisma) {
-    // Simulated response for now
     return null;
   }
 
   try {
-    // Try to use Prisma if Dataset model exists
-    // Note: This will work once the schema is merged
     if (prisma.dataset) {
       return await prisma.dataset.findFirst({
         where: {
@@ -62,7 +49,6 @@ export async function getDataset(datasetId: string, userId: string) {
     }
     return null;
   } catch (error) {
-    // Model might not exist yet - this is okay
     if (process.env.NODE_ENV !== "production") {
       console.warn("[AI Studio DB] Dataset model not found, using simulated response");
     }
@@ -70,9 +56,6 @@ export async function getDataset(datasetId: string, userId: string) {
   }
 }
 
-/**
- * Create dataset record
- */
 export async function createDataset(data: {
   userId: string;
   name: string;
@@ -84,7 +67,6 @@ export async function createDataset(data: {
   status?: string;
 }) {
   if (USE_SIMULATED || !prisma) {
-    // Simulated response
     return {
       id: crypto.randomUUID(),
       ...data,
@@ -94,7 +76,6 @@ export async function createDataset(data: {
   }
 
   try {
-    // Try to use Prisma if Dataset model exists
     if (prisma.dataset) {
       return await prisma.dataset.create({
         data: {
@@ -110,7 +91,6 @@ export async function createDataset(data: {
       });
     }
     
-    // Fallback to simulated
     return {
       id: crypto.randomUUID(),
       ...data,
@@ -119,7 +99,6 @@ export async function createDataset(data: {
     };
   } catch (error) {
     console.error("[AI Studio DB] Error creating dataset:", error);
-    // Fallback to simulated on error
     return {
       id: crypto.randomUUID(),
       ...data,
@@ -129,9 +108,115 @@ export async function createDataset(data: {
   }
 }
 
-/**
- * Get model by ID
- */
+export async function updateDataset(
+  datasetId: string,
+  userId: string,
+  updates: Partial<{
+    name: string;
+    description: string;
+    license: string;
+    status: string;
+  }>
+) {
+  if (USE_SIMULATED || !prisma) {
+    return {
+      id: datasetId,
+      ...updates,
+      updatedAt: new Date(),
+    };
+  }
+
+  try {
+    if (prisma?.dataset) {
+      const dataset = await prisma.dataset.updateMany({
+        where: {
+          id: datasetId,
+          userId: userId,
+          deletedAt: null,
+        },
+        data: {
+          ...(updates.name && { name: updates.name }),
+          ...(updates.description !== undefined && { description: updates.description }),
+          ...(updates.license && { license: updates.license }),
+          ...(updates.status && { status: updates.status }),
+          updatedAt: new Date(),
+        },
+      });
+      if (dataset.count === 0) return null;
+      return getDataset(datasetId, userId);
+    }
+    return {
+      id: datasetId,
+      ...updates,
+      updatedAt: new Date(),
+    };
+  } catch (error) {
+    console.error("[AI Studio DB] Error updating dataset:", error);
+    throw error;
+  }
+}
+
+export async function deleteDataset(datasetId: string, userId: string) {
+  if (USE_SIMULATED || !prisma) {
+    return;
+  }
+
+  try {
+    if (prisma?.dataset) {
+      await prisma.dataset.updateMany({
+        where: {
+          id: datasetId,
+          userId: userId,
+          deletedAt: null,
+        },
+        data: {
+          deletedAt: new Date(),
+          status: "deleted",
+          updatedAt: new Date(),
+        },
+      });
+    }
+  } catch (error) {
+    console.error("[AI Studio DB] Error deleting dataset:", error);
+    throw error;
+  }
+}
+
+export async function listDatasets(userId: string, options?: {
+  limit?: number;
+  offset?: number;
+  status?: string;
+}) {
+  if (USE_SIMULATED || !prisma) {
+    return [];
+  }
+
+  try {
+    if (prisma.dataset) {
+      return await prisma.dataset.findMany({
+        where: {
+          userId: userId,
+          deletedAt: null,
+          ...(options?.status && { status: options.status }),
+        },
+        take: options?.limit || 50,
+        skip: options?.offset || 0,
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    }
+    return [];
+  } catch (error) {
+    console.error("[AI Studio DB] Error listing datasets:", error);
+    return [];
+  }
+}
+
+// ============================================================================
+// Model Functions
+// ============================================================================
+
 export async function getModel(modelId: string, userId: string) {
   if (USE_SIMULATED || !prisma) {
     return null;
@@ -156,9 +241,174 @@ export async function getModel(modelId: string, userId: string) {
   }
 }
 
-/**
- * Create training job
- */
+export async function createModel(data: {
+  userId: string;
+  name: string;
+  description?: string;
+  type: string;
+  architecture: any;
+  status?: string;
+  version?: string;
+  trainingDatasetId?: string;
+  trainingConfig?: any;
+  metadata?: any;
+}) {
+  if (USE_SIMULATED || !prisma) {
+    return {
+      id: crypto.randomUUID(),
+      ...data,
+      status: data.status || "created",
+      version: data.version || "1.0.0",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+  }
+
+  try {
+    if (prisma?.model) {
+      return await prisma.model.create({
+        data: {
+          userId: data.userId,
+          name: data.name,
+          description: data.description,
+          type: data.type,
+          architecture: data.architecture,
+          status: data.status || "created",
+          version: data.version || "1.0.0",
+          trainingDatasetId: data.trainingDatasetId,
+          trainingConfig: data.trainingConfig,
+          metadata: data.metadata || {},
+        },
+      });
+    }
+    
+    return {
+      id: crypto.randomUUID(),
+      ...data,
+      status: data.status || "created",
+      version: data.version || "1.0.0",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+  } catch (error) {
+    console.error("[AI Studio DB] Error creating model:", error);
+    throw error;
+  }
+}
+
+export async function updateModel(
+  modelId: string,
+  userId: string,
+  updates: Partial<{
+    name: string;
+    description: string;
+    architecture: any;
+    status: string;
+    trainingConfig: any;
+    metrics: any;
+  }>
+) {
+  if (USE_SIMULATED || !prisma) {
+    return {
+      id: modelId,
+      ...updates,
+      updatedAt: new Date(),
+    };
+  }
+
+  try {
+    if (prisma?.model) {
+      const model = await prisma.model.updateMany({
+        where: {
+          id: modelId,
+          userId: userId,
+          deletedAt: null,
+        },
+        data: {
+          ...(updates.name && { name: updates.name }),
+          ...(updates.description !== undefined && { description: updates.description }),
+          ...(updates.architecture && { architecture: updates.architecture }),
+          ...(updates.status && { status: updates.status }),
+          ...(updates.trainingConfig && { trainingConfig: updates.trainingConfig }),
+          ...(updates.metrics && { metrics: updates.metrics }),
+          updatedAt: new Date(),
+        },
+      });
+      if (model.count === 0) return null;
+      return getModel(modelId, userId);
+    }
+    return {
+      id: modelId,
+      ...updates,
+      updatedAt: new Date(),
+    };
+  } catch (error) {
+    console.error("[AI Studio DB] Error updating model:", error);
+    throw error;
+  }
+}
+
+export async function deleteModel(modelId: string, userId: string) {
+  if (USE_SIMULATED || !prisma) {
+    return;
+  }
+
+  try {
+    if (prisma?.model) {
+      await prisma.model.updateMany({
+        where: {
+          id: modelId,
+          userId: userId,
+          deletedAt: null,
+        },
+        data: {
+          deletedAt: new Date(),
+          status: "archived",
+          updatedAt: new Date(),
+        },
+      });
+    }
+  } catch (error) {
+    console.error("[AI Studio DB] Error deleting model:", error);
+    throw error;
+  }
+}
+
+export async function listModels(userId: string, options?: {
+  limit?: number;
+  offset?: number;
+  status?: string;
+}) {
+  if (USE_SIMULATED || !prisma) {
+    return [];
+  }
+
+  try {
+    if (prisma.model) {
+      return await prisma.model.findMany({
+        where: {
+          userId: userId,
+          deletedAt: null,
+          ...(options?.status && { status: options.status }),
+        },
+        take: options?.limit || 50,
+        skip: options?.offset || 0,
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    }
+    return [];
+  } catch (error) {
+    console.error("[AI Studio DB] Error listing models:", error);
+    return [];
+  }
+}
+
+// ============================================================================
+// Training Job Functions
+// ============================================================================
+
 export async function createTrainingJob(data: {
   userId: string;
   modelId: string;
@@ -180,7 +430,21 @@ export async function createTrainingJob(data: {
   }
 
   try {
-    // Try to use Prisma Job model if available (generic job model)
+    if (prisma?.trainingJob) {
+      return await prisma.trainingJob.create({
+        data: {
+          userId: data.userId,
+          modelId: data.modelId,
+          datasetId: data.datasetId,
+          status: data.status || "queued",
+          computeType: data.computeType || "browser",
+          config: data.config,
+          progress: 0,
+        },
+      });
+    }
+    
+    // Fallback to generic Job model
     if (prisma.job) {
       return await prisma.job.create({
         data: {
@@ -197,7 +461,6 @@ export async function createTrainingJob(data: {
       });
     }
     
-    // Fallback to simulated
     return {
       id: crypto.randomUUID(),
       ...data,
@@ -209,7 +472,6 @@ export async function createTrainingJob(data: {
     };
   } catch (error) {
     console.error("[AI Studio DB] Error creating training job:", error);
-    // Fallback to simulated on error
     return {
       id: crypto.randomUUID(),
       ...data,
@@ -222,9 +484,6 @@ export async function createTrainingJob(data: {
   }
 }
 
-/**
- * Update training job
- */
 export async function updateTrainingJob(
   jobId: string,
   userId: string,
@@ -246,6 +505,27 @@ export async function updateTrainingJob(
   }
 
   try {
+    if (prisma?.trainingJob) {
+      const job = await prisma.trainingJob.updateMany({
+        where: {
+          id: jobId,
+          userId: userId,
+        },
+        data: {
+          ...(updates.status && { status: updates.status }),
+          ...(updates.progress !== undefined && { progress: updates.progress }),
+          ...(updates.currentEpoch !== undefined && { currentEpoch: updates.currentEpoch }),
+          ...(updates.metrics && { metrics: updates.metrics }),
+          ...(updates.errorMessage && { errorMessage: updates.errorMessage }),
+          ...(updates.completedAt && { completedAt: updates.completedAt }),
+          updatedAt: new Date(),
+        },
+      });
+      if (job.count === 0) return null;
+      return getTrainingJob(jobId, userId);
+    }
+    
+    // Fallback to generic Job model
     if (prisma.job) {
       const job = await prisma.job.updateMany({
         where: {
@@ -284,15 +564,21 @@ export async function updateTrainingJob(
   }
 }
 
-/**
- * Get training job by ID
- */
 export async function getTrainingJob(jobId: string, userId: string) {
   if (USE_SIMULATED || !prisma) {
     return null;
   }
 
   try {
+    if (prisma?.trainingJob) {
+      return await prisma.trainingJob.findFirst({
+        where: {
+          id: jobId,
+          userId: userId,
+        },
+      });
+    }
+    
     if (prisma.job) {
       return await prisma.job.findFirst({
         where: {
@@ -311,77 +597,6 @@ export async function getTrainingJob(jobId: string, userId: string) {
   }
 }
 
-/**
- * List datasets for user
- */
-export async function listDatasets(userId: string, options?: {
-  limit?: number;
-  offset?: number;
-  status?: string;
-}) {
-  if (USE_SIMULATED || !prisma) {
-    return [];
-  }
-
-  try {
-    if (prisma.dataset) {
-      return await prisma.dataset.findMany({
-        where: {
-          userId: userId,
-          deletedAt: null,
-          ...(options?.status && { status: options.status }),
-        },
-        take: options?.limit || 50,
-        skip: options?.offset || 0,
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
-    }
-    return [];
-  } catch (error) {
-    console.error("[AI Studio DB] Error listing datasets:", error);
-    return [];
-  }
-}
-
-/**
- * List models for user
- */
-export async function listModels(userId: string, options?: {
-  limit?: number;
-  offset?: number;
-  status?: string;
-}) {
-  if (USE_SIMULATED || !prisma) {
-    return [];
-  }
-
-  try {
-    if (prisma.model) {
-      return await prisma.model.findMany({
-        where: {
-          userId: userId,
-          deletedAt: null,
-          ...(options?.status && { status: options.status }),
-        },
-        take: options?.limit || 50,
-        skip: options?.offset || 0,
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
-    }
-    return [];
-  } catch (error) {
-    console.error("[AI Studio DB] Error listing models:", error);
-    return [];
-  }
-}
-
-/**
- * List training jobs for user
- */
 export async function listTrainingJobs(userId: string, options?: {
   limit?: number;
   offset?: number;
@@ -392,6 +607,20 @@ export async function listTrainingJobs(userId: string, options?: {
   }
 
   try {
+    if (prisma?.trainingJob) {
+      return await prisma.trainingJob.findMany({
+        where: {
+          userId: userId,
+          ...(options?.status && { status: options.status }),
+        },
+        take: options?.limit || 50,
+        skip: options?.offset || 0,
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    }
+    
     if (prisma.job) {
       return await prisma.job.findMany({
         where: {
@@ -413,23 +642,25 @@ export async function listTrainingJobs(userId: string, options?: {
   }
 }
 
-/**
- * Get agent by ID
- */
+// ============================================================================
+// Agent Functions
+// ============================================================================
+
 export async function getAgent(agentId: string, userId: string) {
   if (USE_SIMULATED || !prisma) {
     return null;
   }
 
   try {
-    // TODO: Uncomment when AI Studio schema is merged
-    // return await prisma.agent.findFirst({
-    //   where: {
-    //     id: agentId,
-    //     userId: userId,
-    //     deletedAt: null,
-    //   },
-    // });
+    if (prisma?.agent) {
+      return await prisma.agent.findFirst({
+        where: {
+          id: agentId,
+          userId: userId,
+          deletedAt: null,
+        },
+      });
+    }
     return null;
   } catch (error) {
     console.error("[AI Studio DB] Error fetching agent:", error);
@@ -437,9 +668,6 @@ export async function getAgent(agentId: string, userId: string) {
   }
 }
 
-/**
- * Create agent record
- */
 export async function createAgent(data: {
   userId: string;
   name: string;
@@ -452,30 +680,35 @@ export async function createAgent(data: {
     return {
       id: crypto.randomUUID(),
       ...data,
-      status: data.status || "created",
-      version: data.version || "1.0.0",
+      status: data.status || "active",
       createdAt: new Date(),
       updatedAt: new Date(),
     };
   }
 
   try {
-    // TODO: Uncomment when AI Studio schema is merged
-    // return await prisma.agent.create({
-    //   data: {
-    //     userId: data.userId,
-    //     name: data.name,
-    //     description: data.description,
-    //     config: data.config,
-    //     status: data.status || "created",
-    //     version: data.version || "1.0.0",
-    //   },
-    // });
+    if (prisma?.agent) {
+      return await prisma.agent.create({
+        data: {
+          userId: data.userId,
+          name: data.name,
+          description: data.description,
+          type: data.config?.type || 'single',
+          modelConfig: data.config?.modelConfig || {},
+          tools: data.config?.tools || [],
+          memoryConfig: data.config?.memoryConfig,
+          systemPrompt: data.config?.systemPrompt,
+          workflow: data.config?.workflow,
+          status: data.status || "active",
+          metadata: data.config?.metadata || {},
+        },
+      });
+    }
+    
     return {
       id: crypto.randomUUID(),
       ...data,
-      status: data.status || "created",
-      version: data.version || "1.0.0",
+      status: data.status || "active",
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -485,9 +718,6 @@ export async function createAgent(data: {
   }
 }
 
-/**
- * Update agent record
- */
 export async function updateAgent(
   agentId: string,
   userId: string,
@@ -507,20 +737,32 @@ export async function updateAgent(
   }
 
   try {
-    // TODO: Uncomment when AI Studio schema is merged
-    // const agent = await prisma.agent.updateMany({
-    //   where: {
-    //     id: agentId,
-    //     userId: userId,
-    //     deletedAt: null,
-    //   },
-    //   data: {
-    //     ...updates,
-    //     updatedAt: new Date(),
-    //   },
-    // });
-    // if (agent.count === 0) return null;
-    // return getAgent(agentId, userId);
+    if (prisma?.agent) {
+      const agent = await prisma.agent.updateMany({
+        where: {
+          id: agentId,
+          userId: userId,
+          deletedAt: null,
+        },
+        data: {
+          ...(updates.name && { name: updates.name }),
+          ...(updates.description !== undefined && { description: updates.description }),
+          ...(updates.config && {
+            type: updates.config.type,
+            modelConfig: updates.config.modelConfig || {},
+            tools: updates.config.tools || [],
+            memoryConfig: updates.config.memoryConfig,
+            systemPrompt: updates.config.systemPrompt,
+            workflow: updates.config.workflow,
+            metadata: updates.config.metadata || {},
+          }),
+          ...(updates.status && { status: updates.status }),
+          updatedAt: new Date(),
+        },
+      });
+      if (agent.count === 0) return null;
+      return getAgent(agentId, userId);
+    }
     return {
       id: agentId,
       ...updates,
@@ -532,37 +774,32 @@ export async function updateAgent(
   }
 }
 
-/**
- * Delete agent record (soft delete)
- */
 export async function deleteAgent(agentId: string, userId: string) {
   if (USE_SIMULATED || !prisma) {
     return;
   }
 
   try {
-    // TODO: Uncomment when AI Studio schema is merged
-    // await prisma.agent.updateMany({
-    //   where: {
-    //     id: agentId,
-    //     userId: userId,
-    //     deletedAt: null,
-    //   },
-    //   data: {
-    //     deletedAt: new Date(),
-    //     status: "deleted",
-    //     updatedAt: new Date(),
-    //   },
-    // });
+    if (prisma?.agent) {
+      await prisma.agent.updateMany({
+        where: {
+          id: agentId,
+          userId: userId,
+          deletedAt: null,
+        },
+        data: {
+          deletedAt: new Date(),
+          status: "archived",
+          updatedAt: new Date(),
+        },
+      });
+    }
   } catch (error) {
     console.error("[AI Studio DB] Error deleting agent:", error);
     throw error;
   }
 }
 
-/**
- * List agents for user
- */
 export async function listAgents(userId: string, options?: {
   limit?: number;
   offset?: number;
@@ -593,4 +830,3 @@ export async function listAgents(userId: string, options?: {
     return [];
   }
 }
-

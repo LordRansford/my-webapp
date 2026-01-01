@@ -9,15 +9,16 @@
  */
 
 import type { GameState, GameMove, ReplayLog } from "./types";
+import { SeededRNG } from "./SeededRNG";
 
 export class StateManager {
   private state: GameState;
   private replayLog: ReplayLog;
-  private rng: () => number;
+  private rng: SeededRNG;
 
   constructor(initialState: Partial<GameState>, seed: number) {
-    // Initialize deterministic RNG
-    this.rng = this.createSeededRNG(seed);
+    // Initialize deterministic RNG using enhanced SeededRNG
+    this.rng = new SeededRNG(seed);
     
     this.state = {
       status: "idle",
@@ -39,17 +40,6 @@ export class StateManager {
   }
 
   /**
-   * Create a seeded random number generator (Linear Congruential Generator)
-   */
-  private createSeededRNG(seed: number): () => number {
-    let value = seed;
-    return () => {
-      value = (value * 1664525 + 1013904223) % 2 ** 32;
-      return value / 2 ** 32;
-    };
-  }
-
-  /**
    * Get current state (immutable copy)
    */
   getState(): Readonly<GameState> {
@@ -60,7 +50,42 @@ export class StateManager {
    * Get random number (deterministic)
    */
   random(): number {
-    return this.rng();
+    return this.rng.next();
+  }
+  
+  /**
+   * Get RNG instance for advanced operations
+   */
+  getRNG(): SeededRNG {
+    return this.rng;
+  }
+  
+  /**
+   * Random integer in range [min, max]
+   */
+  randomInt(min: number, max: number): number {
+    return this.rng.nextInt(min, max);
+  }
+  
+  /**
+   * Random float in range [min, max)
+   */
+  randomFloat(min: number, max: number): number {
+    return this.rng.nextFloat(min, max);
+  }
+  
+  /**
+   * Shuffle array deterministically
+   */
+  shuffle<T>(array: T[]): T[] {
+    return this.rng.shuffle(array);
+  }
+  
+  /**
+   * Weighted random choice
+   */
+  weightedChoice<T>(items: T[], weights: number[]): T {
+    return this.rng.weightedChoice(items, weights);
   }
 
   /**
