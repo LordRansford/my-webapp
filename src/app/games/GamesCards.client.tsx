@@ -38,7 +38,7 @@ export default function GamesCards() {
   const visible = useMemo(() => {
     return GAMES.filter((g) => {
       if (!g.hidden) return true;
-      if (g.requiresMasterTrophy) return unlocked;
+      if (g.requiresCharisTrophy) return unlocked;
       return false;
     });
   }, [unlocked]);
