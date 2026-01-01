@@ -233,7 +233,7 @@ const PRACTICE_GAMES_PREVIEW: GamePreview[] = PRACTICE_GAMES.map(game => ({
   id: game.id,
   title: game.title,
   description: game.description,
-  category: game.category || "practice" as const,
+  category: (game.category || "practice") as ExtendedGameCategory,
   modes: ["solo"] as GameMode[],
   estimatedMinutes: game.minutes,
   difficulty: game.difficulty === "easy" ? "foundations" : game.difficulty === "medium" ? "intermediate" : "advanced",
