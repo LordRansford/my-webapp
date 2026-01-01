@@ -1,0 +1,189 @@
+---
+title: "Software Architecture Foundations - Complete Lifecycle Coverage"
+description: "Comprehensive 24-hour foundation tier covering the complete software development lifecycle with systematic security integration."
+level: "foundations"
+courseId: "software-architecture"
+levelId: "foundations"
+summary: "Master software architecture foundations through the complete lifecycle from discovery to operations, with security integrated at every stage."
+estimatedHours: 24
+stepIndex: 0
+learningObjectives:
+  - "Map user journeys, define NFRs, and apply threat modelling fundamentals."
+  - "Document architecture using C4 models, ADRs, and security by design principles."
+  - "Implement secure coding practices including input validation and session management."
+  - "Apply comprehensive testing strategies including OWASP ASVS and accessibility testing."
+  - "Design CI/CD pipelines with DevSecOps integration."
+  - "Apply SRE principles for reliable operations and incident response."
+  - "Use OSI model and diagnostic tools for troubleshooting."
+  - "Evaluate systems across multiple quality attributes (the \"ilities\")."
+---
+
+import ToolCard from "@/components/notes/ToolCard"
+import Callout from "@/components/notes/Callout"
+import PageNav from "@/components/notes/PageNav"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import { softwareArchitectureSectionManifest } from "@/lib/softwareArchitectureSections"
+
+# Software Architecture Foundations
+
+<LevelProgressBar courseId="software-architecture" levelId="foundations" sectionIds={softwareArchitectureSectionManifest.foundations} />
+
+<CPDTracker courseId="software-architecture" levelId="foundations" estimatedHours={24} showMilestones={true} enableEvidence={true} />
+
+Welcome to the comprehensive foundations tier of the Software Architecture course. This 24-hour programme takes you through the complete software development lifecycle with systematic security integration at every stage.
+
+<Callout variant="accreditation" type="info">
+**CPD Accreditation:**
+
+This Foundation tier delivers **24 CPD hours** of structured learning, aligned with:
+- **iSAQB CPSA-F:** Methods for designing architectures
+- **ISO/IEC/IEEE 42010:** Architecture viewpoints and views
+- **TOGAF Foundation:** Architecture Development Method
+- **ABET:** Software design fundamentals
+- **OWASP:** Secure development lifecycle practices
+- **Microsoft SDL:** Security Development Lifecycle
+- **NIST SSDF:** Secure Software Development Framework
+</Callout>
+
+---
+
+## Course structure
+
+This foundation tier is organised around the software development lifecycle with security integrated throughout.
+
+### Module 1: Discovery and Requirements (2.4 hours)
+
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-discovery-requirements" />
+
+Learn to identify what you're building and what could go wrong. Covers user journeys, non-functional requirements, threat modelling fundamentals with STRIDE, and abuse cases mapped to OWASP Top 10.
+
+<ToolCard
+  title="Discovery and Requirements"
+  description="User journeys, NFRs, threat modelling, and abuse cases"
+  href="/courses/software-architecture/foundations/discovery-requirements"
+  difficulty="Foundation"
+  estimatedTime="2.4 hours"
+/>
+
+### Module 2: Architecture and Design (2.8 hours)
+
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-architecture-design" />
+
+Document and communicate architectural decisions using C4 models, Architecture Decision Records, API contracts, and security by design principles.
+
+<ToolCard
+  title="Architecture and Design"
+  description="C4 models, ADRs, API contracts, and security by design"
+  href="/courses/software-architecture/foundations/architecture-design"
+  difficulty="Foundation"
+  estimatedTime="2.8 hours"
+/>
+
+### Module 3: Implementation (Build) (3.0 hours)
+
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-implementation" />
+
+Write secure, maintainable code with proper input validation, output encoding, session management, error handling, and supply chain security.
+
+<ToolCard
+  title="Implementation (Build)"
+  description="Secure coding, session management, error handling, and supply chain security"
+  href="/courses/software-architecture/foundations/implementation"
+  difficulty="Foundation"
+  estimatedTime="3.0 hours"
+/>
+
+### Module 4: Verification and Testing (3.5 hours)
+
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-verification-testing" />
+
+Ensure quality and security through comprehensive testing strategies, OWASP ASVS integration, accessibility testing with WCAG 2.2, and performance testing.
+
+<ToolCard
+  title="Verification and Testing"
+  description="Test strategies, OWASP ASVS, accessibility testing, and performance validation"
+  href="/courses/software-architecture/foundations/verification-testing"
+  difficulty="Foundation"
+  estimatedTime="3.5 hours"
+/>
+
+### Module 5: Deployment and CI/CD (2.5 hours)
+
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-deployment-cicd" />
+
+Automate secure deployments with CI/CD pipelines, DevSecOps integration, deployment strategies, and Infrastructure as Code basics.
+
+<ToolCard
+  title="Deployment and CI/CD"
+  description="CI/CD pipelines, DevSecOps, deployment strategies, and IaC basics"
+  href="/courses/software-architecture/foundations/deployment-cicd"
+  difficulty="Foundation"
+  estimatedTime="2.5 hours"
+/>
+
+### Module 6: Operations (3.2 hours)
+
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-operations" />
+
+Run systems reliably in production with Google SRE principles, four golden signals, observability triad, and effective incident response.
+
+<ToolCard
+  title="Operations"
+  description="SRE principles, golden signals, observability, and incident response"
+  href="/courses/software-architecture/foundations/operations"
+  difficulty="Foundation"
+  estimatedTime="3.2 hours"
+/>
+
+### Module 7: OSI Model and Browser/Terminal Diagnostics (1.8 hours)
+
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-osi-diagnostics" />
+
+Master troubleshooting tools and techniques using OSI layers, browser DevTools, command-line diagnostics, and TLS certificate inspection.
+
+<ToolCard
+  title="OSI Model and Diagnostics"
+  description="Network fundamentals, browser DevTools, and command-line diagnostics"
+  href="/courses/software-architecture/foundations/osi-diagnostics"
+  difficulty="Foundation"
+  estimatedTime="1.8 hours"
+/>
+
+### Module 8: The "Ilities" Framework (2.0 hours)
+
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-ilities-framework" />
+
+Evaluate systems across quality attributes including security, privacy, accessibility, performance, reliability, scalability, maintainability, and more.
+
+<ToolCard
+  title="The \"Ilities\" Framework"
+  description="Comprehensive quality attributes for system evaluation"
+  href="/courses/software-architecture/foundations/ilities-framework"
+  difficulty="Foundation"
+  estimatedTime="2.0 hours"
+/>
+
+---
+
+## Assessment and certification
+
+<SectionProgressToggle courseId="software-architecture" levelId="foundations" sectionId="soft-arch-foundations-assessment" />
+
+Complete a comprehensive 50-question assessment (80% pass threshold, 120 minutes) plus a reflection portfolio to earn your blockchain-verified certificate with 24 CPD hours.
+
+---
+
+## Next steps
+
+After completing this Foundation tier, progress to the Intermediate tier (30 CPD hours) for advanced topics in security architecture, cloud-native patterns, performance engineering, and more.
+
+<PageNav
+  prev="/courses/software-architecture/course"
+  next="/courses/software-architecture/foundations/discovery-requirements"
+/>
+
+---
+
+**Total CPD hours:** 24 hours (content) + 1.9 hours (assessment) + 0.9 hours (portfolio) = **26.8 hours**

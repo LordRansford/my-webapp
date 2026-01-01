@@ -1,6 +1,12 @@
 {
-  "generatedAt": "2026-01-01T10:25:01.003Z",
+  "generatedAt": "2026-01-01T19:57:50.674Z",
   "pages": [
+    {
+      "route": "/courses/_cpd-checklist",
+      "title": "CPD readiness checklist",
+      "sourcePath": "/content/courses/_cpd-checklist.mdx",
+      "sections": []
+    },
     {
       "route": "/courses/ai/advanced",
       "title": "AI Advanced",
@@ -661,123 +667,559 @@
       ]
     },
     {
+      "route": "/courses/software-architecture/foundations/architecture-design",
+      "title": "Architecture and Design",
+      "sourcePath": "/content/courses/software-architecture/foundations/architecture-design.mdx",
+      "sections": [
+        {
+          "depth": 2,
+          "title": "C4 model",
+          "anchor": "c4-model",
+          "excerpt": "The The C4 model provides four levels of abstraction for documenting software architecture: Context, Container, Component, and Code gives you four levels of zoom for describing a system. Think of it like Google Maps: you start with the country view and zoom into street level."
+        },
+        {
+          "depth": 3,
+          "title": "Level 1: Context",
+          "anchor": "level-1-context",
+          "excerpt": "It shows: - Your system (one box) - People who use it - Other systems it talks to"
+        },
+        {
+          "depth": 3,
+          "title": "Level 2: Container",
+          "anchor": "level-2-container",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Level 3: Component",
+          "anchor": "level-3-component",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Level 4: Code",
+          "anchor": "level-4-code",
+          "excerpt": "**When to use:** Documenting complex algorithms, sharing design patterns, teaching."
+        },
+        {
+          "depth": 3,
+          "title": "Practice: Draw a C4 Context diagram",
+          "anchor": "practice-draw-a-c4-context-diagram",
+          "excerpt": "**Exercise (20 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "Architecture Decision Records",
+          "anchor": "architecture-decision-records",
+          "excerpt": "An An Architecture Decision Record documents a significant architectural decision, its context, options considered, and rationale is a lightweight document that captures why you made a decision. Future you (and your teammates) will thank you."
+        },
+        {
+          "depth": 3,
+          "title": "Why ADRs matter",
+          "anchor": "why-adrs-matter",
+          "excerpt": "Six months from now, someone will ask: \"Why did we choose PostgreSQL instead of MongoDB?\" Without an ADR, the best answer you'll have is: \"I think someone said it was better.\" With an ADR, you'll have: \"We needed ACID transactions for payment processing, and the team had strong PostgreSQL experience.\""
+        },
+        {
+          "depth": 3,
+          "title": "ADR template",
+          "anchor": "adr-template",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "When to write an ADR",
+          "anchor": "when-to-write-an-adr",
+          "excerpt": "Write an ADR when: - The decision is hard to reverse (database, framework, protocol) - Multiple people need to understand it - It affects multiple teams or systems - You had a debate and need to record the outcome"
+        },
+        {
+          "depth": 3,
+          "title": "ADR lifecycle",
+          "anchor": "adr-lifecycle",
+          "excerpt": "1. **Proposed:** Someone drafts it, team discusses 2. **Accepted:** Team agrees, decision is active 3. **Deprecated:** Still in effect, but we're moving away 4. **Superseded:** Replaced by a new ADR"
+        },
+        {
+          "depth": 3,
+          "title": "Practice: Write an ADR",
+          "anchor": "practice-write-an-adr",
+          "excerpt": "**Exercise (25 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "API contracts and versioning strategies",
+          "anchor": "api-contracts-and-versioning-strategies",
+          "excerpt": "An An API contract is a formal specification of what an API promises to do, including endpoints, data formats, and behaviour is a promise about how your API behaves. Break the contract, and you break clients."
+        },
+        {
+          "depth": 3,
+          "title": "Why contracts matter",
+          "anchor": "why-contracts-matter",
+          "excerpt": "Imagine you're building a mobile app that calls your API. You deploy a new backend that changes the endpoint from returning an array to returning an object. Your mobile app crashes for every user until they update."
+        },
+        {
+          "depth": 3,
+          "title": "OpenAPI (Swagger) example",
+          "anchor": "openapi-swagger-example",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Versioning strategies",
+          "anchor": "versioning-strategies",
+          "excerpt": "When you need to change an API, you have four main strategies:"
+        },
+        {
+          "depth": 3,
+          "title": "Breaking vs non-breaking changes",
+          "anchor": "breaking-vs-non-breaking-changes",
+          "excerpt": "**Non-breaking changes** (safe to add): - Adding new endpoints - Adding optional parameters - Adding new fields to responses"
+        },
+        {
+          "depth": 3,
+          "title": "Practice: Design an API contract",
+          "anchor": "practice-design-an-api-contract",
+          "excerpt": "**Exercise (20 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "Security by design principles",
+          "anchor": "security-by-design-principles",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Microsoft SDL principles",
+          "anchor": "microsoft-sdl-principles",
+          "excerpt": "The Microsoft Security Development Lifecycle is a set of security practices integrated into software development gives us battle-tested principles:"
+        },
+        {
+          "depth": 3,
+          "title": "NIST SSDF practices",
+          "anchor": "nist-ssdf-practices",
+          "excerpt": "The NIST Secure Software Development Framework defines practices for integrating security throughout the development lifecycle organises security practices into four groups:"
+        },
+        {
+          "depth": 3,
+          "title": "Key principles in practice",
+          "anchor": "key-principles-in-practice",
+          "excerpt": "**1. Least privilege**"
+        },
+        {
+          "depth": 3,
+          "title": "Practice: Apply security principles",
+          "anchor": "practice-apply-security-principles",
+          "excerpt": "**Exercise (25 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "Trust boundaries and data flow diagrams",
+          "anchor": "trust-boundaries-and-data-flow-diagrams",
+          "excerpt": "A A data flow diagram shows how data moves through a system, highlighting trust boundaries and transformation points shows where data goes and where it transforms. Combined with trust boundaries, it reveals where attacks are most likely."
+        },
+        {
+          "depth": 3,
+          "title": "Marking trust boundaries",
+          "anchor": "marking-trust-boundaries",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Data flow diagram example",
+          "anchor": "data-flow-diagram-example",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "STRIDE on data flows",
+          "anchor": "stride-on-data-flows",
+          "excerpt": "For each data flow, ask STRIDE questions:"
+        },
+        {
+          "depth": 3,
+          "title": "Practice: Draw a data flow diagram",
+          "anchor": "practice-draw-a-data-flow-diagram",
+          "excerpt": "**Exercise (30 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "Summary and next steps",
+          "anchor": "summary-and-next-steps",
+          "excerpt": "You've learned how to: - Document architecture at multiple levels using the C4 model - Capture decisions with ADRs - Define API contracts and version them safely - Apply security by design principles (Microsoft SDL, NIST SSDF) - Map trust boundaries and data flows for threat analysis"
+        }
+      ]
+    },
+    {
+      "route": "/courses/software-architecture/foundations/deployment-cicd",
+      "title": "Deployment and CI/CD",
+      "sourcePath": "/content/courses/software-architecture/foundations/deployment-cicd.mdx",
+      "sections": []
+    },
+    {
+      "route": "/courses/software-architecture/foundations/discovery-requirements",
+      "title": "Discovery and Requirements",
+      "sourcePath": "/content/courses/software-architecture/foundations/discovery-requirements.mdx",
+      "sections": [
+        {
+          "depth": 2,
+          "title": "User journeys and problem statements",
+          "anchor": "user-journeys-and-problem-statements",
+          "excerpt": "Software exists to help someone do something. Before you draw a single box, you need to know who that someone is and what they're trying to accomplish. A A user journey is the sequence of steps a person takes to accomplish a goal with your system gives you that clarity."
+        },
+        {
+          "depth": 3,
+          "title": "Example: Online banking transfer",
+          "anchor": "example-online-banking-transfer",
+          "excerpt": "1. **Trigger:** User needs to pay rent 2. **Actions:** - Log in with username and password - Navigate to transfers - Enter recipient details - Specify amount - Review and confirm 3. **Outcome:** Rent is paid, confirmation received 4. **Pain points:** Forgotten password, unclear error messages, slow loading"
+        },
+        {
+          "depth": 3,
+          "title": "Problem statements",
+          "anchor": "problem-statements",
+          "excerpt": "A A problem statement clearly defines what problem you're solving, for whom, and why current solutions are inadequate keeps you honest. It's easy to build features. It's hard to build the right features."
+        },
+        {
+          "depth": 3,
+          "title": "Practice: Write your own user journey",
+          "anchor": "practice-write-your-own-user-journey",
+          "excerpt": "**Exercise (15 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "Non-functional requirements",
+          "anchor": "non-functional-requirements",
+          "excerpt": "Functional requirements tell you what the system should do. Non-functional requirements specify how well the system should perform, covering quality attributes like performance, security, and usability tell you how well it should do it. These are the qualities that make a system actually usable in the real world."
+        },
+        {
+          "depth": 3,
+          "title": "Latency",
+          "anchor": "latency",
+          "excerpt": "How fast must the system respond? Latency matters because humans notice delays. Research shows: - **< 100ms:** Feels instant - **100-300ms:** Slight delay, still feels responsive - **300-1000ms:** Noticeable delay, user waits - **> 1 second:** User starts to lose focus"
+        },
+        {
+          "depth": 3,
+          "title": "Availability",
+          "anchor": "availability",
+          "excerpt": "Common targets: - **99% (two nines):** 3.65 days downtime per year - **99.9% (three nines):** 8.76 hours downtime per year - **99.99% (four nines):** 52.56 minutes downtime per year - **99.999% (five nines):** 5.26 minutes downtime per year"
+        },
+        {
+          "depth": 3,
+          "title": "Accessibility",
+          "anchor": "accessibility",
+          "excerpt": "Key considerations: - **Keyboard navigation:** Can you do everything without a mouse? - **Screen readers:** Can blind users understand the content? - **Colour contrast:** Can people with low vision read the text? - **Captions and transcripts:** Can deaf users access audio/video content?"
+        },
+        {
+          "depth": 3,
+          "title": "Privacy",
+          "anchor": "privacy",
+          "excerpt": "- Only collect data you need (data minimisation) - Tell users what you're collecting and why (transparency) - Get explicit consent for sensitive data - Allow users to see, correct, or delete their data - Report breaches within 72 hours"
+        },
+        {
+          "depth": 3,
+          "title": "Cost",
+          "anchor": "cost",
+          "excerpt": "How much can you spend to run this system? Cost includes: - **Infrastructure:** Servers, databases, bandwidth - **Licensing:** Third-party services, libraries - **Operations:** Monitoring, support, maintenance - **Personnel:** Developers, ops, security"
+        },
+        {
+          "depth": 3,
+          "title": "Practice: Define your NFRs",
+          "anchor": "practice-define-your-nfrs",
+          "excerpt": "**Exercise (20 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "Threat modelling fundamentals",
+          "anchor": "threat-modelling-fundamentals",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "STRIDE introduction",
+          "anchor": "stride-introduction",
+          "excerpt": "STRIDE is a framework for categorising threats. It's an acronym:"
+        },
+        {
+          "depth": 3,
+          "title": "Trust boundaries",
+          "anchor": "trust-boundaries",
+          "excerpt": "A A trust boundary is a line between components with different levels of trust, where data must be validated and secured is a line between trusted and untrusted components. Data crossing a trust boundary must be validated."
+        },
+        {
+          "depth": 3,
+          "title": "Practice: STRIDE analysis",
+          "anchor": "practice-stride-analysis",
+          "excerpt": "**Exercise (25 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "Abuse cases mapped to OWASP Top 10",
+          "anchor": "abuse-cases-mapped-to-owasp-top-10",
+          "excerpt": "While user journeys show how things should work, An abuse case describes how an attacker might misuse system functionality to cause harm show how attackers might misuse your system. They're the evil twin of use cases."
+        },
+        {
+          "depth": 3,
+          "title": "OWASP Top 10 overview",
+          "anchor": "owasp-top-10-overview",
+          "excerpt": "The The OWASP Top 10 is a regularly updated list of the most critical security risks to web applications lists the most common and dangerous web application vulnerabilities:"
+        },
+        {
+          "depth": 3,
+          "title": "Mapping abuse cases to OWASP Top 10",
+          "anchor": "mapping-abuse-cases-to-owasp-top-10",
+          "excerpt": "Let's take a simple feature: user profile updates."
+        },
+        {
+          "depth": 3,
+          "title": "Defence in depth",
+          "anchor": "defence-in-depth",
+          "excerpt": "**Example: Protecting sensitive data** 1. **Authentication:** Verify user identity 2. **Authorisation:** Check user has permission 3. **Encryption in transit:** Use HTTPS 4. **Encryption at rest:** Encrypt database 5. **Audit logging:** Record who accessed what 6. **Monitoring:** Alert on suspicious patterns"
+        },
+        {
+          "depth": 3,
+          "title": "Practice: Create abuse cases",
+          "anchor": "practice-create-abuse-cases",
+          "excerpt": "**Exercise (30 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "Summary and next steps",
+          "anchor": "summary-and-next-steps",
+          "excerpt": "You've learned how to: - Map user journeys to understand what you're building - Define non-functional requirements (latency, availability, accessibility, privacy, cost) - Apply STRIDE threat modelling to identify security risks - Create abuse cases mapped to OWASP Top 10 vulnerabilities"
+        }
+      ]
+    },
+    {
+      "route": "/courses/software-architecture/foundations/ilities-framework",
+      "title": "The \"Ilities\" Framework",
+      "sourcePath": "/content/courses/software-architecture/foundations/ilities-framework.mdx",
+      "sections": []
+    },
+    {
+      "route": "/courses/software-architecture/foundations/implementation",
+      "title": "Implementation (Build)",
+      "sourcePath": "/content/courses/software-architecture/foundations/implementation.mdx",
+      "sections": [
+        {
+          "depth": 2,
+          "title": "Secure coding foundations",
+          "anchor": "secure-coding-foundations",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Input validation",
+          "anchor": "input-validation",
+          "excerpt": "All external input is untrusted. This includes: - Form data from users - URL parameters - HTTP headers - File uploads - API payloads - Database results (if the DB could be compromised)"
+        },
+        {
+          "depth": 3,
+          "title": "Output encoding",
+          "anchor": "output-encoding",
+          "excerpt": "**Example: User comment **"
+        },
+        {
+          "depth": 3,
+          "title": "Practice: Input validation and output encoding",
+          "anchor": "practice-input-validation-and-output-encoding",
+          "excerpt": "**Exercise (25 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "Session management",
+          "anchor": "session-management",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Stateless vs stateful sessions",
+          "anchor": "stateless-vs-stateful-sessions",
+          "excerpt": "**Stateful (server-side sessions):** - Server stores session data - Client gets a session ID cookie - Each request includes the session ID - Server looks up session data"
+        },
+        {
+          "depth": 3,
+          "title": "JWT security considerations",
+          "anchor": "jwt-security-considerations",
+          "excerpt": "1. **Don't store sensitive data in JWTs:** They're base64-encoded, not encrypted. Anyone can read them."
+        },
+        {
+          "depth": 3,
+          "title": "Cookie security flags",
+          "anchor": "cookie-security-flags",
+          "excerpt": "If using cookies for session management, set these flags:"
+        },
+        {
+          "depth": 3,
+          "title": "Practice: Session security review",
+          "anchor": "practice-session-security-review",
+          "excerpt": "**Exercise (20 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "Error handling that doesn't leak internals",
+          "anchor": "error-handling-that-doesnt-leak-internals",
+          "excerpt": "Errors happen. How you handle them determines whether you're helping users or helping attackers."
+        },
+        {
+          "depth": 3,
+          "title": "The problem with detailed errors",
+          "anchor": "the-problem-with-detailed-errors",
+          "excerpt": "**Bad (leaks too much):**"
+        },
+        {
+          "depth": 3,
+          "title": "Structured error handling",
+          "anchor": "structured-error-handling",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "What to log vs what to show",
+          "anchor": "what-to-log-vs-what-to-show",
+          "excerpt": "**Log server-side (for debugging):** - Full error message and stack trace - Input values (sanitised, no passwords/tokens) - User ID and session info - Timestamp and request ID"
+        },
+        {
+          "depth": 3,
+          "title": "Practice: Improve error handling",
+          "anchor": "practice-improve-error-handling",
+          "excerpt": "**Exercise (20 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "Supply chain security",
+          "anchor": "supply-chain-security",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "The risk",
+          "anchor": "the-risk",
+          "excerpt": "When you run , you're trusting: - The package author - All dependencies (and their dependencies) - The registry (npm, PyPI, etc.) - Your network (could be MITM attacked)"
+        },
+        {
+          "depth": 3,
+          "title": "Dependency pinning",
+          "anchor": "dependency-pinning",
+          "excerpt": "**Bad (package.json):**"
+        },
+        {
+          "depth": 3,
+          "title": "Software Bill of Materials (SBOM)",
+          "anchor": "software-bill-of-materials-sbom",
+          "excerpt": "An A Software Bill of Materials is a comprehensive inventory of all components in a software product lists every dependency, including versions and licenses. It's like an ingredient list for software."
+        },
+        {
+          "depth": 3,
+          "title": "Automated dependency scanning",
+          "anchor": "automated-dependency-scanning",
+          "excerpt": "Use tools to catch vulnerabilities:"
+        },
+        {
+          "depth": 3,
+          "title": "Practice: Supply chain security audit",
+          "anchor": "practice-supply-chain-security-audit",
+          "excerpt": "**Exercise (25 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "Summary and next steps",
+          "anchor": "summary-and-next-steps",
+          "excerpt": "You've learned how to: - Validate input with allowlists and encode output for context - Manage sessions securely (stateful vs stateless, JWT security) - Handle errors without leaking internals - Secure your supply chain with dependency pinning and SBOMs"
+        }
+      ]
+    },
+    {
+      "route": "/courses/software-architecture/foundations/operations",
+      "title": "Operations",
+      "sourcePath": "/content/courses/software-architecture/foundations/operations.mdx",
+      "sections": []
+    },
+    {
+      "route": "/courses/software-architecture/foundations/osi-diagnostics",
+      "title": "OSI Model and Browser/Terminal Diagnostics",
+      "sourcePath": "/content/courses/software-architecture/foundations/osi-diagnostics.mdx",
+      "sections": []
+    },
+    {
+      "route": "/courses/software-architecture/foundations/verification-testing",
+      "title": "Verification and Testing",
+      "sourcePath": "/content/courses/software-architecture/foundations/verification-testing.mdx",
+      "sections": [
+        {
+          "depth": 2,
+          "title": "Test strategy pyramid",
+          "anchor": "test-strategy-pyramid",
+          "excerpt": ""
+        }
+      ]
+    },
+    {
       "route": "/courses/software-architecture/foundations",
-      "title": "Software Development and Architecture Foundations",
+      "title": "Software Architecture Foundations - Complete Lifecycle Coverage",
       "sourcePath": "/content/courses/software-architecture/foundations.mdx",
       "sections": [
         {
           "depth": 2,
-          "title": "What software architecture actually is",
-          "anchor": "what-software-architecture-actually-is",
-          "excerpt": "Architecture is decision making under constraints. You are deciding what the system is allowed to do, what it must never do, and what it will trade to get there. The work is not drawing boxes. The work is picking the decisions that keep change affordable later."
+          "title": "Course structure",
+          "anchor": "course-structure",
+          "excerpt": "This foundation tier is organised around the software development lifecycle with security integrated throughout."
         },
         {
           "depth": 3,
-          "title": "What this optimises for",
-          "anchor": "what-this-optimises-for",
-          "excerpt": "- Shared understanding across a team - Cheaper change later through explicit decisions - Fewer surprises when systems grow or change hands"
+          "title": "Module 1: Discovery and Requirements (2.4 hours)",
+          "anchor": "module-1-discovery-and-requirements-24-hours",
+          "excerpt": "Learn to identify what you're building and what could go wrong. Covers user journeys, non-functional requirements, threat modelling fundamentals with STRIDE, and abuse cases mapped to OWASP Top 10."
         },
         {
           "depth": 3,
-          "title": "What this makes harder",
-          "anchor": "what-this-makes-harder",
-          "excerpt": "- You have to write decisions down and defend them - You might slow short term delivery to reduce long term risk"
+          "title": "Module 2: Architecture and Design (2.8 hours)",
+          "anchor": "module-2-architecture-and-design-28-hours",
+          "excerpt": "Document and communicate architectural decisions using C4 models, Architecture Decision Records, API contracts, and security by design principles."
         },
         {
           "depth": 3,
-          "title": "After this section you should be able to:",
-          "anchor": "after-this-section-you-should-be-able-to",
-          "excerpt": "- Explain what decision is being made in an architecture discussion, not just the diagram - Explain the trade off being accepted and what constraint caused it - Explain why clear decisions reduce risk for security, data, and AI systems"
+          "title": "Module 3: Implementation (Build) (3.0 hours)",
+          "anchor": "module-3-implementation-build-30-hours",
+          "excerpt": "Write secure, maintainable code with proper input validation, output encoding, session management, error handling, and supply chain security."
+        },
+        {
+          "depth": 3,
+          "title": "Module 4: Verification and Testing (3.5 hours)",
+          "anchor": "module-4-verification-and-testing-35-hours",
+          "excerpt": "Ensure quality and security through comprehensive testing strategies, OWASP ASVS integration, accessibility testing with WCAG 2.2, and performance testing."
+        },
+        {
+          "depth": 3,
+          "title": "Module 5: Deployment and CI/CD (2.5 hours)",
+          "anchor": "module-5-deployment-and-cicd-25-hours",
+          "excerpt": "Automate secure deployments with CI/CD pipelines, DevSecOps integration, deployment strategies, and Infrastructure as Code basics."
+        },
+        {
+          "depth": 3,
+          "title": "Module 6: Operations (3.2 hours)",
+          "anchor": "module-6-operations-32-hours",
+          "excerpt": "Run systems reliably in production with Google SRE principles, four golden signals, observability triad, and effective incident response."
+        },
+        {
+          "depth": 3,
+          "title": "Module 7: OSI Model and Browser/Terminal Diagnostics (1.8 hours)",
+          "anchor": "module-7-osi-model-and-browserterminal-diagnostics-18-hours",
+          "excerpt": "Master troubleshooting tools and techniques using OSI layers, browser DevTools, command-line diagnostics, and TLS certificate inspection."
+        },
+        {
+          "depth": 3,
+          "title": "Module 8: The \"Ilities\" Framework (2.0 hours)",
+          "anchor": "module-8-the-ilities-framework-20-hours",
+          "excerpt": "Evaluate systems across quality attributes including security, privacy, accessibility, performance, reliability, scalability, maintainability, and more."
         },
         {
           "depth": 2,
-          "title": "Components, boundaries and interfaces",
-          "anchor": "components-boundaries-and-interfaces",
-          "excerpt": "Architecture starts to become real when you can name the parts and explain how they talk. A component is not just a folder. It is a unit of responsibility with a purpose and a shape that can be explained."
-        },
-        {
-          "depth": 3,
-          "title": "Layered architecture",
-          "anchor": "layered-architecture",
-          "excerpt": "Layering is common because it controls dependency direction. It reduces blast radius by keeping low level details from leaking into core logic. It also improves auditability because you can reason about where checks and decisions happen."
-        },
-        {
-          "depth": 3,
-          "title": "Microservices vs monolith",
-          "anchor": "microservices-vs-monolith",
-          "excerpt": "This is not a morality contest. A monolith can be a good architecture if boundaries are clear and the deployment is reliable. Microservices can be a good architecture when independent scaling, team autonomy, or regulatory separation genuinely matter."
-        },
-        {
-          "depth": 3,
-          "title": "Centralised vs decentralised data",
-          "anchor": "centralised-vs-decentralised-data",
-          "excerpt": "Centralised data can reduce duplication and make reporting easier. Decentralised data can reduce coupling and allow components to evolve independently. The decision is not abstract. It changes who owns quality, who approves schema changes, and how incidents are investigated."
-        },
-        {
-          "depth": 3,
-          "title": "After this section you should be able to:",
-          "anchor": "after-this-section-you-should-be-able-to-2",
-          "excerpt": "- Explain why boundaries reduce change cost and security risk - Explain what breaks when interfaces are implicit or data ownership is unclear - Explain the trade off behind layering, microservices, and data ownership decisions"
+          "title": "Assessment and certification",
+          "anchor": "assessment-and-certification",
+          "excerpt": "Complete a comprehensive 50-question assessment (80% pass threshold, 120 minutes) plus a reflection portfolio to earn your blockchain-verified certificate with 24 CPD hours."
         },
         {
           "depth": 2,
-          "title": "Thinking in systems, not code",
-          "anchor": "thinking-in-systems-not-code",
-          "excerpt": "Most real failures are not inside one function. They happen in interactions: timeouts, retries, queue backlogs, and assumptions between services. A system can be correct in each part and still fail as a whole."
-        },
-        {
-          "depth": 3,
-          "title": "What this optimises for",
-          "anchor": "what-this-optimises-for-2",
-          "excerpt": "- Predictable behaviour under failure - Smaller incidents with clearer blast radius"
-        },
-        {
-          "depth": 3,
-          "title": "What this makes harder",
-          "anchor": "what-this-makes-harder-2",
-          "excerpt": "- You must invest in guardrails, monitoring, and practice - Some optimisations are constrained by safety budgets"
-        },
-        {
-          "depth": 3,
-          "title": "AI automation vs human oversight",
-          "anchor": "ai-automation-vs-human-oversight",
-          "excerpt": "Automation can reduce workload and improve consistency. Oversight keeps accountability with people and catches failures before they scale. In real systems you usually want both: automation for low risk cases, and human review where the cost of a mistake is high."
-        },
-        {
-          "depth": 3,
-          "title": "After this section you should be able to:",
-          "anchor": "after-this-section-you-should-be-able-to-3",
-          "excerpt": "- Explain how feedback loops create incidents without any single bug - Explain why retries and timeouts are architectural decisions - Explain why AI monitoring, versioning, and rollback are part of system design"
-        },
-        {
-          "depth": 2,
-          "title": "Quality attributes and trade offs",
-          "anchor": "quality-attributes-and-trade-offs",
-          "excerpt": "Quality attributes are the \"how\" of a system, not the \"what\". The what is features. The how is performance, reliability, security, and everything that decides whether the system is usable and safe in real life."
-        },
-        {
-          "depth": 3,
-          "title": "What this optimises for",
-          "anchor": "what-this-optimises-for-3",
-          "excerpt": "- Decisions aligned to business and risk priorities - Clear justification for cost and complexity"
-        },
-        {
-          "depth": 3,
-          "title": "What this makes harder",
-          "anchor": "what-this-makes-harder-3",
-          "excerpt": "- You have to say no to some goals and features - You must budget time for non feature work like testing and observability"
-        },
-        {
-          "depth": 3,
-          "title": "After this section you should be able to:",
-          "anchor": "after-this-section-you-should-be-able-to-4",
-          "excerpt": "- Explain what a design is optimising for and what it makes harder - Explain how the same decision affects security posture and data governance - Explain why operability and testability are part of professional accountability"
-        },
-        {
-          "depth": 3,
-          "title": "Architecture as a professional discipline",
-          "anchor": "architecture-as-a-professional-discipline",
-          "excerpt": "Architecture is about trade offs. You are making choices under constraints and living with the consequences. The job is not to pick trendy patterns. The job is to make the system understandable, operable, and safe for its context."
+          "title": "Next steps",
+          "anchor": "next-steps",
+          "excerpt": "After completing this Foundation tier, progress to the Intermediate tier (30 CPD hours) for advanced topics in security architecture, cloud-native patterns, performance engineering, and more."
         }
       ]
     },
@@ -880,12 +1322,6 @@
           "excerpt": "If diagrams still feel fuzzy, revisit Foundations. If integration or data felt heavy, revisit Intermediate. If domains and distributed patterns need time, revisit Advanced and pick one topic to go deeper on."
         }
       ]
-    },
-    {
-      "route": "/courses/_cpd-checklist",
-      "title": "CPD readiness checklist",
-      "sourcePath": "/content/courses/_cpd-checklist.mdx",
-      "sections": []
     },
     {
       "route": "/ai/advanced",
