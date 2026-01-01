@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-01T20:41:07.467Z",
+  "generatedAt": "2026-01-01T20:54:04.045Z",
   "pages": [
     {
       "route": "/courses/_cpd-checklist",
@@ -1850,6 +1850,430 @@
           "title": "Summary and next steps",
           "anchor": "summary-and-next-steps",
           "excerpt": "You have learned cloud-native patterns including multi-region active-active architectures, disaster recovery with RPO/RTO targets, CAP theorem trade-offs and eventual consistency, service mesh patterns, and resilience engineering lessons from Netflix."
+        }
+      ]
+    },
+    {
+      "route": "/courses/software-architecture/intermediate/data-architecture",
+      "title": "Data Architecture",
+      "sourcePath": "/content/courses/software-architecture/intermediate/data-architecture.mdx",
+      "sections": [
+        {
+          "depth": 2,
+          "title": "SQL vs NoSQL trade-offs",
+          "anchor": "sql-vs-nosql-trade-offs",
+          "excerpt": "The choice between A relational database using structured query language with ACID guarantees and A non-relational database optimised for specific data models like document, key-value, graph, or columnar depends on your specific requirements."
+        },
+        {
+          "depth": 3,
+          "title": "When to use SQL",
+          "anchor": "when-to-use-sql",
+          "excerpt": "**Strengths:** - ACID transactions - Complex queries with JOINs - Strong consistency - Mature tooling and expertise"
+        },
+        {
+          "depth": 3,
+          "title": "When to use NoSQL",
+          "anchor": "when-to-use-nosql",
+          "excerpt": "**Strengths:** - Horizontal scalability - Flexible schema - High throughput - Optimised for specific access patterns"
+        },
+        {
+          "depth": 2,
+          "title": "CQRS pattern",
+          "anchor": "cqrs-pattern",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "CQRS architecture",
+          "anchor": "cqrs-architecture",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Implementation example",
+          "anchor": "implementation-example",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "When to use CQRS",
+          "anchor": "when-to-use-cqrs",
+          "excerpt": "**Good fit:** - Read/write ratio heavily skewed - Complex read queries - Different scalability needs for reads and writes - Multiple read models from same data"
+        },
+        {
+          "depth": 2,
+          "title": "Event sourcing",
+          "anchor": "event-sourcing",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Event sourcing concepts",
+          "anchor": "event-sourcing-concepts",
+          "excerpt": "Instead of storing current state, store all events that led to that state."
+        },
+        {
+          "depth": 3,
+          "title": "Benefits and challenges",
+          "anchor": "benefits-and-challenges",
+          "excerpt": "**Benefits:** - Complete audit trail - Time travel (rebuild state at any point) - Event replay for debugging - Multiple projections from same events"
+        },
+        {
+          "depth": 2,
+          "title": "Database scaling strategies",
+          "anchor": "database-scaling-strategies",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Replication",
+          "anchor": "replication",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Sharding",
+          "anchor": "sharding",
+          "excerpt": "**Sharding strategies:**"
+        },
+        {
+          "depth": 2,
+          "title": "Data governance and retention",
+          "anchor": "data-governance-and-retention",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Data retention policies",
+          "anchor": "data-retention-policies",
+          "excerpt": "**Example retention policy:**"
+        },
+        {
+          "depth": 3,
+          "title": "Data anonymisation",
+          "anchor": "data-anonymisation",
+          "excerpt": "**Techniques:** 1. **Pseudonymisation:** Replace identifiers with pseudonyms 2. **Aggregation:** Group data to remove individual identification 3. **Data masking:** Partial redaction (e.g., )"
+        },
+        {
+          "depth": 3,
+          "title": "Practice: Data architecture design",
+          "anchor": "practice-data-architecture-design",
+          "excerpt": "**Exercise (30 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "Summary and next steps",
+          "anchor": "summary-and-next-steps",
+          "excerpt": "You have learned data architecture including SQL vs NoSQL trade-offs, CQRS pattern for separating reads and writes, event sourcing for complete audit trails, database scaling with replication and sharding, and data governance with retention policies."
+        }
+      ]
+    },
+    {
+      "route": "/courses/software-architecture/intermediate/infrastructure-as-code",
+      "title": "Infrastructure as Code",
+      "sourcePath": "/content/courses/software-architecture/intermediate/infrastructure-as-code.mdx",
+      "sections": [
+        {
+          "depth": 2,
+          "title": "Terraform deep dive",
+          "anchor": "terraform-deep-dive",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Terraform core concepts",
+          "anchor": "terraform-core-concepts",
+          "excerpt": "**Resources:** Infrastructure objects (VMs, networks, databases) **Providers:** Plugins for different platforms (AWS, Azure, GCP) **State:** Current infrastructure state tracking **Modules:** Reusable infrastructure components"
+        },
+        {
+          "depth": 3,
+          "title": "Example: Complete AWS infrastructure",
+          "anchor": "example-complete-aws-infrastructure",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Terraform workflow",
+          "anchor": "terraform-workflow",
+          "excerpt": ""
+        },
+        {
+          "depth": 2,
+          "title": "Pulumi multi-language support",
+          "anchor": "pulumi-multi-language-support",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Why Pulumi?",
+          "anchor": "why-pulumi",
+          "excerpt": "**Advantages over Terraform:** - Use familiar languages (TypeScript, Python, Go, C#) - Real programming constructs (loops, functions, classes) - Existing package ecosystems (npm, pip) - Stronger type checking - Better IDE support"
+        },
+        {
+          "depth": 2,
+          "title": "GitOps with Flux/ArgoCD",
+          "anchor": "gitops-with-fluxargocd",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "GitOps principles",
+          "anchor": "gitops-principles",
+          "excerpt": "1. **Declarative:** System described declaratively 2. **Versioned:** Configuration stored in Git 3. **Pulled automatically:** Agents pull changes 4. **Continuously reconciled:** System matches Git state"
+        },
+        {
+          "depth": 3,
+          "title": "Flux example",
+          "anchor": "flux-example",
+          "excerpt": ""
+        },
+        {
+          "depth": 2,
+          "title": "Infrastructure testing",
+          "anchor": "infrastructure-testing",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Testing approaches",
+          "anchor": "testing-approaches",
+          "excerpt": "**1. Unit tests:** Test individual modules **2. Integration tests:** Test provisioned infrastructure **3. Compliance tests:** Verify security/compliance rules"
+        },
+        {
+          "depth": 3,
+          "title": "Terratest example",
+          "anchor": "terratest-example",
+          "excerpt": ""
+        },
+        {
+          "depth": 2,
+          "title": "Policy as code with OPA",
+          "anchor": "policy-as-code-with-opa",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "OPA policy example",
+          "anchor": "opa-policy-example",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Practice: IaC implementation",
+          "anchor": "practice-iac-implementation",
+          "excerpt": "**Exercise (30 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "Summary and next steps",
+          "anchor": "summary-and-next-steps",
+          "excerpt": "You have learned Infrastructure as Code including Terraform deep dive with complete examples, Pulumi multi-language support, GitOps with Flux/ArgoCD, infrastructure testing with Terratest, and policy as code with OPA."
+        }
+      ]
+    },
+    {
+      "route": "/courses/software-architecture/intermediate/performance-engineering",
+      "title": "Performance & Scalability Engineering",
+      "sourcePath": "/content/courses/software-architecture/intermediate/performance-engineering.mdx",
+      "sections": [
+        {
+          "depth": 2,
+          "title": "CPU profiling with flame graphs",
+          "anchor": "cpu-profiling-with-flame-graphs",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Flame graphs explained",
+          "anchor": "flame-graphs-explained",
+          "excerpt": "A A flame graph visualises CPU profiling data with stack traces, where width shows time spent makes bottlenecks obvious at a glance."
+        },
+        {
+          "depth": 3,
+          "title": "Finding hotspots",
+          "anchor": "finding-hotspots",
+          "excerpt": "**Look for:** 1. **Wide plateaus** at top: Functions consuming most CPU 2. **Tall stacks**: Deep call chains (recursion or complex logic) 3. **Unexpected patterns**: Libraries you didn't know were called"
+        },
+        {
+          "depth": 2,
+          "title": "N+1 query problem",
+          "anchor": "n1-query-problem",
+          "excerpt": "The The N+1 query problem occurs when you fetch N items, then make an additional query for each item is a classic performance killer."
+        },
+        {
+          "depth": 3,
+          "title": "Identifying N+1 queries",
+          "anchor": "identifying-n1-queries",
+          "excerpt": "**Symptom:** API response time increases linearly with result count."
+        },
+        {
+          "depth": 3,
+          "title": "Solutions",
+          "anchor": "solutions",
+          "excerpt": "**Solution 1: Eager loading (JOIN)**"
+        },
+        {
+          "depth": 2,
+          "title": "Caching strategies and invalidation",
+          "anchor": "caching-strategies-and-invalidation",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Cache levels",
+          "anchor": "cache-levels",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Cache invalidation strategies",
+          "anchor": "cache-invalidation-strategies",
+          "excerpt": "**1. Time-based (TTL)**"
+        },
+        {
+          "depth": 3,
+          "title": "Cache stampede prevention",
+          "anchor": "cache-stampede-prevention",
+          "excerpt": "**Solution: Lock-based regeneration**"
+        },
+        {
+          "depth": 2,
+          "title": "Load balancing algorithms",
+          "anchor": "load-balancing-algorithms",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Load balancing algorithms",
+          "anchor": "load-balancing-algorithms-2",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Health checks",
+          "anchor": "health-checks",
+          "excerpt": ""
+        },
+        {
+          "depth": 2,
+          "title": "Auto-scaling patterns",
+          "anchor": "auto-scaling-patterns",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Scaling strategies",
+          "anchor": "scaling-strategies",
+          "excerpt": "**Vertical scaling (scale up):** - Add more CPU/memory to existing server - Simpler but has limits - Downtime for resizing"
+        },
+        {
+          "depth": 3,
+          "title": "Auto-scaling metrics",
+          "anchor": "auto-scaling-metrics",
+          "excerpt": "**1. CPU-based scaling**"
+        },
+        {
+          "depth": 3,
+          "title": "Practice: Performance optimization",
+          "anchor": "practice-performance-optimization",
+          "excerpt": "**Exercise (30 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "Summary and next steps",
+          "anchor": "summary-and-next-steps",
+          "excerpt": "You have learned performance and scalability engineering including CPU profiling with flame graphs, solving the N+1 query problem, caching strategies with invalidation, load balancing algorithms, and auto-scaling patterns."
+        }
+      ]
+    },
+    {
+      "route": "/courses/software-architecture/intermediate/service-decomposition",
+      "title": "Service Design & Decomposition",
+      "sourcePath": "/content/courses/software-architecture/intermediate/service-decomposition.mdx",
+      "sections": [
+        {
+          "depth": 2,
+          "title": "Domain-Driven Design fundamentals",
+          "anchor": "domain-driven-design-fundamentals",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Bounded contexts",
+          "anchor": "bounded-contexts",
+          "excerpt": "A A bounded context is a boundary within which a domain model is defined and applicable defines clear ownership and terminology."
+        },
+        {
+          "depth": 3,
+          "title": "Ubiquitous language",
+          "anchor": "ubiquitous-language",
+          "excerpt": "**Example:** - **Avoid:** \"User submits form which creates record in table\" - **Use:** \"Customer places order which creates confirmed order\""
+        },
+        {
+          "depth": 2,
+          "title": "Microservices vs modular monolith",
+          "anchor": "microservices-vs-modular-monolith",
+          "excerpt": "The debate is not \"microservices: yes or no?\" It is \"what are the trade-offs?\""
+        },
+        {
+          "depth": 3,
+          "title": "Modular monolith",
+          "anchor": "modular-monolith",
+          "excerpt": "**Strengths:** - Simpler deployment - Easier transactions - Lower operational complexity - Faster development initially"
+        },
+        {
+          "depth": 3,
+          "title": "Microservices",
+          "anchor": "microservices",
+          "excerpt": "**Strengths:** - Independent deployment - Technology diversity - Team autonomy - Fine-grained scaling"
+        },
+        {
+          "depth": 3,
+          "title": "Decision framework",
+          "anchor": "decision-framework",
+          "excerpt": "**Stay monolith when:** - Team size < 10 people - Deployment frequency acceptable - Performance requirements met - Business domain well understood"
+        },
+        {
+          "depth": 2,
+          "title": "API gateway patterns",
+          "anchor": "api-gateway-patterns",
+          "excerpt": "An An API gateway is a single entry point that routes requests to appropriate backend services simplifies client integration."
+        },
+        {
+          "depth": 3,
+          "title": "API gateway responsibilities",
+          "anchor": "api-gateway-responsibilities",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Backend for Frontend (BFF)",
+          "anchor": "backend-for-frontend-bff",
+          "excerpt": ""
+        },
+        {
+          "depth": 2,
+          "title": "Service mesh (revisited)",
+          "anchor": "service-mesh-revisited",
+          "excerpt": "We covered service mesh basics in Cloud-Native Patterns. Here we focus on service decomposition implications."
+        },
+        {
+          "depth": 3,
+          "title": "Service-to-service communication",
+          "anchor": "service-to-service-communication",
+          "excerpt": "Without service mesh:"
+        },
+        {
+          "depth": 3,
+          "title": "Practice: Service decomposition",
+          "anchor": "practice-service-decomposition",
+          "excerpt": "**Exercise (30 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "Summary and next steps",
+          "anchor": "summary-and-next-steps",
+          "excerpt": "You have learned service design and decomposition including Domain-Driven Design with bounded contexts and ubiquitous language, microservices vs modular monolith trade-offs, API gateway patterns including BFF, and service mesh for communication."
         }
       ]
     },
