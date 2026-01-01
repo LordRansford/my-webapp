@@ -1,5 +1,6 @@
 import GamesHubClient from "./GamesHub.client";
 import type { Metadata } from "next";
+import { MarketingPageTemplate } from "@/components/templates/PageTemplates";
 
 export const metadata: Metadata = {
   title: "Games Hub | Ransford's Notes",
@@ -22,5 +23,9 @@ export const metadata: Metadata = {
 };
 
 export default function GamesHubPage() {
-  return <GamesHubClient />;
+  return (
+    <MarketingPageTemplate breadcrumbs={[{ label: "Home", href: "/" }, { label: "Games Hub" }]}>
+      <GamesHubClient />
+    </MarketingPageTemplate>
+  );
 }

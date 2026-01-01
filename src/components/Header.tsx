@@ -30,8 +30,9 @@ const navItems: NavItem[] = [
   { label: "Tools", href: "/tools" },
   { 
     label: "Games", 
-    href: "/games",
+    href: "/games/hub",
     submenu: [
+      { label: "Games Hub", href: "/games/hub" },
       { label: "All Games", href: "/games" },
       { label: "Practice Games", href: "/practice" },
       { label: "Thinking Gym", href: "/thinking-gym" },
