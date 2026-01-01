@@ -2,12 +2,12 @@
   "per_source_cursors": {
     "cisa-kev": {
       "lastModified": "2025-12-29",
-      "last_fetched": "2026-01-01T01:42:41.793Z"
+      "last_fetched": "2026-01-01T06:29:39.145Z"
     },
     "arxiv-cs-ai": {
-      "lastModified": "2025-12-29T18:43:05Z",
-      "last_fetched": "2026-01-01T01:42:43.822Z"
+      "lastModified": "2025-12-31T18:59:57Z",
+      "last_fetched": "2026-01-01T06:29:41.478Z"
     }
   },
-  "last_successful_run": "2026-01-01T01:42:43.909Z"
+  "last_successful_run": "2026-01-01T06:29:41.564Z"
 }
