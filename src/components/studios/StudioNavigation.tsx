@@ -21,7 +21,10 @@ interface NavLink {
 interface StudioNavigationProps {
   studioType: "dev" | "cyber" | "data" | "ai" | "architecture" | "lab";
   showHub?: boolean;
+  showHome?: boolean;
   additionalLinks?: NavLink[];
+  currentStudio?: string;
+  currentStudioHref?: string;
 }
 
 const studioConfigs = {
