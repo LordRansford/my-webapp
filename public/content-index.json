@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-01T20:26:21.873Z",
+  "generatedAt": "2026-01-01T20:41:07.467Z",
   "pages": [
     {
       "route": "/courses/_cpd-checklist",
@@ -1644,6 +1644,212 @@
           "title": "Next steps",
           "anchor": "next-steps",
           "excerpt": "After completing this Foundation tier, progress to the Intermediate tier (30 CPD hours) for advanced topics in security architecture, cloud-native patterns, performance engineering, and more."
+        }
+      ]
+    },
+    {
+      "route": "/courses/software-architecture/intermediate/advanced-security",
+      "title": "Advanced Security Architecture",
+      "sourcePath": "/content/courses/software-architecture/intermediate/advanced-security.mdx",
+      "sections": [
+        {
+          "depth": 2,
+          "title": "STRIDE deep dive with case studies",
+          "anchor": "stride-deep-dive-with-case-studies",
+          "excerpt": "You learned STRIDE basics in the Foundation tier. Now we go deeper with real-world attack scenarios and comprehensive mitigation strategies."
+        },
+        {
+          "depth": 3,
+          "title": "Spoofing: Real-world case study",
+          "anchor": "spoofing-real-world-case-study",
+          "excerpt": "**Attack scenario:** Session fixation attack on banking application"
+        },
+        {
+          "depth": 3,
+          "title": "Tampering: Data integrity attacks",
+          "anchor": "tampering-data-integrity-attacks",
+          "excerpt": "**Attack scenario:** Price manipulation in e-commerce checkout"
+        },
+        {
+          "depth": 2,
+          "title": "PASTA methodology",
+          "anchor": "pasta-methodology",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "The 7 stages of PASTA",
+          "anchor": "the-7-stages-of-pasta",
+          "excerpt": ""
+        },
+        {
+          "depth": 2,
+          "title": "Attack trees with probability scoring",
+          "anchor": "attack-trees-with-probability-scoring",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Building an attack tree",
+          "anchor": "building-an-attack-tree",
+          "excerpt": "**Goal:** Unauthorised access to customer database"
+        },
+        {
+          "depth": 3,
+          "title": "Probability scoring",
+          "anchor": "probability-scoring",
+          "excerpt": "Assign probability to each attack path:"
+        },
+        {
+          "depth": 2,
+          "title": "Zero trust architecture",
+          "anchor": "zero-trust-architecture",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Core principles",
+          "anchor": "core-principles",
+          "excerpt": "1. **Verify explicitly:** Always authenticate and authorise 2. **Least privilege access:** Minimum permissions needed 3. **Assume breach:** Minimise blast radius"
+        },
+        {
+          "depth": 3,
+          "title": "Implementation pattern",
+          "anchor": "implementation-pattern",
+          "excerpt": ""
+        },
+        {
+          "depth": 2,
+          "title": "NIST Cybersecurity Framework integration",
+          "anchor": "nist-cybersecurity-framework-integration",
+          "excerpt": "The NIST Cybersecurity Framework provides standards, guidelines, and practices for managing cybersecurity risk organises security into five functions."
+        },
+        {
+          "depth": 3,
+          "title": "The five functions",
+          "anchor": "the-five-functions",
+          "excerpt": "1. **Identify:** Asset management, risk assessment 2. **Protect:** Access control, data security, protective technology 3. **Detect:** Anomaly detection, continuous monitoring 4. **Respond:** Incident response planning, communication 5. **Recover:** Recovery planning, improvements"
+        },
+        {
+          "depth": 3,
+          "title": "Practice: Advanced threat modelling",
+          "anchor": "practice-advanced-threat-modelling",
+          "excerpt": "**Exercise (35 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "Summary and next steps",
+          "anchor": "summary-and-next-steps",
+          "excerpt": "You have learned advanced security architecture including STRIDE deep dives with real case studies, PASTA methodology for systematic threat analysis, attack trees with probability scoring, zero trust architecture principles, and NIST Cybersecurity Framework integration."
+        }
+      ]
+    },
+    {
+      "route": "/courses/software-architecture/intermediate/cloud-native-patterns",
+      "title": "Cloud-Native Patterns",
+      "sourcePath": "/content/courses/software-architecture/intermediate/cloud-native-patterns.mdx",
+      "sections": [
+        {
+          "depth": 2,
+          "title": "Multi-region active-active architectures",
+          "anchor": "multi-region-active-active-architectures",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Why multi-region matters",
+          "anchor": "why-multi-region-matters",
+          "excerpt": "**Single region risks:** - Regional outage takes you down completely - High latency for distant users - No disaster recovery without complex failover"
+        },
+        {
+          "depth": 3,
+          "title": "Data replication strategies",
+          "anchor": "data-replication-strategies",
+          "excerpt": "**Synchronous replication:** - Write to all regions before confirming - Strong consistency - High latency (wait for all regions)"
+        },
+        {
+          "depth": 2,
+          "title": "Disaster recovery strategies",
+          "anchor": "disaster-recovery-strategies",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "RPO and RTO targets",
+          "anchor": "rpo-and-rto-targets",
+          "excerpt": "**RPO (Recovery Point Objective):** How much data can you afford to lose? - RPO = 0: Zero data loss (synchronous replication) - RPO = 1 hour: Can lose up to 1 hour of data"
+        },
+        {
+          "depth": 3,
+          "title": "DR testing",
+          "anchor": "dr-testing",
+          "excerpt": "**Testing approaches:** 1. **Tabletop exercise:** Walk through procedures on paper 2. **Simulated failover:** Test in non-production environment 3. **Chaos engineering:** Inject failures in production (carefully) 4. **Game day:** Full-scale DR drill with all teams"
+        },
+        {
+          "depth": 2,
+          "title": "CAP theorem and eventual consistency",
+          "anchor": "cap-theorem-and-eventual-consistency",
+          "excerpt": "The CAP theorem states that distributed systems can only guarantee two of three properties: Consistency, Availability, and Partition tolerance forces architectural trade-offs."
+        },
+        {
+          "depth": 3,
+          "title": "The three properties",
+          "anchor": "the-three-properties",
+          "excerpt": "**Consistency (C):** All nodes see the same data at the same time"
+        },
+        {
+          "depth": 3,
+          "title": "Eventual consistency patterns",
+          "anchor": "eventual-consistency-patterns",
+          "excerpt": "**Conflict resolution strategies:**"
+        },
+        {
+          "depth": 2,
+          "title": "Service mesh patterns",
+          "anchor": "service-mesh-patterns",
+          "excerpt": "A A service mesh is a dedicated infrastructure layer for managing service-to-service communication handles cross-cutting concerns like observability, security, and reliability."
+        },
+        {
+          "depth": 3,
+          "title": "Service mesh architecture",
+          "anchor": "service-mesh-architecture",
+          "excerpt": ""
+        },
+        {
+          "depth": 3,
+          "title": "Service mesh capabilities",
+          "anchor": "service-mesh-capabilities",
+          "excerpt": "**Traffic management:** - Load balancing - Circuit breaking - Retries and timeouts - Traffic splitting (canary deployments)"
+        },
+        {
+          "depth": 2,
+          "title": "Case study: Netflix resilience",
+          "anchor": "case-study-netflix-resilience",
+          "excerpt": "Netflix pioneered many cloud-native patterns. Their approach to resilience offers valuable lessons."
+        },
+        {
+          "depth": 3,
+          "title": "Chaos Monkey",
+          "anchor": "chaos-monkey",
+          "excerpt": "**Philosophy:** If you cannot survive random failures in testing, you will not survive them in production."
+        },
+        {
+          "depth": 3,
+          "title": "Hystrix circuit breaker",
+          "anchor": "hystrix-circuit-breaker",
+          "excerpt": "Prevents cascading failures by detecting and stopping calls to failing services."
+        },
+        {
+          "depth": 3,
+          "title": "Practice: Design a resilient architecture",
+          "anchor": "practice-design-a-resilient-architecture",
+          "excerpt": "**Exercise (30 minutes):**"
+        },
+        {
+          "depth": 2,
+          "title": "Summary and next steps",
+          "anchor": "summary-and-next-steps",
+          "excerpt": "You have learned cloud-native patterns including multi-region active-active architectures, disaster recovery with RPO/RTO targets, CAP theorem trade-offs and eventual consistency, service mesh patterns, and resilience engineering lessons from Netflix."
         }
       ]
     },
