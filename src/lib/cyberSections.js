@@ -1,9 +1,12 @@
 export const cyberSections = {
   foundations: [
+    "foundations-welcome",
     "foundations-why-cyber-matters",
     "foundations-data-and-bits",
     "foundations-networks-and-packets",
-    "foundations-cia-and-simple-attacks",
+    "foundations-threats-and-defenses",
+    "foundations-authentication-privacy",
+    "foundations-checkpoint-capstone",
   ],
   applied: [
     "applied-threat-modelling",
