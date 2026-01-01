@@ -42,10 +42,6 @@ model UserIdentity {
   agents    Agent[]
   agentExecutions AgentExecution[]
   deployments Deployment[]
-  
-  // Assessment and Certificate relations
-  assessmentAttempts AssessmentAttempt[]
-  certificates Certificate[]
 
   @@index([provider, providerAccountId])
 }
@@ -418,7 +414,6 @@ model Certificate {
   userId          String
   courseId        String
   courseVersion   String
-  levelId         String?  // Added for tier-based certificates
   issuedAt        DateTime @default(now())
   certificateHash String   @unique
   pdfKey          String
@@ -426,18 +421,9 @@ model Certificate {
   issuer          String   @default("RansfordsNotes")
   status          String   @default("issued") // "issued" | "revoked"
   createdAt       DateTime @default(now())
-  
-  // Enhanced fields for CPD certificates
-  cpdHours        Float?
-  score           Int?
-  blockchainHash  String?  @unique
-  verificationUrl String?
-  
-  user            UserIdentity @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@unique([userId, courseId, courseVersion])
-  @@index([levelId])
 }
 
 model AuditEvent {
@@ -708,62 +694,3 @@ model Deployment {
 }
 
 
-
-// Assessment system for course evaluations
-model Assessment {
-  id            String   @id @default(cuid())
-  courseId      String
-  levelId       String   // foundations, intermediate, advanced
-  passThreshold Int      @default(80)
-  timeLimit     Int?     // minutes
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  questions     Question[]
-  attempts      AssessmentAttempt[]
-
-  @@unique([courseId, levelId])
-  @@index([courseId])
-  @@index([levelId])
-}
-
-model Question {
-  id               String       @id @default(cuid())
-  assessmentId     String
-  type             String       // MCQ, MultiResponse, Scenario, Practical
-  bloomLevel       Int          // 1-6
-  difficultyTarget Float        // 0.3-0.85 (percentage who get it right)
-  discriminationIndex Float?    // How well it distinguishes high vs low performers
-  question         String       // The question text
-  options          String?      // JSON array for MCQ/MultiResponse
-  correctAnswer    String       // JSON (single value or array)
-  explanation      String       // Detailed explanation of the correct answer
-  tags             String       // Comma-separated tags
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @updatedAt
-
-  assessment       Assessment   @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
-
-  @@index([assessmentId])
-  @@index([bloomLevel])
-  @@index([type])
-}
-
-model AssessmentAttempt {
-  id            String   @id @default(cuid())
-  userId        String
-  assessmentId  String
-  score         Int      // Percentage
-  passed        Boolean
-  answers       String   // JSON of user answers
-  timeSpent     Int      // seconds
-  completedAt   DateTime @default(now())
-
-  user          UserIdentity @relation(fields: [userId], references: [id], onDelete: Cascade)
-  assessment    Assessment   @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-  @@index([assessmentId])
-  @@index([passed])
-  @@index([completedAt])
-}
