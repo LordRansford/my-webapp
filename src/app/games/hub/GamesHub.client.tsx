@@ -7,17 +7,20 @@ import {
   BookOpen, Target, Palette, Network, Shield, Clock3, Star, Bookmark, BookmarkCheck,
   X, ArrowRight, PlayCircle
 } from "lucide-react";
-import type { GameCategory, GameMode, DifficultyLevel } from "@/lib/games/framework/types";
+import type { GameCategory as FrameworkGameCategory, GameMode, DifficultyLevel } from "@/lib/games/framework/types";
 import { ACTION_GAMES, PRACTICE_GAMES, type GameCategory as RegistryGameCategory } from "@/lib/games-registry";
 
 // Re-export types for convenience
-export type { GameCategory, GameMode, DifficultyLevel };
+export type { GameMode, DifficultyLevel };
+
+// Extended category type that includes both framework categories and registry categories
+type ExtendedGameCategory = FrameworkGameCategory | RegistryGameCategory | "action" | "practice";
 
 interface GamePreview {
   id: string;
   title: string;
   description: string;
-  category: GameCategory | "action" | "practice";
+  category: ExtendedGameCategory;
   modes: GameMode[];
   estimatedMinutes: number;
   difficulty: DifficultyLevel | "easy" | "medium" | "hard";
