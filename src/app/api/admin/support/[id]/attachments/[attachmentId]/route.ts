@@ -50,29 +50,40 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string; att
     
     // Try AWS S3 as fallback
     if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
-      const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3');
-      const s3Client = new S3Client({
-        region: process.env.AWS_REGION || 'us-east-1',
-        credentials: {
-          accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-        },
-      });
-      
-      const command = new GetObjectCommand({
-        Bucket: process.env.AWS_S3_BUCKET_NAME,
-        Key: att.storageKey,
-      });
-      
-      const response = await s3Client.send(command);
-      const body = await response.Body.transformToByteArray();
-      
-      return new NextResponse(body, {
-        headers: {
-          'Content-Type': att.mimeType,
-          'Content-Disposition': `attachment; filename="${att.fileName}"`,
-        },
-      });
+      try {
+        // Use Function constructor to create a dynamic require that bundler can't analyze
+        const requireS3 = new Function('moduleName', 'return require(moduleName)');
+        const s3Module = requireS3('@aws-sdk/client-s3');
+        const { S3Client, GetObjectCommand } = s3Module;
+        const s3Client = new S3Client({
+          region: process.env.AWS_REGION || 'us-east-1',
+          credentials: {
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+          },
+        });
+        
+        const command = new GetObjectCommand({
+          Bucket: process.env.AWS_S3_BUCKET_NAME,
+          Key: att.storageKey,
+        });
+        
+        const response = await s3Client.send(command);
+        const body = await response.Body.transformToByteArray();
+        
+        return new NextResponse(body, {
+          headers: {
+            'Content-Type': att.mimeType,
+            'Content-Disposition': `attachment; filename="${att.fileName}"`,
+          },
+        });
+      } catch (s3Error: any) {
+        // AWS SDK not installed or other error - fall through
+        if (s3Error?.code !== 'MODULE_NOT_FOUND') {
+          console.error('AWS S3 download failed:', s3Error);
+        }
+        // Fall through to error response
+      }
     }
     
     // No storage configured

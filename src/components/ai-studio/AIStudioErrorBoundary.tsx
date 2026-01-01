@@ -6,6 +6,7 @@
 
 import React, { Component, ReactNode } from "react";
 import { AlertCircle, RefreshCw } from "lucide-react";
+import { captureException as captureSentryException } from "@/lib/sentry-utils";
 
 interface Props {
   children: ReactNode;
@@ -37,24 +38,17 @@ export class AIStudioErrorBoundary extends Component<Props, State> {
     // Log error to monitoring service in production
     if (process.env.NODE_ENV === "production") {
       console.error("[AI Studio Error Boundary]", error, errorInfo);
-      // Send to Sentry if configured
-      if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
-        try {
-          const Sentry = require('@sentry/nextjs');
-          Sentry.captureException(error, {
-            contexts: {
-              react: {
-                componentStack: errorInfo.componentStack,
-              },
-            },
-            tags: {
-              component: 'AIStudioErrorBoundary',
-            },
-          });
-        } catch (sentryError) {
-          console.error('Failed to send error to Sentry:', sentryError);
-        }
-      }
+      // Send to Sentry if configured (will silently fail if @sentry/nextjs is not installed)
+      captureSentryException(error, {
+        contexts: {
+          react: {
+            componentStack: errorInfo.componentStack,
+          },
+        },
+        tags: {
+          component: 'AIStudioErrorBoundary',
+        },
+      });
     } else {
       console.error("[AI Studio Error Boundary]", error, errorInfo);
     }

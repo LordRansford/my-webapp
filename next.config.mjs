@@ -7,12 +7,26 @@ const nextConfig = {
   // Silence Next.js 16 Turbopack warning when a webpack config is present.
   turbopack: {},
 
-  webpack: (config, { dev }) => {
+  webpack: (config, { dev, isServer }) => {
     config.resolve.fallback = {
       ...(config.resolve.fallback || {}),
       fs: false,
       path: false,
     };
+
+    // Mark optional dependencies as external to prevent build-time errors
+    // These will be resolved at runtime if available
+    if (!config.externals) {
+      config.externals = [];
+    }
+    // Add function-based externals for optional dependencies
+    config.externals.push(({ request }, callback) => {
+      if (request === '@sentry/nextjs' || request === '@aws-sdk/client-s3') {
+        // Mark as external - will be resolved at runtime
+        return callback(null, `commonjs ${request}`);
+      }
+      callback();
+    });
 
     // Windows watchpack + filesystem cache can be flaky and crash dev server.
     // Disable webpack filesystem cache in dev to avoid missing pack.gz errors.

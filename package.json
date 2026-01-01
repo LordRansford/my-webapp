@@ -6,7 +6,7 @@
     "dev": "npx next dev --webpack",
     "build:content-index": "node scripts/build-content-index.mjs",
     "build:tools-index": "node scripts/build-tools-index.mjs",
-    "build": "npm run quality:compute && npm run quality:credits && npm run enforce:credit-patterns && npm run validate:tool-contracts && npm run build:content-index && npm run build:tools-index && node -e \"const fs=require('fs');const p='.next/lock';if(fs.existsSync(p)) fs.rmSync(p,{force:true});\" && node scripts/generate-prisma.mjs && npx next build",
+    "build": "npm run quality:compute && npm run quality:credits && npm run enforce:credit-patterns && npm run validate:tool-contracts && npm run build:content-index && npm run build:tools-index && node -e \"const fs=require('fs');const p='.next/lock';if(fs.existsSync(p)) fs.rmSync(p,{force:true});\" && node scripts/generate-prisma.mjs && node scripts/build-next.mjs",
     "validate:tool-contracts": "node scripts/validate-tool-contracts.mjs",
     "validate:env": "node scripts/validate-env.mjs",
     "start": "npx next start --hostname 0.0.0.0 --port 3000",
@@ -72,6 +72,7 @@
     "papaparse": "^5.5.3",
     "pdf-lib": "^1.17.1",
     "pdfkit": "^0.17.2",
+    "prisma": "^6.1.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "reading-time": "^1.5.0",
@@ -89,12 +90,13 @@
     "xlsx": "^0.18.5",
     "xml2js": "^0.6.2",
     "zod": "^4.2.1",
-    "zustand": "^4.5.7",
-    "prisma": "^6.1.0"
+    "zustand": "^4.5.7"
   },
   "devDependencies": {
+    "@aws-sdk/client-s3": "^3.958.0",
     "@lhci/cli": "^0.13.0",
     "@playwright/test": "^1.55.0",
+    "@sentry/nextjs": "^10.32.1",
     "@tailwindcss/postcss": "^4",
     "@types/better-sqlite3": "^7.6.11",
     "babel-plugin-react-compiler": "1.0.0",

@@ -19,12 +19,12 @@ export default function GamesCards() {
   useEffect(() => {
     const t = utcDateId();
     setToday(t);
-    setUnlocked(progress.get().charisTrophyUnlocked);
+    setUnlocked(progress.get().masterTrophyUnlocked);
     setTodayDaily(progress.getDaily(t));
     setHydrated(true);
 
     const refresh = () => {
-      setUnlocked(progress.get().charisTrophyUnlocked);
+      setUnlocked(progress.get().masterTrophyUnlocked);
       setTodayDaily(progress.getDaily(t));
     };
     window.addEventListener("focus", refresh);
@@ -38,7 +38,7 @@ export default function GamesCards() {
   const visible = useMemo(() => {
     return GAMES.filter((g) => {
       if (!g.hidden) return true;
-      if (g.requiresCharisTrophy) return unlocked;
+      if (g.requiresMasterTrophy) return unlocked;
       return false;
     });
   }, [unlocked]);
@@ -104,14 +104,14 @@ export default function GamesCards() {
       <section aria-label="Campaign" className="space-y-4">
         <div>
           <h2 className="text-2xl font-semibold text-slate-900">Campaign</h2>
-          <p className="mt-2 text-base text-slate-700">12 missions dedicated to Charis Chung Amponsah. Choose your character, complete objectives, earn stars.</p>
+          <p className="mt-2 text-base text-slate-700">12 challenging missions. Choose your character, complete objectives, earn stars.</p>
         </div>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <div 
             className="group rounded-3xl border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50 p-6 shadow-sm hover:border-purple-300 hover:shadow-md transition-all duration-200"
           >
             <div className="flex items-start justify-between gap-3 mb-3">
-              <h3 className="text-xl font-semibold text-slate-900">Charis's Challenge</h3>
+              <h3 className="text-xl font-semibold text-slate-900">Master Challenge</h3>
               <span className="rounded-full bg-purple-100 px-3 py-1 text-xs font-semibold text-purple-700 whitespace-nowrap">
                 Campaign
               </span>
