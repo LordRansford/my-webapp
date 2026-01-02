@@ -46,18 +46,21 @@ export function LearningSystem({
     });
 
     const learnedPatterns: LearningPattern[] = Object.entries(patternMap)
-      .map(([pattern, data]) => ({
-        id: pattern,
-        pattern,
-        frequency: data.count,
-        successRate: data.successes / data.count,
-        lastUsed: data.lastUsed,
-        recommendation: data.successRate > 0.8 
-          ? "This pattern works well for you"
-          : data.successRate < 0.5
-          ? "Consider trying a different approach"
-          : undefined
-      }))
+      .map(([pattern, data]) => {
+        const successRate = data.successes / data.count;
+        return {
+          id: pattern,
+          pattern,
+          frequency: data.count,
+          successRate,
+          lastUsed: data.lastUsed,
+          recommendation: successRate > 0.8 
+            ? "This pattern works well for you"
+            : successRate < 0.5
+            ? "Consider trying a different approach"
+            : undefined
+        };
+      })
       .sort((a, b) => b.frequency - a.frequency)
       .slice(0, 5);
 
