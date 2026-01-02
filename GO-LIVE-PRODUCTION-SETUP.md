@@ -45,6 +45,14 @@ STRIPE_ENABLED=true
 STRIPE_SECRET_KEY=sk_live_...  # LIVE KEY for production!
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...  # LIVE KEY for production!
 STRIPE_WEBHOOK_SECRET=whsec_...  # From Stripe webhook endpoint
+
+# Email Service (Resend - Optional, for magic link auth)
+RESEND_API_KEY=re_xxxxxxxxxxxxx
+EMAIL_SERVER=smtp://resend:re_xxxxxxxxxxxxx@smtp.resend.com:587
+EMAIL_FROM=noreply@ransfordsnotes.com  # Use verified domain email
+
+# Plausible Analytics (Optional)
+NEXT_PUBLIC_PLAUSIBLE_DOMAIN=www.ransfordsnotes.com
 ```
 
 ### Step 2: Get Google OAuth Credentials (10 min)
