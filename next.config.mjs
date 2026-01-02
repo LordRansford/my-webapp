@@ -103,4 +103,22 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+// Wrap with Sentry config if available (for source maps and release tracking)
+// This is optional - Sentry will work without it, but source maps won't be uploaded
+let finalConfig = nextConfig;
+try {
+  const { withSentryConfig } = await import("@sentry/nextjs");
+  const sentryWebpackPluginOptions = {
+    silent: true, // Suppress source map upload logs
+    org: process.env.SENTRY_ORG,
+    project: process.env.SENTRY_PROJECT,
+    hideSourceMaps: true,
+    telemetry: false,
+  };
+  finalConfig = withSentryConfig(nextConfig, sentryWebpackPluginOptions);
+} catch {
+  // Sentry not installed or not available - continue without Sentry webpack plugin
+  // This is fine - Sentry will still work for error tracking, just without source map uploads
+}
+
+export default finalConfig;

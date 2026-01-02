@@ -85,9 +85,24 @@ Based on your Sentry configuration:
 2. Check that the token has read/write permissions
 3. Ensure `@vercel/blob` is installed: `npm install @vercel/blob`
 
+## Step 5: Optional - Sentry Source Maps & Release Tracking
+
+For better error debugging with source maps, you can optionally configure:
+
+1. **Get Sentry Auth Token**:
+   - Go to Sentry → Settings → Account → Auth Tokens
+   - Create a new token with `project:releases` scope
+
+2. **Add to Vercel Environment Variables**:
+   - `SENTRY_ORG` - Your Sentry organization slug
+   - `SENTRY_PROJECT` - Your Sentry project slug (e.g., `javascript-nextjs`)
+   - `SENTRY_AUTH_TOKEN` - Your Sentry auth token (for source map uploads)
+
+3. **The `next.config.mjs` is already configured** to use these if available
+
 ## Next Steps
 
-- Configure Sentry release tracking (optional)
+- ✅ Configure Sentry release tracking (optional - requires SENTRY_ORG, SENTRY_PROJECT, SENTRY_AUTH_TOKEN)
 - Set up Sentry alerts for critical errors
 - Configure Vercel Blob access policies if needed
 - Review Sentry performance monitoring dashboards
