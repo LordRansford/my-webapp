@@ -88,7 +88,10 @@ export default function Page({ source, headings }) {
 export async function getStaticProps() {
   const { source, headings } = await loadNote(
     "software-architecture/foundations.mdx",
-    { softwareArchitectureSectionManifest },
+    { 
+      softwareArchitectureSectionManifest,
+      foundationsSectionIds: softwareArchitectureSectionManifest.foundations,
+    },
     { contentRoot: "courses" }
   );
   return {

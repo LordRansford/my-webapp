@@ -45,6 +45,7 @@ import { AnalysisReportComponent } from './AnalysisReportComponent';
 import { archivePuzzleSet, getArchiveStats, type ArchiveStats } from './archive';
 import {
   loadTutorialState,
+  createDefaultTutorialState,
   startTutorial,
   nextTutorialStep,
   previousTutorialStep,
@@ -94,8 +95,13 @@ export default function DailyLogicGauntletEnhanced() {
   const [streakData, setStreakData] = useState<StreakData>(createDefaultStreak());
   const [analysisReport, setAnalysisReport] = useState<AnalysisReport | null>(null);
   
-  // Tutorial state
-  const [tutorialState, setTutorialState] = useState<TutorialState>(() => loadTutorialState());
+  // Tutorial state - only load on client side
+  const [tutorialState, setTutorialState] = useState<TutorialState>(() => {
+    if (typeof window === 'undefined') {
+      return createDefaultTutorialState();
+    }
+    return loadTutorialState();
+  });
   const [showTutorial, setShowTutorial] = useState(false);
   const currentTutorialStep = useMemo(() => getCurrentTutorialStep(tutorialState), [tutorialState]);
   

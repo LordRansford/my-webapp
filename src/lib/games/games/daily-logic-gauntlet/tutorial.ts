@@ -107,6 +107,11 @@ export function createDefaultTutorialState(): TutorialState {
  * Load tutorial state from localStorage
  */
 export function loadTutorialState(): TutorialState {
+  // Check if we're in a browser environment
+  if (typeof window === 'undefined') {
+    return createDefaultTutorialState();
+  }
+  
   try {
     const stored = localStorage.getItem('daily-logic-gauntlet-tutorial');
     if (!stored) {

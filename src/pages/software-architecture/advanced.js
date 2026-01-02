@@ -66,7 +66,10 @@ export default function Page({ source, headings }) {
 export async function getStaticProps() {
   const { source, headings } = await loadNote(
     "software-architecture/advanced.mdx",
-    { softwareArchitectureSectionManifest },
+    { 
+      softwareArchitectureSectionManifest,
+      practiceStrategySectionIds: softwareArchitectureSectionManifest.advanced,
+    },
     { contentRoot: "courses" }
   );
   return {
