@@ -14,6 +14,7 @@ export default function AiTemplatesClient({ templates, areas }) {
   const [sortBy, setSortBy] = useState("usefulness");
   const [showFavouritesOnly, setShowFavouritesOnly] = useState(false);
   const [favourites, setFavourites] = useState([]);
+  const [viewMode, setViewMode] = useState("grid");
 
   useEffect(() => {
     setFavourites(getFavourites());
