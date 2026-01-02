@@ -12,9 +12,12 @@ type TemplateCardProps = {
     mathsIntensity?: "Low" | "Medium" | "High";
     [key: string]: any; // Allow additional properties
   };
+  isFavorite?: boolean;
+  onToggleFavorite?: () => void;
+  onDownload?: () => void;
 };
 
-export function TemplateCard({ template }: TemplateCardProps) {
+export function TemplateCard({ template, isFavorite, onToggleFavorite, onDownload }: TemplateCardProps) {
   const summary = template.shortDescription || template.description || "";
   return (
     <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:shadow-md">
@@ -23,6 +26,16 @@ export function TemplateCard({ template }: TemplateCardProps) {
           <h3 className="text-lg font-semibold text-slate-900">{template.title}</h3>
           <p className="mt-1 text-base text-slate-600">{summary}</p>
         </div>
+        {onToggleFavorite && (
+          <button
+            type="button"
+            onClick={onToggleFavorite}
+            aria-pressed={isFavorite}
+            className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+          >
+            {isFavorite ? "Favourited" : "Favourite"}
+          </button>
+        )}
       </div>
 
       <dl className="mt-4 grid grid-cols-2 gap-3 text-xs text-slate-700 sm:grid-cols-3">
@@ -39,6 +52,18 @@ export function TemplateCard({ template }: TemplateCardProps) {
           <dd>{template.mathsIntensity || "N/A"}</dd>
         </div>
       </dl>
+
+      {onDownload && (
+        <div className="mt-4 flex items-center gap-2">
+          <button
+            type="button"
+            onClick={onDownload}
+            className="text-sm text-sky-600 hover:text-sky-700 underline"
+          >
+            Download options
+          </button>
+        </div>
+      )}
     </article>
   );
 }
