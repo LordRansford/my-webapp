@@ -53,6 +53,7 @@ export default function CybersecurityOverviewPage({ source, headings }) {
       { id: "path", title: "Core path", depth: 2 },
       { id: "artefacts", title: "What you will build", depth: 2 },
       { id: "how-to-use", title: "How to use this course", depth: 2 },
+      { id: "certification", title: "Certification assessment", depth: 2 },
       { id: "quick-practice", title: "Quick practice", depth: 2 },
     ],
     []
@@ -92,6 +93,7 @@ export default function CybersecurityOverviewPage({ source, headings }) {
         jumpLinks={[
           { id: "path", label: "Core path" },
           { id: "artefacts", label: "What you build" },
+          { id: "certification", label: "Certification" },
           { id: "quick-practice", label: "Practice" },
         ]}
         topCards={
@@ -170,6 +172,46 @@ export default function CybersecurityOverviewPage({ source, headings }) {
             <li>Record a few minutes when you practise so your CPD record stays honest and useful.</li>
             <li>Come back later and redo the capstones on a new system. That is where depth builds.</li>
           </ol>
+        </section>
+
+        <section id="certification" className="space-y-4">
+          <SectionHeader variant="content" emoji="🏁" id="certification">
+            Certification assessment
+          </SectionHeader>
+          <BodyText>
+            Each level has a timed assessment. You need an account and credits to start. Your certificate name is locked.
+          </BodyText>
+          <div className="grid gap-4 md:grid-cols-3">
+            {[
+              {
+                title: "Foundations assessment",
+                body: "50 questions. 75 minutes. 80 percent pass mark.",
+                href: "/cybersecurity/assessment/foundations",
+                tone: "border-slate-200 bg-white",
+              },
+              {
+                title: "Applied assessment",
+                body: "50 questions. 75 minutes. 80 percent pass mark.",
+                href: "/cybersecurity/assessment/applied",
+                tone: "border-slate-200 bg-white",
+              },
+              {
+                title: "Practice assessment",
+                body: "50 questions. 75 minutes. 80 percent pass mark.",
+                href: "/cybersecurity/assessment/practice",
+                tone: "border-slate-200 bg-white",
+              },
+            ].map((card) => (
+              <a
+                key={card.title}
+                href={card.href}
+                className={`block rounded-2xl border ${card.tone} p-4 shadow-sm transition-transform duration-200 hover:-translate-y-1 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400`}
+              >
+                <div className="text-base font-semibold text-slate-900">{card.title}</div>
+                <div className="mt-2 text-sm text-slate-700">{card.body}</div>
+              </a>
+            ))}
+          </div>
         </section>
 
         <section id="quick-practice" className="space-y-4">

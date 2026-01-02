@@ -1,656 +1,116 @@
 {
   "app": {
-    "[project]/src/app/_not-found/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/account/certificates/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/account/credits/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/account/credits/success/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/account/history/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/account/settings/credits/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/account/settings/studios/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/account/usage/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/admin/access-denied/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/admin/architecture-diagrams/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/admin/billing/credits/[id]/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/admin/billing/credits/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/admin/billing/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/admin/billing/stripe/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/admin/billing/usage/[id]/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/admin/billing/usage/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/admin/feedback/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/admin/mentor/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/admin/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/admin/support/[id]/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/admin/support/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/admin/system/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/admin/template-downloads/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/admin/template-permissions/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/admin/users/[id]/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/admin/users/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/compute/demo/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/compute/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/cpd/apply/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/cpd/quality/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/cpd/record/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/dashboards/[category]/[tool]/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/dashboards/ai/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/dashboards/architecture/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/dashboards/cybersecurity/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/dashboards/digitalisation/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/employers/dashboard/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/feedback/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/games/[slug]/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/games/allocation-architect/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/games/daily-logic-gauntlet/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/games/draft-duel/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/games/governance-simulator/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/games/grid-racer/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/games/hex/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/games/hub/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/games/missions/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/games/offline/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/games/packet-route/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/games/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/games/proof-sprint/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/games/signal-hunt/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/games/systems-mastery/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/play/code-reading-lite/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/play/decision-tree-simulator/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/play/insight-puzzle/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/play/logic-grid-mini/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/play/memory-interference/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/play/memory-match/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/play/number-estimation/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/play/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/play/pattern-recall/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/play/reaction-time/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/play/risk-vs-reward/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/play/sequence-builder/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/play/stroop/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/play/time-pressure-math/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/play/tower-of-logic/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/play/visual-search/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/practice/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/pricing/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/privacy/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/sponsor/[token]/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/studios/architecture-diagram-studio/editor/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/studios/architecture-diagram-studio/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/studios/architecture-diagram-studio/templates/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/studios/architecture-diagram-studio/wizard/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/support/cancel/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/support/donate/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/support/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/support/permission/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/support/success/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/templates/[category]/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/templates/ai/[slug]/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/templates/ai/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/templates/cybersecurity/[slug]/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/templates/cybersecurity/incident-response/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/templates/cybersecurity/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/templates/cybersecurity/risk-assessment/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/templates/cybersecurity/threat-model/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/templates/data/[slug]/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/templates/data/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/templates/digitalisation/[slug]/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/templates/digitalisation/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/templates/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/templates/run/[templateSlug]/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/templates/software-architecture/[slug]/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/templates/software-architecture/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/terms/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/thinking-gym/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/updates/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/verify/certificate/[certificateHash]/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "[project]/src/app/verify/certificate/id/[certificateId]/page": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ]
+    "[project]/src/app/_not-found/page": [],
+    "[project]/src/app/account/certificates/page": [],
+    "[project]/src/app/account/credits/page": [],
+    "[project]/src/app/account/credits/success/page": [],
+    "[project]/src/app/account/history/page": [],
+    "[project]/src/app/account/settings/credits/page": [],
+    "[project]/src/app/account/settings/studios/page": [],
+    "[project]/src/app/account/usage/page": [],
+    "[project]/src/app/admin/access-denied/page": [],
+    "[project]/src/app/admin/architecture-diagrams/page": [],
+    "[project]/src/app/admin/billing/credits/[id]/page": [],
+    "[project]/src/app/admin/billing/credits/page": [],
+    "[project]/src/app/admin/billing/page": [],
+    "[project]/src/app/admin/billing/stripe/page": [],
+    "[project]/src/app/admin/billing/usage/[id]/page": [],
+    "[project]/src/app/admin/billing/usage/page": [],
+    "[project]/src/app/admin/feedback/page": [],
+    "[project]/src/app/admin/mentor/page": [],
+    "[project]/src/app/admin/page": [],
+    "[project]/src/app/admin/support/[id]/page": [],
+    "[project]/src/app/admin/support/page": [],
+    "[project]/src/app/admin/system/page": [],
+    "[project]/src/app/admin/template-downloads/page": [],
+    "[project]/src/app/admin/template-permissions/page": [],
+    "[project]/src/app/admin/users/[id]/page": [],
+    "[project]/src/app/admin/users/page": [],
+    "[project]/src/app/compute/demo/page": [],
+    "[project]/src/app/compute/page": [],
+    "[project]/src/app/cpd/apply/page": [],
+    "[project]/src/app/cpd/quality/page": [],
+    "[project]/src/app/cpd/record/page": [],
+    "[project]/src/app/dashboards/[category]/[tool]/page": [],
+    "[project]/src/app/dashboards/ai/page": [],
+    "[project]/src/app/dashboards/architecture/page": [],
+    "[project]/src/app/dashboards/cybersecurity/page": [],
+    "[project]/src/app/dashboards/digitalisation/page": [],
+    "[project]/src/app/employers/dashboard/page": [],
+    "[project]/src/app/feedback/page": [],
+    "[project]/src/app/games/[slug]/page": [],
+    "[project]/src/app/games/allocation-architect/page": [],
+    "[project]/src/app/games/daily-logic-gauntlet/page": [],
+    "[project]/src/app/games/draft-duel/page": [],
+    "[project]/src/app/games/governance-simulator/page": [],
+    "[project]/src/app/games/grid-racer/page": [],
+    "[project]/src/app/games/hex/page": [],
+    "[project]/src/app/games/hub/page": [],
+    "[project]/src/app/games/missions/page": [],
+    "[project]/src/app/games/offline/page": [],
+    "[project]/src/app/games/packet-route/page": [],
+    "[project]/src/app/games/page": [],
+    "[project]/src/app/games/proof-sprint/page": [],
+    "[project]/src/app/games/signal-hunt/page": [],
+    "[project]/src/app/games/systems-mastery/page": [],
+    "[project]/src/app/play/code-reading-lite/page": [],
+    "[project]/src/app/play/decision-tree-simulator/page": [],
+    "[project]/src/app/play/insight-puzzle/page": [],
+    "[project]/src/app/play/logic-grid-mini/page": [],
+    "[project]/src/app/play/memory-interference/page": [],
+    "[project]/src/app/play/memory-match/page": [],
+    "[project]/src/app/play/number-estimation/page": [],
+    "[project]/src/app/play/page": [],
+    "[project]/src/app/play/pattern-recall/page": [],
+    "[project]/src/app/play/reaction-time/page": [],
+    "[project]/src/app/play/risk-vs-reward/page": [],
+    "[project]/src/app/play/sequence-builder/page": [],
+    "[project]/src/app/play/stroop/page": [],
+    "[project]/src/app/play/time-pressure-math/page": [],
+    "[project]/src/app/play/tower-of-logic/page": [],
+    "[project]/src/app/play/visual-search/page": [],
+    "[project]/src/app/practice/page": [],
+    "[project]/src/app/pricing/page": [],
+    "[project]/src/app/privacy/page": [],
+    "[project]/src/app/sponsor/[token]/page": [],
+    "[project]/src/app/studios/architecture-diagram-studio/editor/page": [],
+    "[project]/src/app/studios/architecture-diagram-studio/page": [],
+    "[project]/src/app/studios/architecture-diagram-studio/templates/page": [],
+    "[project]/src/app/studios/architecture-diagram-studio/wizard/page": [],
+    "[project]/src/app/support/cancel/page": [],
+    "[project]/src/app/support/donate/page": [],
+    "[project]/src/app/support/page": [],
+    "[project]/src/app/support/permission/page": [],
+    "[project]/src/app/support/success/page": [],
+    "[project]/src/app/templates/[category]/page": [],
+    "[project]/src/app/templates/ai/[slug]/page": [],
+    "[project]/src/app/templates/ai/page": [],
+    "[project]/src/app/templates/cybersecurity/[slug]/page": [],
+    "[project]/src/app/templates/cybersecurity/incident-response/page": [],
+    "[project]/src/app/templates/cybersecurity/page": [],
+    "[project]/src/app/templates/cybersecurity/risk-assessment/page": [],
+    "[project]/src/app/templates/cybersecurity/threat-model/page": [],
+    "[project]/src/app/templates/data/[slug]/page": [],
+    "[project]/src/app/templates/data/page": [],
+    "[project]/src/app/templates/digitalisation/[slug]/page": [],
+    "[project]/src/app/templates/digitalisation/page": [],
+    "[project]/src/app/templates/page": [],
+    "[project]/src/app/templates/run/[templateSlug]/page": [],
+    "[project]/src/app/templates/software-architecture/[slug]/page": [],
+    "[project]/src/app/templates/software-architecture/page": [],
+    "[project]/src/app/terms/page": [],
+    "[project]/src/app/thinking-gym/page": [],
+    "[project]/src/app/updates/page": [],
+    "[project]/src/app/verify/certificate/[certificateHash]/page": [],
+    "[project]/src/app/verify/certificate/id/[certificateId]/page": []
   },
-  "appUsingSizeAdjust": true,
+  "appUsingSizeAdjust": false,
   "pages": {
-    "/_app": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "/ai/beginner": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "/cybersecurity/advanced": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "/cybersecurity/beginner": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ],
-    "/cybersecurity/intermediate": [
-      "static/media/0c89a48fa5027cee-s.p.4564287c.woff2",
-      "static/media/a343f882a40d2cc9-s.p.71e1367e.woff2",
-      "static/media/051742360c26797e-s.p.102b7f24.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
-    ]
+    "/_app": [],
+    "/ai/beginner": [],
+    "/cybersecurity/advanced": [],
+    "/cybersecurity/beginner": [],
+    "/cybersecurity/intermediate": []
   },
-  "pagesUsingSizeAdjust": true
+  "pagesUsingSizeAdjust": false
 }

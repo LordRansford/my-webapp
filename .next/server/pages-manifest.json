@@ -81,6 +81,7 @@
   "/cyber-studios/sections/ThreatLandscapeLab": "pages/cyber-studios/sections/ThreatLandscapeLab.html",
   "/cybersecurity": "pages/cybersecurity.js",
   "/cybersecurity/advanced": "pages/cybersecurity/advanced.js",
+  "/cybersecurity/assessment/[level]": "pages/cybersecurity/assessment/[level].js",
   "/cybersecurity/beginner": "pages/cybersecurity/beginner.js",
   "/cybersecurity/course": "pages/cybersecurity/course.js",
   "/cybersecurity/dashboards": "pages/cybersecurity/dashboards.html",

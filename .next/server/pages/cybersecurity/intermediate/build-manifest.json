@@ -6,7 +6,7 @@
   "rootMainFiles": [],
   "pages": {
     "/cybersecurity/intermediate": [
-      "static/chunks/5c26ff647d5a0b7d.js",
+      "static/chunks/14386ede43565a58.js",
       "static/chunks/84a87402af429cd2.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/0f7c72f45123340f.js",
@@ -17,9 +17,9 @@
       "static/chunks/f0f43ebb724b8b11.js",
       "static/chunks/4f94aa6f21967ac8.js",
       "static/chunks/fe1de81744e54f04.js",
-      "static/chunks/972bb770631d4a93.js",
-      "static/chunks/e66897640c46bc9d.css",
-      "static/chunks/turbopack-78519c5e38263d69.js"
+      "static/chunks/330132623d124146.js",
+      "static/chunks/a6f6a374fbd656c4.css",
+      "static/chunks/turbopack-ed35b473f202410f.js"
     ]
   },
   "ampFirstPages": []

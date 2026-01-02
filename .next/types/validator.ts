@@ -1040,6 +1040,33 @@ type ApiRouteConfig = {
   type __Unused = __Check
 }
 
+// Validate ../../src/app/api/assessments/start/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/assessments/start">> = Specific
+  const handler = {} as typeof import("../../src/app/api/assessments/start/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../src/app/api/assessments/status/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/assessments/status">> = Specific
+  const handler = {} as typeof import("../../src/app/api/assessments/status/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../src/app/api/assessments/submit/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/assessments/submit">> = Specific
+  const handler = {} as typeof import("../../src/app/api/assessments/submit/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../src/app/api/auth/[...nextauth]/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/auth/[...nextauth]">> = Specific
@@ -2106,6 +2133,15 @@ type ApiRouteConfig = {
 {
   type __IsExpected<Specific extends PagesPageConfig> = Specific
   const handler = {} as typeof import("../../src/pages/cyber-studios/sections/ThreatLandscapeLab.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../src/pages/cybersecurity/assessment/[level].tsx
+{
+  type __IsExpected<Specific extends PagesPageConfig> = Specific
+  const handler = {} as typeof import("../../src/pages/cybersecurity/assessment/[level].js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check
