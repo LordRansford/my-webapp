@@ -22,6 +22,13 @@ export default defineConfig({
     url: "http://localhost:3000",
     reuseExistingServer: false,
     timeout: 180_000,
+    env: {
+      ...process.env,
+      // NextAuth is required by SessionProvider during runtime, even for anonymous browsing.
+      // Provide safe defaults for CI to prevent hard failures from missing env vars.
+      NEXTAUTH_URL: "http://localhost:3000",
+      NEXTAUTH_SECRET: "playwright-ci-not-a-secret",
+    },
   },
   projects: [
     {
