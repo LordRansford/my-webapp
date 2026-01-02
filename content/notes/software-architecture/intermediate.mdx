@@ -27,7 +27,7 @@ import DecisionRecordBuilder from "@/components/notes/tools/architecture/interme
 
 # Software Architecture Notes - Intermediate
 
-<LevelProgressBar courseId="software-architecture" levelId="applied" sectionIds={appliedSectionIds} />
+<LevelProgressBar courseId="software-architecture" levelId="applied" sectionIds={softwareArchitectureSectionManifest.intermediate} />
 
 <CPDTracker courseId="software-architecture" levelId="applied" estimatedHours={12} />
 
@@ -43,16 +43,17 @@ import DecisionRecordBuilder from "@/components/notes/tools/architecture/interme
   From understanding to design
 </SectionHeader>
 
-Designing architecture means:
-- Turning requirements into structure
-- Translating quality attributes into constraints
-- Making decisions with incomplete information
-- Accepting trade-offs explicitly
+Designing architecture means
+
+1. Turning requirements into structure
+2. Translating quality attributes into constraints
+3. Making decisions with incomplete information
+4. Accepting trade offs explicitly
 
 Architecture design is not about finding the perfect answer. It is about finding a **good enough structure** that serves its purpose and can evolve.
 
 <Callout variant="concept">
-Architecture design is the act of making informed trade-offs under uncertainty.
+Architecture design is the act of making informed trade offs under uncertainty.
 </Callout>
 
 ---
@@ -92,10 +93,11 @@ Choosing a style is architectural because it influences how the system evolves, 
 
 Decomposition is the process of breaking a system into parts. Good decomposition is the difference between a system that scales and one that collapses under its own weight.
 
-Focus on:
-- Grouping related responsibilities
-- Minimising unnecessary coupling
-- Aligning components with real-world concepts
+Focus on
+
+1. Grouping related responsibilities
+2. Minimising unnecessary coupling
+3. Aligning components with real world concepts
 
 Poor decomposition often comes from technical convenience, copying existing systems blindly, or organisational pressure instead of design reasoning.
 
@@ -103,7 +105,7 @@ Poor decomposition often comes from technical convenience, copying existing syst
 Decomposition should follow responsibility, not technology.
 </Callout>
 
-A quick test: if a component has more than one reason to change, its boundary is probably wrong.
+A quick test. If a component has more than one reason to change, its boundary is probably wrong.
 
 <ToolCard
   title="&#128200; System Decomposition Lab"
@@ -165,10 +167,11 @@ Undocumented decisions become hidden assumptions.
 
 Architecture must be communicated clearly. One diagram is never enough.
 
-Different stakeholders need different views:
-- Business stakeholders need context
-- Developers need structure
-- Operators need deployment and runtime views
+Different stakeholders need different views
+
+1. Business stakeholders need context
+2. Developers need structure
+3. Operators need deployment and runtime views
 
 Effective documentation uses multiple views rather than one complex diagram. Show only what the reader needs, hide unnecessary detail, and make assumptions explicit.
 

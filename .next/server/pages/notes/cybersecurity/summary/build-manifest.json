@@ -6,7 +6,7 @@
   "rootMainFiles": [],
   "pages": {
     "/notes/cybersecurity/summary": [
-      "static/chunks/363413500ac072b1.js",
+      "static/chunks/bc4172a74511cbe2.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/f0f43ebb724b8b11.js",
       "static/chunks/0f7c72f45123340f.js",
@@ -17,7 +17,7 @@
       "static/chunks/48c11802c3f193fa.js",
       "static/chunks/999d695b5baa4b77.js",
       "static/chunks/f63a3c7a52d599f5.js",
-      "static/chunks/turbopack-f32908e6ac05b172.js"
+      "static/chunks/turbopack-48b26bec6adaf19a.js"
     ]
   },
   "ampFirstPages": []

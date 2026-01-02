@@ -65,6 +65,19 @@ const LEGACY_SECTION_ALIASES: Partial<
       // Old manifest had a placeholder capstone ID, keep it as an alias.
       "foundations-f8-foundations-capstone": ["foundations-checkpoint-capstone"],
     },
+    applied: {
+      "applied-a1-threat-modelling-as-design": ["applied-threat-modelling"],
+      "applied-a2-identity-and-access-control": ["applied-auth-sessions-access"],
+      "applied-a6-logging-and-detection-basics": ["applied-logging-and-risk"],
+    },
+    practice: {
+      "practice-p0-crypto-in-practice": ["advanced-crypto-practice"],
+      "practice-p1-secure-architecture-zero-trust": ["advanced-secure-architecture"],
+      "practice-p2-detection-and-incident-response": ["advanced-detection-response"],
+      "practice-p3-supply-chain-risk": ["advanced-supply-chain-risk"],
+      "practice-p4-adversarial-tradeoffs": ["advanced-adversarial-tradeoffs"],
+      "practice-p5-governance-and-professional-practice": ["advanced-governance-career"],
+    },
   },
 };
 

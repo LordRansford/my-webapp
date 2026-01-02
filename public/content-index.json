@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-02T20:08:41.692Z",
+  "generatedAt": "2026-01-02T20:32:00.606Z",
   "pages": [
     {
       "route": "/courses/_cpd-checklist",
@@ -2860,7 +2860,7 @@
           "depth": 2,
           "title": "Applied cryptography and protocol reasoning",
           "anchor": "applied-cryptography-and-protocol-reasoning",
-          "excerpt": "Cryptography in practice"
+          "excerpt": "Module P0. Crypto in practice"
         },
         {
           "depth": 2,
@@ -2872,13 +2872,13 @@
           "depth": 2,
           "title": "Identity, trust, and zero trust architecture",
           "anchor": "identity-trust-and-zero-trust-architecture",
-          "excerpt": "Secure architecture and zero trust thinking"
+          "excerpt": "Module P1. Secure architecture and zero trust"
         },
         {
           "depth": 2,
           "title": "Detection, response, and operational security",
           "anchor": "detection-response-and-operational-security",
-          "excerpt": "Detection, response and threat hunting"
+          "excerpt": "Module P2. Detection and incident response"
         },
         {
           "depth": 2,
@@ -3965,13 +3965,13 @@
           "depth": 2,
           "title": "What you should now understand",
           "anchor": "what-you-should-now-understand",
-          "excerpt": "If you have worked through the earlier pages, you should have a coherent mental model of architecture: purpose, structure, boundaries, quality attributes, trade-offs, organisational impact, resilience, and governance."
+          "excerpt": "If you have worked through the earlier pages, you should have a coherent mental model of architecture. Purpose, structure, boundaries, quality attributes, trade offs, organisational impact, resilience, and governance."
         },
         {
           "depth": 2,
           "title": "Architecture as thinking",
           "anchor": "architecture-as-thinking",
-          "excerpt": "Architecture is not a deliverable. It is a way of thinking: slowing down, asking what will change, who is affected, what assumptions are hidden, and how failure will occur."
+          "excerpt": "Architecture is not a deliverable. It is a way of thinking. Slowing down, asking what will change, who is affected, what assumptions are hidden, and how failure will occur."
         },
         {
           "depth": 2,

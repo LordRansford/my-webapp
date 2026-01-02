@@ -206,7 +206,7 @@ export default function NotesLayout(props) {
             ) : null}
             {meta.description ? <p className="mt-2 text-base text-gray-800">{meta.description}</p> : null}
             <div className="mt-3 flex flex-wrap gap-2">
-              {showReadAloud ? <ReadAloudControls selector="main article" label="Listen" /> : null}
+              {showReadAloud ? <ReadAloudControls selector="main article" label="Listen" activeHeadingId={activeId} /> : null}
             </div>
             <div className="mt-4">
               {resolvedShowStepper ? (
