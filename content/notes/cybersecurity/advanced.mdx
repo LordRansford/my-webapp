@@ -40,6 +40,8 @@ import { cyberSections } from "@/lib/cyberSections"
 
 ---
 
+## Applied cryptography and protocol reasoning
+
 <SectionHeader variant="content" emoji="🔐" id="crypto-practice">
   Cryptography in practice
 </SectionHeader>
@@ -124,6 +126,12 @@ One more leadership lens: weak crypto choices are often a symptom of rushed deli
 
 ---
 
+## Security architecture and system design thinking
+
+This section is about turning risk into design decisions you can defend. In practice, architecture is where you decide what must be true for your system to be safe, and what you will do when those assumptions fail.
+
+## Identity, trust, and zero trust architecture
+
 <SectionHeader variant="content" emoji="🏗️" id="secure-architecture">
   Secure architecture and zero trust thinking
 </SectionHeader>
@@ -204,6 +212,8 @@ After you run it, the lead move is to turn "nice to have" into "decided". Write 
 
 ---
 
+## Detection, response, and operational security
+
 <SectionHeader variant="content" emoji="🔍" id="detection-response">
   Detection, response and threat hunting
 </SectionHeader>
@@ -279,6 +289,48 @@ After you run it, document the judgement. Which threshold do you choose, why, an
 />
 
 ---
+
+## Supply chain and systemic risk
+
+Supply chain risk is the uncomfortable truth that you inherit other people’s security decisions. Libraries, build tools, CI runners, contractors, and SaaS vendors all become part of your system. The attacker’s trade off is simple: compromise one upstream dependency and reuse it against many downstream targets.
+
+In practice, supply chain work looks like ownership and verification: who can publish packages, who can approve build changes, what is signed, what is pinned, and how you detect tampering. It is also about blast radius: least privilege tokens, isolated environments, and the ability to revoke quickly.
+
+<QuizBlock
+  id="advanced-supply-chain-quiz"
+  courseId="cybersecurity"
+  levelId="practice"
+  sectionId="advanced-supply-chain-risk"
+  title="Quick check: supply chain and systemic risk"
+  questions={[
+    { q: "What is supply chain risk in security", a: "Risk introduced through third parties like dependencies, build tools, vendors, and services you rely on." },
+    { q: "Why are software dependencies attractive targets", a: "One compromise can impact many downstream projects." },
+    { q: "Name one practical supply chain control", a: "Pinning versions, verifying signatures, or restricting who can publish and approve changes." },
+    { q: "What is a common blast radius reducer for CI", a: "Least-privilege tokens and isolating build environments." },
+  ]}
+/>
+
+---
+
+## Adversarial trade offs and failure analysis
+
+Adversaries optimise for cost and probability of success, not elegance. Defence is the same: you rarely get perfect coverage, so you choose controls that change attacker economics and give you time to respond.
+
+Failure analysis is how you stop repeating the same incident with new branding. Look for the broken assumption, the missing guardrail, and the point where a human had to make a call without enough information.
+
+<QuizBlock
+  id="advanced-adversarial-tradeoffs-quiz"
+  courseId="cybersecurity"
+  levelId="practice"
+  sectionId="advanced-adversarial-tradeoffs"
+  title="Quick check: adversarial trade offs and failure analysis"
+  questions={[
+    { q: "What do attackers typically optimise for", a: "Low cost and high probability of success, not perfect technique." },
+    { q: "What does it mean to change attacker economics", a: "Make attacks more expensive, noisy, or slow so they are less likely to succeed." },
+    { q: "What is the first question in failure analysis", a: "Which assumption failed and why was the system allowed to rely on it?" },
+    { q: "What is one good post-incident outcome", a: "A concrete system change that prevents or detects the same class of failure next time." },
+  ]}
+/>
 
 <SectionHeader variant="content" emoji="📋" id="governance-frameworks">
   Governance, frameworks and your career

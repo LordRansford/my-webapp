@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-02T13:37:28.004Z",
+  "generatedAt": "2026-01-02T13:57:45.289Z",
   "pages": [
     {
       "route": "/courses/_cpd-checklist",
@@ -2708,7 +2708,32 @@
       "route": "/ai/beginner",
       "title": "AI Foundations",
       "sourcePath": "/content/notes/ai/beginner.mdx",
-      "sections": []
+      "sections": [
+        {
+          "depth": 2,
+          "title": "What AI is and why it matters now",
+          "anchor": "what-ai-is-and-why-it-matters-now",
+          "excerpt": "What AI is and why it matters now"
+        },
+        {
+          "depth": 2,
+          "title": "Data and representation",
+          "anchor": "data-and-representation",
+          "excerpt": "Data and representation"
+        },
+        {
+          "depth": 2,
+          "title": "Supervised and unsupervised learning",
+          "anchor": "supervised-and-unsupervised-learning",
+          "excerpt": "Supervised and unsupervised learning"
+        },
+        {
+          "depth": 2,
+          "title": "Responsible AI basics and limitations",
+          "anchor": "responsible-ai-basics-and-limitations",
+          "excerpt": "Responsible AI basics and limitations"
+        }
+      ]
     },
     {
       "route": "/ai/intermediate",
@@ -2831,6 +2856,42 @@
       "title": "Cybersecurity Practice and Strategy",
       "sourcePath": "/content/notes/cybersecurity/advanced.mdx",
       "sections": [
+        {
+          "depth": 2,
+          "title": "Applied cryptography and protocol reasoning",
+          "anchor": "applied-cryptography-and-protocol-reasoning",
+          "excerpt": "Cryptography in practice"
+        },
+        {
+          "depth": 2,
+          "title": "Security architecture and system design thinking",
+          "anchor": "security-architecture-and-system-design-thinking",
+          "excerpt": "This section is about turning risk into design decisions you can defend. In practice, architecture is where you decide what must be true for your system to be safe, and what you will do when those assumptions fail."
+        },
+        {
+          "depth": 2,
+          "title": "Identity, trust, and zero trust architecture",
+          "anchor": "identity-trust-and-zero-trust-architecture",
+          "excerpt": "Secure architecture and zero trust thinking"
+        },
+        {
+          "depth": 2,
+          "title": "Detection, response, and operational security",
+          "anchor": "detection-response-and-operational-security",
+          "excerpt": "Detection, response and threat hunting"
+        },
+        {
+          "depth": 2,
+          "title": "Supply chain and systemic risk",
+          "anchor": "supply-chain-and-systemic-risk",
+          "excerpt": "Supply chain risk is the uncomfortable truth that you inherit other people’s security decisions. Libraries, build tools, CI runners, contractors, and SaaS vendors all become part of your system. The attacker’s trade off is simple: compromise one upstream dependency and reuse it against many downstream targets."
+        },
+        {
+          "depth": 2,
+          "title": "Adversarial trade offs and failure analysis",
+          "anchor": "adversarial-trade-offs-and-failure-analysis",
+          "excerpt": "Adversaries optimise for cost and probability of success, not elegance. Defence is the same: you rarely get perfect coverage, so you choose controls that change attacker economics and give you time to respond."
+        },
         {
           "depth": 3,
           "title": "Security as an organisational capability",

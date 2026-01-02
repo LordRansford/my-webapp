@@ -45,7 +45,7 @@ import IncidentTimelineTool from "@/components/notes/tools/ai/advanced/IncidentT
 ---
 
 <SectionHeader variant="content" emoji="🔀" id="transformers-and-attention">
-  Transformers and attention as information routing
+  Transformers and attention as a system
 </SectionHeader>
 
 <SectionProgressToggle courseId="ai" levelId="practice-strategy" sectionId="ai-advanced-transformers-and-agents" />
@@ -125,7 +125,7 @@ LLMs often miscalibrate. They sound certain on thin evidence. They hallucinate w
 ---
 
 <SectionHeader variant="content" emoji="🔗" id="retrieval-grounding">
-  Retrieval, grounding, and embeddings
+  Embeddings, retrieval, and grounding
 </SectionHeader>
 
 <Callout variant="concept">
@@ -188,6 +188,56 @@ Example: An automated cleaner deleting resources faster after each “success”
 
 ---
 
+<SectionHeader variant="content" emoji="🌫️" id="diffusion-generative">
+  Diffusion models and generative systems
+</SectionHeader>
+
+<Callout variant="concept">
+Diffusion is iterative denoising. The “magic” is a controlled reverse process guided by learned structure.
+</Callout>
+
+Diffusion-style generative systems are a different family from transformers, but the operational lesson is similar: high-quality outputs can still be unsafe, biased, or misused. The system questions are not “is it impressive”, but “what can it generate”, “who can trigger it”, and “what evidence do we keep when it is abused”.
+
+In a real system, diffusion models show up inside product features: image generation, background removal, style transfer, and synthetic data for prototyping. The technical details matter less than the boundaries. Decide what inputs are allowed, what outputs are disallowed, and how you will detect attempts to route around restrictions. If you cannot describe the abuse cases, you cannot write the guardrails.
+
+If you are deploying generation in a regulated or safety-critical setting, treat it as a content pipeline: provenance, review, and auditability. “We do not store prompts” sounds privacy-friendly, but it can also erase the evidence you need to investigate misuse. A good standard is: store the minimum evidence that lets you explain and fix failures, and delete it on a clear schedule.
+
+<QuizBlock title="Diffusion and generation checks">
+  {[
+    { q: "What is the intuition behind diffusion models", a: "They learn to remove noise step by step, generating data through an iterative reverse process." },
+    { q: "Why can generative quality still be risky", a: "High fidelity outputs can enable misuse, replicate bias, or create convincing false content." },
+    { q: "Name one operational guardrail for generative systems", a: "Access control, watermarking, logging, and abuse monitoring." },
+    { q: "What is one abuse scenario to plan for", a: "Generating impersonation content, disallowed imagery, or misleading synthetic documents." },
+  ]}
+</QuizBlock>
+
+---
+
+<SectionHeader variant="content" emoji="🧯" id="system-failure-modes">
+  System level failure modes
+</SectionHeader>
+
+<Callout variant="concept">
+Most real failures are system failures: incentives, missing ownership, weak monitoring, and unclear stop conditions.
+</Callout>
+
+System failures are rarely “the model was wrong”. They are “the model was wrong and nothing caught it”. That can be missing eval gates, missing incident drills, weak access controls for tools, or a lack of rollback plans. The reliability question is always: what happens when a confident error hits production traffic.
+
+Treat failures as feedback about the whole loop: data collection, training, evaluation, deployment, monitoring, and response. If the system cannot detect drift, you are flying blind. If the system cannot stop safely, you are betting the business on perfect predictions. If ownership is unclear, every incident becomes slower because nobody is empowered to act.
+
+A simple “gold standard” test is a rehearsal: pick a plausible failure (bad retrieval result, tool misuse, prompt injection, or degraded performance), then walk through detection and containment. If the exercise ends with “we would notice via a customer complaint”, you have found a gap worth fixing before production.
+
+<QuizBlock title="System failure mode checks">
+  {[
+    { q: "What makes a failure a system-level failure", a: "The surrounding process and controls did not catch or contain the error." },
+    { q: "Why do incentives matter", a: "They determine whether teams prioritise safety work or ship quickly and paper over risk." },
+    { q: "What is a practical containment control", a: "Rate limits, approval gates, scoped tool permissions, and safe defaults." },
+    { q: "What is one reliable rollback strategy", a: "Feature flags, staged rollout, and the ability to revert or disable quickly." },
+  ]}
+</QuizBlock>
+
+---
+
 <SectionHeader variant="content" emoji="📊" id="detection-operations">
   Detection and operations at scale
 </SectionHeader>
@@ -241,7 +291,7 @@ Modern AI stacks depend on packages, build systems, identity providers, and host
 ---
 
 <SectionHeader variant="content" emoji="⚖️" id="governance-safety">
-  Governance, safety, and limits
+  Governance, safety, and regulation
 </SectionHeader>
 
 <SectionProgressToggle courseId="ai" levelId="practice-strategy" sectionId="ai-advanced-governance-and-strategy" />
