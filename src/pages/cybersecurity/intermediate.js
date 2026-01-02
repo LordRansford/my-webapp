@@ -1,7 +1,6 @@
 import dynamic from "next/dynamic";
-import Link from "next/link";
 import { useMemo } from "react";
-import NotesLayout from "@/components/notes/Layout";
+import CourseLessonTemplate from "@/components/course/CourseLessonTemplate";
 import { MDXRenderer } from "@/components/notes/MDXRenderer";
 import { loadNote } from "@/lib/content/loadNote";
 import ToolCard from "@/components/learn/ToolCard";
@@ -75,7 +74,7 @@ export default function Page({ source, headings }) {
   );
 
   return (
-    <NotesLayout
+    <CourseLessonTemplate
       meta={{
         title: "Applied Cybersecurity",
         description: "How systems fail and how we defend them",
@@ -86,17 +85,14 @@ export default function Page({ source, headings }) {
       }}
       activeLevelId="applied"
       headings={headings}
+      courseHref="/cybersecurity"
+      courseLabel="Cybersecurity"
+      dashboardHref="/dashboards/cybersecurity"
+      labsHref="/tools/cybersecurity"
+      studiosHref="/cyber-studios"
     >
-      <div className="mb-4">
-        <Link
-          href="/cybersecurity"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-900 focus:outline-none focus:ring focus:ring-blue-200"
-        >
-          Back to Cybersecurity overview
-        </Link>
-      </div>
       <MDXRenderer source={source} components={mdxComponents} />
-    </NotesLayout>
+    </CourseLessonTemplate>
   );
 }
 
