@@ -39,6 +39,49 @@ const emptyState = (): CPDState => ({
 
 const isBrowser = typeof window !== "undefined";
 
+/**
+ * Legacy section IDs exist in older content. We keep them as aliases so:
+ * - existing learner progress still counts after an ID migration
+ * - content can migrate to canonical IDs without breaking progress bars
+ *
+ * IMPORTANT:
+ * - Canonical IDs should be stable and live in docs/courses/CYBERSECURITY_MASTER_SYLLABUS.md
+ * - Aliases should only be added for real historical IDs used in production content.
+ */
+const LEGACY_SECTION_ALIASES: Partial<
+  Record<CPDTrackId, Partial<Record<string, Partial<Record<string, string[]>>>>>
+> = {
+  cyber: {
+    foundations: {
+      // Old "Foundations overview" toggle + quiz lived under this ID.
+      // Canonical syllabus splits this into a dedicated Module F0.
+      "foundations-f0-what-security-is": ["foundations-why-cyber-matters"],
+    },
+  },
+};
+
+export function getSectionAliases(trackId: CPDTrackId, levelId: string, sectionId: string): string[] {
+  const canonical = String(sectionId || "").trim();
+  if (!canonical) return [];
+  const aliases = LEGACY_SECTION_ALIASES?.[trackId]?.[levelId]?.[canonical] ?? [];
+  const all = [canonical, ...aliases].map((s) => String(s).trim()).filter(Boolean);
+  return Array.from(new Set(all));
+}
+
+export function isSectionCompleted(state: CPDState, trackId: CPDTrackId, levelId: string, sectionId: string): boolean {
+  const ids = getSectionAliases(trackId, levelId, sectionId);
+  if (ids.length === 0) return false;
+  return ids.some((id) =>
+    state.sections.some(
+      (section) =>
+        section.trackId === trackId &&
+        section.levelId === levelId &&
+        section.sectionId === id &&
+        section.completed
+    )
+  );
+}
+
 const normaliseSection = (input: any): CPDSectionState | null => {
   if (!input || typeof input !== "object") return null;
   const { trackId, levelId, sectionId, completed, minutes, lastUpdated } = input;
@@ -153,13 +196,7 @@ export function getCompletionForLevel(
   sectionIds: string[] = []
 ) {
   const completedCount = sectionIds.filter((sectionId) =>
-    state.sections.some(
-      (section) =>
-        section.trackId === trackId &&
-        section.levelId === levelId &&
-        section.sectionId === sectionId &&
-        section.completed
-    )
+    isSectionCompleted(state, trackId, levelId, sectionId)
   ).length;
   const totalCount = sectionIds.length;
   const percent = totalCount === 0 ? 0 : Math.round((completedCount / totalCount) * 100);

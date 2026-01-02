@@ -6,7 +6,7 @@
   "rootMainFiles": [],
   "pages": {
     "/signin-signup": [
-      "static/chunks/a48ca21e41eb8a73.js",
+      "static/chunks/9d85bdae24b0d7d6.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/2fcd2aa21d8c3e53.js",
       "static/chunks/d11e15d588813b4c.js",
@@ -16,7 +16,7 @@
       "static/chunks/972bb770631d4a93.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/999d695b5baa4b77.js",
-      "static/chunks/turbopack-8de8fa724a5e2b4c.js"
+      "static/chunks/turbopack-85c26c3b95d0a50f.js"
     ]
   },
   "ampFirstPages": []

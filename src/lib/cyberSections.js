@@ -1,12 +1,13 @@
 export const cyberSections = {
   foundations: [
-    "foundations-welcome",
-    "foundations-why-cyber-matters",
+    // Canonical syllabus IDs (see docs/courses/CYBERSECURITY_MASTER_SYLLABUS.md)
+    "foundations-f0-what-security-is",
+    "foundations-f1-risk-and-outcomes",
+
+    // Existing Foundations sections (kept while we migrate the full page)
     "foundations-data-and-bits",
     "foundations-networks-and-packets",
-    "foundations-threats-and-defenses",
-    "foundations-authentication-privacy",
-    "foundations-checkpoint-capstone",
+    "foundations-cia-and-simple-attacks",
   ],
   applied: [
     "applied-welcome-prerequisites",

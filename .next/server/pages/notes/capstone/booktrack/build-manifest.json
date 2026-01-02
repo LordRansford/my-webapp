@@ -6,7 +6,7 @@
   "rootMainFiles": [],
   "pages": {
     "/notes/capstone/booktrack": [
-      "static/chunks/9bad3550da591c90.js",
+      "static/chunks/3e61a6f76ca9c67a.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/2fcd2aa21d8c3e53.js",
       "static/chunks/f0f43ebb724b8b11.js",
@@ -16,7 +16,7 @@
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/d11e15d588813b4c.js",
       "static/chunks/999d695b5baa4b77.js",
-      "static/chunks/turbopack-1db15d4217d0d197.js"
+      "static/chunks/turbopack-ea5a5a79531c5590.js"
     ]
   },
   "ampFirstPages": []

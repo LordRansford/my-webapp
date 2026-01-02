@@ -1,6 +1,6 @@
 var R=require("../../../../chunks/[turbopack]_runtime.js")("server/app/api/stripe/create-checkout-session/route.js")
 R.c("server/chunks/[root-of-the-server]__06d1fac2._.js")
-R.c("server/chunks/[root-of-the-server]__f8167169._.js")
+R.c("server/chunks/[root-of-the-server]__4b47e1a3._.js")
 R.c("server/chunks/node_modules_next_dist_23bfe24c._.js")
 R.c("server/chunks/node_modules_6dc4a663._.js")
 R.c("server/chunks/node_modules_aa474d64._.js")

@@ -6,7 +6,7 @@
   "rootMainFiles": [],
   "pages": {
     "/cybersecurity/course": [
-      "static/chunks/cab90d0e6a9c7142.js",
+      "static/chunks/2aec31f49c77a357.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/2fcd2aa21d8c3e53.js",
       "static/chunks/48c11802c3f193fa.js",
@@ -16,7 +16,7 @@
       "static/chunks/972bb770631d4a93.js",
       "static/chunks/d11e15d588813b4c.js",
       "static/chunks/999d695b5baa4b77.js",
-      "static/chunks/turbopack-746cf2701fc4cdc5.js"
+      "static/chunks/turbopack-d32a56a292836558.js"
     ]
   },
   "ampFirstPages": []

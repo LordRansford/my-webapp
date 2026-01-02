@@ -37,23 +37,42 @@ import { cyberSections } from "@/lib/cyberSections"
 
 <CPDTracker courseId="cybersecurity" levelId="foundations" estimatedHours={15} />
 
-<SectionHeader variant="content" emoji="🛡️" id="foundations-overview">
-  Foundations overview
+<SectionHeader variant="content" emoji="🧭" id="foundations-f0-what-security-is">
+  Module F0: What cybersecurity is (and is not)
 </SectionHeader>
 
-<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-why-cyber-matters" />
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-f0-what-security-is" />
 
-Cybersecurity is about reducing real harm. It protects people, not just computers. It protects money, time, safety, privacy, and trust. When it goes wrong, it often looks ordinary at first. A bank transfer goes to the wrong place. A delivery address changes. A clinic cannot open a record. A small mistake becomes a big mess.
+Cybersecurity is the practice of reducing risk in **digital systems**. It is not magic. It is not perfection. It is a set of decisions and controls that make harm less likely, less severe, and easier to recover from when it happens.
 
-In plain language, my job in cyber is to stop normal mistakes from turning into expensive disasters. I am not trying to build an unbreakable fortress. I am trying to make the easy failures harder, make the hard failures visible, and make recovery faster.
+If you are a child, think of it like this. The internet is a busy city. Cybersecurity is how we:
+- lock doors that should be locked
+- check who is allowed in
+- notice when something looks wrong
+- have a plan for when mistakes happen
 
-Attackers succeed in the real world because most systems are normal systems. They are busy, messy, and connected. They have legacy tools, shared inboxes, rushed changes, and staff who are trying to get work done. The attacker does not need perfect skill. They need one good moment. They need one person to trust the wrong thing, or one system to accept an unsafe assumption.
+You will hear the word **cyber** used as shorthand. Historically it connects to **cybernetics**, the study of control and communication in animals and machines. That term comes from the Greek *kybernētēs*, meaning “steering” or “governor”. It is a good reminder. Security is about steering risk, not pretending risk does not exist.
 
-In organisations, this is why security work is mostly about <GlossaryTip term="controls">Controls are the practical checks and safeguards that reduce risk, like MFA, approvals, logging, backups, and patching.</GlossaryTip> and decision making. You will see it in finance processes, HR systems, supplier access, and the boring bits like password resets and account cleanup. The glamorous hacker story is not the most common story.
+### Four terms people mix up
 
-Here is a short story I have seen in some form more than once. A finance team gets an email that looks like a supplier. The invoice is correct. The tone is correct. The bank details are new. The team is under pressure. They pay. A week later the supplier calls to chase payment. Nobody was hacked in a dramatic way. It was a quiet identity failure plus weak process. The outcome was still real loss.
+Let’s define four common terms precisely, using simple language.
 
-Threats, vulnerabilities, and risk are not the same thing. A <GlossaryTip term="threat">A threat is something that could cause harm, like phishing, malware, or a dishonest insider.</GlossaryTip> is about what could happen. A <GlossaryTip term="vulnerability">A vulnerability is a weakness that makes a threat more likely to succeed, like reused passwords or missing patches.</GlossaryTip> is about what makes it easier. <GlossaryTip term="risk">Risk is likelihood and impact in your context. It is the decision about what you accept, what you reduce, and what you monitor.</GlossaryTip> A threat can exist with low risk if it cannot reach you. A vulnerability can exist with low risk if it has no meaningful impact. Context is the difference between a scary headline and a meaningful decision.
+- <GlossaryTip term="Vulnerability">A vulnerability is a weakness in a system that could be used to cause harm. Example: a login page that lets you try unlimited passwords.</GlossaryTip>
+- <GlossaryTip term="Exploit">An exploit is a method or technique that takes advantage of a vulnerability. Example: repeatedly guessing passwords until one works.</GlossaryTip>
+- <GlossaryTip term="Incident">An incident is a security event that needs attention. It might be harmless, or it might become serious. Example: suspicious logins from a new country.</GlossaryTip>
+- <GlossaryTip term="Breach">A breach is when security is broken and a real security objective is violated, such as private data being accessed or stolen.</GlossaryTip>
+
+Notice the difference:
+- A vulnerability can exist even if nobody uses it.
+- An exploit is about *how* the weakness is used.
+- An incident is about *what happened* and whether it needs response.
+- A breach is about *impact* (for example, confidentiality is broken).
+
+### What this course deliberately does not teach
+
+This course is defensive and ethical. It does not teach you to break into systems. It teaches you to understand risk, spot weak assumptions, and choose controls that protect people.
+
+Here is a short story that shows what “cyber” looks like in real life. A finance team gets an email that looks like a supplier. The invoice is correct. The tone is correct. The bank details are new. The team is under pressure. They pay. A week later the supplier calls to chase payment. Nobody was hacked in a dramatic way. It was an identity failure plus a weak process. The outcome was still real loss.
 
 <MermaidDiagram caption="Threat, vulnerability, and risk in context">
 {`flowchart TB
@@ -66,7 +85,7 @@ Threats, vulnerabilities, and risk are not the same thing. A <GlossaryTip term="
 
 Everyday example: if you leave your house key under a plant pot, the threat is someone trying doors, the vulnerability is the predictable hiding place, and the risk depends on your street, your neighbours, and what happens if someone gets inside.
 
-Common mistake: treating cyber as a list of bad things that might happen, instead of a set of assumptions you must test. Another common mistake is over focusing on rare, advanced attacks while ignoring easy ones that happen daily.
+Common mistake: treating cybersecurity as a list of scary words, instead of a habit of checking assumptions. Another common mistake is over focusing on rare, advanced attacks while ignoring the easy ones that happen daily.
 
 Why it matters: when you separate threat, vulnerability, and risk, you stop guessing. You can choose the control that reduces harm most, and you can explain that choice to a manager without waving your hands.
 
@@ -88,40 +107,42 @@ Cybersecurity is not only about stopping hackers. It is also about preventing ac
   id="risk-dial"
   title="Risk dial"
   subtitle="See how small choices change harm"
-  description="Move sliders for password strength, software updates, and monitoring to see how overall risk shifts."
+  description="Move the likelihood and impact sliders to see how overall risk shifts."
 >
   <RiskDial />
 </ToolCard>
 
 <QuizBlock
-  id="foundations-why-cyber-matters"
+  id="foundations-f0-what-security-is"
   courseId="cybersecurity"
   levelId="foundations"
-  sectionId="foundations-why-cyber-matters"
-  title="Why cyber matters"
+  sectionId="foundations-f0-what-security-is"
+  title="Quick check: what cybersecurity is"
   questions={[
-    { q: "Why is cybersecurity about people as well as systems", a: "People build, use and are affected by systems; protecting them means reducing real harm." },
-    { q: "What is the goal of Foundations", a: "Give simple mental models for data, movement and trust so later ideas feel grounded." },
-    { q: "Why are broken assumptions dangerous", a: "They hide risk until it is too late, even if the tools look correct." },
-    { q: "How does cybersecurity reduce harm", a: "By controlling who can see or change data and making failure visible and recoverable." },
-    { q: "What three questions sit underneath most controls", a: "Who should see it, who can change it, and how do we recover if something breaks." },
-    { q: "Why is perfect security unrealistic", a: "We need to balance safety with getting work done; the aim is to reduce avoidable harm." },
+    { q: "What is cybersecurity in one sentence", a: "Reducing risk in digital systems so harm is less likely, less severe, and easier to recover from." },
+    { q: "What is a vulnerability", a: "A weakness in a system that could be used to cause harm." },
+    { q: "What is an exploit", a: "A method or technique that takes advantage of a vulnerability." },
+    { q: "What is a security incident", a: "A security event that needs attention, even if it turns out harmless." },
+    { q: "What is a breach", a: "A failure where a security objective is violated, such as private data being accessed or stolen." },
+    { q: "Why is 'secure' contextual", a: "Because controls must balance risk with cost, usability, and time." },
   ]}
 />
 
 ### After this section you should be able to:
 
-- Explain what cybersecurity is protecting and why attackers often succeed
-- Explain the difference between threat, vulnerability, and risk in context
-- Explain what breaks when identity and process controls are treated as optional
+- Explain what cybersecurity is and what it is not
+- Use the terms vulnerability, exploit, incident and breach correctly
+- Explain why security is about trade offs and context
 
-<SectionHeader variant="content" emoji="⚠️" id="assets-threats-risk">
-  Assets, threats, and risk
+<SectionHeader variant="content" emoji="⚖️" id="foundations-f1-risk-and-outcomes">
+  Module F1: Risk and security outcomes
 </SectionHeader>
 
-<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-data-and-bits" />
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-f1-risk-and-outcomes" />
 
-An <GlossaryTip term="asset">An asset is anything you care about enough to protect, like data, systems, people, time, and trust.</GlossaryTip> It includes obvious things like customer records and laptops, but also things like staff time, reputation, and the ability to keep operating. If payroll fails on Friday, that is an availability problem. If a patient record is wrong, that is an integrity problem. If a private email leaks, that is a confidentiality problem.
+Security is risk management. That sounds like boring business language, but it is actually what makes security **real**. You start by being clear about what matters, what could go wrong, and what you will do about it.
+
+An <GlossaryTip term="Asset">An asset is anything you care about enough to protect, such as data, systems, people, money, time, and trust.</GlossaryTip> It includes obvious things like customer records and laptops, but also things like staff time, reputation, and the ability to keep operating. If payroll fails on Friday, that is an availability problem. If a patient record is wrong, that is an integrity problem. If a private email leaks, that is a confidentiality problem.
 
 Risk is contextual. The same control can be essential in one place and pointless in another. A strict password policy does not help if the real attack path is a shared admin account. A fancy monitoring tool does not help if nobody knows what to do when it alerts. Controls without context turn into theatre. They look reassuring and then fail at the worst time.
 
@@ -142,6 +163,24 @@ Why it matters: when you get the asset and context right, you can spend effort w
 - Explain why risk is contextual and what breaks when controls are applied blindly
 - Explain how assets, threats, and vulnerabilities connect to real decisions
 - Explain why Identify work comes before tool buying
+
+<QuizBlock
+  id="foundations-f1-risk-and-outcomes"
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-f1-risk-and-outcomes"
+  title="Quick check: risk and outcomes"
+  questions={[
+    { q: "What is risk", a: "Likelihood and impact in your context, after considering what could go wrong and what you will do about it." },
+    { q: "What is residual risk", a: "The risk that remains after you apply controls." },
+    { q: "Name three security outcomes people use", a: "Confidentiality, integrity, and availability (CIA)." },
+    { q: "What does confidentiality mean", a: "Only the right people or systems can see the information." },
+    { q: "What does integrity mean", a: "Information stays correct, and bad changes are prevented or detectable." },
+    { q: "What does availability mean", a: "Systems are usable when people need them." },
+    { q: "Why can a control become 'theatre'", a: "If it looks reassuring but does not reduce real risk in your situation." },
+    { q: "Why does context matter", a: "Because the same control can be essential in one place and pointless in another." },
+  ]}
+/>
 
 <SectionHeader variant="content" emoji="🔐" id="identity-access-trust">
   Identity, access, and trust

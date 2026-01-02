@@ -6,7 +6,7 @@
   "rootMainFiles": [],
   "pages": {
     "/notes/cybersecurity/practitioner/security_engineer": [
-      "static/chunks/1ac72591e73e2b45.js",
+      "static/chunks/527393d2fb07cab3.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/2fcd2aa21d8c3e53.js",
       "static/chunks/48c11802c3f193fa.js",
@@ -16,7 +16,7 @@
       "static/chunks/f0f43ebb724b8b11.js",
       "static/chunks/d11e15d588813b4c.js",
       "static/chunks/999d695b5baa4b77.js",
-      "static/chunks/turbopack-d8bd5e8a0026fd49.js"
+      "static/chunks/turbopack-73ebc2877dcd429d.js"
     ]
   },
   "ampFirstPages": []

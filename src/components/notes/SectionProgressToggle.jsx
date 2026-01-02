@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useCPD } from "@/hooks/useCPD";
-import { resolveTrackId } from "@/lib/cpd";
+import { getSectionAliases, resolveTrackId } from "@/lib/cpd";
 import SaveProgressPrompt from "@/components/auth/SaveProgressPrompt";
 import { useAnalytics } from "@/hooks/useAnalytics";
 
@@ -13,25 +13,23 @@ export default function SectionProgressToggle({ courseId, levelId, sectionId }) 
   const [hasAwarded, setHasAwarded] = useState(false);
   const [showSavePrompt, setShowSavePrompt] = useState(false);
 
-  const existingSection = useMemo(
-    () =>
-      state.sections.find(
-        (section) =>
-          section.trackId === trackId &&
-          section.levelId === levelId &&
-          section.sectionId === sectionId
-      ),
-    [state.sections, trackId, levelId, sectionId]
+  const aliasIds = useMemo(
+    () => getSectionAliases(trackId, levelId, sectionId),
+    [trackId, levelId, sectionId]
   );
 
-  const checked = useMemo(
-    () => Boolean(existingSection?.completed),
-    [existingSection]
-  );
+  const matchingSections = useMemo(() => {
+    if (!aliasIds.length) return [];
+    return state.sections.filter(
+      (s) => s.trackId === trackId && s.levelId === levelId && aliasIds.includes(s.sectionId)
+    );
+  }, [state.sections, trackId, levelId, aliasIds]);
+
+  const checked = useMemo(() => matchingSections.some((s) => Boolean(s.completed)), [matchingSections]);
 
   const hasCompletedBefore = useMemo(
-    () => Boolean(existingSection && (existingSection.completed || existingSection.minutes > 0)),
-    [existingSection]
+    () => matchingSections.some((s) => Boolean(s.completed) || (Number(s.minutes) || 0) > 0),
+    [matchingSections]
   );
 
   const onChange = () => {
@@ -50,6 +48,20 @@ export default function SectionProgressToggle({ courseId, levelId, sectionId }) 
       completed: !checked,
       minutesDelta: awardingMinutes ? 10 : 0,
     });
+
+    // Keep legacy aliases in sync so toggling behaves predictably for users
+    // who completed an older section ID before we introduced canonical IDs.
+    // We do not award minutes for alias sync writes.
+    for (const aliasId of aliasIds) {
+      if (aliasId === sectionId) continue;
+      updateSection({
+        trackId,
+        levelId,
+        sectionId: aliasId,
+        completed: !checked,
+        minutesDelta: 0,
+      });
+    }
 
     if (!checked) track({ type: "section_completed", trackId, levelId, sectionId });
     if (awardingMinutes) {

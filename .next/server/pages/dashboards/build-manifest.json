@@ -6,7 +6,7 @@
   "rootMainFiles": [],
   "pages": {
     "/dashboards": [
-      "static/chunks/45e3e35c7c0ff58b.js",
+      "static/chunks/7b317e316d102ee6.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/2fcd2aa21d8c3e53.js",
       "static/chunks/f0f43ebb724b8b11.js",
@@ -16,7 +16,7 @@
       "static/chunks/999d695b5baa4b77.js",
       "static/chunks/d11e15d588813b4c.js",
       "static/chunks/972bb770631d4a93.js",
-      "static/chunks/turbopack-380e6cd4f69a6531.js"
+      "static/chunks/turbopack-af3f95db2fabb4ea.js"
     ]
   },
   "ampFirstPages": []

@@ -16,22 +16,21 @@ export default function HashingEncryptionLab() {
   const input = state.input || "";
   const mode = state.mode || "hash";
 
-  // Simple hash simulation (browser crypto API for real hashing)
+  // Use Web Crypto for real hashing where available.
   async function computeHash(algorithm, text) {
     try {
       const encoder = new TextEncoder();
       const data = encoder.encode(text);
       let hashBuffer;
-      
-      if (algorithm === "MD5") {
-        // MD5 not available in WebCrypto, show placeholder
-        return "MD5: (demonstration only - 5f4dcc3b5aa765d61d8327deb882cf99)";
-      } else if (algorithm === "SHA-1") {
+
+      if (algorithm === "SHA-1") {
         hashBuffer = await crypto.subtle.digest("SHA-1", data);
       } else if (algorithm === "SHA-256") {
         hashBuffer = await crypto.subtle.digest("SHA-256", data);
+      } else {
+        return "Unsupported algorithm";
       }
-      
+
       const hashArray = Array.from(new Uint8Array(hashBuffer));
       return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     } catch {
@@ -75,7 +74,7 @@ export default function HashingEncryptionLab() {
   return (
     <div className="space-y-4 text-sm">
       <p className="text-gray-700">
-        Understand the difference between hashing (one-way) and encryption (two-way). Both are critical for security, but serve different purposes.
+        Understand the difference between hashing (one-way) and encryption (two-way). Both are important, but they solve different problems.
       </p>
 
       <div className="flex gap-2 mb-4">
@@ -121,10 +120,10 @@ export default function HashingEncryptionLab() {
                 <span className="text-xs text-red-700">⚠️ Deprecated</span>
               </div>
               <div className="font-mono text-xs break-all text-red-800">
-                5f4dcc3b5aa765d61d8327deb882cf99
+                (not computed in this lab)
               </div>
               <div className="text-xs text-red-700 mt-2">
-                Cryptographically broken since 2004. Collisions easily found. Never use for security.
+                MD5 is cryptographically broken (collision attacks are practical). It is not suitable for security uses like password storage or integrity checks you depend on.
               </div>
             </div>
 
@@ -165,7 +164,7 @@ export default function HashingEncryptionLab() {
                 $2b$10$abcdefghijklmnopqrstuv... (demonstration)
               </div>
               <div className="text-xs text-blue-700 mt-2">
-                <strong>Key feature:</strong> Intentionally slow with salt. Makes brute-force attacks impractical. Use these for password storage, not SHA-256!
+                <strong>Key feature:</strong> Intentionally slow and salted. That makes guessing attacks much harder. Use a password hashing scheme (bcrypt/Argon2/scrypt), not fast hashes like SHA-256, for password storage.
               </div>
             </div>
           </div>
@@ -173,7 +172,7 @@ export default function HashingEncryptionLab() {
           <div className="p-4 bg-purple-50 border border-purple-300 rounded-lg">
             <div className="font-semibold text-purple-900 mb-2">🔍 Rainbow Table Attack</div>
             <p className="text-xs text-purple-800 mb-2">
-              Rainbow tables are precomputed hash databases. If you hash &quot;password123&quot; with SHA-256, an attacker can look it up instantly.
+              Rainbow tables are precomputed hash databases for common passwords. If passwords are hashed without a unique salt, attackers can often match common hashes very quickly.
             </p>
             <p className="text-xs text-purple-800">
               <strong>Defense:</strong> Add a random &quot;salt&quot; before hashing. Same password, different salt = different hash. bcrypt/Argon2 do this automatically.
@@ -231,7 +230,7 @@ export default function HashingEncryptionLab() {
             <div className="space-y-2 text-xs text-yellow-800">
               <div className="flex gap-2">
                 <span className="font-semibold min-w-24">Hashing:</span>
-                <span>One-way transformation. Cannot reverse. Used for integrity, passwords.</span>
+                <span>One-way transformation. You cannot reverse it. Used for integrity checks and password storage (with specialised password hashing).</span>
               </div>
               <div className="flex gap-2">
                 <span className="font-semibold min-w-24">Encryption:</span>
@@ -239,7 +238,7 @@ export default function HashingEncryptionLab() {
               </div>
               <div className="flex gap-2">
                 <span className="font-semibold min-w-24">Use hashing:</span>
-                <span>Verify file integrity, store passwords, digital signatures.</span>
+                <span>Verify file integrity; help power digital signatures (hash then sign).</span>
               </div>
               <div className="flex gap-2">
                 <span className="font-semibold min-w-24">Use encryption:</span>

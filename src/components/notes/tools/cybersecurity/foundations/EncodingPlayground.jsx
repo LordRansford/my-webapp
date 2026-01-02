@@ -13,15 +13,11 @@ export default function EncodingPlayground() {
 
   const input = state.input || "";
 
-  // Encoding functions
-  function toAscii(str) {
-    return str.split('').map(c => c.charCodeAt(0)).join(' ');
-  }
-
-  function toUtf8(str) {
+  // Encoding helpers (UTF-8 bytes are the most honest cross-language view in browsers).
+  function toUtf8Bytes(str) {
     const encoder = new TextEncoder();
     const bytes = encoder.encode(str);
-    return Array.from(bytes).join(' ');
+    return Array.from(bytes);
   }
 
   function toBase64(str) {
@@ -32,14 +28,27 @@ export default function EncodingPlayground() {
     }
   }
 
-  function toHex(str) {
-    return str.split('').map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join(' ');
+  function toAsciiBytesOrMessage(str) {
+    // ASCII is a 7-bit encoding (0–127). It cannot represent emojis, accented characters, etc.
+    // For non-ASCII text, return a clear message instead of misleading numbers.
+    const bytes = toUtf8Bytes(str);
+    const isAllAscii = bytes.every((b) => b >= 0 && b <= 127);
+    if (!isAllAscii) return "(contains non-ASCII characters — ASCII cannot represent this text)";
+    return bytes.join(" ");
+  }
+
+  function toUtf8Decimal(str) {
+    return toUtf8Bytes(str).join(" ");
+  }
+
+  function toUtf8Hex(str) {
+    return toUtf8Bytes(str).map((b) => b.toString(16).padStart(2, "0")).join(" ");
   }
 
   return (
     <div className="space-y-4 text-sm">
       <p className="text-gray-700">
-        Enter text to see how different encoding schemes represent the same information. Notice how special characters and emojis behave differently.
+        Enter text to see how different encodings represent the same information. Watch what happens when you include accents or emojis.
       </p>
 
       <div>
@@ -55,51 +64,51 @@ export default function EncodingPlayground() {
 
       <div className="space-y-3">
         <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-          <div className="font-semibold text-blue-900 mb-1">ASCII (decimal)</div>
-          <div className="font-mono text-xs break-all text-blue-800">{toAscii(input)}</div>
-          <div className="text-xs text-blue-700 mt-1">Character codes from 0-127 standard ASCII range</div>
+          <div className="font-semibold text-blue-900 mb-1">ASCII (bytes, decimal)</div>
+          <div className="font-mono text-xs break-all text-blue-800">{toAsciiBytesOrMessage(input)}</div>
+          <div className="text-xs text-blue-700 mt-1">ASCII is a 7-bit encoding (0–127). It only covers basic English characters.</div>
         </div>
 
         <div className="p-3 bg-green-50 rounded-lg border border-green-200">
           <div className="font-semibold text-green-900 mb-1">UTF-8 (bytes)</div>
-          <div className="font-mono text-xs break-all text-green-800">{toUtf8(input)}</div>
-          <div className="text-xs text-green-700 mt-1">Variable-length encoding supporting all Unicode characters</div>
+          <div className="font-mono text-xs break-all text-green-800">{toUtf8Decimal(input)}</div>
+          <div className="text-xs text-green-700 mt-1">UTF-8 is a variable-length encoding for Unicode characters.</div>
         </div>
 
         <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
           <div className="font-semibold text-purple-900 mb-1">Base64</div>
           <div className="font-mono text-xs break-all text-purple-800">{toBase64(input)}</div>
-          <div className="text-xs text-purple-700 mt-1">Binary-to-text encoding, often used in URLs and APIs</div>
+          <div className="text-xs text-purple-700 mt-1">Binary-to-text encoding. It is not encryption. It is commonly used in data formats and APIs.</div>
         </div>
 
         <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
-          <div className="font-semibold text-amber-900 mb-1">Hexadecimal</div>
-          <div className="font-mono text-xs break-all text-amber-800">{toHex(input)}</div>
-          <div className="text-xs text-amber-700 mt-1">Base-16 representation, each byte shown as two hex digits</div>
+          <div className="font-semibold text-amber-900 mb-1">Hexadecimal (UTF-8 bytes)</div>
+          <div className="font-mono text-xs break-all text-amber-800">{toUtf8Hex(input)}</div>
+          <div className="text-xs text-amber-700 mt-1">Base-16 representation. Each UTF-8 byte is shown as two hex digits.</div>
         </div>
       </div>
 
       <div className="p-4 bg-yellow-50 border border-yellow-300 rounded-lg">
         <div className="font-semibold text-yellow-900 mb-2">💡 Security Insight</div>
         <p className="text-xs text-yellow-800">
-          Attackers sometimes use encoding to bypass basic filters. For example, SQL injection payloads can be hex-encoded or URL-encoded to evade detection. Understanding encoding helps you spot obfuscated malicious input.
+          Encoding can hide what a string looks like at first glance. This matters because naive filters that look for simple keywords can be bypassed by encoded variants.
         </p>
         <p className="text-xs text-yellow-800 mt-2">
-          <strong>Example:</strong> The SQL command <code className="bg-yellow-200 px-1">SELECT</code> could be encoded as <code className="bg-yellow-200 px-1">%53%45%4C%45%43%54</code> (URL encoding) to bypass naive filters looking for plain text keywords.
+          <strong>Safety note:</strong> Do not paste suspicious strings into real websites. Use controlled labs and defensive testing processes. The goal here is recognition and safe handling.
         </p>
       </div>
 
       <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
         <div className="font-semibold text-slate-900 mb-2">Try these examples:</div>
         <div className="space-y-1 text-xs">
-          <button onClick={() => set_state({ input: "SELECT * FROM users" })} className="text-blue-600 hover:underline block">
-            • SQL command (watch how encoding could hide it)
+          <button onClick={() => set_state({ input: "SELECT" })} className="text-blue-600 hover:underline block">
+            • A keyword (watch how encodings change the visible characters)
           </button>
-          <button onClick={() => set_state({ input: "<script>alert('XSS')</script>" })} className="text-blue-600 hover:underline block">
-            • XSS payload (observe HTML encoding needs)
+          <button onClick={() => set_state({ input: "<script>" })} className="text-blue-600 hover:underline block">
+            • A tag-like string (helps explain output encoding vs raw rendering)
           </button>
-          <button onClick={() => set_state({ input: "admin' OR '1'='1" })} className="text-blue-600 hover:underline block">
-            • SQL injection attempt
+          <button onClick={() => set_state({ input: "name=alice&role=admin" })} className="text-blue-600 hover:underline block">
+            • URL-ish parameters (common place where encoding shows up)
           </button>
           <button onClick={() => set_state({ input: "Hello 世界 🌍" })} className="text-blue-600 hover:underline block">
             • Mixed character sets (ASCII + Unicode + Emoji)

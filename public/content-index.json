@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-02T13:57:45.289Z",
+  "generatedAt": "2026-01-02T19:15:06.074Z",
   "pages": [
     {
       "route": "/courses/_cpd-checklist",
@@ -3365,9 +3365,21 @@
       "sections": [
         {
           "depth": 3,
+          "title": "Four terms people mix up",
+          "anchor": "four-terms-people-mix-up",
+          "excerpt": "Let’s define four common terms precisely, using simple language."
+        },
+        {
+          "depth": 3,
+          "title": "What this course deliberately does not teach",
+          "anchor": "what-this-course-deliberately-does-not-teach",
+          "excerpt": "This course is defensive and ethical. It does not teach you to break into systems. It teaches you to understand risk, spot weak assumptions, and choose controls that protect people."
+        },
+        {
+          "depth": 3,
           "title": "After this section you should be able to:",
           "anchor": "after-this-section-you-should-be-able-to",
-          "excerpt": "- Explain what cybersecurity is protecting and why attackers often succeed - Explain the difference between threat, vulnerability, and risk in context - Explain what breaks when identity and process controls are treated as optional"
+          "excerpt": "- Explain what cybersecurity is and what it is not - Use the terms vulnerability, exploit, incident and breach correctly - Explain why security is about trade offs and context"
         },
         {
           "depth": 3,

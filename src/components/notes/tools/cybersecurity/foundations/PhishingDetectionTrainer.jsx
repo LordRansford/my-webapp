@@ -16,7 +16,7 @@ const PHISHING_EXAMPLES = [
       "Spoofed domain (paypa1 with number 1, not paypal)",
       "Creates urgency and fear (suspended, 24 hours)",
       "Suspicious link domain doesn't match PayPal",
-      "Poor grammar in URL",
+      "Untrusted HTTP link (no HTTPS)",
     ],
   },
   {
@@ -98,7 +98,7 @@ const PHISHING_EXAMPLES = [
     isPhishing: false,
     indicators: [
       "Legitimate bank domain",
-      "Provides phone number (verify independently)",
+      "Provides a path to verify (but you should still verify contact details independently)",
       "Secure HTTPS official website link",
       "Reasonable security notification format",
     ],
