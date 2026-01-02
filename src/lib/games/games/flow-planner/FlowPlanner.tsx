@@ -26,6 +26,7 @@ import {
 } from "@/lib/games/shared/achievements";
 import {
   submitScore,
+  getScoreComparison,
 } from "@/lib/games/shared/scoreComparison";
 import {
   ChallengeCodeShare,
@@ -57,6 +58,10 @@ export default function FlowPlanner() {
   const [totalFlow, setTotalFlow] = useState<number>(0);
   const [finalScore, setFinalScore] = useState<number | null>(null);
   const [startTime, setStartTime] = useState<number | null>(null);
+  const [challengeCodeData, setChallengeCodeData] = useState<ChallengeCode | null>(null);
+  const [scoreComparison, setScoreComparison] = useState<any>(null);
+  const [playerScoreData, setPlayerScoreData] = useState<any>(null);
+  const [achievementIds, setAchievementIds] = useState<string[]>([]);
 
   useEffect(() => {
     if (status === "idle" && !challenge) {
@@ -152,7 +157,8 @@ export default function FlowPlanner() {
     };
     
     setPlayerScoreData(scoreData);
-    const comparison = submitScore(codeData.code, scoreData);
+    submitScore(codeData.code, scoreData);
+    const comparison = getScoreComparison(codeData.code, scoreData);
     setScoreComparison(comparison);
 
     completeTodayChallenge(GAME_ID, {
@@ -186,7 +192,11 @@ export default function FlowPlanner() {
     setStatus("idle");
     setFinalScore(null);
     setStartTime(null);
-    setChallenge(null);
+      setChallenge(null);
+      setChallengeCodeData(null);
+      setScoreComparison(null);
+      setPlayerScoreData(null);
+      setAchievementIds([]);
     setEdgeFlows({});
     setTotalFlow(0);
   }, []);

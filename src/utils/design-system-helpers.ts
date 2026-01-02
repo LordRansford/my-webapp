@@ -11,7 +11,8 @@ import { tokens } from "@/theme/tokens";
  * Get spacing value by key
  */
 export function getSpacing(key: keyof typeof tokens.spacing): string {
-  return tokens.spacing[key];
+  const value = tokens.spacing[key];
+  return typeof value === 'string' ? value : String(value);
 }
 
 /**
@@ -108,9 +109,9 @@ export function cssVar(category: string, key: string): string {
 }
 
 /**
- * Design system validation utilities
+ * Design system validation utilities (helpers)
  */
-export const DesignSystemValidator = {
+export const DesignSystemHelperValidator = {
   /**
    * Check if a color value uses design tokens
    */

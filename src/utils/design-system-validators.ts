@@ -77,8 +77,9 @@ export function validateRadius(value: string): value is RadiusKey {
 /**
  * Validate spacing key
  */
-export function validateSpacingKey(value: string): value is SpacingKey {
-  return value in tokens.spacing;
+export function validateSpacingKey(value: string | number): value is SpacingKey {
+  if (typeof value === 'number') return false;
+  return value in tokens.spacing && typeof tokens.spacing[value as SpacingKey] === 'string';
 }
 
 /**

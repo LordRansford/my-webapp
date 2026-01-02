@@ -5,5 +5,5 @@
 export * from './types';
 export * from './dateUtils';
 export * from './streakStorage';
-export * from './streakCalculator';
-export * from './streakManager';
+// Only export from streakManager to avoid duplicate exports
+export { getStreakDataForGame, updateStreakForGame } from './streakManager';

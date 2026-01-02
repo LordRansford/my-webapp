@@ -50,9 +50,9 @@ export function AchievementList({
 
   // Apply unlock filter
   if (filter === 'unlocked') {
-    filtered = filtered.filter(a => userData.unlocked.has(a.id));
+    filtered = filtered.filter(a => userData.unlocked.some(u => u.achievementId === a.id));
   } else if (filter === 'locked') {
-    filtered = filtered.filter(a => !userData.unlocked.has(a.id));
+    filtered = filtered.filter(a => !userData.unlocked.some(u => u.achievementId === a.id));
   }
 
   const getProgress = (achievement: AchievementDefinition): number => {

@@ -36,7 +36,7 @@ export function ChallengeCodeShare({
   }, [code.code]);
 
   const handleShare = useCallback(async () => {
-    if (navigator.share) {
+    if (typeof navigator.share === 'function') {
       try {
         await navigator.share({
           title: `Challenge Code: ${code.code}`,
@@ -72,7 +72,7 @@ export function ChallengeCodeShare({
             <Copy className="h-4 w-4 text-slate-600" />
           )}
         </button>
-        {navigator.share && (
+        {typeof navigator.share === 'function' && (
           <button
             onClick={handleShare}
             className="p-1.5 rounded hover:bg-slate-200 transition-colors"
@@ -136,7 +136,7 @@ export function ChallengeCodeShare({
           )}
         </button>
 
-        {navigator.share && (
+        {typeof navigator.share === 'function' && (
           <button
             onClick={handleShare}
             className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium bg-white text-blue-600 border-2 border-blue-300 hover:bg-blue-50 transition-all"

@@ -21,6 +21,7 @@ import {
   createDefaultPlayerModel,
   AdaptiveDifficultyEngine,
   type PlayerCapabilityModel,
+  type PlayerProfile,
 } from "@/lib/games/framework";
 import { useGameAnalytics } from "@/lib/games/framework/useGameAnalytics";
 import type { GameConfig, GameStatus } from "@/lib/games/framework/types";
@@ -122,7 +123,7 @@ export default function DailyLogicGauntletEnhanced() {
         setPlayerXP(gameXP);
         // Load player model from profile if available
         if (profile.mastery[GAME_CONFIG.id]?.playerModel) {
-          setPlayerModel(profile.mastery[GAME_CONFIG.id].playerModel);
+          setPlayerModel(profile.mastery[GAME_CONFIG.id].playerModel as PlayerCapabilityModel);
         }
       }
       
@@ -175,6 +176,108 @@ export default function DailyLogicGauntletEnhanced() {
     stateManager.updateState({ status: "playing", timestamp: Date.now() });
     stateManager.recordMove("start", { seed: dailySeed, date: today });
   }, [generatePuzzles, dailySeed, today, stateManager]);
+  
+  // Finish game
+  const handleFinish = useCallback(async () => {
+    setStatus("finished");
+    
+    // Calculate XP
+    const sessionXP = calculateSessionXP(
+      performances.length > 0 ? performances : [],
+      hintsUsed,
+      streakData.currentStreak
+    );
+    const newXP = playerXP + sessionXP;
+    setPlayerXP(newXP);
+    
+    // Generate analysis report
+    if (puzzles.length > 0 && performances.length > 0) {
+      const report = generateAnalysisReport(
+        puzzles,
+        performances,
+        hintsUsed,
+        sessionXP,
+        playerXP
+      );
+      setAnalysisReport(report);
+    }
+    
+    // Update streak
+    const updatedStreak = updateStreak(streakData, true);
+    setStreakData(updatedStreak);
+    
+    // Archive the completed puzzle set
+    if (puzzles.length > 0 && performances.length > 0) {
+      const totalTimeSpent = performances.reduce((sum, p) => sum + p.timeSpent, 0);
+      const archiveScore = performances.filter(p => p.correct).length;
+      archivePuzzleSet(puzzles, archiveScore, totalTimeSpent, newXP);
+    }
+    
+    // Check and unlock achievements
+    const archiveStats = getArchiveStats();
+    let profile: PlayerProfile | null = null;
+    try {
+      profile = await persistenceManager.loadPlayerProfile();
+    } catch (error) {
+      // Will create new profile below
+    }
+    
+    if (!profile) {
+      profile = persistenceManager.createDefaultProfile();
+    }
+    
+    const mastery = profile.mastery[GAME_CONFIG.id];
+    const achievementContext = {
+      totalXP: newXP,
+      currentTier: getTierFromXP(newXP),
+      currentStreak: updatedStreak.currentStreak,
+      gamesCompleted: (mastery?.stats?.gamesPlayed || 0) + 1,
+      perfectScores: performances.every(p => p.correct) ? 1 : 0,
+      archivedSets: archiveStats.totalArchived + (puzzles.length > 0 ? 1 : 0),
+      fastestCompletion: performances.reduce((sum, p) => sum + p.timeSpent, 0),
+      hintFreeCompletions: hintsUsed.length === 0 || hintsUsed.every(h => h === 0) ? 1 : 0,
+    };
+    
+    const newlyUnlockedIds = checkAndUnlockAchievements(achievementContext);
+    if (newlyUnlockedIds && newlyUnlockedIds.length > 0) {
+      const unlocked = newlyUnlockedIds.map(id => {
+        const ach = ALL_ACHIEVEMENTS.find(a => a.id === id);
+        return ach!;
+      }).filter(Boolean);
+      setNewlyUnlockedAchievements(unlocked);
+    }
+    
+    // Save progress
+    try {
+      const currentStats = mastery?.stats || {
+        gamesPlayed: 0,
+        wins: 0,
+        bestScore: 0,
+        averageScore: 0,
+      };
+      
+      profile.mastery[GAME_CONFIG.id] = {
+        tier: getTierFromXP(newXP),
+        xp: newXP,
+        unlocks: mastery?.unlocks || [],
+        stats: {
+          gamesPlayed: currentStats.gamesPlayed + 1,
+          wins: currentStats.wins + (performances.length > 0 && performances.every(p => p.correct) ? 1 : 0),
+          bestScore: Math.max(currentStats.bestScore, performances.filter(p => p.correct).length),
+          averageScore: currentStats.gamesPlayed > 0
+            ? (currentStats.averageScore * (currentStats.gamesPlayed - 1) + performances.filter(p => p.correct).length) / currentStats.gamesPlayed
+            : performances.filter(p => p.correct).length,
+        },
+        playerModel: playerModel,
+      };
+      profile.lastPlayed[GAME_CONFIG.id] = Date.now();
+      await persistenceManager.savePlayerProfile(profile);
+    } catch (error) {
+      console.error('Failed to save progress:', error);
+    }
+    
+    stateManager.updateState({ status: "finished" });
+  }, [performances, hintsUsed, streakData, playerXP, puzzles, persistenceManager, stateManager, playerModel]);
   
   // Handle answer selection
   const handleAnswer = useCallback(
@@ -244,107 +347,6 @@ export default function DailyLogicGauntletEnhanced() {
       handleFinish,
     ]
   );
-  
-  // Finish game
-  const handleFinish = useCallback(async () => {
-    setStatus("finished");
-    
-    // Calculate XP (use current performances state)
-    const sessionXP = calculateSessionXP(
-      performances.length > 0 ? performances : [],
-      hintsUsed,
-      streakData.currentStreak
-    );
-    const newXP = playerXP + sessionXP;
-    setPlayerXP(newXP);
-    
-    // Generate analysis report
-    if (puzzles.length > 0 && performances.length > 0) {
-      const report = generateAnalysisReport(
-        puzzles,
-        performances,
-        hintsUsed,
-        sessionXP,
-        playerXP
-      );
-      setAnalysisReport(report);
-    }
-    
-    // Update streak
-    const updatedStreak = updateStreak(streakData, true);
-    setStreakData(updatedStreak);
-    
-    // Archive the completed puzzle set
-    if (puzzles.length > 0 && performances.length > 0) {
-      const totalTimeSpent = performances.reduce((sum, p) => sum + p.timeSpent, 0);
-      const archiveScore = performances.filter(p => p.correct).length;
-      archivePuzzleSet(puzzles, archiveScore, totalTimeSpent, newXP);
-    }
-    
-    // Check and unlock achievements
-    const archiveStats = getArchiveStats();
-    let profile = null;
-    try {
-      profile = await persistenceManager.loadPlayerProfile();
-    } catch (error) {
-      // Will create new profile below
-    }
-    
-    if (!profile) {
-      profile = persistenceManager.createDefaultProfile();
-    }
-    
-    const mastery = profile.mastery[GAME_CONFIG.id];
-    const achievementContext = {
-      totalXP: newXP,
-      currentTier: getTierFromXP(newXP),
-      currentStreak: updatedStreak.currentStreak,
-      gamesCompleted: (mastery?.stats?.gamesPlayed || 0) + 1,
-      perfectScores: performances.every(p => p.correct) ? 1 : 0,
-      archivedSets: archiveStats.totalArchived + (puzzles.length > 0 ? 1 : 0),
-      fastestCompletion: performances.reduce((sum, p) => sum + p.timeSpent, 0),
-      hintFreeCompletions: hintsUsed.length === 0 || hintsUsed.every(h => h === 0) ? 1 : 0,
-    };
-    
-    const newlyUnlockedIds = checkAndUnlockAchievements(achievementContext);
-    if (newlyUnlockedIds.length > 0) {
-      const unlocked = newlyUnlockedIds.map(id => {
-        const ach = ALL_ACHIEVEMENTS.find(a => a.id === id);
-        return ach!;
-      }).filter(Boolean);
-      setNewlyUnlockedAchievements(unlocked);
-    }
-    
-    // Save progress
-    try {
-      const currentStats = mastery?.stats || {
-        gamesPlayed: 0,
-        wins: 0,
-        bestScore: 0,
-        averageScore: 0,
-      };
-      
-      profile.mastery[GAME_CONFIG.id] = {
-        tier: getTierFromXP(newXP),
-        xp: newXP,
-        unlocks: mastery?.unlocks || [],
-        stats: {
-          gamesPlayed: currentStats.gamesPlayed + 1,
-          wins: currentStats.wins + (performances.length > 0 && performances.every(p => p.correct) ? 1 : 0),
-          bestScore: Math.max(currentStats.bestScore, performances.filter(p => p.correct).length),
-          averageScore: currentStats.gamesPlayed > 0
-            ? (currentStats.averageScore * (currentStats.gamesPlayed - 1) + performances.filter(p => p.correct).length) / currentStats.gamesPlayed
-            : performances.filter(p => p.correct).length,
-        },
-      };
-      profile.lastPlayed[GAME_CONFIG.id] = Date.now();
-      await persistenceManager.savePlayerProfile(profile);
-    } catch (error) {
-      console.error('Failed to save progress:', error);
-    }
-    
-    stateManager.updateState({ status: "finished" });
-  }, [performances, hintsUsed, streakData, playerXP, puzzles, persistenceManager, stateManager]);
   
   // Handle hint request
   const handleHint = useCallback(() => {

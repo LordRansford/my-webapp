@@ -13,7 +13,7 @@ export function generateTrafficPattern(
   nodes: Node[]
 ): TrafficFlow[] {
   const rng = new SeededRNG(seed + tick * 1000);
-  const flowCount = 3 + Math.floor(rng.random() * 3); // 3-5 flows
+  const flowCount = 3 + Math.floor(rng.next() * 3); // 3-5 flows
   const flows: TrafficFlow[] = [];
   
   for (let i = 0; i < flowCount; i++) {
@@ -24,7 +24,7 @@ export function generateTrafficPattern(
       id: `flow-${tick}-${i}`,
       source: source.id,
       destination: destination.id,
-      rate: 100 + rng.random() * 200, // packets per second
+      rate: 100 + rng.next() * 200, // packets per second
       route: [], // Will be calculated by routing engine
     });
   }

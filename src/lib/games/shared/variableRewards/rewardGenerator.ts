@@ -15,7 +15,7 @@ export function generateRewardResult(context: RewardContext): RewardResult {
   const rng = new SeededRNG(context.seed + 1000); // Offset seed for reward generation
   
   // Determine reward tier based on probability
-  const roll = rng.random();
+  const roll = rng.next();
   let rewardType: RewardResult['rewardType'];
   let bonusMultiplier: number;
   let rewardDescription: string;
@@ -28,17 +28,17 @@ export function generateRewardResult(context: RewardContext): RewardResult {
   } else if (roll < 0.90) {
     // 20% - Bonus reward
     rewardType = 'bonus';
-    bonusMultiplier = 1.2 + (rng.random() * 0.3); // 1.2x to 1.5x
+    bonusMultiplier = 1.2 + (rng.next() * 0.3); // 1.2x to 1.5x
     rewardDescription = 'Bonus reward! Great performance!';
   } else if (roll < 0.98) {
     // 8% - Rare reward
     rewardType = 'rare';
-    bonusMultiplier = 1.5 + (rng.random() * 0.5); // 1.5x to 2.0x
+    bonusMultiplier = 1.5 + (rng.next() * 0.5); // 1.5x to 2.0x
     rewardDescription = 'Rare reward! Exceptional performance!';
   } else {
     // 2% - Legendary reward
     rewardType = 'legendary';
-    bonusMultiplier = 2.0 + (rng.random() * 1.0); // 2.0x to 3.0x
+    bonusMultiplier = 2.0 + (rng.next() * 1.0); // 2.0x to 3.0x
     rewardDescription = 'Legendary reward! Outstanding achievement!';
   }
   
@@ -54,12 +54,12 @@ export function generateRewardResult(context: RewardContext): RewardResult {
   
   // Check for special unlocks (rare and legendary only)
   const unlocks: string[] = [];
-  if (rewardType === 'rare' && rng.random() < 0.15) {
+  if (rewardType === 'rare' && rng.next() < 0.15) {
     unlocks.push('scenario-variant');
   }
-  if (rewardType === 'legendary' && rng.random() < 0.5) {
+  if (rewardType === 'legendary' && rng.next() < 0.5) {
     unlocks.push('exclusive-scenario');
-    if (rng.random() < 0.3) {
+    if (rng.next() < 0.3) {
       unlocks.push('special-modifier');
     }
   }
@@ -85,7 +85,7 @@ export function generateDailyModifier(seed: number): {
   multiplier: number;
 } {
   const rng = new SeededRNG(seed);
-  const roll = rng.random();
+  const roll = rng.next();
   
   if (roll < 0.10) {
     return {

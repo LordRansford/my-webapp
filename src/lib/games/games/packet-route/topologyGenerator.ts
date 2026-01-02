@@ -62,7 +62,7 @@ function generateTopologyStructure(
       name: `Node ${i}`,
       x: (i % 5) * 100 + 50,
       y: Math.floor(i / 5) * 100 + 50,
-      capacity: 1000 + rng.random() * 500,
+      capacity: 1000 + rng.next() * 500,
       currentLoad: 0,
     });
   }
@@ -129,8 +129,8 @@ function createLink(
     id: `link-${from}-${to}`,
     from,
     to,
-    capacity: config.linkCapacity + rng.random() * 200,
-    latency: config.baseLatency + rng.random() * 10,
+    capacity: config.linkCapacity + rng.next() * 200,
+    latency: config.baseLatency + rng.next() * 10,
     currentLoad: 0,
     failed: false,
   };

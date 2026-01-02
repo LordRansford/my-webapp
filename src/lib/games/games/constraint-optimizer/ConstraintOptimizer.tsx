@@ -60,6 +60,10 @@ export default function ConstraintOptimizer() {
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const [finalEfficiency, setFinalEfficiency] = useState<number | null>(null);
   const [startTime, setStartTime] = useState<number | null>(null);
+  const [challengeCodeData, setChallengeCodeData] = useState<ChallengeCode | null>(null);
+  const [scoreComparison, setScoreComparison] = useState<any>(null);
+  const [playerScoreData, setPlayerScoreData] = useState<any>(null);
+  const [achievementIds, setAchievementIds] = useState<string[]>([]);
 
   useEffect(() => {
     if (status === "idle" && !challenge) {
@@ -77,6 +81,10 @@ export default function ConstraintOptimizer() {
       setChallenge(generated);
       setSelectedItems(new Set());
       setFinalEfficiency(null);
+      setChallengeCodeData(null);
+      setScoreComparison(null);
+      setPlayerScoreData(null);
+      setAchievementIds([]);
     } catch (error) {
       console.error("Error initializing challenge:", error);
     }

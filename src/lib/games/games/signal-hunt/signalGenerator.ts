@@ -18,7 +18,7 @@ export function generateSignalQueue(
   const signals: Signal[] = [];
   
   for (let i = 0; i < signalCount; i++) {
-    const isFalsePositive = rng.random() < falsePositiveRate;
+    const isFalsePositive = rng.next() < falsePositiveRate;
     const signal = generateSignal(rng, turn, phase, isFalsePositive);
     signals.push(signal);
   }
@@ -43,8 +43,8 @@ function generateSignal(
   
   const type = rng.sample(signalTypes, 1)[0];
   const threatProbability = isFalsePositive 
-    ? rng.random() * 0.3  // False positives have low threat probability
-    : 0.7 + rng.random() * 0.3;  // Real threats have high probability
+    ? rng.next() * 0.3  // False positives have low threat probability
+    : 0.7 + rng.next() * 0.3;  // Real threats have high probability
   
   const evidence = generateEvidence(rng, phase, isFalsePositive);
   
@@ -73,8 +73,8 @@ function generateEvidence(
   for (let i = 0; i < count; i++) {
     const type = rng.sample(evidenceTypes, 1)[0];
     const confidence = isFalsePositive
-      ? 0.3 + rng.random() * 0.4  // Lower confidence for false positives
-      : 0.7 + rng.random() * 0.3;  // Higher confidence for real threats
+      ? 0.3 + rng.next() * 0.4  // Lower confidence for false positives
+      : 0.7 + rng.next() * 0.3;  // Higher confidence for real threats
     
     evidence.push({
       id: `evidence-${i}`,

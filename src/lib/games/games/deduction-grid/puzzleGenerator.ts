@@ -19,7 +19,7 @@ export function generatePuzzle(params: {
   for (let row = 0; row < gridSize.rows; row++) {
     solution[row] = [];
     for (let col = 0; col < gridSize.cols; col++) {
-      solution[row][col] = rng.random() < 0.5 ? 'yes' : 'no';
+      solution[row][col] = rng.next() < 0.5 ? 'yes' : 'no';
     }
   }
   
@@ -75,8 +75,8 @@ function generateClues(
   
   // Generate direct clues
   for (let i = 0; i < clueCount; i++) {
-    const row = Math.floor(rng.random() * solution.length);
-    const col = Math.floor(rng.random() * solution[0].length);
+    const row = Math.floor(rng.next() * solution.length);
+    const col = Math.floor(rng.next() * solution[0].length);
     const value = solution[row][col];
     
     clues.push({

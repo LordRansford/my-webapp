@@ -202,7 +202,7 @@ export const PATTERN_PUZZLE_TEMPLATES: PatternPuzzleTemplate[] = [
       { generate: () => 2, pattern: 'start' },
       { generate: (i, rng) => {
         const start = rng ? rng.nextInt(1, 5) : 2;
-        const ratio = rng ? (rng.random() < 0.5 ? 2 : 3) : 2;
+        const ratio = rng ? (rng.next() < 0.5 ? 2 : 3) : 2;
         return start * (ratio ** i);
       }, pattern: 'geometric progression' },
     ],

@@ -35,3 +35,14 @@ export interface BaseXPParams {
   difficulty: string;
   tier: string;
 }
+
+export interface RewardDefinition {
+  id: string;
+  type: string;
+  rarity: 'common' | 'uncommon' | 'rare' | 'legendary' | 'epic';
+  probability: number;
+  baseValue: number;
+  variance?: number;
+  description: string;
+  icon?: string;
+}

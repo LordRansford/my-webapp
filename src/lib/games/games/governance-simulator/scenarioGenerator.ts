@@ -93,9 +93,9 @@ function generateStakeholders(count: number, rng: SeededRNG): Stakeholder[] {
       id: `stakeholder-${i}`,
       name: `${type} ${i + 1}`,
       type,
-      trust: 70 + rng.random() * 20, // 70-90
-      satisfaction: 70 + rng.random() * 20,
-      compliance: 80 + rng.random() * 15,
+      trust: 70 + rng.next() * 20, // 70-90
+      satisfaction: 70 + rng.next() * 20,
+      compliance: 80 + rng.next() * 15,
       preferences: {
         controls: type === 'security-team' ? 80 : type === 'data-team' ? 40 : 60,
         transparency: type === 'executive' ? 90 : 60,
@@ -123,7 +123,7 @@ function generateObjectives(
       description: `Maintain ${type} above threshold`,
       type,
       target: 75,
-      current: 70 + rng.random() * 10,
+      current: 70 + rng.next() * 10,
       met: false,
     });
   }
@@ -141,8 +141,8 @@ function generateRisks(count: number, rng: SeededRNG): Risk[] {
       id: `risk-${i}`,
       name: `${type} Risk`,
       type,
-      level: 30 + rng.random() * 30, // 30-60
-      trend: rng.random() < 0.33 ? 'increasing' : rng.random() < 0.66 ? 'stable' : 'decreasing',
+      level: 30 + rng.next() * 30, // 30-60
+      trend: rng.next() < 0.33 ? 'increasing' : rng.next() < 0.66 ? 'stable' : 'decreasing',
     });
   }
   
@@ -157,7 +157,7 @@ function generateEvents(
   const events: Event[] = [];
   
   for (let turn = 2; turn <= totalTurns; turn++) {
-    if (rng.random() < config.eventFrequency) {
+    if (rng.next() < config.eventFrequency) {
       const eventTypes: Event['type'][] = ['incident', 'scrutiny', 'budget-shock', 'stakeholder-feedback'];
       const type = rng.sample(eventTypes, 1)[0];
       
@@ -167,11 +167,11 @@ function generateEvents(
         name: `${type} Event`,
         description: `${type} occurred in round ${turn}`,
         round: turn,
-        severity: 0.3 + rng.random() * 0.4, // 0.3-0.7
+        severity: 0.3 + rng.next() * 0.4, // 0.3-0.7
         affectedStakeholders: [],
         effect: {
-          trustChange: (rng.random() - 0.5) * 20, // -10 to +10
-          riskChange: rng.random() * 15, // 0 to +15
+          trustChange: (rng.next() - 0.5) * 20, // -10 to +10
+          riskChange: rng.next() * 15, // 0 to +15
         },
       });
     }

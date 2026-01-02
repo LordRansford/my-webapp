@@ -29,6 +29,7 @@ export function ProgressDashboard({
   const totalStreak = streaks.reduce((sum, s) => sum + (s.data.currentStreak || 0), 0);
   const longestStreak = Math.max(...streaks.map(s => s.data.longestStreak || 0), 0);
   
+  const { loadAchievementStorage } = require("../achievements/achievementStorage");
   const storage = loadAchievementStorage();
   const { getAllAchievementDefinitions } = require("../achievements/achievementDefinitions");
   const definitions = getAllAchievementDefinitions();

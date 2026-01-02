@@ -26,6 +26,7 @@ import {
 } from "@/lib/games/shared/achievements";
 import {
   submitScore,
+  getScoreComparison,
 } from "@/lib/games/shared/scoreComparison";
 import {
   ChallengeCodeShare,
@@ -56,6 +57,10 @@ export default function DeductionGrid() {
   const [grid, setGrid] = useState<CellValue[][]>([]);
   const [result, setResult] = useState<DeductionResult | null>(null);
   const [startTime, setStartTime] = useState<number | null>(null);
+  const [challengeCodeData, setChallengeCodeData] = useState<ChallengeCode | null>(null);
+  const [scoreComparison, setScoreComparison] = useState<any>(null);
+  const [playerScoreData, setPlayerScoreData] = useState<any>(null);
+  const [achievementIds, setAchievementIds] = useState<string[]>([]);
 
   useEffect(() => {
     if (status === "idle" && !puzzle) {
@@ -82,6 +87,10 @@ export default function DeductionGrid() {
       }
       setGrid(emptyGrid);
       setResult(null);
+      setChallengeCodeData(null);
+      setScoreComparison(null);
+      setPlayerScoreData(null);
+      setAchievementIds([]);
     } catch (error) {
       console.error("Error initializing puzzle:", error);
     }

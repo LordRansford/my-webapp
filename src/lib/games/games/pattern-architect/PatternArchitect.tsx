@@ -29,6 +29,7 @@ import {
 } from "@/lib/games/shared/achievements";
 import {
   submitScore,
+  getScoreComparison,
 } from "@/lib/games/shared/scoreComparison";
 import {
   ChallengeCodeShare,
@@ -59,6 +60,10 @@ export default function PatternArchitect() {
   const [pattern, setPattern] = useState<Pattern | null>(null);
   const [finalScore, setFinalScore] = useState<number | null>(null);
   const [startTime, setStartTime] = useState<number | null>(null);
+  const [challengeCodeData, setChallengeCodeData] = useState<ChallengeCode | null>(null);
+  const [scoreComparison, setScoreComparison] = useState<any>(null);
+  const [playerScoreData, setPlayerScoreData] = useState<any>(null);
+  const [achievementIds, setAchievementIds] = useState<string[]>([]);
 
   useEffect(() => {
     if (status === "idle" && !challenge) {
@@ -143,7 +148,8 @@ export default function PatternArchitect() {
     };
     
     setPlayerScoreData(scoreData);
-    const comparison = submitScore(codeData.code, scoreData);
+    submitScore(codeData.code, scoreData);
+    const comparison = getScoreComparison(codeData.code, scoreData);
     setScoreComparison(comparison);
 
     completeTodayChallenge(GAME_ID, {

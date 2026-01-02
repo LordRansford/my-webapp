@@ -397,7 +397,6 @@ export default function AllocationArchitect() {
                             value={allocated}
                             onChange={(e) => handleAllocationChange(project.id, parseInt(e.target.value))}
                             className="flex-1"
-                            disabled={status === "finished"}
                           />
                           <div className="w-16 text-sm font-medium text-right">
                             {allocated}

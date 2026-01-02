@@ -21,7 +21,7 @@ export function generateFailures(
   
   const failures: string[] = [];
   for (const link of links) {
-    if (!link.failed && rng.random() < failureRate) {
+    if (!link.failed && rng.next() < failureRate) {
       failures.push(link.id);
     }
   }

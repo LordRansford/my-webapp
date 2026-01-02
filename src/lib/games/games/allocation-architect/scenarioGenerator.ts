@@ -5,7 +5,7 @@
  */
 
 import { SeededRNG } from '@/lib/games/framework/SeededRNG';
-import type { Scenario, Project, Objective, Constraint, Event, Difficulty, ScenarioType } from './types';
+import type { Scenario, Project, Objective, Constraint, Event, Difficulty, ScenarioType, EventType } from './types';
 
 /**
  * Generate a scenario based on seed and parameters

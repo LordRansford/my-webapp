@@ -176,13 +176,14 @@ export class PersistenceManager {
     await this.createBackup(saveData);
     
     // Apply migrations
-    let migratedData = saveData;
+    let migratedData: GameSave<T> = saveData;
     const migrationPath = this.getMigrationPath(saveData.version, this.CURRENT_VERSION);
     
     for (const migrationKey of migrationPath) {
       const migration = this.migrations.get(migrationKey);
       if (migration) {
-        migratedData = migration(migratedData);
+        // Type assertion: migrations preserve the structure and state type
+        migratedData = migration(migratedData) as GameSave<T>;
       }
     }
     

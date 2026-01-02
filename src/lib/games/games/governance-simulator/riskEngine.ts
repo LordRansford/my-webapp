@@ -51,7 +51,7 @@ export function calculateRiskLevels(
  */
 export function applyEventsToRisks(
   risks: Risk[],
-  events: Event[]
+  events: import('./types').Event[]
 ): Risk[] {
   let updated = [...risks];
   
