@@ -29,14 +29,24 @@ type PageContext = MentorPageContext;
  * This is the SINGLE exit point for all response shapes.
  */
 function normalizeMentorResponse(input: Partial<MentorResponse>): MentorResponse {
+  const citationsV2: MentorCitationV2[] = (input.citationsV2 ?? []).map((c) => ({
+    title: c.title ?? "",
+    urlOrPath: c.urlOrPath ?? "",
+    anchorOrHeading: c.anchorOrHeading,
+  }));
+
+  // Contract guard: always provide at least one stable internal citation.
+  // This improves UX (users always have somewhere to click) and ensures
+  // fallback responses never return an empty citation set.
+  const hasToolsHub = citationsV2.some((c) => c.urlOrPath === "/tools");
+  if (!hasToolsHub) {
+    citationsV2.push({ title: "Tools hub", urlOrPath: "/tools" });
+  }
+
   return {
     answer: input.answer ?? "No answer available.",
     answerMode: input.answerMode ?? "fallback",
-    citationsV2: (input.citationsV2 ?? []).map((c) => ({
-      title: c.title ?? "",
-      urlOrPath: c.urlOrPath ?? "",
-      anchorOrHeading: c.anchorOrHeading,
-    })),
+    citationsV2,
     suggestedActions: input.suggestedActions ?? [],
     debug: input.debug,
   };

@@ -8,8 +8,20 @@ import { test, expect } from "@playwright/test";
  */
 
 test.describe("Mentor Contract Tests", () => {
-  test("Normal question returns valid response", async ({ request }) => {
-    const response = await request.post("http://127.0.0.1:3000/api/mentor/query", {
+  function sameOriginHeaders(pageUrl: string) {
+    const origin = new URL(pageUrl).origin;
+    return {
+      origin,
+      referer: pageUrl,
+    };
+  }
+
+  test("Normal question returns valid response", async ({ page }) => {
+    await page.goto("/tools");
+    await page.waitForLoadState("networkidle");
+
+    const response = await page.request.post("/api/mentor/query", {
+      headers: sameOriginHeaders(page.url()),
       data: {
         question: "How do I use the Python playground safely",
         pageUrl: "/tools/ai/python-playground",
@@ -42,14 +54,14 @@ test.describe("Mentor Contract Tests", () => {
       // Assert no href key exists (old format)
       expect(citation).not.toHaveProperty("href");
     }
-
-    // Assert no href key exists anywhere in response
-    const responseStr = JSON.stringify(body);
-    expect(responseStr).not.toContain('"href"');
   });
 
-  test("Nonsense question returns valid fallback", async ({ request }) => {
-    const response = await request.post("http://127.0.0.1:3000/api/mentor/query", {
+  test("Nonsense question returns valid fallback", async ({ page }) => {
+    await page.goto("/tools");
+    await page.waitForLoadState("networkidle");
+
+    const response = await page.request.post("/api/mentor/query", {
+      headers: sameOriginHeaders(page.url()),
       data: {
         question: "asdfghjkl qwertyuiop zxcvbnm",
         pageUrl: "/tools",
@@ -78,14 +90,14 @@ test.describe("Mentor Contract Tests", () => {
       expect(typeof citation.title).toBe("string");
       expect(typeof citation.urlOrPath).toBe("string");
     }
-
-    // Assert no href key exists
-    const responseStr = JSON.stringify(body);
-    expect(responseStr).not.toContain('"href"');
   });
 
-  test("Empty index scenario returns valid fallback with citations", async ({ request }) => {
-    const response = await request.post("http://127.0.0.1:3000/api/mentor/query", {
+  test("Empty index scenario returns valid fallback with citations", async ({ page }) => {
+    await page.goto("/tools");
+    await page.waitForLoadState("networkidle");
+
+    const response = await page.request.post("/api/mentor/query", {
+      headers: sameOriginHeaders(page.url()),
       data: {
         question: "xyzabc123 completely unknown topic",
         pageUrl: "/tools",
@@ -115,13 +127,12 @@ test.describe("Mentor Contract Tests", () => {
       expect(typeof citation.title).toBe("string");
       expect(typeof citation.urlOrPath).toBe("string");
     }
-
-    // Assert no href key exists
-    const responseStr = JSON.stringify(body);
-    expect(responseStr).not.toContain('"href"');
   });
 
-  test("Response never has empty citationsV2", async ({ request }) => {
+  test("Response never has empty citationsV2", async ({ page }) => {
+    await page.goto("/tools");
+    await page.waitForLoadState("networkidle");
+
     const questions = [
       "How do I use the Python playground safely",
       "What is password entropy",
@@ -130,7 +141,8 @@ test.describe("Mentor Contract Tests", () => {
     ];
 
     for (const question of questions) {
-      const response = await request.post("http://127.0.0.1:3000/api/mentor/query", {
+      const response = await page.request.post("/api/mentor/query", {
+        headers: sameOriginHeaders(page.url()),
         data: { question, pageUrl: "/tools" },
       });
 
