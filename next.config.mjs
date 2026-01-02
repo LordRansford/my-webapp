@@ -77,7 +77,7 @@ const nextConfig = {
               "font-src 'self' data: https:",
               "style-src 'self' 'unsafe-inline'",
               scriptSrc,
-              "connect-src 'self' https:",
+              "connect-src 'self' https: *.sentry.io *.ingest.de.sentry.io",
               "upgrade-insecure-requests",
             ].join("; "),
           },
