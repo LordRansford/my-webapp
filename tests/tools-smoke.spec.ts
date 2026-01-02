@@ -34,6 +34,18 @@ const tools = [
 test.describe("Tool Smoke Tests", () => {
   for (const tool of tools) {
     test(`${tool.id} - page loads and Example 1 runs`, async ({ page }) => {
+      const pageErrors: string[] = [];
+      const consoleErrors: string[] = [];
+
+      page.on("pageerror", (err) => {
+        pageErrors.push(String(err));
+      });
+      page.on("console", (msg) => {
+        if (msg.type() === "error") {
+          consoleErrors.push(msg.text());
+        }
+      });
+
       // Visit tool page
       await page.goto(tool.route);
       
@@ -68,7 +80,9 @@ test.describe("Tool Smoke Tests", () => {
       }
 
       // Click Run button
-      const runButton = page.locator('button:has-text("Run")').first();
+      // Note: the tab label is "run" (capitalized via CSS) and may be matched by :has-text("Run").
+      // Exclude tab buttons explicitly so we click the actual action button.
+      const runButton = page.locator('.tool-shell button:not([role="tab"]):has-text("Run")').first();
       await expect(runButton).toBeVisible({ timeout: 5000 });
       
       // Wait for button to be enabled (not disabled)
@@ -79,7 +93,35 @@ test.describe("Tool Smoke Tests", () => {
         await runButton.click();
 
         // Wait for execution to complete (either success or error)
-        await page.waitForSelector('text=/Output|Execution failed|Running.../', { timeout: 15000 });
+        try {
+          await page.waitForSelector('text=/Output|Execution failed|Running.../', { timeout: 15000 });
+        } catch (err) {
+          // Print high-signal diagnostics to aid CI debugging.
+          if (consoleErrors.length > 0) {
+            console.log(`[tools-smoke] console errors for ${tool.id}:\n${consoleErrors.join("\n")}`);
+          }
+          if (pageErrors.length > 0) {
+            console.log(`[tools-smoke] page errors for ${tool.id}:\n${pageErrors.join("\n")}`);
+          }
+
+          const runLabel = await runButton.textContent().catch(() => null);
+          const activeTabLabel = await page
+            .locator('.tool-shell button[role="tab"][aria-selected="true"]')
+            .first()
+            .textContent()
+            .catch(() => null);
+          const outputCount = await page.locator("text=Output").count().catch(() => -1);
+          const execFailedCount = await page.locator("text=Execution failed").count().catch(() => -1);
+          const alerts = await page.locator('[role="alert"]').allTextContents().catch(() => []);
+
+          console.log(
+            `[tools-smoke] DOM state for ${tool.id}: runLabel=${JSON.stringify(runLabel)} activeTab=${JSON.stringify(activeTabLabel)} outputCount=${outputCount} execFailedCount=${execFailedCount} alertCount=${alerts.length}`
+          );
+          if (alerts.length > 0) {
+            console.log(`[tools-smoke] alerts for ${tool.id}:\n${alerts.slice(0, 3).join("\n---\n")}`);
+          }
+          throw err;
+        }
 
         // Check for error panel
         const errorPanel = page.locator('text=Execution failed');

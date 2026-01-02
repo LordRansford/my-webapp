@@ -298,7 +298,8 @@ export default function ToolShell({
   const canRun = (mode === "local" || (mode === "compute" && contract.runner.startsWith("/api/"))) && validationErrors.length === 0;
 
   return (
-    <div className="tool-shell">
+    // Add bottom padding so floating UI (e.g. feedback/mentor buttons) never blocks tool actions.
+    <div className="tool-shell pb-24">
       {/* Self Test Banner */}
       <ToolSelfTest
         contract={contract}
@@ -327,12 +328,16 @@ export default function ToolShell({
       </header>
 
       {/* Tabs */}
-      <div className="mb-6 flex gap-2 border-b border-slate-200">
+      <div className="mb-6 flex gap-2 border-b border-slate-200" role="tablist" aria-label="Tool tabs">
         {(["run", "explain", "examples"] as Tab[]).map((tab) => (
           <button
             key={tab}
             type="button"
             onClick={() => setActiveTab(tab)}
+            role="tab"
+            id={`tool-tab-${tab}`}
+            aria-selected={activeTab === tab}
+            aria-controls={`tool-tabpanel-${tab}`}
             className={`border-b-2 px-4 py-2 text-sm font-semibold capitalize transition ${
               activeTab === tab
                 ? "border-slate-900 text-slate-900"
@@ -368,7 +373,12 @@ export default function ToolShell({
       )}
 
       {activeTab === "run" && (
-        <div className="space-y-6">
+        <div
+          className="space-y-6"
+          role="tabpanel"
+          id="tool-tabpanel-run"
+          aria-labelledby="tool-tab-run"
+        >
           {/* Mode Selector */}
           <div className="flex items-center gap-4">
             <span className="text-sm font-semibold text-slate-700">Execution Mode:</span>
@@ -458,7 +468,12 @@ export default function ToolShell({
       )}
 
       {activeTab === "explain" && (
-        <div className="max-w-3xl">
+        <div
+          className="max-w-3xl"
+          role="tabpanel"
+          id="tool-tabpanel-explain"
+          aria-labelledby="tool-tab-explain"
+        >
           {catalogExplain ? (
             renderExplainText(catalogExplain)
           ) : (
@@ -484,7 +499,12 @@ export default function ToolShell({
       )}
 
       {activeTab === "examples" && (
-        <div className="space-y-4">
+        <div
+          className="space-y-4"
+          role="tabpanel"
+          id="tool-tabpanel-examples"
+          aria-labelledby="tool-tab-examples"
+        >
           {allExamples.length > 0 ? (
             <>
               <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">

@@ -48,6 +48,8 @@ const inter = Inter({
 });
 
 export default function App({ Component, pageProps }) {
+  const isVercel = process.env.VERCEL === "1";
+
   return (
     <div className={`${display.variable} ${body.variable} ${mono.variable} ${inter.variable}`}>
       <AuthSessionProvider>
@@ -60,8 +62,12 @@ export default function App({ Component, pageProps }) {
           </MusicProvider>
         </NotesProvider>
       </AuthSessionProvider>
-      <SpeedInsights />
-      <Analytics />
+      {isVercel && (
+        <>
+          <SpeedInsights />
+          <Analytics />
+        </>
+      )}
     </div>
   );
 }
