@@ -44,12 +44,21 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 # STRIPE_DONATION_PRICE_IDS=price_1,price_2,price_3
 ```
 
-### Vercel Deployment
+### Vercel Deployment (PRODUCTION)
 
 1. Go to Vercel Dashboard → Your Project → Settings → Environment Variables
-2. Add all the variables above for the appropriate environments:
-   - **Production**: Use live keys (`sk_live_`, `pk_live_`)
-   - **Preview/Development**: Use test keys (`sk_test_`, `pk_test_`)
+2. **For Production environment**, add:
+   ```bash
+   STRIPE_ENABLED=true
+   STRIPE_SECRET_KEY=sk_live_...  # ⚠️ LIVE KEY for real payments!
+   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...  # ⚠️ LIVE KEY!
+   STRIPE_WEBHOOK_SECRET=whsec_...
+   NEXT_PUBLIC_SITE_URL=https://www.ransfordsnotes.com  # Your production domain
+   ```
+3. **Important**: 
+   - Use **LIVE keys** (`sk_live_`, `pk_live_`) for production
+   - Use **test keys** (`sk_test_`, `pk_test_`) only for preview/development
+   - Webhook URL must be: `https://www.ransfordsnotes.com/api/stripe/webhook`
 
 ## Step 3: Optional - Create Donation Products/Prices in Stripe
 
@@ -86,16 +95,17 @@ Webhooks are required to process completed payments and update user records.
 
 ### For Production (Vercel)
 
-1. Go to Stripe Dashboard → Developers → Webhooks
-2. Click **Add endpoint**
-3. **Endpoint URL**: `https://your-domain.com/api/stripe/webhook`
-4. **Events to send**: Select these events:
+1. **Switch Stripe to Live Mode** (toggle in top right of Stripe Dashboard)
+2. Go to Stripe Dashboard → Developers → Webhooks
+3. Click **Add endpoint**
+4. **Endpoint URL**: `https://www.ransfordsnotes.com/api/stripe/webhook` (your production domain)
+5. **Events to send**: Select these events:
    - `checkout.session.completed`
    - `payment_intent.succeeded`
    - `payment_intent.payment_failed`
-5. Click **Add endpoint**
-6. **Copy the Signing secret** (starts with `whsec_`)
-7. **Add to Vercel environment variables**: `STRIPE_WEBHOOK_SECRET=whsec_...`
+6. Click **Add endpoint**
+7. **Copy the Signing secret** (starts with `whsec_`)
+8. **Add to Vercel Production environment variables**: `STRIPE_WEBHOOK_SECRET=whsec_...`
 
 ## Step 5: Test the Integration
 

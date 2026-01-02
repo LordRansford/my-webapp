@@ -23,13 +23,13 @@ This guide will help you configure Google OAuth authentication for your Next.js 
    - Click "Create Credentials" → "OAuth client ID"
    - Application type: **Web application**
    - Name: "Ransfords Notes" (or your app name)
-5. **Configure authorized redirect URIs**:
-   - Add these URIs (replace with your actual domain):
+5. **Configure authorized redirect URIs** (PRODUCTION - use your actual domain):
+   - Add these URIs (replace `www.ransfordsnotes.com` with your actual domain):
      ```
-     http://localhost:3000/api/auth/callback/google
-     https://your-domain.com/api/auth/callback/google
-     https://your-vercel-app.vercel.app/api/auth/callback/google
+     https://www.ransfordsnotes.com/api/auth/callback/google
+     https://my-webapp-*.vercel.app/api/auth/callback/google
      ```
+   - ⚠️ **For production, use HTTPS only!** Don't use localhost.
 6. **Copy credentials**:
    - **Client ID** (starts with `...apps.googleusercontent.com`)
    - **Client Secret**
