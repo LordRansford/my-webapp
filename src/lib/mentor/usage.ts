@@ -1,7 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const STORE_PATH = process.env.MENTOR_USAGE_PATH || "data/mentor-usage.json";
+const STORE_PATH =
+  process.env.MENTOR_USAGE_PATH ||
+  // Serverless platforms (Vercel) have a read-only filesystem; /tmp is writable.
+  (process.env.VERCEL ? "/tmp/mentor-usage.json" : "data/mentor-usage.json");
 
 type Usage = { total: number; lastReset: string };
 

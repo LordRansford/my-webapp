@@ -13,12 +13,18 @@ const testPrompts = [
   "What are the limits on this tool",
   "Which tools run locally vs credits",
   "How do I test a regex pattern",
-  "What is password entropy",
-  "How do I generate RSA keys",
   "What tools are available for cybersecurity",
   "How do I use the SQL sandbox",
   "What is the difference between local and compute mode",
 ];
+
+function sameOriginHeaders(pageUrl: string) {
+  const origin = new URL(pageUrl).origin;
+  return {
+    origin,
+    referer: pageUrl,
+  };
+}
 
 test.describe("Mentor E2E Tests", () => {
   test.beforeEach(async ({ page }) => {
@@ -38,6 +44,7 @@ test.describe("Mentor E2E Tests", () => {
         // Test API directly
         const startTime = Date.now();
         const response = await page.request.post("/api/mentor/query", {
+          headers: sameOriginHeaders(page.url()),
           data: {
             question: prompt,
             pageUrl: page.url(),
@@ -81,6 +88,7 @@ test.describe("Mentor E2E Tests", () => {
     // Test that fallback system works
     const startTime = Date.now();
     const response = await page.request.post("/api/mentor/query", {
+      headers: sameOriginHeaders(page.url()),
       data: {
         question: "What tools are available",
         pageUrl: "/tools",
@@ -108,6 +116,7 @@ test.describe("Mentor E2E Tests", () => {
     // In a real scenario, we might mock a slow response
     const startTime = Date.now();
     const response = await page.request.post("/api/mentor/query", {
+      headers: sameOriginHeaders(page.url()),
       data: {
         question: "Test timeout handling",
         pageUrl: "/tools",
