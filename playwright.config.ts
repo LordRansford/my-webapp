@@ -11,12 +11,13 @@ export default defineConfig({
   testMatch: /.*\.(spec|test)\.(ts|js|mjs)/,
   timeout: 60_000,
   use: {
-    baseURL: "http://127.0.0.1:3000",
+    // Use localhost to avoid cross-origin dev asset warnings in Next.js.
+    baseURL: "http://localhost:3000",
     headless: true,
   },
   webServer: {
     command: "npm run dev -- --port 3000",
-    url: "http://127.0.0.1:3000",
+    url: "http://localhost:3000",
     reuseExistingServer: true,
     timeout: 120_000,
   },
