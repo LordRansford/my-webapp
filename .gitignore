@@ -29,3 +29,6 @@ test-results/
 # News ingestion temporary files
 data/news/*.tmp
 data/news/archive/*.tmp
+
+# Nested directory (should not be committed)
+my-webapp/
