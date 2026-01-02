@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { ShieldCheck, CheckCircle2, AlertCircle, FileText, Download, XCircle } from "lucide-react";
+import { ShieldCheck, CheckCircle2, AlertCircle, FileText, Download, XCircle, Loader2 } from "lucide-react";
 import { complianceManager } from "@/lib/studios/governance/compliance";
 
 type ComplianceStandard = "GDPR" | "HIPAA" | "SOC2" | "CCPA";

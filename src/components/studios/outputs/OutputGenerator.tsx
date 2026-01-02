@@ -5,7 +5,7 @@ import { FileText, Code, Settings, TestTube, Download, Copy, CheckCircle2, Loade
 
 export type OutputType = "code" | "config" | "documentation" | "tests" | "package";
 
-interface OutputFile {
+export interface OutputFile {
   id: string;
   name: string;
   type: OutputType;

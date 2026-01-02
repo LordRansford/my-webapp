@@ -3,7 +3,7 @@
 import React, { useState, useCallback } from "react";
 import { Rocket, CheckCircle2, Circle, Loader2, AlertCircle, Cloud, GitBranch, Settings } from "lucide-react";
 
-type DeploymentStep = {
+export type DeploymentStep = {
   id: string;
   name: string;
   description: string;
@@ -11,7 +11,7 @@ type DeploymentStep = {
   execute?: () => Promise<void>;
 };
 
-type DeploymentTarget = "github" | "aws" | "azure" | "gcp" | "docker" | "kubernetes";
+export type DeploymentTarget = "github" | "aws" | "azure" | "gcp" | "docker" | "kubernetes";
 
 interface DeploymentWizardProps {
   target?: DeploymentTarget;

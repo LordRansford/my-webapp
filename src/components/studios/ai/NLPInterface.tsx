@@ -193,7 +193,7 @@ export function NLPInterface({
         <div className="mt-6 space-y-2">
           <h4 className="text-sm font-semibold text-slate-900 mb-2">Recent Commands</h4>
           <div className="space-y-2 max-h-48 overflow-y-auto">
-            {filteredHistory.map((entry, index) => (
+            {history.slice(-5).reverse().map((entry, index) => (
               <div
                 key={index}
                 className="p-3 rounded-lg border border-slate-200 bg-slate-50 text-sm"

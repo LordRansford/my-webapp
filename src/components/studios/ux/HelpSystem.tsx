@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { HelpCircle, Search, BookOpen, Video, FileText, X } from "lucide-react";
 
 interface HelpArticle {

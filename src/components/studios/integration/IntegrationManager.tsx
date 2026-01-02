@@ -3,9 +3,9 @@
 import React, { useState } from "react";
 import { GitBranch, Cloud, Workflow, Settings, CheckCircle2, XCircle, Loader2 } from "lucide-react";
 
-type IntegrationType = "git" | "ci-cd" | "cloud" | "api";
+export type IntegrationType = "git" | "ci-cd" | "cloud" | "api";
 
-interface Integration {
+export interface Integration {
   id: string;
   type: IntegrationType;
   name: string;

@@ -14,9 +14,12 @@ import type { ShadowElevation, RadiusKey } from "@/types/design-system";
 interface BaseLayoutProps {
   children: ReactNode;
   className?: string;
+  title?: string;
+  description?: string;
 }
 
-export function BaseLayout({ children, className = "" }: BaseLayoutProps) {
+export function BaseLayout({ children, className = "", title, description }: BaseLayoutProps) {
+  // Note: title and description are accepted for compatibility but metadata should be set via generateMetadata in App Router
   return (
     <div
       className={className}

@@ -20,3 +20,6 @@ export {
 
 // Enhanced responsive grid component
 export { Grid as ResponsiveGrid } from "./Grid";
+
+// Default export - BaseLayout for App Router compatibility
+export { BaseLayout as default } from "./BaseLayout";

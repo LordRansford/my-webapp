@@ -1,0 +1,13 @@
+
+> my-webapp@0.1.0 dev
+> npx next dev --webpack -p 3000
+
+   ▲ Next.js 16.0.10 (webpack)
+   - Local:         http://localhost:3000
+   - Network:       http://192.168.0.175:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 4.5s
+ ○ Compiling / ...
+ GET / 200 in 12.7s (compile: 12.4s, render: 339ms)
