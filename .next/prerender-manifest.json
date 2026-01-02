@@ -1802,10 +1802,10 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/ai/beginner": {
+    "/ai/advanced": {
       "initialRevalidateSeconds": false,
       "srcRoute": null,
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/ai/beginner.json",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/ai/advanced.json",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -1818,7 +1818,7 @@
     "/ai/intermediate": {
       "initialRevalidateSeconds": false,
       "srcRoute": null,
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/ai/intermediate.json",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/ai/intermediate.json",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -1831,7 +1831,7 @@
     "/ai/summary": {
       "initialRevalidateSeconds": false,
       "srcRoute": null,
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/ai/summary.json",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/ai/summary.json",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -1841,75 +1841,10 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/courses": {
+    "/ai/beginner": {
       "initialRevalidateSeconds": false,
       "srcRoute": null,
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/ai/advanced": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": null,
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/ai/advanced.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/data/advanced": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": null,
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/data/advanced.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/data/foundations": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": null,
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/data/foundations.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/data/intermediate": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": null,
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/data/intermediate.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/data/summary": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": null,
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/data/summary.json",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/ai/beginner.json",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -1922,7 +1857,20 @@
     "/ai": {
       "initialRevalidateSeconds": false,
       "srcRoute": null,
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/ai.json",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/ai.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": null,
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses.json",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -1935,7 +1883,59 @@
     "/cpd": {
       "initialRevalidateSeconds": false,
       "srcRoute": null,
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/cpd.json",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/cpd.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/data/advanced": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": null,
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/data/advanced.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/data/foundations": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": null,
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/data/foundations.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/data/intermediate": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": null,
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/data/intermediate.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/data/summary": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": null,
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/data/summary.json",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -1948,7 +1948,7 @@
     "/digitalisation/advanced": {
       "initialRevalidateSeconds": false,
       "srcRoute": null,
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/digitalisation/advanced.json",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/digitalisation/advanced.json",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -1961,7 +1961,7 @@
     "/digitalisation/beginner": {
       "initialRevalidateSeconds": false,
       "srcRoute": null,
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/digitalisation/beginner.json",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/digitalisation/beginner.json",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -1974,7 +1974,7 @@
     "/digitalisation/intermediate": {
       "initialRevalidateSeconds": false,
       "srcRoute": null,
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/digitalisation/intermediate.json",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/digitalisation/intermediate.json",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -1987,7 +1987,72 @@
     "/digitalisation/summary": {
       "initialRevalidateSeconds": false,
       "srcRoute": null,
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/digitalisation/summary.json",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/digitalisation/summary.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/ai": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/ai.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/cybersecurity": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/cybersecurity.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/data": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/data.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/digitalisation": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/digitalisation.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/software-architecture": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/software-architecture.json",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -2001,515 +2066,7 @@
       "initialRevalidateSeconds": 300,
       "initialExpireSeconds": 31536000,
       "srcRoute": null,
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/index.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/ai/course": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/ai/course.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/ai/evaluation": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/ai/evaluation.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/ai/architecture": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/ai/architecture.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/ai/advanced": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/ai/advanced.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/ai/intermediate": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/ai/intermediate.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/ai/summary-and-games": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/ai/summary-and-games.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/ai/summary": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/ai/summary.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/cybersecurity/course": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/cybersecurity/course.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/cybersecurity/rsa-lab": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/cybersecurity/rsa-lab.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/cybersecurity/detection-lab": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/cybersecurity/detection-lab.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/data/course": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/data/course.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/data/advanced": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/data/advanced.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/data/cpd-mapping": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/data/cpd-mapping.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/data/foundations": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/data/foundations.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/data/intermediate": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/data/intermediate.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/data/summary": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/data/summary.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/digitalisation/advanced": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/digitalisation/advanced.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/digitalisation/foundations": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/digitalisation/foundations.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/digitalisation/intermediate": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/digitalisation/intermediate.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/digitalisation/summary": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/digitalisation/summary.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/software-architecture/course": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/software-architecture/course.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/software-architecture/patterns": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/software-architecture/patterns.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/software-architecture/runbooks": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/software-architecture/runbooks.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/software-architecture/advanced": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/software-architecture/advanced.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/software-architecture/foundations": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/software-architecture/foundations.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/software-architecture/intermediate": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/software-architecture/intermediate.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/software-architecture/summary": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]/[lesson]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/software-architecture/summary.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/sitemap": {
-      "initialRevalidateSeconds": 300,
-      "initialExpireSeconds": 31536000,
-      "srcRoute": null,
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/sitemap.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/software-architecture/advanced": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": null,
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/software-architecture/advanced.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/posts/cybersecurity-notes": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/posts/[slug]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/posts/cybersecurity-notes.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/posts/ai-fundamentals-explained": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/posts/[slug]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/posts/ai-fundamentals-explained.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/software-architecture/beginner": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": null,
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/software-architecture/beginner.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/software-architecture/summary": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": null,
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/software-architecture/summary.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/software-architecture/intermediate": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": null,
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/software-architecture/intermediate.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/ai": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/ai.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/cybersecurity": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/cybersecurity.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/data": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/data.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/digitalisation": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/digitalisation.json",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/software-architecture": {
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/courses/[course]",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/software-architecture.json",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/index.json",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -2523,7 +2080,450 @@
       "initialRevalidateSeconds": 300,
       "initialExpireSeconds": 31536000,
       "srcRoute": null,
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/posts.json",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/posts.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/software-architecture/advanced": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": null,
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/software-architecture/advanced.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/software-architecture/beginner": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": null,
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/software-architecture/beginner.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/software-architecture/intermediate": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": null,
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/software-architecture/intermediate.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/ai/course": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/ai/course.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/ai/evaluation": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/ai/evaluation.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/ai/architecture": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/ai/architecture.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/ai/advanced": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/ai/advanced.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/ai/intermediate": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/ai/intermediate.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/ai/summary-and-games": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/ai/summary-and-games.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/ai/summary": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/ai/summary.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/cybersecurity/course": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/cybersecurity/course.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/cybersecurity/rsa-lab": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/cybersecurity/rsa-lab.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/cybersecurity/detection-lab": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/cybersecurity/detection-lab.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/data/course": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/data/course.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/data/advanced": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/data/advanced.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/data/cpd-mapping": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/data/cpd-mapping.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/data/foundations": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/data/foundations.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/data/intermediate": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/data/intermediate.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/data/summary": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/data/summary.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/digitalisation/advanced": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/digitalisation/advanced.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/digitalisation/foundations": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/digitalisation/foundations.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/digitalisation/intermediate": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/digitalisation/intermediate.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/digitalisation/summary": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/digitalisation/summary.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/software-architecture/course": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/software-architecture/course.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/software-architecture/patterns": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/software-architecture/patterns.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/software-architecture/runbooks": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/software-architecture/runbooks.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/software-architecture/advanced": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/software-architecture/advanced.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/software-architecture/foundations": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/software-architecture/foundations.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/software-architecture/intermediate": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/software-architecture/intermediate.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/courses/software-architecture/summary": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/courses/[course]/[lesson]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/software-architecture/summary.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/software-architecture/summary": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": null,
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/software-architecture/summary.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/sitemap": {
+      "initialRevalidateSeconds": 300,
+      "initialExpireSeconds": 31536000,
+      "srcRoute": null,
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/sitemap.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/posts/cybersecurity-notes": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/posts/[slug]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/posts/cybersecurity-notes.json",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/posts/ai-fundamentals-explained": {
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/posts/[slug]",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/posts/ai-fundamentals-explained.json",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -2670,11 +2670,25 @@
         "x-next-revalidate-tag-token"
       ]
     },
+    "/courses/[course]": {
+      "routeRegex": "^/courses/([^/]+?)(?:/)?$",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/[course].json",
+      "fallback": false,
+      "dataRouteRegex": "^/_next/data/6CneoM2QauIG5SWz_xjBM/courses/([^/]+?)\\.json$",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
     "/courses/[course]/[lesson]": {
       "routeRegex": "^/courses/([^/]+?)/([^/]+?)(?:/)?$",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/[course]/[lesson].json",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/courses/[course]/[lesson].json",
       "fallback": false,
-      "dataRouteRegex": "^/_next/data/Ag95xeYu7La8QXwMHa\\-6u/courses/([^/]+?)/([^/]+?)\\.json$",
+      "dataRouteRegex": "^/_next/data/6CneoM2QauIG5SWz_xjBM/courses/([^/]+?)/([^/]+?)\\.json$",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -2686,23 +2700,9 @@
     },
     "/posts/[slug]": {
       "routeRegex": "^/posts/([^/]+?)(?:/)?$",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/posts/[slug].json",
+      "dataRoute": "/_next/data/6CneoM2QauIG5SWz_xjBM/posts/[slug].json",
       "fallback": false,
-      "dataRouteRegex": "^/_next/data/Ag95xeYu7La8QXwMHa\\-6u/posts/([^/]+?)\\.json$",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/courses/[course]": {
-      "routeRegex": "^/courses/([^/]+?)(?:/)?$",
-      "dataRoute": "/_next/data/Ag95xeYu7La8QXwMHa-6u/courses/[course].json",
-      "fallback": false,
-      "dataRouteRegex": "^/_next/data/Ag95xeYu7La8QXwMHa\\-6u/courses/([^/]+?)\\.json$",
+      "dataRouteRegex": "^/_next/data/6CneoM2QauIG5SWz_xjBM/posts/([^/]+?)\\.json$",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -2715,8 +2715,8 @@
   },
   "notFoundRoutes": [],
   "preview": {
-    "previewModeId": "feab8405081fb740f7fa799c1322ce75",
-    "previewModeSigningKey": "78fea42fa4d084fc98843e6de44a11abd71c07b114c9d967e8ddb162bf5c55ec",
-    "previewModeEncryptionKey": "eb73977c325d9aee32361aa71b56421ac943e84d7dcd93527d51c6750f8d4693"
+    "previewModeId": "07866fd0d0fefc4dc943c0053bd6a781",
+    "previewModeSigningKey": "aa111ab5bc5fffd2ac16d9d3c3ff0082aba65a9344e386fb5db32c6780c55e38",
+    "previewModeEncryptionKey": "08b4fcd9ca2124ce5c330c3d21ff75a150ab2d63368ec3a9260edf716376e546"
   }
 }
