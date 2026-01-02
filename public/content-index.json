@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-02T20:36:21.032Z",
+  "generatedAt": "2026-01-02T21:26:19.069Z",
   "pages": [
     {
       "route": "/courses/_cpd-checklist",
@@ -352,19 +352,19 @@
           "depth": 2,
           "title": "Learning outcomes",
           "anchor": "learning-outcomes",
-          "excerpt": "- Knowledge acquisition: terminology, formats, architectures, governance concepts, and mathematical intuition. - Practical application: hands on tools, scenarios, games, and pipeline thinking that mirror real work. - Critical thinking: evaluating quality, bias, risk, and trade offs before taking action. - Professional judgement: aligning data choices with et"
+          "excerpt": "1. Knowledge acquisition. Terminology, formats, architectures, governance concepts, and mathematical intuition. 2. Practical application. Hands on tools, scenarios, games, and pipeline thinking that mirror real work. 3. Critical thinking. Evaluating quality, bias, risk, and trade offs before taking action. 4. Professional judgement. Aligning data choices wit"
         },
         {
           "depth": 2,
           "title": "CPD suitability",
           "anchor": "cpd-suitability",
-          "excerpt": "- Structured learning: four levels with clear progression and tracked sections. - Progressive difficulty: Foundations for concepts, Intermediate for systems, Advanced for scale and mathematics, Summary for synthesis. - Reflection and practice: quizzes, games, and scenario tools encourage reflection and iteration. - Time tracked via CPDTracker: learners recor"
+          "excerpt": "1. Structured learning. Four levels with clear progression and tracked sections. 2. Progressive difficulty. Foundations for concepts, Intermediate for systems, Advanced for scale and mathematics, Summary for synthesis. 3. Reflection and practice. Quizzes, games, and scenario tools encourage reflection and iteration. 4. Time tracked via CPDTracker. Learners r"
         },
         {
           "depth": 2,
           "title": "Framework alignment (conceptual, not endorsed)",
           "anchor": "framework-alignment-conceptual-not-endorsed",
-          "excerpt": "- Aligned with DAMA DMBOK themes such as data quality, governance, and architecture. - Consistent with ISO 8000 principles on data quality and stewardship. - Supports preparation for FAIR data principles: findable, accessible, interoperable, reusable. - Aligned with NIST-style thinking on governance, controls, and risk. - Consistent with UK Government data s"
+          "excerpt": "1. Aligned with DAMA DMBOK themes such as data quality, governance, and architecture. 2. Consistent with ISO 8000 principles on data quality and stewardship. 3. Supports preparation for FAIR data principles. Findable, accessible, interoperable, reusable. 4. Aligned with NIST style thinking on governance, controls, and risk. 5. Consistent with UK Government d"
         }
       ]
     },
@@ -2858,9 +2858,15 @@
       "sections": [
         {
           "depth": 2,
-          "title": "Applied cryptography and protocol reasoning",
-          "anchor": "applied-cryptography-and-protocol-reasoning",
-          "excerpt": "Module P0. Crypto in practice"
+          "title": "Secure SDLC and release discipline",
+          "anchor": "secure-sdlc-and-release-discipline",
+          "excerpt": "Module P1. Secure SDLC"
+        },
+        {
+          "depth": 2,
+          "title": "Runtime, cloud, and applied crypto",
+          "anchor": "runtime-cloud-and-applied-crypto",
+          "excerpt": "Module P3. Runtime and cloud security"
         },
         {
           "depth": 2,
@@ -2872,13 +2878,13 @@
           "depth": 2,
           "title": "Identity, trust, and zero trust architecture",
           "anchor": "identity-trust-and-zero-trust-architecture",
-          "excerpt": "Module P1. Secure architecture and zero trust"
+          "excerpt": "Module P2. Exposure reduction and zero trust"
         },
         {
           "depth": 2,
           "title": "Detection, response, and operational security",
           "anchor": "detection-response-and-operational-security",
-          "excerpt": "Module P2. Detection and incident response"
+          "excerpt": "Module P5. Vulnerability management"
         },
         {
           "depth": 2,

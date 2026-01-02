@@ -7,7 +7,7 @@
   "pages": {
     "/cybersecurity/beginner": [
       "static/chunks/6bd1b060cc02463e.js",
-      "static/chunks/a1f4df986e8103eb.js",
+      "static/chunks/fb98fcd34f058154.js",
       "static/chunks/69ab314e5730c09d.js",
       "static/chunks/0f7c72f45123340f.js",
       "static/chunks/2fcd2aa21d8c3e53.js",
@@ -19,7 +19,7 @@
       "static/chunks/fe1de81744e54f04.js",
       "static/chunks/972bb770631d4a93.js",
       "static/chunks/e66897640c46bc9d.css",
-      "static/chunks/turbopack-d66da94880bfd8e7.js"
+      "static/chunks/turbopack-5bbbbe5b5b6e1866.js"
     ]
   },
   "ampFirstPages": []

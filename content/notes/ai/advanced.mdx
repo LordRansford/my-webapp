@@ -56,18 +56,18 @@ Attention is weighted routing, not memory. The context window is a hard wall, no
 
 Transformers succeed because they repeatedly ask which tokens matter most right now. Each token assigns weights to other tokens. Those weights shape the next representation. There is no persistent world model, only dynamic weighting inside a fixed context window.
 
-The context window is a boundary. Tokens outside it do not exist to the model. That is why long documents get summarised incorrectly and why earlier facts are contradicted. The model is not lying; it is operating in a truncated universe.
+The context window is a boundary. Tokens outside it do not exist to the model. That is why long documents get summarised incorrectly and why earlier facts are contradicted. The model is not lying. It is operating in a truncated universe.
 
 <GlossaryTip term="Attention">
-Plain: A way to score which parts of the input should influence the current step.  
-Formal: A weighted sum of value vectors where weights come from query-key similarity.  
-Example: A translation model giving high weight to the subject token when generating a verb.
+Plain language. A way to score which parts of the input should influence the current step.  
+Formal wording. A weighted sum of value vectors where weights come from query key similarity.  
+Example. A translation model giving high weight to the subject token when generating a verb.
 </GlossaryTip>
 
 <GlossaryTip term="Context window">
-Plain: The slice of tokens the model can see at once.  
-Formal: A fixed-length sequence limit in the transformer architecture.  
-Example: A 8k-token model cannot use a fact placed at token 10000 when answering.
+Plain language. The slice of tokens the model can see at once.  
+Formal wording. A fixed length sequence limit in the transformer architecture.  
+Example. A 8k token model cannot use a fact placed at token 10000 when answering.
 </GlossaryTip>
 
 Attention is powerful because it routes information flexibly. It is brittle because it forgets everything outside the window. If I push too much into the prompt, important facts fall out. Grounding and retrieval help, but they only extend the window-they do not create memory.
@@ -102,9 +102,9 @@ LLMs optimise likelihood, not truth. Fluency is not reliability.
 An LLM chooses the next token that maximises the probability under its learned distribution. High probability feels like confidence. Humans equate confidence with correctness. That is a trap.
 
 <GlossaryTip term="Calibration">
-Plain: When probability estimates match reality.  
-Formal: p(y=1|x)=0.7 should mean roughly 70% of such cases are true.  
-Example: An email model outputting 0.9 spam probability that is correct 90% of the time.
+Plain language. When probability estimates match reality.  
+Formal wording. p(y=1|x)=0.7 should mean roughly 70% of such cases are true.  
+Example. An email model outputting 0.9 spam probability that is correct 90% of the time.
 </GlossaryTip>
 
 LLMs often miscalibrate. They sound certain on thin evidence. They hallucinate when the distribution is flat. That is expected behaviour, not a bug.
@@ -129,15 +129,15 @@ LLMs often miscalibrate. They sound certain on thin evidence. They hallucinate w
 </SectionHeader>
 
 <Callout variant="concept">
-Grounding reduces hallucination; it does not erase it. Retrieval quality matters more than model size.
+Grounding reduces hallucination. It does not erase it. Retrieval quality matters more than model size.
 </Callout>
 
-Grounding attaches generation to external data via retrieval. The model remains a pattern engine; retrieval narrows the pattern space. If retrieval is weak, the model will confidently interpolate with the wrong evidence.
+Grounding attaches generation to external data via retrieval. The model remains a pattern engine. Retrieval narrows the pattern space. If retrieval is weak, the model will confidently interpolate with the wrong evidence.
 
 <GlossaryTip term="Retrieval-augmented generation">
-Plain: Fetch relevant documents, then ask the model to answer using them.  
-Formal: Retrieve top-k contexts, concatenate to prompt, decode tokens conditioned on combined context.  
-Example: A support bot pulling the latest policy snippet before answering.
+Plain language. Fetch relevant documents, then ask the model to answer using them.  
+Formal wording. Retrieve top k contexts, concatenate to prompt, decode tokens conditioned on combined context.  
+Example. A support bot pulling the latest policy snippet before answering.
 </GlossaryTip>
 
 Embeddings power retrieval. They encode similarity. Similarity is an opinion derived from training data. If embeddings encode past bias, retrieval repeats it.
@@ -162,15 +162,15 @@ Embeddings power retrieval. They encode similarity. Similarity is an opinion der
 </SectionHeader>
 
 <Callout variant="concept">
-An agent is a loop: observe, plan, act, observe. Each loop compounds error.
+An agent is a loop. Observe, plan, act, observe. Each loop compounds error.
 </Callout>
 
 Agent systems give models tools, memory, and goals. Autonomy amplifies risk. Without stop conditions, humans, and monitoring, small misreads snowball.
 
 <GlossaryTip term="Runaway behaviour">
-Plain: When an agent keeps acting in a harmful way because feedback is wrong or missing.  
-Formal: Positive feedback without dampening leads to unbounded actions.  
-Example: An automated cleaner deleting resources faster after each “success”.
+Plain language. When an agent keeps acting in a harmful way because feedback is wrong or missing.  
+Formal wording. Positive feedback without dampening leads to unbounded actions.  
+Example. An automated cleaner deleting resources faster after each “success”.
 </GlossaryTip>
 
 <ToolCard title="Plan zero trust controls for an agent environment">
@@ -181,7 +181,7 @@ Example: An automated cleaner deleting resources faster after each “success”
   {[
     { q: "Why do agents break more often than single-turn models", a: "They act repeatedly, so small errors compound across steps." },
     { q: "What mitigates runaway behaviour", a: "Strong stop conditions, monitoring, and human escalation paths." },
-    { q: "Why are guardrails insufficient alone", a: "Guardrails are prompts; agents can route around them when context shifts." },
+    { q: "Why are guardrails insufficient alone", a: "Guardrails are prompts. Agents can route around them when context shifts." },
     { q: "What should always accompany an autonomous tool", a: "Clear scope, logging, and the ability to revoke actions quickly." },
   ]}
 </QuizBlock>
@@ -196,11 +196,11 @@ Example: An automated cleaner deleting resources faster after each “success”
 Diffusion is iterative denoising. The “magic” is a controlled reverse process guided by learned structure.
 </Callout>
 
-Diffusion-style generative systems are a different family from transformers, but the operational lesson is similar: high-quality outputs can still be unsafe, biased, or misused. The system questions are not “is it impressive”, but “what can it generate”, “who can trigger it”, and “what evidence do we keep when it is abused”.
+Diffusion-style generative systems are a different family from transformers, but the operational lesson is similar. High quality outputs can still be unsafe, biased, or misused. The system questions are not “is it impressive”, but “what can it generate”, “who can trigger it”, and “what evidence do we keep when it is abused”.
 
-In a real system, diffusion models show up inside product features: image generation, background removal, style transfer, and synthetic data for prototyping. The technical details matter less than the boundaries. Decide what inputs are allowed, what outputs are disallowed, and how you will detect attempts to route around restrictions. If you cannot describe the abuse cases, you cannot write the guardrails.
+In a real system, diffusion models show up inside product features such as image generation, background removal, style transfer, and synthetic data for prototyping. The technical details matter less than the boundaries. Decide what inputs are allowed, what outputs are disallowed, and how you will detect attempts to route around restrictions. If you cannot describe the abuse cases, you cannot write the guardrails.
 
-If you are deploying generation in a regulated or safety-critical setting, treat it as a content pipeline: provenance, review, and auditability. “We do not store prompts” sounds privacy-friendly, but it can also erase the evidence you need to investigate misuse. A good standard is: store the minimum evidence that lets you explain and fix failures, and delete it on a clear schedule.
+If you are deploying generation in a regulated or safety critical setting, treat it as a content pipeline. Provenance, review, and auditability. “We do not store prompts” sounds privacy friendly, but it can also erase the evidence you need to investigate misuse. A good standard is this. Store the minimum evidence that lets you explain and fix failures, and delete it on a clear schedule.
 
 <QuizBlock title="Diffusion and generation checks">
   {[
@@ -218,14 +218,14 @@ If you are deploying generation in a regulated or safety-critical setting, treat
 </SectionHeader>
 
 <Callout variant="concept">
-Most real failures are system failures: incentives, missing ownership, weak monitoring, and unclear stop conditions.
+Most real failures are system failures. Incentives, missing ownership, weak monitoring, and unclear stop conditions.
 </Callout>
 
-System failures are rarely “the model was wrong”. They are “the model was wrong and nothing caught it”. That can be missing eval gates, missing incident drills, weak access controls for tools, or a lack of rollback plans. The reliability question is always: what happens when a confident error hits production traffic.
+System failures are rarely “the model was wrong”. They are “the model was wrong and nothing caught it”. That can be missing eval gates, missing incident drills, weak access controls for tools, or a lack of rollback plans. The reliability question is always. What happens when a confident error hits production traffic.
 
-Treat failures as feedback about the whole loop: data collection, training, evaluation, deployment, monitoring, and response. If the system cannot detect drift, you are flying blind. If the system cannot stop safely, you are betting the business on perfect predictions. If ownership is unclear, every incident becomes slower because nobody is empowered to act.
+Treat failures as feedback about the whole loop. Data collection, training, evaluation, deployment, monitoring, and response. If the system cannot detect drift, you are flying blind. If the system cannot stop safely, you are betting the business on perfect predictions. If ownership is unclear, every incident becomes slower because nobody is empowered to act.
 
-A simple “gold standard” test is a rehearsal: pick a plausible failure (bad retrieval result, tool misuse, prompt injection, or degraded performance), then walk through detection and containment. If the exercise ends with “we would notice via a customer complaint”, you have found a gap worth fixing before production.
+A simple “gold standard” test is a rehearsal. Pick a plausible failure (bad retrieval result, tool misuse, prompt injection, or degraded performance), then walk through detection and containment. If the exercise ends with “we would notice via a customer complaint”, you have found a gap worth fixing before production.
 
 <QuizBlock title="System failure mode checks">
   {[
@@ -248,7 +248,7 @@ A simple “gold standard” test is a rehearsal: pick a plausible failure (bad 
 Prevention fails. Detection and response decide whether failure becomes disaster.
 </Callout>
 
-LLM-based systems need signals: unusual tool calls, spikes in refusals, unexpected prompt tokens. Traditional systems need auth anomalies, privilege changes, and sensitive reads. The challenge is choosing signals that matter without drowning in noise.
+LLM based systems need signals. Unusual tool calls, spikes in refusals, unexpected prompt tokens. Traditional systems need auth anomalies, privilege changes, and sensitive reads. The challenge is choosing signals that matter without drowning in noise.
 
 <ToolCard title="Evaluate detection coverage">
 <DetectionCoverageTool />
@@ -258,7 +258,7 @@ LLM-based systems need signals: unusual tool calls, spikes in refusals, unexpect
   {[
     { q: "Why is alert fatigue a security risk", a: "Important events get ignored when noise is high." },
     { q: "What makes a signal actionable", a: "Context, low false positives, and clear response steps." },
-    { q: "Why must LLM systems log tool use", a: "Tool misuse is a primary failure mode; without logs you cannot see it." },
+    { q: "Why must LLM systems log tool use", a: "Tool misuse is a primary failure mode. Without logs you cannot see it." },
     { q: "What is a practical mitigation for noise", a: "Tune thresholds, aggregate signals, and align alerts to response capacity." },
   ]}
 </QuizBlock>
@@ -303,9 +303,9 @@ Governance is not paperwork. It is how we make decisions under uncertainty and a
 Real governance fails when incentives reward shipping over safety. Model cards unread, red teaming skipped, monitoring underfunded. The result is surprise failures that were foreseeable.
 
 <GlossaryTip term="Residual risk">
-Plain: The risk that remains after controls.  
-Formal: Risk not eliminated by mitigation, consciously accepted.  
-Example: Accepting some false positives to avoid missing high-impact fraud.
+Plain language. The risk that remains after controls.  
+Formal wording. Risk not eliminated by mitigation, consciously accepted.  
+Example. Accepting some false positives to avoid missing high impact fraud.
 </GlossaryTip>
 
 <ToolCard title="Incident rehearsal checklist">
@@ -314,10 +314,10 @@ Example: Accepting some false positives to avoid missing high-impact fraud.
 
 <QuizBlock title="Governance checks">
   {[
-    { q: "Why does governance often fail", a: "Incentives reward speed; safety work is deprioritised or papered over." },
-    { q: "What is residual risk", a: "The risk you accept after mitigations; it must be explicit." },
+    { q: "Why does governance often fail", a: "Incentives reward speed. Safety work is deprioritised or papered over." },
+    { q: "What is residual risk", a: "The risk you accept after mitigations. It must be explicit." },
     { q: "Why do model cards matter", a: "They document intended use, limits, and evaluation so misuse is visible." },
-    { q: "Why is human-in-the-loop different from human-on-the-loop", a: "In-the-loop means humans approve actions; on-the-loop often means humans are nominally present but systems act autonomously." },
+    { q: "Why is human-in-the-loop different from human-on-the-loop", a: "In the loop means humans approve actions. On the loop often means humans are nominally present but systems act autonomously." },
   ]}
 </QuizBlock>
 

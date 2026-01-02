@@ -6,7 +6,7 @@
   "rootMainFiles": [],
   "pages": {
     "/notes/cybersecurity/roadmap": [
-      "static/chunks/82a0ab51219d5653.js",
+      "static/chunks/0074b219851d507c.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/2fcd2aa21d8c3e53.js",
       "static/chunks/48c11802c3f193fa.js",
@@ -16,7 +16,7 @@
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/fe1de81744e54f04.js",
       "static/chunks/972bb770631d4a93.js",
-      "static/chunks/turbopack-e4b51a5e96652d27.js"
+      "static/chunks/turbopack-36a93d6b63259a0f.js"
     ]
   },
   "ampFirstPages": []

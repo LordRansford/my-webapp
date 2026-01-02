@@ -7,7 +7,7 @@
   "pages": {
     "/ai/beginner": [
       "static/chunks/3ee684ecfcd74ab3.js",
-      "static/chunks/a1f4df986e8103eb.js",
+      "static/chunks/fb98fcd34f058154.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/0f7c72f45123340f.js",
       "static/chunks/2fcd2aa21d8c3e53.js",
@@ -19,7 +19,7 @@
       "static/chunks/fe1de81744e54f04.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/e66897640c46bc9d.css",
-      "static/chunks/turbopack-a6c9ec06d96f852c.js"
+      "static/chunks/turbopack-15269a7ac4d53507.js"
     ]
   },
   "ampFirstPages": []

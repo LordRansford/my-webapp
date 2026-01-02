@@ -31,6 +31,10 @@ const RiskTradeoffVisualizer = dynamic(() => import("@/components/dashboards/cyb
 const IntermediateQuizBoard = dynamic(() => import("@/components/dashboards/cybersecurity/intermediate/IntermediateQuizBoard"), { ssr: false });
 const Quiz = dynamic(() => import("@/components/Quiz"), { ssr: false });
 const Recap = dynamic(() => import("@/components/notes/Recap"), { ssr: false });
+const FeatureSecurityReviewPackTool = dynamic(
+  () => import("@/components/notes/tools/cybersecurity/intermediate/FeatureSecurityReviewPackTool"),
+  { ssr: false }
+);
 
 export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
@@ -65,6 +69,7 @@ export default function Page({ source, headings }) {
       Quiz,
       PageNav,
       Recap,
+      FeatureSecurityReviewPackTool,
     }),
     []
   );

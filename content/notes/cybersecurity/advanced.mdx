@@ -40,13 +40,52 @@ import { cyberSections } from "@/lib/cyberSections"
 
 ---
 
-## Applied cryptography and protocol reasoning
+## Secure SDLC and release discipline
 
-<SectionHeader variant="content" emoji="🔐" id="practice-p0-crypto-in-practice">
-  Module P0. Crypto in practice
+<SectionHeader variant="content" emoji="🧩" id="practice-p1-secure-sdlc">
+  Module P1. Secure SDLC
 </SectionHeader>
 
-<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p0-crypto-in-practice" />
+<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p1-secure-sdlc" />
+
+Security becomes real when it is built into how work ships. A secure SDLC is not a list of gates that slow teams down. It is a set of small controls that make failure harder to hide and easier to recover from.
+
+The practical question is where you place controls so they catch the right problems at the right time. The early stages should catch design mistakes. The later stages should catch configuration and drift. The goal is not perfect prevention. The goal is verified safety and fast containment.
+
+Use the tool below to write a minimal release posture for one product. Keep it small enough that teams can follow it on a bad day.
+
+<ToolCard
+  id="secure-sdlc-gate-planner"
+  title="Plan a secure SDLC gate set"
+  description="Pick a small set of controls per stage and define how you will verify they work."
+>
+  <SecureSdlcGatePlannerTool />
+</ToolCard>
+
+<QuizBlock
+  id="practice-p1-secure-sdlc"
+  courseId="cybersecurity"
+  levelId="practice"
+  sectionId="practice-p1-secure-sdlc"
+  title="Quick check. Secure SDLC"
+  questions={[
+    { q: "What is the point of a secure SDLC", a: "To build safety and verification into delivery so failures are caught and contained early." },
+    { q: "Why do early gates matter", a: "They catch design mistakes before they become expensive and hard to unwind." },
+    { q: "What is a useful quality for a gate", a: "It is measurable, repeatable, and does not depend on heroics." },
+    { q: "Why avoid too many gates", a: "Overweight process encourages bypassing and makes real risk harder to see." },
+    { q: "What should every gate have", a: "A clear owner and a definition of how it will be verified." },
+  ]}
+/>
+
+---
+
+## Runtime, cloud, and applied crypto
+
+<SectionHeader variant="content" emoji="🔐" id="practice-p3-runtime-and-cloud-security">
+  Module P3. Runtime and cloud security
+</SectionHeader>
+
+<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p3-runtime-and-cloud-security" />
 
 Crypto is only useful when it is applied correctly. Most organisations do not lose because the maths was broken. They lose because assumptions drift, keys leak, validation gets skipped, or somebody treats "encrypted" as a risk stamp that means "safe".
 
@@ -108,11 +147,11 @@ After you run it, translate the output into standards. The policy decision is no
 One more leadership lens. Weak crypto choices are often a symptom of rushed delivery or copy paste culture. Fixing it usually needs guardrails (defaults) more than training.
 
 <QuizBlock
-  id="practice-p0-crypto-in-practice"
+  id="practice-p3-runtime-and-cloud-security"
   courseId="cybersecurity"
   levelId="practice"
-  sectionId="practice-p0-crypto-in-practice"
-  title="Quick check. Crypto in practice"
+  sectionId="practice-p3-runtime-and-cloud-security"
+  title="Quick check. Runtime and cloud security"
   questions={[
     { q: "What does a cipher suite specify", a: "The algorithms for key exchange, encryption and integrity used in a session." },
     { q: "Why do we trust a certificate", a: "Because a certificate authority signs it and the client validates that signature and chain." },
@@ -132,11 +171,11 @@ This section is about turning risk into design decisions you can defend. In prac
 
 ## Identity, trust, and zero trust architecture
 
-<SectionHeader variant="content" emoji="🏗️" id="practice-p1-secure-architecture-zero-trust">
-  Module P1. Secure architecture and zero trust
+<SectionHeader variant="content" emoji="🏗️" id="practice-p2-exposure-reduction-zero-trust">
+  Module P2. Exposure reduction and zero trust
 </SectionHeader>
 
-<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p1-secure-architecture-zero-trust" />
+<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p2-exposure-reduction-zero-trust" />
 
 Zero trust is simple. Never assume the network is friendly, always verify access, limit blast radius. <GlossaryTip term="zero trust">Design where no implicit trust is granted based on network location</GlossaryTip>. <GlossaryTip term="microsegment">Breaking systems into small zones with tight policy</GlossaryTip> reduces how far an attacker can move. Defence in depth still matters. Identity, network, application, and data controls should stack.
 
@@ -195,10 +234,10 @@ Before the next tool, make a decision about constraints. Are you optimising for 
 After you run it, the lead move is to turn "nice to have" into "decided". Write down what is mandatory, what is optional, and what is explicitly accepted risk. Then align it to governance. Architecture standards, design review checklists, and exception handling. If you cannot enforce it, it is not a standard, it is a wish.
 
 <QuizBlock
-  id="practice-p1-secure-architecture-zero-trust"
+  id="practice-p2-exposure-reduction-zero-trust"
   courseId="cybersecurity"
   levelId="practice"
-  sectionId="practice-p1-secure-architecture-zero-trust"
+  sectionId="practice-p2-exposure-reduction-zero-trust"
   title="Quick check. Secure architecture"
   questions={[
     { q: "What is the core idea of zero trust", a: "Do not grant implicit trust based on network location. Verify every access." },
@@ -214,11 +253,48 @@ After you run it, the lead move is to turn "nice to have" into "decided". Write 
 
 ## Detection, response, and operational security
 
-<SectionHeader variant="content" emoji="🔍" id="practice-p2-detection-and-incident-response">
-  Module P2. Detection and incident response
+<SectionHeader variant="content" emoji="🧯" id="practice-p5-vulnerability-management">
+  Module P5. Vulnerability management
 </SectionHeader>
 
-<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p2-detection-and-incident-response" />
+<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p5-vulnerability-management" />
+
+Vulnerability management is not a panic feed. It is a system for deciding what matters now, what can wait, and what you will never fix and must isolate. The hard part is prioritisation under uncertainty and limited capacity.
+
+A good triage decision uses a few simple inputs. Exposure, impact, exploitability signals, and how fast you can safely patch. If your process only sorts by severity labels, it will fail in the real world.
+
+Use the tool below to practise triage on defensive scenarios. The aim is to justify a priority and write down what you would do in the first day.
+
+<ToolCard
+  id="vulnerability-triage-planner"
+  title="Triage vulnerabilities without panic"
+  description="Score a scenario by exposure and impact, then choose a practical response plan."
+>
+  <VulnerabilityTriagePlannerTool />
+</ToolCard>
+
+<QuizBlock
+  id="practice-p5-vulnerability-management"
+  courseId="cybersecurity"
+  levelId="practice"
+  sectionId="practice-p5-vulnerability-management"
+  title="Quick check. Vulnerability management"
+  questions={[
+    { q: "What is the goal of vulnerability management", a: "To reduce risk through prioritised remediation and sensible compensating controls." },
+    { q: "What is a common failure mode", a: "Sorting only by severity label and ignoring exposure and business impact." },
+    { q: "What matters when you cannot patch quickly", a: "Containment, monitoring, and limiting blast radius until you can fix." },
+    { q: "Why track patch windows", a: "To make risk decisions explicit and reduce silent backlog growth." },
+    { q: "What is one good output from triage", a: "A documented priority and a first day response plan." },
+  ]}
+/>
+
+---
+
+<SectionHeader variant="content" emoji="🔍" id="practice-p6-detection-and-incident-response">
+  Module P6. Detection and incident response
+</SectionHeader>
+
+<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p6-detection-and-incident-response" />
 
 Detection closes the gap between compromise and action. A <GlossaryTip term="SIEM">Security information and event management (SIEM), a platform that collects and correlates security events</GlossaryTip> feeds alerts to a <GlossaryTip term="SOC">security operations centre (SOC), a team that monitors and responds</GlossaryTip>. Good detection reduces <GlossaryTip term="dwell time">how long an attacker stays unnoticed</GlossaryTip>. Response follows a loop: triage, contain, eradicate, recover, and learn.
 
@@ -273,10 +349,10 @@ Before the next tool, pick an acceptable risk of noise. If you tune for zero fal
 After you run it, document the judgement. Which threshold do you choose, why, and what compensating controls exist (for example, extra logging, rate limits, step-up authentication). Then turn it into an operating rule: who can change thresholds, how changes are reviewed, and what you monitor to detect drift.
 
 <QuizBlock
-  id="practice-p2-detection-and-incident-response"
+  id="practice-p6-detection-and-incident-response"
   courseId="cybersecurity"
   levelId="practice"
-  sectionId="practice-p2-detection-and-incident-response"
+  sectionId="practice-p6-detection-and-incident-response"
   title="Quick check. Detection and response"
   questions={[
     { q: "What does a SIEM do", a: "Collects and correlates events to surface potential security issues." },
@@ -290,11 +366,11 @@ After you run it, document the judgement. Which threshold do you choose, why, an
 
 ---
 
-<SectionHeader variant="content" emoji="📦" id="practice-p3-supply-chain-risk">
-  Module P3. Supply chain risk
+<SectionHeader variant="content" emoji="📦" id="practice-p4-supply-chain-security">
+  Module P4. Supply chain security
 </SectionHeader>
 
-<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p3-supply-chain-risk" />
+<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p4-supply-chain-security" />
 
 ## Supply chain and systemic risk
 
@@ -303,10 +379,10 @@ Supply chain risk is the uncomfortable truth that you inherit other people’s s
 In practice, supply chain work looks like ownership and verification: who can publish packages, who can approve build changes, what is signed, what is pinned, and how you detect tampering. It is also about blast radius: least privilege tokens, isolated environments, and the ability to revoke quickly.
 
 <QuizBlock
-  id="practice-p3-supply-chain-risk"
+  id="practice-p4-supply-chain-security"
   courseId="cybersecurity"
   levelId="practice"
-  sectionId="practice-p3-supply-chain-risk"
+  sectionId="practice-p4-supply-chain-security"
   title="Quick check. Supply chain and systemic risk"
   questions={[
     { q: "What is supply chain risk in security", a: "Risk introduced through third parties like dependencies, build tools, vendors, and services you rely on." },
@@ -318,11 +394,11 @@ In practice, supply chain work looks like ownership and verification: who can pu
 
 ---
 
-<SectionHeader variant="content" emoji="⚖️" id="practice-p4-adversarial-tradeoffs">
-  Module P4. Adversarial trade offs
+<SectionHeader variant="content" emoji="⚖️" id="practice-p8-system-ilities">
+  Module P8. System ilities
 </SectionHeader>
 
-<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p4-adversarial-tradeoffs" />
+<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p8-system-ilities" />
 
 ## Adversarial trade offs and failure analysis
 
@@ -331,11 +407,11 @@ Adversaries optimise for cost and probability of success, not elegance. Defence 
 Failure analysis is how you stop repeating the same incident with new branding. Look for the broken assumption, the missing guardrail, and the point where a human had to make a call without enough information.
 
 <QuizBlock
-  id="practice-p4-adversarial-tradeoffs"
+  id="practice-p8-system-ilities"
   courseId="cybersecurity"
   levelId="practice"
-  sectionId="practice-p4-adversarial-tradeoffs"
-  title="Quick check. Adversarial trade offs and failure analysis"
+  sectionId="practice-p8-system-ilities"
+  title="Quick check. System ilities"
   questions={[
     { q: "What do attackers typically optimise for", a: "Low cost and high probability of success, not perfect technique." },
     { q: "What does it mean to change attacker economics", a: "Make attacks more expensive, noisy, or slow so they are less likely to succeed." },
@@ -344,11 +420,11 @@ Failure analysis is how you stop repeating the same incident with new branding. 
   ]}
 />
 
-<SectionHeader variant="content" emoji="📋" id="practice-p5-governance-and-professional-practice">
-  Module P5. Governance and professional practice
+<SectionHeader variant="content" emoji="📋" id="practice-p7-privacy-ethics-auditability">
+  Module P7. Privacy, ethics, and auditability
 </SectionHeader>
 
-<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p5-governance-and-professional-practice" />
+<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p7-privacy-ethics-auditability" />
 
 This section is the glue. It is temporary tooling in a way, because your first versions will be imperfect. That is normal. The point is to build a loop that makes the next version better.
 
@@ -449,11 +525,11 @@ Before the next tool, be honest about your audience. Are you planning for an eng
 Afterwards, treat the output as a roadmap, not an identity. Career planning is a governance skill too: you are choosing where to build depth so you can lead decisions under pressure. If a certification helps you structure knowledge and communicate credibility, great. If it becomes a proxy for competence, it becomes theatre.
 
 <QuizBlock
-  id="practice-p5-governance-and-professional-practice"
+  id="practice-p7-privacy-ethics-auditability"
   courseId="cybersecurity"
   levelId="practice"
-  sectionId="practice-p5-governance-and-professional-practice"
-  title="Quick check. Governance and career"
+  sectionId="practice-p7-privacy-ethics-auditability"
+  title="Quick check. Privacy, ethics, and auditability"
   questions={[
     { q: "Why use a framework like NIST CSF 2.0", a: "It provides shared language and coverage across Govern, Identify, Protect, Detect, Respond and Recover, making gaps and priorities easier to communicate." },
     { q: "What is risk appetite", a: "The level of risk an organisation is willing to accept, which should shape priorities and exception decisions." },
@@ -466,13 +542,21 @@ Afterwards, treat the output as a roadmap, not an identity. Career planning is a
 
 ---
 
-<SectionHeader variant="content" emoji="🏆" id="practice-p6-capstone">
-  Module P6. Capstone
+<SectionHeader variant="content" emoji="🏆" id="practice-p9-capstone-professional-practice">
+  Module P9. Capstone professional practice
 </SectionHeader>
 
-<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p6-capstone" />
+<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p9-capstone-professional-practice" />
 
 Pick one system you understand. Produce a short professional pack you could defend in a review. Include the system goal, the highest impact risks, the most important controls, and the evidence you would keep.
+
+<ToolCard
+  id="operational-security-pack"
+  title="Build an operational security pack"
+  description="Capture the system scope, top risks, controls, verification, and evidence in one defensible pack."
+>
+  <OperationalSecurityPackTool />
+</ToolCard>
 
 <ToolCard
   id="framework-mapping-capstone"
@@ -483,10 +567,10 @@ Pick one system you understand. Produce a short professional pack you could defe
 </ToolCard>
 
 <QuizBlock
-  id="practice-p6-capstone"
+  id="practice-p9-capstone-professional-practice"
   courseId="cybersecurity"
   levelId="practice"
-  sectionId="practice-p6-capstone"
+  sectionId="practice-p9-capstone-professional-practice"
   title="Quick check. Capstone"
   questions={[
     { q: "What makes a capstone defensible", a: "Clear scope, clear risk choices, and clear evidence you can show." },

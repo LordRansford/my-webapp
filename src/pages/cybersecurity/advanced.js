@@ -39,6 +39,18 @@ const TokenSecurityLab = dynamic(() => import("@/components/dashboards/cybersecu
 const SecureDesignTradeoffLab = dynamic(() => import("@/components/dashboards/cybersecurity/advanced/SecureDesignTradeoffLab"), { ssr: false });
 const DetectionRuleTuner = dynamic(() => import("@/components/dashboards/cybersecurity/advanced/DetectionRuleTuner"), { ssr: false });
 const AdvancedQuizBoard = dynamic(() => import("@/components/dashboards/cybersecurity/advanced/AdvancedQuizBoard"), { ssr: false });
+const SecureSdlcGatePlannerTool = dynamic(
+  () => import("@/components/notes/tools/cybersecurity/advanced/SecureSdlcGatePlannerTool"),
+  { ssr: false }
+);
+const VulnerabilityTriagePlannerTool = dynamic(
+  () => import("@/components/notes/tools/cybersecurity/advanced/VulnerabilityTriagePlannerTool"),
+  { ssr: false }
+);
+const OperationalSecurityPackTool = dynamic(
+  () => import("@/components/notes/tools/cybersecurity/advanced/OperationalSecurityPackTool"),
+  { ssr: false }
+);
 
 export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
@@ -77,6 +89,9 @@ export default function Page({ source, headings }) {
       SecureDesignTradeoffLab,
       DetectionRuleTuner,
       AdvancedQuizBoard,
+      SecureSdlcGatePlannerTool,
+      VulnerabilityTriagePlannerTool,
+      OperationalSecurityPackTool,
     }),
     []
   );
