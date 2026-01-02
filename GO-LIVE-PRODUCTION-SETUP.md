@@ -1,5 +1,8 @@
 # 🚀 GO LIVE - Production Setup Checklist
 
+**⚠️ CRITICAL: Read `PRODUCTION-BLOCKERS.md` first!**  
+**Your app uses file-based storage which WON'T work on Vercel. You MUST set up PostgreSQL first!**
+
 **This guide is for PRODUCTION deployment. Configure everything in Vercel, not localhost!**
 
 ## Your Production Domain
@@ -33,6 +36,9 @@ GOOGLE_CLIENT_SECRET=<your-google-client-secret>
 
 # Site URL
 NEXT_PUBLIC_SITE_URL=https://www.ransfordsnotes.com  # YOUR PRODUCTION DOMAIN
+
+# Database (REQUIRED - set up PostgreSQL first!)
+DATABASE_URL=postgresql://user:password@host:5432/dbname?sslmode=require
 
 # Stripe (REQUIRED for donations/credits)
 STRIPE_ENABLED=true
