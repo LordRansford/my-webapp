@@ -10,9 +10,16 @@ import NotesLayout from "@/components/NotesLayout";
  */
 export default function SignInPage() {
   const providers = useMemo(
-    () => [
-      { id: "google", name: "Google" },
-    ],
+    () => {
+      const providersList = [
+        { id: "google", name: "Google" },
+      ];
+      // Add email provider if configured
+      if (process.env.NEXT_PUBLIC_EMAIL_ENABLED === "true") {
+        providersList.push({ id: "email", name: "Email" });
+      }
+      return providersList;
+    },
     []
   );
 
