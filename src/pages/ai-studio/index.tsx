@@ -420,9 +420,9 @@ export default function AIStudioPage() {
                       title: "Getting Started",
                       content: (
                         <div>
-                          <p>Welcome to AI Studio! Here's how to get started:</p>
+                          <p>Welcome to AI Studio! Here&apos;s how to get started:</p>
                           <ol className="list-decimal pl-5 mt-2 space-y-1">
-                            <li>Explore examples to see what's possible</li>
+                            <li>Explore examples to see what&apos;s possible</li>
                             <li>Follow the guided workflow to build your first model</li>
                             <li>Use the learning studio to understand concepts</li>
                             <li>Deploy your models to production</li>
@@ -459,7 +459,7 @@ export default function AIStudioPage() {
                       New to AI Studio?
                     </h2>
                     <p className="text-slate-700 mb-4">
-                      Take our quick onboarding tour to learn how to build your first AI model, or explore examples to see what's possible.
+                      Take our quick onboarding tour to learn how to build your first AI model, or explore examples to see what&apos;s possible.
                     </p>
                     <div className="flex gap-3">
                       <Link

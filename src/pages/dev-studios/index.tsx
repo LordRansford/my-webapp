@@ -75,7 +75,7 @@ export default function DevStudiosPage() {
         </div>
         <h1 className="text-2xl sm:text-3xl font-semibold text-slate-900">Ransford&apos;s Software Development Studio</h1>
         <p className="text-sm sm:text-base text-slate-700 max-w-3xl leading-relaxed">
-          This is my workshop for shipping software safely. We sketch systems, pick stacks, check security, and get friendly nudges from a local "agent". No cloud calls, no telemetry. Just guidance, templates and checklists that behave.
+          This is my workshop for shipping software safely. We sketch systems, pick stacks, check security, and get friendly nudges from a local &quot;agent&quot;. No cloud calls, no telemetry. Just guidance, templates and checklists that behave.
         </p>
         <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-2 text-xs sm:text-sm">
           <Link href="/studios" className="font-semibold text-emerald-700 hover:underline">

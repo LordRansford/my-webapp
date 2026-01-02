@@ -291,7 +291,7 @@ export default function APIDesignerPage() {
                   {endpoints.length === 0 && (
                     <div className="text-center py-8 text-slate-500">
                       <FileCode className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                      <p>No endpoints added yet. Click "Add Endpoint" to get started.</p>
+                      <p>No endpoints added yet. Click &quot;Add Endpoint&quot; to get started.</p>
                     </div>
                   )}
                 </div>

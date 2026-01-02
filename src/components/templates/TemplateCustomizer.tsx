@@ -242,7 +242,7 @@ export function TemplateCustomizer({
       {fields.length === 0 && (
         <div className="text-center py-8 text-slate-600">
           <p>This template has no customization options.</p>
-          <p className="text-sm mt-2">Click "Start Template" to begin with default settings.</p>
+          <p className="text-sm mt-2">Click &quot;Start Template&quot; to begin with default settings.</p>
         </div>
       )}
 

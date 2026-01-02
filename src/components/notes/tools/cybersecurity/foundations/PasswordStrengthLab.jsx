@@ -137,7 +137,7 @@ export default function PasswordStrengthLab() {
             <div className="p-3 bg-red-50 border border-red-300 rounded-lg">
               <div className="font-semibold text-red-900 mb-1">⚠️ Warning</div>
               <p className="text-xs text-red-800">
-                This password contains a common word or pattern found in breach databases. Attackers use dictionaries of common passwords first. Even with modifications like "P@ssw0rd", it's easily cracked.
+                This password contains a common word or pattern found in breach databases. Attackers use dictionaries of common passwords first. Even with modifications like &quot;P@ssw0rd&quot;, it&apos;s easily cracked.
               </p>
             </div>
           )}
@@ -151,10 +151,10 @@ export default function PasswordStrengthLab() {
             <strong>Length vs Complexity:</strong> A 16-character password of all lowercase letters is stronger than an 8-character password with mixed case, numbers, and symbols.
           </div>
           <div>
-            <strong>Why "P@ssw0rd1!" is terrible:</strong> Predictable substitutions (@ for a, 0 for o) don't fool modern cracking tools. Dictionary attacks check these variations automatically.
+            <strong>Why &quot;P@ssw0rd1!&quot; is terrible:</strong> Predictable substitutions (@ for a, 0 for o) don&apos;t fool modern cracking tools. Dictionary attacks check these variations automatically.
           </div>
           <div>
-            <strong>Best practice:</strong> Use a passphrase (4+ random words) or password manager to generate truly random passwords. Example: "correct horse battery staple" (XKCD reference).
+            <strong>Best practice:</strong> Use a passphrase (4+ random words) or password manager to generate truly random passwords. Example: &quot;correct horse battery staple&quot; (XKCD reference).
           </div>
         </div>
       </div>
@@ -163,19 +163,19 @@ export default function PasswordStrengthLab() {
         <div className="font-semibold text-slate-900 mb-2">Try these examples:</div>
         <div className="space-y-1 text-xs">
           <button onClick={() => set_state({ password: "password" })} className="text-blue-600 hover:underline block">
-            • "password" - Most common password
+            • &quot;password&quot; - Most common password
           </button>
           <button onClick={() => set_state({ password: "P@ssw0rd1!" })} className="text-blue-600 hover:underline block">
-            • "P@ssw0rd1!" - Predictable substitutions
+            • &quot;P@ssw0rd1!&quot; - Predictable substitutions
           </button>
           <button onClick={() => set_state({ password: "Tr0ub4dor&3" })} className="text-blue-600 hover:underline block">
-            • "Tr0ub4dor&3" - Complex but short (still weak)
+            • &quot;Tr0ub4dor&amp;3&quot; - Complex but short (still weak)
           </button>
           <button onClick={() => set_state({ password: "correcthorsebatterystaple" })} className="text-blue-600 hover:underline block">
-            • "correcthorsebatterystaple" - Long passphrase (strong)
+            • &quot;correcthorsebatterystaple&quot; - Long passphrase (strong)
           </button>
           <button onClick={() => set_state({ password: "7vQ#mP9$xL2@nR5%" })} className="text-blue-600 hover:underline block">
-            • "7vQ#mP9$xL2@nR5%" - Truly random (very strong)
+            • &quot;7vQ#mP9$xL2@nR5%&quot; - Truly random (very strong)
           </button>
         </div>
       </div>

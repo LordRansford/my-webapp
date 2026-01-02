@@ -270,7 +270,7 @@ export default function AIHubPage() {
               <h3 className="font-semibold text-slate-900">See Examples</h3>
             </div>
             <p className="text-sm text-slate-600">
-              Explore proof-of-concept implementations and see what's possible with AI Studio.
+              Explore proof-of-concept implementations and see what&apos;s possible with AI Studio.
             </p>
           </Link>
         </div>

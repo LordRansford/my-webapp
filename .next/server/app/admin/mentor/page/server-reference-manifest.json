@@ -1,0 +1,20 @@
+{
+  "node": {
+    "000bf91e53b75337c42c9f8deaf65ad2751ae244aa": {
+      "workers": {
+        "app/admin/mentor/page": {
+          "moduleId": 361916,
+          "async": false,
+          "exportedName": "$$RSC_SERVER_ACTION_0",
+          "filename": "src/app/admin/mentor/page.tsx"
+        }
+      },
+      "layer": {
+        "app/admin/mentor/page": "rsc"
+      },
+      "exportedName": "$$RSC_SERVER_ACTION_0",
+      "filename": "src/app/admin/mentor/page.tsx"
+    }
+  },
+  "edge": {}
+}

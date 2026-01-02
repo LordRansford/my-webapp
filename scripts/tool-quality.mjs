@@ -15,8 +15,10 @@ function read(relativePath) {
 const registryPath = "content/templates/registry.json";
 const registryRaw = read(registryPath);
 
-if (/-/.test(registryRaw)) {
-  fail("Registry contains an em dash. Replace with a hyphen.");
+// Guard against unicode dash characters (e.g. en dash / em dash) which can cause
+// subtle string mismatches in IDs and routes.
+if (/[\u2013\u2014]/.test(registryRaw)) {
+  fail("Registry contains a unicode dash (en/em dash). Replace it with a hyphen (-).");
 }
 
 const registry = JSON.parse(registryRaw);

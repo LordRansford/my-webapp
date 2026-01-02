@@ -61,7 +61,7 @@
 
 ### Core Authentication
 ```bash
-NEXTAUTH_SECRET=PrVCjJTE5zWJEhWtHmiQsjl74l6+SRmy3Xt25EadwmA=  # ✅ Generated
+NEXTAUTH_SECRET=<generate-a-strong-random-secret>  # ✅ REQUIRED
 NEXTAUTH_URL=https://www.ransfordsnotes.com  # Your production domain
 GOOGLE_CLIENT_ID=<get-from-google>
 GOOGLE_CLIENT_SECRET=<get-from-google>
@@ -76,15 +76,15 @@ DATABASE_URL=postgresql://...  # ⚠️ MUST SET UP POSTGRESQL FIRST
 ### Stripe (For Donations/Credits)
 ```bash
 STRIPE_ENABLED=true
-STRIPE_SECRET_KEY=sk_live_...  # Live key for production
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...  # Live key
+STRIPE_SECRET_KEY=sk_<your-stripe-secret-key>  # Live-mode key for production
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_<your-stripe-publishable-key>  # Live-mode key for production
 STRIPE_WEBHOOK_SECRET=whsec_...  # From webhook endpoint
 ```
 
 ### Sentry & Blob (Already Have)
 ```bash
-NEXT_PUBLIC_SENTRY_DSN=https://18ce20185c853218c17f8ae07b0a910c@04510635376836608.ingest.de.sentry.io/4510635463999568
-BLOB_READ_WRITE_TOKEN=vercel_blob_rw_UuhVh3M1IDJgNtMG_iVjfFbe4ZavEw1BfnPveoB3Z1dW7zU
+NEXT_PUBLIC_SENTRY_DSN=<your-sentry-dsn>
+BLOB_READ_WRITE_TOKEN=<your-blob-read-write-token>
 ```
 
 ### Optional

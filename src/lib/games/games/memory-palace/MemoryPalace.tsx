@@ -280,7 +280,7 @@ export default function MemoryPalace() {
                   onClick={handleStartRecall}
                   className="w-full px-4 py-3 bg-amber-600 text-white rounded-lg hover:bg-amber-700"
                 >
-                  I'm Ready to Recall
+                  I&apos;m Ready to Recall
                 </button>
               </>
             ) : (

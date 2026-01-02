@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/play/layout,_N_T_/play/decision-tree-simulator/layout,_N_T_/play/decision-tree-simulator/page,_N_T_/play/decision-tree-simulator"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/play/decision-tree-simulator/__PAGE__",
+    "/play/decision-tree-simulator",
+    "/play",
+    "/_index",
+    "/_head"
+  ]
+}

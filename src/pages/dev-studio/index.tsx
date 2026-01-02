@@ -422,7 +422,7 @@ export default function DevStudioPage() {
                     you need to start coding. It is like getting a new house with all the rooms already built.
                   </p>
                   <p className="text-xs text-slate-600">
-                    <strong>Example:</strong> Choose "Website" and "React" to create a new website project. 
+                    <strong>Example:</strong> Choose &quot;Website&quot; and &quot;React&quot; to create a new website project. 
                     The builder creates files for your homepage, styles, and configuration.
                   </p>
                 </div>
@@ -456,7 +456,7 @@ export default function DevStudioPage() {
                   </p>
                   <p className="text-xs text-slate-600">
                     <strong>Example:</strong> Use the Deployment Wizard to put your website on Vercel. 
-                    It gives your website a web address (URL) like "mywebsite.vercel.app" so people can visit it.
+                    It gives your website a web address (URL) like &quot;mywebsite.vercel.app&quot; so people can visit it.
                   </p>
                 </div>
               </div>

@@ -31,7 +31,7 @@ export default function ErrorBoundary({ error, reset }) {
           Something went wrong
         </h2>
         <p className="mt-4 text-slate-600 max-w-md">
-          We're sorry, but something unexpected happened. Our team has been notified.
+          We&apos;re sorry, but something unexpected happened. Our team has been notified.
         </p>
         <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
           <button

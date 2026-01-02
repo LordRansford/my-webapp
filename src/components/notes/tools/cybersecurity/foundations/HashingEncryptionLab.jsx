@@ -2,7 +2,7 @@
 
 import { use_tool_state } from "@/components/notes/hooks/use_tool_state";
 import ToolStateActions from "@/components/notes/ToolStateActions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function HashingEncryptionLab() {
   const { state, set_state, reset, copy_share_link, export_json, import_json, is_ready } = use_tool_state({
@@ -11,8 +11,7 @@ export default function HashingEncryptionLab() {
   });
 
   const [copied, setCopied] = useState({});
-
-  if (!is_ready) return <p className="text-sm text-gray-600">Loading...</p>;
+  const [hashes, setHashes] = useState({});
 
   const input = state.input || "";
   const mode = state.mode || "hash";
@@ -40,14 +39,29 @@ export default function HashingEncryptionLab() {
     }
   }
 
-  const [hashes, setHashes] = useState({});
-
   // Compute hashes on input change
-  useState(() => {
-    if (input) {
-      computeHash("SHA-1", input).then(h => setHashes(prev => ({ ...prev, "SHA-1": h })));
-      computeHash("SHA-256", input).then(h => setHashes(prev => ({ ...prev, "SHA-256": h })));
+  useEffect(() => {
+    let cancelled = false;
+
+    if (!input) {
+      setHashes({});
+      return () => {
+        cancelled = true;
+      };
     }
+
+    computeHash("SHA-1", input).then((h) => {
+      if (cancelled) return;
+      setHashes((prev) => ({ ...prev, "SHA-1": h }));
+    });
+    computeHash("SHA-256", input).then((h) => {
+      if (cancelled) return;
+      setHashes((prev) => ({ ...prev, "SHA-256": h }));
+    });
+
+    return () => {
+      cancelled = true;
+    };
   }, [input]);
 
   function copyHash(hash) {
@@ -55,6 +69,8 @@ export default function HashingEncryptionLab() {
     setCopied({ [hash]: true });
     setTimeout(() => setCopied({}), 2000);
   }
+
+  if (!is_ready) return <p className="text-sm text-gray-600">Loading...</p>;
 
   return (
     <div className="space-y-4 text-sm">
@@ -157,10 +173,10 @@ export default function HashingEncryptionLab() {
           <div className="p-4 bg-purple-50 border border-purple-300 rounded-lg">
             <div className="font-semibold text-purple-900 mb-2">🔍 Rainbow Table Attack</div>
             <p className="text-xs text-purple-800 mb-2">
-              Rainbow tables are precomputed hash databases. If you hash "password123" with SHA-256, an attacker can look it up instantly.
+              Rainbow tables are precomputed hash databases. If you hash &quot;password123&quot; with SHA-256, an attacker can look it up instantly.
             </p>
             <p className="text-xs text-purple-800">
-              <strong>Defense:</strong> Add a random "salt" before hashing. Same password, different salt = different hash. bcrypt/Argon2 do this automatically.
+              <strong>Defense:</strong> Add a random &quot;salt&quot; before hashing. Same password, different salt = different hash. bcrypt/Argon2 do this automatically.
             </p>
           </div>
         </div>
@@ -238,16 +254,16 @@ export default function HashingEncryptionLab() {
         <div className="font-semibold text-slate-900 mb-2">Try these examples:</div>
         <div className="space-y-1 text-xs">
           <button onClick={() => set_state({ ...state, input: "password" })} className="text-blue-600 hover:underline block">
-            • "password" - Most common password (easily cracked)
+            • &quot;password&quot; - Most common password (easily cracked)
           </button>
           <button onClick={() => set_state({ ...state, input: "P@ssw0rd1!" })} className="text-blue-600 hover:underline block">
-            • "P@ssw0rd1!" - Common substitution pattern (still weak)
+            • &quot;P@ssw0rd1!&quot; - Common substitution pattern (still weak)
           </button>
           <button onClick={() => set_state({ ...state, input: "correct horse battery staple" })} className="text-blue-600 hover:underline block">
-            • "correct horse battery staple" - XKCD famous passphrase
+            • &quot;correct horse battery staple&quot; - XKCD famous passphrase
           </button>
           <button onClick={() => set_state({ ...state, input: "Tr0ub4dor&3" })} className="text-blue-600 hover:underline block">
-            • "Tr0ub4dor&3" - Complex but short (compare hash)
+            • &quot;Tr0ub4dor&amp;3&quot; - Complex but short (compare hash)
           </button>
         </div>
       </div>

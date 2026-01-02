@@ -252,8 +252,8 @@ export default function StudiosHubPage() {
                     content={
                       <div className="space-y-2 text-sm text-slate-700">
                         <p>
-                          This shows your overall progress across all learning studios. It's calculated by averaging
-                          your completion percentage in each studio's learning mode.
+                          This shows your overall progress across all learning studios. It&apos;s calculated by averaging
+                          your completion percentage in each studio&apos;s learning mode.
                         </p>
                         <p>
                           <strong>How to improve:</strong> Complete sections in the learning studios to increase your progress.
@@ -275,10 +275,10 @@ export default function StudiosHubPage() {
                       <div className="space-y-2 text-sm text-slate-700">
                         <p>
                           This is the total number of active projects you have across all build studios. These are
-                          real projects that you're working on or have deployed.
+                          real projects that you&apos;re working on or have deployed.
                         </p>
                         <p>
-                          <strong>What counts:</strong> Any project you've created in a build studio, whether it's
+                          <strong>What counts:</strong> Any project you&apos;ve created in a build studio, whether it&apos;s
                           in progress, completed, or deployed.
                         </p>
                       </div>
@@ -297,7 +297,7 @@ export default function StudiosHubPage() {
                     content={
                       <div className="space-y-2 text-sm text-slate-700">
                         <p>
-                          This shows how many studios you've used. A studio is considered "active" if you have
+                          This shows how many studios you&apos;ve used. A studio is considered &quot;active&quot; if you have
                           learning progress or live projects in it.
                         </p>
                         <p>

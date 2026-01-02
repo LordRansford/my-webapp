@@ -16,8 +16,8 @@ This guide will help you configure Stripe payment processing and donation functi
 1. **Sign up for Stripe**: https://stripe.com
 2. **Get your API keys**:
    - Go to Stripe Dashboard → Developers → API keys
-   - Copy your **Publishable key** (starts with `pk_test_` or `pk_live_`)
-   - Copy your **Secret key** (starts with `sk_test_` or `sk_live_`)
+   - Copy your **Publishable key** (test keys start with `pk_test_`; live-mode keys start with `pk_`)
+   - Copy your **Secret key** (test keys start with `sk_test_`; live-mode keys start with `sk_`)
 
    ⚠️ **Important**: Use test keys (`sk_test_`, `pk_test_`) for development. Live keys are blocked in non-production environments.
 
@@ -50,13 +50,13 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 2. **For Production environment**, add:
    ```bash
    STRIPE_ENABLED=true
-   STRIPE_SECRET_KEY=sk_live_...  # ⚠️ LIVE KEY for real payments!
-   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...  # ⚠️ LIVE KEY!
+   STRIPE_SECRET_KEY=sk_<your-stripe-secret-key>  # Live-mode key for real payments
+   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_<your-stripe-publishable-key>  # Live-mode key for real payments
    STRIPE_WEBHOOK_SECRET=whsec_...
    NEXT_PUBLIC_SITE_URL=https://www.ransfordsnotes.com  # Your production domain
    ```
 3. **Important**: 
-   - Use **LIVE keys** (`sk_live_`, `pk_live_`) for production
+   - Use **live-mode keys** for production
    - Use **test keys** (`sk_test_`, `pk_test_`) only for preview/development
    - Webhook URL must be: `https://www.ransfordsnotes.com/api/stripe/webhook`
 
@@ -149,8 +149,8 @@ Webhooks are required to process completed payments and update user records.
 ### Required
 ```bash
 STRIPE_ENABLED=true
-STRIPE_SECRET_KEY=sk_test_... or sk_live_...
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_... or pk_live_...
+STRIPE_SECRET_KEY=sk_test_... or sk_<live-mode-key>
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_... or pk_<live-mode-key>
 STRIPE_WEBHOOK_SECRET=whsec_...
 NEXT_PUBLIC_SITE_URL=https://your-domain.com
 ```

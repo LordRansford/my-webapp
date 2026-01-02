@@ -192,9 +192,9 @@ export default function PhishingDetectionTrainer() {
 
       {accuracy >= 90 && answered === totalEmails && (
         <div className="p-4 bg-green-50 border border-green-300 rounded-lg">
-          <div className="font-semibold text-green-900 mb-1">🎉 Excellent! You've reached 90% accuracy</div>
+          <div className="font-semibold text-green-900 mb-1">🎉 Excellent! You&apos;ve reached 90% accuracy</div>
           <p className="text-xs text-green-800">
-            You've demonstrated strong phishing detection skills. In real-world scenarios, always verify suspicious emails through alternative channels before taking action.
+            You&apos;ve demonstrated strong phishing detection skills. In real-world scenarios, always verify suspicious emails through alternative channels before taking action.
           </p>
         </div>
       )}
@@ -308,7 +308,7 @@ export default function PhishingDetectionTrainer() {
         <div className="p-4 bg-blue-50 border border-blue-300 rounded-lg">
           <div className="font-semibold text-blue-900 mb-2">Training Complete</div>
           <p className="text-xs text-blue-800 mb-2">
-            You've reviewed all {totalEmails} emails. Your final accuracy: <strong>{accuracy}%</strong>
+            You&apos;ve reviewed all {totalEmails} emails. Your final accuracy: <strong>{accuracy}%</strong>
           </p>
           <div className="text-xs text-blue-800">
             <strong>Next steps:</strong>

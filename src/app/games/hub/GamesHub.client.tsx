@@ -460,7 +460,7 @@ export default function GamesHubClient() {
       {favoriteGames.length > 0 && (
         <section className="mt-8" aria-labelledby="favorites-heading">
           <h2 id="favorites-heading" className="text-xl font-semibold text-slate-900">Your favorites</h2>
-          <p className="mt-1 text-sm text-slate-700">Games you've bookmarked</p>
+          <p className="mt-1 text-sm text-slate-700">Games you&apos;ve bookmarked</p>
           <div className="mt-4 grid gap-4 lg:grid-cols-3">
             {favoriteGames.map((game) => (
               <Link

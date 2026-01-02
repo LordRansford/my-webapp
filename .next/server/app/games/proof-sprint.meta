@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/games/layout,_N_T_/games/proof-sprint/layout,_N_T_/games/proof-sprint/page,_N_T_/games/proof-sprint"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/games/proof-sprint/__PAGE__",
+    "/games/proof-sprint",
+    "/games",
+    "/_index",
+    "/_head"
+  ]
+}

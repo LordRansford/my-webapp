@@ -421,7 +421,7 @@ export default function CyberStudioPage() {
                   </p>
                   <p className="text-xs text-slate-600">
                     <strong>Example:</strong> Describe your website that handles user payments. The generator 
-                    identifies threats like "unauthorised access to payment data" or "denial of service attacks".
+                    identifies threats like &quot;unauthorised access to payment data&quot; or &quot;denial of service attacks&quot;.
                   </p>
                 </div>
                 <div className="bg-white rounded-2xl p-6 border border-rose-200">
@@ -436,7 +436,7 @@ export default function CyberStudioPage() {
                     A risk is the chance that something bad could happen, like data being stolen.
                   </p>
                   <p className="text-xs text-slate-600">
-                    <strong>Example:</strong> Add a risk like "User passwords could be stolen" with a plan to 
+                    <strong>Example:</strong> Add a risk like &quot;User passwords could be stolen&quot; with a plan to 
                     use strong encryption and require two-factor authentication.
                   </p>
                 </div>
@@ -449,7 +449,7 @@ export default function CyberStudioPage() {
                   </div>
                   <p className="text-sm text-slate-700 mb-3">
                     Run compliance audits to check if your system meets security rules and regulations. 
-                    Compliance means following rules to protect people's information.
+                    Compliance means following rules to protect people&apos;s information.
                   </p>
                   <p className="text-xs text-slate-600">
                     <strong>Example:</strong> Run a GDPR compliance audit. The auditor checks if you are 

@@ -89,7 +89,7 @@ export const devStudioOnboardingSteps: OnboardingStep[] = [
           <p className="text-sm font-semibold text-blue-900 mb-2">Simple example:</p>
           <p className="text-sm text-blue-800 mb-2">
             Imagine you have a weather app on your phone. When you open it, the app asks a weather service 
-            (through an API): "What is the weather in London?" The weather service responds: "It is sunny, 20 degrees."
+            (through an API): &quot;What is the weather in London?&quot; The weather service responds: &quot;It is sunny, 20 degrees.&quot;
           </p>
           <p className="text-sm text-blue-800">
             The API Designer helps you create these rules for how programs can ask your application questions 
@@ -230,7 +230,7 @@ export const devStudioOnboardingSteps: OnboardingStep[] = [
           <li><strong>Vercel:</strong> Great for websites and web applications</li>
           <li><strong>AWS (Amazon Web Services):</strong> Powerful cloud platform for all types of applications</li>
           <li><strong>Google Cloud Platform:</strong> Another major cloud provider</li>
-          <li><strong>Microsoft Azure:</strong> Microsoft's cloud platform</li>
+          <li><strong>Microsoft Azure:</strong> Microsoft&apos;s cloud platform</li>
         </ul>
       </div>
     )

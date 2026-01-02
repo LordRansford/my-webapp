@@ -1,0 +1,11 @@
+var R=require("../../../../../../chunks/[turbopack]_runtime.js")("server/app/api/ai-studio/jobs/[id]/cancel/route.js")
+R.c("server/chunks/[root-of-the-server]__d5e7f70e._.js")
+R.c("server/chunks/[root-of-the-server]__34fd47d2._.js")
+R.c("server/chunks/[root-of-the-server]__f8167169._.js")
+R.c("server/chunks/_79b23dc3._.js")
+R.c("server/chunks/node_modules_aa474d64._.js")
+R.c("server/chunks/node_modules_next_f2da0d3e._.js")
+R.c("server/chunks/node_modules_next_dist_23bfe24c._.js")
+R.c("server/chunks/_next-internal_server_app_api_ai-studio_jobs_[id]_cancel_route_actions_f9157ec1.js")
+R.m(569266)
+module.exports=R.m(569266).exports

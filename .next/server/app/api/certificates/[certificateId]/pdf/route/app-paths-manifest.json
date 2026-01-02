@@ -1,0 +1,3 @@
+{
+  "/api/certificates/[certificateId]/pdf/route": "app/api/certificates/[certificateId]/pdf/route.js"
+}

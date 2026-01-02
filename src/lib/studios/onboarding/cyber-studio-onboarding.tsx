@@ -61,7 +61,7 @@ export const cyberStudioOnboardingSteps: OnboardingStep[] = [
         </div>
         <p className="text-sm text-slate-600">
           <strong>Example:</strong> Describe a website that handles user payments. The generator identifies 
-          threats like "unauthorised access to payment data" or "denial of service attacks".
+          threats like &quot;unauthorised access to payment data&quot; or &quot;denial of service attacks&quot;.
         </p>
       </div>
     )
@@ -94,7 +94,7 @@ export const cyberStudioOnboardingSteps: OnboardingStep[] = [
           </ol>
         </div>
         <p className="text-sm text-slate-600">
-          <strong>Example:</strong> Add a risk like "User passwords could be stolen" with a plan to use 
+          <strong>Example:</strong> Add a risk like &quot;User passwords could be stolen&quot; with a plan to use 
           strong encryption and require two-factor authentication.
         </p>
       </div>
@@ -115,7 +115,7 @@ export const cyberStudioOnboardingSteps: OnboardingStep[] = [
           </div>
         </div>
         <p>
-          Compliance means following rules set by governments or organisations to protect people's information. 
+          Compliance means following rules set by governments or organisations to protect people&apos;s information. 
           It is like following traffic laws to keep everyone safe on the road.
         </p>
         <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">

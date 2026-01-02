@@ -1,0 +1,13 @@
+var R=require("../../../../chunks/[turbopack]_runtime.js")("server/app/api/tools/ip-reputation/route.js")
+R.c("server/chunks/[root-of-the-server]__f8167169._.js")
+R.c("server/chunks/src_lib_5d4cd947._.js")
+R.c("server/chunks/node_modules_next_dist_23bfe24c._.js")
+R.c("server/chunks/[root-of-the-server]__a38278b9._.js")
+R.c("server/chunks/node_modules_aa474d64._.js")
+R.c("server/chunks/node_modules_zod_v4_classic_external_fa90cebf.js")
+R.c("server/chunks/[root-of-the-server]__34fd47d2._.js")
+R.c("server/chunks/_79b23dc3._.js")
+R.c("server/chunks/node_modules_next_f2da0d3e._.js")
+R.c("server/chunks/_next-internal_server_app_api_tools_ip-reputation_route_actions_ca06e0fd.js")
+R.m(681072)
+module.exports=R.m(681072).exports

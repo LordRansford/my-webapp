@@ -28,7 +28,7 @@ export default function PrivacyPage() {
               <li>Name (if provided during sign-up)</li>
               <li>Learning progress and course completion data</li>
               <li>Usage analytics (anonymized, privacy-friendly)</li>
-              <li>Payment information (processed securely by Stripe, we don't store card details)</li>
+              <li>Payment information (processed securely by Stripe, we don&apos;t store card details)</li>
             </ul>
           </section>
 
@@ -68,7 +68,7 @@ export default function PrivacyPage() {
             <ul className="list-disc pl-6 text-slate-700 mb-4 space-y-2">
               <li><strong>Vercel</strong>: Hosting and deployment (privacy policy: <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-sky-600 hover:text-sky-700">vercel.com/legal/privacy-policy</a>)</li>
               <li><strong>Neon</strong>: Database hosting (privacy policy: <a href="https://neon.tech/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-sky-600 hover:text-sky-700">neon.tech/legal/privacy-policy</a>)</li>
-              <li><strong>Stripe</strong>: Payment processing - we don't store card details (privacy policy: <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-sky-600 hover:text-sky-700">stripe.com/privacy</a>)</li>
+              <li><strong>Stripe</strong>: Payment processing - we don&apos;t store card details (privacy policy: <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-sky-600 hover:text-sky-700">stripe.com/privacy</a>)</li>
               <li><strong>Google</strong>: Authentication (OAuth) - only email and name (privacy policy: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-sky-600 hover:text-sky-700">policies.google.com/privacy</a>)</li>
               <li><strong>Sentry</strong>: Error tracking and monitoring (privacy policy: <a href="https://sentry.io/privacy/" target="_blank" rel="noopener noreferrer" className="text-sky-600 hover:text-sky-700">sentry.io/privacy</a>)</li>
               <li><strong>Plausible</strong>: Privacy-friendly analytics (no cookies, GDPR compliant) (privacy policy: <a href="https://plausible.io/privacy" target="_blank" rel="noopener noreferrer" className="text-sky-600 hover:text-sky-700">plausible.io/privacy</a>)</li>
@@ -124,7 +124,7 @@ export default function PrivacyPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-slate-900 mb-4">8. Children's Privacy</h2>
+            <h2 className="text-2xl font-semibold text-slate-900 mb-4">8. Children&apos;s Privacy</h2>
             <p className="text-slate-700 mb-4">
               Our service is not intended for children under 13. We do not knowingly collect personal information from children under 13.
             </p>
@@ -134,7 +134,7 @@ export default function PrivacyPage() {
             <h2 className="text-2xl font-semibold text-slate-900 mb-4">9. Changes to This Policy</h2>
             <p className="text-slate-700 mb-4">
               We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new policy on this page 
-              and updating the "Last updated" date.
+              and updating the &quot;Last updated&quot; date.
             </p>
           </section>
 
