@@ -68,6 +68,21 @@ See `SETUP-STRIPE-DONATIONS.md` for complete Stripe configuration guide.
 3. Configure webhook endpoint
 4. Test with Stripe test cards
 
+## Google Sign-In Setup
+
+See `SETUP-GOOGLE-AUTH.md` for complete Google OAuth configuration guide.
+
+**Quick Start:**
+1. Create OAuth credentials in Google Cloud Console
+2. Set environment variables (see guide)
+3. Add callback URL to Google OAuth settings
+4. Test sign-in at `/signin`
+
+**Quick Check:**
+```bash
+node scripts/check-google-auth.mjs
+```
+
 ## Next Steps (Optional)
 
 - [ ] Set up Sentry alerts for critical errors
