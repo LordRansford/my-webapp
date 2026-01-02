@@ -20,6 +20,7 @@ export default function AdminHomePage() {
         {[
           { title: "Users", href: "/admin/users", note: "Placeholder. No user admin features yet." },
           { title: "Support", href: "/admin/support", note: "Placeholder. No support features yet." },
+          { title: "Assessments", href: "/admin/assessments", note: "Manage questions and publishing for course assessments." },
           { title: "Billing", href: "/admin/billing", note: "Placeholder. No billing admin features yet." },
           { title: "System", href: "/admin/system", note: "Placeholder. System health tools will land later." },
           { title: "Architecture diagrams", href: "/admin/architecture-diagrams", note: "Existing read-only admin view." },

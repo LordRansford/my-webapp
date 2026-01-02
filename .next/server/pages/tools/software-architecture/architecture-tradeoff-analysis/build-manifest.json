@@ -7,12 +7,12 @@
   "pages": {
     "/tools/software-architecture/architecture-tradeoff-analysis": [
       "static/chunks/870d39adb83d7cd4.js",
-      "static/chunks/fc95eef628780df2.js",
+      "static/chunks/53c344a8bc5477ca.js",
       "static/chunks/6bd1b060cc02463e.js",
-      "static/chunks/330132623d124146.js",
+      "static/chunks/640dc3620eb10de9.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/f0f43ebb724b8b11.js",
-      "static/chunks/turbopack-123ca6d0814e0c11.js"
+      "static/chunks/turbopack-e73ce9c3abfa2ad9.js"
     ]
   },
   "ampFirstPages": []

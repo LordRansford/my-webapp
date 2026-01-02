@@ -2,12 +2,14 @@
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
+const COURSE_VERSION = "2025.01";
 
 function qid(prefix, n) {
   return `${prefix}-q${String(n).padStart(2, "0")}`;
 }
 
 function mcq({ id, question, options, correctIndex, explanation, tags, bloomLevel }) {
+  const versionedTags = [tags, `v:${COURSE_VERSION}`, "published"].filter(Boolean).join(", ");
   return {
     id,
     type: "MCQ",
@@ -18,7 +20,7 @@ function mcq({ id, question, options, correctIndex, explanation, tags, bloomLeve
     options: JSON.stringify(options),
     correctAnswer: JSON.stringify(correctIndex),
     explanation,
-    tags,
+    tags: versionedTags,
   };
 }
 

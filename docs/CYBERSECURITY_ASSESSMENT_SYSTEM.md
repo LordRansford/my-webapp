@@ -11,6 +11,8 @@ It is designed to be reusable as the template for the other courses later.
 4. Pass threshold
 5. Certificate name lock
 6. Certificate issuance on pass
+7. Admin question editor with publish workflow
+8. Basic item analysis for question tuning
 
 ## Routes
 1. Assessment pages
@@ -21,6 +23,13 @@ It is designed to be reusable as the template for the other courses later.
    1. `POST /api/assessments/start`
    2. `POST /api/assessments/submit`
    3. `GET /api/assessments/status`
+3. Admin routes
+   1. `/admin/assessments`
+4. Admin API routes
+   1. `GET /api/admin/assessments/questions`
+   2. `POST /api/admin/assessments/questions`
+   3. `POST /api/admin/assessments/questions/[id]`
+   4. `GET /api/admin/assessments/analysis`
 
 ## Rules
 1. Time limit is 75 minutes
@@ -41,6 +50,12 @@ Run the seed script in an environment that has a database connection.
 
 1. Set `DATABASE_URL`
 2. Run `node scripts/seed-cyber-assessments.mjs`
+
+## Publishing workflow
+Questions are selected for exams only when both tags exist.
+
+1. `v:2025.01` or the active course version
+2. `published`
 
 ## Certificate cost model for Cybersecurity
 Certificates for the Cybersecurity course are set to zero credits.

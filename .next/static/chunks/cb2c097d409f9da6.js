@@ -1,9 +1,0 @@
-__turbopack_load_page_chunks__("/tools/data/schema-inspector", [
-  "static/chunks/619ca846f3090c98.js",
-  "static/chunks/fc95eef628780df2.js",
-  "static/chunks/6bd1b060cc02463e.js",
-  "static/chunks/330132623d124146.js",
-  "static/chunks/d1ea35920c32a766.js",
-  "static/chunks/f0f43ebb724b8b11.js",
-  "static/chunks/turbopack-b8a12b83bccb65c0.js"
-])

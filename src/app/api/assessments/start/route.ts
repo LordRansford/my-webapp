@@ -7,6 +7,7 @@ import { requireSameOrigin } from "@/lib/security/origin";
 import { rateLimit } from "@/lib/security/rateLimit";
 import { enforceCreditGate, creditGateErrorResponse } from "@/lib/credits/enforceCreditGate";
 import { getAssessmentAttemptCredits } from "@/lib/cpd/assessmentCredits";
+import { getActiveCourseVersion } from "@/lib/cpd/courseVersion";
 
 type Body = {
   courseId?: string;
@@ -82,6 +83,8 @@ export async function POST(req: Request) {
 
     const timeLimitMinutes = assessment.timeLimit ?? 75;
     const now = new Date();
+    const courseVersion = getActiveCourseVersion(courseId);
+    const versionTag = `v:${courseVersion}`;
 
     const existing = await prisma.assessmentSession.findUnique({
       where: { userId_assessmentId: { userId, assessmentId: assessment.id } },
@@ -122,7 +125,10 @@ export async function POST(req: Request) {
     }
 
     const ids = await prisma.question.findMany({
-      where: { assessmentId: assessment.id },
+      where: {
+        assessmentId: assessment.id,
+        AND: [{ tags: { contains: versionTag } }, { tags: { contains: "published" } }],
+      },
       select: { id: true },
       take: 500,
     });

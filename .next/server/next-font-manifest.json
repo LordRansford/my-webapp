@@ -10,6 +10,7 @@
     "[project]/src/app/account/usage/page": [],
     "[project]/src/app/admin/access-denied/page": [],
     "[project]/src/app/admin/architecture-diagrams/page": [],
+    "[project]/src/app/admin/assessments/page": [],
     "[project]/src/app/admin/billing/credits/[id]/page": [],
     "[project]/src/app/admin/billing/credits/page": [],
     "[project]/src/app/admin/billing/page": [],
