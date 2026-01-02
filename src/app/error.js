@@ -1,12 +1,26 @@
 "use client";
 
 import { useEffect } from "react";
+import { captureException } from "@/lib/sentry-utils";
 
 export default function ErrorBoundary({ error, reset }) {
   useEffect(() => {
-    // Client-side error boundary: keep logging minimal.
+    // Client-side error boundary: log to console and Sentry
     console.error("ui:error", { message: error?.message || "unknown" });
-  }, [error]);
+    // Capture error in Sentry if available
+    if (error) {
+      captureException(error, {
+        tags: {
+          component: "ErrorBoundary",
+        },
+        contexts: {
+          error: {
+            resetAvailable: typeof reset === "function",
+          },
+        },
+      });
+    }
+  }, [error, reset]);
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-12 md:px-6 lg:px-8">

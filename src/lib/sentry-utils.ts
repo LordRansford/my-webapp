@@ -40,3 +40,25 @@ export async function captureException(error: Error, context?: any) {
     // Silently ignore - Sentry not available or error in Sentry itself
   }
 }
+
+// Synchronous version for use in error boundaries and immediate error handling
+export function captureExceptionSync(error: Error, context?: any) {
+  if (!process.env.NEXT_PUBLIC_SENTRY_DSN) return;
+  
+  try {
+    // Try to use the standard Sentry import if available (for server-side)
+    if (typeof window === 'undefined') {
+      // Server-side: try direct import
+      const Sentry = require('@sentry/nextjs');
+      if (Sentry?.captureException) {
+        Sentry.captureException(error, context);
+      }
+    } else {
+      // Client-side: use async version
+      captureException(error, context);
+    }
+  } catch {
+    // Fallback to async version
+    captureException(error, context);
+  }
+}
