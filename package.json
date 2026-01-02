@@ -41,7 +41,7 @@
     "test:data": "node --test tests/**/*.test.mjs",
     "test:mentor": "npm run build:content-index && node --test tests/mentor-*.test.mjs",
     "test:contracts": "node --test tests/contracts/*.test.mjs",
-    "test:e2e": "node -e \"const fs=require('fs');const p='.next/dev/lock';if(fs.existsSync(p)) fs.rmSync(p,{force:true});\" && playwright test -c playwright.config.mjs",
+    "test:e2e": "node -e \"const fs=require('fs');const p='.next/dev/lock';if(fs.existsSync(p)) fs.rmSync(p,{force:true});\" && playwright test -c playwright.config.ts",
     "test:ux": "node scripts/ux-check.mjs",
     "worker:tick": "node scripts/worker.mjs",
     "news:ingest": "npx tsx scripts/news-ingest/main.ts",
