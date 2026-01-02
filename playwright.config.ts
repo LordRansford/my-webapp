@@ -16,10 +16,12 @@ export default defineConfig({
     headless: true,
   },
   webServer: {
-    command: "npm run dev -- --port 3000",
+    // CI builds the app before running Playwright; use `next start` for
+    // deterministic behavior (and to avoid dev overlay hiding the UI).
+    command: "npm run start",
     url: "http://localhost:3000",
-    reuseExistingServer: true,
-    timeout: 120_000,
+    reuseExistingServer: false,
+    timeout: 180_000,
   },
   projects: [
     {
