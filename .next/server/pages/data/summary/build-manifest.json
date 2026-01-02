@@ -7,7 +7,7 @@
   "pages": {
     "/data/summary": [
       "static/chunks/6bd1b060cc02463e.js",
-      "static/chunks/0445f9bbecc96022.js",
+      "static/chunks/5d7bb5634f9bf16c.js",
       "static/chunks/2fcd2aa21d8c3e53.js",
       "static/chunks/d11e15d588813b4c.js",
       "static/chunks/0f7c72f45123340f.js",
@@ -16,7 +16,7 @@
       "static/chunks/972bb770631d4a93.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/999d695b5baa4b77.js",
-      "static/chunks/turbopack-1b63c3ad40f0b004.js"
+      "static/chunks/turbopack-7778055cb4119ddb.js"
     ]
   },
   "ampFirstPages": []

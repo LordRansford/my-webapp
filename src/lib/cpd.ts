@@ -56,6 +56,11 @@ const LEGACY_SECTION_ALIASES: Partial<
       // Old "Foundations overview" toggle + quiz lived under this ID.
       // Canonical syllabus splits this into a dedicated Module F0.
       "foundations-f0-what-security-is": ["foundations-why-cyber-matters"],
+
+      // Old module IDs from the original Foundations page.
+      "foundations-f2-data-and-integrity": ["foundations-data-and-bits"],
+      "foundations-f3-networks-and-transport": ["foundations-networks-and-packets"],
+      "foundations-f4-cia-and-simple-attacks": ["foundations-cia-and-simple-attacks"],
     },
   },
 };

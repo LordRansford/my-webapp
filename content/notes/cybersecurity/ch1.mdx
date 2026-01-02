@@ -182,11 +182,11 @@ Why it matters: when you get the asset and context right, you can spend effort w
   ]}
 />
 
-<SectionHeader variant="content" emoji="🔐" id="identity-access-trust">
-  Identity, access, and trust
+<SectionHeader variant="content" emoji="🔐" id="foundations-f5-identity-and-access">
+  Module F5: Identity and access
 </SectionHeader>
 
-<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-networks-and-packets" />
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-f5-identity-and-access" />
 
 Identity is now the security perimeter because work happens everywhere. Staff work from home. Phones are used for approvals. Vendors have access. Cloud services connect to other cloud services. The question is no longer only "is the network safe". The question is "who is this, and what should they be allowed to do".
 
@@ -207,6 +207,27 @@ Why it matters: when identity is strong and access is narrow, a compromised acco
 - Explain the difference between authentication and authorisation
 - Explain what breaks when identity is treated as a soft control
 - Explain why least privilege reduces blast radius during incidents
+
+<QuizBlock
+  id="foundations-f5-identity-and-access"
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-f5-identity-and-access"
+  title="Quick check: identity and access"
+  questions={[
+    { q: "What is authentication", a: "Proving who you are, for example with a password plus a second factor." },
+    { q: "What is authorisation", a: "Deciding what you are allowed to do after you are authenticated." },
+    { q: "Why does MFA help", a: "It reduces the damage if a password leaks, because a password alone is not enough." },
+    { q: "What does least privilege mean", a: "Give only the access needed for a job so mistakes and compromise have a smaller blast radius." },
+    { q: "Name one common identity failure", a: "Shared accounts, stale accounts, or broad permissions given for convenience." },
+  ]}
+/>
+
+<SectionHeader variant="content" emoji="🧩" id="foundations-f2-data-and-integrity">
+  Module F2: Data, encoding, and integrity
+</SectionHeader>
+
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-f2-data-and-integrity" />
 
 <DiagramBlock
   title="Bits → bytes → characters"
@@ -237,10 +258,10 @@ Why it matters: when identity is strong and access is narrow, a compromised acco
   id="encoding-playground"
   title="Encoding Playground"
   subtitle="Explore ASCII, UTF-8, Base64, and Hex"
-  description="See how the same text is represented in different encoding schemes. Understand why encoding matters for security—attackers sometimes use encoding to bypass filters."
+  description="See how the same text becomes bytes and symbols. This helps you spot when systems may disagree about what the data means."
   courseId="cybersecurity"
   levelId="foundations"
-  sectionId="foundations-data-and-bits"
+  sectionId="foundations-f2-data-and-integrity"
   cpdMinutesOnUse={5}
 >
   <EncodingPlayground />
@@ -248,14 +269,14 @@ Why it matters: when identity is strong and access is narrow, a compromised acco
 
 **Why encoding matters for security:**
 
-Attackers often use encoding to hide malicious payloads from simple filters. For example, SQL injection attempts might be URL-encoded or hex-encoded to bypass security controls that only look for plain-text patterns. Understanding how data can be represented in multiple ways helps you recognize obfuscation techniques.
+Encoding changes how text is *represented*, not what it *means*. The security problem happens when one part of a system validates the data one way, but another part interprets it differently. Also, naive keyword checks can miss encoded variants, which is why we prefer robust parsing and context-aware validation.
 
-Real example: The SQL command `SELECT * FROM users` could be encoded as:
-- URL encoding: `%53%45%4C%45%43%54%20%2A%20%46%52%4F%4D%20%75%73%65%72%73`
-- Hex encoding: `53454C454354202A2046524F4D207573657273`
-- Base64: `U0VMRUNUICogRlJPTSB1c2Vycw==`
+Benign example: the word `SELECT` can look very different once encoded, but it is still the same underlying bytes. The lesson is not “memorise encoded strings”. The lesson is “do not rely on brittle string checks for security”.
 
-Simple keyword filters looking for "SELECT" would miss these encoded versions, but the server still interprets them correctly.
+If you are building or reviewing a system, the safer approach is:
+- parse inputs using a trusted parser for that format
+- validate based on the expected structure and context
+- encode outputs in the correct context (HTML, URL, JSON)
 
 <ToolCard
   id="hashing-encryption-lab"
@@ -264,7 +285,7 @@ Simple keyword filters looking for "SELECT" would miss these encoded versions, b
   description="Compare one-way hashing (MD5, SHA-1, SHA-256, bcrypt) with two-way encryption. Learn why MD5 is broken, why bcrypt is better than SHA-256 for passwords, and how rainbow tables work."
   courseId="cybersecurity"
   levelId="foundations"
-  sectionId="foundations-data-and-bits"
+  sectionId="foundations-f2-data-and-integrity"
   cpdMinutesOnUse={10}
 >
   <HashingEncryptionLab />
@@ -290,11 +311,11 @@ Simple keyword filters looking for "SELECT" would miss these encoded versions, b
 **Rainbow tables:** Pre-computed hashes of common passwords. If you hash "password123" with SHA-256, an attacker can instantly look it up in a rainbow table. Defense: use a salt (random data added before hashing) so the same password produces different hashes for different users. bcrypt does this automatically.
 
 <QuizBlock
-  id="foundations-data-and-bits"
+  id="foundations-f2-data-and-integrity"
   courseId="cybersecurity"
   levelId="foundations"
-  sectionId="foundations-data-and-bits"
-  title="Data and bits quiz"
+  sectionId="foundations-f2-data-and-integrity"
+  title="Quick check: data and integrity"
   questions={[
     { q: "What is a bit", a: "A single binary digit that can be 0 or 1." },
     { q: "How many bits are in a byte", a: "Eight bits make one byte." },
@@ -305,6 +326,7 @@ Simple keyword filters looking for "SELECT" would miss these encoded versions, b
     { q: "Why do encoding mistakes cause security issues", a: "Different interpretations of the same bytes can break validation or create parsing bugs." },
     { q: "Convert decimal 13 to binary", a: "1101 (8 + 4 + 1)." },
     { q: "Why store text with bytes instead of single bits", a: "Single bits cannot represent enough symbols; bytes provide the range needed for characters." },
+    { q: "Why is hashing not encryption", a: "Hashing is one-way; encryption is reversible with a key." },
   ]}
 />
 
@@ -314,9 +336,11 @@ Simple keyword filters looking for "SELECT" would miss these encoded versions, b
 - Explain what breaks when systems disagree on how bytes should be interpreted
 - Explain why integrity controls depend on correct data handling
 
-<SectionHeader variant="content" emoji="🛡️" id="defence-detection-response">
-  Defence, detection, response
+<SectionHeader variant="content" emoji="🌐" id="foundations-f3-networks-and-transport">
+  Module F3: Networks, transport, and what leaks
 </SectionHeader>
+
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-f3-networks-and-transport" />
 
 Prevention alone fails. Not because people are lazy, but because systems are complex. Something will slip. A password will leak. A laptop will go missing. A supplier will get compromised. Defence needs layers, and it needs feedback.
 
@@ -404,7 +428,7 @@ Under the hood, data still moves as packets. A packet has a header and a payload
   description="Learn about Wireshark and network protocol analysis. Explore resources for analyzing real network traffic and identifying security issues."
   courseId="cybersecurity"
   levelId="foundations"
-  sectionId="foundations-networks-and-packets"
+  sectionId="foundations-f3-networks-and-transport"
   cpdMinutesOnUse={5}
 >
   <WiresharkIntro />
@@ -433,7 +457,7 @@ Under the hood, data still moves as packets. A packet has a header and a payload
   description="Learn about DNS queries, DNS hijacking, DNSSEC, and how to identify typosquatting domains used in phishing."
   courseId="cybersecurity"
   levelId="foundations"
-  sectionId="foundations-networks-and-packets"
+  sectionId="foundations-f3-networks-and-transport"
   cpdMinutesOnUse={5}
 >
   <DnsTrustLab />
@@ -446,7 +470,7 @@ Under the hood, data still moves as packets. A packet has a header and a payload
   description="Practice mapping network architecture to identify where attackers might gain access and where trust boundaries should exist."
   courseId="cybersecurity"
   levelId="foundations"
-  sectionId="foundations-networks-and-packets"
+  sectionId="foundations-f3-networks-and-transport"
   cpdMinutesOnUse={10}
 >
   <AttackSurfaceMapper />
@@ -463,11 +487,11 @@ Your home network is an attack surface too. Consider:
 A compromised smart camera can be used to spy on you, launch attacks on other devices, or join a botnet for distributed denial-of-service (DDoS) attacks. Security isn't just about corporate networks.
 
 <QuizBlock
-  id="foundations-networks-and-packets"
+  id="foundations-f3-networks-and-transport"
   courseId="cybersecurity"
   levelId="foundations"
-  sectionId="foundations-networks-and-packets"
-  title="Networks and packets quiz"
+  sectionId="foundations-f3-networks-and-transport"
+  title="Quick check: networks and transport"
   questions={[
     { q: "What is a packet", a: "A small piece of data with a header and payload used for network transport." },
     { q: "What is the difference between a header and a payload", a: "The header is routing and control info; the payload is the content being delivered." },
@@ -477,6 +501,7 @@ A compromised smart camera can be used to spy on you, launch attacks on other de
     { q: "Why are packets used instead of one large blob", a: "Small packets are easier to route, resend on failure and share network capacity." },
     { q: "Name one security control at a network layer", a: "TLS for encrypting traffic or a firewall filtering packets." },
     { q: "How can timing of packets leak information", a: "Patterns in timing can hint at actions like page loads or logins." },
+    { q: "What does TLS mainly protect", a: "It protects confidentiality and integrity of data in transit between endpoints, but it does not hide all metadata." },
   ]}
 />
 
@@ -486,11 +511,11 @@ A compromised smart camera can be used to spy on you, launch attacks on other de
 - Explain how metadata can leak behaviour even when content is encrypted
 - Explain why monitoring often starts with patterns, not secrets
 
-<SectionHeader variant="content" emoji="🔒" id="cia-and-attacks">
-  Confidentiality, integrity, availability and simple attacks
+<SectionHeader variant="content" emoji="🔒" id="foundations-f4-cia-and-simple-attacks">
+  Module F4: CIA and simple attacks
 </SectionHeader>
 
-<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-cia-and-simple-attacks" />
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-f4-cia-and-simple-attacks" />
 
 To keep this practical, we will use one simple frame: confidentiality, integrity, and availability, often shortened to CIA. Confidentiality means only the right people can see information. Integrity means changes are correct and visible. Availability means systems are there when needed. The purpose is not to memorise three words. The purpose is to ask better questions.
 
@@ -526,6 +551,10 @@ Why it matters: CIA is a simple way to reason about controls and to spot what ki
   title="Try building stronger passwords"
   subtitle="See how small changes affect strength"
   description="Type a pretend password and see feedback about length, variety and guessability. No real passwords are stored; this is a safe, local practice tool."
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-f4-cia-and-simple-attacks"
+  cpdMinutesOnUse={5}
 >
   <PasswordEntropyTool />
 </ToolCard>
@@ -540,10 +569,10 @@ Why it matters: CIA is a simple way to reason about controls and to spot what ki
 </ToolCard>
 
 <QuizBlock
-  id="foundations-cia-and-simple-attacks"
+  id="foundations-f4-cia-and-simple-attacks"
   courseId="cybersecurity"
   levelId="foundations"
-  sectionId="foundations-cia-and-simple-attacks"
+  sectionId="foundations-f4-cia-and-simple-attacks"
   title="Core ideas quiz"
   questions={[
     { q: "What is confidentiality", a: "Keeping data visible only to the right people or systems." },
@@ -563,9 +592,11 @@ Why it matters: CIA is a simple way to reason about controls and to spot what ki
 - Explain what breaks when identity is weak or integrity is not monitored
 - Explain why availability needs planning, not hope
 
-<SectionHeader variant="content" emoji="👥" id="human-factors-governance">
-  Human factors and governance
+<SectionHeader variant="content" emoji="👥" id="foundations-f6-human-factors-and-phishing">
+  Module F6: Human factors and phishing
 </SectionHeader>
+
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-f6-human-factors-and-phishing" />
 
 Humans are not the weakest link. Humans are the system. Most insecure behaviour is a rational response to a bad setup. If it takes five minutes to do the safe thing, people will do the fast thing. If approvals block urgent work, people will route around them. If security tools produce noise, people will ignore them.
 
@@ -586,6 +617,94 @@ Why it matters: human factors and governance are what make security sustainable.
 - Explain why humans are part of the system and what breaks when processes are unrealistic
 - Explain governance as ownership of trade offs, not documents
 - Explain why clear roles and rehearsed response reduce harm
+
+<ToolCard
+  id="phishing-detection-trainer"
+  title="Phishing detection trainer"
+  subtitle="Build judgement with realistic examples"
+  description="Classify emails and learn the practical signals: sender domains, urgency tactics, mismatched links, and risky requests."
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-f6-human-factors-and-phishing"
+  cpdMinutesOnUse={10}
+>
+  <PhishingDetectionTrainer />
+</ToolCard>
+
+<ToolCard
+  id="social-engineering-simulator"
+  title="Social engineering simulator"
+  subtitle="See how good people get rushed"
+  description="Practice recognising pressure tactics and choosing safe verification steps."
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-f6-human-factors-and-phishing"
+  cpdMinutesOnUse={10}
+>
+  <SocialEngineeringSimulator />
+</ToolCard>
+
+<QuizBlock
+  id="foundations-f6-human-factors-and-phishing"
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-f6-human-factors-and-phishing"
+  title="Quick check: human factors"
+  questions={[
+    { q: "Why is 'someone clicked a link' not a full explanation", a: "Because systems, incentives, and processes shape behaviour; the fix is usually design and process, not blame." },
+    { q: "What is a safe default action for urgent requests", a: "Pause and verify through an independent channel before taking action." },
+    { q: "Name one common pressure tactic", a: "Urgency, secrecy, authority, or fear." },
+    { q: "What does governance mean in simple terms", a: "Who owns decisions, who accepts risk, and how choices are made and checked." },
+  ]}
+/>
+
+<SectionHeader variant="content" emoji="🕵️" id="foundations-f7-privacy-and-everyday-data-protection">
+  Module F7: Privacy and everyday data protection
+</SectionHeader>
+
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-f7-privacy-and-everyday-data-protection" />
+
+Privacy is a security property. It is about reducing harm from unnecessary collection, unnecessary sharing, and unnecessary retention. If you collect less data, there is less data to leak. If you keep data for less time, there is less to steal later.
+
+<ToolCard
+  id="privacy-threat-modeler"
+  title="Privacy threat modeler"
+  subtitle="Spot harm early"
+  description="Map a simple data flow and ask: who could be harmed, how, and what control reduces that harm."
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-f7-privacy-and-everyday-data-protection"
+  cpdMinutesOnUse={10}
+>
+  <PrivacyThreatModeler />
+</ToolCard>
+
+<ToolCard
+  id="account-hygiene-audit"
+  title="Account hygiene audit"
+  subtitle="Reduce easy identity risk"
+  description="Work through a safe checklist: recovery methods, old accounts, app permissions, and simple hardening steps."
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-f7-privacy-and-everyday-data-protection"
+  cpdMinutesOnUse={10}
+>
+  <AccountHygieneAudit />
+</ToolCard>
+
+<QuizBlock
+  id="foundations-f7-privacy-and-everyday-data-protection"
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-f7-privacy-and-everyday-data-protection"
+  title="Quick check: privacy"
+  questions={[
+    { q: "What does data minimisation mean", a: "Collect only what you need, for a clear purpose, and no more." },
+    { q: "Why does retention increase risk", a: "Because data you keep can be stolen later; keeping less reduces future harm." },
+    { q: "What is one privacy-safe habit", a: "Review and remove unused accounts and reduce app permissions." },
+    { q: "Why can logging create privacy risk", a: "Logs can contain personal or sensitive data if you record too much." },
+  ]}
+/>
 
 This is Foundations. Move into Applied next once you can explain every term on this page to another person and show them how the tools work.
 

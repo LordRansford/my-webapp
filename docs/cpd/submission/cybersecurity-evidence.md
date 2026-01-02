@@ -36,7 +36,7 @@ They are suitable for CPD evidence as self-directed learning outcomes.
 ## Estimated hours
 
 Hours are conservative estimates to guide learners:
-- Foundations: 10
+- Foundations: 15
 - Intermediate (Applied): 12
 - Advanced (Practice and Strategy): 14
 
@@ -96,7 +96,7 @@ Activities include:
 
 ## Estimated hours
 
-- Foundations: 10 hours
+- Foundations: 15 hours
 - Intermediate (Applied): 12 hours
 - Advanced (Practice and Strategy): 14 hours
 

@@ -22,13 +22,18 @@ export default function PasswordStrengthLab() {
     if (/[A-Z]/.test(pwd)) charsetSize += 26;
     if (/[0-9]/.test(pwd)) charsetSize += 10;
     if (/[^a-zA-Z0-9]/.test(pwd)) charsetSize += 32;
-    
+    if (charsetSize <= 0) return 0;
+
     return pwd.length * Math.log2(charsetSize);
   }
 
-  function timeToCrack(entropy) {
-    // Assume 100 billion guesses per second (modern GPU)
-    const guessesPerSecond = 100_000_000_000;
+  function timeToCrackFastHashOffline(entropy) {
+    // IMPORTANT: This is a rough illustration for an OFFLINE attack against a FAST hash.
+    // Real crack time depends heavily on:
+    // - whether the attacker can guess offline (stolen hashes) or only online (rate limited)
+    // - the password hashing scheme (bcrypt/Argon2 can be thousands+ times slower than fast hashes)
+    // - rules/dictionaries (many real attacks are smarter than brute force)
+    const guessesPerSecond = 100_000_000_000; // illustrative only
     const totalCombinations = Math.pow(2, entropy);
     const seconds = totalCombinations / (guessesPerSecond * 2); // Avg is half
     
@@ -42,7 +47,7 @@ export default function PasswordStrengthLab() {
   }
 
   const entropy = calculateEntropy(password);
-  const crackTime = timeToCrack(entropy);
+  const crackTime = timeToCrackFastHashOffline(entropy);
   
   const hasLength = password.length >= 12;
   const hasLower = /[a-z]/.test(password);
@@ -50,6 +55,7 @@ export default function PasswordStrengthLab() {
   const hasNumber = /[0-9]/.test(password);
   const hasSpecial = /[^a-zA-Z0-9]/.test(password);
   
+  // Small illustrative list only. Real breach dictionaries are much larger.
   const commonPasswords = ["password", "123456", "qwerty", "admin", "letmein", "welcome", "monkey", "dragon"];
   const isCommon = commonPasswords.some(common => password.toLowerCase().includes(common));
   
@@ -66,7 +72,7 @@ export default function PasswordStrengthLab() {
   return (
     <div className="space-y-4 text-sm">
       <p className="text-gray-700">
-        Test password strength and see realistic crack times. Length matters more than complexity!
+        Test password strength and see why length matters. The crack-time estimate below is a simplified illustration, not a promise.
       </p>
 
       <div>
@@ -95,10 +101,17 @@ export default function PasswordStrengthLab() {
                 <div className="font-semibold">{entropy.toFixed(1)} bits</div>
               </div>
               <div>
-                <div className="text-slate-600">Time to Crack</div>
+                <div className="text-slate-600">Offline guessing (fast hash)</div>
                 <div className="font-semibold">{crackTime}</div>
               </div>
             </div>
+          </div>
+
+          <div className="p-3 bg-amber-50 border border-amber-300 rounded-lg">
+            <div className="font-semibold text-amber-900 mb-1">Reality check</div>
+            <p className="text-xs text-amber-800">
+              Online logins are usually rate-limited, so guessing is far slower. Offline guessing is faster, but good systems store passwords with slow hashing (bcrypt/Argon2/scrypt), which makes guessing far harder. Attackers also use dictionaries and patterns, not only brute force.
+            </p>
           </div>
 
           <div className="p-3 bg-white rounded-lg border border-slate-200">
@@ -154,7 +167,7 @@ export default function PasswordStrengthLab() {
             <strong>Why &quot;P@ssw0rd1!&quot; is terrible:</strong> Predictable substitutions (@ for a, 0 for o) don&apos;t fool modern cracking tools. Dictionary attacks check these variations automatically.
           </div>
           <div>
-            <strong>Best practice:</strong> Use a passphrase (4+ random words) or password manager to generate truly random passwords. Example: &quot;correct horse battery staple&quot; (XKCD reference).
+            <strong>Best practice:</strong> Use a password manager to generate unique passwords, or use a long passphrase made of several random words. The phrase “correct horse battery staple” became famous because it demonstrates why length can beat “clever” complexity.
           </div>
         </div>
       </div>

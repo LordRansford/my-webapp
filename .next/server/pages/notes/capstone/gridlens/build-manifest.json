@@ -6,7 +6,7 @@
   "rootMainFiles": [],
   "pages": {
     "/notes/capstone/gridlens": [
-      "static/chunks/af8d78f965845493.js",
+      "static/chunks/73179c03873fadb3.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/2fcd2aa21d8c3e53.js",
       "static/chunks/f0f43ebb724b8b11.js",
@@ -16,7 +16,7 @@
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/d11e15d588813b4c.js",
       "static/chunks/999d695b5baa4b77.js",
-      "static/chunks/turbopack-d0df3489e243ca61.js"
+      "static/chunks/turbopack-f9230a667ab461b0.js"
     ]
   },
   "ampFirstPages": []

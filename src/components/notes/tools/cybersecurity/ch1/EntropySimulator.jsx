@@ -25,7 +25,7 @@ export default function EntropySimulator() {
   return (
     <div className="space-y-4 text-sm">
       <p className="text-gray-700">
-        Adjust length and character set to see estimated entropy (guessing difficulty). This is a simplified model.
+        Adjust length and character set to see estimated entropy (guessing difficulty). This is a simplified model and does not account for real-world patterns, password reuse, or rate limits.
       </p>
 
       <label className="block space-y-1">
