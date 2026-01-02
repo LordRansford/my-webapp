@@ -161,13 +161,13 @@ export default function PasswordStrengthLab() {
         <div className="font-semibold text-blue-900 mb-2">💡 Key Insights</div>
         <div className="space-y-2 text-xs text-blue-800">
           <div>
-            <strong>Length vs Complexity:</strong> A 16-character password of all lowercase letters is stronger than an 8-character password with mixed case, numbers, and symbols.
+            <strong>Length vs complexity</strong> A 16-character password of all lowercase letters is stronger than an 8-character password with mixed case, numbers, and symbols.
           </div>
           <div>
-            <strong>Why &quot;P@ssw0rd1!&quot; is terrible:</strong> Predictable substitutions (@ for a, 0 for o) don&apos;t fool modern cracking tools. Dictionary attacks check these variations automatically.
+            <strong>Why &quot;P@ssw0rd1!&quot; is terrible</strong> Predictable substitutions (@ for a, 0 for o) do not fool modern cracking tools. Dictionary attacks check these variations automatically.
           </div>
           <div>
-            <strong>Best practice:</strong> Use a password manager to generate unique passwords, or use a long passphrase made of several random words. The phrase “correct horse battery staple” became famous because it demonstrates why length can beat “clever” complexity.
+            <strong>Best practice</strong> Use a password manager to generate unique passwords, or use a long passphrase made of several random words. The phrase “correct horse battery staple” became famous because it demonstrates why length can beat “clever” complexity.
           </div>
         </div>
       </div>

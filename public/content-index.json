@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-02T19:29:06.697Z",
+  "generatedAt": "2026-01-02T20:08:41.692Z",
   "pages": [
     {
       "route": "/courses/_cpd-checklist",
@@ -3377,45 +3377,45 @@
         },
         {
           "depth": 3,
-          "title": "After this section you should be able to:",
+          "title": "After this section you should be able to",
           "anchor": "after-this-section-you-should-be-able-to",
-          "excerpt": "- Explain what cybersecurity is and what it is not - Use the terms vulnerability, exploit, incident and breach correctly - Explain why security is about trade offs and context"
+          "excerpt": "1. Explain what cybersecurity is and what it is not 2. Use the terms vulnerability, exploit, incident and breach correctly 3. Explain why security is about trade offs and context"
         },
         {
           "depth": 3,
-          "title": "After this section you should be able to:",
+          "title": "After this section you should be able to",
           "anchor": "after-this-section-you-should-be-able-to-2",
-          "excerpt": "- Explain why risk is contextual and what breaks when controls are applied blindly - Explain how assets, threats, and vulnerabilities connect to real decisions - Explain why Identify work comes before tool buying"
+          "excerpt": "1. Explain why risk is contextual and what breaks when controls are applied blindly 2. Explain how assets, threats, and vulnerabilities connect to real decisions 3. Explain why Identify work comes before tool buying"
         },
         {
           "depth": 3,
-          "title": "After this section you should be able to:",
+          "title": "After this section you should be able to",
           "anchor": "after-this-section-you-should-be-able-to-3",
-          "excerpt": "- Explain the difference between authentication and authorisation - Explain what breaks when identity is treated as a soft control - Explain why least privilege reduces blast radius during incidents"
+          "excerpt": "1. Explain the difference between authentication and authorisation 2. Explain what breaks when identity is treated as a soft control 3. Explain why least privilege reduces blast radius during incidents"
         },
         {
           "depth": 3,
-          "title": "After this section you should be able to:",
+          "title": "After this section you should be able to",
           "anchor": "after-this-section-you-should-be-able-to-4",
-          "excerpt": "- Explain why representation and parsing mistakes create security risk - Explain what breaks when systems disagree on how bytes should be interpreted - Explain why integrity controls depend on correct data handling"
+          "excerpt": "1. Explain why representation and parsing mistakes create security risk 2. Explain what breaks when systems disagree on how bytes should be interpreted 3. Explain why integrity controls depend on correct data handling"
         },
         {
           "depth": 3,
-          "title": "After this section you should be able to:",
+          "title": "After this section you should be able to",
           "anchor": "after-this-section-you-should-be-able-to-5",
-          "excerpt": "- Explain why trust boundaries exist and what breaks when networks are assumed safe - Explain how metadata can leak behaviour even when content is encrypted - Explain why monitoring often starts with patterns, not secrets"
+          "excerpt": "1. Explain why trust boundaries exist and what breaks when networks are assumed safe 2. Explain how metadata can leak behaviour even when content is encrypted 3. Explain why monitoring often starts with patterns, not secrets"
         },
         {
           "depth": 3,
-          "title": "After this section you should be able to:",
+          "title": "After this section you should be able to",
           "anchor": "after-this-section-you-should-be-able-to-6",
-          "excerpt": "- Explain CIA as decision questions, not memorised words - Explain what breaks when identity is weak or integrity is not monitored - Explain why availability needs planning, not hope"
+          "excerpt": "1. Explain CIA as decision questions, not memorised words 2. Explain what breaks when identity is weak or integrity is not monitored 3. Explain why availability needs planning, not hope"
         },
         {
           "depth": 3,
-          "title": "After this section you should be able to:",
+          "title": "After this section you should be able to",
           "anchor": "after-this-section-you-should-be-able-to-7",
-          "excerpt": "- Explain why humans are part of the system and what breaks when processes are unrealistic - Explain governance as ownership of trade offs, not documents - Explain why clear roles and rehearsed response reduce harm"
+          "excerpt": "1. Explain why humans are part of the system and what breaks when processes are unrealistic 2. Explain governance as ownership of trade offs, not documents 3. Explain why clear roles and rehearsed response reduce harm"
         }
       ]
     },

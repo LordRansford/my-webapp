@@ -61,6 +61,9 @@ const LEGACY_SECTION_ALIASES: Partial<
       "foundations-f2-data-and-integrity": ["foundations-data-and-bits"],
       "foundations-f3-networks-and-transport": ["foundations-networks-and-packets"],
       "foundations-f4-cia-and-simple-attacks": ["foundations-cia-and-simple-attacks"],
+
+      // Old manifest had a placeholder capstone ID, keep it as an alias.
+      "foundations-f8-foundations-capstone": ["foundations-checkpoint-capstone"],
     },
   },
 };

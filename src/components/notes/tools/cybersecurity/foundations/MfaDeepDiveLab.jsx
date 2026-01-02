@@ -51,7 +51,7 @@ export default function MfaDeepDiveLab() {
   return (
     <div className="space-y-4 text-sm">
       <p className="text-gray-700">
-        Compare different 2FA/MFA methods. Not all 2FA is created equal—some methods are more secure than others.
+        Compare different 2FA and MFA methods. Not all methods are equally strong.
       </p>
 
       <div className="grid grid-cols-2 gap-2">
@@ -86,8 +86,8 @@ export default function MfaDeepDiveLab() {
             <ul className="text-xs space-y-1">
               {selected.pros.map((pro, i) => (
                 <li key={i} className="flex gap-2">
-                  <span>•</span>
-                  <span>{pro}</span>
+                  <span className="tabular-nums">{i + 1}.</span>
+                  <span className="flex-1">{pro}</span>
                 </li>
               ))}
             </ul>
@@ -98,8 +98,8 @@ export default function MfaDeepDiveLab() {
             <ul className="text-xs space-y-1">
               {selected.cons.map((con, i) => (
                 <li key={i} className="flex gap-2">
-                  <span>•</span>
-                  <span>{con}</span>
+                  <span className="tabular-nums">{i + 1}.</span>
+                  <span className="flex-1">{con}</span>
                 </li>
               ))}
             </ul>
@@ -113,12 +113,12 @@ export default function MfaDeepDiveLab() {
       </div>
 
       <div className="p-4 bg-yellow-50 border border-yellow-300 rounded-lg">
-        <div className="font-semibold text-yellow-900 mb-2">⚠️ Real Attack: Uber 2022 MFA Fatigue</div>
+        <div className="font-semibold text-yellow-900 mb-2">⚠️ Real attack. Uber 2022 MFA fatigue</div>
         <p className="text-xs text-yellow-800 mb-2">
-          Attacker sent repeated MFA push notifications to an Uber employee. After many denials, the tired employee approved one—giving the attacker access.
+          An attacker sent repeated MFA push notifications to an Uber employee. After many denials, the tired employee approved one and gave the attacker access.
         </p>
         <p className="text-xs text-yellow-800">
-          <strong>Defense:</strong> Use number-matching or TOTP apps instead of simple push notifications. Always verify unexpected MFA requests.
+          <strong>Defense</strong> Use number matching or TOTP apps instead of simple push notifications. Always verify unexpected MFA requests.
         </p>
       </div>
 
@@ -126,13 +126,13 @@ export default function MfaDeepDiveLab() {
         <div className="font-semibold text-purple-900 mb-2">🎯 Your Action Plan</div>
         <div className="text-xs text-purple-800 space-y-2">
           <div>
-            <strong>Priority 1 (This Week):</strong> Enable 2FA on email and banking using authenticator app
+            <strong>Priority 1 (This week)</strong> Enable 2FA on email and banking using an authenticator app
           </div>
           <div>
-            <strong>Priority 2 (This Month):</strong> Enable 2FA on work accounts, social media, password manager
+            <strong>Priority 2 (This month)</strong> Enable 2FA on work accounts, social media, and password manager
           </div>
           <div>
-            <strong>Priority 3 (Optional):</strong> Purchase hardware token for highest-value accounts
+            <strong>Priority 3 (Optional)</strong> Purchase a hardware token for highest value accounts
           </div>
         </div>
       </div>

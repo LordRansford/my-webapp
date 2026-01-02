@@ -53,6 +53,7 @@ const AttackSurfaceMapper = dynamic(() => import("@/components/notes/tools/cyber
 const DnsTrustLab = dynamic(() => import("@/components/notes/tools/cybersecurity/foundations/DnsTrustLab"), { ssr: false });
 const PrivacyThreatModeler = dynamic(() => import("@/components/notes/tools/cybersecurity/foundations/PrivacyThreatModeler"), { ssr: false });
 const AccountHygieneAudit = dynamic(() => import("@/components/notes/tools/cybersecurity/foundations/AccountHygieneAudit"), { ssr: false });
+const PersonalSecurityBaselineTool = dynamic(() => import("@/components/notes/tools/cybersecurity/foundations/PersonalSecurityBaselineTool"), { ssr: false });
 
 export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
@@ -99,6 +100,7 @@ export default function Page({ source, headings }) {
       DnsTrustLab,
       PrivacyThreatModeler,
       AccountHygieneAudit,
+      PersonalSecurityBaselineTool,
       Recap,
       PageNav,
       GlossaryTip,

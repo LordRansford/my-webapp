@@ -204,11 +204,11 @@ export default function PhishingDetectionTrainer() {
         <div className="bg-slate-50 p-3 border-b border-slate-300">
           <div className="space-y-1 text-xs">
             <div className="flex gap-2">
-              <span className="font-semibold min-w-16">From:</span>
+              <span className="font-semibold min-w-16">From</span>
               <span className="font-mono">{email.from}</span>
             </div>
             <div className="flex gap-2">
-              <span className="font-semibold min-w-16">Subject:</span>
+              <span className="font-semibold min-w-16">Subject</span>
               <span>{email.subject}</span>
             </div>
           </div>
@@ -220,7 +220,7 @@ export default function PhishingDetectionTrainer() {
           
           {email.link && (
             <div className="mt-3 p-2 bg-blue-50 border border-blue-200 rounded">
-              <div className="text-xs text-slate-600 mb-1">Link:</div>
+              <div className="text-xs text-slate-600 mb-1">Link</div>
               <div className="font-mono text-xs text-blue-700 break-all">{email.link}</div>
             </div>
           )}
@@ -253,23 +253,23 @@ export default function PhishingDetectionTrainer() {
             
             <div className="text-xs space-y-1 mb-3">
               <div className="font-semibold">
-                This email is: {email.isPhishing ? '🎣 Phishing' : '✓ Legitimate'}
+                This email is {email.isPhishing ? '🎣 Phishing' : '✓ Legitimate'}
               </div>
             </div>
 
             <div className="text-xs">
-              <div className="font-semibold mb-1">Key Indicators:</div>
-              <ul className="space-y-1 ml-4">
+              <div className="font-semibold mb-1">Key indicators</div>
+              <ol className="space-y-1 ml-4 list-decimal">
                 {email.indicators.map((indicator, i) => (
-                  <li key={i} className="list-disc">{indicator}</li>
+                  <li key={i}>{indicator}</li>
                 ))}
-              </ul>
+              </ol>
             </div>
 
             {!answers[email.id].correct && (
               <div className="mt-3 p-2 bg-yellow-50 border border-yellow-300 rounded">
                 <p className="text-xs text-yellow-800">
-                  <strong>Learning point:</strong> {email.isPhishing 
+                  <strong>Learning point</strong> {email.isPhishing 
                     ? "Always verify sender domains, check for urgency tactics, and inspect links before clicking."
                     : "Legitimate emails use official domains, HTTPS links, and don't create false urgency. When in doubt, contact the company directly."
                   }
@@ -308,16 +308,16 @@ export default function PhishingDetectionTrainer() {
         <div className="p-4 bg-blue-50 border border-blue-300 rounded-lg">
           <div className="font-semibold text-blue-900 mb-2">Training Complete</div>
           <p className="text-xs text-blue-800 mb-2">
-            You&apos;ve reviewed all {totalEmails} emails. Your final accuracy: <strong>{accuracy}%</strong>
+            You&apos;ve reviewed all {totalEmails} emails. Your final accuracy is <strong>{accuracy}%</strong>
           </p>
           <div className="text-xs text-blue-800">
-            <strong>Next steps:</strong>
-            <ul className="ml-4 mt-1 space-y-1">
-              <li className="list-disc">Apply these skills to real emails you receive</li>
-              <li className="list-disc">Report suspicious emails to your IT/security team</li>
-              <li className="list-disc">Verify urgent requests through alternative channels</li>
-              <li className="list-disc">Never click links or download attachments from unknown senders</li>
-            </ul>
+            <strong>Next steps</strong>
+            <ol className="ml-4 mt-1 space-y-1 list-decimal">
+              <li>Apply these skills to real emails you receive</li>
+              <li>Report suspicious emails to your IT or security team</li>
+              <li>Verify urgent requests through an independent channel</li>
+              <li>Do not click links or download attachments from unknown senders</li>
+            </ol>
           </div>
         </div>
       )}

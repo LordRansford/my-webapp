@@ -8,6 +8,7 @@ export const cyberSections = {
     "foundations-f5-identity-and-access",
     "foundations-f6-human-factors-and-phishing",
     "foundations-f7-privacy-and-everyday-data-protection",
+    "foundations-f8-foundations-capstone",
   ],
   applied: [
     "applied-welcome-prerequisites",

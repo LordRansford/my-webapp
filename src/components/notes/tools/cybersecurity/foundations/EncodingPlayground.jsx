@@ -33,7 +33,7 @@ export default function EncodingPlayground() {
     // For non-ASCII text, return a clear message instead of misleading numbers.
     const bytes = toUtf8Bytes(str);
     const isAllAscii = bytes.every((b) => b >= 0 && b <= 127);
-    if (!isAllAscii) return "(contains non-ASCII characters — ASCII cannot represent this text)";
+    if (!isAllAscii) return "(contains non ASCII characters. ASCII cannot represent this text)";
     return bytes.join(" ");
   }
 
@@ -94,24 +94,24 @@ export default function EncodingPlayground() {
           Encoding can hide what a string looks like at first glance. This matters because naive filters that look for simple keywords can be bypassed by encoded variants.
         </p>
         <p className="text-xs text-yellow-800 mt-2">
-          <strong>Safety note:</strong> Do not paste suspicious strings into real websites. Use controlled labs and defensive testing processes. The goal here is recognition and safe handling.
+          <strong>Safety note</strong> Do not paste suspicious strings into real websites. Use controlled labs and defensive testing processes. The goal here is recognition and safe handling.
         </p>
       </div>
 
       <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-        <div className="font-semibold text-slate-900 mb-2">Try these examples:</div>
+        <div className="font-semibold text-slate-900 mb-2">Try these examples</div>
         <div className="space-y-1 text-xs">
           <button onClick={() => set_state({ input: "SELECT" })} className="text-blue-600 hover:underline block">
-            • A keyword (watch how encodings change the visible characters)
+            1. A keyword (watch how encodings change the visible characters)
           </button>
           <button onClick={() => set_state({ input: "<script>" })} className="text-blue-600 hover:underline block">
-            • A tag-like string (helps explain output encoding vs raw rendering)
+            2. A tag like string (helps explain output encoding vs raw rendering)
           </button>
           <button onClick={() => set_state({ input: "name=alice&role=admin" })} className="text-blue-600 hover:underline block">
-            • URL-ish parameters (common place where encoding shows up)
+            3. URL like parameters (common place where encoding shows up)
           </button>
           <button onClick={() => set_state({ input: "Hello 世界 🌍" })} className="text-blue-600 hover:underline block">
-            • Mixed character sets (ASCII + Unicode + Emoji)
+            4. Mixed character sets (ASCII + Unicode + Emoji)
           </button>
         </div>
       </div>

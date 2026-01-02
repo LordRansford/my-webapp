@@ -164,7 +164,7 @@ export default function HashingEncryptionLab() {
                 $2b$10$abcdefghijklmnopqrstuv... (demonstration)
               </div>
               <div className="text-xs text-blue-700 mt-2">
-                <strong>Key feature:</strong> Intentionally slow and salted. That makes guessing attacks much harder. Use a password hashing scheme (bcrypt/Argon2/scrypt), not fast hashes like SHA-256, for password storage.
+                <strong>Key feature</strong> Intentionally slow and salted. That makes guessing attacks much harder. Use a password hashing scheme (bcrypt, Argon2, scrypt), not fast hashes like SHA-256, for password storage.
               </div>
             </div>
           </div>
@@ -175,7 +175,7 @@ export default function HashingEncryptionLab() {
               Rainbow tables are precomputed hash databases for common passwords. If passwords are hashed without a unique salt, attackers can often match common hashes very quickly.
             </p>
             <p className="text-xs text-purple-800">
-              <strong>Defense:</strong> Add a random &quot;salt&quot; before hashing. Same password, different salt = different hash. bcrypt/Argon2 do this automatically.
+              <strong>Defense</strong> Add a random &quot;salt&quot; before hashing. Same password, different salt means a different hash. bcrypt and Argon2 do this automatically.
             </p>
           </div>
         </div>
@@ -229,19 +229,19 @@ export default function HashingEncryptionLab() {
             <div className="font-semibold text-yellow-900 mb-2">Key Differences</div>
             <div className="space-y-2 text-xs text-yellow-800">
               <div className="flex gap-2">
-                <span className="font-semibold min-w-24">Hashing:</span>
+                <span className="font-semibold min-w-24">Hashing</span>
                 <span>One-way transformation. You cannot reverse it. Used for integrity checks and password storage (with specialised password hashing).</span>
               </div>
               <div className="flex gap-2">
-                <span className="font-semibold min-w-24">Encryption:</span>
+                <span className="font-semibold min-w-24">Encryption</span>
                 <span>Two-way transformation. Can decrypt with key. Used for confidentiality.</span>
               </div>
               <div className="flex gap-2">
-                <span className="font-semibold min-w-24">Use hashing:</span>
+                <span className="font-semibold min-w-24">Use hashing</span>
                 <span>Verify file integrity; help power digital signatures (hash then sign).</span>
               </div>
               <div className="flex gap-2">
-                <span className="font-semibold min-w-24">Use encryption:</span>
+                <span className="font-semibold min-w-24">Use encryption</span>
                 <span>Protect data in transit (HTTPS), at rest (disk encryption), backups.</span>
               </div>
             </div>
@@ -250,19 +250,19 @@ export default function HashingEncryptionLab() {
       )}
 
       <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-        <div className="font-semibold text-slate-900 mb-2">Try these examples:</div>
+        <div className="font-semibold text-slate-900 mb-2">Try these examples</div>
         <div className="space-y-1 text-xs">
           <button onClick={() => set_state({ ...state, input: "password" })} className="text-blue-600 hover:underline block">
-            • &quot;password&quot; - Most common password (easily cracked)
+            1. &quot;password&quot; - Most common password (easily guessed)
           </button>
           <button onClick={() => set_state({ ...state, input: "P@ssw0rd1!" })} className="text-blue-600 hover:underline block">
-            • &quot;P@ssw0rd1!&quot; - Common substitution pattern (still weak)
+            2. &quot;P@ssw0rd1!&quot; - Common substitution pattern (still weak)
           </button>
           <button onClick={() => set_state({ ...state, input: "correct horse battery staple" })} className="text-blue-600 hover:underline block">
-            • &quot;correct horse battery staple&quot; - XKCD famous passphrase
+            3. &quot;correct horse battery staple&quot; - Famous passphrase example
           </button>
           <button onClick={() => set_state({ ...state, input: "Tr0ub4dor&3" })} className="text-blue-600 hover:underline block">
-            • &quot;Tr0ub4dor&amp;3&quot; - Complex but short (compare hash)
+            4. &quot;Tr0ub4dor&amp;3&quot; - Complex but short (compare hash)
           </button>
         </div>
       </div>

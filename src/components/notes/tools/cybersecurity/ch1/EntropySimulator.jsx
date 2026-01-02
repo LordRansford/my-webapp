@@ -59,7 +59,7 @@ export default function EntropySimulator() {
         <div className="text-xs font-semibold text-gray-700">Estimated entropy</div>
         <div className="text-2xl font-semibold text-gray-900 mt-1">{entropy.toFixed(1)} bits</div>
         <p className="text-xs text-gray-600 mt-1">
-          Formula: H = L \times log2(N) where L is length and N is character set size.
+          Formula is H = L \times log2(N) where L is length and N is character set size.
         </p>
       </div>
 
