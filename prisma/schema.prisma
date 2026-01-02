@@ -1,6 +1,6 @@
 // Phase 5 baseline schema
-// - SQLite for local development (DATABASE_URL="file:./data/dev.db")
-// - Structure is Postgres-compatible (Prisma will translate types)
+// - PostgreSQL for production (Neon) - DATABASE_URL from environment
+// - Structure is Postgres-native (no translation needed)
 //
 // Identity model (passwordless):
 // - User = email + provider id (providerAccountId)
