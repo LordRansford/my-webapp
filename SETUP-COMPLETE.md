@@ -58,12 +58,24 @@ For better error debugging with readable stack traces:
 ✅ **Session Replay** - User sessions are recorded for debugging  
 ✅ **File Storage** - Vercel Blob is ready for file uploads/downloads  
 
+## Stripe & Donations Setup
+
+See `SETUP-STRIPE-DONATIONS.md` for complete Stripe configuration guide.
+
+**Quick Start:**
+1. Get Stripe API keys from Stripe Dashboard
+2. Set environment variables (see guide)
+3. Configure webhook endpoint
+4. Test with Stripe test cards
+
 ## Next Steps (Optional)
 
 - [ ] Set up Sentry alerts for critical errors
 - [ ] Configure Sentry release tracking (requires auth token)
 - [ ] Review Sentry performance dashboards
 - [ ] Set up Vercel Blob access policies if needed
+- [ ] Complete Stripe webhook configuration
+- [ ] Test donation flow end-to-end
 
 ## Documentation
 
