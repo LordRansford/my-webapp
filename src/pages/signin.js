@@ -101,7 +101,7 @@ export default function SignInPage() {
                 </Link>
               </div>
               <div className="mt-3 text-xs text-rose-900">
-                For Vercel you need NEXTAUTH_URL and NEXTAUTH_SECRET plus a provider such as Google client id and secret.
+                                For Vercel you need a valid site URL, a NextAuth secret, and a provider such as Google client id and secret.
               </div>
             </div>
           ) : (

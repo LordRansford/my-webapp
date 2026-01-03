@@ -45,10 +45,10 @@ export default function AppShell({ children }: AppShellProps) {
     <BreadcrumbsProvider>
       <div className="app-shell">
         <Header />
-        <div className="page-shell">
+        <PageContainer>
           <BreadcrumbsFallback />
-          <PageContainer>{children}</PageContainer>
-        </div>
+          {children}
+        </PageContainer>
         <Footer />
       </div>
     </BreadcrumbsProvider>

@@ -2,5 +2,10 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/": "pages/index.js"
+  "/tools/digitalisation/process-friction-mapper": "pages/tools/digitalisation/process-friction-mapper.js",
+  "/tools/software-architecture/technical-debt-qualifier": "pages/tools/software-architecture/technical-debt-qualifier.js",
+  "/tools/cyber/incident-post-mortem-builder": "pages/tools/cyber/incident-post-mortem-builder.js",
+  "/tools/data/metrics-definition-studio": "pages/tools/data/metrics-definition-studio.js",
+  "/tools/cyber/certificate-viewer": "pages/tools/cyber/certificate-viewer.js",
+  "/tools/data/schema-inspector": "pages/tools/data/schema-inspector.js"
 }
