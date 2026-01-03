@@ -11,11 +11,14 @@ import ProjectsPanel from "@/components/ai-studio/ProjectsPanel";
 import type { AIStudioProject } from "@/lib/ai-studio/projects/store";
 import { getLastOpenedProjectId, getProjectById, getProjects, importProject, setLastOpenedProjectId, updateProjectRun } from "@/lib/ai-studio/projects/store";
 import { runAiStudioProjectLocal } from "@/lib/ai-studio/projects/run";
+import { parseProjectShareCode } from "@/lib/ai-studio/projects/share";
 
 export default function AIStudioProjectsIndexPage() {
   const [projects, setProjects] = useState<AIStudioProject[]>([]);
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
   const [importError, setImportError] = useState<string | null>(null);
+  const [shareCode, setShareCode] = useState("");
+  const [shareCodeError, setShareCodeError] = useState<string | null>(null);
 
   const refresh = () => {
     const list = getProjects();
@@ -94,6 +97,60 @@ export default function AIStudioProjectsIndexPage() {
             {importError}
           </div>
         ) : null}
+
+        <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-3">
+          <h2 className="text-lg font-semibold text-slate-900">Import from share code</h2>
+          <p className="text-sm text-slate-600">
+            Share codes are a safe, copy/paste way to move projects between devices (no server upload required).
+          </p>
+          <textarea
+            value={shareCode}
+            onChange={(e) => setShareCode(e.target.value)}
+            rows={3}
+            className="w-full rounded-lg border border-slate-300 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+            placeholder="Paste a share code here…"
+            aria-label="Project share code"
+          />
+          {shareCodeError ? (
+            <div className="rounded-lg border border-rose-200 bg-rose-50 p-3 text-sm text-rose-900" role="alert">
+              {shareCodeError}
+            </div>
+          ) : null}
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                setShareCodeError(null);
+                const parsed = parseProjectShareCode(shareCode);
+                if (!parsed.ok) {
+                  setShareCodeError(parsed.error);
+                  return;
+                }
+                const res = importProject(parsed.payload.project);
+                if (!res.ok) {
+                  setShareCodeError(res.error);
+                  return;
+                }
+                setLastOpenedProjectId(res.project.id);
+                setShareCode("");
+                refresh();
+              }}
+              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-2"
+            >
+              Import share code
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setShareCode("");
+                setShareCodeError(null);
+              }}
+              className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+            >
+              Clear
+            </button>
+          </div>
+        </section>
 
         <ProjectsPanel
           projects={projects}

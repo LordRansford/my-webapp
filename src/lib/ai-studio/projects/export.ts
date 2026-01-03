@@ -117,6 +117,19 @@ function checklistForExample(exampleId: string) {
   return ["Add a clear goal for this project.", "Make one small improvement, then re-run and compare outputs.", "Export a pack and share it."];
 }
 
+function artefactMarkdown(project: AIStudioProject) {
+  const run = project.lastRun;
+  const header = `# ${project.title}\n\nTemplate: \`${project.exampleId}\`\n\n`;
+  if (!run) {
+    return `${header}No runs yet.\n`;
+  }
+  const receipt = run.receipt;
+  const receiptLine = receipt
+    ? `Receipt: mode=${receipt.mode} durationMs=${receipt.durationMs} creditsCharged=${receipt.creditsCharged}\n\n`
+    : "Receipt: not available\n\n";
+  return `${header}## Latest run\n\nRan at: ${run.ranAt}\n\n${receiptLine}## Output\n\n\`\`\`json\n${JSON.stringify(run.output, null, 2)}\n\`\`\`\n`;
+}
+
 export async function exportProjectAsPackZip(project: AIStudioProject) {
   const slug = project.title.replace(/[^a-z0-9]+/gi, "-").toLowerCase();
   const base = `${slug}-${project.id}`;
@@ -131,6 +144,7 @@ export async function exportProjectAsPackZip(project: AIStudioProject) {
 
   const checklist = checklistForExample(project.exampleId);
   zip.file("NEXT_STEPS.md", `# Next steps\n\n${checklist.map((c) => `- ${c}`).join("\n")}\n`);
+  zip.file("ARTEFACT.md", artefactMarkdown(project));
 
   const pdfBytes = await buildProjectPdfBytes(project);
   zip.file("project-summary.pdf", pdfBytes);

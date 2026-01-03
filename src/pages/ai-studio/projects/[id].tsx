@@ -7,12 +7,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Download, FileText, Play, Trash2 } from "lucide-react";
+import { Download, FileText, Link as LinkIcon, Play, Trash2 } from "lucide-react";
 import type { AIStudioProject } from "@/lib/ai-studio/projects/store";
 import { deleteProject, getProjectById, setLastOpenedProjectId, updateProjectRun } from "@/lib/ai-studio/projects/store";
 import { exportProjectAsJson, exportProjectAsPackZip, exportProjectAsPdf } from "@/lib/ai-studio/projects/export";
 import { runAiStudioProjectLocal } from "@/lib/ai-studio/projects/run";
 import RunReceiptPanel from "@/components/ai-studio/RunReceiptPanel";
+import { createProjectShareCode } from "@/lib/ai-studio/projects/share";
 
 type ComputeEstimate = {
   ok: boolean;
@@ -211,6 +212,18 @@ export default function AIStudioProjectDetailsPage() {
             >
               <Download className="w-4 h-4" aria-hidden="true" />
               Export JSON
+            </button>
+            <button
+              type="button"
+              onClick={async () => {
+                const code = createProjectShareCode(project);
+                await navigator.clipboard.writeText(code);
+                alert("Share code copied. Paste it into /ai-studio/projects to import on another device.");
+              }}
+              className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+            >
+              <LinkIcon className="w-4 h-4" aria-hidden="true" />
+              Copy share code
             </button>
             <button
               type="button"
