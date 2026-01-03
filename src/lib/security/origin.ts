@@ -22,7 +22,11 @@ export function requireSameOrigin(req: Request) {
   }
 
   const candidate = origin || (referer ? (() => { try { return new URL(referer).origin; } catch { return null; } })() : null);
+  // Some same-site requests may not include Origin or Referer.
+  // For CSRF prevention we only need to reject cross-site browser requests, which do send Origin.
+  // If the request has no Origin/Referer we allow it when the request origin is known.
   if (!candidate) {
+    if (requestOrigin) return null;
     return NextResponse.json({ error: "Missing origin" }, { status: 403 });
   }
   // Accept either:

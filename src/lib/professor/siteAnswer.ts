@@ -18,6 +18,15 @@ type ToolsIndexRow = {
   description?: string;
 };
 
+type ContentIndex = {
+  pages: Array<{
+    route: string;
+    title?: string;
+    sourcePath?: string;
+    sections?: Array<{ depth: number; title: string; anchor: string; excerpt?: string }>;
+  }>;
+};
+
 function readJsonFile<T>(p: string): T | null {
   try {
     if (!fs.existsSync(p)) return null;
@@ -47,20 +56,41 @@ function scoreRow(tokens: string[], haystack: string) {
 }
 
 let cachedContent: ContentIndexRow[] | null = null;
+let cachedContentByRoute: Map<string, { route: string; title: string; excerpt: string }> | null = null;
 let cachedTools: ToolsIndexRow[] | null = null;
 
 function loadContentIndex(): ContentIndexRow[] {
   if (cachedContent) return cachedContent;
   const p = path.join(process.cwd(), "public", "content-index.json");
-  const rows = readJsonFile<ContentIndexRow[]>(p) || [];
-  cachedContent = rows;
-  return rows;
+  const raw = readJsonFile<ContentIndex>(p);
+  const pages = raw?.pages || [];
+  const flat: ContentIndexRow[] = pages.map((page) => ({
+    slug: page.route,
+    title: page.title,
+    excerpt:
+      Array.isArray(page.sections) && page.sections.length
+        ? String(page.sections[0]?.excerpt || page.sections[0]?.title || "")
+        : "",
+    section: page.sourcePath,
+  }));
+  cachedContent = flat;
+  const byRoute = new Map<string, { route: string; title: string; excerpt: string }>();
+  for (const page of pages) {
+    const excerpt =
+      Array.isArray(page.sections) && page.sections.length
+        ? String(page.sections.find((s) => s.depth === 2)?.excerpt || page.sections[0]?.excerpt || "")
+        : "";
+    byRoute.set(page.route, { route: page.route, title: String(page.title || page.route), excerpt });
+  }
+  cachedContentByRoute = byRoute;
+  return flat;
 }
 
 function loadToolsIndex(): ToolsIndexRow[] {
   if (cachedTools) return cachedTools;
   const p = path.join(process.cwd(), "public", "tools-index.json");
-  const rows = readJsonFile<ToolsIndexRow[]>(p) || [];
+  const raw = readJsonFile<{ tools?: ToolsIndexRow[] }>(p);
+  const rows = Array.isArray(raw?.tools) ? raw!.tools : [];
   cachedTools = rows;
   return rows;
 }
@@ -113,9 +143,32 @@ function buildCitations(params: { question: string; pageUrl: string }) {
   });
 }
 
+function bestPageForTokens(tokens: string[]) {
+  const content = loadContentIndex();
+  const scored = content
+    .map((r) => ({
+      row: r,
+      score: scoreRow(tokens, `${r.title || ""} ${r.excerpt || ""} ${r.slug || ""}`),
+    }))
+    .sort((a, b) => b.score - a.score)
+    .filter((x) => x.score > 0)
+    .slice(0, 1);
+  return scored[0]?.row || null;
+}
+
+function extractMeaningfulExcerpt(route: string) {
+  if (!cachedContentByRoute) loadContentIndex();
+  const row = cachedContentByRoute?.get(route) || null;
+  const ex = String(row?.excerpt || "").trim();
+  if (!ex) return "";
+  // Strip obvious MDX component fragments from excerpts where possible.
+  return ex.replace(/courseId=.*?>/g, "").replace(/<[^>]+>/g, "").trim().slice(0, 260);
+}
+
 function buildAnswer(params: { question: string; citations: Citation[] }) {
   const q = String(params.question || "").trim();
   const t = q.toLowerCase();
+  const tokens = tokenize(q);
 
   if (t.includes("pricing") || t.includes("price") || t.includes("pay") || t.includes("credits")) {
     return [
@@ -141,6 +194,19 @@ function buildAnswer(params: { question: string; citations: Citation[] }) {
     ].join("\n");
   }
 
+  if (t.includes("digitalisation") || t.includes("digitalization")) {
+    const page = bestPageForTokens(["digitalisation", ...tokens]) || { slug: "/digitalisation", title: "Digitalisation" };
+    const excerpt = extractMeaningfulExcerpt(String(page.slug || "/digitalisation"));
+    return [
+      "Digitalisation is the redesign of how value is created and delivered using people, process, data, and technology together.",
+      "It is not the same as buying tools.",
+      "",
+      excerpt ? `On this site it is covered as.\n${excerpt}` : "On this site it is covered through foundations, intermediate, and advanced notes with tools and dashboards.",
+      "",
+      "If you tell me your context I can point you to the best starting page and one tool to practise with.",
+    ].join("\n");
+  }
+
   if (t.includes("tool") || t.includes("lab") || t.includes("not working") || t.includes("error")) {
     return [
       "If a tool is not working, the fastest way to fix it is to narrow the problem.",
@@ -152,13 +218,16 @@ function buildAnswer(params: { question: string; citations: Citation[] }) {
     ].join("\n");
   }
 
-  const cites = params.citations.slice(0, 3).map((c) => `- ${c.title} ${c.href}`);
+  const best = bestPageForTokens(tokens);
+  const excerpt = best?.slug ? extractMeaningfulExcerpt(best.slug) : "";
+  const cites = params.citations.slice(0, 4).map((c) => `- ${c.title} ${c.href}`);
   return [
-    "I can help using this site content.",
-    "Here are the most relevant pages and tools to answer your question.",
+    excerpt ? `Here is a direct answer based on this site.\n${excerpt}` : "I can answer using this site content.",
+    "",
+    "Best next pages on this site.",
     ...cites,
     "",
-    "Ask one focused question at a time and I will point you to the exact sections to read next.",
+    "Ask your question in one sentence and I will respond with a direct explanation and the exact page to read next.",
   ].join("\n");
 }
 
