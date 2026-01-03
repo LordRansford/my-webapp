@@ -59,9 +59,9 @@ test("Compute components expose aria labels", () => {
 });
 
 test("Assistants remain text-labeled, not icon-only", () => {
-  const mentor = read("src/components/assistants/MentorAssistant.tsx");
-  assert.ok(/aria-label="Mentor drawer"/.test(mentor), "MentorAssistant must keep Mentor drawer aria-label");
-  assert.ok(/>Mentor</.test(mentor), "MentorAssistant must render visible Mentor heading");
+  const professor = read("src/components/assistants/ProfessorRansfordAssistant.tsx");
+  assert.ok(/aria-label="Professor drawer"/.test(professor), "ProfessorRansfordAssistant must keep Professor drawer aria-label");
+  assert.ok(/>Professor Ransford</.test(professor), "ProfessorRansfordAssistant must render visible Professor heading");
 
   const feedback = read("src/components/assistants/FeedbackAssistant.tsx");
   assert.ok(/aria-label="Feedback drawer"/.test(feedback), "FeedbackAssistant must keep Feedback drawer aria-label");

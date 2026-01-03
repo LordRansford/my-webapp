@@ -6,7 +6,7 @@
   "rootMainFiles": [],
   "pages": {
     "/ai/advanced": [
-      "static/chunks/0adc9012dec8f78a.js",
+      "static/chunks/c4bd54bca1935237.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/2fcd2aa21d8c3e53.js",
       "static/chunks/f0f43ebb724b8b11.js",
@@ -14,10 +14,10 @@
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/48c11802c3f193fa.js",
       "static/chunks/999d695b5baa4b77.js",
-      "static/chunks/79ef764a2bfa63a8.js",
+      "static/chunks/30bacc71719868c1.js",
       "static/chunks/01073211ade0ab07.js",
       "static/chunks/8725458b63ca15a4.js",
-      "static/chunks/turbopack-a7c5dbc385351743.js"
+      "static/chunks/turbopack-cb7b59222e1f6538.js"
     ]
   },
   "ampFirstPages": []

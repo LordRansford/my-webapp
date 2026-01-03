@@ -12,11 +12,8 @@ import cybersecurityCourse from "../../../content/courses/cybersecurity.json";
 import { useEffect, useMemo, useState } from "react";
 import FeedbackPanel from "@/components/feedback/FeedbackPanel";
 import { highlightAnchorFromLocation } from "@/lib/ui/highlightAnchor";
-import dynamic from "next/dynamic";
 import ReadAloudControls from "@/components/a11y/ReadAloudControls";
 import { CourseAssessmentTemplate, CourseLessonTemplate, CourseOverviewTemplate } from "@/components/templates/PageTemplates";
-
-const AssistantShell = dynamic(() => import("@/components/assistants/AssistantShell"), { ssr: false });
 
 /** @param {{ meta?: any, headings?: any[], children: any, activeLevelId?: any, showContentsSidebar?: boolean, showStepper?: boolean, useAppShell?: boolean }} props */
 export default function NotesLayout(props) {
@@ -193,7 +190,6 @@ export default function NotesLayout(props) {
         ) : null}
         <main className="w-full max-w-full flex-1">
           <BetaBanner />
-          <AssistantShell />
           <header className="mb-4 rounded-3xl border border-gray-200 bg-white/90 p-4 shadow-sm backdrop-blur">
             <p className="eyebrow m-0 text-gray-700">
               {sectionLabelMap[resolvedSection] || "Notes"} · {meta.level || "Notes"}

@@ -77,10 +77,18 @@ export default function ProfessorRansfordAssistant(props: { open: boolean; onClo
   return (
     <div className="fixed inset-0 z-50">
       <button type="button" className="absolute inset-0 bg-black/35" aria-label="Close professor" onClick={props.onClose} />
-      <aside className="absolute right-0 top-0 h-full w-full max-w-sm overflow-y-auto bg-white p-4 shadow-xl">
+      <aside
+        className="absolute right-0 top-0 h-full w-full max-w-sm overflow-y-auto bg-white p-4 shadow-xl"
+        aria-label="Professor drawer"
+      >
         <div className="flex items-center justify-between gap-2">
           <h2 className="text-base font-semibold text-slate-900">Professor Ransford</h2>
-          <button type="button" className="rounded-full border px-3 py-1 text-sm" onClick={props.onClose}>
+          <button
+            type="button"
+            className="rounded-full border px-3 py-1 text-sm"
+            onClick={props.onClose}
+            aria-label="Close professor panel"
+          >
             Close
           </button>
         </div>

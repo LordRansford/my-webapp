@@ -1,5 +1,5 @@
 var R=require("../../chunks/ssr/[turbopack]_runtime.js")("server/pages/cybersecurity/course.js")
-R.c("server/chunks/ssr/[root-of-the-server]__0c513e45._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__8995bdba._.js")
 R.c("server/chunks/ssr/node_modules_next_dist_4c22b386._.js")
 R.c("server/chunks/ssr/[root-of-the-server]__4d98b5df._.js")
 R.c("server/chunks/ssr/node_modules_next_dist_004b2d83._.js")

@@ -1,5 +1,5 @@
 var R=require("../../../chunks/ssr/[turbopack]_runtime.js")("server/pages/notes/cybersecurity/practitioner.js")
-R.c("server/chunks/ssr/[root-of-the-server]__3976fbe9._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__2d6677d6._.js")
 R.c("server/chunks/ssr/[root-of-the-server]__561a8601._.js")
 R.c("server/chunks/ssr/[root-of-the-server]__4d98b5df._.js")
 R.c("server/chunks/ssr/_99c71c06._.js")
