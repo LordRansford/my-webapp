@@ -37,6 +37,57 @@ function extractChoice(raw: any) {
   return null;
 }
 
+function domainFromTags(tags: string) {
+  const parts = String(tags || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  for (const p of parts) {
+    if (p.startsWith("domain:")) return p.slice("domain:".length);
+  }
+  return "";
+}
+
+function buildNextSteps(params: { levelId: string; weakDomains: string[] }) {
+  const level = String(params.levelId || "");
+  const next: Array<{ title: string; href: string; why: string }> = [];
+
+  next.push({ title: "CPD prep pack", href: "/cybersecurity/cpd-prep", why: "Structured revision workflows that do not mirror the live bank" });
+  next.push({ title: "Pricing", href: "/pricing", why: "CPD, certificates, donations, and compute credits" });
+
+  const courseHref =
+    level === "foundations" ? "/cybersecurity/beginner" : level === "applied" ? "/cybersecurity/intermediate" : "/cybersecurity/advanced";
+  next.push({ title: "Return to course notes", href: courseHref, why: "Target revision using the course path" });
+
+  const toolByDomain: Record<string, { title: string; href: string; why: string }> = {
+    risk: { title: "Risk register builder", href: "/tools/cyber/risk-register-builder", why: "Train prioritisation and mitigation clarity" },
+    detection: { title: "Incident post mortem builder", href: "/tools/cyber/incident-post-mortem-builder", why: "Practice timeline, containment, and follow up actions" },
+    logging: { title: "Incident post mortem builder", href: "/tools/cyber/incident-post-mortem-builder", why: "Translate logs into an investigation narrative" },
+    web: { title: "Threat modelling lite", href: "/tools/cyber/threat-modelling-lite", why: "Rehearse common web abuse cases and mitigations" },
+    api: { title: "Threat modelling lite", href: "/tools/cyber/threat-modelling-lite", why: "Rehearse unsafe endpoint patterns and controls" },
+    auth: { title: "Threat modelling lite", href: "/tools/cyber/threat-modelling-lite", why: "Rehearse auth vs authorisation failure patterns" },
+    identity: { title: "Threat modelling lite", href: "/tools/cyber/threat-modelling-lite", why: "Rehearse sessions, cookies, and access boundaries" },
+    governance: { title: "Decision log generator", href: "/tools/software-architecture/decision-log-generator", why: "Write defensible decisions and evidence" },
+    sdlc: { title: "Decision log generator", href: "/tools/software-architecture/decision-log-generator", why: "Capture verification steps and trade offs" },
+    basics: { title: "Entropy and hashing", href: "/tools/cyber/entropy-hashing", why: "Reinforce core primitives with safe practice" },
+    crypto: { title: "RSA lab", href: "/tools/cyber/rsa-lab", why: "Reinforce asymmetric crypto concepts safely" },
+    network: { title: "Certificate viewer", href: "/tools/cyber/certificate-viewer", why: "Build confidence with browser trust cues" },
+  };
+
+  for (const d of params.weakDomains.slice(0, 3)) {
+    const tool = toolByDomain[String(d || "").trim()];
+    if (tool) next.push(tool);
+  }
+
+  const seen = new Set<string>();
+  return next.filter((x) => {
+    if (!x.href) return false;
+    if (seen.has(x.href)) return false;
+    seen.add(x.href);
+    return true;
+  });
+}
+
 function scoreAttempt(params: {
   questions: Array<{ id: string; correctAnswer: string; options?: string | null }>;
   answers: Record<string, any>;
@@ -222,6 +273,7 @@ export async function POST(req: Request) {
       completionWritten = true;
     }
 
+    const domainTotals = new Map<string, { correct: number; total: number }>();
     const review = ordered.map((q) => {
       const userAnswer = answers[q.id];
       const choice = extractChoice(userAnswer);
@@ -232,6 +284,12 @@ export async function POST(req: Request) {
         (Array.isArray(expected) &&
           Array.isArray(choice) &&
           expected.slice().sort().join("|") === choice.slice().sort().join("|"));
+
+      const domain = domainFromTags(q.tags) || "other";
+      const current = domainTotals.get(domain) || { correct: 0, total: 0 };
+      current.total += 1;
+      if (ok) current.correct += 1;
+      domainTotals.set(domain, current);
 
       return {
         id: q.id,
@@ -246,6 +304,16 @@ export async function POST(req: Request) {
         type: q.type,
       };
     });
+
+    const domainReport = Array.from(domainTotals.entries())
+      .map(([domain, v]) => {
+        const percent = v.total ? Math.round((v.correct / v.total) * 100) : 0;
+        return { domain, correct: v.correct, total: v.total, percent };
+      })
+      .sort((a, b) => a.percent - b.percent);
+
+    const weakDomains = domainReport.filter((d) => d.total >= 3 && d.percent < assessment.passThreshold).map((d) => d.domain);
+    const nextSteps = buildNextSteps({ levelId: assessment.levelId, weakDomains });
 
     return NextResponse.json(
       {
@@ -265,6 +333,8 @@ export async function POST(req: Request) {
         },
         completionWritten,
         certificateCourseId: passed ? `${assessment.courseId}:${assessment.levelId}` : null,
+        domainReport,
+        nextSteps,
         review,
       },
       { status: 200 },

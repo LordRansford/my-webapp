@@ -5,15 +5,15 @@ level: "foundations"
 courseId: "cybersecurity"
 levelId: "foundations"
 summary: "Data, networks, attackers, and everyday defences with hands-on labs."
-estimatedHours: 15
+estimatedHours: 8
 learningObjectives:
   - "Explain the CIA triad (confidentiality, integrity, availability) with concrete everyday examples."
   - "Explain how data representation (bits, bytes, encodings) affects security outcomes."
   - "Apply simple checks to passwords, links, and basic account hygiene using the labs."
   - "Analyse a small system to identify trust boundaries and obvious attack surface."
-  - "Demonstrate ability to detect phishing attempts with 90% accuracy."
-  - "Create a personal security improvement plan with evidence of implementation."
-  - "Evaluate breach scenarios and recommend preventive controls."
+  - "Explain how phishing and social engineering attempts work and how to spot realistic red flags."
+  - "Create a personal security improvement plan you can follow and review."
+  - "Evaluate a simple breach scenario and recommend preventive and detective controls."
 ---
 
 import ProgressBar from "@/components/notes/ProgressBar"
@@ -35,7 +35,7 @@ import { cyberSections } from "@/lib/cyberSections"
 
 <LevelProgressBar courseId="cybersecurity" levelId="foundations" sectionIds={cyberSections.foundations} />
 
-<CPDTracker courseId="cybersecurity" levelId="foundations" estimatedHours={15} />
+<CPDTracker courseId="cybersecurity" levelId="foundations" estimatedHours={8} />
 
 <SectionHeader variant="content" emoji="🧭" id="foundations-f0-what-security-is">
   Module F0. What cybersecurity is and is not

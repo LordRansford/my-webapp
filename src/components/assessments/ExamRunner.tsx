@@ -24,6 +24,8 @@ type SubmitResponse = {
   attempt: { id: string; score: number; passed: boolean; completedAt: string; timeSpentSeconds: number };
   assessment: { courseId: string; levelId: string; passThreshold: number; timeLimitMinutes: number };
   certificateCourseId: string | null;
+  domainReport?: Array<{ domain: string; correct: number; total: number; percent: number }>;
+  nextSteps?: Array<{ title: string; href: string; why: string }>;
   review: Array<{
     id: string;
     question: string;
@@ -287,6 +289,8 @@ export default function ExamRunner(props: {
 
   if (submitted) {
     const passed = Boolean(submitted.attempt.passed);
+    const domainReport = Array.isArray(submitted.domainReport) ? submitted.domainReport : [];
+    const nextSteps = Array.isArray(submitted.nextSteps) ? submitted.nextSteps : [];
     return (
       <div className="space-y-4">
         <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
@@ -329,6 +333,45 @@ export default function ExamRunner(props: {
               </button>
             </div>
           )}
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">Learning report</div>
+          <div className="mt-2 text-sm text-slate-700">
+            This report is designed to keep the assessment defensible. It shows what you missed by domain and points you back to the course and tools.
+          </div>
+          {domainReport.length ? (
+            <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {domainReport.slice(0, 9).map((d) => (
+                <div key={d.domain} className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">{d.domain}</div>
+                  <div className="mt-1 text-lg font-semibold text-slate-900">{d.percent} percent</div>
+                  <div className="mt-1 text-xs text-slate-600">
+                    {d.correct} correct of {d.total}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="mt-3 text-sm text-slate-700">Domain report not available yet.</div>
+          )}
+          {nextSteps.length ? (
+            <div className="mt-4 space-y-2">
+              <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">Next steps</div>
+              <div className="grid gap-2 md:grid-cols-2">
+                {nextSteps.slice(0, 6).map((s) => (
+                  <a
+                    key={s.href}
+                    href={s.href}
+                    className="block rounded-2xl border border-slate-200 bg-white p-3 shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+                  >
+                    <div className="text-sm font-semibold text-slate-900">{s.title}</div>
+                    <div className="mt-1 text-xs text-slate-600">{s.why}</div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          ) : null}
         </div>
 
         <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">

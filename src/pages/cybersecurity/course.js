@@ -51,10 +51,10 @@ export default function CybersecurityCoursePage({ course }) {
           <p className="eyebrow">Course overview</p>
           <h1>Cybersecurity Course</h1>
           <p className="lead">
-            Three levels aligned with CISSP domains, NIST CSF 2.0 and Cyber Essentials. Friendly, opinionated, and hands-on with browser-only labs.
+            Three levels mapped against common security frameworks. Friendly, opinionated, and hands-on with browser-first labs.
           </p>
           <p>
-            This is not an exam cram. It is a CPD-friendly structure that teaches judgement first, then tools. Use the levels in order or drop into the labs when you need a refresher.
+            This is not an exam cram. It is a CPD oriented structure that teaches judgement first, then tools. Use the levels in order or drop into the labs when you need a refresher.
           </p>
         </section>
 
@@ -87,9 +87,9 @@ export default function CybersecurityCoursePage({ course }) {
           <h2>How to use this course</h2>
           <ul className="list-disc space-y-2 pl-5 text-base text-slate-800">
             <li>Start with Foundations to get the shared language for data, networks, attackers, and controls.</li>
-            <li>Apply the labs directly in your browser, with no installs, no secrets, and no telemetry.</li>
-            <li>Use Applied to practise threat modelling and logging; use Practice &amp; Strategy to map work to CISSP domains and NIST CSF.</li>
-            <li>Remember: this mirrors recognised frameworks but is not an official exam prep course.</li>
+            <li>Use the labs directly in your browser where possible and only enter safe, non sensitive example data.</li>
+            <li>Use Applied to practise threat modelling and logging. Use Practice and Strategy to join architecture, operations, and governance thinking.</li>
+            <li>Remember: this is designed to be compatible with recognised frameworks, but it is not endorsed by any certification body.</li>
           </ul>
         </section>
       </div>

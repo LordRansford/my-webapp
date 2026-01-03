@@ -52,7 +52,20 @@ export default function CyberAssessmentPage(props: { levelId: LevelId }) {
               <li>There are 50 questions.</li>
               <li>Pass mark is 80 percent.</li>
               <li>You can retake. Attempts are tracked.</li>
+              <li>Professor Ransford is paused during timed sessions.</li>
+              <li>Copy and context menu actions are restricted to reduce casual cheating.</li>
             </ol>
+            <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
+              If you are doing CPD, use the prep pack for structured revision. If you still need help, email ransford.amponsah@ransfordsnotes.com and include your CPD reference code from the prep pack page.
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <a href="/cybersecurity/cpd-prep" className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800">
+                CPD prep pack
+              </a>
+              <a href="/pricing" className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50">
+                Pricing
+              </a>
+            </div>
           </div>
         </section>
       </CourseLessonTemplate>
