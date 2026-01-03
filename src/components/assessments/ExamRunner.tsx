@@ -24,7 +24,7 @@ type SubmitResponse = {
   attempt: { id: string; score: number; passed: boolean; completedAt: string; timeSpentSeconds: number };
   assessment: { courseId: string; levelId: string; passThreshold: number; timeLimitMinutes: number };
   certificateCourseId: string | null;
-  domainReport?: Array<{ domain: string; correct: number; total: number; percent: number }>;
+  domainReport?: Array<{ domain: string; correct: number; total: number; percent: number; link?: { title: string; href: string } | null }>;
   nextSteps?: Array<{ title: string; href: string; why: string }>;
   review: Array<{
     id: string;
@@ -349,6 +349,14 @@ export default function ExamRunner(props: {
                   <div className="mt-1 text-xs text-slate-600">
                     {d.correct} correct of {d.total}
                   </div>
+                  {d.link?.href ? (
+                    <a
+                      href={d.link.href}
+                      className="mt-2 inline-flex text-xs font-semibold text-slate-800 underline decoration-slate-300 underline-offset-4 hover:text-slate-900"
+                    >
+                      Revise {d.link.title}
+                    </a>
+                  ) : null}
                 </div>
               ))}
             </div>

@@ -35,6 +35,7 @@ type AnalysisData = {
 type QualityData = {
   totals: Record<string, number>;
   samples: Record<string, string[]>;
+  issues?: Record<string, string[]>;
 };
 
 function tagSet(tags: string) {
@@ -53,6 +54,24 @@ function setPublishedTag(tags: string, published: boolean) {
   return Array.from(set).join(", ");
 }
 
+function getDomainFromTags(tags: string) {
+  const set = tagSet(tags);
+  for (const t of set) {
+    if (t.startsWith("domain:")) return t.slice("domain:".length);
+  }
+  return "";
+}
+
+function setDomainTag(tags: string, domain: string) {
+  const set = tagSet(tags);
+  for (const t of Array.from(set)) {
+    if (t.startsWith("domain:")) set.delete(t);
+  }
+  const d = String(domain || "").trim();
+  if (d) set.add(`domain:${d}`);
+  return Array.from(set).join(", ");
+}
+
 export default function AdminAssessmentsClient(props: { canManage: boolean }) {
   const [levelId, setLevelId] = useState<LevelId>("foundations");
   const [version, setVersion] = useState("2025.01");
@@ -63,6 +82,7 @@ export default function AdminAssessmentsClient(props: { canManage: boolean }) {
   const [analysis, setAnalysis] = useState<AnalysisData | null>(null);
   const [quality, setQuality] = useState<QualityData | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [issueFilter, setIssueFilter] = useState<string>("");
 
   const selected = useMemo(() => ({ courseId: "cybersecurity", levelId, version }), [levelId, version]);
 
@@ -107,6 +127,24 @@ export default function AdminAssessmentsClient(props: { canManage: boolean }) {
     const published = list.filter((q) => q.published).length;
     return { total: list.length, published, draft: list.length - published };
   }, [data?.questions]);
+
+  const issueIds = useMemo(() => {
+    if (!issueFilter) return null;
+    const ids = quality?.issues?.[issueFilter] || quality?.samples?.[issueFilter] || [];
+    return new Set(ids);
+  }, [issueFilter, quality?.issues, quality?.samples]);
+
+  const visibleQuestions = useMemo(() => {
+    const list = data?.questions || [];
+    if (!issueIds) return list;
+    return list.filter((q) => issueIds.has(q.id));
+  }, [data?.questions, issueIds]);
+
+  const allowedDomains = useMemo(() => {
+    if (levelId === "foundations") return ["basics", "identity", "network", "crypto", "risk", "response"];
+    if (levelId === "applied") return ["web", "api", "auth", "secrets", "cloud", "logging"];
+    return ["sdlc", "zero-trust", "runtime", "vulnerability", "detection", "governance"];
+  }, [levelId]);
 
   const togglePublish = async (q: QuestionRow) => {
     if (!props.canManage) return;
@@ -301,6 +339,35 @@ export default function AdminAssessmentsClient(props: { canManage: boolean }) {
                 </div>
               ))}
             </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                className={[
+                  "rounded-full border px-3 py-1 text-xs font-semibold shadow-sm",
+                  !issueFilter ? "border-slate-900 bg-slate-900 text-white" : "border-slate-200 bg-white text-slate-900 hover:bg-slate-50",
+                ].join(" ")}
+                onClick={() => setIssueFilter("")}
+              >
+                Show all
+              </button>
+              {Object.entries(quality.totals || {})
+                .filter(([, v]) => Number(v) > 0)
+                .slice(0, 10)
+                .map(([k]) => (
+                  <button
+                    key={k}
+                    type="button"
+                    className={[
+                      "rounded-full border px-3 py-1 text-xs font-semibold shadow-sm",
+                      issueFilter === k ? "border-slate-900 bg-slate-900 text-white" : "border-slate-200 bg-white text-slate-900 hover:bg-slate-50",
+                    ].join(" ")}
+                    onClick={() => setIssueFilter(k)}
+                    title="Filter questions by this issue"
+                  >
+                    {k}
+                  </button>
+                ))}
+            </div>
             <div className="text-xs text-slate-600">
               Prioritise missing rationales first so the exported answer key is worth paying for.
             </div>
@@ -308,8 +375,9 @@ export default function AdminAssessmentsClient(props: { canManage: boolean }) {
         ) : null}
 
         <div className="space-y-3">
-          {(data?.questions || []).map((q) => {
+          {visibleQuestions.map((q) => {
             const editing = editingId === q.id;
+            const domain = getDomainFromTags(q.tags);
             return (
               <div key={q.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-3">
                 <div className="flex flex-wrap items-start justify-between gap-3">
@@ -317,6 +385,7 @@ export default function AdminAssessmentsClient(props: { canManage: boolean }) {
                     <div className="text-xs font-semibold text-slate-600">{q.id}</div>
                     <div className="text-sm font-semibold text-slate-900">{q.type} Bloom {q.bloomLevel}</div>
                     <div className="text-xs text-slate-600">{q.published ? "Published" : "Draft"}</div>
+                    {domain ? <div className="text-xs font-semibold text-slate-700">Domain {domain}</div> : <div className="text-xs font-semibold text-rose-700">Domain missing</div>}
                   </div>
                   <div className="flex flex-wrap items-center gap-2">
                     {props.canManage ? (
@@ -457,6 +526,35 @@ export default function AdminAssessmentsClient(props: { canManage: boolean }) {
                             });
                           }}
                         />
+                        <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                          <div className="space-y-1">
+                            <div className="text-xs font-semibold text-slate-700">Domain tag</div>
+                            <select
+                              className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900"
+                              value={getDomainFromTags(q.tags) || ""}
+                              onChange={(e) => {
+                                const v = e.target.value;
+                                setData((prev) => {
+                                  if (!prev) return prev;
+                                  return { ...prev, questions: prev.questions.map((x) => (x.id === q.id ? { ...x, tags: setDomainTag(x.tags, v) } : x)) };
+                                });
+                              }}
+                            >
+                              <option value="">Choose domain</option>
+                              {allowedDomains.map((d) => (
+                                <option key={d} value={d}>
+                                  {d}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="space-y-1">
+                            <div className="text-xs font-semibold text-slate-700">Tip</div>
+                            <div className="text-xs text-slate-600">
+                              Use exactly one domain tag. Keep it consistent with the blueprint so the learning report links correctly.
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
 

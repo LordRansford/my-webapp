@@ -587,7 +587,7 @@
       "static/chunks/turbopack-55f5b24288396707.js"
     ],
     "/cybersecurity/assessment/[level]": [
-      "static/chunks/d37fd0ed5c1beba7.js",
+      "static/chunks/ca3a0d60d6d56a40.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/2fcd2aa21d8c3e53.js",
       "static/chunks/48c11802c3f193fa.js",
@@ -597,7 +597,7 @@
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/79ef764a2bfa63a8.js",
       "static/chunks/999d695b5baa4b77.js",
-      "static/chunks/turbopack-9cd753ebb9a179fc.js"
+      "static/chunks/turbopack-2888397ea62bb0b8.js"
     ],
     "/cybersecurity/beginner": [
       "static/chunks/6bd1b060cc02463e.js",
@@ -1807,12 +1807,12 @@
     ],
     "/tools/ai/python-playground": [
       "static/chunks/f6d03441bf9449de.js",
-      "static/chunks/7c94cc55e5c423e0.js",
+      "static/chunks/df7e8490dcf01903.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/01073211ade0ab07.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/f0f43ebb724b8b11.js",
-      "static/chunks/turbopack-78b6a13ea3f2e857.js"
+      "static/chunks/turbopack-33a59fd768f52072.js"
     ],
     "/tools/code-lab": [
       "static/chunks/8c7676b476af4f20.js",
@@ -1825,120 +1825,120 @@
     ],
     "/tools/cyber/certificate-viewer": [
       "static/chunks/f29178104f75bc75.js",
-      "static/chunks/7c94cc55e5c423e0.js",
+      "static/chunks/df7e8490dcf01903.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/01073211ade0ab07.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/f0f43ebb724b8b11.js",
-      "static/chunks/turbopack-9e491edf6a1aa18a.js"
+      "static/chunks/turbopack-7542dff7207ce771.js"
     ],
     "/tools/cyber/control-mapping-tool": [
       "static/chunks/8ec5f0727028682c.js",
-      "static/chunks/7c94cc55e5c423e0.js",
+      "static/chunks/df7e8490dcf01903.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/01073211ade0ab07.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/f0f43ebb724b8b11.js",
-      "static/chunks/turbopack-7d56fbb70c905362.js"
+      "static/chunks/turbopack-5086c2ac22c9d571.js"
     ],
     "/tools/cyber/entropy-hashing": [
       "static/chunks/6d2f2d68583a641f.js",
-      "static/chunks/7c94cc55e5c423e0.js",
+      "static/chunks/df7e8490dcf01903.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/01073211ade0ab07.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/f0f43ebb724b8b11.js",
-      "static/chunks/turbopack-1468c203843bd8f2.js"
+      "static/chunks/turbopack-fe64e65b4b5960a8.js"
     ],
     "/tools/cyber/incident-post-mortem-builder": [
       "static/chunks/689dea0f69617d99.js",
-      "static/chunks/7c94cc55e5c423e0.js",
+      "static/chunks/df7e8490dcf01903.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/f0f43ebb724b8b11.js",
       "static/chunks/01073211ade0ab07.js",
-      "static/chunks/turbopack-de1dbf9ef8381b23.js"
+      "static/chunks/turbopack-d801a714d82380af.js"
     ],
     "/tools/cyber/password-entropy": [
       "static/chunks/73afc06773548e46.js",
-      "static/chunks/7c94cc55e5c423e0.js",
+      "static/chunks/df7e8490dcf01903.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/01073211ade0ab07.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/f0f43ebb724b8b11.js",
-      "static/chunks/turbopack-a0b8e5580232541d.js"
+      "static/chunks/turbopack-336977acb8eb842b.js"
     ],
     "/tools/cyber/risk-register-builder": [
       "static/chunks/d5724df97f45442a.js",
-      "static/chunks/7c94cc55e5c423e0.js",
+      "static/chunks/df7e8490dcf01903.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/f0f43ebb724b8b11.js",
       "static/chunks/01073211ade0ab07.js",
-      "static/chunks/turbopack-cb6920756118997e.js"
+      "static/chunks/turbopack-881a7b7ca9e17819.js"
     ],
     "/tools/cyber/rsa-lab": [
       "static/chunks/c833e1b3ed9c96e2.js",
-      "static/chunks/7c94cc55e5c423e0.js",
+      "static/chunks/df7e8490dcf01903.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/01073211ade0ab07.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/f0f43ebb724b8b11.js",
-      "static/chunks/turbopack-841ed9759cd9f5c7.js"
+      "static/chunks/turbopack-5b576114d73043e2.js"
     ],
     "/tools/cyber/threat-modelling-lite": [
       "static/chunks/cfe3c9fac251e2c7.js",
-      "static/chunks/7c94cc55e5c423e0.js",
+      "static/chunks/df7e8490dcf01903.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/f0f43ebb724b8b11.js",
       "static/chunks/01073211ade0ab07.js",
-      "static/chunks/turbopack-7371ed43b3acffa5.js"
+      "static/chunks/turbopack-599ed2dc7602d52d.js"
     ],
     "/tools/data/data-classification-helper": [
       "static/chunks/ecf084f220f6cc3f.js",
-      "static/chunks/7c94cc55e5c423e0.js",
+      "static/chunks/df7e8490dcf01903.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/f0f43ebb724b8b11.js",
       "static/chunks/01073211ade0ab07.js",
-      "static/chunks/turbopack-430bad558b8c14fd.js"
+      "static/chunks/turbopack-aabd2e8792ae3784.js"
     ],
     "/tools/data/metrics-definition-studio": [
       "static/chunks/7a65a46843bd5377.js",
-      "static/chunks/7c94cc55e5c423e0.js",
+      "static/chunks/df7e8490dcf01903.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/f0f43ebb724b8b11.js",
       "static/chunks/01073211ade0ab07.js",
-      "static/chunks/turbopack-d5ba5f70ae40bced.js"
+      "static/chunks/turbopack-06db97ad2d059065.js"
     ],
     "/tools/data/schema-inspector": [
       "static/chunks/619ca846f3090c98.js",
-      "static/chunks/7c94cc55e5c423e0.js",
+      "static/chunks/df7e8490dcf01903.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/01073211ade0ab07.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/f0f43ebb724b8b11.js",
-      "static/chunks/turbopack-5b1c79e3d96baaf5.js"
+      "static/chunks/turbopack-8ca5800e08a63fc7.js"
     ],
     "/tools/data/sql-sandbox": [
       "static/chunks/920ec8e1e317ce8f.js",
-      "static/chunks/7c94cc55e5c423e0.js",
+      "static/chunks/df7e8490dcf01903.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/01073211ade0ab07.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/f0f43ebb724b8b11.js",
-      "static/chunks/turbopack-ca978da86ca84dfa.js"
+      "static/chunks/turbopack-332666789200968a.js"
     ],
     "/tools/digitalisation/process-friction-mapper": [
       "static/chunks/f48af6a3ea632cc5.js",
-      "static/chunks/7c94cc55e5c423e0.js",
+      "static/chunks/df7e8490dcf01903.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/01073211ade0ab07.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/f0f43ebb724b8b11.js",
-      "static/chunks/turbopack-1a1f27fb5d101972.js"
+      "static/chunks/turbopack-096e476393c6e632.js"
     ],
     "/tools/sandbox-echo": [
       "static/chunks/aea7371a9504fc42.js",
@@ -1950,57 +1950,57 @@
     ],
     "/tools/software-architecture/architecture-tradeoff-analysis": [
       "static/chunks/870d39adb83d7cd4.js",
-      "static/chunks/7c94cc55e5c423e0.js",
+      "static/chunks/df7e8490dcf01903.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/01073211ade0ab07.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/f0f43ebb724b8b11.js",
-      "static/chunks/turbopack-4237250434071d57.js"
+      "static/chunks/turbopack-b972a4a204d43dd8.js"
     ],
     "/tools/software-architecture/decision-log-generator": [
       "static/chunks/878397f3ee169060.js",
-      "static/chunks/7c94cc55e5c423e0.js",
+      "static/chunks/df7e8490dcf01903.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/f0f43ebb724b8b11.js",
       "static/chunks/01073211ade0ab07.js",
-      "static/chunks/turbopack-c9c47034247f31e2.js"
+      "static/chunks/turbopack-4630f02cf6ac76c2.js"
     ],
     "/tools/software-architecture/js-sandbox": [
       "static/chunks/68ca4ee79c3ad302.js",
-      "static/chunks/7c94cc55e5c423e0.js",
+      "static/chunks/df7e8490dcf01903.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/01073211ade0ab07.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/f0f43ebb724b8b11.js",
-      "static/chunks/turbopack-04835213ca93f98f.js"
+      "static/chunks/turbopack-6581cea6be27523e.js"
     ],
     "/tools/software-architecture/logic-gates": [
       "static/chunks/f2c6615c87cebbde.js",
-      "static/chunks/7c94cc55e5c423e0.js",
+      "static/chunks/df7e8490dcf01903.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/01073211ade0ab07.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/f0f43ebb724b8b11.js",
-      "static/chunks/turbopack-6536fd683fe36c11.js"
+      "static/chunks/turbopack-fa0bef8a818f77e1.js"
     ],
     "/tools/software-architecture/regex-tester": [
       "static/chunks/469fc000ed8c3e0c.js",
-      "static/chunks/7c94cc55e5c423e0.js",
+      "static/chunks/df7e8490dcf01903.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/01073211ade0ab07.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/f0f43ebb724b8b11.js",
-      "static/chunks/turbopack-7b6ba00cd9cc90fe.js"
+      "static/chunks/turbopack-acef26d2ec0a5107.js"
     ],
     "/tools/software-architecture/technical-debt-qualifier": [
       "static/chunks/184057b6624ce131.js",
-      "static/chunks/7c94cc55e5c423e0.js",
+      "static/chunks/df7e8490dcf01903.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/01073211ade0ab07.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/f0f43ebb724b8b11.js",
-      "static/chunks/turbopack-042d7f4d27ea2af9.js"
+      "static/chunks/turbopack-4e5d7d78b5f1ef01.js"
     ],
     "/trust": [
       "static/chunks/f18485a64318c542.js",
@@ -2058,8 +2058,8 @@
     "static/chunks/a6dad97d9634a72d.js"
   ],
   "lowPriorityFiles": [
-    "static/zzUkoUgE7kd437v1V4szN/_ssgManifest.js",
-    "static/zzUkoUgE7kd437v1V4szN/_buildManifest.js"
+    "static/NFkBe5WmBcfiTY08GP87c/_ssgManifest.js",
+    "static/NFkBe5WmBcfiTY08GP87c/_buildManifest.js"
   ],
   "rootMainFiles": [
     "static/chunks/6b2bd2533454d720.js",

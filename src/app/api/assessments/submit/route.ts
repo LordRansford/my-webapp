@@ -11,6 +11,7 @@ import { createCreditUsageEvent } from "@/lib/credits/store";
 import { getAssessmentAttemptCredits } from "@/lib/cpd/assessmentCredits";
 import { recordEvidence } from "@/lib/cpd/evidence";
 import { getActiveCourseVersion } from "@/lib/cpd/courseVersion";
+import { getDomainLink } from "@/lib/cpd/domainLinks";
 
 type Body = {
   sessionId?: string;
@@ -58,6 +59,12 @@ function buildNextSteps(params: { levelId: string; weakDomains: string[] }) {
   const courseHref =
     level === "foundations" ? "/cybersecurity/beginner" : level === "applied" ? "/cybersecurity/intermediate" : "/cybersecurity/advanced";
   next.push({ title: "Return to course notes", href: courseHref, why: "Target revision using the course path" });
+
+  // Domain deep links into the exact lesson anchors when available.
+  for (const d of params.weakDomains.slice(0, 3)) {
+    const link = getDomainLink({ courseId: "cybersecurity", levelId: level, domain: String(d || "") });
+    if (link) next.push({ title: link.title, href: link.href, why: `Revision for domain ${String(d || "")}` });
+  }
 
   const toolByDomain: Record<string, { title: string; href: string; why: string }> = {
     risk: { title: "Risk register builder", href: "/tools/cyber/risk-register-builder", why: "Train prioritisation and mitigation clarity" },
@@ -308,7 +315,8 @@ export async function POST(req: Request) {
     const domainReport = Array.from(domainTotals.entries())
       .map(([domain, v]) => {
         const percent = v.total ? Math.round((v.correct / v.total) * 100) : 0;
-        return { domain, correct: v.correct, total: v.total, percent };
+        const link = getDomainLink({ courseId: assessment.courseId, levelId: assessment.levelId, domain });
+        return { domain, correct: v.correct, total: v.total, percent, link };
       })
       .sort((a, b) => a.percent - b.percent);
 
