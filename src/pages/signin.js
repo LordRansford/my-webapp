@@ -1,15 +1,20 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
 import NotesLayout from "@/components/NotesLayout";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 /**
  * Simplified sign-in page that uses client-side signIn to avoid server-side rendering issues.
  * We render a single Google button; if more providers are added later, extend this list.
  */
 export default function SignInPage() {
+  const router = useRouter();
+  const callbackUrl = typeof router?.query?.callbackUrl === "string" ? router.query.callbackUrl : "";
+  const error = typeof router?.query?.error === "string" ? router.query.error : "";
+  const check = typeof router?.query?.check === "string" ? router.query.check : "";
   const [providers, setProviders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [statusMessage, setStatusMessage] = useState("");
@@ -42,6 +47,13 @@ export default function SignInPage() {
     };
   }, []);
 
+  const banner =
+    error === "auth"
+      ? { tone: "rose", title: "Sign in failed", body: "Please try again. If this keeps happening, check /status to confirm auth is configured." }
+      : check
+        ? { tone: "slate", title: "Check your email", body: "If you used a magic link, check your inbox and click the link to continue." }
+        : null;
+
   return (
     <NotesLayout
       meta={{
@@ -56,6 +68,18 @@ export default function SignInPage() {
         <p className="text-sm text-slate-700">
           Sign in is optional. Use Google to sync progress across devices. No passwords.
         </p>
+
+        {banner ? (
+          <div
+            className={`rounded-2xl border p-4 text-sm shadow-sm ${
+              banner.tone === "rose" ? "border-rose-200 bg-rose-50 text-rose-900" : "border-slate-200 bg-slate-50 text-slate-900"
+            }`}
+            role="status"
+          >
+            <div className="font-semibold">{banner.title}</div>
+            <div className="mt-1">{banner.body}</div>
+          </div>
+        ) : null}
 
         <div className="grid gap-2 sm:grid-cols-2">
           {loading ? (
@@ -85,7 +109,7 @@ export default function SignInPage() {
               <button
                 key={p.id}
                 type="button"
-                onClick={() => signIn(p.id)}
+                onClick={() => signIn(p.id, { callbackUrl: callbackUrl || "/" })}
                 className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700"
               >
                 Continue with {p.name}
@@ -93,6 +117,12 @@ export default function SignInPage() {
             ))
           )}
         </div>
+
+        {callbackUrl ? (
+          <div className="rounded-2xl border border-slate-200 bg-white/90 p-4 text-sm text-slate-700 shadow-sm">
+            After signing in you will return to: <span className="font-semibold text-slate-900">{callbackUrl}</span>
+          </div>
+        ) : null}
 
         <div className="rounded-2xl border border-slate-200 bg-white/90 p-4 text-sm text-slate-700 shadow-sm">
           <p className="m-0">

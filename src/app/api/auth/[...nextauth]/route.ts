@@ -2,9 +2,10 @@ import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/auth/options";
 import { rateLimit } from "@/lib/security/rateLimit";
-import { getAuthEnvStatus, logAuthEnvIfMisconfigured } from "@/lib/auth/env";
+import { ensureNextAuthUrl, getAuthEnvStatus, logAuthEnvIfMisconfigured } from "@/lib/auth/env";
 
 // next-auth@4 App Router handler (runtime-typed)
+ensureNextAuthUrl();
 const handler: any = NextAuth(authOptions);
 
 export async function GET(req: Request, ctx: any) {

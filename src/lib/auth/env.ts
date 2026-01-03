@@ -3,11 +3,32 @@ export type AuthEnvStatus = {
   missing: string[];
 };
 
+function getBaseUrlFallback() {
+  const explicit = (process.env.NEXT_PUBLIC_SITE_URL || "").trim();
+  if (explicit) return explicit;
+  const vercel = (process.env.VERCEL_URL || "").trim();
+  if (vercel) return vercel.startsWith("http") ? vercel : `https://${vercel}`;
+  return "";
+}
+
+/**
+ * Best-effort compatibility:
+ * - Prefer NEXTAUTH_URL (canonical).
+ * - If absent, use NEXT_PUBLIC_SITE_URL or VERCEL_URL so OAuth callbacks can still work.
+ */
+export function ensureNextAuthUrl() {
+  if (process.env.NEXTAUTH_URL) return;
+  const fallback = getBaseUrlFallback();
+  if (fallback) process.env.NEXTAUTH_URL = fallback;
+}
+
 export function getAuthEnvStatus(): AuthEnvStatus {
   const missing: string[] = [];
 
   // NextAuth v4 canonical env names.
-  if (!process.env.NEXTAUTH_URL) missing.push("NEXTAUTH_URL");
+  // Allow a fallback so production doesn't "look broken" when only NEXT_PUBLIC_SITE_URL/VERCEL_URL is set.
+  // Still recommend setting NEXTAUTH_URL explicitly.
+  if (!process.env.NEXTAUTH_URL && !getBaseUrlFallback()) missing.push("NEXTAUTH_URL");
   if (!process.env.NEXTAUTH_SECRET) missing.push("NEXTAUTH_SECRET");
 
   // Provider env vars (only required when you want sign-in enabled).

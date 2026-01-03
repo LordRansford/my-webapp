@@ -211,6 +211,23 @@ export default function CybersecurityOverviewPage({ source, headings }) {
             Each level has a timed assessment with detailed feedback after submission. You need an account and credits to start.
             Certificates help your career and help keep this site free.
           </BodyText>
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="text-sm font-semibold text-slate-900">Practice before the timed attempt</div>
+            <div className="mt-2 text-sm text-slate-700">
+              Use the labs, the summary scenarios, and the CPD prep pack to practise first. Then start the timed attempt when you are ready.
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Link href="/cybersecurity/summary" className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50">
+                Practice first
+              </Link>
+              <Link href="/cybersecurity/cpd-prep" className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50">
+                CPD prep pack
+              </Link>
+              <Link href="/cybersecurity/assessment/foundations" className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800">
+                Start assessment
+              </Link>
+            </div>
+          </div>
           <div className="grid gap-4 md:grid-cols-3">
             {[
               {

@@ -8,7 +8,7 @@ export default function StatusPage(props: {
   env: Record<string, boolean>;
 }) {
   const env = props.env || {};
-  const okAuthCore = env.NEXTAUTH_URL && env.NEXTAUTH_SECRET;
+  const okAuthCore = (env.NEXTAUTH_URL || env.NEXT_PUBLIC_SITE_URL) && env.NEXTAUTH_SECRET;
   const okAuthProvider = (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) || (env.EMAIL_SERVER && env.EMAIL_FROM);
   const okAuth = okAuthCore && okAuthProvider;
   const okDb = env.DATABASE_URL;

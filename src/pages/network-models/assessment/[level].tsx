@@ -42,6 +42,26 @@ export default function NetworkModelsAssessmentPage(props: { levelId: LevelId })
               You need an account and credits to start. Certificate name is locked.
             </div>
           </div>
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="text-sm font-semibold text-slate-900">Practice before your timed attempt</div>
+            <div className="mt-1 text-sm text-slate-700">
+              If you feel rusty, do the summary practice first, then start the timed attempt when you are ready. Sign in so your attempts attach to your account.
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Link
+                href="/network-models/summary"
+                className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50"
+              >
+                Practice first
+              </Link>
+              <Link
+                href="/signin"
+                className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800"
+              >
+                Sign in
+              </Link>
+            </div>
+          </div>
           <ExamRunner courseId="network-models" levelId={levelId} title={title} />
         </section>
 
