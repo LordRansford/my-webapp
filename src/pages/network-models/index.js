@@ -15,6 +15,7 @@ import { useCPD } from "@/hooks/useCPD";
 import { getCompletionForLevel } from "@/lib/cpd";
 import networkCourse from "../../../content/courses/network-models.json";
 import { networkSectionManifest } from "@/lib/networkSections";
+import Link from "next/link";
 
 const EncapsulationLab = dynamic(() => import("@/components/notes/tools/network-models/overview/EncapsulationLab"), { ssr: false });
 
@@ -117,6 +118,27 @@ export default function NetworkModelsOverviewPage() {
             This course uses OSI and TCP IP as models. They are not competing religions. They are tools for thinking. The goal is
             that you can explain a network problem using evidence and a small number of correct terms.
           </BodyText>
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="text-sm font-semibold text-slate-900">CPD practice before assessment</div>
+            <div className="mt-2 text-sm text-slate-700">
+              If you plan to take a CPD assessment, use the labs and the summary practice first. Then start the timed attempt when you are ready.
+              Sign in before you start learning so your progress and attempts attach to your account.
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Link href="/signin" className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800">
+                Sign in
+              </Link>
+              <Link href="/network-models/assessment/foundations" className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50">
+                Start assessment
+              </Link>
+              <Link href="/network-models/summary" className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50">
+                Practice first
+              </Link>
+              <Link href="/pricing" className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50">
+                Pricing
+              </Link>
+            </div>
+          </div>
           <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
             This course is designed to support networking and security certifications. It is not endorsed by any certification body.
           </div>

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { signIn } from "next-auth/react";
 import NotesLayout from "@/components/NotesLayout";
+import Link from "next/link";
 
 /**
  * Simplified sign-in page that uses client-side signIn to avoid server-side rendering issues.
@@ -11,6 +12,7 @@ import NotesLayout from "@/components/NotesLayout";
 export default function SignInPage() {
   const [providers, setProviders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [statusMessage, setStatusMessage] = useState("");
 
   useEffect(() => {
     let alive = true;
@@ -18,12 +20,19 @@ export default function SignInPage() {
       try {
         const res = await fetch("/api/auth/providers", { method: "GET" });
         const json = await res.json().catch(() => null);
+        if (!res.ok) {
+          const msg = typeof json?.error === "string" ? json.error : "Sign in is not available right now.";
+          if (alive) setStatusMessage(msg);
+          if (alive) setProviders([]);
+          return;
+        }
         const list = Object.values(json || {})
           .map((p) => ({ id: String((p && p.id) || ""), name: String((p && p.name) || "") }))
           .filter((p) => p.id && p.name);
         if (alive) setProviders(list);
       } catch {
         if (alive) setProviders([]);
+        if (alive) setStatusMessage("Sign in is not available right now.");
       } finally {
         if (alive) setLoading(false);
       }
@@ -55,7 +64,21 @@ export default function SignInPage() {
             </div>
           ) : providers.length === 0 ? (
             <div className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-900 shadow-sm">
-              Sign in is not configured yet. Please try again later.
+              <div className="font-semibold text-rose-900">Sign in is not configured</div>
+              <div className="mt-1 text-rose-900">
+                {statusMessage || "No sign in providers are available."}
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <Link href="/status" className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800">
+                  Check status
+                </Link>
+                <Link href="/pricing" className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50">
+                  Pricing
+                </Link>
+              </div>
+              <div className="mt-3 text-xs text-rose-900">
+                For Vercel you need NEXTAUTH_URL and NEXTAUTH_SECRET plus a provider such as Google client id and secret.
+              </div>
             </div>
           ) : (
             providers.map((p) => (

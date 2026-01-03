@@ -8,7 +8,9 @@ export default function StatusPage(props: {
   env: Record<string, boolean>;
 }) {
   const env = props.env || {};
-  const okAuth = env.NEXTAUTH_SECRET && (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET);
+  const okAuthCore = env.NEXTAUTH_URL && env.NEXTAUTH_SECRET;
+  const okAuthProvider = (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) || (env.EMAIL_SERVER && env.EMAIL_FROM);
+  const okAuth = okAuthCore && okAuthProvider;
   const okDb = env.DATABASE_URL;
   const okStripe = env.STRIPE_SECRET_KEY && env.STRIPE_WEBHOOK_SECRET;
 
@@ -30,7 +32,9 @@ export default function StatusPage(props: {
           </div>
           <div className={`rounded-3xl border p-5 shadow-sm ${okAuth ? "border-emerald-200 bg-emerald-50" : "border-rose-200 bg-rose-50"}`}>
             <div className="text-sm font-semibold text-slate-900">Sign in</div>
-            <div className="mt-1 text-sm text-slate-700">{okAuth ? "Google configured" : "Provider not configured"}</div>
+            <div className="mt-1 text-sm text-slate-700">
+              {okAuth ? "Configured" : okAuthCore ? "Provider not configured" : "NextAuth not configured"}
+            </div>
           </div>
           <div className={`rounded-3xl border p-5 shadow-sm ${okStripe ? "border-emerald-200 bg-emerald-50" : "border-rose-200 bg-rose-50"}`}>
             <div className="text-sm font-semibold text-slate-900">Payments</div>
@@ -59,6 +63,7 @@ export default function StatusPage(props: {
 export async function getServerSideProps() {
   const env = {
     DATABASE_URL: flag(process.env.DATABASE_URL),
+    NEXTAUTH_URL: flag(process.env.NEXTAUTH_URL),
     NEXTAUTH_SECRET: flag(process.env.NEXTAUTH_SECRET),
     GOOGLE_CLIENT_ID: flag(process.env.GOOGLE_CLIENT_ID),
     GOOGLE_CLIENT_SECRET: flag(process.env.GOOGLE_CLIENT_SECRET),
