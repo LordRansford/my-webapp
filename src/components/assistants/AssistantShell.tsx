@@ -8,22 +8,7 @@ import FeedbackAssistant from "@/components/assistants/FeedbackAssistant";
 import ProfessorRansfordAssistant from "@/components/assistants/ProfessorRansfordAssistant";
 import { enforceOneOpen, readAssistantsOpenState, writeAssistantsOpenState } from "@/components/assistants/state";
 
-declare global {
-  interface Window {
-    __RN_ASSISTANT_SHELL_MOUNTED__?: boolean;
-  }
-}
-
 export default function AssistantShell() {
-  // Prevent duplicate mounts if multiple layouts include the shell.
-  const [enabled, setEnabled] = useState(false);
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (window.__RN_ASSISTANT_SHELL_MOUNTED__) return;
-    window.__RN_ASSISTANT_SHELL_MOUNTED__ = true;
-    setEnabled(true);
-  }, []);
-
   const reduce = useReducedMotion();
   const pathname = usePathname() || "/";
   const isAssessment = pathname.includes("/assessment");
@@ -66,8 +51,6 @@ export default function AssistantShell() {
       transition: { duration: 0.18 },
     } as any;
   };
-
-  if (!enabled) return null;
 
   return (
     <LazyMotion features={domAnimation}>

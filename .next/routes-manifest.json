@@ -2899,55 +2899,55 @@
   "dataRoutes": [
     {
       "page": "/",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/index\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/index\\.json$"
     },
     {
       "page": "/ai",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/ai\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/ai\\.json$"
     },
     {
       "page": "/ai/advanced",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/ai/advanced\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/ai/advanced\\.json$"
     },
     {
       "page": "/ai/beginner",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/ai/beginner\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/ai/beginner\\.json$"
     },
     {
       "page": "/ai/intermediate",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/ai/intermediate\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/ai/intermediate\\.json$"
     },
     {
       "page": "/ai/summary",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/ai/summary\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/ai/summary\\.json$"
     },
     {
       "page": "/certificates/verify/[certificateId]",
       "routeKeys": {
         "nxtPcertificateId": "nxtPcertificateId"
       },
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/certificates/verify/([^/]+?)\\.json$",
-      "namedDataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/certificates/verify/(?<nxtPcertificateId>[^/]+?)\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/certificates/verify/([^/]+?)\\.json$",
+      "namedDataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/certificates/verify/(?<nxtPcertificateId>[^/]+?)\\.json$"
     },
     {
       "page": "/certificates/[certificateId]",
       "routeKeys": {
         "nxtPcertificateId": "nxtPcertificateId"
       },
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/certificates/([^/]+?)\\.json$",
-      "namedDataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/certificates/(?<nxtPcertificateId>[^/]+?)\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/certificates/([^/]+?)\\.json$",
+      "namedDataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/certificates/(?<nxtPcertificateId>[^/]+?)\\.json$"
     },
     {
       "page": "/courses",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/courses\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/courses\\.json$"
     },
     {
       "page": "/courses/[course]",
       "routeKeys": {
         "nxtPcourse": "nxtPcourse"
       },
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/courses/([^/]+?)\\.json$",
-      "namedDataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/courses/(?<nxtPcourse>[^/]+?)\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/courses/([^/]+?)\\.json$",
+      "namedDataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/courses/(?<nxtPcourse>[^/]+?)\\.json$"
     },
     {
       "page": "/courses/[course]/[lesson]",
@@ -2955,184 +2955,184 @@
         "nxtPcourse": "nxtPcourse",
         "nxtPlesson": "nxtPlesson"
       },
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/courses/([^/]+?)/([^/]+?)\\.json$",
-      "namedDataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/courses/(?<nxtPcourse>[^/]+?)/(?<nxtPlesson>[^/]+?)\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/courses/([^/]+?)/([^/]+?)\\.json$",
+      "namedDataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/courses/(?<nxtPcourse>[^/]+?)/(?<nxtPlesson>[^/]+?)\\.json$"
     },
     {
       "page": "/cpd",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/cpd\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/cpd\\.json$"
     },
     {
       "page": "/cybersecurity",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/cybersecurity\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/cybersecurity\\.json$"
     },
     {
       "page": "/cybersecurity/advanced",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/cybersecurity/advanced\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/cybersecurity/advanced\\.json$"
     },
     {
       "page": "/cybersecurity/assessment/[level]",
       "routeKeys": {
         "nxtPlevel": "nxtPlevel"
       },
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/cybersecurity/assessment/([^/]+?)\\.json$",
-      "namedDataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/cybersecurity/assessment/(?<nxtPlevel>[^/]+?)\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/cybersecurity/assessment/([^/]+?)\\.json$",
+      "namedDataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/cybersecurity/assessment/(?<nxtPlevel>[^/]+?)\\.json$"
     },
     {
       "page": "/cybersecurity/beginner",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/cybersecurity/beginner\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/cybersecurity/beginner\\.json$"
     },
     {
       "page": "/cybersecurity/course",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/cybersecurity/course\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/cybersecurity/course\\.json$"
     },
     {
       "page": "/cybersecurity/cpd-prep",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/cybersecurity/cpd-prep\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/cybersecurity/cpd-prep\\.json$"
     },
     {
       "page": "/cybersecurity/intermediate",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/cybersecurity/intermediate\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/cybersecurity/intermediate\\.json$"
     },
     {
       "page": "/dashboards",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/dashboards\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/dashboards\\.json$"
     },
     {
       "page": "/data/advanced",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/data/advanced\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/data/advanced\\.json$"
     },
     {
       "page": "/data/foundations",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/data/foundations\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/data/foundations\\.json$"
     },
     {
       "page": "/data/intermediate",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/data/intermediate\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/data/intermediate\\.json$"
     },
     {
       "page": "/data/summary",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/data/summary\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/data/summary\\.json$"
     },
     {
       "page": "/digitalisation/advanced",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/digitalisation/advanced\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/digitalisation/advanced\\.json$"
     },
     {
       "page": "/digitalisation/beginner",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/digitalisation/beginner\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/digitalisation/beginner\\.json$"
     },
     {
       "page": "/digitalisation/intermediate",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/digitalisation/intermediate\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/digitalisation/intermediate\\.json$"
     },
     {
       "page": "/digitalisation/summary",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/digitalisation/summary\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/digitalisation/summary\\.json$"
     },
     {
       "page": "/internal/cpd",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/internal/cpd\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/internal/cpd\\.json$"
     },
     {
       "page": "/network-models/advanced",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/network-models/advanced\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/network-models/advanced\\.json$"
     },
     {
       "page": "/network-models/assessment/[level]",
       "routeKeys": {
         "nxtPlevel": "nxtPlevel"
       },
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/network\\-models/assessment/([^/]+?)\\.json$",
-      "namedDataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/network\\-models/assessment/(?<nxtPlevel>[^/]+?)\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/network\\-models/assessment/([^/]+?)\\.json$",
+      "namedDataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/network\\-models/assessment/(?<nxtPlevel>[^/]+?)\\.json$"
     },
     {
       "page": "/network-models/beginner",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/network-models/beginner\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/network-models/beginner\\.json$"
     },
     {
       "page": "/network-models/intermediate",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/network-models/intermediate\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/network-models/intermediate\\.json$"
     },
     {
       "page": "/network-models/summary",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/network-models/summary\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/network-models/summary\\.json$"
     },
     {
       "page": "/notes/capstone/booktrack",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/notes/capstone/booktrack\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/notes/capstone/booktrack\\.json$"
     },
     {
       "page": "/notes/capstone/gridlens",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/notes/capstone/gridlens\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/notes/capstone/gridlens\\.json$"
     },
     {
       "page": "/notes/cybersecurity/ch3",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/notes/cybersecurity/ch3\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/notes/cybersecurity/ch3\\.json$"
     },
     {
       "page": "/notes/cybersecurity/practitioner",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/notes/cybersecurity/practitioner\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/notes/cybersecurity/practitioner\\.json$"
     },
     {
       "page": "/notes/cybersecurity/practitioner/cloud_platform_security",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/notes/cybersecurity/practitioner/cloud_platform_security\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/notes/cybersecurity/practitioner/cloud_platform_security\\.json$"
     },
     {
       "page": "/notes/cybersecurity/practitioner/detection_response_analyst",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/notes/cybersecurity/practitioner/detection_response_analyst\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/notes/cybersecurity/practitioner/detection_response_analyst\\.json$"
     },
     {
       "page": "/notes/cybersecurity/practitioner/security_architect",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/notes/cybersecurity/practitioner/security_architect\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/notes/cybersecurity/practitioner/security_architect\\.json$"
     },
     {
       "page": "/notes/cybersecurity/practitioner/security_engineer",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/notes/cybersecurity/practitioner/security_engineer\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/notes/cybersecurity/practitioner/security_engineer\\.json$"
     },
     {
       "page": "/notes/cybersecurity/roadmap",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/notes/cybersecurity/roadmap\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/notes/cybersecurity/roadmap\\.json$"
     },
     {
       "page": "/notes/cybersecurity/summary",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/notes/cybersecurity/summary\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/notes/cybersecurity/summary\\.json$"
     },
     {
       "page": "/posts",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/posts\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/posts\\.json$"
     },
     {
       "page": "/posts/[slug]",
       "routeKeys": {
         "nxtPslug": "nxtPslug"
       },
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/posts/([^/]+?)\\.json$",
-      "namedDataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/posts/(?<nxtPslug>[^/]+?)\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/posts/([^/]+?)\\.json$",
+      "namedDataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/posts/(?<nxtPslug>[^/]+?)\\.json$"
     },
     {
       "page": "/sitemap",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/sitemap\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/sitemap\\.json$"
     },
     {
       "page": "/software-architecture/advanced",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/software-architecture/advanced\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/software-architecture/advanced\\.json$"
     },
     {
       "page": "/software-architecture/beginner",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/software-architecture/beginner\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/software-architecture/beginner\\.json$"
     },
     {
       "page": "/software-architecture/intermediate",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/software-architecture/intermediate\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/software-architecture/intermediate\\.json$"
     },
     {
       "page": "/software-architecture/summary",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/software-architecture/summary\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/software-architecture/summary\\.json$"
     },
     {
       "page": "/status",
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/status\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/status\\.json$"
     },
     {
       "page": "/templates/[category]/[templateId]",
@@ -3140,24 +3140,24 @@
         "nxtPcategory": "nxtPcategory",
         "nxtPtemplateId": "nxtPtemplateId"
       },
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/templates/([^/]+?)/([^/]+?)\\.json$",
-      "namedDataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/templates/(?<nxtPcategory>[^/]+?)/(?<nxtPtemplateId>[^/]+?)\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/templates/([^/]+?)/([^/]+?)\\.json$",
+      "namedDataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/templates/(?<nxtPcategory>[^/]+?)/(?<nxtPtemplateId>[^/]+?)\\.json$"
     },
     {
       "page": "/tools/[slug]",
       "routeKeys": {
         "nxtPslug": "nxtPslug"
       },
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/tools/([^/]+?)\\.json$",
-      "namedDataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/tools/(?<nxtPslug>[^/]+?)\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/tools/([^/]+?)\\.json$",
+      "namedDataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/tools/(?<nxtPslug>[^/]+?)\\.json$"
     },
     {
       "page": "/verify/[certificateId]",
       "routeKeys": {
         "nxtPcertificateId": "nxtPcertificateId"
       },
-      "dataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/verify/([^/]+?)\\.json$",
-      "namedDataRouteRegex": "^/_next/data/JocdVrpnSgfgURnIvVx\\-B/verify/(?<nxtPcertificateId>[^/]+?)\\.json$"
+      "dataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/verify/([^/]+?)\\.json$",
+      "namedDataRouteRegex": "^/_next/data/TpHEu8RXXLNAuZxmCk_R\\-/verify/(?<nxtPcertificateId>[^/]+?)\\.json$"
     }
   ],
   "rsc": {

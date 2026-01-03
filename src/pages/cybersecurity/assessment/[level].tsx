@@ -1,6 +1,7 @@
 import { ErrorBoundary } from "@/components/notes/ErrorBoundary";
 import CourseLessonTemplate from "@/components/course/CourseLessonTemplate";
 import ExamRunner from "@/components/assessments/ExamRunner";
+import Link from "next/link";
 
 type LevelId = "foundations" | "applied" | "practice";
 
@@ -59,12 +60,12 @@ export default function CyberAssessmentPage(props: { levelId: LevelId }) {
               If you are doing CPD, use the prep pack for structured revision. If you still need help, email ransford.amponsah@ransfordsnotes.com and include your CPD reference code from the prep pack page.
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
-              <a href="/cybersecurity/cpd-prep" className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800">
+              <Link href="/cybersecurity/cpd-prep" className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800">
                 CPD prep pack
-              </a>
-              <a href="/pricing" className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50">
+              </Link>
+              <Link href="/pricing" className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50">
                 Pricing
-              </a>
+              </Link>
             </div>
           </div>
         </section>

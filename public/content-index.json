@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-03T16:27:41.739Z",
+  "generatedAt": "2026-01-03T16:49:04.901Z",
   "pages": [
     {
       "route": "/courses/_cpd-checklist",
@@ -2907,8 +2907,8 @@
         },
         {
           "depth": 2,
-          "title": "Runtime, cloud, and applied crypto",
-          "anchor": "runtime-cloud-and-applied-crypto",
+          "title": "Applied cryptography and protocol reasoning",
+          "anchor": "applied-cryptography-and-protocol-reasoning",
           "excerpt": "Module P3. Runtime and cloud security"
         },
         {

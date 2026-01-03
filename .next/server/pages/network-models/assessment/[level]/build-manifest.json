@@ -6,7 +6,7 @@
   "rootMainFiles": [],
   "pages": {
     "/network-models/assessment/[level]": [
-      "static/chunks/8beb78ea166817bc.js",
+      "static/chunks/7675826a05f8d305.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/2fcd2aa21d8c3e53.js",
       "static/chunks/48c11802c3f193fa.js",
@@ -16,7 +16,7 @@
       "static/chunks/999d695b5baa4b77.js",
       "static/chunks/30bacc71719868c1.js",
       "static/chunks/f0f43ebb724b8b11.js",
-      "static/chunks/turbopack-e9dc1ecf3fcdfeaa.js"
+      "static/chunks/turbopack-9976321dc91b7eab.js"
     ]
   },
   "ampFirstPages": []

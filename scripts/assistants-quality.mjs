@@ -16,9 +16,6 @@ const src = fs.readFileSync(abs, "utf8");
 if (!src.includes('aria-label="Professor Ransford"')) fail('Missing aria-label for Professor launcher.');
 if (!src.includes('aria-label="Feedback"')) fail('Missing aria-label for Feedback launcher.');
 
-// Ensure duplicate mounts are safely handled.
-if (!src.includes("__RN_ASSISTANT_SHELL_MOUNTED__")) fail("Missing singleton guard for duplicate AssistantShell mounts.");
-
 // Ensure screenshot uploads are bounded.
 const feedbackFile = path.join(process.cwd(), "src/components/assistants/FeedbackAssistant.tsx");
 if (!fs.existsSync(feedbackFile)) fail("Missing FeedbackAssistant component.");

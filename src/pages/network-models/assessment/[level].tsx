@@ -1,6 +1,7 @@
 import { ErrorBoundary } from "@/components/notes/ErrorBoundary";
 import CourseLessonTemplate from "@/components/course/CourseLessonTemplate";
 import ExamRunner from "@/components/assessments/ExamRunner";
+import Link from "next/link";
 
 type LevelId = "foundations" | "applied" | "practice";
 
@@ -31,8 +32,8 @@ export default function NetworkModelsAssessmentPage(props: { levelId: LevelId })
         courseHref="/network-models"
         courseLabel="Network Models"
         dashboardHref="/dashboards/cybersecurity"
-        labsHref="/tools"
-        studiosHref="/studios"
+        labsHref="/network-models"
+        studiosHref="/studios/hub"
       >
         <section id="assessment" className="space-y-4">
           <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
@@ -56,12 +57,12 @@ export default function NetworkModelsAssessmentPage(props: { levelId: LevelId })
               <li>Copy and context menu actions are restricted to reduce casual cheating.</li>
             </ol>
             <div className="mt-3 flex flex-wrap gap-2">
-              <a href="/pricing" className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50">
+              <Link href="/pricing" className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50">
                 Pricing
-              </a>
-              <a href="/network-models" className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800">
+              </Link>
+              <Link href="/network-models" className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800">
                 Back to course
-              </a>
+              </Link>
             </div>
           </div>
         </section>

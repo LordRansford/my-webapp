@@ -15,6 +15,7 @@ import ToolCard from "@/components/notes/ToolCard";
 import QuizBlock from "@/components/notes/QuizBlock";
 import { ErrorBoundary } from "@/components/notes/ErrorBoundary";
 import { Shield, Layers, Target, Gamepad2 } from "lucide-react";
+import Link from "next/link";
 
 const SecurityHabitPlannerTool = dynamic(() => import("@/components/notes/tools/cybersecurity/overview/SecurityHabitPlannerTool"), { ssr: false });
 
@@ -127,15 +128,15 @@ export default function CybersecurityOverviewPage({ source, headings }) {
               Assessments and certificates also help keep this site free for everyone.
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
-              <a href="/signin" className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800">
+              <Link href="/signin" className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800">
                 Sign in
-              </a>
-              <a href="/pricing" className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50">
+              </Link>
+              <Link href="/pricing" className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50">
                 Pricing
-              </a>
-              <a href="/cybersecurity/assessment/foundations" className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50">
+              </Link>
+              <Link href="/cybersecurity/assessment/foundations" className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50">
                 Take an assessment
-              </a>
+              </Link>
             </div>
           </div>
         </section>

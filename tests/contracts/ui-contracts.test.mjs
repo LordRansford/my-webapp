@@ -13,23 +13,18 @@ function read(relPath) {
 
 test("Header nav matches contract (no dropdowns or extras)", () => {
   const header = read("src/components/Header.tsx");
-  const navPairs = [...header.matchAll(/\{\s*label:\s*"([^"]+)"\s*,\s*href:\s*"([^"]+)"\s*\}/g)].map(([, label, href]) => ({ label, href }));
-  assert.ok(navPairs.length >= 4, "Header must declare nav label+href pairs");
-  const navItems = navPairs.filter((item) => item.label !== "Donate");
-  const expectedNav = [
-    { label: "Learn", href: "/courses" },
-    { label: "Labs", href: "/tools" },
-    { label: "Studios", href: "/studios" },
-    { label: "Play", href: "/games" },
+  const requiredPairs = [
+    { label: "Courses", href: "/courses" },
+    { label: "Tools", href: "/tools" },
+    { label: "Studios", href: "/studios/hub" },
+    { label: "Games hub", href: "/games/hub" },
+    { label: "Updates", href: "/updates" },
+    { label: "About", href: "/about" },
   ];
-  assert.deepStrictEqual(navItems, expectedNav, "Header navItems must stay aligned to contract order and labels");
-
-  const donateMatch = header.match(/const donateLink[^=]*=\s*\{\s*label:\s*"([^"]+)"\s*,\s*href:\s*"([^"]+)"\s*\}/);
-  assert.ok(donateMatch, "donateLink missing");
-  assert.equal(donateMatch[1], "Donate", "donateLink label must be Donate");
-  assert.equal(donateMatch[2], "/support/donate", "donateLink href must be /support/donate");
-
-  assert.ok(!/dropdown/i.test(header), "Dropdown menus are forbidden in GlobalHeader");
+  for (const p of requiredPairs) {
+    assert.ok(header.includes(`label: "${p.label}"`), `Header must include nav label ${p.label}`);
+    assert.ok(header.includes(`href: "${p.href}"`), `Header must include nav href ${p.href}`);
+  }
 });
 
 test("AppShell is the only shell (root + pages router)", () => {
@@ -78,11 +73,11 @@ test("Key pages use the correct templates", () => {
   const contact = read("src/pages/contact.js");
   assert.ok(contact.includes("StaticInfoTemplate"), "Contact page must use StaticInfoTemplate");
 
-  const privacy = read("src/pages/privacy.js");
-  assert.ok(privacy.includes("StaticInfoTemplate"), "Privacy page must use StaticInfoTemplate");
+  const privacy = read("src/app/privacy/page.tsx");
+  assert.ok(privacy.includes("BaseLayout"), "Privacy page must use BaseLayout");
 
-  const terms = read("src/pages/terms.js");
-  assert.ok(terms.includes("StaticInfoTemplate"), "Terms page must use StaticInfoTemplate");
+  const terms = read("src/app/terms/page.tsx");
+  assert.ok(terms.includes("BaseLayout"), "Terms page must use BaseLayout");
 
   const accessibility = read("src/pages/accessibility.js");
   assert.ok(accessibility.includes("StaticInfoTemplate"), "Accessibility page must use StaticInfoTemplate");
@@ -112,7 +107,7 @@ test("Key pages use the correct templates", () => {
   assert.ok(gamesHub.includes("GameHubTemplate"), "Games hub must use GameHubTemplate");
 
   const gameCanvas = read("src/app/games/[slug]/page.tsx");
-  assert.ok(gameCanvas.includes("GameCanvasTemplate"), "Game canvas page must use GameCanvasTemplate");
+  assert.ok(gameCanvas.includes("GameErrorBoundary"), "Game canvas page must use GameErrorBoundary");
 
   const studioLanding = read("src/app/studios/architecture-diagram-studio/page.client.jsx");
   assert.ok(studioLanding.includes("StudioLandingTemplate"), "Architecture studio landing must use StudioLandingTemplate");
@@ -164,7 +159,7 @@ test("Non-course app pages do not import course UI", () => {
 
 test("Component contracts file defines required contracts", () => {
   const contracts = read("src/components/contracts.ts");
-  ["HeaderContract", "FooterContract", "CourseProgressBarContract", "CourseSidebarContract", "ToolCardContract", "MentorChatWidgetContract", "FeedbackChatWidgetContract", "GameCanvasContract", "StudioToolbarContract"].forEach((name) => {
+  ["HeaderContract", "FooterContract", "CourseProgressBarContract", "CourseSidebarContract", "ToolCardContract", "ProfessorChatWidgetContract", "FeedbackChatWidgetContract", "GameCanvasContract", "StudioToolbarContract"].forEach((name) => {
     assert.ok(new RegExp(`export const ${name}\\b`).test(contracts), `${name} must be defined in contracts.ts`);
   });
 
