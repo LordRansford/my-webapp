@@ -197,6 +197,63 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true, output: metered.output, receipt: metered.receipt });
     }
 
+    if (toolId === "ai-story-generator") {
+      const schema = z.object({ prompt: z.string().trim().min(1).max(240) });
+      const parsed = schema.safeParse(body.inputs);
+      if (!parsed.success) {
+        return NextResponse.json(
+          { success: false, error: { code: "validation_error", message: "Provide a prompt (1–240 characters).", fixSuggestion: "Try a short sentence like: A kind robot helps a lost astronaut" } },
+          { status: 400 }
+        );
+      }
+
+      const prompt = parsed.data.prompt;
+
+      const metered = await runWithMetering({
+        req,
+        userId,
+        toolId: "ai-story-generator",
+        inputBytes: Buffer.byteLength(prompt),
+        requestedComplexityPreset: "standard",
+        execute: async () => {
+          // Deterministic, safe compute demo. No external model calls.
+          // Add a small bounded delay so compute receipts look realistic.
+          await new Promise((r) => setTimeout(r, Math.min(900, 120 + prompt.length * 3)));
+
+          const payload = {
+            prompt,
+            story:
+              `Once upon a time, a brave robot named R2-D5 discovered a quiet planet filled with shimmering crystals.\n\n` +
+              `It followed a simple rule: be curious, be careful, and be kind. With a small map and a bright light, ` +
+              `it explored caves, logged the terrain, and helped a lost traveller find the safest path home.\n\n` +
+              `In the end, R2-D5 returned with new knowledge and a promise: every adventure is better when you keep people safe.`,
+            safety: {
+              mode: "safe-demo",
+              note: "No external model calls. Deterministic output for reliability.",
+            },
+          };
+          return { output: payload, outputBytes: Buffer.byteLength(JSON.stringify(payload)) };
+        },
+      });
+
+      if (!metered.ok) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: {
+              code: "run_blocked",
+              message: metered.message,
+              fixSuggestion: metered.estimate?.reason || "Try a shorter prompt, or sign in to run beyond the free tier.",
+            },
+            estimate: metered.estimate,
+          },
+          { status: metered.status }
+        );
+      }
+
+      return NextResponse.json({ success: true, output: metered.output, receipt: metered.receipt });
+    }
+
     // Default: preserve previous behaviour for unknown tools
     return NextResponse.json(
       {

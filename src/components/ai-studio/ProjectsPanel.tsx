@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import { Trash2, Download, FileText, Play, Search } from "lucide-react";
+import { useRouter } from "next/router";
 import type { AIStudioProject } from "@/lib/ai-studio/projects/store";
 import { deleteProject } from "@/lib/ai-studio/projects/store";
 import { exportProjectAsJson, exportProjectAsPdf } from "@/lib/ai-studio/projects/export";
@@ -13,6 +14,7 @@ export default function ProjectsPanel(props: {
   onRun: (projectId: string) => void;
   onRefresh: () => void;
 }) {
+  const router = useRouter();
   const [q, setQ] = useState("");
 
   const filtered = useMemo(() => {
@@ -91,7 +93,10 @@ export default function ProjectsPanel(props: {
                 <div className="mt-4 flex flex-wrap gap-2">
                   <button
                     type="button"
-                    onClick={() => props.onOpen(p.id)}
+                    onClick={() => {
+                      props.onOpen(p.id);
+                      router.push(`/ai-studio/projects/${encodeURIComponent(p.id)}`);
+                    }}
                     className="rounded-lg bg-slate-900 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-800"
                   >
                     Open
