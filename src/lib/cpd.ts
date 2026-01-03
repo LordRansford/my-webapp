@@ -1,4 +1,4 @@
-export type CPDTrackId = "cyber" | "ai" | "software-architecture" | "digitalisation" | "data";
+export type CPDTrackId = "cyber" | "ai" | "software-architecture" | "digitalisation" | "data" | "network-models";
 
 export interface CPDSectionKey {
   trackId: CPDTrackId;
@@ -133,6 +133,34 @@ const normaliseActivity = (input: any): CPDActivity | null => {
   };
 };
 
+function isNetworkModelsSectionId(sectionId: string) {
+  const id = String(sectionId || "").trim().toLowerCase();
+  // Network Models content is consistently namespaced.
+  return id.startsWith("net-") || id.startsWith("network-models-");
+}
+
+function migrateLegacyNetworkModels(state: CPDState): CPDState {
+  // Historical bug: network-models pages previously resolved to trackId "ai".
+  // We can safely migrate because network models section IDs are namespaced.
+  const next: CPDState = { ...state, sections: [...state.sections], activity: [...state.activity] };
+
+  let changed = false;
+  for (const s of next.sections) {
+    if (s.trackId === "ai" && isNetworkModelsSectionId(s.sectionId)) {
+      (s as any).trackId = "network-models";
+      changed = true;
+    }
+  }
+  for (const a of next.activity) {
+    if (a.trackId === "ai" && isNetworkModelsSectionId(a.sectionId)) {
+      (a as any).trackId = "network-models";
+      changed = true;
+    }
+  }
+
+  return changed ? next : state;
+}
+
 export function getInitialCPDState(): CPDState {
   if (!isBrowser) return emptyState();
   try {
@@ -147,7 +175,7 @@ export function getInitialCPDState(): CPDState {
     const activity = Array.isArray(parsed.activity)
       ? parsed.activity.map(normaliseActivity).filter(Boolean)
       : [];
-    return { version, sections, activity };
+    return migrateLegacyNetworkModels({ version, sections, activity });
   } catch {
     return emptyState();
   }
@@ -205,6 +233,7 @@ export function getTotalsForTrack(state: CPDState, trackId: CPDTrackId) {
 
 export function resolveTrackId(courseId: string): CPDTrackId {
   if (courseId === "cybersecurity" || courseId === "cyber") return "cyber";
+  if (courseId === "network-models" || courseId === "network") return "network-models";
   if (courseId === "software-architecture" || courseId === "architecture") return "software-architecture";
   if (courseId === "digitalisation") return "digitalisation";
   if (courseId === "data") return "data";

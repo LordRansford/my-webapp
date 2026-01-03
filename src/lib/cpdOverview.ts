@@ -53,6 +53,12 @@ const COURSE_LEVEL_MAP: Record<
     { id: "advanced", title: "Advanced", sourceId: "practice-strategy", slug: "advanced" },
     { id: "summary", title: "Summary and games", slug: "summary" },
   ],
+  "network-models": [
+    { id: "foundations", title: "Foundations", sourceId: "foundations", slug: "foundations" },
+    { id: "applied", title: "Applied", sourceId: "applied", slug: "intermediate" },
+    { id: "practice", title: "Practice", sourceId: "practice", slug: "advanced" },
+    { id: "summary", title: "Summary and practice", slug: "summary" },
+  ],
 };
 
 const readJson = (courseId: string) => {

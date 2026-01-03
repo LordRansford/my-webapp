@@ -9,6 +9,7 @@ import { cyberSections } from "@/lib/cyberSections";
 import { softwareArchitectureSectionManifest } from "@/lib/softwareArchitectureSections";
 import { dataSectionManifest } from "@/lib/dataSections";
 import { digitalisationSectionManifest } from "@/lib/digitalisationSections";
+import { networkSectionManifest } from "@/lib/networkSections";
 
 const trackConfigs: Array<{
   trackId: CPDTrackId;
@@ -45,6 +46,12 @@ const trackConfigs: Array<{
     title: "Data",
     manifest: dataSectionManifest,
     levels: ["foundations", "intermediate", "advanced", "summary"],
+  },
+  {
+    trackId: "network-models",
+    title: "Network models",
+    manifest: networkSectionManifest,
+    levels: ["foundations", "applied", "practice", "summary"],
   },
 ];
 

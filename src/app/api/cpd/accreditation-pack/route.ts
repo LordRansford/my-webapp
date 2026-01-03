@@ -85,6 +85,12 @@ ${mapping.applicableBodies.map((b) => `  - ${b}`).join("\n")}
           applied: getCourseLevelMeta("cybersecurity", "applied"),
           practice: getCourseLevelMeta("cybersecurity", "practice"),
         },
+        "network-models": {
+          foundations: getCourseLevelMeta("network-models", "foundations"),
+          applied: getCourseLevelMeta("network-models", "applied"),
+          practice: getCourseLevelMeta("network-models", "practice"),
+          summary: getCourseLevelMeta("network-models", "summary"),
+        },
         "software-architecture": {
           foundations: getCourseLevelMeta("software-architecture", "foundations"),
           intermediate: getCourseLevelMeta("software-architecture", "intermediate"),

@@ -14,7 +14,7 @@ type Body = {
 };
 
 const ALLOWED_TYPES = new Set<EvidenceType>(["progress", "quiz", "tool", "manual"]);
-const ALLOWED_COURSES = new Set<CourseId>(["cybersecurity", "ai", "software-architecture", "data", "digitalisation"]);
+const ALLOWED_COURSES = new Set<CourseId>(["cybersecurity", "ai", "software-architecture", "data", "digitalisation", "network-models"]);
 
 export async function POST(req: Request) {
   return withRequestLogging(req, { route: "POST /api/cpd/evidence" }, async () => {
