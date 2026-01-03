@@ -109,6 +109,119 @@ After you use the tool: sanity check your output. Do your threats connect to rea
 
 ---
 
+<CaseStudy
+  id="equifax-2017-breach"
+  title="Equifax Data Breach (2017)"
+  summary="How an unpatched Apache Struts vulnerability led to the exposure of 147 million people's personal and financial data"
+  industry="Financial Services"
+  year="2017"
+  impact="$700M+ settlement + massive reputational damage"
+  learningObjectives={["Vulnerability management", "Attack surfaces", "Patch management"]}
+  difficulty="intermediate"
+>
+  <Timeline>
+    <TimelineEvent date="March 7, 2017">
+      Apache Struts vulnerability (CVE-2017-5638) publicly disclosed with patch available
+    </TimelineEvent>
+    <TimelineEvent date="March 9, 2017">
+      U.S. CERT and DHS issue alert about the critical vulnerability
+    </TimelineEvent>
+    <TimelineEvent date="Mid-March 2017">
+      Attackers exploit the unpatched vulnerability on Equifax systems
+    </TimelineEvent>
+    <TimelineEvent date="March-July 2017">
+      Attackers maintain access for ~4 months, exfiltrating data undetected
+    </TimelineEvent>
+    <TimelineEvent date="July 29, 2017">
+      Equifax discovers unusual network traffic and begins investigation
+    </TimelineEvent>
+    <TimelineEvent date="September 7, 2017">
+      Public disclosure of the breach (6 weeks after discovery)
+    </TimelineEvent>
+    <TimelineEvent date="July 2019">
+      $700M settlement announced with FTC, CFPB, and state attorneys general
+    </TimelineEvent>
+  </Timeline>
+
+  <RootCause>
+    A perfect storm of security failures:
+    - **Unpatched vulnerability**: Critical Apache Struts flaw (CVE-2017-5638) remained unpatched for months despite public disclosure and available fix
+    - **Missed detection**: Security tools failed to identify the vulnerable version during scanning
+    - **Weak segmentation**: Attackers could move laterally from web servers to databases without effective network controls
+    - **Certificate expiry**: SSL certificate on monitoring tool expired, disabling inspection of encrypted traffic for 19 months
+    - **Inadequate logging**: Lack of comprehensive logging and monitoring made attacker activity invisible for 4 months
+    - **Poor incident response**: 6-week delay between discovery and public disclosure, during which executives sold stock
+  </RootCause>
+
+  <TechnicalDetails>
+    **The Vulnerability (CVE-2017-5638):**
+    - Apache Struts web framework had remote code execution flaw in Jakarta Multipart parser
+    - Attackers could send specially crafted HTTP requests to execute arbitrary commands
+    - CVSS score: 10.0 (Critical) - as severe as it gets
+    
+    **The Attack Chain:**
+    1. **Initial access**: Exploited unpatched Struts vulnerability on Equifax web portal
+    2. **Reconnaissance**: Mapped internal network and located databases containing consumer data
+    3. **Privilege escalation**: Leveraged weak credentials and misconfigurations to access additional systems
+    4. **Data exfiltration**: Slowly extracted 147.9M records over 76 days to avoid detection
+    5. **Persistence**: Maintained backdoors and access points throughout the environment
+    
+    **Data Exposed:**
+    - Names, SSNs, birth dates, addresses (147M people)
+    - Credit card numbers (209K people)
+    - Drivers license numbers (182K people)
+    
+    **How it relates to Applied Cybersecurity concepts:**
+    - **Attack surface**: Public-facing web application was the entry point
+    - **Vulnerability management failure**: Known, critical vulnerability with available patch was not applied
+    - **Logging and monitoring gap**: 4 months of malicious activity went undetected
+    - **Network segmentation**: Flat network allowed lateral movement from web tier to database tier
+  </TechnicalDetails>
+
+  <ImpactAnalysis
+    financial="$700M+ settlement, $1.4B in security improvements, countless incident response costs, stock price drop"
+    operational="Complete security program overhaul, replacement of leadership including CEO and CSO, ongoing monitoring obligations"
+    reputational="Became the poster child for security negligence. Consumer trust destroyed. 'Equifax' became synonymous with breach"
+    legal="Congressional hearings, FTC investigation, state AG investigations, class action lawsuits, potential criminal charges for insider trading"
+  />
+
+  <LessonsLearned>
+    **For intermediate learners, this case study teaches:**
+    
+    1. **Patch management is life-or-death**: A known, critical vulnerability with a public patch remained unpatched. This is inexcusable for a security-critical organization. Develop a process:
+       - Monitor vulnerability disclosures (CVEs, vendor alerts)
+       - Assess severity in your context (is the vulnerable component exposed?)
+       - Test patches in non-production first
+       - Deploy emergency patches for critical vulnerabilities within days, not months
+    
+    2. **Asset inventory is foundational**: Equifax likely didn't have complete visibility into all systems running Apache Struts. You can't patch what you don't know exists.
+    
+    3. **Defense in depth matters**: The vulnerability was the entry point, but lack of segmentation, monitoring, and access controls turned it into a catastrophic breach. Multiple layers could have limited damage:
+       - Web application firewall (WAF) might have blocked exploit attempts
+       - Network segmentation would have limited lateral movement
+       - Database access controls could have prevented mass exfiltration
+       - Proper monitoring would have detected unusual queries
+    
+    4. **Monitoring must actually be monitored**: Having security tools is useless if they're not working (expired SSL cert), not configured correctly, or no one is watching alerts
+    
+    5. **Incident response includes communication**: The 6-week delay in disclosure made everything worse. Have a clear IR plan that includes legal, PR, and customer notification timelines
+    
+    6. **Vulnerability management is a process, not a project**: This isn't "run a scanner once a quarter." It's:
+       - Continuous monitoring of vulnerability feeds
+       - Automated scanning integrated into CI/CD
+       - Clear ownership and SLAs for patching
+       - Exception process for systems that can't be patched immediately
+       - Regular testing that patches were actually applied
+    
+    **Practical takeaways:**
+    - Prioritize patching by CVSS score + exploitability + exposure (public-facing systems first)
+    - Subscribe to vendor security advisories for all software you use
+    - Test your monitoring: can you detect a breach in hours/days, not months?
+    - Segment networks: web tier → app tier → database tier with strict firewall rules
+    - Implement data loss prevention (DLP) to detect mass data exfiltration
+  </LessonsLearned>
+</CaseStudy>
+
 <SectionHeader variant="content" emoji="🔍" id="attack-surfaces">
   Attack surfaces and common failure classes
 </SectionHeader>

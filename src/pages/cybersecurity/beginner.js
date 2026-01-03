@@ -23,6 +23,7 @@ import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
 import SectionHeader from "@/components/course/SectionHeader";
 import SubsectionHeader from "@/components/course/SubsectionHeader";
 import BodyText from "@/components/course/BodyText";
+import CaseStudy, { Timeline, TimelineEvent, RootCause, LessonsLearned, TechnicalDetails, ImpactAnalysis } from "@/components/notes/CaseStudy";
 import { cyberSections } from "@/lib/cyberSections";
 import { safeAgentLog } from "@/lib/safeAgentLog";
 
@@ -110,6 +111,13 @@ export default function Page({ source, headings }) {
       SectionHeader,
       SubsectionHeader,
       BodyText,
+      CaseStudy,
+      Timeline,
+      TimelineEvent,
+      RootCause,
+      LessonsLearned,
+      TechnicalDetails,
+      ImpactAnalysis,
     }),
     []
   );

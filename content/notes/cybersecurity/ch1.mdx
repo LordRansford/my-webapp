@@ -74,6 +74,82 @@ Why it matters: when you separate threat, vulnerability, and risk, you stop gues
 Cybersecurity is not only about stopping hackers. It is also about preventing accidents, spotting mistakes early, and recovering fast when something breaks.
 </Callout>
 
+<CaseStudy
+  id="british-airways-2018"
+  title="British Airways Data Breach (2018)"
+  summary="How a compromised website script led to the theft of 400,000+ customer payment details"
+  industry="Aviation"
+  year="2018"
+  impact="£20M GDPR fine + significant reputational damage"
+  learningObjectives={["Integrity failures", "Trust boundaries", "Defense in depth"]}
+  difficulty="beginner"
+>
+  <Timeline>
+    <TimelineEvent date="June 2018">
+      Attackers compromise BA's booking website by injecting malicious JavaScript
+    </TimelineEvent>
+    <TimelineEvent date="June-September 2018">
+      Customer payment data (card numbers, CVVs, addresses) stolen during checkout
+    </TimelineEvent>
+    <TimelineEvent date="September 5, 2018">
+      BA notified of suspicious activity, breach discovered
+    </TimelineEvent>
+    <TimelineEvent date="September 6, 2018">
+      Public disclosure to affected customers
+    </TimelineEvent>
+    <TimelineEvent date="October 2020">
+      ICO (UK regulator) issues £20M fine for GDPR violations
+    </TimelineEvent>
+  </Timeline>
+
+  <RootCause>
+    The breach succeeded because of multiple failures:
+    - **Integrity failure**: No integrity checks on third-party scripts loaded on payment pages
+    - **Trust boundary violation**: External scripts had access to sensitive payment form data
+    - **Insufficient monitoring**: The malicious script ran undetected for over 2 months
+    - **Weak segmentation**: Payment processing wasn't isolated from general web infrastructure
+  </RootCause>
+
+  <TechnicalDetails>
+    The attackers used a technique called "Magecart" or web skimming:
+    1. They compromised BA's website infrastructure (likely through stolen credentials or vulnerability)
+    2. They modified legitimate JavaScript files to include malicious code
+    3. The malicious code intercepted form data when customers entered payment details
+    4. Data was sent to attacker-controlled servers disguised as legitimate analytics
+    
+    **How it relates to CIA triad:**
+    - **Confidentiality**: Customer payment data was exposed to unauthorized parties
+    - **Integrity**: The website code was modified without detection
+    - **Availability**: Not directly affected, making the breach harder to detect
+  </TechnicalDetails>
+
+  <ImpactAnalysis
+    financial="£20M regulatory fine + estimated £100M+ in compensation and remediation costs"
+    operational="Emergency response, forensic investigation, system hardening across entire web infrastructure"
+    reputational="Customer trust damaged, negative media coverage for months, stock price impact"
+    legal="ICO investigation, potential lawsuits from affected customers, mandatory breach notification"
+  />
+
+  <LessonsLearned>
+    **For beginners, this case study teaches:**
+    
+    1. **Trust but verify**: Even your own website can be compromised. Use integrity checks (like Subresource Integrity) for all external scripts
+    
+    2. **Defense in depth matters**: A single control (perimeter security) wasn't enough. Multiple layers could have caught this earlier
+    
+    3. **Monitoring is critical**: The malicious code ran for 2+ months. Better monitoring of code changes and data flows could have detected it
+    
+    4. **Sensitive data needs special handling**: Payment data should be isolated and ideally never touch general web infrastructure
+    
+    5. **Incident response takes time**: Even large organizations with security teams can take months to detect sophisticated attacks
+    
+    **What you can do personally:**
+    - Use virtual credit cards or PayPal for online shopping (limits exposure if a site is compromised)
+    - Monitor your bank statements for unauthorized charges
+    - Understand that even major companies can be breached - have a response plan for yourself
+  </LessonsLearned>
+</CaseStudy>
+
 <DiagramBlock
   title="Everyday dependency chain"
   subtitle="One weak link can still hurt people even when the app looks fine."
@@ -162,6 +238,85 @@ Everyday example: handing someone your house keys is authorisation. Checking the
 Common mistake: treating identity as a user experience detail instead of a safety system. Another common mistake is giving broad permissions because it is easier, then being surprised when something bad happens quickly.
 
 Why it matters: when identity is strong and access is narrow, a compromised account does not automatically become a full breach. It buys time. It limits harm. It makes detection and recovery possible.
+
+<CaseStudy
+  id="twitter-2020-breach"
+  title="Twitter Account Hijacking (2020)"
+  summary="How social engineering of Twitter employees led to the compromise of high-profile accounts including Barack Obama, Elon Musk, and Bill Gates"
+  industry="Social Media"
+  year="2020"
+  impact="$180k stolen via Bitcoin scam + massive reputational damage"
+  learningObjectives={["Social engineering", "Least privilege", "Authentication weaknesses"]}
+  difficulty="beginner"
+>
+  <Timeline>
+    <TimelineEvent date="July 15, 2020 ~3:00 PM ET">
+      Attackers begin social engineering Twitter employees via phone/SMS
+    </TimelineEvent>
+    <TimelineEvent date="July 15, 2020 ~3:30 PM ET">
+      First compromised tweets appear on cryptocurrency exchange accounts
+    </TimelineEvent>
+    <TimelineEvent date="July 15, 2020 ~4:00-7:00 PM ET">
+      High-profile accounts hijacked: Obama, Biden, Musk, Gates, Bezos, Apple, Uber
+    </TimelineEvent>
+    <TimelineEvent date="July 15, 2020 ~7:45 PM ET">
+      Twitter disables tweeting for verified accounts while investigating
+    </TimelineEvent>
+    <TimelineEvent date="July 30, 2020">
+      Three suspects arrested (including a 17-year-old)
+    </TimelineEvent>
+  </Timeline>
+
+  <RootCause>
+    The attack succeeded because of human and technical failures:
+    - **Social engineering**: Attackers called Twitter employees pretending to be IT support, tricking them into providing credentials
+    - **Excessive privilege**: Employees had access to internal admin tools that could control ANY account
+    - **Weak authentication**: Internal tools didn't require strong MFA or additional verification for sensitive actions
+    - **Insufficient training**: Staff weren't prepared to recognize or resist social engineering attempts
+    - **No separation of duties**: Single employees could make account changes without approval
+  </RootCause>
+
+  <TechnicalDetails>
+    The attackers used a combination of techniques:
+    1. **Vishing** (voice phishing): Called Twitter employees pretending to be IT/security
+    2. **Credential theft**: Convinced employees to enter credentials into fake login pages
+    3. **Internal tool abuse**: Once inside, used Twitter's "admin panel" to reset account passwords and disable two-factor authentication
+    4. **Bitcoin scam**: Posted tweets from compromised accounts asking followers to send Bitcoin with false promise of doubling their money
+    
+    **How it relates to security concepts:**
+    - **Authentication failure**: Internal systems didn't verify employee identity strongly enough
+    - **Authorization failure**: Employees had god-mode access they didn't need for daily work
+    - **Trust boundary**: Attackers crossed from external (phone call) to internal (admin systems) by exploiting human trust
+  </TechnicalDetails>
+
+  <ImpactAnalysis
+    financial="~$180k stolen via Bitcoin scam (recovered some). Significantly larger costs for incident response, security overhaul, and potential regulatory fines"
+    operational="Twitter had to temporarily disable tweeting for ALL verified accounts during the breach, affecting millions of users and businesses"
+    reputational="Massive embarrassment that Twitter's own systems could be compromised so easily. Raised questions about platform security and ability to protect user accounts"
+    legal="Investigation by FBI, SEC, and multiple state attorneys general. Potential regulatory consequences regarding user data protection"
+  />
+
+  <LessonsLearned>
+    **For beginners, this case study teaches:**
+    
+    1. **Humans are the weakest link**: Even at a tech company like Twitter, employees can be tricked. No amount of technical security helps if attackers can convince staff to hand over credentials
+    
+    2. **Least privilege is critical**: Twitter employees had way more access than they needed. If tools had been restricted to "view only" or required manager approval for account changes, damage would have been limited
+    
+    3. **Phone/SMS are not secure authentication**: The attackers used phone calls and texts to bypass security. This is why SMS 2FA is considered weak - calls and texts can be intercepted or impersonated
+    
+    4. **Social engineering is real**: You don't need to be a coding genius to breach a major company. Good liars with basic technical knowledge can go far
+    
+    5. **Response matters**: Twitter's quick action to disable tweeting for verified accounts, while disruptive, prevented MORE damage
+    
+    **What you can do personally:**
+    - Be skeptical of unexpected calls/emails asking for passwords or credentials, even if they claim to be from IT
+    - Use hardware keys (like YubiKey) instead of SMS for two-factor authentication when possible
+    - Never share passwords over phone, email, or text - legitimate IT won't ask
+    - If someone pressures you urgently, that's a red flag. Attackers use time pressure to bypass your careful thinking
+    - Verify unexpected requests through a separate channel (e.g., if IT calls, hang up and call the official IT number yourself)
+  </LessonsLearned>
+</CaseStudy>
 
 ### After this section you should be able to:
 
