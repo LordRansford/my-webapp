@@ -1,6 +1,6 @@
 {
   "courseId": "software-architecture",
-  "generatedAt": "2026-01-03T23:01:28.778Z",
+  "generatedAt": "2026-01-03T23:09:53.876Z",
   "status": "Draft",
   "version": "1.0.0",
   "coverage": {
@@ -26,10 +26,10 @@
         "learningObjectivesCount": 8,
         "learningObjectivesMissing": false,
         "trackedSectionsCount": 9,
-        "quizBlocksCount": 0,
+        "quizBlocksCount": 1,
         "toolsCount": 8,
         "signals": {
-          "quizzesPresent": false,
+          "quizzesPresent": true,
           "toolsPresent": true,
           "learningObjectivesPresent": true,
           "sectionTrackingPresent": true
@@ -70,19 +70,15 @@
       "totalEstimatedHours": 100.7,
       "totalLearningObjectives": 20,
       "totalTrackedSections": 27,
-      "totalQuizBlocks": 9,
+      "totalQuizBlocks": 10,
       "totalTools": 21
     },
     "gaps": {
       "levelsMissingLearningObjectives": [],
-      "levelsMissingQuizBlocks": [
-        "foundations"
-      ],
+      "levelsMissingQuizBlocks": [],
       "levelsMissingToolActivities": [],
       "levelsMissingSectionTracking": [],
-      "recommendations": [
-        "Add at least one QuizBlock per level (8–12 questions is ideal)."
-      ]
+      "recommendations": []
     }
   }
 }

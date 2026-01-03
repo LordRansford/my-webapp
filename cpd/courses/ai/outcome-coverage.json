@@ -1,6 +1,6 @@
 {
   "courseId": "ai",
-  "generatedAt": "2026-01-03T23:01:28.770Z",
+  "generatedAt": "2026-01-03T23:09:53.867Z",
   "status": "InProgress",
   "version": "1.0.0",
   "coverage": {
@@ -8,30 +8,30 @@
       {
         "levelId": "advanced",
         "estimatedHours": 12,
-        "learningObjectivesCount": 0,
-        "learningObjectivesMissing": true,
+        "learningObjectivesCount": 4,
+        "learningObjectivesMissing": false,
         "trackedSectionsCount": 3,
         "quizBlocksCount": 3,
         "toolsCount": 3,
         "signals": {
           "quizzesPresent": true,
           "toolsPresent": true,
-          "learningObjectivesPresent": false,
+          "learningObjectivesPresent": true,
           "sectionTrackingPresent": true
         }
       },
       {
         "levelId": "intermediate",
         "estimatedHours": 22,
-        "learningObjectivesCount": 0,
-        "learningObjectivesMissing": true,
+        "learningObjectivesCount": 4,
+        "learningObjectivesMissing": false,
         "trackedSectionsCount": 9,
         "quizBlocksCount": 9,
         "toolsCount": 9,
         "signals": {
           "quizzesPresent": true,
           "toolsPresent": true,
-          "learningObjectivesPresent": false,
+          "learningObjectivesPresent": true,
           "sectionTrackingPresent": true
         }
       },
@@ -68,22 +68,17 @@
     ],
     "totals": {
       "totalEstimatedHours": 49,
-      "totalLearningObjectives": 8,
+      "totalLearningObjectives": 16,
       "totalTrackedSections": 25,
       "totalQuizBlocks": 19,
       "totalTools": 24
     },
     "gaps": {
-      "levelsMissingLearningObjectives": [
-        "advanced",
-        "intermediate"
-      ],
+      "levelsMissingLearningObjectives": [],
       "levelsMissingQuizBlocks": [],
       "levelsMissingToolActivities": [],
       "levelsMissingSectionTracking": [],
-      "recommendations": [
-        "Add `learningObjectives` frontmatter to the listed levels (3–8 measurable outcomes per level)."
-      ]
+      "recommendations": []
     }
   }
 }

@@ -24,6 +24,7 @@ import PageNav from "@/components/notes/PageNav"
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
 import LevelProgressBar from "@/components/course/LevelProgressBar"
 import CPDTracker from "@/components/CPDTracker"
+import QuizBlock from "@/components/notes/QuizBlock"
 import { softwareArchitectureSectionManifest } from "@/lib/softwareArchitectureSections"
 
 # Software Architecture Foundations
@@ -52,6 +53,26 @@ This Foundation tier delivers **24 CPD hours** of structured learning, aligned w
 ## Course structure
 
 This foundation tier is organised around the software development lifecycle with security integrated throughout.
+
+<QuizBlock
+  id="soft-arch-foundations-lifecycle-quiz"
+  courseId="software-architecture"
+  levelId="foundations"
+  sectionId="soft-arch-foundations-discovery-requirements"
+  title="Quick check: architecture foundations across the lifecycle"
+  questions={[
+    { q: "What is an architecture decision record used for", a: "To capture a decision, the context, the trade-offs, and the rationale so change stays deliberate." },
+    { q: "What is a non-functional requirement", a: "A quality attribute constraint such as latency, availability, security, or maintainability." },
+    { q: "Why is threat modelling useful early", a: "It surfaces likely abuse paths so you can design controls before code hardens bad assumptions." },
+    { q: "What is the goal of CI/CD in one line", a: "To ship changes reliably by automating build, test, and deployment checks." },
+    { q: "What does DevSecOps mean in practice", a: "Security checks and ownership integrated into delivery pipelines and team habits, not a separate gate at the end." },
+    { q: "What does OWASP ASVS help with", a: "A structured checklist for verifying web app security requirements and test coverage." },
+    { q: "Why does observability matter", a: "Without signals you cannot debug, prove safety, or improve reliability under real load." },
+    { q: "What is an incident in SRE terms", a: "A user-impacting event requiring coordinated response and learning to reduce recurrence." },
+    { q: "Why use the OSI model in troubleshooting", a: "It gives a disciplined order to test hypotheses and isolate where evidence points." },
+    { q: "What is an 'ility' example", a: "Availability, scalability, auditability, or recoverability—qualities you must design and operate for." },
+  ]}
+/>
 
 ### Module 1: Discovery and Requirements (2.4 hours)
 

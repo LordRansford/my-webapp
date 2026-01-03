@@ -1,7 +1,7 @@
 # Mapping – digitalisation
 
 - Status: Draft
-- Generated: 2026-01-03T23:01:28.778Z
+- Generated: 2026-01-03T23:09:53.875Z
 - Total estimated hours: 32
 - Total learning objectives: 16
 - Total tracked sections: 16

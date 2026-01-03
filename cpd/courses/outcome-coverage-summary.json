@@ -1,27 +1,22 @@
 {
-  "generatedAt": "2026-01-03T23:01:28.782Z",
+  "generatedAt": "2026-01-03T23:09:53.880Z",
   "courses": [
     {
       "courseId": "ai",
       "status": "InProgress",
       "totals": {
         "totalEstimatedHours": 49,
-        "totalLearningObjectives": 8,
+        "totalLearningObjectives": 16,
         "totalTrackedSections": 25,
         "totalQuizBlocks": 19,
         "totalTools": 24
       },
       "gaps": {
-        "levelsMissingLearningObjectives": [
-          "advanced",
-          "intermediate"
-        ],
+        "levelsMissingLearningObjectives": [],
         "levelsMissingQuizBlocks": [],
         "levelsMissingToolActivities": [],
         "levelsMissingSectionTracking": [],
-        "recommendations": [
-          "Add `learningObjectives` frontmatter to the listed levels (3–8 measurable outcomes per level)."
-        ]
+        "recommendations": []
       }
     },
     {
@@ -103,19 +98,15 @@
         "totalEstimatedHours": 100.7,
         "totalLearningObjectives": 20,
         "totalTrackedSections": 27,
-        "totalQuizBlocks": 9,
+        "totalQuizBlocks": 10,
         "totalTools": 21
       },
       "gaps": {
         "levelsMissingLearningObjectives": [],
-        "levelsMissingQuizBlocks": [
-          "foundations"
-        ],
+        "levelsMissingQuizBlocks": [],
         "levelsMissingToolActivities": [],
         "levelsMissingSectionTracking": [],
-        "recommendations": [
-          "Add at least one QuizBlock per level (8–12 questions is ideal)."
-        ]
+        "recommendations": []
       }
     }
   ]

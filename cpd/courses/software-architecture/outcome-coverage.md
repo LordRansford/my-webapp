@@ -1,20 +1,17 @@
 # Outcome coverage – software-architecture
 
-Generated: 2026-01-03T23:01:28.778Z
+Generated: 2026-01-03T23:09:53.876Z
 Status: Draft
 
 ## Summary
 - Total estimated hours: 100.7
 - Total learning objectives: 20
 - Total tracked sections: 27
-- Total quiz blocks: 9
+- Total quiz blocks: 10
 - Total tools: 21
 
 ## Gaps
-- Missing quiz blocks in: foundations
-
-## Recommendations
-- Add at least one QuizBlock per level (8–12 questions is ideal).
+- None detected for core CPD structural signals (objectives, quizzes, tools, section tracking).
 
 ## Level breakdown
 ### advanced
@@ -28,7 +25,7 @@ Status: Draft
 - Estimated hours: 45.2
 - Learning objectives: 8
 - Tracked sections: 9
-- Quiz blocks: 0
+- Quiz blocks: 1
 - Tools: 8
 
 ### intermediate

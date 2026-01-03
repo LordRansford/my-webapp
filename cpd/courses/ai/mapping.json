@@ -1,7 +1,7 @@
 {
   "courseId": "ai",
   "status": "InProgress",
-  "generatedAt": "2026-01-03T23:01:28.770Z",
+  "generatedAt": "2026-01-03T23:09:53.867Z",
   "version": "1.0.0",
   "levels": [
     {
@@ -14,7 +14,12 @@
           "stepIndex": 2
         }
       ],
-      "learningObjectives": [],
+      "learningObjectives": [
+        "Design a production AI system architecture with clear boundaries, failure handling, and observability.",
+        "Evaluate cost, latency, reliability, and quality trade-offs using practical system constraints.",
+        "Define monitoring signals for drift, safety, and performance and explain how to act on them operationally.",
+        "Explain how retrieval, permissions, and data freshness change the risk profile of AI assistants."
+      ],
       "sectionIds": [
         "ai-advanced-systems-and-architectures",
         "ai-advanced-scaling-cost-reliability",
@@ -57,7 +62,7 @@
       "evidenceSignals": {
         "quizzesPresent": true,
         "toolsPresent": true,
-        "learningObjectivesPresent": false,
+        "learningObjectivesPresent": true,
         "sectionTrackingPresent": true
       }
     },
@@ -76,7 +81,12 @@
           "stepIndex": 1
         }
       ],
-      "learningObjectives": [],
+      "learningObjectives": [
+        "Explain the training loop in plain language and diagnose common failure modes like overfitting and leakage.",
+        "Design a basic evaluation plan (metrics + thresholds) that matches a real-world decision and risk profile.",
+        "Describe how data quality, features, and representation affect model behaviour in production.",
+        "Select an appropriate deployment pattern (batch, real-time, retrieval-augmented) and explain the trade-offs."
+      ],
       "sectionIds": [
         "ai-intermediate-models-and-training",
         "ai-intermediate-data-features-representation",
@@ -185,7 +195,7 @@
       "evidenceSignals": {
         "quizzesPresent": true,
         "toolsPresent": true,
-        "learningObjectivesPresent": false,
+        "learningObjectivesPresent": true,
         "sectionTrackingPresent": true
       }
     },
@@ -362,7 +372,7 @@
   },
   "coverageSummary": {
     "totalEstimatedHours": 49,
-    "totalLearningObjectives": 8,
+    "totalLearningObjectives": 16,
     "totalTrackedSections": 25,
     "totalQuizBlocks": 19,
     "totalTools": 24

@@ -1,11 +1,11 @@
 # Mapping – software-architecture
 
 - Status: Draft
-- Generated: 2026-01-03T23:01:28.778Z
+- Generated: 2026-01-03T23:09:53.876Z
 - Total estimated hours: 100.7
 - Total learning objectives: 20
 - Total tracked sections: 27
-- Total quiz blocks: 9
+- Total quiz blocks: 10
 - Total tools: 21
 
 ## advanced
@@ -21,7 +21,7 @@
 - Source files: 9
 - Learning objectives: 8
 - Tracked sections: 9
-- Quiz blocks: 0
+- Quiz blocks: 1
 - Tools: 8
 
 ## intermediate

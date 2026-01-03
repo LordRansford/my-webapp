@@ -1,7 +1,7 @@
 {
   "courseId": "software-architecture",
   "status": "Draft",
-  "generatedAt": "2026-01-03T23:01:28.778Z",
+  "generatedAt": "2026-01-03T23:09:53.876Z",
   "version": "1.0.0",
   "levels": [
     {
@@ -148,7 +148,14 @@
         "soft-arch-foundations-verification-testing",
         "soft-arch-foundations-assessment"
       ],
-      "quizzes": [],
+      "quizzes": [
+        {
+          "id": "soft-arch-foundations-lifecycle-quiz",
+          "title": "Quick check: architecture foundations across the lifecycle",
+          "sectionId": "soft-arch-foundations-discovery-requirements",
+          "explicitId": true
+        }
+      ],
       "tools": [
         {
           "id": null,
@@ -184,7 +191,7 @@
         }
       ],
       "evidenceSignals": {
-        "quizzesPresent": false,
+        "quizzesPresent": true,
         "toolsPresent": true,
         "learningObjectivesPresent": true,
         "sectionTrackingPresent": true
@@ -367,7 +374,7 @@
     "totalEstimatedHours": 100.7,
     "totalLearningObjectives": 20,
     "totalTrackedSections": 27,
-    "totalQuizBlocks": 9,
+    "totalQuizBlocks": 10,
     "totalTools": 21
   }
 }
