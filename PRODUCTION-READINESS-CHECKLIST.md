@@ -61,7 +61,7 @@
 
 ### Core Authentication
 ```bash
-NEXTAUTH_SECRET=PrVCjJTE5zWJEhWtHmiQsjl74l6+SRmy3Xt25EadwmA=  # ✅ Generated
+NEXTAUTH_SECRET=<generate-strong-random-secret>  # ✅ Generate your own (do not commit)
 NEXTAUTH_URL=https://www.ransfordsnotes.com  # Your production domain
 GOOGLE_CLIENT_ID=<get-from-google>
 GOOGLE_CLIENT_SECRET=<get-from-google>
@@ -84,7 +84,7 @@ STRIPE_WEBHOOK_SECRET=whsec_...  # From webhook endpoint
 ### Sentry & Blob (Already Have)
 ```bash
 NEXT_PUBLIC_SENTRY_DSN=https://18ce20185c853218c17f8ae07b0a910c@04510635376836608.ingest.de.sentry.io/4510635463999568
-BLOB_READ_WRITE_TOKEN=vercel_blob_rw_UuhVh3M1IDJgNtMG_iVjfFbe4ZavEw1BfnPveoB3Z1dW7zU
+BLOB_READ_WRITE_TOKEN=vercel_blob_rw_REPLACE_WITH_YOUR_TOKEN
 ```
 
 ### Optional
