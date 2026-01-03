@@ -1,8 +1,0 @@
-__turbopack_load_page_chunks__("/dev-studio/children-mode", [
-  "static/chunks/6bd1b060cc02463e.js",
-  "static/chunks/d81eaba3cbb4e53e.js",
-  "static/chunks/d1ea35920c32a766.js",
-  "static/chunks/a6a29af3297ffde1.js",
-  "static/chunks/f0f43ebb724b8b11.js",
-  "static/chunks/turbopack-df72c2ab09933e87.js"
-])

@@ -32,6 +32,11 @@ type AnalysisData = {
   perQuestion: Array<{ questionId: string; attempts: number; correct: number; correctRatePercent: number }>;
 };
 
+type QualityData = {
+  totals: Record<string, number>;
+  samples: Record<string, string[]>;
+};
+
 function tagSet(tags: string) {
   return new Set(
     String(tags || "")
@@ -56,6 +61,7 @@ export default function AdminAssessmentsClient(props: { canManage: boolean }) {
   const [reason, setReason] = useState("");
   const [data, setData] = useState<AssessmentData | null>(null);
   const [analysis, setAnalysis] = useState<AnalysisData | null>(null);
+  const [quality, setQuality] = useState<QualityData | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
 
   const selected = useMemo(() => ({ courseId: "cybersecurity", levelId, version }), [levelId, version]);
@@ -78,6 +84,12 @@ export default function AdminAssessmentsClient(props: { canManage: boolean }) {
       const ajson = (await ares.json().catch(() => null)) as any;
       if (ares.ok) setAnalysis(ajson as AnalysisData);
       else setAnalysis(null);
+
+      const qurl = `/api/admin/assessments/quality?courseId=${encodeURIComponent(selected.courseId)}&levelId=${encodeURIComponent(selected.levelId)}&version=${encodeURIComponent(selected.version)}`;
+      const qres = await fetch(qurl);
+      const qjson = (await qres.json().catch(() => null)) as any;
+      if (qres.ok) setQuality(qjson as QualityData);
+      else setQuality(null);
     } catch {
       setError("Unable to load assessment.");
     } finally {
@@ -277,6 +289,24 @@ export default function AdminAssessmentsClient(props: { canManage: boolean }) {
             </a>
           </div>
         </div>
+
+        {quality ? (
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-2">
+            <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">Quality checks</div>
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {Object.entries(quality.totals || {}).map(([k, v]) => (
+                <div key={k} className="rounded-xl border border-slate-200 bg-white px-3 py-2">
+                  <div className="text-xs font-semibold text-slate-700">{k}</div>
+                  <div className="mt-1 text-sm font-semibold text-slate-900">{v}</div>
+                </div>
+              ))}
+            </div>
+            <div className="text-xs text-slate-600">
+              Prioritise missing rationales first so the exported answer key is worth paying for.
+            </div>
+          </div>
+        ) : null}
+
         <div className="space-y-3">
           {(data?.questions || []).map((q) => {
             const editing = editingId === q.id;

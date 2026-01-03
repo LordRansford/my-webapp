@@ -73,14 +73,31 @@ export default function ExamRunner(props: {
 
   const current = data?.questions?.[activeIndex] || null;
   const total = data?.questions?.length || 0;
+  const isPractice = props.levelId === "practice";
+
+  const getChoice = (value: any): number | null => {
+    if (value == null) return null;
+    if (typeof value === "number") return value;
+    if (typeof value === "object" && typeof value.choice === "number") return value.choice;
+    return null;
+  };
+
+  const getJustification = (value: any): string => {
+    if (!value || typeof value !== "object") return "";
+    const j = typeof value.justification === "string" ? value.justification : "";
+    return j;
+  };
+
   const answeredCount = useMemo(() => {
     if (!data?.questions?.length) return 0;
     let n = 0;
     for (const q of data.questions) {
-      if (answers[q.id] !== undefined && answers[q.id] !== null) n += 1;
+      const v = answers[q.id];
+      const choice = getChoice(v);
+      if (choice !== null) n += 1;
     }
     return n;
-  }, [answers, data?.questions]);
+  }, [answers, data?.questions, isPractice]);
 
   useEffect(() => {
     if (!data?.expiresAt) return;
@@ -141,7 +158,34 @@ export default function ExamRunner(props: {
   }, [answers, data?.sessionId]);
 
   const setSingleChoice = (questionId: string, choiceIndex: number) => {
-    setAnswers((prev) => ({ ...prev, [questionId]: choiceIndex }));
+    setAnswers((prev) => {
+      const existing = prev[questionId];
+      if (isPractice) {
+        return {
+          ...prev,
+          [questionId]: {
+            choice: choiceIndex,
+            justification: getJustification(existing),
+          },
+        };
+      }
+      return { ...prev, [questionId]: choiceIndex };
+    });
+  };
+
+  const setPracticeJustification = (questionId: string, text: string) => {
+    if (!isPractice) return;
+    setAnswers((prev) => {
+      const existing = prev[questionId];
+      const choice = getChoice(existing);
+      return {
+        ...prev,
+        [questionId]: {
+          choice,
+          justification: text,
+        },
+      };
+    });
   };
 
   const startOrResume = async () => {
@@ -399,7 +443,7 @@ export default function ExamRunner(props: {
 
         <div className="mt-3 grid gap-2">
           {(current?.options || []).map((opt, idx) => {
-            const selected = answers[current?.id || ""] === idx;
+            const selected = getChoice(answers[current?.id || ""]) === idx;
             return (
               <button
                 key={idx}
@@ -417,6 +461,22 @@ export default function ExamRunner(props: {
             );
           })}
         </div>
+
+        {isPractice && current?.id ? (
+          <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3">
+            <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">Your reasoning</div>
+            <p className="mt-1 text-xs text-slate-600">
+              Optional. Write your thinking so you can compare it with the model rationale later.
+            </p>
+            <textarea
+              value={getJustification(answers[current.id])}
+              onChange={(e) => setPracticeJustification(current.id, e.target.value)}
+              rows={4}
+              placeholder="Explain your reasoning in plain language."
+              className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-inner focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500"
+            />
+          </div>
+        ) : null}
 
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
           <button

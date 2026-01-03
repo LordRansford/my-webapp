@@ -14,7 +14,7 @@ import { getActiveCourseVersion } from "@/lib/cpd/courseVersion";
 
 type Body = {
   sessionId?: string;
-  answers?: Record<string, number | number[] | string | null>;
+  answers?: Record<string, any>;
 };
 
 function safeJsonString(value: any) {
@@ -25,21 +25,34 @@ function safeJsonString(value: any) {
   }
 }
 
+function extractChoice(raw: any) {
+  if (raw == null) return null;
+  if (typeof raw === "number" || typeof raw === "string") return raw;
+  if (Array.isArray(raw)) return raw;
+  if (typeof raw === "object") {
+    const c = (raw as any).choice;
+    if (typeof c === "number" || typeof c === "string") return c;
+    if (Array.isArray(c)) return c;
+  }
+  return null;
+}
+
 function scoreAttempt(params: {
   questions: Array<{ id: string; correctAnswer: string; options?: string | null }>;
-  answers: Record<string, number | number[] | string | null>;
+  answers: Record<string, any>;
 }) {
   let correct = 0;
   const perQuestion: Array<{ questionId: string; correct: boolean; answer: any }> = [];
   for (const q of params.questions) {
     const raw = params.answers[q.id];
+    const choice = extractChoice(raw);
     const expected = JSON.parse(q.correctAnswer) as any;
     let ok = false;
-    if (typeof expected === "number" && typeof raw === "number" && raw === expected) ok = true;
-    if (typeof expected === "string" && typeof raw === "string" && raw === expected) ok = true;
-    if (Array.isArray(expected) && Array.isArray(raw)) {
+    if (typeof expected === "number" && typeof choice === "number" && choice === expected) ok = true;
+    if (typeof expected === "string" && typeof choice === "string" && choice === expected) ok = true;
+    if (Array.isArray(expected) && Array.isArray(choice)) {
       const a = expected.slice().sort().join("|");
-      const b = raw.slice().sort().join("|");
+      const b = choice.slice().sort().join("|");
       if (a === b) ok = true;
     }
     if (ok) correct += 1;
@@ -211,13 +224,14 @@ export async function POST(req: Request) {
 
     const review = ordered.map((q) => {
       const userAnswer = answers[q.id];
+      const choice = extractChoice(userAnswer);
       const expected = JSON.parse(q.correctAnswer);
       const ok =
-        (typeof expected === "number" && typeof userAnswer === "number" && userAnswer === expected) ||
-        (typeof expected === "string" && typeof userAnswer === "string" && userAnswer === expected) ||
+        (typeof expected === "number" && typeof choice === "number" && choice === expected) ||
+        (typeof expected === "string" && typeof choice === "string" && choice === expected) ||
         (Array.isArray(expected) &&
-          Array.isArray(userAnswer) &&
-          expected.slice().sort().join("|") === userAnswer.slice().sort().join("|"));
+          Array.isArray(choice) &&
+          expected.slice().sort().join("|") === choice.slice().sort().join("|"));
 
       return {
         id: q.id,
