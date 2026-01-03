@@ -7,11 +7,11 @@
   "pages": {
     "/studios/docs-data-lab": [
       "static/chunks/6bd1b060cc02463e.js",
-      "static/chunks/3a7b6bf806ba3f0e.js",
+      "static/chunks/1279ecff198d9934.js",
       "static/chunks/f0f43ebb724b8b11.js",
       "static/chunks/01073211ade0ab07.js",
       "static/chunks/d1ea35920c32a766.js",
-      "static/chunks/turbopack-3a7eb0945d26a475.js"
+      "static/chunks/turbopack-8d600d485ae4425e.js"
     ]
   },
   "ampFirstPages": []

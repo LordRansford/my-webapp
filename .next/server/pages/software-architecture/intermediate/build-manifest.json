@@ -6,7 +6,7 @@
   "rootMainFiles": [],
   "pages": {
     "/software-architecture/intermediate": [
-      "static/chunks/9fb58960162791b6.js",
+      "static/chunks/1d0d9f7ea679c378.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/2fcd2aa21d8c3e53.js",
       "static/chunks/48c11802c3f193fa.js",
@@ -17,7 +17,7 @@
       "static/chunks/79ef764a2bfa63a8.js",
       "static/chunks/f0f43ebb724b8b11.js",
       "static/chunks/1df8b41d1be5fa38.js",
-      "static/chunks/turbopack-ce46900946588771.js"
+      "static/chunks/turbopack-3a508ba68821343a.js"
     ]
   },
   "ampFirstPages": []

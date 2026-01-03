@@ -1,0 +1,46 @@
+---
+title: "Network models summary"
+description: "A tight recap of OSI and TCP IP with a practice checklist."
+level: "Summary"
+---
+
+import ProgressBar from "@/components/notes/ProgressBar"
+import Callout from "@/components/notes/Callout"
+import QuizBlock from "@/components/notes/QuizBlock"
+import PageNav from "@/components/notes/PageNav"
+
+<ProgressBar mode="scroll" />
+
+# Summary
+
+This page is a recap. It is designed to be short.
+
+## The smallest set of terms that must be correct
+
+1. A protocol is a set of rules for exchanging data.
+2. Encapsulation wraps data with headers as it moves down the stack.
+3. A frame carries a packet. A packet carries a segment or datagram.
+4. DNS maps names to records such as IP addresses.
+5. TLS protects data in transit. It does not make the application safe by itself.
+
+## A troubleshooting checklist you can reuse
+
+1. State the symptom.
+2. State what success looks like.
+3. Test one boundary at a time.
+4. Record evidence.
+5. Keep assumptions explicit.
+
+<Callout variant="concept">
+If you are stuck, do not jump layers. Prove the lower layers first, then move up.
+</Callout>
+
+<QuizBlock
+  title="Quick check"
+  questions={[
+    { q: "What does encapsulation add", a: "Headers and sometimes trailers." },
+    { q: "What does routing decide", a: "The next hop for a destination network." },
+    { q: "What does TLS not do", a: "It does not fix broken authorisation or unsafe application logic." },
+  ]}
+/>
+

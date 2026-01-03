@@ -1,0 +1,165 @@
+---
+title: "OSI and TCP IP Foundations"
+description: "Encapsulation, addressing, and network models with precise terms and safe labs."
+level: "foundations"
+courseId: "network-models"
+levelId: "foundations"
+summary: "Encapsulation, addressing, and the purpose of layers, explained with exact terms and safe labs."
+estimatedHours: 10
+learningObjectives:
+  - "Explain what a protocol is and what a model is, using clear boundaries."
+  - "Explain encapsulation and decapsulation using correct PDU names."
+  - "Map OSI layers to TCP IP layers and explain the limits of the mapping."
+  - "Describe DNS and HTTPS flows in the right order."
+---
+
+import ProgressBar from "@/components/notes/ProgressBar"
+import PageNav from "@/components/notes/PageNav"
+import ToolCard from "@/components/notes/ToolCard"
+import Callout from "@/components/notes/Callout"
+import GlossaryTip from "@/components/notes/GlossaryTip"
+import QuizBlock from "@/components/notes/QuizBlock"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import SectionHeader from "@/components/course/SectionHeader"
+import SubsectionHeader from "@/components/course/SubsectionHeader"
+import BodyText from "@/components/course/BodyText"
+import DiagramBlock from "@/components/DiagramBlock"
+import { networkSectionManifest } from "@/lib/networkSections"
+
+<ProgressBar mode="scroll" />
+
+# OSI and TCP IP Foundations
+
+<LevelProgressBar courseId="network-models" levelId="foundations" sectionIds={networkSectionManifest.foundations} />
+
+<CPDTracker courseId="network-models" levelId="foundations" estimatedHours={10} />
+
+<BodyText>
+  I use OSI and TCP IP as thinking tools. They help me describe what is happening without guessing.
+  They also help me talk to other people in a consistent way. The models are not the network.
+  They are a way to structure what we observe.
+</BodyText>
+
+---
+
+<SectionHeader variant="content" emoji="🧭" id="net-foundations-why-models-exist">
+  Why models exist
+</SectionHeader>
+
+<SectionProgressToggle courseId="network-models" levelId="foundations" sectionId="net-foundations-why-models-exist" />
+
+A <GlossaryTip term="protocol">protocol</GlossaryTip> is a set of rules that two systems follow so they can exchange data.
+Rules include message formats, required fields, timing expectations, and error handling.
+
+A <GlossaryTip term="model">model</GlossaryTip> is a simplified way to describe a complex system.
+OSI and TCP IP are models that group networking behaviour into layers.
+
+The key idea is separation. I can talk about physical signals without mixing it up with DNS.
+I can also troubleshoot systematically.
+
+---
+
+<SectionHeader variant="content" emoji="🧩" id="net-foundations-encapsulation-and-pdus">
+  Encapsulation and protocol data units
+</SectionHeader>
+
+<SectionProgressToggle courseId="network-models" levelId="foundations" sectionId="net-foundations-encapsulation-and-pdus" />
+
+Encapsulation is the process of wrapping data as it moves down the stack.
+Each layer adds its own header. Some layers also add a trailer.
+Decapsulation is the reverse process on the receiving side.
+
+These names matter:
+
+1. **Application data** is the message as your program thinks about it.
+2. A TCP <GlossaryTip term="segment">segment</GlossaryTip> or a UDP <GlossaryTip term="datagram">datagram</GlossaryTip> carries the application data plus a transport header.
+3. An IP <GlossaryTip term="packet">packet</GlossaryTip> carries the transport data plus an IP header.
+4. A link layer <GlossaryTip term="frame">frame</GlossaryTip> carries the IP packet plus a link header and trailer.
+
+<ToolCard title="Encapsulation lab" description="Turn one scenario into a correct layered explanation.">
+  <EncapsulationLab />
+</ToolCard>
+
+---
+
+<SectionHeader variant="content" emoji="🗺️" id="net-foundations-osi-and-tcpip-mapping">
+  OSI and TCP IP mapping
+</SectionHeader>
+
+<SectionProgressToggle courseId="network-models" levelId="foundations" sectionId="net-foundations-osi-and-tcpip-mapping" />
+
+OSI is a seven layer conceptual model.
+TCP IP is a suite of protocols organised into fewer layers.
+People map OSI to TCP IP because it is convenient for learning.
+
+The mapping is useful, but it has limits.
+Some protocols span boundaries. Some implementations bundle responsibilities differently.
+Treat the mapping as a guide, not a law.
+
+<ToolCard title="Map OSI to TCP IP" description="A short exercise to build the correct mental model.">
+  <OsiTcpIpMapperTool />
+</ToolCard>
+
+---
+
+<SectionHeader variant="content" emoji="🔎" id="net-foundations-addressing-and-names">
+  Addresses and names
+</SectionHeader>
+
+<SectionProgressToggle courseId="network-models" levelId="foundations" sectionId="net-foundations-addressing-and-names" />
+
+Networks use more than one kind of identifier.
+
+1. **A MAC address** identifies a network interface on a local link.
+2. **An IP address** identifies an endpoint for routing across networks.
+3. **A port number** identifies a service on a host.
+4. **A domain name** is a human friendly identifier that maps to IP addresses through DNS.
+
+If I know which identifier is wrong, I can narrow the fault quickly.
+
+---
+
+<SectionHeader variant="content" emoji="🌍" id="net-foundations-requests-from-browser-to-server">
+  A request from browser to server
+</SectionHeader>
+
+<SectionProgressToggle courseId="network-models" levelId="foundations" sectionId="net-foundations-requests-from-browser-to-server" />
+
+This is a common flow when you load an HTTPS page.
+
+1. Browser resolves the domain name using DNS.
+2. Browser opens a TCP connection to the server IP and port 443.
+3. Browser and server negotiate TLS and verify the certificate.
+4. Browser sends an HTTP request inside the TLS protected connection.
+5. Server responds with an HTTP response inside the same connection.
+
+<DiagramBlock title="A plain flow you can memorise" subtitle="When you know the order, you stop guessing.">
+  <div className="text-xs sm:text-sm leading-5 space-y-2">
+    <div>DNS lookup → TCP connect → TLS handshake → HTTP request → HTTP response</div>
+    <div className="text-slate-700">Each arrow has evidence you can observe in DevTools or with command line tools.</div>
+  </div>
+</DiagramBlock>
+
+---
+
+<SectionHeader variant="content" emoji="✅" id="net-foundations-foundations-capstone">
+  Foundations capstone
+</SectionHeader>
+
+<SectionProgressToggle courseId="network-models" levelId="foundations" sectionId="net-foundations-foundations-capstone" />
+
+Write a short explanation of what happens when you load one HTTPS page.
+Use the five step flow above.
+Use correct terms. If you are unsure, state the assumption.
+
+<QuizBlock
+  title="Quick check"
+  questions={[
+    { q: "What is encapsulation", a: "Adding headers and sometimes trailers as data moves down the stack." },
+    { q: "What is a TCP segment", a: "Transport layer data made of a TCP header plus payload." },
+    { q: "What does DNS do", a: "It maps names to records such as IP addresses using queries and responses." },
+  ]}
+/>
+

@@ -6,7 +6,7 @@
   "rootMainFiles": [],
   "pages": {
     "/data": [
-      "static/chunks/2593aabbe896b509.js",
+      "static/chunks/2ee3d93c72792c73.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/2fcd2aa21d8c3e53.js",
       "static/chunks/48c11802c3f193fa.js",
@@ -16,7 +16,7 @@
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/79ef764a2bfa63a8.js",
       "static/chunks/999d695b5baa4b77.js",
-      "static/chunks/turbopack-ff1492033f4e18a2.js"
+      "static/chunks/turbopack-4907f8a3180f526f.js"
     ]
   },
   "ampFirstPages": []

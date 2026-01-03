@@ -86,6 +86,7 @@ const parseJsonCourse = (fileName) => {
 };
 
 const COURSE_TRACK_ORDER = [
+  "network-models",
   "cybersecurity",
   "ai",
   "software-architecture",
@@ -96,6 +97,7 @@ const COURSE_TRACK_ORDER = [
 const COURSE_TRACK_ROUTES = {
   ai: "/ai",
   cybersecurity: "/cybersecurity",
+  "network-models": "/network-models",
   data: "/data",
   digitalisation: "/digitalisation",
   "software-architecture": "/software-architecture",
@@ -113,6 +115,12 @@ const COURSE_TRACK_LEVEL_ROUTES = {
     intermediate: "/cybersecurity/intermediate",
     advanced: "/cybersecurity/advanced",
     summary: "/cybersecurity/summary",
+  },
+  "network-models": {
+    foundations: "/network-models/beginner",
+    intermediate: "/network-models/intermediate",
+    advanced: "/network-models/advanced",
+    summary: "/network-models/summary",
   },
   data: {
     foundations: "/data/foundations",

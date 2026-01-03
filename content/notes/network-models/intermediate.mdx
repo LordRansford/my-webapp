@@ -1,0 +1,178 @@
+---
+title: "Applied OSI and TCP IP"
+description: "TCP, UDP, routing, NAT, and TLS, with realistic troubleshooting."
+level: "applied"
+courseId: "network-models"
+levelId: "applied"
+summary: "Layer by layer behaviour with TCP, UDP, routing, NAT, and TLS, with realistic troubleshooting."
+estimatedHours: 14
+learningObjectives:
+  - "Explain TCP reliability using clear terms and measurable outcomes."
+  - "Explain UDP trade offs and name realistic use cases."
+  - "Explain routing and forwarding with correct boundaries."
+  - "Explain NAT behaviour and common failure modes."
+---
+
+import ProgressBar from "@/components/notes/ProgressBar"
+import PageNav from "@/components/notes/PageNav"
+import ToolCard from "@/components/notes/ToolCard"
+import Callout from "@/components/notes/Callout"
+import GlossaryTip from "@/components/notes/GlossaryTip"
+import QuizBlock from "@/components/notes/QuizBlock"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import SectionHeader from "@/components/course/SectionHeader"
+import SubsectionHeader from "@/components/course/SubsectionHeader"
+import BodyText from "@/components/course/BodyText"
+import DiagramBlock from "@/components/DiagramBlock"
+import { networkSectionManifest } from "@/lib/networkSections"
+
+<ProgressBar mode="scroll" />
+
+# Applied OSI and TCP IP
+
+<LevelProgressBar courseId="network-models" levelId="applied" sectionIds={networkSectionManifest.applied} />
+
+<CPDTracker courseId="network-models" levelId="applied" estimatedHours={14} />
+
+<BodyText>
+  In foundations we built language and the basic flow. Here we get more exact about behaviour.
+  We focus on what you can prove using inspection, not what you can recite.
+</BodyText>
+
+---
+
+<SectionHeader variant="content" emoji="🧵" id="net-applied-tcp-reliability-and-flow">
+  TCP reliability and flow
+</SectionHeader>
+
+<SectionProgressToggle courseId="network-models" levelId="applied" sectionId="net-applied-tcp-reliability-and-flow" />
+
+TCP provides a reliable byte stream between two endpoints.
+Reliable means three specific things.
+
+1. Data is delivered in order.
+2. Data is retransmitted if it is lost.
+3. Data is protected against corruption using checksums.
+
+TCP also manages flow control so a fast sender does not overwhelm a slow receiver.
+It also performs congestion control so the network is not overwhelmed.
+
+<ToolCard title="TCP handshake timeline" description="A minimal handshake with sequence and acknowledgement numbers.">
+  <TcpHandshakeTimelineTool />
+</ToolCard>
+
+---
+
+<SectionHeader variant="content" emoji="⚡" id="net-applied-udp-and-real-world-trade-offs">
+  UDP and real world trade offs
+</SectionHeader>
+
+<SectionProgressToggle courseId="network-models" levelId="applied" sectionId="net-applied-udp-and-real-world-trade-offs" />
+
+UDP is a connectionless transport.
+It sends datagrams. It does not provide ordering or retransmission.
+
+This is not always a weakness.
+Some applications implement reliability themselves.
+Some applications prefer timeliness over perfect delivery.
+
+Examples you will see often:
+
+1. DNS commonly uses UDP for queries.
+2. Real time audio and video often uses UDP based transports.
+3. Modern web transports can run over UDP based protocols such as QUIC.
+
+---
+
+<SectionHeader variant="content" emoji="🧭" id="net-applied-routing-and-forwarding">
+  Routing and forwarding
+</SectionHeader>
+
+<SectionProgressToggle courseId="network-models" levelId="applied" sectionId="net-applied-routing-and-forwarding" />
+
+Routing is how a device decides which next hop to use for a destination.
+Forwarding is the act of moving a packet from one interface to another based on that decision.
+
+Switching is different.
+A switch forwards frames inside a local network using MAC addresses.
+A router forwards packets across networks using IP addresses.
+
+This is why you can have a perfect Wi Fi link and still fail to reach a remote site.
+
+---
+
+<SectionHeader variant="content" emoji="🔁" id="net-applied-nat-and-state">
+  NAT and state
+</SectionHeader>
+
+<SectionProgressToggle courseId="network-models" levelId="applied" sectionId="net-applied-nat-and-state" />
+
+Network Address Translation changes addresses as packets pass through a device.
+The most common pattern is translating many private addresses to one public address.
+
+NAT is not the same thing as a firewall.
+Many devices combine NAT with stateful filtering, which is why people confuse them.
+
+Common failure patterns:
+
+1. The mapping expires and breaks a long lived flow.
+2. A port is reused and traffic is delivered to the wrong internal endpoint.
+3. An inbound flow is blocked because there is no mapping and no explicit rule.
+
+---
+
+<SectionHeader variant="content" emoji="🔐" id="net-applied-tls-where-it-sits">
+  TLS and where it sits
+</SectionHeader>
+
+<SectionProgressToggle courseId="network-models" levelId="applied" sectionId="net-applied-tls-where-it-sits" />
+
+TLS is the protocol most people mean when they say HTTPS.
+TLS provides confidentiality and integrity for application data.
+
+OSI explanations often place TLS in the presentation layer because it is about encoding and protection of data.
+In TCP IP practice, TLS is usually treated as part of the application layer stack because it is above the transport layer.
+
+This is the key point.
+Layer models describe responsibilities. They do not force a protocol to live in one place forever.
+
+---
+
+<SectionHeader variant="content" emoji="🧪" id="net-applied-troubleshooting-method">
+  A troubleshooting method you can repeat
+</SectionHeader>
+
+<SectionProgressToggle courseId="network-models" levelId="applied" sectionId="net-applied-troubleshooting-method" />
+
+My method is simple.
+
+1. State the user visible symptom in one sentence.
+2. State what success would look like.
+3. Pick the smallest test that isolates one layer boundary.
+4. Record the result and update your hypothesis.
+
+When you do this, you stop jumping straight to rare causes.
+
+---
+
+<SectionHeader variant="content" emoji="✅" id="net-applied-applied-capstone">
+  Applied capstone
+</SectionHeader>
+
+<SectionProgressToggle courseId="network-models" levelId="applied" sectionId="net-applied-applied-capstone" />
+
+Pick one real page you trust. Use a browser.
+Write down the DNS step, the TCP step, and the TLS step.
+For each step, write one observation you could use as evidence.
+
+<QuizBlock
+  title="Quick check"
+  questions={[
+    { q: "What does TCP reliability mean", a: "In order delivery plus retransmission on loss plus corruption detection." },
+    { q: "What does routing decide", a: "The next hop for a destination network." },
+    { q: "Is NAT a firewall", a: "No. NAT changes addresses. A firewall applies policy, sometimes using state." },
+  ]}
+/>
+

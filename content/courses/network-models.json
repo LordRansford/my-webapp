@@ -1,0 +1,61 @@
+{
+  "id": "network-models",
+  "slug": "network-models",
+  "title": "OSI and TCP IP Network Models",
+  "shortTitle": "Network Models",
+  "description": "My deep, practical guide to how network communication works, using OSI and TCP IP as mental models you can actually apply for troubleshooting and security.",
+  "totalEstimatedHours": 40,
+  "section": "network-models",
+  "overview_route": "/network-models",
+  "summary_route": "/network-models/summary",
+  "levels": [
+    {
+      "id": "foundations",
+      "title": "OSI and TCP IP Foundations",
+      "label": "Foundations",
+      "route": "/network-models/beginner",
+      "estimatedHours": 10,
+      "summary": "Encapsulation, addressing, and the purpose of layers, explained with exact terms and safe labs.",
+      "learning_outcomes": [
+        "Explain what a protocol is and what a network model is, using precise definitions.",
+        "Explain encapsulation and decapsulation using correct protocol data unit names.",
+        "Map OSI layers to TCP IP layers and explain what the mapping does and does not mean.",
+        "Describe how DNS, HTTP, and HTTPS fit into a real request flow.",
+        "Use browser and command line inspection to observe DNS, TLS, and HTTP behaviour safely."
+      ],
+      "pages": ["/network-models/beginner"]
+    },
+    {
+      "id": "applied",
+      "title": "Applied OSI and TCP IP",
+      "label": "Applied",
+      "route": "/network-models/intermediate",
+      "estimatedHours": 14,
+      "summary": "Layer by layer behaviour with TCP, UDP, routing, NAT, and TLS, with realistic troubleshooting.",
+      "learning_outcomes": [
+        "Explain how TCP provides reliability and what reliability means in measurable terms.",
+        "Explain UDP trade offs and name common protocols that use it and why.",
+        "Explain what routing is and how IP forwarding differs from switching.",
+        "Explain what NAT changes and what it does not change, with common failure modes.",
+        "Use a structured troubleshooting method to isolate a fault to a layer and prove it."
+      ],
+      "pages": ["/network-models/intermediate"]
+    },
+    {
+      "id": "practice",
+      "title": "Network Models for Security and Operations",
+      "label": "Practice & Strategy",
+      "route": "/network-models/advanced",
+      "estimatedHours": 16,
+      "summary": "Security, monitoring, and operations thinking built on correct network foundations, without unsafe attacking.",
+      "learning_outcomes": [
+        "Explain how common security failures map onto layers and where controls actually apply.",
+        "Design a minimal logging and monitoring plan for a web service using layer aware signals.",
+        "Explain how to reason about packet captures without turning learning into exploitation.",
+        "Describe common enterprise controls such as segmentation, least privilege network access, and secure DNS.",
+        "Produce a defensible network troubleshooting write up with evidence and clear assumptions."
+      ],
+      "pages": ["/network-models/advanced"]
+    }
+  ]
+}

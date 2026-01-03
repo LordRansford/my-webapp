@@ -6,7 +6,7 @@
   "rootMainFiles": [],
   "pages": {
     "/digitalisation/beginner": [
-      "static/chunks/491378ffaaa5e2d1.js",
+      "static/chunks/95e53a5cbb016ec4.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/2fcd2aa21d8c3e53.js",
       "static/chunks/48c11802c3f193fa.js",
@@ -17,7 +17,7 @@
       "static/chunks/79ef764a2bfa63a8.js",
       "static/chunks/f0f43ebb724b8b11.js",
       "static/chunks/1df8b41d1be5fa38.js",
-      "static/chunks/turbopack-7916bef75b4b2fb9.js"
+      "static/chunks/turbopack-a72e2b4c38f0c59a.js"
     ]
   },
   "ampFirstPages": []

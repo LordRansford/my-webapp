@@ -6,7 +6,7 @@
   "rootMainFiles": [],
   "pages": {
     "/digitalisation/intermediate": [
-      "static/chunks/e5ddb47e4ced451a.js",
+      "static/chunks/7ba7eff6d6bd8381.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/2fcd2aa21d8c3e53.js",
       "static/chunks/48c11802c3f193fa.js",
@@ -17,7 +17,7 @@
       "static/chunks/79ef764a2bfa63a8.js",
       "static/chunks/f0f43ebb724b8b11.js",
       "static/chunks/1df8b41d1be5fa38.js",
-      "static/chunks/turbopack-cc802132b822d9c2.js"
+      "static/chunks/turbopack-10d6fafadb041a04.js"
     ]
   },
   "ampFirstPages": []

@@ -1,0 +1,8 @@
+__turbopack_load_page_chunks__("/dev-studio/enterprise/adr", [
+  "static/chunks/6bd1b060cc02463e.js",
+  "static/chunks/f0f43ebb724b8b11.js",
+  "static/chunks/d1ea35920c32a766.js",
+  "static/chunks/01073211ade0ab07.js",
+  "static/chunks/0d396f4a0e5995f4.js",
+  "static/chunks/turbopack-9b1e537a6e0b907c.js"
+])

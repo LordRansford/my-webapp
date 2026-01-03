@@ -1,0 +1,8 @@
+__turbopack_load_page_chunks__("/cyber-studios", [
+  "static/chunks/6bd1b060cc02463e.js",
+  "static/chunks/f0f43ebb724b8b11.js",
+  "static/chunks/01073211ade0ab07.js",
+  "static/chunks/d1ea35920c32a766.js",
+  "static/chunks/5b9be8ff1b733c6f.js",
+  "static/chunks/turbopack-ccc3ccc284fd4269.js"
+])

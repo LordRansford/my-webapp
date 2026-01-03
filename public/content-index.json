@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-03T13:05:26.236Z",
+  "generatedAt": "2026-01-03T13:35:26.791Z",
   "pages": [
     {
       "route": "/courses/_cpd-checklist",
@@ -584,6 +584,49 @@
           "excerpt": "Use the tools below to plan your next learning sprint and log the hours for CPD."
         }
       ]
+    },
+    {
+      "route": "/courses/network-models/advanced",
+      "title": "Practice and strategy",
+      "sourcePath": "/content/courses/network-models/advanced.mdx",
+      "sections": []
+    },
+    {
+      "route": "/courses/network-models/course",
+      "title": "OSI and TCP IP course",
+      "sourcePath": "/content/courses/network-models/course.mdx",
+      "sections": [
+        {
+          "depth": 2,
+          "title": "What this course focuses on",
+          "anchor": "what-this-course-focuses-on",
+          "excerpt": "1. Correct terms and careful definitions 2. Encapsulation and protocol data units 3. TCP and UDP behaviour you can explain 4. Troubleshooting with evidence 5. Security controls placed at the right layer"
+        },
+        {
+          "depth": 2,
+          "title": "How to study it",
+          "anchor": "how-to-study-it",
+          "excerpt": "1. Read one section 2. Use one lab 3. Write down what you observed"
+        }
+      ]
+    },
+    {
+      "route": "/courses/network-models/foundations",
+      "title": "Foundations",
+      "sourcePath": "/content/courses/network-models/foundations.mdx",
+      "sections": []
+    },
+    {
+      "route": "/courses/network-models/intermediate",
+      "title": "Applied",
+      "sourcePath": "/content/courses/network-models/intermediate.mdx",
+      "sections": []
+    },
+    {
+      "route": "/courses/network-models/summary",
+      "title": "Summary",
+      "sourcePath": "/content/courses/network-models/summary.mdx",
+      "sections": []
     },
     {
       "route": "/courses/software-architecture/advanced/compliance-architectures",
@@ -3898,6 +3941,43 @@
           "title": "Reflection and next steps",
           "anchor": "reflection-and-next-steps",
           "excerpt": "questions={[ { q: \"What is the most important difference between digitalisation and buying new technology?\", a: \"Digitalisation changes how value is created through people, processes, data, and technology together, not just acquiring tools.\" }, { q: \"Why does thinking in ecosystems matter at the advanced level?\", a: \"Because services, data, and risks span ma"
+        }
+      ]
+    },
+    {
+      "route": "/notes/network-models/advanced",
+      "title": "Network Models for Security and Operations",
+      "sourcePath": "/content/notes/network-models/advanced.mdx",
+      "sections": []
+    },
+    {
+      "route": "/notes/network-models/foundations",
+      "title": "OSI and TCP IP Foundations",
+      "sourcePath": "/content/notes/network-models/foundations.mdx",
+      "sections": []
+    },
+    {
+      "route": "/notes/network-models/intermediate",
+      "title": "Applied OSI and TCP IP",
+      "sourcePath": "/content/notes/network-models/intermediate.mdx",
+      "sections": []
+    },
+    {
+      "route": "/notes/network-models/summary",
+      "title": "Network models summary",
+      "sourcePath": "/content/notes/network-models/summary.mdx",
+      "sections": [
+        {
+          "depth": 2,
+          "title": "The smallest set of terms that must be correct",
+          "anchor": "the-smallest-set-of-terms-that-must-be-correct",
+          "excerpt": "1. A protocol is a set of rules for exchanging data. 2. Encapsulation wraps data with headers as it moves down the stack. 3. A frame carries a packet. A packet carries a segment or datagram. 4. DNS maps names to records such as IP addresses. 5. TLS protects data in transit. It does not make the application safe by itself."
+        },
+        {
+          "depth": 2,
+          "title": "A troubleshooting checklist you can reuse",
+          "anchor": "a-troubleshooting-checklist-you-can-reuse",
+          "excerpt": "1. State the symptom. 2. State what success looks like. 3. Test one boundary at a time. 4. Record evidence. 5. Keep assumptions explicit."
         }
       ]
     },

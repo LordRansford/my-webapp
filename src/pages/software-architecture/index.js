@@ -103,9 +103,11 @@ export default function ArchitectureHub() {
               href: "/software-architecture/beginner",
             }}
             secondaryActions={[
-              { label: "Track CPD", href: "/my-cpd" },
-              { label: "Export CPD evidence", href: "/my-cpd/evidence" },
+              { label: "Pricing and CPD", href: "/pricing" },
+              { label: "Sign in for CPD tracking", href: "/signin" },
+              { label: "My CPD evidence", href: "/my-cpd/evidence" },
               { label: "Open dashboards", href: "/dashboards/architecture" },
+              { label: "Open the labs", href: "/tools" },
             ]}
             icon={<Layers size={20} />}
             gradient="purple"

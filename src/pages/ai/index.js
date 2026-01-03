@@ -66,11 +66,14 @@ function StartButton() {
       <Link href="/ai/beginner" className="button primary">
         Start with Foundations
       </Link>
-      <Link href="/my-cpd" className="button ghost">
-        Track CPD
+      <Link href="/pricing" className="button ghost">
+        Pricing and CPD
+      </Link>
+      <Link href="/signin" className="button ghost">
+        Sign in for CPD tracking
       </Link>
       <Link href="/my-cpd/evidence" className="button ghost">
-        Export CPD evidence
+        My CPD evidence
       </Link>
       <Link href="/dashboards/ai" className="button ghost">
         Open dashboards
