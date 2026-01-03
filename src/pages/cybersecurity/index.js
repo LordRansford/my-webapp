@@ -19,6 +19,7 @@ import { ErrorBoundary } from "@/components/notes/ErrorBoundary";
 import CPDTracker from "@/components/CPDTracker";
 import AchievementsDashboard from "@/components/notes/AchievementsDashboard";
 import LearningPathSelector from "@/components/notes/LearningPathSelector";
+import WhatsNewBanner from "@/components/notes/WhatsNewBanner";
 
 const SecurityHabitPlannerTool = dynamic(() => import("@/components/notes/tools/cybersecurity/overview/SecurityHabitPlannerTool"), { ssr: false });
 
@@ -151,6 +152,7 @@ export default function CybersecurityOverviewPage({ source, headings }) {
       SecurityHabitPlannerTool,
       AchievementsDashboard,
       LearningPathSelector,
+      WhatsNewBanner,
     }),
     []
   );
