@@ -8,8 +8,57 @@ function qid(prefix, n) {
   return `${prefix}-q${String(n).padStart(2, "0")}`;
 }
 
+function domainFromTags(tags, levelId) {
+  const raw = String(tags || "").toLowerCase();
+  if (raw.includes("domain:")) {
+    const m = raw.match(/domain:([a-z0-9-]+)/);
+    if (m && m[1]) return m[1];
+  }
+
+  const has = (needle) => raw.includes(needle);
+  const any = (list) => list.some((x) => has(x));
+
+  if (levelId === "applied") {
+    if (any(["logging", "audit"])) return "logging";
+    if (has("secrets")) return "secrets";
+    if (any(["cloud", "metadata"])) return "cloud";
+    if (any(["jwt", "oauth", "api", "idempotency"])) return "api";
+    if (any(["xss", "csrf", "sql", "csp", "hsts", "headers", "uploads", "clickjacking", "owasp", "ssrf"])) return "web";
+    if (any(["auth", "access-control", "authorisation", "authentication"])) return "auth";
+    return "web";
+  }
+
+  if (levelId === "practice") {
+    if (any(["sdlc", "sast", "gate", "review"])) return "sdlc";
+    if (has("zero-trust")) return "zero-trust";
+    if (any(["runtime", "egress"])) return "runtime";
+    if (any(["vuln", "cvss", "triage", "patch"])) return "vulnerability";
+    if (any(["detection", "alert"])) return "detection";
+    if (any(["governance", "audit", "policy", "kpi", "exception", "privacy"])) return "governance";
+    return "sdlc";
+  }
+
+  // foundations default
+  if (any(["authn", "authz", "mfa", "password", "iam", "least-privilege", "accounts", "access"])) return "identity";
+  if (any(["dns", "network", "firewall", "wifi", "vpn", "segmentation", "ports", "packet"])) return "network";
+  if (any(["tls", "crypto", "encryption", "hash", "hashing", "keys", "kms", "secrets"])) return "crypto";
+  if (any(["incident", "response", "logging", "monitoring", "backup", "ransomware"])) return "response";
+  if (any(["risk", "metrics"])) return "risk";
+  if (any(["privacy", "retention", "consent"])) return "privacy";
+  if (any(["supply-chain", "sbom", "dependency"])) return "supply-chain";
+  if (any(["cia", "basics", "principles", "malware", "threat-model"])) return "basics";
+
+  return "basics";
+}
+
 function mcq({ id, question, options, correctIndex, explanation, tags, bloomLevel }) {
-  const versionedTags = [tags, `v:${COURSE_VERSION}`, "published"].filter(Boolean).join(", ");
+  const levelId = String(id || "").includes("cyber-applied")
+    ? "applied"
+    : String(id || "").includes("cyber-practice")
+      ? "practice"
+      : "foundations";
+  const domain = domainFromTags(tags, levelId);
+  const versionedTags = [tags, `domain:${domain}`, `v:${COURSE_VERSION}`, "published"].filter(Boolean).join(", ");
   return {
     id,
     type: "MCQ",
@@ -183,6 +232,304 @@ const practice = [
   mcq({ id: qid("cyber-practice", 50), bloomLevel: 5, tags: "capstone,pack", question: "A strong operational security pack should include", options: ["Scope, risks, controls, verification, and evidence plan", "Only a slogan", "Only a list of tools", "Only a budget"], correctIndex: 0, explanation: "A pack is defensible when it clearly defines scope, top risks, chosen controls, how you verify, and what evidence you keep.", }),
 ];
 
+function addGeneratedQuestions(params) {
+  const out = [];
+  let n = params.start;
+  for (const spec of params.specs) {
+    out.push(
+      mcq({
+        id: qid(params.prefix, n),
+        bloomLevel: spec.bloomLevel,
+        tags: spec.tags,
+        question: spec.question,
+        options: spec.options,
+        correctIndex: spec.correctIndex,
+        explanation: spec.explanation,
+      }),
+    );
+    n += 1;
+  }
+  return out;
+}
+
+function buildExtraFoundations() {
+  const specs = [];
+
+  const identityScenarios = [
+    "A team shares one admin login for convenience",
+    "A user reports repeated MFA prompts they did not start",
+    "A contractor still has access after their end date",
+    "A finance inbox receives a password reset email that was not requested",
+    "A service account has access to every database table",
+    "A manager asks for credentials to be emailed for handover",
+  ];
+  for (const s of identityScenarios) {
+    specs.push({
+      bloomLevel: 3,
+      tags: "accounts,access,identity",
+      question: `${s}. What is the best first improvement`,
+      options: ["Use least privilege and remove shared credentials", "Disable logging", "Remove backups", "Make passwords shorter"],
+      correctIndex: 0,
+      explanation: "Shared or excessive access increases blast radius. Start by fixing identity and privilege before tuning other controls.",
+    });
+  }
+
+  const networkScenarios = [
+    "A small business router still uses the default admin password",
+    "A database port is open to the internet for quick testing",
+    "Staff regularly use public WiFi without thinking about it",
+    "A service allows any inbound traffic on a wide port range",
+    "A legacy system cannot be patched for three months",
+  ];
+  for (const s of networkScenarios) {
+    specs.push({
+      bloomLevel: 3,
+      tags: "network,exposure",
+      question: `${s}. What action most directly reduces attack surface`,
+      options: ["Restrict exposure with firewall rules and segmentation", "Add more ports for flexibility", "Disable TLS", "Stop collecting logs"],
+      correctIndex: 0,
+      explanation: "Reducing exposure lowers the number of reachable attack paths. Firewalls and segmentation reduce reachable services.",
+    });
+  }
+
+  const cryptoScenarios = [
+    "An API key is embedded in client side JavaScript",
+    "A team stores database passwords in a shared spreadsheet",
+    "A reset token never expires",
+    "A private key is copied between servers manually",
+    "An application uses HTTP for internal traffic because it is trusted",
+  ];
+  for (const s of cryptoScenarios) {
+    specs.push({
+      bloomLevel: 3,
+      tags: "secrets,crypto",
+      question: `${s}. What is the best security principle to apply`,
+      options: ["Protect secrets and encrypt data in transit", "Assume internal traffic is always safe", "Log secrets for debugging", "Reuse the same key everywhere"],
+      correctIndex: 0,
+      explanation: "Secrets should be protected and rotated. Encryption in transit reduces sniffing and tampering risk.",
+    });
+  }
+
+  const basicsPrompts = [
+    { q: "Which statement best describes defence in depth", a: 1, o: ["One control is enough if it is strong", "Multiple layers reduce single point failure", "Disable monitoring to reduce noise", "Share admin accounts to simplify access"], e: "Layered controls reduce the chance that a single failure leads to compromise." },
+    { q: "Why is phishing still effective even with good spelling and branding", a: 2, o: ["Because TLS is disabled", "Because backups fail", "Because it exploits trust and urgency", "Because firewalls encrypt email"], e: "Phishing relies on human pressure patterns, not just obvious mistakes." },
+    { q: "What is the most accurate description of risk", a: 0, o: ["Likelihood times impact", "A list of controls", "A firewall setting", "A password manager"], e: "Risk is a combination of likelihood and impact." },
+  ];
+  for (const p of basicsPrompts) {
+    specs.push({
+      bloomLevel: 2,
+      tags: "basics,risk",
+      question: p.q,
+      options: p.o,
+      correctIndex: p.a,
+      explanation: p.e,
+    });
+  }
+
+  const responsePrompts = [
+    "You detect a suspicious login from a new country",
+    "A developer reports a secret was committed to git",
+    "A laptop with customer data is lost",
+    "An internal service starts making unusual outbound connections",
+    "Backups fail for two days without alerting",
+  ];
+  for (const s of responsePrompts) {
+    specs.push({
+      bloomLevel: 3,
+      tags: "incident,response,logging",
+      question: `${s}. What is the best immediate objective`,
+      options: ["Contain and preserve evidence", "Delete all logs to avoid exposure", "Announce blame publicly", "Turn off monitoring to reduce alerts"],
+      correctIndex: 0,
+      explanation: "Early containment limits damage and evidence preservation supports investigation and recovery.",
+    });
+  }
+
+  while (specs.length < 100) {
+    const i = specs.length + 1;
+    specs.push({
+      bloomLevel: 2,
+      tags: "basics,security",
+      question: `A colleague asks why security work never ends. What is the best answer`,
+      options: ["Threats and systems change so risk management is continuous", "Security ends once you buy a tool", "Security ends after one audit", "Security ends when you disable updates"],
+      correctIndex: 0,
+      explanation: "Security is ongoing because systems, attackers, and business needs change over time.",
+    });
+    if (i > 200) break;
+  }
+
+  return addGeneratedQuestions({ prefix: "cyber-foundations", start: 51, specs: specs.slice(0, 100) });
+}
+
+function buildExtraApplied() {
+  const specs = [];
+  const webIssues = [
+    { tag: "owasp,web", stem: "An input field reflects user data into HTML", best: "Escape output and use safe rendering", why: "Output encoding reduces XSS risk." },
+    { tag: "owasp,web", stem: "A form changes a password without verifying current password", best: "Require reauthentication for sensitive actions", why: "Step up checks reduce account takeover impact." },
+    { tag: "owasp,csrf", stem: "A state changing endpoint accepts cookies without CSRF protection", best: "Use CSRF tokens or same site cookies with verification", why: "CSRF protections ensure intent." },
+    { tag: "uploads,web", stem: "Users can upload files that are served back from the same origin", best: "Serve uploads from a separate domain and validate type", why: "Origin separation reduces script execution risk." },
+  ];
+  for (const w of webIssues) {
+    specs.push({
+      bloomLevel: 4,
+      tags: w.tag,
+      question: `${w.stem}. What is the best fix`,
+      options: [w.best, "Disable logging", "Use a longer URL", "Store secrets in the browser"],
+      correctIndex: 0,
+      explanation: w.why,
+    });
+  }
+
+  const apiScenarios = [
+    "An API returns different error messages for existing and non existing accounts",
+    "An API accepts a user id in the request body without checking ownership",
+    "A webhook endpoint retries can create duplicate side effects",
+    "An API key has write access but is shared across customers",
+    "A service fetches a URL provided by the user",
+  ];
+  for (const s of apiScenarios) {
+    specs.push({
+      bloomLevel: 4,
+      tags: "api,authz",
+      question: `${s}. What is the best guardrail`,
+      options: ["Deny by default and validate access for every object", "Allow by default for speed", "Disable TLS", "Log secrets to debug faster"],
+      correctIndex: 0,
+      explanation: "API security depends on explicit authorisation and validation. Deny by default reduces accidental exposure.",
+    });
+  }
+
+  const secretsScenarios = [
+    "A token is pasted into a support ticket",
+    "A secret is stored in a config file committed to git",
+    "A build system prints environment variables on failure",
+    "A staging environment uses production credentials",
+  ];
+  for (const s of secretsScenarios) {
+    specs.push({
+      bloomLevel: 4,
+      tags: "secrets,devops",
+      question: `${s}. What is the best response`,
+      options: ["Rotate the secret and reduce future exposure with scanning", "Ignore it because it is only staging", "Disable monitoring", "Share the secret with more people"],
+      correctIndex: 0,
+      explanation: "Assume secrets are compromised when exposed. Rotate and add controls such as scanning and least privilege.",
+    });
+  }
+
+  const loggingScenarios = [
+    "You need to investigate suspicious admin changes",
+    "A system has logs but no stable request id",
+    "Logs are stored only on the application server",
+    "Audit logs can be edited by normal users",
+  ];
+  for (const s of loggingScenarios) {
+    specs.push({
+      bloomLevel: 4,
+      tags: "logging,audit",
+      question: `${s}. What is the best improvement`,
+      options: ["Centralise logs and make audit trails append only", "Reduce logs to save storage", "Log passwords for traceability", "Disable retention to avoid risk"],
+      correctIndex: 0,
+      explanation: "Security logs must be trustworthy and available. Centralisation and append only design improves auditability.",
+    });
+  }
+
+  while (specs.length < 100) {
+    specs.push({
+      bloomLevel: 4,
+      tags: "owasp,web",
+      question: "Why should server side validation exist even if the client validates",
+      options: ["Clients can be bypassed or modified", "It increases DNS speed", "It replaces encryption", "It prevents backups"],
+      correctIndex: 0,
+      explanation: "Attackers can send requests directly. Server side validation is the authoritative guard.",
+    });
+  }
+
+  return addGeneratedQuestions({ prefix: "cyber-applied", start: 51, specs: specs.slice(0, 100) });
+}
+
+function buildExtraPractice() {
+  const specs = [];
+
+  const sdlc = [
+    "A team wants to add a security gate but fears slowing delivery",
+    "A threat model exists but is never updated after changes",
+    "A code review checklist is long and rarely used",
+    "A build pipeline allows unsigned artefacts",
+  ];
+  for (const s of sdlc) {
+    specs.push({
+      bloomLevel: 5,
+      tags: "sdlc,gates",
+      question: `${s}. What is the best high signal improvement`,
+      options: ["Add a small verifiable gate with clear owner and evidence", "Make the process vague and optional", "Disable tests to speed up", "Avoid documenting decisions"],
+      correctIndex: 0,
+      explanation: "High signal gates are verifiable and owned. Evidence makes them auditable and repeatable.",
+    });
+  }
+
+  const vuln = [
+    "A critical issue is exploitable in the wild",
+    "A medium issue is internet reachable and affects sensitive data",
+    "A high severity issue is not reachable from any trust boundary",
+    "A patch is available but rollout risk is high",
+  ];
+  for (const s of vuln) {
+    specs.push({
+      bloomLevel: 5,
+      tags: "vuln,triage",
+      question: `${s}. Which factor should drive priority most`,
+      options: ["Exposure and impact with exploit signals", "Only the CVSS number", "Only developer preference", "Only how long the ticket is"],
+      correctIndex: 0,
+      explanation: "Priority should be driven by exposure, impact, and real exploit signals. Severity alone is not enough.",
+    });
+  }
+
+  const detection = [
+    "An alert triggers frequently but never leads to action",
+    "A detection rule has no test cases",
+    "An incident response runbook is missing contacts",
+    "Logs exist but no one knows the normal baseline",
+  ];
+  for (const s of detection) {
+    specs.push({
+      bloomLevel: 5,
+      tags: "detection,response",
+      question: `${s}. What is the best fix`,
+      options: ["Make detections testable and link them to response actions", "Alert on everything always", "Disable logs", "Hide alerts from engineers"],
+      correctIndex: 0,
+      explanation: "Detections need to be actionable. Tests and clear response mapping reduce noise and improve outcomes.",
+    });
+  }
+
+  const governance = [
+    "A risk exception is approved without an expiry date",
+    "A privacy decision has no evidence trail",
+    "A break glass account is used weekly",
+    "Audit logs can be deleted to save storage",
+  ];
+  for (const s of governance) {
+    specs.push({
+      bloomLevel: 5,
+      tags: "governance,audit",
+      question: `${s}. What is the best governance control`,
+      options: ["Require owner, reason, expiry, and evidence", "Rely on verbal agreements only", "Avoid documentation", "Disable monitoring"],
+      correctIndex: 0,
+      explanation: "Good governance is explicit and auditable. Owners, expiry, and evidence keep decisions defensible.",
+    });
+  }
+
+  while (specs.length < 100) {
+    specs.push({
+      bloomLevel: 5,
+      tags: "zero-trust,identity",
+      question: "Which statement best matches zero trust",
+      options: ["Verify explicitly and minimise implicit trust", "Trust internal networks fully", "Disable MFA", "Use one shared password"],
+      correctIndex: 0,
+      explanation: "Zero trust reduces reliance on network location and emphasises explicit verification and least privilege.",
+    });
+  }
+
+  return addGeneratedQuestions({ prefix: "cyber-practice", start: 51, specs: specs.slice(0, 100) });
+}
+
 async function upsertAssessment({ courseId, levelId }) {
   return prisma.assessment.upsert({
     where: { courseId_levelId: { courseId, levelId } },
@@ -217,13 +564,19 @@ async function main() {
   const courseId = "cybersecurity";
 
   const a1 = await upsertAssessment({ courseId, levelId: "foundations" });
-  await upsertQuestions(a1.id, foundations);
+  const f = foundations.concat(buildExtraFoundations());
+  if (f.length < 150) throw new Error("FOUNDATIONS_POOL_TOO_SMALL");
+  await upsertQuestions(a1.id, f.slice(0, 150));
 
   const a2 = await upsertAssessment({ courseId, levelId: "applied" });
-  await upsertQuestions(a2.id, applied);
+  const ap = applied.concat(buildExtraApplied());
+  if (ap.length < 150) throw new Error("APPLIED_POOL_TOO_SMALL");
+  await upsertQuestions(a2.id, ap.slice(0, 150));
 
   const a3 = await upsertAssessment({ courseId, levelId: "practice" });
-  await upsertQuestions(a3.id, practice);
+  const pr = practice.concat(buildExtraPractice());
+  if (pr.length < 150) throw new Error("PRACTICE_POOL_TOO_SMALL");
+  await upsertQuestions(a3.id, pr.slice(0, 150));
 
   console.log("Seed complete");
 }

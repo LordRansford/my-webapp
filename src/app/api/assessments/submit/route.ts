@@ -109,6 +109,7 @@ export async function POST(req: Request) {
     const passed = scored.percent >= assessment.passThreshold;
 
     const timeSpentSeconds = Math.max(0, Math.round((now.getTime() - examSession.startedAt.getTime()) / 1000));
+    const courseVersion = getActiveCourseVersion(assessment.courseId);
 
     const deducted = await deductCreditsFromLots({ userId, credits: estimatedCredits });
     if (!deducted.ok) {
@@ -119,6 +120,8 @@ export async function POST(req: Request) {
       data: {
         userId,
         assessmentId: assessment.id,
+        courseVersion,
+        questionIds: examSession.questionIds || "[]",
         score: scored.percent,
         passed,
         answers: safeJsonString(answers),
@@ -170,7 +173,6 @@ export async function POST(req: Request) {
 
     let completionWritten = false;
     if (passed) {
-      const courseVersion = getActiveCourseVersion(assessment.courseId);
       const completionCourseId = `${assessment.courseId}:${assessment.levelId}`;
       await (prisma as any).courseCompletion
         .upsert({

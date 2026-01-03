@@ -6,7 +6,7 @@
   "rootMainFiles": [],
   "pages": {
     "/cybersecurity/assessment/[level]": [
-      "static/chunks/01ba7641e9367320.js",
+      "static/chunks/d61e2d5829c025a0.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/2fcd2aa21d8c3e53.js",
       "static/chunks/48c11802c3f193fa.js",
@@ -16,7 +16,7 @@
       "static/chunks/640dc3620eb10de9.js",
       "static/chunks/fe1de81744e54f04.js",
       "static/chunks/f0f43ebb724b8b11.js",
-      "static/chunks/turbopack-cb5d87f3f5d59c31.js"
+      "static/chunks/turbopack-e8fb24dcd321c6fe.js"
     ]
   },
   "ampFirstPages": []

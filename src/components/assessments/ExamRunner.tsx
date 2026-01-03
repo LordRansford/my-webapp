@@ -315,7 +315,7 @@ export default function ExamRunner(props: {
         <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
           <div className="text-sm font-semibold text-slate-900">{props.title}</div>
           <p className="mt-2 text-sm text-slate-700">
-            This assessment is timed. It uses 50 questions. Pass mark is 80 percent.
+            This assessment is timed. It uses 50 questions from a larger bank so retries are less repetitive. Pass mark is 80 percent.
           </p>
           <p className="mt-2 text-sm text-slate-700">
             Enter your full name. This name is locked for your certificates.
@@ -337,7 +337,7 @@ export default function ExamRunner(props: {
             </button>
           </div>
           <div className="mt-3 text-xs text-slate-600">
-            You can retake as many times as you like. Attempts are tracked.
+            You can retake as many times as you like. Attempts are tracked. Recent questions are avoided when possible.
           </div>
         </div>
 

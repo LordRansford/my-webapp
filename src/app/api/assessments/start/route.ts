@@ -18,6 +18,33 @@ type Body = {
 const ALLOWED_COURSES = new Set(["cybersecurity"]);
 const ALLOWED_LEVELS = new Set(["foundations", "applied", "practice"]);
 
+const BLUEPRINT: Record<string, Array<{ domain: string; count: number }>> = {
+  foundations: [
+    { domain: "basics", count: 10 },
+    { domain: "identity", count: 10 },
+    { domain: "network", count: 10 },
+    { domain: "crypto", count: 8 },
+    { domain: "risk", count: 6 },
+    { domain: "response", count: 6 },
+  ],
+  applied: [
+    { domain: "web", count: 16 },
+    { domain: "api", count: 10 },
+    { domain: "auth", count: 8 },
+    { domain: "secrets", count: 6 },
+    { domain: "cloud", count: 5 },
+    { domain: "logging", count: 5 },
+  ],
+  practice: [
+    { domain: "sdlc", count: 10 },
+    { domain: "zero-trust", count: 8 },
+    { domain: "runtime", count: 8 },
+    { domain: "vulnerability", count: 8 },
+    { domain: "detection", count: 8 },
+    { domain: "governance", count: 8 },
+  ],
+};
+
 function shuffle<T>(items: T[]) {
   const arr = items.slice();
   for (let i = arr.length - 1; i > 0; i -= 1) {
@@ -27,6 +54,15 @@ function shuffle<T>(items: T[]) {
     arr[j] = tmp as T;
   }
   return arr;
+}
+
+function parseJsonArray(value: string) {
+  try {
+    const v = JSON.parse(value);
+    return Array.isArray(v) ? v : [];
+  } catch {
+    return [];
+  }
 }
 
 export async function POST(req: Request) {
@@ -86,6 +122,17 @@ export async function POST(req: Request) {
     const courseVersion = getActiveCourseVersion(courseId);
     const versionTag = `v:${courseVersion}`;
 
+    const recentAttempts = await prisma.assessmentAttempt.findMany({
+      where: { userId, assessmentId: assessment.id, courseVersion },
+      orderBy: { completedAt: "desc" },
+      take: 2,
+      select: { questionIds: true },
+    });
+    const avoid = new Set<string>();
+    for (const a of recentAttempts) {
+      for (const id of parseJsonArray(a.questionIds || "[]")) avoid.add(String(id));
+    }
+
     const existing = await prisma.assessmentSession.findUnique({
       where: { userId_assessmentId: { userId, assessmentId: assessment.id } },
       select: { id: true, questionIds: true, startedAt: true, expiresAt: true },
@@ -124,18 +171,84 @@ export async function POST(req: Request) {
       });
     }
 
-    const ids = await prisma.question.findMany({
+    const pool = await prisma.question.findMany({
       where: {
         assessmentId: assessment.id,
         AND: [{ tags: { contains: versionTag } }, { tags: { contains: "published" } }],
       },
-      select: { id: true },
+      select: { id: true, tags: true },
       take: 500,
     });
-    const picked = shuffle(ids.map((r) => r.id)).slice(0, 50);
+
+    if (pool.length < 150) {
+      return NextResponse.json({ message: "Not enough questions available for randomised attempts" }, { status: 503 });
+    }
+
+    const byDomain = new Map<string, string[]>();
+    const all = pool.map((r) => ({ id: r.id, tags: String(r.tags || "") }));
+    for (const row of all) {
+      const tags = row.tags;
+      const parts = tags
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+      for (const p of parts) {
+        if (!p.startsWith("domain:")) continue;
+        const d = p.slice("domain:".length);
+        if (!d) continue;
+        const list = byDomain.get(d) || [];
+        list.push(row.id);
+        byDomain.set(d, list);
+      }
+    }
+
+    const picked: string[] = [];
+    const pickedSet = new Set<string>();
+    const blueprint = BLUEPRINT[levelId] || [];
+
+    function takeFrom(list: string[], count: number) {
+      const shuffled = shuffle(list);
+      const primary = shuffled.filter((id) => !pickedSet.has(id) && !avoid.has(id));
+      const secondary = shuffled.filter((id) => !pickedSet.has(id));
+      const out: string[] = [];
+      for (const id of primary) {
+        if (out.length >= count) break;
+        out.push(id);
+      }
+      if (out.length < count) {
+        for (const id of secondary) {
+          if (out.length >= count) break;
+          if (out.includes(id)) continue;
+          out.push(id);
+        }
+      }
+      return out;
+    }
+
+    for (const b of blueprint) {
+      const list = byDomain.get(b.domain) || [];
+      const out = takeFrom(list, b.count);
+      for (const id of out) {
+        if (pickedSet.has(id)) continue;
+        picked.push(id);
+        pickedSet.add(id);
+      }
+    }
+
+    if (picked.length < 50) {
+      const fallback = takeFrom(all.map((r) => r.id), 50 - picked.length);
+      for (const id of fallback) {
+        if (pickedSet.has(id)) continue;
+        picked.push(id);
+        pickedSet.add(id);
+      }
+    }
+
     if (picked.length < 50) {
       return NextResponse.json({ message: "Not enough questions available" }, { status: 503 });
     }
+
+    const finalPicked = shuffle(picked).slice(0, 50);
 
     const startedAt = new Date();
     const expiresAt = new Date(startedAt.getTime() + timeLimitMinutes * 60_000);
@@ -144,7 +257,7 @@ export async function POST(req: Request) {
       data: {
         userId,
         assessmentId: assessment.id,
-        questionIds: JSON.stringify(picked),
+        questionIds: JSON.stringify(finalPicked),
         startedAt,
         expiresAt,
       },
@@ -152,11 +265,11 @@ export async function POST(req: Request) {
     });
 
     const questions = await prisma.question.findMany({
-      where: { id: { in: picked } },
+      where: { id: { in: finalPicked } },
       select: { id: true, question: true, options: true, type: true },
     });
     const byId = new Map(questions.map((q) => [q.id, q]));
-    const ordered = picked.map((id) => byId.get(id)).filter(Boolean) as any[];
+    const ordered = finalPicked.map((id) => byId.get(id)).filter(Boolean) as any[];
 
     return NextResponse.json(
       {

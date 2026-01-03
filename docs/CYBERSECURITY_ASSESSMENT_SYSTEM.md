@@ -36,7 +36,8 @@ It is designed to be reusable as the template for the other courses later.
 2. Question count is 50
 3. Pass mark is 80 percent
 4. Retakes are allowed and attempts are tracked
-5. Candidate name is locked for certificates
+5. Question bank target is 150 per level
+6. Recent attempts should avoid repeating questions when possible
 
 ## Data model
 1. `Assessment`

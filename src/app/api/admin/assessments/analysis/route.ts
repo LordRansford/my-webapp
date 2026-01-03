@@ -50,7 +50,7 @@ export async function GET(req: Request) {
   if (!assessment) return NextResponse.json({ error: "Assessment not found" }, { status: 404 });
 
   const attempts = await prisma.assessmentAttempt.findMany({
-    where: { assessmentId: assessment.id },
+    where: { assessmentId: assessment.id, courseVersion: version },
     orderBy: { completedAt: "desc" },
     take: 200,
     select: { id: true, score: true, passed: true, answers: true },

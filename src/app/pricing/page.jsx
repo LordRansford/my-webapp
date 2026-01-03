@@ -136,7 +136,12 @@ export default function PricingPage() {
 
       <section className="mt-10 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
         <h2 className="text-xl font-semibold text-slate-900">CPD certificates</h2>
-        <p className="mt-2 text-sm text-slate-700">CPD certificates will be optional and available later.</p>
+        <p className="mt-2 text-sm text-slate-700">
+          Learning stays free. Payment is for formal assessment, verification, and certificates you can use professionally.
+        </p>
+        <p className="mt-2 text-sm text-slate-700">
+          Pricing also helps keep the site free for everyone and funds updates, question maintenance, and quality assurance.
+        </p>
       </section>
     </MarketingPageTemplate>
   );
