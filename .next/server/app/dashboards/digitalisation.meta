@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/dashboards/layout,_N_T_/dashboards/digitalisation/layout,_N_T_/dashboards/digitalisation/page,_N_T_/dashboards/digitalisation"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/dashboards/digitalisation/__PAGE__",
+    "/dashboards/digitalisation",
+    "/dashboards",
+    "/_index",
+    "/_head"
+  ]
+}

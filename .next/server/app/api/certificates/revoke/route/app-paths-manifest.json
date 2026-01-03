@@ -1,0 +1,3 @@
+{
+  "/api/certificates/revoke/route": "app/api/certificates/revoke/route.js"
+}

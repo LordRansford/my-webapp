@@ -80,9 +80,11 @@ async function buildProjectPdfBytes(project: AIStudioProject) {
 
 export async function exportProjectAsPdf(project: AIStudioProject) {
   const bytes = await buildProjectPdfBytes(project);
+  // pdf-lib returns Uint8Array<ArrayBufferLike> in some environments; BlobPart expects ArrayBuffer.
+  const safeArrayBuffer = Uint8Array.from(bytes).buffer;
   downloadBlob(
     `${project.title.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}-${project.id}.pdf`,
-    new Blob([bytes], { type: "application/pdf" })
+    new Blob([safeArrayBuffer], { type: "application/pdf" })
   );
 }
 

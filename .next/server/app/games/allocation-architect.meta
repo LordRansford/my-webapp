@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/games/layout,_N_T_/games/allocation-architect/layout,_N_T_/games/allocation-architect/page,_N_T_/games/allocation-architect"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/games/allocation-architect/__PAGE__",
+    "/games/allocation-architect",
+    "/games",
+    "/_index",
+    "/_head"
+  ]
+}

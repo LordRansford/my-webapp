@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/support/layout,_N_T_/support/donate/layout,_N_T_/support/donate/page,_N_T_/support/donate"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/support/donate/__PAGE__",
+    "/support/donate",
+    "/support",
+    "/_index",
+    "/_head"
+  ]
+}

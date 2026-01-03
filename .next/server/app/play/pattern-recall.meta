@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/play/layout,_N_T_/play/pattern-recall/layout,_N_T_/play/pattern-recall/page,_N_T_/play/pattern-recall"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/play/pattern-recall/__PAGE__",
+    "/play/pattern-recall",
+    "/play",
+    "/_index",
+    "/_head"
+  ]
+}

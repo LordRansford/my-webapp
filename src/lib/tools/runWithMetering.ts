@@ -76,6 +76,7 @@ export async function runWithMetering<T>(params: {
     const receipt: RunReceipt = {
       runId,
       toolId,
+      mode: "compute",
       durationMs,
       inputBytes,
       outputBytes,
@@ -133,6 +134,7 @@ export async function runWithMetering<T>(params: {
   const receipt: RunReceipt = {
     runId,
     toolId,
+    mode: "compute",
     durationMs,
     inputBytes,
     outputBytes,

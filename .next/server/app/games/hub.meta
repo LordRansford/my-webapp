@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/games/layout,_N_T_/games/hub/layout,_N_T_/games/hub/page,_N_T_/games/hub"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/games/hub/__PAGE__",
+    "/games/hub",
+    "/games",
+    "/_index",
+    "/_head"
+  ]
+}

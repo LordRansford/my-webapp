@@ -1,0 +1,8 @@
+__turbopack_load_page_chunks__("/cyber-studios/sections/CyberGovernanceLab", [
+  "static/chunks/30767f50ca569bcf.js",
+  "static/chunks/6bd1b060cc02463e.js",
+  "static/chunks/883337ce332c9e6c.js",
+  "static/chunks/d1ea35920c32a766.js",
+  "static/chunks/f0f43ebb724b8b11.js",
+  "static/chunks/turbopack-a3b0b147a3cf8f71.js"
+])

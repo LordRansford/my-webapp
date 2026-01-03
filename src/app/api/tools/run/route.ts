@@ -177,13 +177,19 @@ export async function POST(req: Request) {
               target,
               fallback: true,
               message: "Could not resolve. Verify the domain exists and try again.",
+              records: [],
             };
             return { output: payload, outputBytes: Buffer.byteLength(JSON.stringify(payload)) };
           }
 
           // Cap record count for predictable output
           const safeRecords = Array.isArray(records) ? records.slice(0, 50) : records;
-          const payload = { target, records: safeRecords };
+          const payload = {
+            target,
+            fallback: false,
+            message: "OK",
+            records: safeRecords,
+          };
           return { output: payload, outputBytes: Buffer.byteLength(JSON.stringify(payload)) };
         },
       });

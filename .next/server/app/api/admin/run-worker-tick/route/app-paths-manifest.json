@@ -1,0 +1,3 @@
+{
+  "/api/admin/run-worker-tick/route": "app/api/admin/run-worker-tick/route.js"
+}

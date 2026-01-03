@@ -1,0 +1,3 @@
+{
+  "/verify/certificate/id/[certificateId]/page": "app/verify/certificate/id/[certificateId]/page.js"
+}

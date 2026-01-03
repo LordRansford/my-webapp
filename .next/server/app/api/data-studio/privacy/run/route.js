@@ -1,0 +1,13 @@
+var R=require("../../../../../chunks/[turbopack]_runtime.js")("server/app/api/data-studio/privacy/run/route.js")
+R.c("server/chunks/[root-of-the-server]__c6d868fb._.js")
+R.c("server/chunks/[root-of-the-server]__ba9ac86a._.js")
+R.c("server/chunks/src_lib_5d4cd947._.js")
+R.c("server/chunks/src_a52a25c7._.js")
+R.c("server/chunks/_79b23dc3._.js")
+R.c("server/chunks/node_modules_aa474d64._.js")
+R.c("server/chunks/node_modules_next_dist_23bfe24c._.js")
+R.c("server/chunks/[root-of-the-server]__34fd47d2._.js")
+R.c("server/chunks/node_modules_next_f2da0d3e._.js")
+R.c("server/chunks/_next-internal_server_app_api_data-studio_privacy_run_route_actions_1b1b864f.js")
+R.m(640205)
+module.exports=R.m(640205).exports
