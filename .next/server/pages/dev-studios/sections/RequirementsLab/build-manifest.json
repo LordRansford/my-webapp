@@ -6,12 +6,12 @@
   "rootMainFiles": [],
   "pages": {
     "/dev-studios/sections/RequirementsLab": [
-      "static/chunks/cdbf374936ab2814.js",
+      "static/chunks/858b1c2e1ea66449.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/d1ea35920c32a766.js",
-      "static/chunks/a806ebb22895a412.js",
+      "static/chunks/30ea0386b8b29acd.js",
       "static/chunks/f0f43ebb724b8b11.js",
-      "static/chunks/turbopack-2182f7456cd3ad0f.js"
+      "static/chunks/turbopack-bfe808c3579820f3.js"
     ]
   },
   "ampFirstPages": []

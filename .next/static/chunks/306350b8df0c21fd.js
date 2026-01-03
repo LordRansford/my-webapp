@@ -1,8 +1,0 @@
-__turbopack_load_page_chunks__("/data-studio", [
-  "static/chunks/6bd1b060cc02463e.js",
-  "static/chunks/f0f43ebb724b8b11.js",
-  "static/chunks/a806ebb22895a412.js",
-  "static/chunks/d1ea35920c32a766.js",
-  "static/chunks/8a16c0b552096adb.js",
-  "static/chunks/turbopack-46221ddf8a1b8029.js"
-])

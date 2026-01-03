@@ -15,10 +15,10 @@ type Props = {
 
 export default function CPDEvidencePanel({ itemId, activityType, defaultObjectives = [], defaultMinutes = 20, evidenceLinks = [], templateVersion, category }: Props) {
   const [objectives, setObjectives] = useState<string[]>(defaultObjectives);
-  const [minutes, setMinutes] = useState<number>(defaultMinutes);
   const [reflection, setReflection] = useState("");
   const [message, setMessage] = useState<string | null>(null);
 
+  const minutes = Math.max(5, Math.round(Number(defaultMinutes) || 20));
   const valid = useMemo(() => minutes > 0 && objectives.length > 0, [minutes, objectives]);
 
   const handleSave = () => {
@@ -62,14 +62,10 @@ export default function CPDEvidencePanel({ itemId, activityType, defaultObjectiv
 
       <div className="space-y-1">
         <label className="text-sm font-semibold text-slate-900">Time spent (minutes)</label>
-        <input
-          type="number"
-          min={5}
-          value={minutes}
-          onChange={(e) => setMinutes(Number(e.target.value) || 0)}
-          className="w-32 rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-inner focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-2"
-        />
-        <p className="text-xs text-slate-600">Enter total minutes; a sensible minimum applies.</p>
+        <div className="w-32 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-900">
+          {minutes}
+        </div>
+        <p className="text-xs text-slate-600">This is set by the site. Learners cannot edit time.</p>
       </div>
 
       <div className="space-y-1">

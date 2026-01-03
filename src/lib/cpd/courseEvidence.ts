@@ -169,9 +169,11 @@ export function buildCourseEvidenceSummary(params: {
 
   const completionDate = pickCompletionDate(params.cpdState, trackId, params.levelId);
 
-  // Prefer the explicit "overall" tracker minutes for recorded hours, since that is what users set manually.
-  const overallMinutes =
-    (params.cpdState.sections || []).find((s) => s.trackId === trackId && s.levelId === params.levelId && s.sectionId === "overall")?.minutes || 0;
+  // Fixed hours policy:
+  // - Learners cannot self-declare hours
+  // - Recorded hours match the fixed estimated hours
+  // - Timed assessment time is included once when the level is completed
+  const assessmentHours = completionDate ? (params.levelId === "summary" ? 0 : (75 / 60)) : 0;
 
   return {
     courseId: params.courseId,
@@ -180,7 +182,7 @@ export function buildCourseEvidenceSummary(params: {
     levelTitle,
     learnerIdentifier: params.learnerIdentifier,
     estimatedHours,
-    recordedHours: minutesToHours(overallMinutes),
+    recordedHours: Math.round((Number(estimatedHours) + assessmentHours) * 10) / 10,
     completionDate,
     objectivesCovered,
     evidenceSignals: {

@@ -238,14 +238,69 @@ function AccountAction({ variant, isSignedIn, onActionClick }: { variant: "deskt
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const { data: session } = useSession();
   const pathname = usePathname();
   const isSignedIn = Boolean(session?.user);
   const focusStyle =
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600";
 
+  useEffect(() => {
+    let lastY = typeof window !== "undefined" ? window.scrollY : 0;
+    let lastActivityAt = Date.now();
+    let hideTimeout: any = null;
+
+    const show = () => setHidden(false);
+    const scheduleHide = () => {
+      if (hideTimeout) window.clearTimeout(hideTimeout);
+      hideTimeout = window.setTimeout(() => {
+        // Do not hide if the mobile menu is open.
+        if (mobileOpen) return;
+        setHidden(true);
+      }, 1600);
+    };
+
+    const onActivity = () => {
+      lastActivityAt = Date.now();
+      show();
+      scheduleHide();
+    };
+
+    const onScroll = () => {
+      const y = window.scrollY || 0;
+      const delta = y - lastY;
+      lastY = y;
+      if (y < 10) {
+        setHidden(false);
+        return;
+      }
+      // If user scrolls up, reveal. If scrolling down, hide.
+      if (delta < -6) {
+        setHidden(false);
+        return;
+      }
+      if (delta > 10 && Date.now() - lastActivityAt > 250) {
+        setHidden(true);
+      }
+    };
+
+    window.addEventListener("mousemove", onActivity, { passive: true });
+    window.addEventListener("touchstart", onActivity, { passive: true });
+    window.addEventListener("keydown", onActivity);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    scheduleHide();
+
+    return () => {
+      if (hideTimeout) window.clearTimeout(hideTimeout);
+      window.removeEventListener("mousemove", onActivity as any);
+      window.removeEventListener("touchstart", onActivity as any);
+      window.removeEventListener("keydown", onActivity as any);
+      window.removeEventListener("scroll", onScroll as any);
+    };
+  }, [mobileOpen]);
+
   return (
-    <header className="site-header" role="banner">
+    <header className={`site-header ${hidden ? "site-header--hidden" : ""}`} role="banner">
       <div className="site-header__inner">
         <div className="flex items-center gap-3">
           <button

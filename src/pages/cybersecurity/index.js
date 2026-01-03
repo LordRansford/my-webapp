@@ -78,11 +78,13 @@ export default function CybersecurityOverviewPage({ source, headings }) {
           highlights: [
             { chip: "Focus", text: "Real systems and real habits, not theory alone." },
             { chip: "Tools", text: "In browser labs you can reuse with a team." },
+            { chip: "CPD", text: "Assessments and certificates fund keeping learning free." },
           ],
           primaryAction: { label: "Start with Foundations", href: "/cybersecurity/beginner" },
           secondaryActions: [
-            { label: "Track CPD", href: "/my-cpd" },
-            { label: "Export CPD evidence", href: "/my-cpd/evidence" },
+            { label: "Pricing and CPD", href: "/pricing" },
+            { label: "Sign in for CPD tracking", href: "/signin" },
+            { label: "My CPD evidence", href: "/my-cpd/evidence" },
             { label: "Open dashboards", href: "/dashboards/cybersecurity" },
             { label: "Open studios", href: "/cyber-studios" },
             { label: "Open the labs", href: "/tools/cybersecurity" },
@@ -101,7 +103,7 @@ export default function CybersecurityOverviewPage({ source, headings }) {
             <div id="progress" className="space-y-3">
               <CourseProgressBar courseId="cybersecurity" manifest={cyberSections} />
             </div>
-            <CPDHoursTotal courseId="cybersecurity" courseName="Cybersecurity" />
+            <CPDHoursTotal courseName="Cybersecurity" totalHours={cybersecurityCourse.totalEstimatedHours || 0} />
           </>
         }
       >
@@ -110,6 +112,24 @@ export default function CybersecurityOverviewPage({ source, headings }) {
             This course has three core levels plus a summary and games page. Move through them at your own pace and revisit the
             labs whenever you need a reset.
           </BodyText>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <div className="text-sm font-semibold text-slate-900">CPD and certificates</div>
+            <div className="mt-2 text-sm text-slate-700">
+              If you want CPD evidence and certificates, sign in before you start learning so the system can record your progress.
+              Assessments and certificates also help keep this site free for everyone.
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <a href="/signin" className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800">
+                Sign in
+              </a>
+              <a href="/pricing" className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50">
+                Pricing
+              </a>
+              <a href="/cybersecurity/assessment/foundations" className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50">
+                Take an assessment
+              </a>
+            </div>
+          </div>
         </section>
 
         <section id="path" className="space-y-4">
@@ -179,27 +199,28 @@ export default function CybersecurityOverviewPage({ source, headings }) {
             Certification assessment
           </SectionHeader>
           <BodyText>
-            Each level has a timed assessment. You need an account and credits to start. Your certificate name is locked.
+            Each level has a timed assessment with detailed feedback after submission. You need an account and credits to start.
+            Certificates help your career and help keep this site free.
           </BodyText>
           <div className="grid gap-4 md:grid-cols-3">
             {[
               {
                 title: "Foundations assessment",
-                body: "50 questions. 75 minutes. 80 percent pass mark.",
+                body: "50 questions. 75 minutes. 80 percent pass mark. Clear feedback and revision links after submission.",
                 href: "/cybersecurity/assessment/foundations",
-                tone: "border-slate-200 bg-white",
+                tone: "border-slate-200 bg-white hover:border-slate-300",
               },
               {
                 title: "Applied assessment",
-                body: "50 questions. 75 minutes. 80 percent pass mark.",
+                body: "50 questions. 75 minutes. 80 percent pass mark. Clear feedback and revision links after submission.",
                 href: "/cybersecurity/assessment/applied",
-                tone: "border-slate-200 bg-white",
+                tone: "border-slate-200 bg-white hover:border-slate-300",
               },
               {
                 title: "Practice assessment",
-                body: "50 questions. 75 minutes. 80 percent pass mark.",
+                body: "50 questions. 75 minutes. 80 percent pass mark. Includes constructive feedback on your reasoning.",
                 href: "/cybersecurity/assessment/practice",
-                tone: "border-slate-200 bg-white",
+                tone: "border-slate-200 bg-white hover:border-slate-300",
               },
             ].map((card) => (
               <a
@@ -211,6 +232,13 @@ export default function CybersecurityOverviewPage({ source, headings }) {
                 <div className="mt-2 text-sm text-slate-700">{card.body}</div>
               </a>
             ))}
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">CPD prep pack</div>
+            <div className="mt-2 text-sm text-slate-700">
+              CPD candidates will get practice flows and targeted revision prompts designed to help you pass.
+              Access is for one year from purchase and subject to availability.
+            </div>
           </div>
         </section>
 

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-03T02:23:22.625Z",
+  "generatedAt": "2026-01-03T04:11:02.435Z",
   "tools": [
     {
       "id": "architecture-diagram-studio",
@@ -246,9 +246,29 @@
           "limits": "js|py (allowlist only)"
         }
       ],
-      "defaultInputs": {},
-      "examples": [],
-      "explain": ""
+      "defaultInputs": {
+        "language": "js",
+        "code": "console.log(\"Hello world\")"
+      },
+      "examples": [
+        {
+          "title": "Hello world",
+          "inputs": {
+            "language": "js",
+            "code": "console.log(\"Hello world\")"
+          },
+          "expectedOutput": "Hello world"
+        },
+        {
+          "title": "Simple loop",
+          "inputs": {
+            "language": "js",
+            "code": "let sum = 0;\nfor (let i = 1; i <= 5; i++) sum += i;\nconsole.log(\"sum\", sum);"
+          },
+          "expectedOutput": "sum 15"
+        }
+      ],
+      "explain": "Code Lab lets you run small snippets in a locked-down environment for safe practice. Use it for learning language basics, testing tiny algorithms, and verifying assumptions. Do not use it for secrets, private data, or anything that requires network access. The runner is designed to be constrained and auditable. If you see a runner unavailable error, it means the secure compute service is not enabled or is temporarily offline. Inputs: language and code. Limits: short runtime and output caps."
     },
     {
       "id": "python-playground",
@@ -1765,6 +1785,77 @@
         }
       ],
       "explain": "The metrics definition studio helps you define useful metrics and avoid vanity measurements. It guides you through specifying what to measure, how to measure it, and what targets to set. Use it to create meaningful metrics that drive decisions. Don't use it as a replacement for formal metrics frameworks. Inputs: metricName, type, target, measurementMethod (strings). Limits: 300ms CPU, 32MB memory, 32KB output. Security: Specification only."
+    },
+    {
+      "id": "sandbox-echo",
+      "title": "Sandbox echo",
+      "description": "Sends a small payload to the secure compute runner and returns stdout. Use it to confirm the runner is available and your credits setup is working.",
+      "route": "/tools/sandbox-echo",
+      "executionModes": [
+        "compute"
+      ],
+      "defaultMode": "compute",
+      "limits": {
+        "cpuMs": 2000,
+        "memoryMb": 128,
+        "outputKb": 64,
+        "wallMs": 8000,
+        "inputKb": 64
+      },
+      "creditModel": {
+        "baseCredits": 1,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "runner": "/api/jobs/create",
+      "failureModes": [
+        "runner_unavailable",
+        "timeout",
+        "rate_limited",
+        "insufficient_credits"
+      ],
+      "statusStates": [
+        "idle",
+        "queued",
+        "running",
+        "completed",
+        "failed"
+      ],
+      "inputs": [
+        {
+          "name": "message",
+          "type": "string",
+          "limits": "max 1KB"
+        },
+        {
+          "name": "repeat",
+          "type": "number",
+          "limits": "1 to 20"
+        }
+      ],
+      "defaultInputs": {
+        "message": "Hello from the secure runner",
+        "repeat": 2
+      },
+      "examples": [
+        {
+          "title": "Basic echo",
+          "inputs": {
+            "message": "Hello",
+            "repeat": 2
+          },
+          "expectedOutput": "Hello\nHello"
+        },
+        {
+          "title": "Runner health check",
+          "inputs": {
+            "message": "runner ok",
+            "repeat": 1
+          },
+          "expectedOutput": "runner ok"
+        }
+      ],
+      "explain": "Sandbox echo is a small health check tool for the secure compute runner. It sends a short message to the runner and returns the output, so you can confirm that jobs can be queued, executed, and billed correctly. Use it to diagnose availability and credit issues. If it fails, check that you are signed in, that the runner is enabled, and that you have credits. Inputs: message, repeat. Limits: small input, short runtime, fixed output cap."
     }
   ]
 }

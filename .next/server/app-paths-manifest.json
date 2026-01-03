@@ -132,6 +132,7 @@
   "/api/payments/create-intent/route": "app/api/payments/create-intent/route.js",
   "/api/payments/initiate/route": "app/api/payments/initiate/route.js",
   "/api/payments/webhook/route": "app/api/payments/webhook/route.js",
+  "/api/professor/ask/route": "app/api/professor/ask/route.js",
   "/api/progress/cpd/route": "app/api/progress/cpd/route.js",
   "/api/stripe/create-checkout-session/route": "app/api/stripe/create-checkout-session/route.js",
   "/api/stripe/donation/checkout/route": "app/api/stripe/donation/checkout/route.js",

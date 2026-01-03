@@ -1670,6 +1670,15 @@ type ApiRouteConfig = {
   type __Unused = __Check
 }
 
+// Validate ../../src/app/api/professor/ask/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/professor/ask">> = Specific
+  const handler = {} as typeof import("../../src/app/api/professor/ask/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../src/app/api/progress/cpd/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/progress/cpd">> = Specific
@@ -2196,6 +2205,15 @@ type ApiRouteConfig = {
 {
   type __IsExpected<Specific extends PagesPageConfig> = Specific
   const handler = {} as typeof import("../../src/pages/cybersecurity/assessment/[level].js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../src/pages/cybersecurity/cpd-prep.tsx
+{
+  type __IsExpected<Specific extends PagesPageConfig> = Specific
+  const handler = {} as typeof import("../../src/pages/cybersecurity/cpd-prep.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

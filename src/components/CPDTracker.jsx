@@ -13,44 +13,24 @@ export function getTotalCpdHours(courseId) {
 }
 
 export default function CPDTracker({ courseId, levelId, estimatedHours }) {
-  const { state, updateSection } = useCPD();
-  const [hours, setHours] = useState(0);
+  const { state, isAuthed } = useCPD();
   const trackId = resolveTrackId(courseId);
-  const sectionId = "overall";
 
-  const currentMinutes = useMemo(() => {
-    const match = state.sections.find(
-      (section) =>
-        section.trackId === trackId &&
-        section.levelId === levelId &&
-        section.sectionId === sectionId
-    );
-    return match?.minutes || 0;
+  const loggedMinutes = useMemo(() => {
+    return state.sections
+      .filter((s) => s.trackId === trackId && s.levelId === levelId && s.sectionId !== "overall")
+      .reduce((sum, s) => sum + (Number(s.minutes) || 0), 0);
   }, [state.sections, trackId, levelId]);
 
-  useEffect(() => {
-    setHours(Math.round((currentMinutes / 60) * 10) / 10);
-  }, [currentMinutes]);
-
-  const onChange = (e) => {
-    const value = Number(e.target.value) || 0;
-    setHours(value);
-    const nextMinutes = Math.max(0, value * 60);
-    updateSection({
-      trackId,
-      levelId,
-      sectionId,
-      minutesDelta: nextMinutes - currentMinutes,
-    });
-  };
+  const loggedHours = useMemo(() => Math.round((loggedMinutes / 60) * 10) / 10, [loggedMinutes]);
 
   return (
     <div className="rounded-2xl border border-gray-200 bg-white/85 p-4 shadow-sm">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-semibold text-gray-900">Track your CPD time for this level</p>
+          <p className="text-sm font-semibold text-gray-900">CPD tracking</p>
           <p className="text-xs text-gray-700">
-            Suggested guided hours: {estimatedHours || "not specified"}. This stays in your browser only and is for your own CPD notes.
+            Fixed hours for this level: {estimatedHours || "not specified"}. Timed assessment time is included once on pass.
           </p>
           <Link
             href="/my-cpd"
@@ -58,21 +38,20 @@ export default function CPDTracker({ courseId, levelId, estimatedHours }) {
           >
             View in My CPD
           </Link>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <Link href="/pricing" className="text-xs font-semibold text-emerald-700 hover:underline">
+              Pricing and CPD
+            </Link>
+            {!isAuthed ? (
+              <Link href="/signin" className="text-xs font-semibold text-slate-700 hover:underline">
+                Sign in to record progress
+              </Link>
+            ) : null}
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <label className="text-xs font-semibold text-gray-800" htmlFor={`${courseId}-${levelId}-cpd`}>
-            Hours recorded
-          </label>
-          <input
-            id={`${courseId}-${levelId}-cpd`}
-            type="number"
-            min="0"
-            step="0.5"
-            value={hours}
-            onChange={onChange}
-            className="w-20 rounded-lg border border-gray-300 px-2 py-1 text-sm focus:outline-none focus:ring focus:ring-blue-200"
-            aria-label="Record CPD hours for this level"
-          />
+        <div className="text-right">
+          <div className="text-xs font-semibold text-gray-700">Progress minutes</div>
+          <div className="text-base font-semibold text-gray-900">{loggedHours.toFixed(1)} hours</div>
         </div>
       </div>
     </div>

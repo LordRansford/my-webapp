@@ -20,6 +20,7 @@ import SectionHeader from "@/components/course/SectionHeader";
 import SubsectionHeader from "@/components/course/SubsectionHeader";
 import BodyText from "@/components/course/BodyText";
 import { cyberSections } from "@/lib/cyberSections";
+import CPDAssessmentPromo from "@/components/course/CPDAssessmentPromo";
 
 const TrustGraphTool = dynamic(() => import("@/components/notes/tools/cybersecurity/advanced/TrustGraphTool"), { ssr: false });
 const ProtocolAssumptionsTool = dynamic(() => import("@/components/notes/tools/cybersecurity/advanced/ProtocolAssumptionsTool"), { ssr: false });
@@ -113,6 +114,14 @@ export default function Page({ source, headings }) {
       labsHref="/tools/cybersecurity"
       studiosHref="/cyber-studios"
     >
+      <div className="mb-6">
+        <CPDAssessmentPromo
+          courseName="Cybersecurity"
+          levelLabel="Practice and Strategy"
+          assessmentHref="/cybersecurity/assessment/practice"
+          prepHref="/cybersecurity/cpd-prep"
+        />
+      </div>
       <MDXRenderer source={source} components={mdxComponents} />
     </CourseLessonTemplate>
   );

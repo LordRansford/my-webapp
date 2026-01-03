@@ -1,9 +1,0 @@
-__turbopack_load_page_chunks__("/tools/software-architecture/logic-gates", [
-  "static/chunks/9b993c8c8dd7d8b4.js",
-  "static/chunks/0457c27a103d8a39.js",
-  "static/chunks/6bd1b060cc02463e.js",
-  "static/chunks/a806ebb22895a412.js",
-  "static/chunks/d1ea35920c32a766.js",
-  "static/chunks/f0f43ebb724b8b11.js",
-  "static/chunks/turbopack-c87e8f61b805f3ad.js"
-])

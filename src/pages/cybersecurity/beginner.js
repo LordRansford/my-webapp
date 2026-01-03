@@ -23,6 +23,7 @@ import SectionHeader from "@/components/course/SectionHeader";
 import SubsectionHeader from "@/components/course/SubsectionHeader";
 import BodyText from "@/components/course/BodyText";
 import { cyberSections } from "@/lib/cyberSections";
+import CPDAssessmentPromo from "@/components/course/CPDAssessmentPromo";
 
 const BitChangeTool = dynamic(() => import("@/components/notes/tools/cybersecurity/ch1/BitChangeTool"), { ssr: false });
 const EncodingExplorerTool = dynamic(() => import("@/components/notes/tools/cybersecurity/ch1/EncodingExplorerTool"), { ssr: false });
@@ -132,6 +133,14 @@ export default function Page({ source, headings }) {
       labsHref="/tools/cybersecurity"
       studiosHref="/cyber-studios"
     >
+      <div className="mb-6">
+        <CPDAssessmentPromo
+          courseName="Cybersecurity"
+          levelLabel="Foundations"
+          assessmentHref="/cybersecurity/assessment/foundations"
+          prepHref="/cybersecurity/cpd-prep"
+        />
+      </div>
       <MDXRenderer source={source} components={mdxComponents} />
     </CourseLessonTemplate>
   );

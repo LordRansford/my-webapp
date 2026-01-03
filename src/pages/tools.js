@@ -182,6 +182,24 @@ const tools = [
     compute: "Browser-only",
     href: "/tools/data/metrics-definition-studio",
   },
+  {
+    id: "code-lab",
+    title: "Code Lab",
+    purpose: "Run small snippets in a locked-down environment for safe practice.",
+    category: "Software Architecture",
+    level: "Intermediate",
+    compute: "Compute runner",
+    href: "/tools/code-lab",
+  },
+  {
+    id: "sandbox-echo",
+    title: "Sandbox echo",
+    purpose: "Health check for secure compute runner availability and credits.",
+    category: "Software Architecture",
+    level: "Beginner",
+    compute: "Compute runner",
+    href: "/tools/sandbox-echo",
+  },
 ];
 
 function Badge({ children, tone = "slate" }) {

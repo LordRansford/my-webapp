@@ -1,8 +1,0 @@
-__turbopack_load_page_chunks__("/ai-studios/sections/EvaluationBiasLab", [
-  "static/chunks/7085dcf4f1136ac7.js",
-  "static/chunks/6bd1b060cc02463e.js",
-  "static/chunks/a806ebb22895a412.js",
-  "static/chunks/d1ea35920c32a766.js",
-  "static/chunks/f0f43ebb724b8b11.js",
-  "static/chunks/turbopack-ad536b348a424aa2.js"
-])

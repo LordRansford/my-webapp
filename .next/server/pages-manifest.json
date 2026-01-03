@@ -84,6 +84,7 @@
   "/cybersecurity/assessment/[level]": "pages/cybersecurity/assessment/[level].js",
   "/cybersecurity/beginner": "pages/cybersecurity/beginner.js",
   "/cybersecurity/course": "pages/cybersecurity/course.js",
+  "/cybersecurity/cpd-prep": "pages/cybersecurity/cpd-prep.js",
   "/cybersecurity/dashboards": "pages/cybersecurity/dashboards.html",
   "/cybersecurity/intermediate": "pages/cybersecurity/intermediate.js",
   "/cybersecurity/summary": "pages/cybersecurity/summary.html",

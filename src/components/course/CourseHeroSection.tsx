@@ -48,7 +48,7 @@ export default function CourseHeroSection({
     <div
       className={`not-prose rounded-3xl border border-slate-200 bg-gradient-to-br ${gradientClasses[gradient]} p-6 shadow-sm mb-8 ${className} dark:border-slate-700 dark:from-slate-800 dark:via-slate-800 dark:to-slate-800/80`}
     >
-      <div className="flex flex-wrap items-center gap-3 mb-4">
+      <div className="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center">
         {icon && (
           <span
             className="inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-indigo-100 bg-indigo-50 text-indigo-700 dark:border-indigo-900 dark:bg-indigo-900/30 dark:text-indigo-300"
@@ -62,7 +62,6 @@ export default function CourseHeroSection({
           <p className="eyebrow m-0 text-slate-600 dark:text-slate-400">{eyebrow}</p>
           <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">{title}</h1>
         </div>
-        <span className="chip chip--accent">CPD support</span>
       </div>
 
       <div className="text-base text-slate-700 leading-relaxed mb-4 dark:text-slate-300">

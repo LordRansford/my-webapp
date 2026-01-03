@@ -6,12 +6,12 @@
   "rootMainFiles": [],
   "pages": {
     "/ai/dashboards": [
-      "static/chunks/09e0b9430bc6ac85.js",
+      "static/chunks/23e7cc2a4fc520fa.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/d1ea35920c32a766.js",
-      "static/chunks/a806ebb22895a412.js",
+      "static/chunks/30ea0386b8b29acd.js",
       "static/chunks/f0f43ebb724b8b11.js",
-      "static/chunks/turbopack-66cb753769a430c6.js"
+      "static/chunks/turbopack-75ac2854a452f42f.js"
     ]
   },
   "ampFirstPages": []

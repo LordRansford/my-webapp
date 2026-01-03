@@ -164,7 +164,7 @@ export default function AICourseOverviewPage({ source, headings }) {
       SectionHeader,
       BodyText,
       TrackProgressSummary,
-      CPDHoursTotal: () => <CPDHoursTotal courseId="ai" courseName="AI" />,
+      CPDHoursTotal: () => <CPDHoursTotal courseName="AI" totalHours={aiCourse.totalEstimatedHours || 0} />,
       LevelCards: () => <LevelCards />,
       ToolCard,
       QuizBlock,

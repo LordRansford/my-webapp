@@ -331,6 +331,13 @@ body {
   backdrop-filter: blur(12px);
   background: rgba(255, 255, 255, 0.86);
   border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  transition: transform 220ms ease, opacity 220ms ease;
+  will-change: transform;
+}
+
+.site-header--hidden {
+  transform: translateY(-110%);
+  opacity: 0.02;
 }
 
 .site-header__inner {
@@ -341,6 +348,15 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
+}
+
+@media (max-width: 640px) {
+  .site-header__inner {
+    padding: var(--space-2) var(--space-3);
+  }
+  .brand__text {
+    font-size: 0.95rem;
+  }
 }
 
 /* Navigation contrast: ensure WCAG AA compliance across all states */

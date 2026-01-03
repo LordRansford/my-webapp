@@ -117,7 +117,7 @@ export async function POST(req: Request) {
     const questionIds = JSON.parse(examSession.questionIds || "[]") as string[];
     const questions = await prisma.question.findMany({
       where: { id: { in: questionIds } },
-      select: { id: true, question: true, options: true, correctAnswer: true, explanation: true, tags: true, type: true },
+      select: { id: true, question: true, options: true, correctAnswer: true, explanation: true, optionRationales: true, tags: true, type: true },
     });
     const byId = new Map(questions.map((q) => [q.id, q]));
     const ordered = questionIds.map((id) => byId.get(id)).filter(Boolean) as any[];
@@ -241,6 +241,7 @@ export async function POST(req: Request) {
         correctAnswer: expected,
         correct: ok,
         explanation: q.explanation,
+        optionRationales: q.optionRationales ? (JSON.parse(q.optionRationales) as string[]) : null,
         tags: q.tags,
         type: q.type,
       };

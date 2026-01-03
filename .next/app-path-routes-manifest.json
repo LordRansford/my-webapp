@@ -132,6 +132,7 @@
   "/api/payments/create-intent/route": "/api/payments/create-intent",
   "/api/payments/initiate/route": "/api/payments/initiate",
   "/api/payments/webhook/route": "/api/payments/webhook",
+  "/api/professor/ask/route": "/api/professor/ask",
   "/api/progress/cpd/route": "/api/progress/cpd",
   "/api/stripe/create-checkout-session/route": "/api/stripe/create-checkout-session",
   "/api/stripe/donation/checkout/route": "/api/stripe/donation/checkout",

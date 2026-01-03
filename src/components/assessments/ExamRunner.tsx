@@ -32,6 +32,7 @@ type SubmitResponse = {
     correctAnswer: any;
     correct: boolean;
     explanation: string;
+    optionRationales?: string[] | null;
     tags: string;
     type: string;
   }>;
@@ -333,18 +334,39 @@ export default function ExamRunner(props: {
         <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
           <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">Review</div>
           <div className="mt-3 space-y-4">
-            {submitted.review.slice(0, 12).map((r, idx) => (
+            {submitted.review.slice(0, 50).map((r, idx) => (
               <div key={r.id} className="rounded-xl border border-slate-200 bg-slate-50 p-3">
                 <div className="text-xs font-semibold text-slate-600">
                   Question {idx + 1}. {r.correct ? "Correct" : "Incorrect"}
                 </div>
                 <div className="mt-1 text-sm font-semibold text-slate-900">{r.question}</div>
                 <div className="mt-2 text-sm text-slate-700">{r.explanation}</div>
+                {Array.isArray(r.options) && r.options.length ? (
+                  <div className="mt-3 space-y-2">
+                    <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">Options</div>
+                    <ol className="ml-5 list-decimal space-y-1 text-sm text-slate-800">
+                      {r.options.map((opt, i) => {
+                        const correctIndex = typeof r.correctAnswer === "number" ? r.correctAnswer : null;
+                        const userChoice = typeof r.userAnswer === "number" ? r.userAnswer : typeof r.userAnswer?.choice === "number" ? r.userAnswer.choice : null;
+                        const isCorrect = correctIndex !== null ? i === correctIndex : false;
+                        const isUser = userChoice !== null ? i === userChoice : false;
+                        const rationale = Array.isArray(r.optionRationales) ? String(r.optionRationales[i] || "").trim() : "";
+                        const label = isCorrect ? "Correct" : isUser ? "Your answer" : "";
+                        return (
+                          <li key={i} className="rounded-lg border border-slate-200 bg-white p-2">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                              <div className="font-semibold text-slate-900">{opt}</div>
+                              {label ? <div className="text-xs font-semibold text-slate-600">{label}</div> : null}
+                            </div>
+                            <div className="mt-1 text-xs text-slate-700">{rationale || "Rationale pending. This will be improved as the bank is curated."}</div>
+                          </li>
+                        );
+                      })}
+                    </ol>
+                  </div>
+                ) : null}
               </div>
             ))}
-          </div>
-          <div className="mt-3 text-xs text-slate-600">
-            Review is shortened here so the page stays fast.
           </div>
         </div>
 
@@ -435,11 +457,25 @@ export default function ExamRunner(props: {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div
+        className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+        onContextMenu={(e) => {
+          // Basic anti-cheat friction. This does not guarantee integrity, but it reduces casual copy-paste.
+          e.preventDefault();
+        }}
+        onCopy={(e) => {
+          e.preventDefault();
+        }}
+        onCut={(e) => {
+          e.preventDefault();
+        }}
+      >
         <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">
           Question {activeIndex + 1} of {total}
         </div>
-        <div className="mt-2 text-base font-semibold text-slate-900">{current?.question}</div>
+        <div className="mt-2 text-base font-semibold text-slate-900 select-none" style={{ WebkitUserSelect: "none", userSelect: "none" }}>
+          {current?.question}
+        </div>
 
         <div className="mt-3 grid gap-2">
           {(current?.options || []).map((opt, idx) => {
@@ -456,7 +492,9 @@ export default function ExamRunner(props: {
                     : "border-slate-200 bg-white text-slate-900 hover:bg-slate-50",
                 ].join(" ")}
               >
-                {opt}
+                <span className="select-none" style={{ WebkitUserSelect: "none", userSelect: "none" }}>
+                  {opt}
+                </span>
               </button>
             );
           })}

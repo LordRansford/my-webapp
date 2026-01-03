@@ -20,6 +20,7 @@ import SectionHeader from "@/components/course/SectionHeader";
 import SubsectionHeader from "@/components/course/SubsectionHeader";
 import BodyText from "@/components/course/BodyText";
 import { cyberSections } from "@/lib/cyberSections";
+import CPDAssessmentPromo from "@/components/course/CPDAssessmentPromo";
 
 const ThreatScenarioMapper = dynamic(() => import("@/components/dashboards/cybersecurity/intermediate/ThreatScenarioMapper"), { ssr: false });
 const AttackSurfaceExplorer = dynamic(() => import("@/components/dashboards/cybersecurity/intermediate/AttackSurfaceExplorer"), { ssr: false });
@@ -91,6 +92,14 @@ export default function Page({ source, headings }) {
       labsHref="/tools/cybersecurity"
       studiosHref="/cyber-studios"
     >
+      <div className="mb-6">
+        <CPDAssessmentPromo
+          courseName="Cybersecurity"
+          levelLabel="Applied"
+          assessmentHref="/cybersecurity/assessment/applied"
+          prepHref="/cybersecurity/cpd-prep"
+        />
+      </div>
       <MDXRenderer source={source} components={mdxComponents} />
     </CourseLessonTemplate>
   );
