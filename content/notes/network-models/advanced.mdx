@@ -35,6 +35,8 @@ import { networkSectionManifest } from "@/lib/networkSections"
 
 <CPDTracker courseId="network-models" levelId="practice" estimatedHours={16} />
 
+<CPDAssessmentPromo courseName="Network models" levelLabel="Practice" assessmentHref="/network-models/assessment/practice" />
+
 <BodyText>
   In practice, the model becomes valuable when you can place controls and signals correctly.
   This level is about security and operations thinking, grounded in correct network foundations.
@@ -75,6 +77,10 @@ When a user says "the site is slow", you need signals that separate causes.
 
 If you only have application logs, you will miss many failure patterns.
 
+<ToolCard title="Signal triage matrix" description="Pick a symptom and isolate one boundary at a time.">
+  <SignalTriageMatrixTool />
+</ToolCard>
+
 ---
 
 <SectionHeader variant="content" emoji="🔎" id="net-practice-captures-without-hacking">
@@ -93,6 +99,10 @@ The goal in this course is interpretation:
 3. Relate a symptom to one layer boundary.
 
 You do not need to craft attack traffic to learn these skills.
+
+<ToolCard title="Packet capture filter builder" description="Wireshark display filters and tcpdump capture filters for common investigations.">
+  <PacketCaptureFilterBuilderTool />
+</ToolCard>
 
 ---
 

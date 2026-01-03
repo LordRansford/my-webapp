@@ -5,7 +5,7 @@ import { rateLimit } from "@/lib/security/rateLimit";
 import { buildCourseEvidenceSummary } from "@/lib/cpd/courseEvidence";
 import type { CPDState } from "@/lib/cpd";
 
-const ALLOWED_COURSES = new Set(["cybersecurity"]);
+const ALLOWED_COURSES = new Set(["cybersecurity", "network-models"]);
 
 function safeJsonParse(value: string | null) {
   if (!value) return null;

@@ -12,13 +12,18 @@ import GlossaryTip from "@/components/notes/GlossaryTip";
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
 import LevelProgressBar from "@/components/course/LevelProgressBar";
 import CPDTracker from "@/components/CPDTracker";
+import CPDAssessmentPromo from "@/components/course/CPDAssessmentPromo";
 import SectionHeader from "@/components/course/SectionHeader";
 import SubsectionHeader from "@/components/course/SubsectionHeader";
 import BodyText from "@/components/course/BodyText";
 import DiagramBlock from "@/components/DiagramBlock";
+import MermaidDiagram from "@/components/notes/MermaidDiagram";
 import { networkSectionManifest } from "@/lib/networkSections";
 
 const TcpHandshakeTimelineTool = dynamic(() => import("@/components/notes/tools/network-models/applied/TcpHandshakeTimelineTool"), { ssr: false });
+const DnsResolutionWalkthroughTool = dynamic(() => import("@/components/notes/tools/network-models/applied/DnsResolutionWalkthroughTool"), { ssr: false });
+const TracerouteTtlTool = dynamic(() => import("@/components/notes/tools/network-models/applied/TracerouteTtlTool"), { ssr: false });
+const NatStateTableTool = dynamic(() => import("@/components/notes/tools/network-models/applied/NatStateTableTool"), { ssr: false });
 
 export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
@@ -32,11 +37,16 @@ export default function Page({ source, headings }) {
       SectionProgressToggle,
       LevelProgressBar,
       CPDTracker,
+      CPDAssessmentPromo,
       SectionHeader,
       SubsectionHeader,
       BodyText,
       DiagramBlock,
+      MermaidDiagram,
       TcpHandshakeTimelineTool,
+      DnsResolutionWalkthroughTool,
+      TracerouteTtlTool,
+      NatStateTableTool,
     }),
     []
   );

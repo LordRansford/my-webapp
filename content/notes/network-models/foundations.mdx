@@ -36,11 +36,17 @@ import { networkSectionManifest } from "@/lib/networkSections"
 
 <CPDTracker courseId="network-models" levelId="foundations" estimatedHours={10} />
 
+<CPDAssessmentPromo courseName="Network models" levelLabel="Foundations" assessmentHref="/network-models/assessment/foundations" />
+
 <BodyText>
   I use OSI and TCP IP as thinking tools. They help me describe what is happening without guessing.
   They also help me talk to other people in a consistent way. The models are not the network.
   They are a way to structure what we observe.
 </BodyText>
+
+<ToolCard title="PDU stack builder" description="Turn one scenario into the correct PDU names and observable signals.">
+  <PduStackBuilderTool />
+</ToolCard>
 
 ---
 
@@ -104,6 +110,39 @@ Treat the mapping as a guide, not a law.
 
 ---
 
+<SectionHeader variant="content" emoji="🧱" id="net-foundations-osi-layers-detail">
+  OSI layers with concrete examples
+</SectionHeader>
+
+<SectionProgressToggle courseId="network-models" levelId="foundations" sectionId="net-foundations-osi-layers-detail" />
+
+When I say "layer", I want a specific meaning. I want a responsibility boundary.
+This is the OSI model with concrete examples.
+
+1. **Physical** carries bits as signals. Examples include copper, fibre, and radio.
+2. **Data link** carries frames on a local link. Examples include Ethernet and Wi Fi framing.
+3. **Network** carries packets across networks. The core idea is routing and logical addressing.
+4. **Transport** carries segments or datagrams end to end. The core idea is process to process delivery.
+5. **Session** manages long lived conversations. Many stacks blur this responsibility.
+6. **Presentation** manages representation such as encoding and some security transforms.
+7. **Application** is where protocols such as HTTP and DNS live.
+
+<MermaidDiagram caption="Encapsulation and decapsulation, simplified" ariaLabel="Encapsulation diagram">
+{`flowchart TD
+  A[Application data] --> B[TCP segment]
+  B --> C[IP packet]
+  C --> D[Link frame]
+  D --> E[Bits on the medium]
+  E --> D2[Frame received]
+  D2 --> C2[Packet extracted]
+  C2 --> B2[Segment extracted]
+  B2 --> A2[Application data delivered]`}
+</MermaidDiagram>
+
+This diagram is simplified. Real stacks include details such as checksums, retransmission, and link layer trailers.
+
+---
+
 <SectionHeader variant="content" emoji="🔎" id="net-foundations-addressing-and-names">
   Addresses and names
 </SectionHeader>
@@ -118,6 +157,23 @@ Networks use more than one kind of identifier.
 4. **A domain name** is a human friendly identifier that maps to IP addresses through DNS.
 
 If I know which identifier is wrong, I can narrow the fault quickly.
+
+<ToolCard title="Ports and protocols" description="Common ports with the right mental model.">
+  <PortProtocolExplorerTool />
+</ToolCard>
+
+<SectionHeader variant="content" emoji="🧮" id="net-foundations-subnetting-basics">
+  Subnetting basics you can reuse
+</SectionHeader>
+
+<SectionProgressToggle courseId="network-models" levelId="foundations" sectionId="net-foundations-subnetting-basics" />
+
+IP addresses are not just labels. They are prefixes that drive routing decisions.
+If you can calculate a network and range quickly, you stop making accidental assumptions.
+
+<ToolCard title="Subnetting lab" description="Calculate network, range, and usable hosts from CIDR.">
+  <SubnettingLab />
+</ToolCard>
 
 ---
 

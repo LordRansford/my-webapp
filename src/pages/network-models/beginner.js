@@ -12,14 +12,19 @@ import GlossaryTip from "@/components/notes/GlossaryTip";
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
 import LevelProgressBar from "@/components/course/LevelProgressBar";
 import CPDTracker from "@/components/CPDTracker";
+import CPDAssessmentPromo from "@/components/course/CPDAssessmentPromo";
 import SectionHeader from "@/components/course/SectionHeader";
 import SubsectionHeader from "@/components/course/SubsectionHeader";
 import BodyText from "@/components/course/BodyText";
 import DiagramBlock from "@/components/DiagramBlock";
+import MermaidDiagram from "@/components/notes/MermaidDiagram";
 import { networkSectionManifest } from "@/lib/networkSections";
 
 const EncapsulationLab = dynamic(() => import("@/components/notes/tools/network-models/overview/EncapsulationLab"), { ssr: false });
 const OsiTcpIpMapperTool = dynamic(() => import("@/components/notes/tools/network-models/foundations/OsiTcpIpMapperTool"), { ssr: false });
+const SubnettingLab = dynamic(() => import("@/components/notes/tools/network-models/foundations/SubnettingLab"), { ssr: false });
+const PortProtocolExplorerTool = dynamic(() => import("@/components/notes/tools/network-models/foundations/PortProtocolExplorerTool"), { ssr: false });
+const PduStackBuilderTool = dynamic(() => import("@/components/notes/tools/network-models/foundations/PduStackBuilderTool"), { ssr: false });
 
 export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
@@ -33,12 +38,17 @@ export default function Page({ source, headings }) {
       SectionProgressToggle,
       LevelProgressBar,
       CPDTracker,
+      CPDAssessmentPromo,
       SectionHeader,
       SubsectionHeader,
       BodyText,
       DiagramBlock,
+      MermaidDiagram,
       EncapsulationLab,
       OsiTcpIpMapperTool,
+      SubnettingLab,
+      PortProtocolExplorerTool,
+      PduStackBuilderTool,
     }),
     []
   );

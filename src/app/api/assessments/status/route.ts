@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/options";
 import { prisma } from "@/lib/db/prisma";
 
-const ALLOWED_COURSES = new Set(["cybersecurity"]);
+const ALLOWED_COURSES = new Set(["cybersecurity", "network-models"]);
 const ALLOWED_LEVELS = new Set(["foundations", "applied", "practice"]);
 
 export async function GET(req: Request) {

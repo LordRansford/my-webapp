@@ -15,34 +15,62 @@ type Body = {
   certificateName?: string;
 };
 
-const ALLOWED_COURSES = new Set(["cybersecurity"]);
+const ALLOWED_COURSES = new Set(["cybersecurity", "network-models"]);
 const ALLOWED_LEVELS = new Set(["foundations", "applied", "practice"]);
 
-const BLUEPRINT: Record<string, Array<{ domain: string; count: number }>> = {
-  foundations: [
-    { domain: "basics", count: 10 },
-    { domain: "identity", count: 10 },
-    { domain: "network", count: 10 },
-    { domain: "crypto", count: 8 },
-    { domain: "risk", count: 6 },
-    { domain: "response", count: 6 },
-  ],
-  applied: [
-    { domain: "web", count: 16 },
-    { domain: "api", count: 10 },
-    { domain: "auth", count: 8 },
-    { domain: "secrets", count: 6 },
-    { domain: "cloud", count: 5 },
-    { domain: "logging", count: 5 },
-  ],
-  practice: [
-    { domain: "sdlc", count: 10 },
-    { domain: "zero-trust", count: 8 },
-    { domain: "runtime", count: 8 },
-    { domain: "vulnerability", count: 8 },
-    { domain: "detection", count: 8 },
-    { domain: "governance", count: 8 },
-  ],
+const BLUEPRINTS: Record<string, Record<string, Array<{ domain: string; count: number }>>> = {
+  cybersecurity: {
+    foundations: [
+      { domain: "basics", count: 10 },
+      { domain: "identity", count: 10 },
+      { domain: "network", count: 10 },
+      { domain: "crypto", count: 8 },
+      { domain: "risk", count: 6 },
+      { domain: "response", count: 6 },
+    ],
+    applied: [
+      { domain: "web", count: 16 },
+      { domain: "api", count: 10 },
+      { domain: "auth", count: 8 },
+      { domain: "secrets", count: 6 },
+      { domain: "cloud", count: 5 },
+      { domain: "logging", count: 5 },
+    ],
+    practice: [
+      { domain: "sdlc", count: 10 },
+      { domain: "zero-trust", count: 8 },
+      { domain: "runtime", count: 8 },
+      { domain: "vulnerability", count: 8 },
+      { domain: "detection", count: 8 },
+      { domain: "governance", count: 8 },
+    ],
+  },
+  "network-models": {
+    foundations: [
+      { domain: "models", count: 6 },
+      { domain: "encapsulation", count: 10 },
+      { domain: "layers", count: 10 },
+      { domain: "addressing", count: 10 },
+      { domain: "dns", count: 8 },
+      { domain: "subnetting", count: 6 },
+    ],
+    applied: [
+      { domain: "tcp", count: 12 },
+      { domain: "udp", count: 8 },
+      { domain: "dns", count: 8 },
+      { domain: "routing", count: 8 },
+      { domain: "nat", count: 7 },
+      { domain: "tls", count: 7 },
+    ],
+    practice: [
+      { domain: "security", count: 10 },
+      { domain: "observability", count: 10 },
+      { domain: "captures", count: 8 },
+      { domain: "segmentation", count: 8 },
+      { domain: "operations", count: 8 },
+      { domain: "troubleshooting", count: 6 },
+    ],
+  },
 };
 
 function domainFromTags(tags: string) {
@@ -208,7 +236,7 @@ export async function POST(req: Request) {
 
     const picked: string[] = [];
     const pickedSet = new Set<string>();
-    const blueprint = BLUEPRINT[levelId] || [];
+    const blueprint = BLUEPRINTS[courseId]?.[levelId] || [];
 
     function takeFrom(list: string[], count: number) {
       const shuffled = shuffle(list);

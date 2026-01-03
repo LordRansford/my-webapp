@@ -3,12 +3,15 @@ export const networkSectionManifest = {
     "net-foundations-why-models-exist",
     "net-foundations-encapsulation-and-pdus",
     "net-foundations-osi-and-tcpip-mapping",
+    "net-foundations-osi-layers-detail",
     "net-foundations-addressing-and-names",
+    "net-foundations-subnetting-basics",
     "net-foundations-requests-from-browser-to-server",
     "net-foundations-foundations-capstone",
   ],
   intermediate: [
     "net-applied-tcp-reliability-and-flow",
+    "net-applied-dns-resolution-in-practice",
     "net-applied-udp-and-real-world-trade-offs",
     "net-applied-routing-and-forwarding",
     "net-applied-nat-and-state",
@@ -18,6 +21,7 @@ export const networkSectionManifest = {
   ],
   applied: [
     "net-applied-tcp-reliability-and-flow",
+    "net-applied-dns-resolution-in-practice",
     "net-applied-udp-and-real-world-trade-offs",
     "net-applied-routing-and-forwarding",
     "net-applied-nat-and-state",

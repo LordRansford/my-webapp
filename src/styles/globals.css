@@ -322,6 +322,8 @@ body {
   min-height: 100vh;
   display: grid;
   grid-template-rows: auto 1fr auto;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
 }
 
 .site-header {
@@ -333,6 +335,7 @@ body {
   border-bottom: 1px solid rgba(0, 0, 0, 0.04);
   transition: transform 220ms ease, opacity 220ms ease;
   will-change: transform;
+  --header-height: 64px;
 }
 
 .site-header--hidden {
@@ -351,6 +354,9 @@ body {
 }
 
 @media (max-width: 640px) {
+  .site-header {
+    --header-height: 56px;
+  }
   .site-header__inner {
     padding: var(--space-2) var(--space-3);
   }
@@ -531,6 +537,7 @@ html.dark .site-header nav a:not([data-active="true"]):hover {
 .page-shell {
   max-width: 1200px;
   width: 100%;
+  min-width: 0;
   margin: 0 auto;
   padding: var(--space-10) var(--space-6) var(--space-16);
 }

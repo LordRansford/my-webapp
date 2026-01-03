@@ -79,7 +79,7 @@ function NavItemWithDropdown({
           href={item.href}
           aria-current={active ? "page" : undefined}
           data-active={active}
-          className={`rounded-2xl border border-slate-200 bg-white px-3 py-2 text-base font-semibold transition ${
+          className={`block w-full max-w-full break-words rounded-2xl border border-slate-200 bg-white px-3 py-2 text-left text-base font-semibold transition ${
             active 
               ? "bg-slate-900 text-white shadow-sm hover:bg-slate-800" 
               : "text-slate-900 hover:bg-slate-100"
@@ -94,7 +94,7 @@ function NavItemWithDropdown({
               <li key={subItem.href}>
                 <Link
                   href={subItem.href}
-                  className="block rounded-lg px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+                  className="block w-full max-w-full break-words rounded-lg px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors"
                   onClick={onLinkClick}
                 >
                   {subItem.label}
@@ -166,7 +166,7 @@ function NavLinks({ vertical = false, pathname, onLinkClick }: { vertical?: bool
   return (
     <nav
       aria-label={vertical ? "Primary navigation (mobile)" : "Primary navigation"}
-      className={vertical ? "flex flex-col gap-2" : "nav-links hidden items-center gap-2 xl:flex"}
+      className={vertical ? "flex w-full max-w-full flex-col gap-2" : "nav-links hidden items-center gap-2 xl:flex"}
     >
       {navItems.map((item) => {
         const active = isActive(item.href);
@@ -187,7 +187,7 @@ function NavLinks({ vertical = false, pathname, onLinkClick }: { vertical?: bool
             href={item.href}
             aria-current={active ? "page" : undefined}
             data-active={active}
-            className={`${vertical ? "rounded-2xl border border-slate-200 bg-white px-3 py-2 text-base" : "rounded-full px-3 py-2 text-sm"} font-semibold transition ${
+            className={`${vertical ? "block w-full max-w-full break-words rounded-2xl border border-slate-200 bg-white px-3 py-2 text-left text-base" : "rounded-full px-3 py-2 text-sm"} font-semibold transition ${
               active 
                 ? "bg-slate-900 text-white shadow-sm hover:bg-slate-800" 
                 : "text-slate-900 bg-transparent hover:bg-slate-100 hover:text-slate-900"
@@ -223,16 +223,13 @@ function AccountAction({ variant, isSignedIn, onActionClick }: { variant: "deskt
   }
 
   return (
-    <button
-      type="button"
-      onClick={() => {
-        onActionClick();
-        signIn();
-      }}
+    <Link
+      href="/signin"
       className={`${base} ${variant === "desktop" ? "bg-slate-900 text-white hover:bg-slate-800" : ""}`}
+      onClick={onActionClick}
     >
       Sign in
-    </button>
+    </Link>
   );
 }
 
@@ -332,10 +329,18 @@ export default function Header() {
       </div>
 
       {mobileOpen ? (
-        <div className="border-t border-[color:var(--line)] bg-[var(--surface)] px-4 py-4 xl:hidden">
-          <NavLinks vertical pathname={pathname} onLinkClick={() => setMobileOpen(false)} />
-          <div className="mt-3 flex flex-col gap-2">
-            <AccountAction variant="mobile" isSignedIn={isSignedIn} onActionClick={() => setMobileOpen(false)} />
+        <div className="xl:hidden">
+          <button
+            type="button"
+            className="fixed inset-0 z-40 bg-black/20"
+            aria-label="Close navigation"
+            onClick={() => setMobileOpen(false)}
+          />
+          <div className="fixed left-0 right-0 z-50 border-t border-[color:var(--line)] bg-[var(--surface)] px-4 py-4 overflow-y-auto" style={{ top: "var(--header-height, 64px)", maxHeight: "calc(100dvh - var(--header-height, 64px))" }}>
+            <NavLinks vertical pathname={pathname} onLinkClick={() => setMobileOpen(false)} />
+            <div className="mt-3 flex flex-col gap-2">
+              <AccountAction variant="mobile" isSignedIn={isSignedIn} onActionClick={() => setMobileOpen(false)} />
+            </div>
           </div>
         </div>
       ) : null}

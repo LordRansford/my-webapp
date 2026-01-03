@@ -36,6 +36,8 @@ import { networkSectionManifest } from "@/lib/networkSections"
 
 <CPDTracker courseId="network-models" levelId="applied" estimatedHours={14} />
 
+<CPDAssessmentPromo courseName="Network models" levelLabel="Applied" assessmentHref="/network-models/assessment/applied" />
+
 <BodyText>
   In foundations we built language and the basic flow. Here we get more exact about behaviour.
   We focus on what you can prove using inspection, not what you can recite.
@@ -61,6 +63,21 @@ It also performs congestion control so the network is not overwhelmed.
 
 <ToolCard title="TCP handshake timeline" description="A minimal handshake with sequence and acknowledgement numbers.">
   <TcpHandshakeTimelineTool />
+</ToolCard>
+
+---
+
+<SectionHeader variant="content" emoji="🧠" id="net-applied-dns-resolution-in-practice">
+  DNS resolution in practice
+</SectionHeader>
+
+<SectionProgressToggle courseId="network-models" levelId="applied" sectionId="net-applied-dns-resolution-in-practice" />
+
+When DNS fails, people often blame the Internet.
+I try to be more exact. I ask which step failed.
+
+<ToolCard title="DNS resolution walkthrough" description="A step by step model you can use when DNS is slow or broken.">
+  <DnsResolutionWalkthroughTool />
 </ToolCard>
 
 ---
@@ -101,6 +118,10 @@ A router forwards packets across networks using IP addresses.
 
 This is why you can have a perfect Wi Fi link and still fail to reach a remote site.
 
+<ToolCard title="Traceroute and TTL" description="See why routers reply with time exceeded and why some hops are missing.">
+  <TracerouteTtlTool />
+</ToolCard>
+
 ---
 
 <SectionHeader variant="content" emoji="🔁" id="net-applied-nat-and-state">
@@ -120,6 +141,10 @@ Common failure patterns:
 1. The mapping expires and breaks a long lived flow.
 2. A port is reused and traffic is delivered to the wrong internal endpoint.
 3. An inbound flow is blocked because there is no mapping and no explicit rule.
+
+<ToolCard title="NAT state table simulator" description="Make NAT feel like a table, not a mystery.">
+  <NatStateTableTool />
+</ToolCard>
 
 ---
 

@@ -4,6 +4,9 @@ const byCourseLevel: Record<string, number> = {
   "cybersecurity:foundations": 80,
   "cybersecurity:applied": 80,
   "cybersecurity:practice": 80,
+  "network-models:foundations": 80,
+  "network-models:applied": 80,
+  "network-models:practice": 80,
 };
 
 export function getAssessmentAttemptCredits(params: { courseId: string; levelId: string }): number {

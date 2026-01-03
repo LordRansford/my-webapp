@@ -59,7 +59,7 @@ function storageKey(sessionId: string) {
 }
 
 export default function ExamRunner(props: {
-  courseId: "cybersecurity";
+  courseId: "cybersecurity" | "network-models";
   levelId: "foundations" | "applied" | "practice";
   title: string;
 }) {

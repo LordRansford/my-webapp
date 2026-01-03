@@ -1,4 +1,4 @@
-:HL["/_next/static/chunks/0ee4317a82fe1f3d.css","style"]
+:HL["/_next/static/chunks/1ab21f72c521ac9d.css","style"]
 :HL["/_next/static/chunks/a6f6a374fbd656c4.css","style"]
 :HC["/",""]
-0:{"buildId":"NFkBe5WmBcfiTY08GP87c","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"games","paramType":null,"paramKey":"games","hasRuntimePrefetch":false,"slots":{"children":{"name":"draft-duel","paramType":null,"paramKey":"draft-duel","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
+0:{"buildId":"sDF6hIH0r9dBY3K54xqGw","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"games","paramType":null,"paramKey":"games","hasRuntimePrefetch":false,"slots":{"children":{"name":"draft-duel","paramType":null,"paramKey":"draft-duel","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":true},"staleTime":300}

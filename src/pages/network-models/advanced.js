@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import { useMemo } from "react";
 import CourseLessonTemplate from "@/components/course/CourseLessonTemplate";
 import { MDXRenderer } from "@/components/notes/MDXRenderer";
@@ -11,11 +12,16 @@ import GlossaryTip from "@/components/notes/GlossaryTip";
 import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
 import LevelProgressBar from "@/components/course/LevelProgressBar";
 import CPDTracker from "@/components/CPDTracker";
+import CPDAssessmentPromo from "@/components/course/CPDAssessmentPromo";
 import SectionHeader from "@/components/course/SectionHeader";
 import SubsectionHeader from "@/components/course/SubsectionHeader";
 import BodyText from "@/components/course/BodyText";
 import DiagramBlock from "@/components/DiagramBlock";
+import MermaidDiagram from "@/components/notes/MermaidDiagram";
 import { networkSectionManifest } from "@/lib/networkSections";
+
+const PacketCaptureFilterBuilderTool = dynamic(() => import("@/components/notes/tools/network-models/practice/PacketCaptureFilterBuilderTool"), { ssr: false });
+const SignalTriageMatrixTool = dynamic(() => import("@/components/notes/tools/network-models/practice/SignalTriageMatrixTool"), { ssr: false });
 
 export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
@@ -29,10 +35,14 @@ export default function Page({ source, headings }) {
       SectionProgressToggle,
       LevelProgressBar,
       CPDTracker,
+      CPDAssessmentPromo,
       SectionHeader,
       SubsectionHeader,
       BodyText,
       DiagramBlock,
+      MermaidDiagram,
+      PacketCaptureFilterBuilderTool,
+      SignalTriageMatrixTool,
     }),
     []
   );

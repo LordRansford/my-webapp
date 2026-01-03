@@ -4,7 +4,7 @@ import { requireSameOrigin } from "@/lib/security/origin";
 import { requireAdminJson } from "@/lib/security/adminAuth";
 import { rateLimit } from "@/lib/security/rateLimit";
 
-const ALLOWED_COURSES = new Set(["cybersecurity"]);
+const ALLOWED_COURSES = new Set(["cybersecurity", "network-models"]);
 const ALLOWED_LEVELS = new Set(["foundations", "applied", "practice"]);
 
 function parsePublished(tags: string) {

@@ -49,24 +49,44 @@ function domainFromTags(tags: string) {
   return "";
 }
 
-function buildNextSteps(params: { levelId: string; weakDomains: string[] }) {
+function buildNextSteps(params: { courseId: string; levelId: string; weakDomains: string[] }) {
+  const courseId = String(params.courseId || "");
   const level = String(params.levelId || "");
   const next: Array<{ title: string; href: string; why: string }> = [];
 
-  next.push({ title: "CPD prep pack", href: "/cybersecurity/cpd-prep", why: "Structured revision workflows that do not mirror the live bank" });
   next.push({ title: "Pricing", href: "/pricing", why: "CPD, certificates, donations, and compute credits" });
 
   const courseHref =
-    level === "foundations" ? "/cybersecurity/beginner" : level === "applied" ? "/cybersecurity/intermediate" : "/cybersecurity/advanced";
+    courseId === "cybersecurity"
+      ? level === "foundations"
+        ? "/cybersecurity/beginner"
+        : level === "applied"
+          ? "/cybersecurity/intermediate"
+          : "/cybersecurity/advanced"
+      : courseId === "network-models"
+        ? level === "foundations"
+          ? "/network-models/beginner"
+          : level === "applied"
+            ? "/network-models/intermediate"
+            : "/network-models/advanced"
+        : "/";
+
   next.push({ title: "Return to course notes", href: courseHref, why: "Target revision using the course path" });
+
+  if (courseId === "cybersecurity") {
+    next.push({ title: "CPD prep pack", href: "/cybersecurity/cpd-prep", why: "Structured revision workflows that do not mirror the live bank" });
+  }
+  if (courseId === "network-models") {
+    next.push({ title: "Open the labs", href: "/network-models", why: "Practice flows with the labs and diagrams" });
+  }
 
   // Domain deep links into the exact lesson anchors when available.
   for (const d of params.weakDomains.slice(0, 3)) {
-    const link = getDomainLink({ courseId: "cybersecurity", levelId: level, domain: String(d || "") });
+    const link = getDomainLink({ courseId, levelId: level, domain: String(d || "") });
     if (link) next.push({ title: link.title, href: link.href, why: `Revision for domain ${String(d || "")}` });
   }
 
-  const toolByDomain: Record<string, { title: string; href: string; why: string }> = {
+  const toolByDomainCyber: Record<string, { title: string; href: string; why: string }> = {
     risk: { title: "Risk register builder", href: "/tools/cyber/risk-register-builder", why: "Train prioritisation and mitigation clarity" },
     detection: { title: "Incident post mortem builder", href: "/tools/cyber/incident-post-mortem-builder", why: "Practice timeline, containment, and follow up actions" },
     logging: { title: "Incident post mortem builder", href: "/tools/cyber/incident-post-mortem-builder", why: "Translate logs into an investigation narrative" },
@@ -80,6 +100,16 @@ function buildNextSteps(params: { levelId: string; weakDomains: string[] }) {
     crypto: { title: "RSA lab", href: "/tools/cyber/rsa-lab", why: "Reinforce asymmetric crypto concepts safely" },
     network: { title: "Certificate viewer", href: "/tools/cyber/certificate-viewer", why: "Build confidence with browser trust cues" },
   };
+
+  const toolByDomainNetwork: Record<string, { title: string; href: string; why: string }> = {
+    dns: { title: "DNS walkthrough", href: "/network-models/intermediate#net-applied-dns-resolution-in-practice", why: "Rehearse the resolver path and caching behaviour" },
+    subnetting: { title: "Subnetting lab", href: "/network-models/beginner#net-foundations-subnetting-basics", why: "Build fast CIDR intuition and avoid wrong assumptions" },
+    routing: { title: "Traceroute and TTL", href: "/network-models/intermediate#net-applied-routing-and-forwarding", why: "Make routing and forwarding observable" },
+    nat: { title: "NAT state table simulator", href: "/network-models/intermediate#net-applied-nat-and-state", why: "Understand NAT expiry and stateful behaviour" },
+    captures: { title: "Packet capture filter builder", href: "/network-models/advanced#net-practice-captures-without-hacking", why: "Practice safe investigation filters" },
+  };
+
+  const toolByDomain = courseId === "network-models" ? toolByDomainNetwork : toolByDomainCyber;
 
   for (const d of params.weakDomains.slice(0, 3)) {
     const tool = toolByDomain[String(d || "").trim()];
@@ -321,7 +351,7 @@ export async function POST(req: Request) {
       .sort((a, b) => a.percent - b.percent);
 
     const weakDomains = domainReport.filter((d) => d.total >= 3 && d.percent < assessment.passThreshold).map((d) => d.domain);
-    const nextSteps = buildNextSteps({ levelId: assessment.levelId, weakDomains });
+    const nextSteps = buildNextSteps({ courseId: assessment.courseId, levelId: assessment.levelId, weakDomains });
 
     return NextResponse.json(
       {

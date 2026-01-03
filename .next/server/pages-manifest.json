@@ -157,6 +157,7 @@
   "/my-cpd/records": "pages/my-cpd/records.html",
   "/network-models": "pages/network-models.html",
   "/network-models/advanced": "pages/network-models/advanced.js",
+  "/network-models/assessment/[level]": "pages/network-models/assessment/[level].js",
   "/network-models/beginner": "pages/network-models/beginner.js",
   "/network-models/intermediate": "pages/network-models/intermediate.js",
   "/network-models/summary": "pages/network-models/summary.js",

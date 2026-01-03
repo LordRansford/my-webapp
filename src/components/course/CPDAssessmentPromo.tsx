@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useSession, signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 export default function CPDAssessmentPromo(props: {
   courseName: string;
@@ -25,13 +25,12 @@ export default function CPDAssessmentPromo(props: {
         </div>
         <div className="flex flex-wrap gap-2">
           {!isAuthed ? (
-            <button
-              type="button"
-              onClick={() => signIn()}
+            <Link
+              href="/signin"
               className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800"
             >
               Sign in
-            </button>
+            </Link>
           ) : null}
           <Link
             href={props.assessmentHref}

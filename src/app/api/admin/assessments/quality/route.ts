@@ -3,12 +3,19 @@ import { prisma } from "@/lib/db/prisma";
 import { requireAdminJson } from "@/lib/security/adminAuth";
 import { rateLimit } from "@/lib/security/rateLimit";
 
-const ALLOWED_COURSES = new Set(["cybersecurity"]);
+const ALLOWED_COURSES = new Set(["cybersecurity", "network-models"]);
 const ALLOWED_LEVELS = new Set(["foundations", "applied", "practice"]);
-const ALLOWED_DOMAINS: Record<string, Set<string>> = {
-  foundations: new Set(["basics", "identity", "network", "crypto", "risk", "response"]),
-  applied: new Set(["web", "api", "auth", "secrets", "cloud", "logging"]),
-  practice: new Set(["sdlc", "zero-trust", "runtime", "vulnerability", "detection", "governance"]),
+const ALLOWED_DOMAINS: Record<string, Record<string, Set<string>>> = {
+  cybersecurity: {
+    foundations: new Set(["basics", "identity", "network", "crypto", "risk", "response"]),
+    applied: new Set(["web", "api", "auth", "secrets", "cloud", "logging"]),
+    practice: new Set(["sdlc", "zero-trust", "runtime", "vulnerability", "detection", "governance"]),
+  },
+  "network-models": {
+    foundations: new Set(["models", "encapsulation", "layers", "addressing", "dns", "subnetting"]),
+    applied: new Set(["tcp", "udp", "dns", "routing", "nat", "tls"]),
+    practice: new Set(["security", "observability", "captures", "segmentation", "operations", "troubleshooting"]),
+  },
 };
 
 function safeJsonParse(value: string | null) {
@@ -104,7 +111,7 @@ export async function GET(req: Request) {
     const hasPublished = hasTag(q.tags, "published");
     const domains = extractDomains(q.tags);
     const hasDomain = domains.length > 0;
-    const allowedDomains = ALLOWED_DOMAINS[levelId] || new Set<string>();
+    const allowedDomains = ALLOWED_DOMAINS[courseId]?.[levelId] || new Set<string>();
 
     if (!hasPublished) missingPublished.push(q.id);
     if (!hasDomain) missingDomain.push(q.id);

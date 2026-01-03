@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 
 type LevelId = "foundations" | "applied" | "practice";
+type CourseId = "cybersecurity" | "network-models";
 
 type QuestionRow = {
   id: string;
@@ -73,6 +74,7 @@ function setDomainTag(tags: string, domain: string) {
 }
 
 export default function AdminAssessmentsClient(props: { canManage: boolean }) {
+  const [courseId, setCourseId] = useState<CourseId>("cybersecurity");
   const [levelId, setLevelId] = useState<LevelId>("foundations");
   const [version, setVersion] = useState("2025.01");
   const [busy, setBusy] = useState(false);
@@ -84,7 +86,7 @@ export default function AdminAssessmentsClient(props: { canManage: boolean }) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [issueFilter, setIssueFilter] = useState<string>("");
 
-  const selected = useMemo(() => ({ courseId: "cybersecurity", levelId, version }), [levelId, version]);
+  const selected = useMemo(() => ({ courseId, levelId, version }), [courseId, levelId, version]);
 
   const refresh = async () => {
     setBusy(true);
@@ -141,10 +143,15 @@ export default function AdminAssessmentsClient(props: { canManage: boolean }) {
   }, [data?.questions, issueIds]);
 
   const allowedDomains = useMemo(() => {
+    if (selected.courseId === "network-models") {
+      if (levelId === "foundations") return ["models", "encapsulation", "layers", "addressing", "dns", "subnetting"];
+      if (levelId === "applied") return ["tcp", "udp", "dns", "routing", "nat", "tls"];
+      return ["security", "observability", "captures", "segmentation", "operations", "troubleshooting"];
+    }
     if (levelId === "foundations") return ["basics", "identity", "network", "crypto", "risk", "response"];
     if (levelId === "applied") return ["web", "api", "auth", "secrets", "cloud", "logging"];
     return ["sdlc", "zero-trust", "runtime", "vulnerability", "detection", "governance"];
-  }, [levelId]);
+  }, [levelId, selected.courseId]);
 
   const togglePublish = async (q: QuestionRow) => {
     if (!props.canManage) return;
@@ -227,8 +234,18 @@ export default function AdminAssessmentsClient(props: { canManage: boolean }) {
       <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
         <div className="grid gap-3 md:grid-cols-3">
           <div className="space-y-1">
-            <div className="text-xs font-semibold text-slate-600">Course</div>
-            <div className="text-sm font-semibold text-slate-900">Cybersecurity</div>
+            <label className="text-xs font-semibold text-slate-600" htmlFor="course">
+              Course
+            </label>
+            <select
+              id="course"
+              className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900"
+              value={courseId}
+              onChange={(e) => setCourseId(e.target.value as CourseId)}
+            >
+              <option value="cybersecurity">Cybersecurity</option>
+              <option value="network-models">Network models</option>
+            </select>
           </div>
           <div className="space-y-1">
             <label className="text-xs font-semibold text-slate-600" htmlFor="level">

@@ -90,11 +90,89 @@ const CYBER_DOMAIN_LINKS: Record<string, DomainLink> = {
   },
 };
 
+const NETWORK_DOMAIN_LINKS: Record<string, DomainLink> = {
+  [key("network-models", "foundations", "models")]: {
+    title: "Why models exist",
+    href: "/network-models/beginner#net-foundations-why-models-exist",
+  },
+  [key("network-models", "foundations", "encapsulation")]: {
+    title: "Encapsulation and PDUs",
+    href: "/network-models/beginner#net-foundations-encapsulation-and-pdus",
+  },
+  [key("network-models", "foundations", "layers")]: {
+    title: "OSI and TCP IP mapping",
+    href: "/network-models/beginner#net-foundations-osi-and-tcpip-mapping",
+  },
+  [key("network-models", "foundations", "addressing")]: {
+    title: "Addresses and names",
+    href: "/network-models/beginner#net-foundations-addressing-and-names",
+  },
+  [key("network-models", "foundations", "dns")]: {
+    title: "A request from browser to server",
+    href: "/network-models/beginner#net-foundations-requests-from-browser-to-server",
+  },
+  [key("network-models", "foundations", "subnetting")]: {
+    title: "Subnetting basics",
+    href: "/network-models/beginner#net-foundations-subnetting-basics",
+  },
+
+  [key("network-models", "applied", "tcp")]: {
+    title: "TCP reliability and flow",
+    href: "/network-models/intermediate#net-applied-tcp-reliability-and-flow",
+  },
+  [key("network-models", "applied", "dns")]: {
+    title: "DNS resolution in practice",
+    href: "/network-models/intermediate#net-applied-dns-resolution-in-practice",
+  },
+  [key("network-models", "applied", "udp")]: {
+    title: "UDP trade offs",
+    href: "/network-models/intermediate#net-applied-udp-and-real-world-trade-offs",
+  },
+  [key("network-models", "applied", "routing")]: {
+    title: "Routing and forwarding",
+    href: "/network-models/intermediate#net-applied-routing-and-forwarding",
+  },
+  [key("network-models", "applied", "nat")]: {
+    title: "NAT and state",
+    href: "/network-models/intermediate#net-applied-nat-and-state",
+  },
+  [key("network-models", "applied", "tls")]: {
+    title: "TLS and where it sits",
+    href: "/network-models/intermediate#net-applied-tls-where-it-sits",
+  },
+
+  [key("network-models", "practice", "security")]: {
+    title: "Security by layer",
+    href: "/network-models/advanced#net-practice-security-by-layer",
+  },
+  [key("network-models", "practice", "observability")]: {
+    title: "Observability and signals",
+    href: "/network-models/advanced#net-practice-observability-and-signals",
+  },
+  [key("network-models", "practice", "captures")]: {
+    title: "Packet captures",
+    href: "/network-models/advanced#net-practice-captures-without-hacking",
+  },
+  [key("network-models", "practice", "segmentation")]: {
+    title: "Segmentation and trust zones",
+    href: "/network-models/advanced#net-practice-enterprise-segmentation",
+  },
+  [key("network-models", "practice", "operations")]: {
+    title: "Capstone",
+    href: "/network-models/advanced#net-practice-capstone",
+  },
+  [key("network-models", "practice", "troubleshooting")]: {
+    title: "Capstone",
+    href: "/network-models/advanced#net-practice-capstone",
+  },
+};
+
 export function getDomainLink(params: Params): DomainLink | null {
   const courseId = String(params.courseId || "");
   const levelId = String(params.levelId || "");
   const domain = String(params.domain || "").trim();
   if (!courseId || !levelId || !domain) return null;
-  return CYBER_DOMAIN_LINKS[key(courseId, levelId, domain)] || null;
+  const k = key(courseId, levelId, domain);
+  return CYBER_DOMAIN_LINKS[k] || NETWORK_DOMAIN_LINKS[k] || null;
 }
 
