@@ -22,6 +22,44 @@ function slugify(text) {
     .replace(/-+/g, "-");
 }
 
+function courseLessonUrlFromContentPath(filePath) {
+  const rel = String(path.relative(root, filePath)).replace(/\\/g, "/");
+  if (!rel.startsWith("content/")) return null;
+  const without = rel.replace(/^content\//, "").replace(/\.mdx$/, "");
+  // Course MDX is served under /courses/*
+  if (without.startsWith("courses/")) return `/${without}`;
+  return null;
+}
+
+function learnerLevelUrl(courseId, levelId) {
+  // Map to the learner-facing canonical URLs.
+  const c = String(courseId || "").trim();
+  const l = String(levelId || "").trim();
+
+  if (c === "cybersecurity") {
+    if (l === "foundations") return "/cybersecurity/beginner";
+    if (l === "applied") return "/cybersecurity/intermediate";
+    if (l === "practice") return "/cybersecurity/advanced";
+    if (l === "summary") return "/cybersecurity/summary";
+    return "/cybersecurity";
+  }
+
+  if (c === "network-models") {
+    if (l === "foundations") return "/network-models/beginner";
+    if (l === "applied") return "/network-models/intermediate";
+    if (l === "practice") return "/network-models/advanced";
+    if (l === "summary") return "/network-models/summary";
+    return "/network-models";
+  }
+
+  // Most other courses use /courses/<course>/<level>
+  if (l === "foundations") return `/courses/${c}/foundations`;
+  if (l === "intermediate") return `/courses/${c}/intermediate`;
+  if (l === "advanced") return `/courses/${c}/advanced`;
+  if (l === "summary") return `/courses/${c}/summary`;
+  return `/courses/${c}`;
+}
+
 function readStatus() {
   if (!fs.existsSync(courseStatusPath)) return {};
   return JSON.parse(fs.readFileSync(courseStatusPath, "utf8"));
@@ -66,6 +104,7 @@ function parseFile(filePath) {
   const courseId = String(front.courseId || "").trim();
   const levelId = String(front.levelId || "").trim();
   const title = String(front.title || path.basename(filePath));
+  const summary = String(front.summary || front.description || "").trim();
   const estimatedHours = Number(front.estimatedHours || 0);
   const stepIndex = Number(front.stepIndex || 0);
   const learningObjectives = Array.isArray(front.learningObjectives)
@@ -111,6 +150,7 @@ function parseFile(filePath) {
     courseId,
     levelId,
     title,
+    summary,
     estimatedHours,
     stepIndex,
     hasQuiz,
@@ -320,6 +360,82 @@ function writeMapping(courseId, status, grouped) {
     cov.push("");
   });
   fs.writeFileSync(path.join(folder, "outcome-coverage.md"), cov.join("\n"), "utf8");
+
+  // Accreditor-ready pack: a single, structured JSON bundle per course.
+  // This is designed for CPD assessors to scan quickly:
+  // - course structure + timings
+  // - learning objectives/outcomes per level
+  // - evidence signals (sections/quizzes/tools)
+  // - links to learner-facing pages
+  const packLevels = levels
+    .slice()
+    .sort((a, b) => String(a.levelId).localeCompare(String(b.levelId)))
+    .map((lvl) => {
+      // enrich source files with URLs and per-file hours if available
+      const enrichedFiles = lvl.sourceFiles
+        .slice()
+        .sort((a, b) => (Number(a.stepIndex) || 0) - (Number(b.stepIndex) || 0))
+        .map((sf) => {
+          const full = path.join(root, sf.file);
+          let perFileHours = null;
+          let perFileSummary = null;
+          try {
+            const raw = fs.readFileSync(full, "utf8");
+            const parsed = matter(raw);
+            perFileHours = Number(parsed?.data?.estimatedHours) || null;
+            perFileSummary = String(parsed?.data?.summary || parsed?.data?.description || "").trim() || null;
+          } catch {
+            // ignore
+          }
+          return {
+            title: sf.title,
+            sourcePath: sf.file,
+            url: courseLessonUrlFromContentPath(full),
+            estimatedHours: perFileHours,
+            summary: perFileSummary,
+          };
+        });
+
+      return {
+        levelId: lvl.levelId,
+        url: learnerLevelUrl(courseId, lvl.levelId),
+        estimatedHours: lvl.estimatedHours,
+        learningObjectives: lvl.learningObjectives,
+        trackedSectionIds: lvl.sectionIds,
+        quizzes: lvl.quizzes,
+        tools: lvl.tools,
+        syllabus: {
+          modules: enrichedFiles,
+        },
+        evidenceSignals: lvl.evidenceSignals,
+      };
+    });
+
+  const accreditorPack = {
+    generatedAt: mapping.generatedAt,
+    version: "1.0.0",
+    course: {
+      courseId,
+      status,
+      totalEstimatedHours: mapping.coverageSummary.totalEstimatedHours,
+    },
+    policy: {
+      cpdHoursPolicy: "1 hour = 1 CPD hour (point).",
+      timeRecordingPolicy:
+        "Fixed-hours model. Learners cannot self-declare CPD time. Progress is tracked via completion signals and timed assessment is counted once on completion.",
+      certificatePolicy: "Certificates use UUIDs and a public verification page. Certificates do not imply third-party accreditation unless explicitly stated.",
+    },
+    syllabus: {
+      levels: packLevels,
+    },
+    outcomeCoverage: outcomeCoverage.coverage,
+  };
+  fs.writeFileSync(path.join(folder, "accreditation-pack.json"), JSON.stringify(accredititorPackSafe(accreditorPack), null, 2), "utf8");
+}
+
+function accredititorPackSafe(pack) {
+  // Defensive: ensure the output never includes undefined values (keeps diffs clean, avoids null/undefined ambiguity).
+  return JSON.parse(JSON.stringify(pack));
 }
 
 export async function generate() {

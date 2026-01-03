@@ -1,0 +1,265 @@
+{
+  "generatedAt": "2026-01-03T23:01:28.781Z",
+  "version": "1.0.0",
+  "course": {
+    "courseId": "network-models",
+    "status": "Draft",
+    "totalEstimatedHours": 40
+  },
+  "policy": {
+    "cpdHoursPolicy": "1 hour = 1 CPD hour (point).",
+    "timeRecordingPolicy": "Fixed-hours model. Learners cannot self-declare CPD time. Progress is tracked via completion signals and timed assessment is counted once on completion.",
+    "certificatePolicy": "Certificates use UUIDs and a public verification page. Certificates do not imply third-party accreditation unless explicitly stated."
+  },
+  "syllabus": {
+    "levels": [
+      {
+        "levelId": "applied",
+        "url": "/network-models/intermediate",
+        "estimatedHours": 14,
+        "learningObjectives": [
+          "Explain TCP reliability using clear terms and measurable outcomes.",
+          "Explain UDP trade offs and name realistic use cases.",
+          "Explain routing and forwarding with correct boundaries.",
+          "Explain NAT behaviour and common failure modes."
+        ],
+        "trackedSectionIds": [
+          "net-applied-tcp-reliability-and-flow",
+          "net-applied-dns-resolution-in-practice",
+          "net-applied-udp-and-real-world-trade-offs",
+          "net-applied-routing-and-forwarding",
+          "net-applied-nat-and-state",
+          "net-applied-tls-where-it-sits",
+          "net-applied-troubleshooting-method",
+          "net-applied-applied-capstone"
+        ],
+        "quizzes": [
+          {
+            "id": "quiz-quick-check",
+            "title": "Quick check",
+            "sectionId": null,
+            "explicitId": false
+          }
+        ],
+        "tools": [
+          {
+            "id": null,
+            "title": "TCP handshake timeline"
+          },
+          {
+            "id": null,
+            "title": "DNS resolution walkthrough"
+          },
+          {
+            "id": null,
+            "title": "Traceroute and TTL"
+          },
+          {
+            "id": null,
+            "title": "NAT state table simulator"
+          }
+        ],
+        "syllabus": {
+          "modules": [
+            {
+              "title": "Applied OSI and TCP IP",
+              "sourcePath": "content/notes/network-models/intermediate.mdx",
+              "url": null,
+              "estimatedHours": 14,
+              "summary": "Layer by layer behaviour with TCP, UDP, routing, NAT, and TLS, with realistic troubleshooting."
+            }
+          ]
+        },
+        "evidenceSignals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      },
+      {
+        "levelId": "foundations",
+        "url": "/network-models/beginner",
+        "estimatedHours": 10,
+        "learningObjectives": [
+          "Explain what a protocol is and what a model is, using clear boundaries.",
+          "Explain encapsulation and decapsulation using correct PDU names.",
+          "Map OSI layers to TCP IP layers and explain the limits of the mapping.",
+          "Describe DNS and HTTPS flows in the right order."
+        ],
+        "trackedSectionIds": [
+          "net-foundations-why-models-exist",
+          "net-foundations-encapsulation-and-pdus",
+          "net-foundations-osi-and-tcpip-mapping",
+          "net-foundations-osi-layers-detail",
+          "net-foundations-addressing-and-names",
+          "net-foundations-subnetting-basics",
+          "net-foundations-requests-from-browser-to-server",
+          "net-foundations-foundations-capstone"
+        ],
+        "quizzes": [
+          {
+            "id": "quiz-quick-check",
+            "title": "Quick check",
+            "sectionId": null,
+            "explicitId": false
+          }
+        ],
+        "tools": [
+          {
+            "id": null,
+            "title": "PDU stack builder"
+          },
+          {
+            "id": null,
+            "title": "Encapsulation lab"
+          },
+          {
+            "id": null,
+            "title": "Map OSI to TCP IP"
+          },
+          {
+            "id": null,
+            "title": "Ports and protocols"
+          },
+          {
+            "id": null,
+            "title": "Subnetting lab"
+          }
+        ],
+        "syllabus": {
+          "modules": [
+            {
+              "title": "OSI and TCP IP Foundations",
+              "sourcePath": "content/notes/network-models/foundations.mdx",
+              "url": null,
+              "estimatedHours": 10,
+              "summary": "Encapsulation, addressing, and the purpose of layers, explained with exact terms and safe labs."
+            }
+          ]
+        },
+        "evidenceSignals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      },
+      {
+        "levelId": "practice",
+        "url": "/network-models/advanced",
+        "estimatedHours": 16,
+        "learningObjectives": [
+          "Map common failures and controls to the right layer and explain why.",
+          "Design a small monitoring and logging plan using layer aware signals.",
+          "Explain how to reason about packet captures safely and ethically."
+        ],
+        "trackedSectionIds": [
+          "net-practice-security-by-layer",
+          "net-practice-observability-and-signals",
+          "net-practice-captures-without-hacking",
+          "net-practice-enterprise-segmentation",
+          "net-practice-capstone"
+        ],
+        "quizzes": [
+          {
+            "id": "quiz-quick-check",
+            "title": "Quick check",
+            "sectionId": null,
+            "explicitId": false
+          }
+        ],
+        "tools": [
+          {
+            "id": null,
+            "title": "Signal triage matrix"
+          },
+          {
+            "id": null,
+            "title": "Packet capture filter builder"
+          }
+        ],
+        "syllabus": {
+          "modules": [
+            {
+              "title": "Network Models for Security and Operations",
+              "sourcePath": "content/notes/network-models/advanced.mdx",
+              "url": null,
+              "estimatedHours": 16,
+              "summary": "Security, monitoring, and operations thinking built on correct network foundations."
+            }
+          ]
+        },
+        "evidenceSignals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      }
+    ]
+  },
+  "outcomeCoverage": {
+    "levels": [
+      {
+        "levelId": "practice",
+        "estimatedHours": 16,
+        "learningObjectivesCount": 3,
+        "learningObjectivesMissing": false,
+        "trackedSectionsCount": 5,
+        "quizBlocksCount": 1,
+        "toolsCount": 2,
+        "signals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      },
+      {
+        "levelId": "foundations",
+        "estimatedHours": 10,
+        "learningObjectivesCount": 4,
+        "learningObjectivesMissing": false,
+        "trackedSectionsCount": 8,
+        "quizBlocksCount": 1,
+        "toolsCount": 5,
+        "signals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      },
+      {
+        "levelId": "applied",
+        "estimatedHours": 14,
+        "learningObjectivesCount": 4,
+        "learningObjectivesMissing": false,
+        "trackedSectionsCount": 8,
+        "quizBlocksCount": 1,
+        "toolsCount": 4,
+        "signals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      }
+    ],
+    "totals": {
+      "totalEstimatedHours": 40,
+      "totalLearningObjectives": 11,
+      "totalTrackedSections": 21,
+      "totalQuizBlocks": 3,
+      "totalTools": 11
+    },
+    "gaps": {
+      "levelsMissingLearningObjectives": [],
+      "levelsMissingQuizBlocks": [],
+      "levelsMissingToolActivities": [],
+      "levelsMissingSectionTracking": [],
+      "recommendations": []
+    }
+  }
+}

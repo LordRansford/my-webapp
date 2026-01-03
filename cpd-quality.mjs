@@ -14,6 +14,7 @@ const packFiles = [
   "mapping.md",
   "outcome-coverage.json",
   "outcome-coverage.md",
+  "accreditation-pack.json",
   "quality-and-review.md",
   "assessment.md",
   "provider-and-instructor.md",

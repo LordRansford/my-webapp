@@ -1,0 +1,501 @@
+{
+  "generatedAt": "2026-01-03T23:01:28.780Z",
+  "version": "1.0.0",
+  "course": {
+    "courseId": "cybersecurity",
+    "status": "Ready",
+    "totalEstimatedHours": 56
+  },
+  "policy": {
+    "cpdHoursPolicy": "1 hour = 1 CPD hour (point).",
+    "timeRecordingPolicy": "Fixed-hours model. Learners cannot self-declare CPD time. Progress is tracked via completion signals and timed assessment is counted once on completion.",
+    "certificatePolicy": "Certificates use UUIDs and a public verification page. Certificates do not imply third-party accreditation unless explicitly stated."
+  },
+  "syllabus": {
+    "levels": [
+      {
+        "levelId": "applied",
+        "url": "/cybersecurity/intermediate",
+        "estimatedHours": 16,
+        "learningObjectives": [
+          "Apply basic threat modelling to a small system, identifying assets, actors, and likely threats.",
+          "Explain how authentication, authorisation, sessions, and cookies interact in common web flows.",
+          "Analyse simple log signals and relate them to likely misuse or attack paths.",
+          "Evaluate trade offs between controls when constraints (cost, usability, risk) conflict."
+        ],
+        "trackedSectionIds": [
+          "applied-a1-threat-modelling-as-design",
+          "applied-a3-web-app-security",
+          "applied-a2-identity-and-access-control",
+          "applied-a6-logging-and-detection-basics",
+          "applied-a5-verification-and-release-gates",
+          "applied-a4-api-and-service-security",
+          "applied-a7-applied-capstone"
+        ],
+        "quizzes": [
+          {
+            "id": "applied-a1-threat-modelling-as-design",
+            "title": "Quick check. Threat modelling",
+            "sectionId": "applied-a1-threat-modelling-as-design",
+            "explicitId": true
+          },
+          {
+            "id": "applied-a3-web-app-security",
+            "title": "Quick check. Web security",
+            "sectionId": "applied-a3-web-app-security",
+            "explicitId": true
+          },
+          {
+            "id": "applied-a2-identity-and-access-control",
+            "title": "Quick check. Identity and sessions",
+            "sectionId": "applied-a2-identity-and-access-control",
+            "explicitId": true
+          },
+          {
+            "id": "applied-a6-logging-and-detection-basics",
+            "title": "Quick check. Logging and risk",
+            "sectionId": "applied-a6-logging-and-detection-basics",
+            "explicitId": true
+          },
+          {
+            "id": "applied-a5-verification-and-release-gates",
+            "title": "Quick check. Verification",
+            "sectionId": "applied-a5-verification-and-release-gates",
+            "explicitId": true
+          },
+          {
+            "id": "applied-a4-api-and-service-security",
+            "title": "Quick check. APIs",
+            "sectionId": "applied-a4-api-and-service-security",
+            "explicitId": true
+          },
+          {
+            "id": "applied-a7-applied-capstone",
+            "title": "Quick check. Capstone",
+            "sectionId": "applied-a7-applied-capstone",
+            "explicitId": true
+          }
+        ],
+        "tools": [
+          {
+            "id": "threat-model-canvas",
+            "title": "Sketch a simple threat model"
+          },
+          {
+            "id": "attack-surface-explorer",
+            "title": "Explore attack surfaces"
+          },
+          {
+            "id": "session-flow-sandbox",
+            "title": "Follow a session through a web app"
+          },
+          {
+            "id": "session-hijack-demo",
+            "title": "See session hijacking in action"
+          },
+          {
+            "id": "log-triage-lab",
+            "title": "Practice spotting important events in logs"
+          },
+          {
+            "id": "risk-tradeoff-lab",
+            "title": "Play with risk trade offs"
+          },
+          {
+            "id": "feature-security-review-pack",
+            "title": "Build a feature security review pack"
+          }
+        ],
+        "syllabus": {
+          "modules": [
+            {
+              "title": "Applied Cybersecurity",
+              "sourcePath": "content/notes/cybersecurity/intermediate.mdx",
+              "url": null,
+              "estimatedHours": 16,
+              "summary": "Applied threat modelling, attack surfaces, identity, detection and risk trade offs with hands-on labs."
+            }
+          ]
+        },
+        "evidenceSignals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      },
+      {
+        "levelId": "foundations",
+        "url": "/cybersecurity/beginner",
+        "estimatedHours": 8,
+        "learningObjectives": [
+          "Explain the CIA triad (confidentiality, integrity, availability) with concrete everyday examples.",
+          "Explain how data representation (bits, bytes, encodings) affects security outcomes.",
+          "Apply simple checks to passwords, links, and basic account hygiene using the labs.",
+          "Analyse a small system to identify trust boundaries and obvious attack surface.",
+          "Explain how phishing and social engineering attempts work and how to spot realistic red flags.",
+          "Create a personal security improvement plan you can follow and review.",
+          "Evaluate a simple breach scenario and recommend preventive and detective controls."
+        ],
+        "trackedSectionIds": [
+          "foundations-f0-what-security-is",
+          "foundations-f1-risk-and-outcomes",
+          "foundations-f5-identity-and-access",
+          "foundations-f2-data-and-integrity",
+          "foundations-f3-networks-and-transport",
+          "foundations-f4-cia-and-simple-attacks",
+          "foundations-f6-human-factors-and-phishing",
+          "foundations-f7-privacy-and-everyday-data-protection",
+          "foundations-f8-foundations-capstone"
+        ],
+        "quizzes": [
+          {
+            "id": "foundations-f0-what-security-is",
+            "title": "Quick check. What cybersecurity is",
+            "sectionId": "foundations-f0-what-security-is",
+            "explicitId": true
+          },
+          {
+            "id": "foundations-f1-risk-and-outcomes",
+            "title": "Quick check. Risk and outcomes",
+            "sectionId": "foundations-f1-risk-and-outcomes",
+            "explicitId": true
+          },
+          {
+            "id": "foundations-f5-identity-and-access",
+            "title": "Quick check. Identity and access",
+            "sectionId": "foundations-f5-identity-and-access",
+            "explicitId": true
+          },
+          {
+            "id": "foundations-f2-data-and-integrity",
+            "title": "Quick check. Data and integrity",
+            "sectionId": "foundations-f2-data-and-integrity",
+            "explicitId": true
+          },
+          {
+            "id": "foundations-f3-networks-and-transport",
+            "title": "Quick check. Networks and transport",
+            "sectionId": "foundations-f3-networks-and-transport",
+            "explicitId": true
+          },
+          {
+            "id": "foundations-f4-cia-and-simple-attacks",
+            "title": "Core ideas quiz. CIA in practice",
+            "sectionId": "foundations-f4-cia-and-simple-attacks",
+            "explicitId": true
+          },
+          {
+            "id": "foundations-f6-human-factors-and-phishing",
+            "title": "Quick check. Human factors",
+            "sectionId": "foundations-f6-human-factors-and-phishing",
+            "explicitId": true
+          },
+          {
+            "id": "foundations-f7-privacy-and-everyday-data-protection",
+            "title": "Quick check. Privacy",
+            "sectionId": "foundations-f7-privacy-and-everyday-data-protection",
+            "explicitId": true
+          },
+          {
+            "id": "foundations-f8-foundations-capstone",
+            "title": "Quick check. Capstone",
+            "sectionId": "foundations-f8-foundations-capstone",
+            "explicitId": true
+          }
+        ],
+        "tools": [
+          {
+            "id": "risk-dial",
+            "title": "Risk dial"
+          },
+          {
+            "id": "bit-visualiser",
+            "title": "Play with bits and bytes"
+          },
+          {
+            "id": "encoding-playground",
+            "title": "Encoding Playground"
+          },
+          {
+            "id": "hashing-encryption-lab",
+            "title": "Hashing vs Encryption Lab"
+          },
+          {
+            "id": "packet-journey-lab",
+            "title": "Follow a packet"
+          },
+          {
+            "id": "metadata-leak-lab",
+            "title": "Metadata leak explorer"
+          },
+          {
+            "id": "wireshark-intro",
+            "title": "Network Analysis Introduction"
+          },
+          {
+            "id": "dns-trust-lab",
+            "title": "DNS Trust and Security"
+          },
+          {
+            "id": "attack-surface-mapper",
+            "title": "Attack Surface Mapper"
+          },
+          {
+            "id": "password-strength-lab",
+            "title": "Try building stronger passwords"
+          },
+          {
+            "id": "cia-tradeoff-lab",
+            "title": "CIA trade off explorer"
+          },
+          {
+            "id": "phishing-detection-trainer",
+            "title": "Phishing detection trainer"
+          },
+          {
+            "id": "social-engineering-simulator",
+            "title": "Social engineering simulator"
+          },
+          {
+            "id": "privacy-threat-modeler",
+            "title": "Privacy threat modeler"
+          },
+          {
+            "id": "account-hygiene-audit",
+            "title": "Account hygiene audit"
+          },
+          {
+            "id": "personal-security-baseline",
+            "title": "Personal security baseline"
+          }
+        ],
+        "syllabus": {
+          "modules": [
+            {
+              "title": "Cybersecurity Foundations",
+              "sourcePath": "content/notes/cybersecurity/ch1.mdx",
+              "url": null,
+              "estimatedHours": 8,
+              "summary": "Data, networks, attackers, and everyday defences with hands-on labs."
+            }
+          ]
+        },
+        "evidenceSignals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      },
+      {
+        "levelId": "practice",
+        "url": "/cybersecurity/advanced",
+        "estimatedHours": 32,
+        "learningObjectives": [
+          "Analyse a system design for weak assumptions across identity, secrets, and trust boundaries.",
+          "Evaluate vulnerability and incident information to prioritise remediation and response.",
+          "Explain how governance, logging, and monitoring support detection and recovery in practice.",
+          "Evaluate how to communicate risk and mitigations to non technical stakeholders with clear trade offs."
+        ],
+        "trackedSectionIds": [
+          "practice-p1-secure-sdlc",
+          "practice-p3-runtime-and-cloud-security",
+          "practice-p2-exposure-reduction-zero-trust",
+          "practice-p5-vulnerability-management",
+          "practice-p6-detection-and-incident-response",
+          "practice-p4-supply-chain-security",
+          "practice-p8-system-ilities",
+          "practice-p7-privacy-ethics-auditability",
+          "practice-p9-capstone-professional-practice"
+        ],
+        "quizzes": [
+          {
+            "id": "practice-p1-secure-sdlc",
+            "title": "Quick check. Secure SDLC",
+            "sectionId": "practice-p1-secure-sdlc",
+            "explicitId": true
+          },
+          {
+            "id": "practice-p3-runtime-and-cloud-security",
+            "title": "Quick check. Runtime and cloud security",
+            "sectionId": "practice-p3-runtime-and-cloud-security",
+            "explicitId": true
+          },
+          {
+            "id": "practice-p2-exposure-reduction-zero-trust",
+            "title": "Quick check. Secure architecture",
+            "sectionId": "practice-p2-exposure-reduction-zero-trust",
+            "explicitId": true
+          },
+          {
+            "id": "practice-p5-vulnerability-management",
+            "title": "Quick check. Vulnerability management",
+            "sectionId": "practice-p5-vulnerability-management",
+            "explicitId": true
+          },
+          {
+            "id": "practice-p6-detection-and-incident-response",
+            "title": "Quick check. Detection and response",
+            "sectionId": "practice-p6-detection-and-incident-response",
+            "explicitId": true
+          },
+          {
+            "id": "practice-p4-supply-chain-security",
+            "title": "Quick check. Supply chain and systemic risk",
+            "sectionId": "practice-p4-supply-chain-security",
+            "explicitId": true
+          },
+          {
+            "id": "practice-p8-system-ilities",
+            "title": "Quick check. System ilities",
+            "sectionId": "practice-p8-system-ilities",
+            "explicitId": true
+          },
+          {
+            "id": "practice-p7-privacy-ethics-auditability",
+            "title": "Quick check. Privacy, ethics, and auditability",
+            "sectionId": "practice-p7-privacy-ethics-auditability",
+            "explicitId": true
+          },
+          {
+            "id": "practice-p9-capstone-professional-practice",
+            "title": "Quick check. Capstone",
+            "sectionId": "practice-p9-capstone-professional-practice",
+            "explicitId": true
+          }
+        ],
+        "tools": [
+          {
+            "id": "secure-sdlc-gate-planner",
+            "title": "Plan a secure SDLC gate set"
+          },
+          {
+            "id": "tls-handshake-lab",
+            "title": "Explore a TLS handshake"
+          },
+          {
+            "id": "crypto-misuse-checker",
+            "title": "Spot bad crypto choices"
+          },
+          {
+            "id": "zero-trust-map",
+            "title": "Map trust boundaries in a simple system"
+          },
+          {
+            "id": "defence-in-depth-planner",
+            "title": "Plan layered defences"
+          },
+          {
+            "id": "vulnerability-triage-planner",
+            "title": "Triage vulnerabilities without panic"
+          },
+          {
+            "id": "incident-timeline-lab",
+            "title": "Build an incident timeline"
+          },
+          {
+            "id": "threat-hunting-sandbox",
+            "title": "Practice a small threat hunt"
+          },
+          {
+            "id": "framework-mapper",
+            "title": "Map controls to frameworks"
+          },
+          {
+            "id": "security-career-planner",
+            "title": "Sketch your security learning path"
+          },
+          {
+            "id": "operational-security-pack",
+            "title": "Build an operational security pack"
+          },
+          {
+            "id": "framework-mapping-capstone",
+            "title": "Map controls to a framework"
+          }
+        ],
+        "syllabus": {
+          "modules": [
+            {
+              "title": "Cybersecurity Practice and Strategy",
+              "sourcePath": "content/notes/cybersecurity/advanced.mdx",
+              "url": null,
+              "estimatedHours": 32,
+              "summary": "Crypto in practice, secure architecture, detection and response, and governance you can apply in real organisations."
+            }
+          ]
+        },
+        "evidenceSignals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      }
+    ]
+  },
+  "outcomeCoverage": {
+    "levels": [
+      {
+        "levelId": "practice",
+        "estimatedHours": 32,
+        "learningObjectivesCount": 4,
+        "learningObjectivesMissing": false,
+        "trackedSectionsCount": 9,
+        "quizBlocksCount": 9,
+        "toolsCount": 12,
+        "signals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      },
+      {
+        "levelId": "foundations",
+        "estimatedHours": 8,
+        "learningObjectivesCount": 7,
+        "learningObjectivesMissing": false,
+        "trackedSectionsCount": 9,
+        "quizBlocksCount": 9,
+        "toolsCount": 16,
+        "signals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      },
+      {
+        "levelId": "applied",
+        "estimatedHours": 16,
+        "learningObjectivesCount": 4,
+        "learningObjectivesMissing": false,
+        "trackedSectionsCount": 7,
+        "quizBlocksCount": 7,
+        "toolsCount": 7,
+        "signals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      }
+    ],
+    "totals": {
+      "totalEstimatedHours": 56,
+      "totalLearningObjectives": 15,
+      "totalTrackedSections": 25,
+      "totalQuizBlocks": 25,
+      "totalTools": 35
+    },
+    "gaps": {
+      "levelsMissingLearningObjectives": [],
+      "levelsMissingQuizBlocks": [],
+      "levelsMissingToolActivities": [],
+      "levelsMissingSectionTracking": [],
+      "recommendations": []
+    }
+  }
+}

@@ -1,7 +1,7 @@
 # Mapping – software-architecture
 
 - Status: Draft
-- Generated: 2026-01-03T22:48:09.851Z
+- Generated: 2026-01-03T23:01:28.778Z
 - Total estimated hours: 100.7
 - Total learning objectives: 20
 - Total tracked sections: 27

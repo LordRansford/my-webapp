@@ -1,0 +1,502 @@
+{
+  "generatedAt": "2026-01-03T23:01:28.778Z",
+  "version": "1.0.0",
+  "course": {
+    "courseId": "software-architecture",
+    "status": "Draft",
+    "totalEstimatedHours": 100.7
+  },
+  "policy": {
+    "cpdHoursPolicy": "1 hour = 1 CPD hour (point).",
+    "timeRecordingPolicy": "Fixed-hours model. Learners cannot self-declare CPD time. Progress is tracked via completion signals and timed assessment is counted once on completion.",
+    "certificatePolicy": "Certificates use UUIDs and a public verification page. Certificates do not imply third-party accreditation unless explicitly stated."
+  },
+  "syllabus": {
+    "levels": [
+      {
+        "levelId": "advanced",
+        "url": "/courses/software-architecture/advanced",
+        "estimatedHours": 14,
+        "learningObjectives": [
+          "Analyse architecture decisions in complex systems using realistic constraints and failure modes.",
+          "Explain advanced patterns (events, CQRS, observability) in practical terms.",
+          "Evaluate risk and resilience trade offs and their operational consequences.",
+          "Apply decision recording and governance thinking to keep systems changeable over time."
+        ],
+        "trackedSectionIds": [
+          "soft-arch-advanced-domain-and-bounded-contexts",
+          "soft-arch-advanced-patterns-and-distribution",
+          "soft-arch-advanced-resilience-performance",
+          "soft-arch-advanced-evolution-and-governance"
+        ],
+        "quizzes": [
+          {
+            "id": "soft-arch-advanced-domains-quiz",
+            "title": "Quick check: domains and bounded contexts",
+            "sectionId": "soft-arch-advanced-domain-and-bounded-contexts",
+            "explicitId": true
+          },
+          {
+            "id": "soft-arch-advanced-patterns-quiz",
+            "title": "Quick check: patterns and distribution",
+            "sectionId": "soft-arch-advanced-patterns-and-distribution",
+            "explicitId": true
+          },
+          {
+            "id": "soft-arch-advanced-resilience-quiz",
+            "title": "Quick check: resilience and scale",
+            "sectionId": "soft-arch-advanced-resilience-performance",
+            "explicitId": true
+          },
+          {
+            "id": "soft-arch-advanced-governance-quiz",
+            "title": "Quick check: evolution and governance",
+            "sectionId": "soft-arch-advanced-evolution-and-governance",
+            "explicitId": true
+          }
+        ],
+        "tools": [
+          {
+            "id": "soft-arch-domain-mapper",
+            "title": "Domain and bounded context mapper"
+          },
+          {
+            "id": "soft-arch-cqrs-events-lab",
+            "title": "CQRS and events lab"
+          },
+          {
+            "id": "soft-arch-resilience-simulator",
+            "title": "Resilience and latency simulator"
+          },
+          {
+            "id": "soft-arch-adr-workbench",
+            "title": "Architecture decision workbench"
+          }
+        ],
+        "syllabus": {
+          "modules": [
+            {
+              "title": "Software Development and Architecture Advanced",
+              "sourcePath": "content/courses/software-architecture/advanced.mdx",
+              "url": "/courses/software-architecture/advanced",
+              "estimatedHours": 14,
+              "summary": "We move into big system thinking, advanced patterns and how to keep complex software fast, safe and changeable over time."
+            }
+          ]
+        },
+        "evidenceSignals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      },
+      {
+        "levelId": "foundations",
+        "url": "/courses/software-architecture/foundations",
+        "estimatedHours": 45.2,
+        "learningObjectives": [
+          "Map user journeys, define NFRs, and apply threat modelling fundamentals.",
+          "Document architecture using C4 models, ADRs, and security by design principles.",
+          "Implement secure coding practices including input validation and session management.",
+          "Apply comprehensive testing strategies including OWASP ASVS and accessibility testing.",
+          "Design CI/CD pipelines with DevSecOps integration.",
+          "Apply SRE principles for reliable operations and incident response.",
+          "Use OSI model and diagnostic tools for troubleshooting.",
+          "Evaluate systems across multiple quality attributes (the 'ilities')."
+        ],
+        "trackedSectionIds": [
+          "soft-arch-foundations-architecture-design",
+          "soft-arch-foundations-deployment-cicd",
+          "soft-arch-foundations-discovery-requirements",
+          "soft-arch-foundations-ilities-framework",
+          "soft-arch-foundations-implementation",
+          "soft-arch-foundations-operations",
+          "soft-arch-foundations-osi-diagnostics",
+          "soft-arch-foundations-verification-testing",
+          "soft-arch-foundations-assessment"
+        ],
+        "quizzes": [],
+        "tools": [
+          {
+            "id": null,
+            "title": "Discovery and Requirements"
+          },
+          {
+            "id": null,
+            "title": "Architecture and Design"
+          },
+          {
+            "id": null,
+            "title": "Implementation (Build)"
+          },
+          {
+            "id": null,
+            "title": "Verification and Testing"
+          },
+          {
+            "id": null,
+            "title": "Deployment and CI/CD"
+          },
+          {
+            "id": null,
+            "title": "Operations"
+          },
+          {
+            "id": null,
+            "title": "OSI Model and Diagnostics"
+          },
+          {
+            "id": null,
+            "title": "The 'Ilities' Framework"
+          }
+        ],
+        "syllabus": {
+          "modules": [
+            {
+              "title": "Architecture and Design",
+              "sourcePath": "content/courses/software-architecture/foundations/architecture-design.mdx",
+              "url": "/courses/software-architecture/foundations/architecture-design",
+              "estimatedHours": 2.8,
+              "summary": "C4 model, Architecture Decision Records, API contracts, security by design principles, trust boundaries and data flow diagrams."
+            },
+            {
+              "title": "Deployment and CI/CD",
+              "sourcePath": "content/courses/software-architecture/foundations/deployment-cicd.mdx",
+              "url": "/courses/software-architecture/foundations/deployment-cicd",
+              "estimatedHours": 2.5,
+              "summary": "CI/CD pipeline anatomy, DevSecOps integration, deployment strategies, and Infrastructure as Code basics."
+            },
+            {
+              "title": "Discovery and Requirements",
+              "sourcePath": "content/courses/software-architecture/foundations/discovery-requirements.mdx",
+              "url": "/courses/software-architecture/foundations/discovery-requirements",
+              "estimatedHours": 2.4,
+              "summary": "User journeys, non-functional requirements, threat modelling fundamentals, and abuse cases mapped to OWASP Top 10."
+            },
+            {
+              "title": "The \"Ilities\" Framework",
+              "sourcePath": "content/courses/software-architecture/foundations/ilities-framework.mdx",
+              "url": "/courses/software-architecture/foundations/ilities-framework",
+              "estimatedHours": 2,
+              "summary": "Security, privacy, accessibility, performance, reliability, and comprehensive quality attributes for system evaluation."
+            },
+            {
+              "title": "Implementation (Build)",
+              "sourcePath": "content/courses/software-architecture/foundations/implementation.mdx",
+              "url": "/courses/software-architecture/foundations/implementation",
+              "estimatedHours": 3,
+              "summary": "Secure coding foundations including input validation, output encoding, session management, error handling, and supply chain security."
+            },
+            {
+              "title": "Operations",
+              "sourcePath": "content/courses/software-architecture/foundations/operations.mdx",
+              "url": "/courses/software-architecture/foundations/operations",
+              "estimatedHours": 3.2,
+              "summary": "Google SRE principles, four golden signals, observability triad, and incident response."
+            },
+            {
+              "title": "OSI Model and Browser/Terminal Diagnostics",
+              "sourcePath": "content/courses/software-architecture/foundations/osi-diagnostics.mdx",
+              "url": "/courses/software-architecture/foundations/osi-diagnostics",
+              "estimatedHours": 1.8,
+              "summary": "OSI layers 1-7 with practical tools, browser DevTools mastery, and command-line diagnostics."
+            },
+            {
+              "title": "Verification and Testing",
+              "sourcePath": "content/courses/software-architecture/foundations/verification-testing.mdx",
+              "url": "/courses/software-architecture/foundations/verification-testing",
+              "estimatedHours": 3.5,
+              "summary": "Test strategy pyramid, OWASP ASVS integration, accessibility testing (WCAG 2.2), and performance testing."
+            },
+            {
+              "title": "Software Architecture Foundations - Complete Lifecycle Coverage",
+              "sourcePath": "content/courses/software-architecture/foundations.mdx",
+              "url": "/courses/software-architecture/foundations",
+              "estimatedHours": 24,
+              "summary": "Master software architecture foundations through the complete lifecycle from discovery to operations, with security integrated at every stage."
+            }
+          ]
+        },
+        "evidenceSignals": {
+          "quizzesPresent": false,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      },
+      {
+        "levelId": "intermediate",
+        "url": "/courses/software-architecture/intermediate",
+        "estimatedHours": 37.5,
+        "learningObjectives": [
+          "Explain common architecture styles and integration patterns with clear examples.",
+          "Apply service boundary and data ownership thinking to a realistic scenario.",
+          "Analyse coupling, latency, and consistency trade offs in designs.",
+          "Evaluate design options against non functional needs, not personal preference."
+        ],
+        "trackedSectionIds": [
+          "soft-arch-intermediate-advanced-security",
+          "soft-arch-intermediate-cloud-native-patterns",
+          "soft-arch-intermediate-data-architecture",
+          "soft-arch-intermediate-infrastructure-as-code",
+          "soft-arch-intermediate-performance-engineering",
+          "soft-arch-intermediate-service-decomposition",
+          "soft-arch-intermediate-architecture-styles",
+          "soft-arch-intermediate-integration-and-apis",
+          "soft-arch-intermediate-quality-attributes",
+          "soft-arch-intermediate-data-and-state"
+        ],
+        "quizzes": [
+          {
+            "id": "soft-arch-intermediate-architecture-styles-quiz",
+            "title": "Quick check: architecture styles",
+            "sectionId": "soft-arch-intermediate-architecture-styles",
+            "explicitId": true
+          },
+          {
+            "id": "soft-arch-intermediate-integration-quiz",
+            "title": "Quick check: integration and APIs",
+            "sectionId": "soft-arch-intermediate-integration-and-apis",
+            "explicitId": true
+          },
+          {
+            "id": "soft-arch-intermediate-quality-quiz",
+            "title": "Quick check: quality attributes",
+            "sectionId": "soft-arch-intermediate-quality-attributes",
+            "explicitId": true
+          },
+          {
+            "id": "soft-arch-intermediate-state-quiz",
+            "title": "Quick check: data and state",
+            "sectionId": "soft-arch-intermediate-data-and-state",
+            "explicitId": true
+          }
+        ],
+        "tools": [
+          {
+            "id": "soft-arch-architecture-style-explorer",
+            "title": "Architecture style explorer"
+          },
+          {
+            "id": "soft-arch-api-integrations-lab",
+            "title": "Integration and API lab"
+          },
+          {
+            "id": "soft-arch-quality-tradeoffs",
+            "title": "Quality trade off explorer"
+          },
+          {
+            "id": "soft-arch-consistency-simulator",
+            "title": "Consistency and state simulator"
+          }
+        ],
+        "syllabus": {
+          "modules": [
+            {
+              "title": "Advanced Security Architecture",
+              "sourcePath": "content/courses/software-architecture/intermediate/advanced-security.mdx",
+              "url": "/courses/software-architecture/intermediate/advanced-security",
+              "estimatedHours": 4.5,
+              "summary": "STRIDE deep dive, PASTA methodology, attack trees, zero trust architecture, and NIST Cybersecurity Framework integration."
+            },
+            {
+              "title": "Cloud-Native Patterns",
+              "sourcePath": "content/courses/software-architecture/intermediate/cloud-native-patterns.mdx",
+              "url": "/courses/software-architecture/intermediate/cloud-native-patterns",
+              "estimatedHours": 5,
+              "summary": "Multi-region architectures, disaster recovery strategies, CAP theorem, service mesh patterns, and resilience engineering."
+            },
+            {
+              "title": "Data Architecture",
+              "sourcePath": "content/courses/software-architecture/intermediate/data-architecture.mdx",
+              "url": "/courses/software-architecture/intermediate/data-architecture",
+              "estimatedHours": 4.5,
+              "summary": "SQL vs NoSQL trade-offs, CQRS pattern, event sourcing, database scaling with replication and sharding, and data governance."
+            },
+            {
+              "title": "Infrastructure as Code",
+              "sourcePath": "content/courses/software-architecture/intermediate/infrastructure-as-code.mdx",
+              "url": "/courses/software-architecture/intermediate/infrastructure-as-code",
+              "estimatedHours": 4,
+              "summary": "Terraform deep dive, Pulumi multi-language support, GitOps with Flux/ArgoCD, infrastructure testing, and policy as code with OPA."
+            },
+            {
+              "title": "Performance & Scalability Engineering",
+              "sourcePath": "content/courses/software-architecture/intermediate/performance-engineering.mdx",
+              "url": "/courses/software-architecture/intermediate/performance-engineering",
+              "estimatedHours": 4,
+              "summary": "CPU profiling with flame graphs, N+1 query problem, caching strategies, load balancing algorithms, and auto-scaling patterns."
+            },
+            {
+              "title": "Service Design & Decomposition",
+              "sourcePath": "content/courses/software-architecture/intermediate/service-decomposition.mdx",
+              "url": "/courses/software-architecture/intermediate/service-decomposition",
+              "estimatedHours": 3.5,
+              "summary": "Domain-Driven Design with bounded contexts, microservices vs modular monolith evaluation, API gateway patterns, and service mesh."
+            },
+            {
+              "title": "Software Development and Architecture Intermediate",
+              "sourcePath": "content/courses/software-architecture/intermediate.mdx",
+              "url": "/courses/software-architecture/intermediate",
+              "estimatedHours": 12,
+              "summary": "We move from simple boxes and arrows to real world architecture styles, integration patterns and trade offs."
+            }
+          ]
+        },
+        "evidenceSignals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      },
+      {
+        "levelId": "summary",
+        "url": "/courses/software-architecture/summary",
+        "estimatedHours": 4,
+        "learningObjectives": [
+          "Explain the core architecture ideas from the track in plain language.",
+          "Apply patterns to short scenarios and identify the key trade offs.",
+          "Analyse common failure stories and what design signals were missed.",
+          "Evaluate what you would practise next to improve judgement."
+        ],
+        "trackedSectionIds": [
+          "soft-arch-summary-you-made-it",
+          "soft-arch-summary-big-picture",
+          "soft-arch-summary-games-labs",
+          "soft-arch-summary-next-steps"
+        ],
+        "quizzes": [
+          {
+            "id": "soft-arch-summary-quick-quiz",
+            "title": "Quick check: can you still think like an architect",
+            "sectionId": "soft-arch-summary-games-labs",
+            "explicitId": true
+          }
+        ],
+        "tools": [
+          {
+            "id": "soft-arch-summary-architecture-bingo",
+            "title": "Architecture bingo"
+          },
+          {
+            "id": "soft-arch-summary-style-matcher",
+            "title": "Style matcher"
+          },
+          {
+            "id": "soft-arch-summary-failure-story",
+            "title": "Failure story explorer"
+          },
+          {
+            "id": "soft-arch-summary-sequence-puzzle",
+            "title": "Sequence diagram puzzle"
+          },
+          {
+            "id": "soft-arch-summary-tradeoff-slider",
+            "title": "Trade off slider"
+          }
+        ],
+        "syllabus": {
+          "modules": [
+            {
+              "title": "Software Development and Architecture: Summary and games",
+              "sourcePath": "content/courses/software-architecture/summary.mdx",
+              "url": "/courses/software-architecture/summary",
+              "estimatedHours": 4,
+              "summary": "A relaxed recap of the key ideas in software development and architecture, with games, labs, and extra practice."
+            }
+          ]
+        },
+        "evidenceSignals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      }
+    ]
+  },
+  "outcomeCoverage": {
+    "levels": [
+      {
+        "levelId": "advanced",
+        "estimatedHours": 14,
+        "learningObjectivesCount": 4,
+        "learningObjectivesMissing": false,
+        "trackedSectionsCount": 4,
+        "quizBlocksCount": 4,
+        "toolsCount": 4,
+        "signals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      },
+      {
+        "levelId": "foundations",
+        "estimatedHours": 45.2,
+        "learningObjectivesCount": 8,
+        "learningObjectivesMissing": false,
+        "trackedSectionsCount": 9,
+        "quizBlocksCount": 0,
+        "toolsCount": 8,
+        "signals": {
+          "quizzesPresent": false,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      },
+      {
+        "levelId": "intermediate",
+        "estimatedHours": 37.5,
+        "learningObjectivesCount": 4,
+        "learningObjectivesMissing": false,
+        "trackedSectionsCount": 10,
+        "quizBlocksCount": 4,
+        "toolsCount": 4,
+        "signals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      },
+      {
+        "levelId": "summary",
+        "estimatedHours": 4,
+        "learningObjectivesCount": 4,
+        "learningObjectivesMissing": false,
+        "trackedSectionsCount": 4,
+        "quizBlocksCount": 1,
+        "toolsCount": 5,
+        "signals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      }
+    ],
+    "totals": {
+      "totalEstimatedHours": 100.7,
+      "totalLearningObjectives": 20,
+      "totalTrackedSections": 27,
+      "totalQuizBlocks": 9,
+      "totalTools": 21
+    },
+    "gaps": {
+      "levelsMissingLearningObjectives": [],
+      "levelsMissingQuizBlocks": [
+        "foundations"
+      ],
+      "levelsMissingToolActivities": [],
+      "levelsMissingSectionTracking": [],
+      "recommendations": [
+        "Add at least one QuizBlock per level (8–12 questions is ideal)."
+      ]
+    }
+  }
+}
