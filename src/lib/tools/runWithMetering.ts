@@ -6,19 +6,9 @@ import { addAnonUsageMs, getAnonFreeMsRemainingToday, getUserFreeMsRemainingToda
 import { deductCreditsFromLots } from "@/lib/credits/deductFromLots";
 import { createCreditUsageEvent, getOrCreateCredits } from "@/lib/credits/store";
 import { getToolComputeProfile } from "@/config/computeLimits";
+import type { UnifiedRunReceipt } from "@/lib/compute/receipts";
 
-export type RunReceipt = {
-  runId: string;
-  toolId: string;
-  durationMs: number;
-  inputBytes: number;
-  outputBytes: number;
-  freeTierAppliedMs: number;
-  paidMs: number;
-  creditsCharged: number;
-  remainingCredits: number | null;
-  guidanceTips: string[];
-};
+export type RunReceipt = UnifiedRunReceipt;
 
 function nowMs() {
   return Date.now();

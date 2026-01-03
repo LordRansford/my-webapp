@@ -1,12 +1,12 @@
 "use client";
 
 import React from "react";
-import type { AIStudioRunReceipt } from "@/lib/ai-studio/projects/store";
+import type { UnifiedRunReceipt } from "@/lib/compute/receipts";
 
-export default function RunReceiptPanel(props: { receipt: AIStudioRunReceipt }) {
+export default function RunReceiptPanel(props: { receipt: UnifiedRunReceipt }) {
   const r = props.receipt;
   return (
-    <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs text-slate-700 space-y-2">
+    <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 text-xs text-slate-700 space-y-2">
       <div className="flex flex-wrap gap-2 items-center justify-between">
         <p className="font-semibold text-slate-900">Receipt</p>
         <p className="font-mono text-slate-600">{r.runId}</p>

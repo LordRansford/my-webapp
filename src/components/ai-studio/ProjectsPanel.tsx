@@ -5,7 +5,7 @@ import { Trash2, Download, FileText, Play, Search } from "lucide-react";
 import { useRouter } from "next/router";
 import type { AIStudioProject } from "@/lib/ai-studio/projects/store";
 import { deleteProject } from "@/lib/ai-studio/projects/store";
-import { exportProjectAsJson, exportProjectAsPdf } from "@/lib/ai-studio/projects/export";
+import { exportProjectAsJson, exportProjectAsPackZip, exportProjectAsPdf } from "@/lib/ai-studio/projects/export";
 
 export default function ProjectsPanel(props: {
   projects: AIStudioProject[];
@@ -97,14 +97,16 @@ export default function ProjectsPanel(props: {
                       props.onOpen(p.id);
                       router.push(`/ai-studio/projects/${encodeURIComponent(p.id)}`);
                     }}
-                    className="rounded-lg bg-slate-900 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-800"
+                    className="rounded-lg bg-slate-900 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-2"
+                    aria-label={`Open project ${p.title}`}
                   >
                     Open
                   </button>
                   <button
                     type="button"
                     onClick={() => props.onRun(p.id)}
-                    className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-900 hover:bg-slate-50"
+                    className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-900 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+                    aria-label={`Run project ${p.title}`}
                   >
                     <Play className="w-4 h-4" aria-hidden="true" />
                     Run
@@ -112,15 +114,26 @@ export default function ProjectsPanel(props: {
                   <button
                     type="button"
                     onClick={() => exportProjectAsJson(p)}
-                    className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-900 hover:bg-slate-50"
+                    className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-900 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+                    aria-label={`Export JSON for ${p.title}`}
                   >
                     <Download className="w-4 h-4" aria-hidden="true" />
                     JSON
                   </button>
                   <button
                     type="button"
+                    onClick={() => exportProjectAsPackZip(p)}
+                    className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-900 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+                    aria-label={`Export pack for ${p.title}`}
+                  >
+                    <Download className="w-4 h-4" aria-hidden="true" />
+                    Pack
+                  </button>
+                  <button
+                    type="button"
                     onClick={() => exportProjectAsPdf(p)}
-                    className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-900 hover:bg-slate-50"
+                    className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-900 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+                    aria-label={`Export PDF for ${p.title}`}
                   >
                     <FileText className="w-4 h-4" aria-hidden="true" />
                     PDF

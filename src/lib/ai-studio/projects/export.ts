@@ -3,6 +3,7 @@
  */
 
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import JSZip from "jszip";
 import type { AIStudioProject } from "./store";
 
 function downloadBlob(filename: string, blob: Blob) {
@@ -21,7 +22,7 @@ export function exportProjectAsJson(project: AIStudioProject) {
   downloadBlob(`${project.title.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}-${project.id}.json`, new Blob([payload], { type: "application/json" }));
 }
 
-export async function exportProjectAsPdf(project: AIStudioProject) {
+async function buildProjectPdfBytes(project: AIStudioProject) {
   const doc = await PDFDocument.create();
   const page = doc.addPage([595.28, 841.89]); // A4
   const font = await doc.embedFont(StandardFonts.Helvetica);
@@ -74,6 +75,67 @@ export async function exportProjectAsPdf(project: AIStudioProject) {
   draw("This export contains project configuration and the latest run summary only.");
 
   const bytes = await doc.save();
-  downloadBlob(`${project.title.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}-${project.id}.pdf`, new Blob([bytes], { type: "application/pdf" }));
+  return bytes;
+}
+
+export async function exportProjectAsPdf(project: AIStudioProject) {
+  const bytes = await buildProjectPdfBytes(project);
+  downloadBlob(
+    `${project.title.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}-${project.id}.pdf`,
+    new Blob([bytes], { type: "application/pdf" })
+  );
+}
+
+function checklistForExample(exampleId: string) {
+  if (exampleId === "story-generator") {
+    return [
+      "Decide your audience (children, teens, adults).",
+      "Define tone rules (kind, non-violent, no personal data).",
+      "Add a 'character sheet' section to the prompt.",
+      "Add a 'length' parameter (short/medium/long) and test cost vs quality.",
+      "Export a few runs and keep the best as a portfolio pack.",
+    ];
+  }
+  if (exampleId === "homework-helper") {
+    return [
+      "Choose a narrow scope (e.g., linear equations only) and state it clearly.",
+      "Always show steps and a final check step (substitution).",
+      "Add friendly hints before revealing the answer.",
+      "Create 10 sample questions and save the best outputs.",
+      "Add a “teacher mode” vs “student mode” toggle later.",
+    ];
+  }
+  if (exampleId === "customer-support-bot") {
+    return [
+      "Write a safe policy (no sensitive data, no account takeover advice).",
+      "Add an intent classifier (returns/refunds/shipping/login).",
+      "Add a knowledge base stub (static FAQ snippets) and cite which snippet was used.",
+      "Add escalation rules (when to hand off to human).",
+      "Export a set of response templates for a portfolio.",
+    ];
+  }
+  return ["Add a clear goal for this project.", "Make one small improvement, then re-run and compare outputs.", "Export a pack and share it."];
+}
+
+export async function exportProjectAsPackZip(project: AIStudioProject) {
+  const slug = project.title.replace(/[^a-z0-9]+/gi, "-").toLowerCase();
+  const base = `${slug}-${project.id}`;
+  const zip = new JSZip();
+
+  const runs = Array.isArray(project.runs) ? project.runs : project.lastRun ? [project.lastRun] : [];
+
+  zip.file("README.md", `# ${project.title}\n\nTemplate: \`${project.exampleId}\`\n\n## What this is\n\nThis is an AI Studio project pack export.\n\n## How to import\n\n1. Go to \`/ai-studio/projects\`\n2. Click **Import project JSON**\n3. Select \`project.json\`\n\n## What’s inside\n\n- \`project.json\`: full project (local-first) export\n- \`project-summary.pdf\`: PDF summary\n- \`run-history.json\`: recent runs (output + receipts)\n- \`NEXT_STEPS.md\`: practical next steps\n`);
+
+  zip.file("project.json", JSON.stringify(project, null, 2));
+  zip.file("run-history.json", JSON.stringify({ projectId: project.id, runs }, null, 2));
+
+  const checklist = checklistForExample(project.exampleId);
+  zip.file("NEXT_STEPS.md", `# Next steps\n\n${checklist.map((c) => `- ${c}`).join("\n")}\n`);
+
+  const pdfBytes = await buildProjectPdfBytes(project);
+  zip.file("project-summary.pdf", pdfBytes);
+
+  const blob = await zip.generateAsync({ type: "blob" });
+  downloadBlob(`${base}.zip`, blob);
 }
 

@@ -14,6 +14,7 @@ import type { ToolError } from "@/components/tools/ErrorPanel";
 export interface ToolRunResult {
   ok: boolean;
   output?: string;
+  receipt?: unknown;
   warnings?: string[];
   metrics?: {
     durationMs: number;
@@ -190,6 +191,7 @@ export async function runTool(
           return {
             ok: true,
             output: typeof data.output === "string" ? data.output : JSON.stringify(data.output, null, 2),
+            receipt: data.receipt ?? null,
             metrics: {
               durationMs: duration,
               cpuMs: duration,

@@ -147,6 +147,7 @@ export async function runAiStudioProjectLocal(params: {
 
   const receipt: AIStudioRunReceipt = {
     runId,
+    toolId: `ai-studio:${params.project.exampleId}`,
     mode: "local",
     durationMs,
     inputBytes,

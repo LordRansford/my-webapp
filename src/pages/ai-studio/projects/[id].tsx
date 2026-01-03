@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 import { Download, FileText, Play, Trash2 } from "lucide-react";
 import type { AIStudioProject } from "@/lib/ai-studio/projects/store";
 import { deleteProject, getProjectById, setLastOpenedProjectId, updateProjectRun } from "@/lib/ai-studio/projects/store";
-import { exportProjectAsJson, exportProjectAsPdf } from "@/lib/ai-studio/projects/export";
+import { exportProjectAsJson, exportProjectAsPackZip, exportProjectAsPdf } from "@/lib/ai-studio/projects/export";
 import { runAiStudioProjectLocal } from "@/lib/ai-studio/projects/run";
 import RunReceiptPanel from "@/components/ai-studio/RunReceiptPanel";
 
@@ -33,6 +33,8 @@ export default function AIStudioProjectDetailsPage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [computeEstimate, setComputeEstimate] = useState<ComputeEstimate | null>(null);
+  const [selectedRunAt, setSelectedRunAt] = useState<string | null>(null);
+  const [computePreset, setComputePreset] = useState<"light" | "standard" | "heavy">("light");
 
   const isStory = project?.exampleId === "story-generator";
   const isHomework = project?.exampleId === "homework-helper";
@@ -58,6 +60,12 @@ export default function AIStudioProjectDetailsPage() {
     }
   }, [projectId]);
 
+  useEffect(() => {
+    if (!project) return;
+    const runs = Array.isArray(project.runs) ? project.runs : project.lastRun ? [project.lastRun] : [];
+    setSelectedRunAt(runs[0]?.ranAt || null);
+  }, [project?.id]);
+
   const computeToolId = useMemo(() => {
     if (!project) return null;
     if (project.exampleId === "story-generator") return "ai-story-generator";
@@ -75,7 +83,7 @@ export default function AIStudioProjectDetailsPage() {
         const res = await fetch("/api/compute/estimate", {
           method: "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify({ toolId: computeToolId, inputBytes, requestedComplexityPreset: "light" }),
+          body: JSON.stringify({ toolId: computeToolId, inputBytes, requestedComplexityPreset: computePreset }),
         });
         const data = await res.json().catch(() => null);
         if (!alive) return;
@@ -101,7 +109,7 @@ export default function AIStudioProjectDetailsPage() {
     return () => {
       alive = false;
     };
-  }, [computeToolId, prompt]);
+  }, [computeToolId, prompt, computePreset]);
 
   const runLocal = async () => {
     if (!project) return;
@@ -113,6 +121,8 @@ export default function AIStudioProjectDetailsPage() {
       updateProjectRun(project.id, { input, output, receipt });
       const updated = getProjectById(project.id);
       setProject(updated);
+      const latest = updated?.runs?.[0]?.ranAt || updated?.lastRun?.ranAt || null;
+      setSelectedRunAt(latest);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Run failed.");
     } finally {
@@ -137,6 +147,7 @@ export default function AIStudioProjectDetailsPage() {
           toolId: computeToolId,
           mode: "compute",
           inputs: isStory ? { prompt } : isHomework ? { question: prompt } : { question: prompt },
+          requestedComplexityPreset: computePreset,
         }),
       });
       const data = await res.json().catch(() => null);
@@ -152,6 +163,8 @@ export default function AIStudioProjectDetailsPage() {
       updateProjectRun(project.id, { input: prompt, output: data.output, receipt: data.receipt });
       const updated = getProjectById(project.id);
       setProject(updated);
+      const latest = updated?.runs?.[0]?.ranAt || updated?.lastRun?.ranAt || null;
+      setSelectedRunAt(latest);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Compute run failed.");
     } finally {
@@ -194,15 +207,23 @@ export default function AIStudioProjectDetailsPage() {
             <button
               type="button"
               onClick={() => exportProjectAsJson(project)}
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-50"
+              className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
             >
               <Download className="w-4 h-4" aria-hidden="true" />
               Export JSON
             </button>
             <button
               type="button"
+              onClick={() => exportProjectAsPackZip(project)}
+              className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+            >
+              <Download className="w-4 h-4" aria-hidden="true" />
+              Export pack (ZIP)
+            </button>
+            <button
+              type="button"
               onClick={() => exportProjectAsPdf(project)}
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-50"
+              className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
             >
               <FileText className="w-4 h-4" aria-hidden="true" />
               Export PDF
@@ -215,7 +236,7 @@ export default function AIStudioProjectDetailsPage() {
                 deleteProject(project.id);
                 router.push("/ai-studio");
               }}
-              className="inline-flex items-center gap-2 rounded-lg border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-900 hover:bg-rose-100"
+              className="inline-flex items-center gap-2 rounded-lg border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-900 hover:bg-rose-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:ring-offset-2"
             >
               <Trash2 className="w-4 h-4" aria-hidden="true" />
               Delete
@@ -293,6 +314,27 @@ export default function AIStudioProjectDetailsPage() {
                 Estimated wall time: ~{Math.round(computeEstimate.estimatedWallTimeMs / 1000)}s · Free tier remaining: ~
                 {Math.round(computeEstimate.freeTierRemainingMs / 1000)}s · Estimated credits: {computeEstimate.estimatedCreditCost}
               </p>
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                <span className="text-xs font-semibold text-slate-700">Quality</span>
+                <div className="flex gap-1 rounded-lg border border-slate-300 bg-white p-1">
+                  {(["light", "standard", "heavy"] as const).map((p) => (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => setComputePreset(p)}
+                      className={`rounded-md px-3 py-1 text-xs font-semibold transition ${
+                        computePreset === p ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-50"
+                      }`}
+                      aria-pressed={computePreset === p}
+                    >
+                      {p}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-[11px] text-slate-600">
+                  Higher quality increases compute time and may cost more credits.
+                </p>
+              </div>
               {computeEstimate.allowed ? null : (
                 <p className="mt-2 text-xs text-rose-700">
                   This run may be blocked: {computeEstimate.reasons?.[0] || "not allowed"}
@@ -306,7 +348,7 @@ export default function AIStudioProjectDetailsPage() {
               type="button"
               onClick={runLocal}
               disabled={busy}
-              className="inline-flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-2"
             >
               <Play className="w-4 h-4" aria-hidden="true" />
               Run local (free)
@@ -314,8 +356,8 @@ export default function AIStudioProjectDetailsPage() {
             <button
               type="button"
               onClick={runCompute}
-              disabled={busy || !computeToolId}
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-50 disabled:opacity-50"
+              disabled={busy || !computeToolId || (computeEstimate ? !computeEstimate.allowed : false)}
+              className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-50 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
             >
               <Play className="w-4 h-4" aria-hidden="true" />
               Run compute (metered)
@@ -323,18 +365,73 @@ export default function AIStudioProjectDetailsPage() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-3">
-          <h2 className="text-lg font-semibold text-slate-900">Latest output</h2>
-          {project.lastRun ? (
-            <>
-              {project.lastRun.receipt ? <RunReceiptPanel receipt={project.lastRun.receipt} /> : null}
-              <pre className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs text-slate-900 overflow-auto whitespace-pre-wrap">
-                {JSON.stringify(project.lastRun.output, null, 2)}
-              </pre>
-            </>
-          ) : (
-            <p className="text-sm text-slate-600">No runs yet.</p>
-          )}
+        <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="text-lg font-semibold text-slate-900">Run history</h2>
+            <p className="text-xs text-slate-600">Your last 30 runs are stored on this device.</p>
+          </div>
+
+          {(() => {
+            const runs = Array.isArray(project.runs) ? project.runs : project.lastRun ? [project.lastRun] : [];
+            if (runs.length === 0) {
+              return <p className="text-sm text-slate-600">No runs yet.</p>;
+            }
+            const selected = runs.find((r) => r.ranAt === selectedRunAt) || runs[0];
+            return (
+              <div className="grid gap-4 lg:grid-cols-[260px_1fr]">
+                <div className="space-y-2">
+                  {runs.slice(0, 10).map((r) => {
+                    const active = r.ranAt === selected.ranAt;
+                    const label = new Date(r.ranAt).toLocaleString();
+                    const mode = r.receipt?.mode || "local";
+                    const credits = r.receipt?.creditsCharged ?? 0;
+                    return (
+                      <button
+                        key={r.ranAt}
+                        type="button"
+                        onClick={() => setSelectedRunAt(r.ranAt)}
+                        className={`w-full rounded-lg border p-3 text-left text-xs transition focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                          active ? "border-primary-500 bg-primary-50" : "border-slate-200 bg-white hover:bg-slate-50"
+                        }`}
+                        aria-label={`Open run from ${label}`}
+                      >
+                        <p className="font-semibold text-slate-900">{label}</p>
+                        <p className="mt-1 text-slate-600">
+                          {mode} · {credits} credits
+                        </p>
+                      </button>
+                    );
+                  })}
+                  {runs.length > 10 ? <p className="text-[11px] text-slate-500">Showing latest 10 runs here.</p> : null}
+                </div>
+
+                <div className="space-y-3">
+                  {selected.receipt ? <RunReceiptPanel receipt={selected.receipt} /> : null}
+                  <div className="flex flex-wrap gap-2">
+                    {typeof selected.input === "string" ? (
+                      <button
+                        type="button"
+                        onClick={() => setPrompt(selected.input as string)}
+                        className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-900 hover:bg-slate-50"
+                      >
+                        Load this input
+                      </button>
+                    ) : null}
+                    <button
+                      type="button"
+                      onClick={() => navigator.clipboard.writeText(JSON.stringify(selected.output, null, 2))}
+                      className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-900 hover:bg-slate-50"
+                    >
+                      Copy output
+                    </button>
+                  </div>
+                  <pre className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs text-slate-900 overflow-auto whitespace-pre-wrap">
+                    {JSON.stringify(selected.output, null, 2)}
+                  </pre>
+                </div>
+              </div>
+            );
+          })()}
         </section>
 
         <details className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">

@@ -9,19 +9,9 @@
  */
 
 import type { AIStudioExample } from "@/lib/ai-studio/examples/types";
+import type { UnifiedRunReceipt } from "@/lib/compute/receipts";
 
-export type AIStudioRunReceipt = {
-  runId: string;
-  mode: "local" | "compute";
-  durationMs: number;
-  inputBytes: number;
-  outputBytes: number;
-  freeTierAppliedMs: number;
-  paidMs: number;
-  creditsCharged: number;
-  remainingCredits: number | null;
-  guidanceTips: string[];
-};
+export type AIStudioRunReceipt = UnifiedRunReceipt;
 
 export type AIStudioProject = {
   id: string;
@@ -33,6 +23,12 @@ export type AIStudioProject = {
   createdAt: string;
   updatedAt: string;
   config: AIStudioExample["config"];
+  runs?: Array<{
+    ranAt: string;
+    input?: unknown;
+    output: unknown;
+    receipt?: AIStudioRunReceipt;
+  }>;
   lastRun?: {
     ranAt: string;
     input?: unknown;
@@ -71,20 +67,38 @@ export function getProjects(): AIStudioProject[] {
   const parsed = safeParse<AIStudioProject[]>(localStorage.getItem(STORAGE_KEY));
   if (!Array.isArray(parsed)) return [];
 
-  // Lightweight migration: tolerate older lastRun shape.
+  // Lightweight migration:
+  // - tolerate older lastRun shape (without receipt)
+  // - ensure runs[] exists if lastRun exists
   return parsed.map((p) => {
     if (!p || typeof p !== "object") return p;
-    const lastRun: any = (p as any).lastRun;
-    if (!lastRun || typeof lastRun !== "object") return p;
-    if ("receipt" in lastRun) return p;
-    return {
-      ...p,
-      lastRun: {
+
+    const anyP: any = p as any;
+    const lastRun: any = anyP.lastRun;
+    const runs: any = anyP.runs;
+
+    let normalisedLastRun: AIStudioProject["lastRun"] | undefined = undefined;
+    if (lastRun && typeof lastRun === "object") {
+      normalisedLastRun = {
         ranAt: typeof lastRun.ranAt === "string" ? lastRun.ranAt : nowIso(),
         input: lastRun.input,
         output: lastRun.output,
-      },
-    } as AIStudioProject;
+        receipt: lastRun.receipt,
+      };
+    }
+
+    const normalisedRuns =
+      Array.isArray(runs) && runs.length > 0
+        ? runs
+        : normalisedLastRun
+          ? [normalisedLastRun]
+          : undefined;
+
+    return {
+      ...(p as AIStudioProject),
+      lastRun: normalisedLastRun,
+      runs: normalisedRuns,
+    };
   });
 }
 
@@ -144,10 +158,14 @@ export function updateProjectRun(projectId: string, params: { input?: unknown; o
   const projects = getProjects();
   const idx = projects.findIndex((p) => p.id === projectId);
   if (idx < 0) return;
+  const runEntry = { ranAt: nowIso(), input: params.input, output: params.output, receipt: params.receipt };
+  const existingRuns = Array.isArray(projects[idx].runs) ? projects[idx].runs! : projects[idx].lastRun ? [projects[idx].lastRun] : [];
+  const nextRuns = [runEntry, ...existingRuns].slice(0, 30);
   const updated: AIStudioProject = {
     ...projects[idx],
     updatedAt: nowIso(),
-    lastRun: { ranAt: nowIso(), input: params.input, output: params.output, receipt: params.receipt },
+    runs: nextRuns,
+    lastRun: runEntry,
   };
   const next = [...projects];
   next[idx] = updated;

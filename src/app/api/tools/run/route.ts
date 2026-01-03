@@ -8,6 +8,7 @@ import { runWithMetering } from "@/lib/tools/runWithMetering";
 import { requireSameOrigin } from "@/lib/security/origin";
 import { rateLimit } from "@/lib/security/rateLimit";
 import { withRequestLogging } from "@/lib/security/requestLog";
+import type { ComplexityPreset } from "@/lib/billing/estimateRunCost";
 
 /**
  * Tool Execution API Route
@@ -25,6 +26,7 @@ interface RunRequest {
   toolId: string;
   mode: "local" | "compute";
   inputs: Record<string, unknown>;
+  requestedComplexityPreset?: ComplexityPreset;
 }
 
 const isPrivateIp = (value: string) => {
@@ -63,6 +65,13 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
+
+    const requestedPreset: ComplexityPreset =
+      body.requestedComplexityPreset === "heavy"
+        ? "heavy"
+        : body.requestedComplexityPreset === "standard"
+          ? "standard"
+          : "light";
 
     // If mode is local, this endpoint should not be called
     if (body.mode === "local") {
@@ -214,19 +223,28 @@ export async function POST(req: Request) {
         userId,
         toolId: "ai-story-generator",
         inputBytes: Buffer.byteLength(prompt),
-        requestedComplexityPreset: "standard",
+        requestedComplexityPreset: requestedPreset,
         execute: async () => {
-          // Deterministic, safe compute demo. No external model calls.
-          // Add a small bounded delay so compute receipts look realistic.
-          await new Promise((r) => setTimeout(r, Math.min(900, 120 + prompt.length * 3)));
+          const delayBase = requestedPreset === "heavy" ? 700 : requestedPreset === "standard" ? 420 : 180;
+          await new Promise((r) => setTimeout(r, Math.min(1400, delayBase + prompt.length * 3)));
+
+          const shortStory =
+            `Once upon a time, a brave robot named R2-D5 discovered a quiet planet filled with shimmering crystals.\n\n` +
+            `It followed one simple rule: be curious, be careful, and be kind. R2-D5 helped a lost traveller and returned home safely.`;
+
+          const longStory =
+            `Once upon a time, a brave robot named R2-D5 discovered a quiet planet filled with shimmering crystals.\n\n` +
+            `It followed a simple rule: be curious, be careful, and be kind. With a small map and a bright light, ` +
+            `it explored caves, logged the terrain, and helped a lost traveller find the safest path home.\n\n` +
+            `R2-D5 also made a tiny “safety plan”: 1) stay with your team, 2) check your equipment, 3) ask for help early, 4) rest when tired.\n\n` +
+            `In the end, R2-D5 returned with new knowledge and a promise: every adventure is better when you keep people safe.`;
+
+          const story = requestedPreset === "light" ? shortStory : longStory;
 
           const payload = {
             prompt,
-            story:
-              `Once upon a time, a brave robot named R2-D5 discovered a quiet planet filled with shimmering crystals.\n\n` +
-              `It followed a simple rule: be curious, be careful, and be kind. With a small map and a bright light, ` +
-              `it explored caves, logged the terrain, and helped a lost traveller find the safest path home.\n\n` +
-              `In the end, R2-D5 returned with new knowledge and a promise: every adventure is better when you keep people safe.`,
+            quality: requestedPreset,
+            story,
             safety: {
               mode: "safe-demo",
               note: "No external model calls. Deterministic output for reliability.",
@@ -278,17 +296,22 @@ export async function POST(req: Request) {
         userId,
         toolId: "ai-homework-helper",
         inputBytes: Buffer.byteLength(question),
-        requestedComplexityPreset: "standard",
+        requestedComplexityPreset: requestedPreset,
         execute: async () => {
-          await new Promise((r) => setTimeout(r, Math.min(900, 120 + question.length * 2)));
+          const delayBase = requestedPreset === "heavy" ? 700 : requestedPreset === "standard" ? 420 : 180;
+          await new Promise((r) => setTimeout(r, Math.min(1400, delayBase + question.length * 2)));
           const matched = question.replace(/\s+/g, " ").match(/(\d+)\s*x\s*\+\s*(\d+)\s*=\s*(\d+)/i);
           const payload: any = { question, ranAt: new Date().toISOString() };
           if (matched) {
             const a = Number(matched[1]);
             const b = Number(matched[2]);
             const c = Number(matched[3]);
-            payload.steps = [`Subtract ${b} from both sides → ${a}x = ${c - b}`, `Divide both sides by ${a} → x = ${(c - b) / a}`];
-            payload.answer = `x = ${(c - b) / a}`;
+            const x = (c - b) / a;
+            payload.steps = [`Subtract ${b} from both sides → ${a}x = ${c - b}`, `Divide both sides by ${a} → x = ${x}`];
+            if (requestedPreset === "heavy") {
+              payload.steps.push(`Check: plug x back in → ${a}·${x} + ${b} = ${a * x + b} ✓`);
+            }
+            payload.answer = `x = ${x}`;
           } else {
             payload.steps = [
               "Rewrite the problem in a simpler form (remove extra words).",
@@ -297,6 +320,7 @@ export async function POST(req: Request) {
             ];
             payload.answer = "This demo can only solve simple equations like 2x + 5 = 15.";
           }
+          payload.quality = requestedPreset;
           payload.safety = { mode: "safe-demo", note: "No external model calls. Deterministic output for reliability." };
           return { output: payload, outputBytes: Buffer.byteLength(JSON.stringify(payload)) };
         },
@@ -344,9 +368,10 @@ export async function POST(req: Request) {
         userId,
         toolId: "ai-support-bot",
         inputBytes: Buffer.byteLength(question),
-        requestedComplexityPreset: "standard",
+        requestedComplexityPreset: requestedPreset,
         execute: async () => {
-          await new Promise((r) => setTimeout(r, Math.min(900, 120 + question.length * 2)));
+          const delayBase = requestedPreset === "heavy" ? 700 : requestedPreset === "standard" ? 420 : 180;
+          await new Promise((r) => setTimeout(r, Math.min(1400, delayBase + question.length * 2)));
           const q = question.toLowerCase();
           let reply =
             "I can help with orders, returns, delivery, and account questions. Tell me what you need, and include your order number if you have one.";
@@ -364,12 +389,28 @@ export async function POST(req: Request) {
               "If you cannot sign in, use the password reset link on the sign-in page. If you do not receive the email, check spam and confirm the address is correct.";
           }
 
-          const payload = {
-            question,
-            reply,
-            safety: { mode: "safe-demo", note: "No external model calls. Deterministic output for reliability." },
-            ranAt: new Date().toISOString(),
-          };
+          const payload =
+            requestedPreset === "heavy"
+              ? {
+                  question,
+                  quality: requestedPreset,
+                  summary: reply,
+                  steps: [
+                    "Confirm the intent (return/refund/delivery/login).",
+                    "Provide the exact steps and where to find them in the account area.",
+                    "Offer escalation if the timeline is abnormal or the user is stuck.",
+                  ],
+                  escalation: "If this does not solve it, contact support and include your order number.",
+                  safety: { mode: "safe-demo", note: "No external model calls. Deterministic output for reliability." },
+                  ranAt: new Date().toISOString(),
+                }
+              : {
+                  question,
+                  quality: requestedPreset,
+                  reply,
+                  safety: { mode: "safe-demo", note: "No external model calls. Deterministic output for reliability." },
+                  ranAt: new Date().toISOString(),
+                };
           return { output: payload, outputBytes: Buffer.byteLength(JSON.stringify(payload)) };
         },
       });
