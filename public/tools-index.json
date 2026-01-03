@@ -1,11 +1,12 @@
 {
-  "generatedAt": "2026-01-03T15:29:36.850Z",
+  "generatedAt": "2026-01-03T20:59:22.121Z",
   "tools": [
     {
       "id": "dns-lookup",
       "title": "DNS lookup",
       "description": "Look up DNS records for a public hostname (server-assisted).",
       "route": "/tools/cyber/dns-lookup",
+      "listed": true,
       "executionModes": [
         "compute"
       ],
@@ -69,6 +70,7 @@
       "title": "WHOIS summary (safe)",
       "description": "Quick, safe domain context and guidance (educational fallback).",
       "route": "/tools/cyber/whois-summary",
+      "listed": true,
       "executionModes": [
         "compute"
       ],
@@ -130,6 +132,7 @@
       "title": "Sandbox echo",
       "description": "Send a short message to the secure runner and get it back.",
       "route": "/tools/sandbox-echo",
+      "listed": true,
       "executionModes": [
         "compute"
       ],
@@ -201,6 +204,7 @@
       "title": "Architecture Diagram Studio",
       "description": "Generate draft architecture diagrams from structured inputs.",
       "route": "/studios/architecture-diagram-studio",
+      "listed": false,
       "executionModes": [
         "local"
       ],
@@ -265,6 +269,7 @@
       "title": "Game Canvas",
       "description": "Interactive games with keyboard and touch; offline after first load.",
       "route": "/games",
+      "listed": false,
       "executionModes": [
         "local"
       ],
@@ -304,6 +309,7 @@
       "title": "Vision Quick Check",
       "description": "Validate and preview images; guide on size/format.",
       "route": "/labs/vision/quick-check",
+      "listed": false,
       "executionModes": [
         "compute"
       ],
@@ -350,6 +356,7 @@
       "title": "Speech Sound Analysis",
       "description": "Analyze uploaded/recorded audio; transcript and basic metrics.",
       "route": "/labs/speech/sound-analysis",
+      "listed": false,
       "executionModes": [
         "compute"
       ],
@@ -398,6 +405,7 @@
       "title": "Code Lab",
       "description": "Run code safely in a sandbox with allowlisted languages.",
       "route": "/tools/code-lab",
+      "listed": false,
       "executionModes": [
         "compute"
       ],
@@ -450,6 +458,7 @@
       "title": "Python playground",
       "description": "Run small Python experiments in-browser (Pyodide).",
       "route": "/tools/ai/python-playground",
+      "listed": true,
       "executionModes": [
         "local"
       ],
@@ -519,6 +528,7 @@
       "title": "JavaScript sandbox",
       "description": "Test JS behaviour and parsing safely.",
       "route": "/tools/software-architecture/js-sandbox",
+      "listed": true,
       "executionModes": [
         "local"
       ],
@@ -587,6 +597,7 @@
       "title": "SQL sandbox (SQLite)",
       "description": "Practise queries and joins locally.",
       "route": "/tools/data/sql-sandbox",
+      "listed": true,
       "executionModes": [
         "local"
       ],
@@ -655,6 +666,7 @@
       "title": "RSA lab (OAEP + SHA-256)",
       "description": "Generate keys and explain asymmetric crypto.",
       "route": "/tools/cyber/rsa-lab",
+      "listed": true,
       "executionModes": [
         "local"
       ],
@@ -728,6 +740,7 @@
       "title": "Entropy and hashing",
       "description": "Visualise randomness and the avalanche effect.",
       "route": "/tools/cyber/entropy-hashing",
+      "listed": true,
       "executionModes": [
         "local"
       ],
@@ -792,6 +805,7 @@
       "title": "Password entropy meter",
       "description": "Compare length vs complexity trade-offs.",
       "route": "/tools/cyber/password-entropy",
+      "listed": true,
       "executionModes": [
         "local"
       ],
@@ -857,6 +871,7 @@
       "title": "Certificate viewer",
       "description": "Inspect certificate fields and trust cues.",
       "route": "/tools/cyber/certificate-viewer",
+      "listed": true,
       "executionModes": [
         "local"
       ],
@@ -917,6 +932,7 @@
       "title": "Regex tester",
       "description": "Extract patterns and groups from sample text.",
       "route": "/tools/software-architecture/regex-tester",
+      "listed": true,
       "executionModes": [
         "local"
       ],
@@ -994,6 +1010,7 @@
       "title": "Schema inspector",
       "description": "Explore entities, fields, and relationships.",
       "route": "/tools/data/schema-inspector",
+      "listed": true,
       "executionModes": [
         "local"
       ],
@@ -1054,6 +1071,7 @@
       "title": "Logic gate simulator",
       "description": "Learn AND/OR/XOR with truth tables.",
       "route": "/tools/software-architecture/logic-gates",
+      "listed": true,
       "executionModes": [
         "local"
       ],
@@ -1128,6 +1146,7 @@
       "title": "Risk register builder",
       "description": "Structure and prioritise risks with likelihood, impact, and mitigations.",
       "route": "/tools/cyber/risk-register-builder",
+      "listed": true,
       "executionModes": [
         "local"
       ],
@@ -1193,6 +1212,7 @@
       "title": "Decision log generator",
       "description": "Create auditable records of decisions and rationale.",
       "route": "/tools/software-architecture/decision-log-generator",
+      "listed": true,
       "executionModes": [
         "local"
       ],
@@ -1282,6 +1302,7 @@
       "title": "Architecture trade-off analysis",
       "description": "Compare options against constraints and non-functional requirements.",
       "route": "/tools/software-architecture/architecture-tradeoff-analysis",
+      "listed": true,
       "executionModes": [
         "local"
       ],
@@ -1378,6 +1399,7 @@
       "title": "Data classification helper",
       "description": "Classify sensitivity and handling requirements in plain terms.",
       "route": "/tools/data/data-classification-helper",
+      "listed": true,
       "executionModes": [
         "local"
       ],
@@ -1455,6 +1477,7 @@
       "title": "Threat modelling lite",
       "description": "Run a STRIDE-style walkthrough without diagrams.",
       "route": "/tools/cyber/threat-modelling-lite",
+      "listed": true,
       "executionModes": [
         "local"
       ],
@@ -1544,6 +1567,7 @@
       "title": "Control mapping tool",
       "description": "Map controls to standards at a conceptual level (ISO, NIST, SOC 2).",
       "route": "/tools/cyber/control-mapping-tool",
+      "listed": true,
       "executionModes": [
         "local"
       ],
@@ -1626,6 +1650,7 @@
       "title": "Process friction mapper",
       "description": "Identify where process slows delivery or creates risk.",
       "route": "/tools/digitalisation/process-friction-mapper",
+      "listed": true,
       "executionModes": [
         "local"
       ],
@@ -1711,6 +1736,7 @@
       "title": "Technical debt qualifier",
       "description": "Describe and prioritise debt with impact, cost, and risk.",
       "route": "/tools/software-architecture/technical-debt-qualifier",
+      "listed": true,
       "executionModes": [
         "local"
       ],
@@ -1791,6 +1817,7 @@
       "title": "Incident post-mortem builder",
       "description": "Create learning-focused post-incident reviews and actions.",
       "route": "/tools/cyber/incident-post-mortem-builder",
+      "listed": true,
       "executionModes": [
         "local"
       ],
@@ -1881,6 +1908,7 @@
       "title": "Metrics definition studio",
       "description": "Define useful metrics and avoid vanity measurements.",
       "route": "/tools/data/metrics-definition-studio",
+      "listed": true,
       "executionModes": [
         "local"
       ],

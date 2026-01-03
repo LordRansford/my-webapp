@@ -304,6 +304,15 @@ export const TOOL_COMPUTE_PROFILES: Record<string, ToolComputeProfile> = {
     typicalSteps: 55,
     guidance: ["Keep one intent per message (return/refund/delivery).", "Avoid sensitive personal data in demos.", "Save strong replies as templates."],
   },
+
+  "studio-help-assistant": {
+    toolId: "studio-help-assistant",
+    label: "Studios help assistant",
+    computeClass: "A",
+    typicalInputBytes: 420,
+    typicalSteps: 70,
+    guidance: ["Ask one clear question at a time.", "Paste your requirements to tailor examples.", "Use the light preset for cheaper runs."],
+  },
 };
 
 export function getToolComputeProfile(toolId?: string | null): ToolComputeProfile | null {

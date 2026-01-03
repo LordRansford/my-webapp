@@ -154,7 +154,7 @@ function StudioNavigation({
     ] : []),
     ...additionalLinks,
     ...(studioType !== "lab" ? [{ label: "Settings", href: config.settings, icon: Settings }] : []),
-    { label: "Help", href: "/help", icon: HelpCircle },
+    { label: "Help", href: `/help?studio=${encodeURIComponent(studioType)}`, icon: HelpCircle },
   ], [showHome, showHub, studioType, config.hub, config.learn, config.build, config.settings, additionalLinks, currentStudio, currentStudioHref]);
 
   const isActive = (href: string) => {

@@ -30,18 +30,18 @@ function extractToolsFromToolsPage() {
 }
 
 function main() {
-  const toolsJsIds = extractToolsFromToolsPage();
   const contracts = readJson("data/tool-contracts.json").tools || [];
   const catalog = readJson("data/tools/catalog.json").tools || [];
 
+  const listedIds = contracts.filter((c) => c && c.listed === true).map((c) => c.id);
   const contractIds = new Set(contracts.map((c) => c.id));
   const catalogIds = new Set(catalog.map((c) => c.id));
-  const toolsJsIdSet = new Set(toolsJsIds);
+  const listedIdSet = new Set(listedIds);
 
-  const missingContract = toolsJsIds.filter((id) => !contractIds.has(id));
-  const missingCatalog = toolsJsIds.filter((id) => !catalogIds.has(id));
-  const unlistedContracts = contracts.map((c) => c.id).filter((id) => !toolsJsIdSet.has(id));
-  const unlistedCatalog = catalog.map((c) => c.id).filter((id) => !toolsJsIdSet.has(id));
+  const missingContract = listedIds.filter((id) => !contractIds.has(id));
+  const missingCatalog = listedIds.filter((id) => !catalogIds.has(id));
+  const unlistedContracts = contracts.map((c) => c.id).filter((id) => !listedIdSet.has(id));
+  const unlistedCatalog = catalog.map((c) => c.id).filter((id) => !listedIdSet.has(id));
 
   const lines = [];
   lines.push(`# Tools sync report`);
@@ -49,7 +49,7 @@ function main() {
   lines.push(`Generated: ${new Date().toISOString()}`);
   lines.push(``);
   lines.push(`## Summary`);
-  lines.push(`- tools.js entries: ${toolsJsIds.length}`);
+  lines.push(`- listed tools (contracts): ${listedIds.length}`);
   lines.push(`- contracts: ${contracts.length}`);
   lines.push(`- catalog entries: ${catalog.length}`);
   lines.push(``);

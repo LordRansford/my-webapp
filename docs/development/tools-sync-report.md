@@ -1,9 +1,9 @@
 # Tools sync report
 
-Generated: 2026-01-03T20:40:06.509Z
+Generated: 2026-01-03T20:59:28.327Z
 
 ## Summary
-- tools.js entries: 23
+- listed tools (contracts): 23
 - contracts: 28
 - catalog entries: 23
 

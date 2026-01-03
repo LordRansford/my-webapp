@@ -29,6 +29,7 @@ function buildToolsIndex() {
       category: contract.category,
       difficulty: contract.difficulty,
       route: contract.route,
+      listed: Boolean(contract.listed),
       executionModes: contract.executionModes || (contract.execution === "sandboxed-server" ? ["compute"] : ["local"]),
       defaultMode: contract.defaultMode || "local",
       limits: {

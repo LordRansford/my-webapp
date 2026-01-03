@@ -1,215 +1,33 @@
 import Link from "next/link";
 import { MarketingPageTemplate } from "@/components/templates/PageTemplates";
 
-const tools = [
-  {
-    id: "dns-lookup",
-    title: "DNS lookup",
-    purpose: "Look up DNS records for a public hostname (server-assisted).",
-    category: "Cybersecurity",
-    level: "Beginner",
-    compute: "Compute",
-    href: "/tools/cyber/dns-lookup",
-  },
-  {
-    id: "python-playground",
-    title: "Python playground",
-    purpose: "Run small Python experiments in-browser (Pyodide).",
-    category: "AI",
-    level: "Intermediate",
-    compute: "Heavy",
-    href: "/tools/ai/python-playground",
-  },
-  {
-    id: "js-sandbox",
-    title: "JavaScript sandbox",
-    purpose: "Test JS behaviour and parsing safely.",
-    category: "Software Architecture",
-    level: "Beginner",
-    compute: "Browser-only",
-    href: "/tools/software-architecture/js-sandbox",
-  },
-  {
-    id: "sql-sqlite",
-    title: "SQL sandbox (SQLite)",
-    purpose: "Practise queries and joins locally.",
-    category: "Data",
-    level: "Beginner",
-    compute: "Light",
-    href: "/tools/data/sql-sandbox",
-  },
-  {
-    id: "rsa-oaep",
-    title: "RSA lab (OAEP + SHA-256)",
-    purpose: "Generate keys and explain asymmetric crypto.",
-    category: "Cybersecurity",
-    level: "Intermediate",
-    compute: "Light",
-    href: "/tools/cyber/rsa-lab",
-  },
-  {
-    id: "entropy-hashing",
-    title: "Entropy and hashing",
-    purpose: "Visualise randomness and the avalanche effect.",
-    category: "Cybersecurity",
-    level: "Beginner",
-    compute: "Browser-only",
-    href: "/tools/cyber/entropy-hashing",
-  },
-  {
-    id: "password-entropy",
-    title: "Password entropy meter",
-    purpose: "Compare length vs complexity trade-offs.",
-    category: "Cybersecurity",
-    level: "Beginner",
-    compute: "Browser-only",
-    href: "/tools/cyber/password-entropy",
-  },
-  {
-    id: "cert-viewer",
-    title: "Certificate viewer",
-    purpose: "Inspect certificate fields and trust cues.",
-    category: "Cybersecurity",
-    level: "Intermediate",
-    compute: "Browser-only",
-    href: "/tools/cyber/certificate-viewer",
-  },
-  {
-    id: "regex-tester",
-    title: "Regex tester",
-    purpose: "Extract patterns and groups from sample text.",
-    category: "Software Architecture",
-    level: "Beginner",
-    compute: "Browser-only",
-    href: "/tools/software-architecture/regex-tester",
-  },
-  {
-    id: "schema-inspector",
-    title: "Schema inspector",
-    purpose: "Explore entities, fields, and relationships.",
-    category: "Data",
-    level: "Intermediate",
-    compute: "Browser-only",
-    href: "/tools/data/schema-inspector",
-  },
-  {
-    id: "logic-gates",
-    title: "Logic gate simulator",
-    purpose: "Learn AND/OR/XOR with truth tables.",
-    category: "Software Architecture",
-    level: "Beginner",
-    compute: "Browser-only",
-    href: "/tools/software-architecture/logic-gates",
-  },
-  {
-    id: "risk-register-builder",
-    title: "Risk register builder",
-    purpose: "Structure and prioritise risks with likelihood, impact, and mitigations.",
-    category: "Cybersecurity",
-    level: "Intermediate",
-    compute: "Browser-only",
-    href: "/tools/cyber/risk-register-builder",
-  },
-  {
-    id: "decision-log-generator",
-    title: "Decision log generator",
-    purpose: "Create auditable records of decisions and rationale.",
-    category: "Software Architecture",
-    level: "Beginner",
-    compute: "Browser-only",
-    href: "/tools/software-architecture/decision-log-generator",
-  },
-  {
-    id: "architecture-tradeoff-analysis",
-    title: "Architecture trade-off analysis",
-    purpose: "Compare options against constraints and non-functional requirements.",
-    category: "Software Architecture",
-    level: "Advanced",
-    compute: "Browser-only",
-    href: "/tools/software-architecture/architecture-tradeoff-analysis",
-  },
-  {
-    id: "data-classification-helper",
-    title: "Data classification helper",
-    purpose: "Classify sensitivity and handling requirements in plain terms.",
-    category: "Data",
-    level: "Intermediate",
-    compute: "Browser-only",
-    href: "/tools/data/data-classification-helper",
-  },
-  {
-    id: "threat-modelling-lite",
-    title: "Threat modelling lite",
-    purpose: "Run a STRIDE-style walkthrough without diagrams.",
-    category: "Cybersecurity",
-    level: "Intermediate",
-    compute: "Browser-only",
-    href: "/tools/cyber/threat-modelling-lite",
-  },
-  {
-    id: "control-mapping-tool",
-    title: "Control mapping tool",
-    purpose: "Map controls to standards at a conceptual level (ISO, NIST, SOC 2).",
-    category: "Cybersecurity",
-    level: "Advanced",
-    compute: "Browser-only",
-    href: "/tools/cyber/control-mapping-tool",
-  },
-  {
-    id: "process-friction-mapper",
-    title: "Process friction mapper",
-    purpose: "Identify where process slows delivery or creates risk.",
-    category: "Digitalisation",
-    level: "Beginner",
-    compute: "Browser-only",
-    href: "/tools/digitalisation/process-friction-mapper",
-  },
-  {
-    id: "technical-debt-qualifier",
-    title: "Technical debt qualifier",
-    purpose: "Describe and prioritise debt with impact, cost, and risk.",
-    category: "Software Architecture",
-    level: "Intermediate",
-    compute: "Browser-only",
-    href: "/tools/software-architecture/technical-debt-qualifier",
-  },
-  {
-    id: "incident-postmortem-builder",
-    title: "Incident post-mortem builder",
-    purpose: "Create learning-focused post-incident reviews and actions.",
-    category: "Cybersecurity",
-    level: "Intermediate",
-    compute: "Browser-only",
-    href: "/tools/cyber/incident-post-mortem-builder",
-  },
-  {
-    id: "metrics-definition-studio",
-    title: "Metrics definition studio",
-    purpose: "Define useful metrics and avoid vanity measurements.",
-    category: "Data",
-    level: "Advanced",
-    compute: "Browser-only",
-    href: "/tools/data/metrics-definition-studio",
-  },
-  {
-    id: "whois-summary",
-    title: "WHOIS summary (safe)",
-    purpose: "Quick, safe domain context and guidance (server-assisted; educational fallback).",
-    category: "Cybersecurity",
-    level: "Beginner",
-    compute: "Compute",
-    href: "/tools/cyber/whois-summary",
-  },
-  {
-    id: "sandbox-echo",
-    title: "Sandbox echo",
-    purpose: "Send a message to the secure runner and get it back (compute demo).",
-    category: "Software Architecture",
-    level: "Beginner",
-    compute: "Compute",
-    href: "/tools/sandbox-echo",
-  },
-];
+export async function getStaticProps() {
+  const fs = require("node:fs");
+  const path = require("node:path");
+  const p = path.join(process.cwd(), "public", "tools-index.json");
+  const raw = fs.readFileSync(p, "utf8");
+  const index = JSON.parse(raw);
+  const tools = Array.isArray(index?.tools) ? index.tools : [];
+
+  const listed = tools
+    .filter((t) => Boolean(t?.listed))
+    .map((t) => {
+      const executionModes = Array.isArray(t.executionModes) ? t.executionModes : [];
+      const isCompute = executionModes.includes("compute");
+      return {
+        id: t.id,
+        title: t.title,
+        purpose: t.description || "",
+        category: t.category || "General",
+        level: t.difficulty || "Beginner",
+        compute: isCompute ? "Compute" : "Browser-only",
+        href: t.route,
+      };
+    })
+    .sort((a, b) => (a.category + a.title).localeCompare(b.category + b.title));
+
+  return { props: { tools: listed } };
+}
 
 function Badge({ children, tone = "slate" }) {
   const toneClass =
@@ -230,7 +48,7 @@ function toneForCategory(cat) {
   return "slate";
 }
 
-export default function ToolsPage() {
+export default function ToolsPage({ tools }) {
   return (
     <MarketingPageTemplate breadcrumbs={[{ label: "Home", href: "/" }, { label: "Tools" }]}>
       <header className="page-header">

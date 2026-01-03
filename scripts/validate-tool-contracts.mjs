@@ -48,15 +48,9 @@ const REQUIRED_CREDIT_FIELDS = ["costPerRun"];
 // Valid execution types
 const VALID_EXECUTION_TYPES = ["browser-only", "sandboxed-server", "static-analysis"];
 
-function extractToolsFromToolsPage() {
-  const toolsPagePath = path.join(rootDir, "src", "pages", "tools.js");
-  const content = fs.readFileSync(toolsPagePath, "utf8");
-  
-  // Extract tool IDs from the tools array
-  const toolMatches = content.matchAll(/id:\s*"([^"]+)"/g);
-  const toolIds = Array.from(toolMatches, (m) => m[1]);
-  
-  return toolIds;
+function extractListedToolsFromContracts() {
+  const contracts = loadContracts();
+  return contracts.filter((c) => c && c.listed === true).map((c) => c.id);
 }
 
 function loadContracts() {
@@ -189,19 +183,19 @@ function validateContract(contract, index) {
 function main() {
   console.log("Validating tool contracts...\n");
   
-  const toolIds = extractToolsFromToolsPage();
   const contracts = loadContracts();
   const catalog = loadCatalog();
+  const toolIds = extractListedToolsFromContracts();
   
   const contractMap = new Map(contracts.map((c) => [c.id, c]));
   const catalogMap = new Map(catalog.tools.map((t) => [t.id, t]));
   const errors = [];
   const warnings = [];
   
-  // Check that every tool has a contract
+  // Check that every listed tool has a contract (contracts are the source of truth now).
   for (const toolId of toolIds) {
     if (!contractMap.has(toolId)) {
-      errors.push(`Tool "${toolId}" in tools.js has no contract in tool-contracts.json`);
+      errors.push(`Listed tool "${toolId}" has no contract in tool-contracts.json`);
     }
   }
   
@@ -211,22 +205,22 @@ function main() {
     const contractErrors = validateContract(contract, i);
     errors.push(...contractErrors);
     
-    // Validate catalog entry for tools that are in tools.js (not studios/games)
+    // Validate catalog entry for tools that are listed (tools page)
     if (toolIds.includes(contract.id)) {
       const catalogEntry = catalogMap.get(contract.id);
       if (catalogEntry) {
         const catalogErrors = validateCatalogEntry(catalogEntry, contract.id);
         errors.push(...catalogErrors);
       } else {
-        errors.push(`Tool "${contract.id}" (in tools.js) has no catalog entry in data/tools/catalog.json`);
+        errors.push(`Tool "${contract.id}" (listed) has no catalog entry in data/tools/catalog.json`);
       }
     }
   }
   
   // Check for contracts that don't have corresponding tools
   for (const contract of contracts) {
-    if (!toolIds.includes(contract.id)) {
-      warnings.push(`Contract for "${contract.id}" exists but tool not found in tools.js`);
+    if (contract.listed !== true && String(contract.route || "").startsWith("/tools/")) {
+      warnings.push(`Contract for "${contract.id}" exists but is not listed on /tools (listed=false)`);
     }
   }
   
