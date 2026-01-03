@@ -17,6 +17,8 @@ import ToolCard from "@/components/notes/ToolCard";
 import QuizBlock from "@/components/notes/QuizBlock";
 import { ErrorBoundary } from "@/components/notes/ErrorBoundary";
 import CPDTracker from "@/components/CPDTracker";
+import AchievementsDashboard from "@/components/notes/AchievementsDashboard";
+import LearningPathSelector from "@/components/notes/LearningPathSelector";
 
 const SecurityHabitPlannerTool = dynamic(() => import("@/components/notes/tools/cybersecurity/overview/SecurityHabitPlannerTool"), { ssr: false });
 
@@ -147,6 +149,8 @@ export default function CybersecurityOverviewPage({ source, headings }) {
       ToolCard,
       QuizBlock,
       SecurityHabitPlannerTool,
+      AchievementsDashboard,
+      LearningPathSelector,
     }),
     []
   );
