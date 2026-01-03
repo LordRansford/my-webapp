@@ -1,0 +1,9 @@
+__turbopack_load_page_chunks__("/tools/software-architecture/js-sandbox", [
+  "static/chunks/eef3d21a5c9cd197.js",
+  "static/chunks/0457c27a103d8a39.js",
+  "static/chunks/6bd1b060cc02463e.js",
+  "static/chunks/a806ebb22895a412.js",
+  "static/chunks/d1ea35920c32a766.js",
+  "static/chunks/f0f43ebb724b8b11.js",
+  "static/chunks/turbopack-988332f4347e02a6.js"
+])

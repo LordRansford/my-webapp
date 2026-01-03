@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { highlightAnchorFromLocation } from "@/lib/mentor/highlight";
+import { highlightAnchorFromLocation } from "@/lib/ui/highlightAnchor";
 
 export default function CitationChip({ href, title, why }: { href: string; title: string; why?: string }) {
   return (

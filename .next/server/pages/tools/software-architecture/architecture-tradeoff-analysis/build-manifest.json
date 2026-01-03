@@ -6,13 +6,13 @@
   "rootMainFiles": [],
   "pages": {
     "/tools/software-architecture/architecture-tradeoff-analysis": [
-      "static/chunks/870d39adb83d7cd4.js",
-      "static/chunks/d9da028ea9a8e8dd.js",
+      "static/chunks/e19695a279c684c2.js",
+      "static/chunks/0457c27a103d8a39.js",
       "static/chunks/6bd1b060cc02463e.js",
-      "static/chunks/0d2906eccf5d710f.js",
+      "static/chunks/a806ebb22895a412.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/f0f43ebb724b8b11.js",
-      "static/chunks/turbopack-e27241bbe2c34536.js"
+      "static/chunks/turbopack-43a0a003a6e339fa.js"
     ]
   },
   "ampFirstPages": []

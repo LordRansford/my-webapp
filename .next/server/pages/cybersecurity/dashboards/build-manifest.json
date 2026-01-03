@@ -6,12 +6,12 @@
   "rootMainFiles": [],
   "pages": {
     "/cybersecurity/dashboards": [
-      "static/chunks/db437ba600817ab0.js",
+      "static/chunks/c3d42b72c1bb7392.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/d1ea35920c32a766.js",
-      "static/chunks/0d2906eccf5d710f.js",
+      "static/chunks/a806ebb22895a412.js",
       "static/chunks/f0f43ebb724b8b11.js",
-      "static/chunks/turbopack-98791bf74d6be5af.js"
+      "static/chunks/turbopack-b6a3843688b9fe10.js"
     ]
   },
   "ampFirstPages": []

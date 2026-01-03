@@ -1,8 +1,0 @@
-__turbopack_load_page_chunks__("/dev-studios/sections/PipelineDeployLab", [
-  "static/chunks/89ee0bbd7acb0708.js",
-  "static/chunks/6bd1b060cc02463e.js",
-  "static/chunks/f0f43ebb724b8b11.js",
-  "static/chunks/0d2906eccf5d710f.js",
-  "static/chunks/d1ea35920c32a766.js",
-  "static/chunks/turbopack-6b734b4a4ba31d6b.js"
-])

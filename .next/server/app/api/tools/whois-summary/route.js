@@ -1,6 +1,6 @@
 var R=require("../../../../chunks/[turbopack]_runtime.js")("server/app/api/tools/whois-summary/route.js")
 R.c("server/chunks/[root-of-the-server]__4b47e1a3._.js")
-R.c("server/chunks/[root-of-the-server]__9c132f5c._.js")
+R.c("server/chunks/[root-of-the-server]__18523dc0._.js")
 R.c("server/chunks/node_modules_next_dist_23bfe24c._.js")
 R.c("server/chunks/node_modules_next_f2da0d3e._.js")
 R.c("server/chunks/[root-of-the-server]__34fd47d2._.js")

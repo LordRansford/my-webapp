@@ -212,15 +212,6 @@ type ApiRouteConfig = {
   type __Unused = __Check
 }
 
-// Validate ../../src/app/admin/mentor/page.tsx
-{
-  type __IsExpected<Specific extends AppPageConfig<"/admin/mentor">> = Specific
-  const handler = {} as typeof import("../../src/app/admin/mentor/page.js")
-  type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
-  type __Unused = __Check
-}
-
 // Validate ../../src/app/admin/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/admin">> = Specific
@@ -1647,24 +1638,6 @@ type ApiRouteConfig = {
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/learning/records">> = Specific
   const handler = {} as typeof import("../../src/app/api/learning/records/route.js")
-  type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
-  type __Unused = __Check
-}
-
-// Validate ../../src/app/api/mentor/admin/reset/route.ts
-{
-  type __IsExpected<Specific extends RouteHandlerConfig<"/api/mentor/admin/reset">> = Specific
-  const handler = {} as typeof import("../../src/app/api/mentor/admin/reset/route.js")
-  type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
-  type __Unused = __Check
-}
-
-// Validate ../../src/app/api/mentor/query/route.ts
-{
-  type __IsExpected<Specific extends RouteHandlerConfig<"/api/mentor/query">> = Specific
-  const handler = {} as typeof import("../../src/app/api/mentor/query/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

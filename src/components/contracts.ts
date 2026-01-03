@@ -59,18 +59,6 @@ export const ToolCardContract: ToolCardContract = {
   forbidden: ["Empty description", "Fixed heights", "Inline styles", "Missing usage hint"],
 };
 
-export type MentorChatWidgetContract = {
-  props: { pageContext?: unknown };
-  allowed: string[];
-  forbidden: string[];
-};
-
-export const MentorChatWidgetContract: MentorChatWidgetContract = {
-  props: { pageContext: undefined },
-  allowed: ["Collapsed/expanded states", "Context-aware answers", "Links to site sections"],
-  forbidden: ["Icon-only triggers", "Refusals without alternatives"],
-};
-
 export type FeedbackChatWidgetContract = {
   props: {};
   allowed: string[];

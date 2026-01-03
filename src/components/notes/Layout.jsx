@@ -11,7 +11,7 @@ import PreviewBanner from "./PreviewBanner";
 import cybersecurityCourse from "../../../content/courses/cybersecurity.json";
 import { useEffect, useMemo, useState } from "react";
 import FeedbackPanel from "@/components/feedback/FeedbackPanel";
-import { highlightAnchorFromLocation } from "@/lib/mentor/highlight";
+import { highlightAnchorFromLocation } from "@/lib/ui/highlightAnchor";
 import dynamic from "next/dynamic";
 import ReadAloudControls from "@/components/a11y/ReadAloudControls";
 import { CourseAssessmentTemplate, CourseLessonTemplate, CourseOverviewTemplate } from "@/components/templates/PageTemplates";

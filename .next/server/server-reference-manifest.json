@@ -1,21 +1,5 @@
 {
-  "node": {
-    "008de8dc4a19a82564a53f372185f93526db066afe": {
-      "workers": {
-        "app/admin/mentor/page": {
-          "moduleId": 361916,
-          "async": false,
-          "exportedName": "$$RSC_SERVER_ACTION_0",
-          "filename": "src/app/admin/mentor/page.tsx"
-        }
-      },
-      "layer": {
-        "app/admin/mentor/page": "rsc"
-      },
-      "filename": "src/app/admin/mentor/page.tsx",
-      "exportedName": "$$RSC_SERVER_ACTION_0"
-    }
-  },
+  "node": {},
   "edge": {},
-  "encryptionKey": "r8c4IDUFT35/yMW457tfKG8WoXgKjR5JWOV/kXuqDTQ="
+  "encryptionKey": "HNEO162t/8l/ecpIovaud5yecz8dfGkrh/yoT8agOIk="
 }

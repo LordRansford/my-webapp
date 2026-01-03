@@ -298,7 +298,7 @@ export default function ToolShell({
   const canRun = (mode === "local" || (mode === "compute" && contract.runner.startsWith("/api/"))) && validationErrors.length === 0;
 
   return (
-    // Add bottom padding so floating UI (e.g. feedback/mentor buttons) never blocks tool actions.
+    // Add bottom padding so floating UI never blocks tool actions.
     <div className="tool-shell pb-24">
       {/* Self Test Banner */}
       <ToolSelfTest

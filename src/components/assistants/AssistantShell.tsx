@@ -3,10 +3,9 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { LazyMotion, domAnimation, m, useReducedMotion } from "framer-motion";
-import { GraduationCap, LifeBuoy } from "lucide-react";
-import MentorAssistant from "@/components/assistants/MentorAssistant";
+import { LifeBuoy } from "lucide-react";
 import FeedbackAssistant from "@/components/assistants/FeedbackAssistant";
-import { enforceOneOpen, readAssistantsOpenState, writeAssistantsOpenState } from "@/components/assistants/state";
+import { readAssistantsOpenState, writeAssistantsOpenState } from "@/components/assistants/state";
 
 declare global {
   interface Window {
@@ -27,34 +26,19 @@ export default function AssistantShell() {
   const reduce = useReducedMotion();
   const pathname = usePathname() || "/";
 
-  const [mentorOpen, setMentorOpen] = useState(false);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
 
   useEffect(() => {
     const persisted = readAssistantsOpenState();
-    setMentorOpen(persisted.mentorOpen);
     setFeedbackOpen(persisted.feedbackOpen);
   }, []);
 
   useEffect(() => {
-    writeAssistantsOpenState(enforceOneOpen({ mentorOpen, feedbackOpen }));
-  }, [mentorOpen, feedbackOpen]);
-
-  useEffect(() => {
-    // One assistant open at a time on small screens.
-    const mq = window.matchMedia("(max-width: 640px)");
-    const enforce = () => {
-      if (!mq.matches) return;
-      if (mentorOpen && feedbackOpen) setFeedbackOpen(false);
-    };
-    enforce();
-    mq.addEventListener?.("change", enforce);
-    return () => mq.removeEventListener?.("change", enforce);
-  }, [mentorOpen, feedbackOpen]);
+    writeAssistantsOpenState({ feedbackOpen });
+  }, [feedbackOpen]);
 
   const onEsc = (e: React.KeyboardEvent) => {
     if (e.key === "Escape") {
-      setMentorOpen(false);
       setFeedbackOpen(false);
     }
   };
@@ -83,7 +67,6 @@ export default function AssistantShell() {
                 className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-900 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
                 aria-label="Feedback"
                 onClick={() => {
-                  setMentorOpen(false);
                   setFeedbackOpen((v) => !v);
                 }}
               >
@@ -91,28 +74,11 @@ export default function AssistantShell() {
                 <span className="hidden sm:inline">Feedback</span>
               </button>
             </div>
-            <div className="pointer-events-auto">
-              <button
-                type="button"
-                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-900 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-                aria-label="Mentor"
-                onClick={() => {
-                  setFeedbackOpen(false);
-                  setMentorOpen((v) => !v);
-                }}
-              >
-                <GraduationCap className="h-4 w-4" aria-hidden="true" />
-                <span className="hidden sm:inline">Mentor</span>
-              </button>
-            </div>
           </div>
         </div>
 
         <m.div {...drawerMotion("left")}>
           <FeedbackAssistant open={feedbackOpen} onClose={() => setFeedbackOpen(false)} pageUrl={pathname} pageTitle={typeof document !== "undefined" ? document.title || "" : ""} />
-        </m.div>
-        <m.div {...drawerMotion("right")}>
-          <MentorAssistant open={mentorOpen} onClose={() => setMentorOpen(false)} />
         </m.div>
       </div>
     </LazyMotion>
