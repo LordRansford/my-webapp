@@ -35,6 +35,9 @@ import { Suspense } from "react";
 import { auditLogger, AuditActions } from "@/lib/studios/security/auditLogger";
 import { getLastOpenedProjectId, getProjectById, getProjects, updateProjectLastRun } from "@/lib/ai-studio/projects/store";
 import type { AIStudioProject } from "@/lib/ai-studio/projects/store";
+import { setLastOpenedProjectId, updateProjectRun } from "@/lib/ai-studio/projects/store";
+import { runAiStudioProjectLocal } from "@/lib/ai-studio/projects/run";
+import ProjectsPanel from "@/components/ai-studio/ProjectsPanel";
 
 // Lazy load heavy POC components
 const BrowserTrainingPOC = dynamic(
@@ -85,7 +88,7 @@ const TrainingJobMonitor = dynamic(
   }
 );
 
-type ViewMode = "dashboard" | "training" | "validation" | "builder" | "orchestrator" | "datasets" | "jobs";
+type ViewMode = "dashboard" | "projects" | "training" | "validation" | "builder" | "orchestrator" | "datasets" | "jobs";
 
 export default function AIStudioPage() {
   const router = useRouter();
@@ -119,6 +122,33 @@ export default function AIStudioPage() {
     }
   }, [showExamples]);
 
+  const refreshProjects = () => {
+    const list = getProjects();
+    setProjects(list);
+    const lastId = getLastOpenedProjectId();
+    setActiveProject(lastId ? getProjectById(lastId) : null);
+  };
+
+  const openProject = (projectId: string) => {
+    setLastOpenedProjectId(projectId);
+    const p = getProjectById(projectId);
+    setActiveProject(p);
+    setActiveView("dashboard");
+  };
+
+  const runProject = async (projectId: string) => {
+    const p = getProjectById(projectId);
+    if (!p) return;
+    setLastOpenedProjectId(projectId);
+    setActiveProject(p);
+
+    const input = p.exampleId === "story-generator" ? "A brave robot exploring a new planet" : undefined;
+    const { output, receipt } = await runAiStudioProjectLocal({ project: p, input });
+    updateProjectRun(projectId, { input, output, receipt });
+    setActiveProject(getProjectById(projectId));
+    setProjects(getProjects());
+  };
+
   const quickStats = [
     { label: "Projects", value: String(projects.length), icon: Layers, color: "blue" },
     { label: "Datasets", value: "—", icon: Database, color: "green" },
@@ -134,6 +164,16 @@ export default function AIStudioPage() {
 
   const renderContent = () => {
     switch (activeView) {
+      case "projects":
+        return (
+          <ProjectsPanel
+            projects={projects}
+            activeProjectId={activeProject?.id || null}
+            onOpen={openProject}
+            onRun={runProject}
+            onRefresh={refreshProjects}
+          />
+        );
       case "training":
         return (
           <Suspense fallback={<LoadingSpinner message="Loading training interface..." />}>
@@ -219,6 +259,20 @@ export default function AIStudioPage() {
 
             {/* Quick Actions */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <button
+                onClick={() => setActiveView("projects")}
+                className="p-6 bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 rounded-2xl hover:shadow-md transition-all text-left group"
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="p-3 bg-slate-500 rounded-xl group-hover:scale-110 transition-transform">
+                    <Layers className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-slate-900">Projects</h3>
+                </div>
+                <p className="text-sm text-slate-700">
+                  Open, run, export, and manage the projects created from examples
+                </p>
+              </button>
               <button
                 onClick={() => setActiveView("training")}
                 className="p-6 bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-2xl hover:shadow-md transition-all text-left group"
@@ -370,39 +424,11 @@ export default function AIStudioPage() {
                     <button
                       type="button"
                       onClick={() => {
-                        const output =
-                          activeProject.exampleId === "story-generator"
-                            ? {
-                                prompt: "A brave robot exploring a new planet",
-                                story:
-                                  "Once upon a time, a brave robot named R2-D5 discovered a quiet planet filled with shimmering crystals. It logged the terrain, made a new friend, and returned home with a map for future explorers.",
-                                note: "Demo output (safe local simulation).",
-                              }
-                            : activeProject.exampleId === "homework-helper"
-                              ? {
-                                  question: "How do I solve 2x + 5 = 15?",
-                                  steps: ["Subtract 5 from both sides → 2x = 10", "Divide both sides by 2 → x = 5"],
-                                  answer: "x = 5",
-                                  note: "Demo output (safe local simulation).",
-                                }
-                              : activeProject.exampleId === "customer-support-bot"
-                                ? {
-                                    question: "How do I return an item?",
-                                    reply:
-                                      "To return an item: 1) Sign in, 2) Open Orders, 3) Choose the item, 4) Select Return, 5) Print the label, 6) Drop it off. If the item is damaged, contact support first.",
-                                    note: "Demo output (safe local simulation).",
-                                  }
-                                : {
-                                    message: "Demo run not configured for this example yet.",
-                                    note: "Demo output (safe local simulation).",
-                                  };
-
-                        updateProjectLastRun(activeProject.id, output);
-                        setActiveProject(getProjectById(activeProject.id));
+                        runProject(activeProject.id);
                       }}
                       className="px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors font-semibold text-sm"
                     >
-                      Run demo
+                      Run
                     </button>
                     <button
                       type="button"
@@ -420,6 +446,12 @@ export default function AIStudioPage() {
                 {activeProject.lastRun ? (
                   <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
                     <p className="text-xs font-semibold text-slate-700 mb-2">Latest demo output</p>
+                    {activeProject.lastRun.receipt ? (
+                      <p className="text-xs text-slate-600 mb-2">
+                        Receipt: {activeProject.lastRun.receipt.mode} · {activeProject.lastRun.receipt.durationMs} ms ·{" "}
+                        {activeProject.lastRun.receipt.creditsCharged} credits
+                      </p>
+                    ) : null}
                     <pre className="text-xs text-slate-900 overflow-auto whitespace-pre-wrap">
                       {JSON.stringify(activeProject.lastRun.output, null, 2)}
                     </pre>

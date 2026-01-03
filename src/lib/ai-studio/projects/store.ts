@@ -10,6 +10,19 @@
 
 import type { AIStudioExample } from "@/lib/ai-studio/examples/types";
 
+export type AIStudioRunReceipt = {
+  runId: string;
+  mode: "local" | "compute";
+  durationMs: number;
+  inputBytes: number;
+  outputBytes: number;
+  freeTierAppliedMs: number;
+  paidMs: number;
+  creditsCharged: number;
+  remainingCredits: number | null;
+  guidanceTips: string[];
+};
+
 export type AIStudioProject = {
   id: string;
   title: string;
@@ -22,7 +35,9 @@ export type AIStudioProject = {
   config: AIStudioExample["config"];
   lastRun?: {
     ranAt: string;
+    input?: unknown;
     output: unknown;
+    receipt?: AIStudioRunReceipt;
   };
 };
 
@@ -54,7 +69,23 @@ function newId() {
 export function getProjects(): AIStudioProject[] {
   if (!isClient()) return [];
   const parsed = safeParse<AIStudioProject[]>(localStorage.getItem(STORAGE_KEY));
-  return Array.isArray(parsed) ? parsed : [];
+  if (!Array.isArray(parsed)) return [];
+
+  // Lightweight migration: tolerate older lastRun shape.
+  return parsed.map((p) => {
+    if (!p || typeof p !== "object") return p;
+    const lastRun: any = (p as any).lastRun;
+    if (!lastRun || typeof lastRun !== "object") return p;
+    if ("receipt" in lastRun) return p;
+    return {
+      ...p,
+      lastRun: {
+        ranAt: typeof lastRun.ranAt === "string" ? lastRun.ranAt : nowIso(),
+        input: lastRun.input,
+        output: lastRun.output,
+      },
+    } as AIStudioProject;
+  });
 }
 
 export function saveProjects(projects: AIStudioProject[]) {
@@ -107,5 +138,29 @@ export function updateProjectLastRun(projectId: string, output: unknown) {
   const next = [...projects];
   next[idx] = updated;
   saveProjects(next);
+}
+
+export function updateProjectRun(projectId: string, params: { input?: unknown; output: unknown; receipt?: AIStudioRunReceipt }) {
+  const projects = getProjects();
+  const idx = projects.findIndex((p) => p.id === projectId);
+  if (idx < 0) return;
+  const updated: AIStudioProject = {
+    ...projects[idx],
+    updatedAt: nowIso(),
+    lastRun: { ranAt: nowIso(), input: params.input, output: params.output, receipt: params.receipt },
+  };
+  const next = [...projects];
+  next[idx] = updated;
+  saveProjects(next);
+}
+
+export function deleteProject(projectId: string) {
+  const projects = getProjects();
+  const next = projects.filter((p) => p.id !== projectId);
+  saveProjects(next);
+  const last = getLastOpenedProjectId();
+  if (last === projectId && isClient()) {
+    localStorage.removeItem(LAST_OPENED_KEY);
+  }
 }
 
