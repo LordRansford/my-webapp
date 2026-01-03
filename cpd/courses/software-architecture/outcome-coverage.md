@@ -1,40 +1,45 @@
-# Mapping – software-architecture
+# Outcome coverage – software-architecture
 
-- Status: Draft
-- Generated: 2026-01-03T22:48:09.851Z
+Generated: 2026-01-03T22:48:09.851Z
+Status: Draft
+
+## Summary
 - Total estimated hours: 100.7
 - Total learning objectives: 20
 - Total tracked sections: 27
 - Total quiz blocks: 9
 - Total tools: 21
 
-## advanced
-- Estimated hours (sum of sections): 14
-- Source files: 1
+## Gaps
+- Missing quiz blocks in: foundations
+
+## Recommendations
+- Add at least one QuizBlock per level (8–12 questions is ideal).
+
+## Level breakdown
+### advanced
+- Estimated hours: 14
 - Learning objectives: 4
 - Tracked sections: 4
 - Quiz blocks: 4
 - Tools: 4
 
-## foundations
-- Estimated hours (sum of sections): 45.2
-- Source files: 9
+### foundations
+- Estimated hours: 45.2
 - Learning objectives: 8
 - Tracked sections: 9
 - Quiz blocks: 0
 - Tools: 8
 
-## intermediate
-- Estimated hours (sum of sections): 37.5
-- Source files: 7
+### intermediate
+- Estimated hours: 37.5
 - Learning objectives: 4
 - Tracked sections: 10
 - Quiz blocks: 4
 - Tools: 4
 
-## summary
-- Estimated hours (sum of sections): 4
-- Source files: 1
+### summary
+- Estimated hours: 4
 - Learning objectives: 4
 - Tracked sections: 4
 - Quiz blocks: 1

@@ -1,0 +1,122 @@
+{
+  "generatedAt": "2026-01-03T22:48:09.852Z",
+  "courses": [
+    {
+      "courseId": "ai",
+      "status": "InProgress",
+      "totals": {
+        "totalEstimatedHours": 49,
+        "totalLearningObjectives": 8,
+        "totalTrackedSections": 25,
+        "totalQuizBlocks": 19,
+        "totalTools": 24
+      },
+      "gaps": {
+        "levelsMissingLearningObjectives": [
+          "advanced",
+          "intermediate"
+        ],
+        "levelsMissingQuizBlocks": [],
+        "levelsMissingToolActivities": [],
+        "levelsMissingSectionTracking": [],
+        "recommendations": [
+          "Add `learningObjectives` frontmatter to the listed levels (3–8 measurable outcomes per level)."
+        ]
+      }
+    },
+    {
+      "courseId": "cybersecurity",
+      "status": "Ready",
+      "totals": {
+        "totalEstimatedHours": 56,
+        "totalLearningObjectives": 15,
+        "totalTrackedSections": 25,
+        "totalQuizBlocks": 25,
+        "totalTools": 35
+      },
+      "gaps": {
+        "levelsMissingLearningObjectives": [],
+        "levelsMissingQuizBlocks": [],
+        "levelsMissingToolActivities": [],
+        "levelsMissingSectionTracking": [],
+        "recommendations": []
+      }
+    },
+    {
+      "courseId": "data",
+      "status": "Draft",
+      "totals": {
+        "totalEstimatedHours": 34,
+        "totalLearningObjectives": 16,
+        "totalTrackedSections": 22,
+        "totalQuizBlocks": 20,
+        "totalTools": 26
+      },
+      "gaps": {
+        "levelsMissingLearningObjectives": [],
+        "levelsMissingQuizBlocks": [],
+        "levelsMissingToolActivities": [],
+        "levelsMissingSectionTracking": [],
+        "recommendations": []
+      }
+    },
+    {
+      "courseId": "digitalisation",
+      "status": "Draft",
+      "totals": {
+        "totalEstimatedHours": 32,
+        "totalLearningObjectives": 16,
+        "totalTrackedSections": 16,
+        "totalQuizBlocks": 15,
+        "totalTools": 19
+      },
+      "gaps": {
+        "levelsMissingLearningObjectives": [],
+        "levelsMissingQuizBlocks": [],
+        "levelsMissingToolActivities": [],
+        "levelsMissingSectionTracking": [],
+        "recommendations": []
+      }
+    },
+    {
+      "courseId": "network-models",
+      "status": "Draft",
+      "totals": {
+        "totalEstimatedHours": 40,
+        "totalLearningObjectives": 11,
+        "totalTrackedSections": 21,
+        "totalQuizBlocks": 3,
+        "totalTools": 11
+      },
+      "gaps": {
+        "levelsMissingLearningObjectives": [],
+        "levelsMissingQuizBlocks": [],
+        "levelsMissingToolActivities": [],
+        "levelsMissingSectionTracking": [],
+        "recommendations": []
+      }
+    },
+    {
+      "courseId": "software-architecture",
+      "status": "Draft",
+      "totals": {
+        "totalEstimatedHours": 100.7,
+        "totalLearningObjectives": 20,
+        "totalTrackedSections": 27,
+        "totalQuizBlocks": 9,
+        "totalTools": 21
+      },
+      "gaps": {
+        "levelsMissingLearningObjectives": [],
+        "levelsMissingQuizBlocks": [
+          "foundations"
+        ],
+        "levelsMissingToolActivities": [],
+        "levelsMissingSectionTracking": [],
+        "recommendations": [
+          "Add at least one QuizBlock per level (8–12 questions is ideal)."
+        ]
+      }
+    }
+  ]
+}

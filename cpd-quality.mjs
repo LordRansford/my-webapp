@@ -12,6 +12,8 @@ const packFiles = [
   "cpd-pack.md",
   "mapping.json",
   "mapping.md",
+  "outcome-coverage.json",
+  "outcome-coverage.md",
   "quality-and-review.md",
   "assessment.md",
   "provider-and-instructor.md",

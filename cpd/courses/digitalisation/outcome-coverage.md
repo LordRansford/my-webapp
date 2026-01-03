@@ -1,40 +1,42 @@
-# Mapping – digitalisation
+# Outcome coverage – digitalisation
 
-- Status: Draft
-- Generated: 2026-01-03T22:48:09.850Z
+Generated: 2026-01-03T22:48:09.850Z
+Status: Draft
+
+## Summary
 - Total estimated hours: 32
 - Total learning objectives: 16
 - Total tracked sections: 16
 - Total quiz blocks: 15
 - Total tools: 19
 
-## advanced
-- Estimated hours (sum of sections): 10
-- Source files: 1
+## Gaps
+- None detected for core CPD structural signals (objectives, quizzes, tools, section tracking).
+
+## Level breakdown
+### advanced
+- Estimated hours: 10
 - Learning objectives: 4
 - Tracked sections: 4
 - Quiz blocks: 4
 - Tools: 4
 
-## foundations
-- Estimated hours (sum of sections): 8
-- Source files: 1
+### foundations
+- Estimated hours: 8
 - Learning objectives: 4
 - Tracked sections: 4
 - Quiz blocks: 4
 - Tools: 4
 
-## intermediate
-- Estimated hours (sum of sections): 10
-- Source files: 1
+### intermediate
+- Estimated hours: 10
 - Learning objectives: 4
 - Tracked sections: 4
 - Quiz blocks: 4
 - Tools: 4
 
-## summary
-- Estimated hours (sum of sections): 4
-- Source files: 1
+### summary
+- Estimated hours: 4
 - Learning objectives: 4
 - Tracked sections: 4
 - Quiz blocks: 3

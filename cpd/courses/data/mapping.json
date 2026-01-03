@@ -1,10 +1,381 @@
 {
   "courseId": "data",
   "status": "Draft",
-  "levels": [],
+  "generatedAt": "2026-01-03T22:48:09.850Z",
+  "version": "1.0.0",
+  "levels": [
+    {
+      "levelId": "advanced",
+      "estimatedHours": 12,
+      "sourceFiles": [
+        {
+          "title": "Data Advanced",
+          "file": "content/courses/data/advanced.mdx",
+          "stepIndex": 2
+        }
+      ],
+      "learningObjectives": [
+        "Analyse distribution, sampling, and measurement issues that distort conclusions.",
+        "Explain how advanced system choices (streaming, storage, governance) change data quality and latency.",
+        "Evaluate architectural trade offs for warehouse, lakehouse, and hybrid approaches.",
+        "Apply governance and strategy thinking to keep data ownership and interfaces clear."
+      ],
+      "sectionIds": [
+        "data-advanced-math-foundations",
+        "data-advanced-models-and-abstraction",
+        "data-advanced-analytics-and-inference",
+        "data-advanced-platforms-and-distributed",
+        "data-advanced-governance-regulation",
+        "data-advanced-strategic-asset"
+      ],
+      "quizzes": [
+        {
+          "id": "data-advanced-math-quiz",
+          "title": "Quick check. Mathematical foundations",
+          "sectionId": "data-advanced-math-foundations",
+          "explicitId": true
+        },
+        {
+          "id": "data-advanced-models-quiz",
+          "title": "Quick check. Models and abstraction",
+          "sectionId": "data-advanced-models-and-abstraction",
+          "explicitId": true
+        },
+        {
+          "id": "data-advanced-inference-quiz",
+          "title": "Quick check. Analytics and inference",
+          "sectionId": "data-advanced-analytics-and-inference",
+          "explicitId": true
+        },
+        {
+          "id": "data-advanced-distributed-quiz",
+          "title": "Quick check. Platforms and distributed systems",
+          "sectionId": "data-advanced-platforms-and-distributed",
+          "explicitId": true
+        },
+        {
+          "id": "data-advanced-governance-quiz",
+          "title": "Quick check. Governance, regulation, and accountability",
+          "sectionId": "data-advanced-governance-regulation",
+          "explicitId": true
+        },
+        {
+          "id": "data-advanced-strategy-quiz",
+          "title": "Quick check. Data as a strategic asset",
+          "sectionId": "data-advanced-strategic-asset",
+          "explicitId": true
+        }
+      ],
+      "tools": [
+        {
+          "id": "distribution-explorer",
+          "title": "Explore data distributions"
+        },
+        {
+          "id": "model-abstraction-lab",
+          "title": "Experiment with data models"
+        },
+        {
+          "id": "sampling-bias-simulator",
+          "title": "See how sampling misleads"
+        },
+        {
+          "id": "replication-consistency-visualiser",
+          "title": "Balance consistency and availability"
+        },
+        {
+          "id": "governance-decision-simulator",
+          "title": "Make governance decisions"
+        },
+        {
+          "id": "data-strategy-sandbox",
+          "title": "Build a data strategy"
+        }
+      ],
+      "evidenceSignals": {
+        "quizzesPresent": true,
+        "toolsPresent": true,
+        "learningObjectivesPresent": true,
+        "sectionTrackingPresent": true
+      }
+    },
+    {
+      "levelId": "foundations",
+      "estimatedHours": 8,
+      "sourceFiles": [
+        {
+          "title": "Data Foundations",
+          "file": "content/courses/data/foundations.mdx",
+          "stepIndex": 0
+        }
+      ],
+      "learningObjectives": [
+        "Understand what data is, how it moves, and why teams misinterpret it.",
+        "Explain common formats and basic storage and querying choices.",
+        "Apply simple quality and stewardship checks to a dataset and a workflow.",
+        "Evaluate basic responsible data risks and trade offs."
+      ],
+      "sectionIds": [
+        "data-foundations-what-is-data",
+        "data-foundations-representation-and-formats",
+        "data-foundations-quality-and-meaning",
+        "data-foundations-lifecycle-and-flow",
+        "data-foundations-roles-and-responsibilities",
+        "data-foundations-ethics-and-trust"
+      ],
+      "quizzes": [
+        {
+          "id": "data-foundations-what-is-data-quiz",
+          "title": "Quick check. What data is and why it matters",
+          "sectionId": "data-foundations-what-is-data",
+          "explicitId": true
+        },
+        {
+          "id": "data-foundations-representation-quiz",
+          "title": "Quick check. Representation and formats",
+          "sectionId": "data-foundations-representation-and-formats",
+          "explicitId": true
+        },
+        {
+          "id": "data-foundations-quality-quiz",
+          "title": "Quick check. Data quality and meaning",
+          "sectionId": "data-foundations-quality-and-meaning",
+          "explicitId": true
+        },
+        {
+          "id": "data-foundations-lifecycle-quiz",
+          "title": "Quick check. Lifecycle and flow",
+          "sectionId": "data-foundations-lifecycle-and-flow",
+          "explicitId": true
+        },
+        {
+          "id": "data-foundations-roles-quiz",
+          "title": "Quick check. Roles and responsibilities",
+          "sectionId": "data-foundations-roles-and-responsibilities",
+          "explicitId": true
+        },
+        {
+          "id": "data-foundations-ethics-quiz",
+          "title": "Quick check. Ethics and trust",
+          "sectionId": "data-foundations-ethics-and-trust",
+          "explicitId": true
+        }
+      ],
+      "tools": [
+        {
+          "id": "data-foundations-data-around-you",
+          "title": "Data around you"
+        },
+        {
+          "id": "data-foundations-text-to-bytes",
+          "title": "Text to bytes visualiser"
+        },
+        {
+          "id": "data-foundations-quality-checker",
+          "title": "Data quality checker"
+        },
+        {
+          "id": "data-foundations-lifecycle-mapper",
+          "title": "Lifecycle mapper"
+        },
+        {
+          "id": "data-foundations-role-matcher",
+          "title": "Role matcher"
+        },
+        {
+          "id": "data-foundations-ethics-scenarios",
+          "title": "Ethics scenario helper"
+        },
+        {
+          "id": "shared-data-interpretation",
+          "title": "The same data, different meanings"
+        },
+        {
+          "id": "shared-lifecycle-risks",
+          "title": "Spot the data risks"
+        },
+        {
+          "id": "shared-data-to-decision",
+          "title": "From raw data to action"
+        },
+        {
+          "id": "data-format-explorer",
+          "title": "Explore data formats"
+        },
+        {
+          "id": "data-quality-sandbox",
+          "title": "Test data quality"
+        },
+        {
+          "id": "data-flow-visualiser",
+          "title": "Visualise how data moves"
+        }
+      ],
+      "evidenceSignals": {
+        "quizzesPresent": true,
+        "toolsPresent": true,
+        "learningObjectivesPresent": true,
+        "sectionTrackingPresent": true
+      }
+    },
+    {
+      "levelId": "intermediate",
+      "estimatedHours": 10,
+      "sourceFiles": [
+        {
+          "title": "Data Intermediate",
+          "file": "content/courses/data/intermediate.mdx",
+          "stepIndex": 1
+        }
+      ],
+      "learningObjectives": [
+        "Explain how schemas and interfaces support real questions and constraints.",
+        "Apply a simple pipeline model from ingestion to serving and identify failure points.",
+        "Analyse trust signals (tests, monitoring, lineage) that make data usable in production.",
+        "Evaluate trade offs between speed, quality, and governance constraints."
+      ],
+      "sectionIds": [
+        "data-intermediate-architectures-and-pipelines",
+        "data-intermediate-governance-and-stewardship",
+        "data-intermediate-interoperability-and-standards",
+        "data-intermediate-analysis-and-insight",
+        "data-intermediate-risk-ethics-strategic-value"
+      ],
+      "quizzes": [
+        {
+          "id": "data-intermediate-architectures-quiz",
+          "title": "Quick check. Architectures and pipelines",
+          "sectionId": "data-intermediate-architectures-and-pipelines",
+          "explicitId": true
+        },
+        {
+          "id": "data-intermediate-governance-quiz",
+          "title": "Quick check. Governance and stewardship",
+          "sectionId": "data-intermediate-governance-and-stewardship",
+          "explicitId": true
+        },
+        {
+          "id": "data-intermediate-interoperability-quiz",
+          "title": "Quick check. Interoperability and standards",
+          "sectionId": "data-intermediate-interoperability-and-standards",
+          "explicitId": true
+        },
+        {
+          "id": "data-intermediate-analysis-quiz",
+          "title": "Quick check. Analysis and insight",
+          "sectionId": "data-intermediate-analysis-and-insight",
+          "explicitId": true
+        },
+        {
+          "id": "data-intermediate-risk-quiz",
+          "title": "Quick check. Risk, ethics, and strategic value",
+          "sectionId": "data-intermediate-risk-ethics-strategic-value",
+          "explicitId": true
+        }
+      ],
+      "tools": [
+        {
+          "id": "data-pipeline-designer",
+          "title": "Design a simple data pipeline"
+        },
+        {
+          "id": "governance-policy-simulator",
+          "title": "Try governing a dataset"
+        },
+        {
+          "id": "schema-mapping-lab",
+          "title": "Map data between systems"
+        },
+        {
+          "id": "analysis-playground",
+          "title": "Explore patterns in data"
+        },
+        {
+          "id": "data-risk-scenarios",
+          "title": "Spot data risks"
+        }
+      ],
+      "evidenceSignals": {
+        "quizzesPresent": true,
+        "toolsPresent": true,
+        "learningObjectivesPresent": true,
+        "sectionTrackingPresent": true
+      }
+    },
+    {
+      "levelId": "summary",
+      "estimatedHours": 4,
+      "sourceFiles": [
+        {
+          "title": "Data Summary and games",
+          "file": "content/courses/data/summary.mdx",
+          "stepIndex": 3
+        }
+      ],
+      "learningObjectives": [
+        "Explain core data concepts from the track with clear examples.",
+        "Apply concepts to short scenarios and identify what to measure and why.",
+        "Analyse common mistakes and misreads that show up in real data work.",
+        "Evaluate what you would change in a workflow to improve trust and outcomes."
+      ],
+      "sectionIds": [
+        "data-summary-recap",
+        "data-summary-scenarios",
+        "data-summary-games-and-labs",
+        "data-summary-connections",
+        "data-summary-next-steps"
+      ],
+      "quizzes": [
+        {
+          "id": "data-summary-recap-quiz",
+          "title": "Quick reflection: data mindset",
+          "sectionId": "data-summary-recap",
+          "explicitId": true
+        },
+        {
+          "id": "data-summary-connections-quiz",
+          "title": "Quick check. Cross course links",
+          "sectionId": "data-summary-connections",
+          "explicitId": true
+        },
+        {
+          "id": "data-summary-next-steps-quiz",
+          "title": "Quick plan: next steps",
+          "sectionId": "data-summary-next-steps",
+          "explicitId": true
+        }
+      ],
+      "tools": [
+        {
+          "id": "data-system-challenge",
+          "title": "Design a data system"
+        },
+        {
+          "id": "hidden-data-risks",
+          "title": "Spot the hidden data risks"
+        },
+        {
+          "id": "data-decision-lab",
+          "title": "Make a data driven decision"
+        }
+      ],
+      "evidenceSignals": {
+        "quizzesPresent": true,
+        "toolsPresent": true,
+        "learningObjectivesPresent": true,
+        "sectionTrackingPresent": true
+      }
+    }
+  ],
   "evidence": {
     "progressTracking": "Server CPD state + analytics",
-    "certificates": "Available after Ready status"
+    "certificates": "UUID with public verification page"
+  },
+  "coverageSummary": {
+    "totalEstimatedHours": 34,
+    "totalLearningObjectives": 16,
+    "totalTrackedSections": 22,
+    "totalQuizBlocks": 20,
+    "totalTools": 26
   }
 }
-

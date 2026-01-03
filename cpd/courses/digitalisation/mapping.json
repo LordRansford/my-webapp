@@ -1,10 +1,317 @@
 {
   "courseId": "digitalisation",
   "status": "Draft",
-  "levels": [],
+  "generatedAt": "2026-01-03T22:48:09.850Z",
+  "version": "1.0.0",
+  "levels": [
+    {
+      "levelId": "advanced",
+      "estimatedHours": 10,
+      "sourceFiles": [
+        {
+          "title": "Digitalisation Advanced",
+          "file": "content/courses/digitalisation/advanced.mdx",
+          "stepIndex": 2
+        }
+      ],
+      "learningObjectives": [
+        "Analyse how strategy, governance, and delivery constraints shape digital outcomes.",
+        "Explain how standards, policies, and operating models support sustainable change.",
+        "Evaluate roadmap and risk decisions with a realistic view of dependencies.",
+        "Apply measurement thinking to define outcomes and avoid vanity metrics."
+      ],
+      "sectionIds": [
+        "dig-advanced-strategy-target-state",
+        "dig-advanced-data-sharing-and-standards",
+        "dig-advanced-platforms-and-ecosystems",
+        "dig-advanced-measurement-risk-and-roadmaps"
+      ],
+      "quizzes": [
+        {
+          "id": "dig-advanced-strategy-quiz",
+          "title": "Quick check: strategy and target state",
+          "sectionId": null,
+          "explicitId": true
+        },
+        {
+          "id": "dig-advanced-standards-quiz",
+          "title": "Quick check: data sharing and standards",
+          "sectionId": null,
+          "explicitId": true
+        },
+        {
+          "id": "dig-advanced-ecosystem-quiz",
+          "title": "Quick check: platforms and ecosystems",
+          "sectionId": null,
+          "explicitId": true
+        },
+        {
+          "id": "dig-advanced-roadmap-quiz",
+          "title": "Quick check: measurement and roadmaps",
+          "sectionId": null,
+          "explicitId": true
+        }
+      ],
+      "tools": [
+        {
+          "id": "dig-advanced-strategy-canvas",
+          "title": "Target state canvas"
+        },
+        {
+          "id": "dig-advanced-cim-mapper",
+          "title": "Schema and CIM mapping"
+        },
+        {
+          "id": "dig-advanced-ecosystem-mapper",
+          "title": "Ecosystem mapper"
+        },
+        {
+          "id": "dig-advanced-risk-roadmap-tool",
+          "title": "Risk and roadmap planner"
+        }
+      ],
+      "evidenceSignals": {
+        "quizzesPresent": true,
+        "toolsPresent": true,
+        "learningObjectivesPresent": true,
+        "sectionTrackingPresent": true
+      }
+    },
+    {
+      "levelId": "foundations",
+      "estimatedHours": 8,
+      "sourceFiles": [
+        {
+          "title": "Digitalisation Foundations",
+          "file": "content/courses/digitalisation/foundations.mdx",
+          "stepIndex": 0
+        }
+      ],
+      "learningObjectives": [
+        "Understand what digitalisation means and how it differs from digitisation and automation.",
+        "Explain how data, processes, and people fit together in a digital operating model.",
+        "Apply basic journey and outcome thinking to a simple service.",
+        "Evaluate common digital trade offs between speed, risk, and reliability."
+      ],
+      "sectionIds": [
+        "dig-foundations-context-and-drivers",
+        "dig-foundations-data-and-standards",
+        "dig-foundations-platforms-and-journeys",
+        "dig-foundations-risks-governance"
+      ],
+      "quizzes": [
+        {
+          "id": "dig-foundations-context-quiz",
+          "title": "Quick check: why digitalisation matters",
+          "sectionId": null,
+          "explicitId": true
+        },
+        {
+          "id": "dig-foundations-data-quiz",
+          "title": "Quick check: data and standards",
+          "sectionId": null,
+          "explicitId": true
+        },
+        {
+          "id": "dig-foundations-platforms-quiz",
+          "title": "Quick check: platforms and journeys",
+          "sectionId": null,
+          "explicitId": true
+        },
+        {
+          "id": "dig-foundations-governance-quiz",
+          "title": "Quick check: risks and governance",
+          "sectionId": null,
+          "explicitId": true
+        }
+      ],
+      "tools": [
+        {
+          "id": "dig-value-map",
+          "title": "Digital value map"
+        },
+        {
+          "id": "schema-sandbox",
+          "title": "Schema sandbox"
+        },
+        {
+          "id": "journey-dashboard-lab",
+          "title": "Journey dashboard lab"
+        },
+        {
+          "id": "digitalisation-governance-lab",
+          "title": "Governance readiness check"
+        }
+      ],
+      "evidenceSignals": {
+        "quizzesPresent": true,
+        "toolsPresent": true,
+        "learningObjectivesPresent": true,
+        "sectionTrackingPresent": true
+      }
+    },
+    {
+      "levelId": "intermediate",
+      "estimatedHours": 10,
+      "sourceFiles": [
+        {
+          "title": "Digitalisation Intermediate",
+          "file": "content/courses/digitalisation/intermediate.mdx",
+          "stepIndex": 1
+        }
+      ],
+      "learningObjectives": [
+        "Explain how platforms, APIs, and integration patterns shape digital ecosystems.",
+        "Apply basic schema and contract thinking to a real data sharing scenario.",
+        "Analyse end to end journeys to find friction, duplication, and risk.",
+        "Evaluate trade offs between standardisation and local optimisation."
+      ],
+      "sectionIds": [
+        "dig-intermediate-data-pipelines",
+        "dig-intermediate-apis-and-integration",
+        "dig-intermediate-models-and-mapping",
+        "dig-intermediate-ops-and-observability"
+      ],
+      "quizzes": [
+        {
+          "id": "dig-intermediate-pipelines-quiz",
+          "title": "Quick check: pipelines and flows",
+          "sectionId": null,
+          "explicitId": true
+        },
+        {
+          "id": "dig-intermediate-apis-quiz",
+          "title": "Quick check: APIs and integration",
+          "sectionId": null,
+          "explicitId": true
+        },
+        {
+          "id": "dig-intermediate-models-quiz",
+          "title": "Quick check: models and mapping",
+          "sectionId": null,
+          "explicitId": true
+        },
+        {
+          "id": "dig-intermediate-ops-quiz",
+          "title": "Quick check: operations and observability",
+          "sectionId": null,
+          "explicitId": true
+        }
+      ],
+      "tools": [
+        {
+          "id": "dig-pipeline-lab",
+          "title": "Pipeline flow mapper"
+        },
+        {
+          "id": "api-contract-explorer",
+          "title": "API contract explorer"
+        },
+        {
+          "id": "schema-mapping-sandbox",
+          "title": "Schema mapping sandbox"
+        },
+        {
+          "id": "ops-observability-lab",
+          "title": "Observability signal picker"
+        }
+      ],
+      "evidenceSignals": {
+        "quizzesPresent": true,
+        "toolsPresent": true,
+        "learningObjectivesPresent": true,
+        "sectionTrackingPresent": true
+      }
+    },
+    {
+      "levelId": "summary",
+      "estimatedHours": 4,
+      "sourceFiles": [
+        {
+          "title": "Digitalisation summary and games",
+          "file": "content/courses/digitalisation/summary.mdx",
+          "stepIndex": 3
+        }
+      ],
+      "learningObjectives": [
+        "Explain key digitalisation concepts and use them in plain language.",
+        "Apply concepts to short scenarios involving journeys, platforms, and change.",
+        "Analyse common failure modes in transformation work and why they happen.",
+        "Evaluate what you would do next to improve outcomes and reduce risk."
+      ],
+      "sectionIds": [
+        "dig-summary-big-picture",
+        "dig-summary-key-tools-and-standards",
+        "dig-summary-scenarios-and-games",
+        "dig-summary-next-steps-and-cpd"
+      ],
+      "quizzes": [
+        {
+          "id": "dig-summary-big-picture-quiz",
+          "title": "Quick check: the big picture",
+          "sectionId": null,
+          "explicitId": true
+        },
+        {
+          "id": "dig-summary-tools-quiz",
+          "title": "Quick check: tools and standards",
+          "sectionId": null,
+          "explicitId": true
+        },
+        {
+          "id": "dig-summary-scenarios-quiz",
+          "title": "Quick check: scenarios and games",
+          "sectionId": null,
+          "explicitId": true
+        }
+      ],
+      "tools": [
+        {
+          "id": "dig-summary-standards-match",
+          "title": "Match data sets to standards"
+        },
+        {
+          "id": "dig-summary-dashboard-signals",
+          "title": "Signals you would actually track"
+        },
+        {
+          "id": "dig-summary-roadmap-game",
+          "title": "Build a digitalisation roadmap in five moves"
+        },
+        {
+          "id": "dig-summary-governance-check",
+          "title": "Governance readiness check"
+        },
+        {
+          "id": "dig-summary-quick-fire",
+          "title": "Digitalisation quick fire quiz"
+        },
+        {
+          "id": "dig-summary-booktrack",
+          "title": "BookTrack capstone journey"
+        },
+        {
+          "id": "dig-summary-gridlens",
+          "title": "GridLens capstone journey"
+        }
+      ],
+      "evidenceSignals": {
+        "quizzesPresent": true,
+        "toolsPresent": true,
+        "learningObjectivesPresent": true,
+        "sectionTrackingPresent": true
+      }
+    }
+  ],
   "evidence": {
     "progressTracking": "Server CPD state + analytics",
-    "certificates": "Available after Ready status"
+    "certificates": "UUID with public verification page"
+  },
+  "coverageSummary": {
+    "totalEstimatedHours": 32,
+    "totalLearningObjectives": 16,
+    "totalTrackedSections": 16,
+    "totalQuizBlocks": 15,
+    "totalTools": 19
   }
 }
-
