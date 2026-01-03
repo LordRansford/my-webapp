@@ -1,6 +1,153 @@
 {
   "tools": [
     {
+      "id": "dns-lookup",
+      "route": "/tools/cyber/dns-lookup",
+      "title": "DNS lookup",
+      "purpose": "Look up DNS records for a public hostname (server-assisted).",
+      "execution": "sandboxed-server",
+      "inputs": [
+        {
+          "name": "target",
+          "type": "string",
+          "limits": "public hostname, max 200 chars"
+        }
+      ],
+      "limits": {
+        "cpuMs": 5000,
+        "memoryMb": 128,
+        "outputKb": 64,
+        "wallMs": 7000,
+        "inputKb": 1
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "/api/tools/run",
+      "failureModes": [
+        "validation_error",
+        "timeout",
+        "network_error",
+        "credits_insufficient"
+      ],
+      "statusStates": [
+        "idle",
+        "queued",
+        "running",
+        "completed",
+        "failed"
+      ],
+      "executionModes": [
+        "compute"
+      ],
+      "defaultMode": "compute",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Look up DNS records for a public hostname (server-assisted)."
+    },
+    {
+      "id": "whois-summary",
+      "route": "/tools/cyber/whois-summary",
+      "title": "WHOIS summary (safe)",
+      "purpose": "Quick, safe domain context and guidance (educational fallback).",
+      "execution": "sandboxed-server",
+      "inputs": [
+        {
+          "name": "target",
+          "type": "string",
+          "limits": "public hostname, max 200 chars"
+        }
+      ],
+      "limits": {
+        "cpuMs": 5000,
+        "memoryMb": 128,
+        "outputKb": 32,
+        "wallMs": 7000,
+        "inputKb": 1
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "/api/tools/run",
+      "failureModes": [
+        "validation_error",
+        "timeout",
+        "credits_insufficient"
+      ],
+      "statusStates": [
+        "idle",
+        "running",
+        "completed",
+        "failed"
+      ],
+      "executionModes": [
+        "compute"
+      ],
+      "defaultMode": "compute",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Quick, safe domain context and guidance (educational fallback)."
+    },
+    {
+      "id": "sandbox-echo",
+      "route": "/tools/sandbox-echo",
+      "title": "Sandbox echo",
+      "purpose": "Send a short message to the secure runner and get it back.",
+      "execution": "sandboxed-server",
+      "inputs": [
+        {
+          "name": "message",
+          "type": "string",
+          "limits": "max 2KB"
+        },
+        {
+          "name": "repeat",
+          "type": "number",
+          "limits": "1-20"
+        }
+      ],
+      "limits": {
+        "cpuMs": 15000,
+        "memoryMb": 128,
+        "outputKb": 128,
+        "wallMs": 20000,
+        "inputKb": 2
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "/api/jobs/create",
+      "failureModes": [
+        "validation_error",
+        "timeout",
+        "runner_unavailable",
+        "credits_insufficient"
+      ],
+      "statusStates": [
+        "idle",
+        "queued",
+        "running",
+        "completed",
+        "failed"
+      ],
+      "executionModes": [
+        "compute"
+      ],
+      "defaultMode": "compute",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Send a short message to the secure runner and get it back."
+    },
+    {
       "id": "architecture-diagram-studio",
       "route": "/studios/architecture-diagram-studio",
       "title": "Architecture Diagram Studio",

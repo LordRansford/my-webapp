@@ -1,6 +1,201 @@
 {
-  "generatedAt": "2026-01-02T11:19:34.979Z",
+  "generatedAt": "2026-01-03T15:29:36.850Z",
   "tools": [
+    {
+      "id": "dns-lookup",
+      "title": "DNS lookup",
+      "description": "Look up DNS records for a public hostname (server-assisted).",
+      "route": "/tools/cyber/dns-lookup",
+      "executionModes": [
+        "compute"
+      ],
+      "defaultMode": "compute",
+      "limits": {
+        "cpuMs": 5000,
+        "memoryMb": 128,
+        "outputKb": 64,
+        "wallMs": 7000,
+        "inputKb": 1
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "runner": "/api/tools/run",
+      "failureModes": [
+        "validation_error",
+        "timeout",
+        "network_error",
+        "credits_insufficient"
+      ],
+      "statusStates": [
+        "idle",
+        "queued",
+        "running",
+        "completed",
+        "failed"
+      ],
+      "inputs": [
+        {
+          "name": "target",
+          "type": "string",
+          "limits": "public hostname, max 200 chars"
+        }
+      ],
+      "defaultInputs": {
+        "target": "example.com"
+      },
+      "examples": [
+        {
+          "title": "Look up A / AAAA records (starter)",
+          "inputs": {
+            "target": "example.com"
+          },
+          "expectedOutput": "Returns DNS records (or a safe fallback if not resolvable)"
+        },
+        {
+          "title": "Look up mail-related DNS (MX focus)",
+          "inputs": {
+            "target": "gmail.com"
+          },
+          "expectedOutput": "Returns MX and related records (records may vary over time)"
+        }
+      ],
+      "explain": "**What this tool does**\n\nThis tool looks up DNS records for a public hostname. DNS is like the internet's phone book: it tells computers where a domain should point.\n\n**When to use it**\n\n✅ Checking if a domain points to the right place\n✅ Investigating suspicious domains (basic context)\n✅ Learning how DNS works (A, AAAA, MX, TXT)\n\n**How to use it**\n\n1. Type a hostname like `example.com`\n2. Click Run\n3. Review the records returned\n\n**Safety**\n\n- Only public hostnames are allowed\n- Private and local IP targets are blocked\n- Output is capped and time-limited\n\n**Notes**\n\nDNS records can change. If you are investigating risk, combine this with context and additional checks."
+    },
+    {
+      "id": "whois-summary",
+      "title": "WHOIS summary (safe)",
+      "description": "Quick, safe domain context and guidance (educational fallback).",
+      "route": "/tools/cyber/whois-summary",
+      "executionModes": [
+        "compute"
+      ],
+      "defaultMode": "compute",
+      "limits": {
+        "cpuMs": 5000,
+        "memoryMb": 128,
+        "outputKb": 32,
+        "wallMs": 7000,
+        "inputKb": 1
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "runner": "/api/tools/run",
+      "failureModes": [
+        "validation_error",
+        "timeout",
+        "credits_insufficient"
+      ],
+      "statusStates": [
+        "idle",
+        "running",
+        "completed",
+        "failed"
+      ],
+      "inputs": [
+        {
+          "name": "target",
+          "type": "string",
+          "limits": "public hostname, max 200 chars"
+        }
+      ],
+      "defaultInputs": {
+        "target": "example.com"
+      },
+      "examples": [
+        {
+          "title": "Quick domain context (starter)",
+          "inputs": {
+            "target": "example.com"
+          },
+          "expectedOutput": "Returns a safe WHOIS/RDAP guidance summary (educational fallback)"
+        },
+        {
+          "title": "Suspicious domain triage (practice)",
+          "inputs": {
+            "target": "example.net"
+          },
+          "expectedOutput": "Returns what to check next (age, registrar portal, context checks)"
+        }
+      ],
+      "explain": "**What this tool does**\n\nThis tool provides a safe WHOIS-style summary and guidance for a public domain. It is designed for learning and basic triage.\n\n**Important**\n\nReal WHOIS data often requires paid services or registrar portals. This tool uses an educational fallback so it can stay safe and reliable.\n\n**When to use it**\n\n✅ Learning domain triage basics\n✅ Writing down what evidence you should collect next\n✅ Sanity-checking a domain in context\n\n**How to use it**\n\n1. Enter a domain like `example.com`\n2. Click Run\n3. Use the guidance to decide what to verify next\n\n**Safety**\n\nOnly public hostnames are allowed. Private IP ranges and local targets are blocked."
+    },
+    {
+      "id": "sandbox-echo",
+      "title": "Sandbox echo",
+      "description": "Send a short message to the secure runner and get it back.",
+      "route": "/tools/sandbox-echo",
+      "executionModes": [
+        "compute"
+      ],
+      "defaultMode": "compute",
+      "limits": {
+        "cpuMs": 15000,
+        "memoryMb": 128,
+        "outputKb": 128,
+        "wallMs": 20000,
+        "inputKb": 2
+      },
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "runner": "/api/jobs/create",
+      "failureModes": [
+        "validation_error",
+        "timeout",
+        "runner_unavailable",
+        "credits_insufficient"
+      ],
+      "statusStates": [
+        "idle",
+        "queued",
+        "running",
+        "completed",
+        "failed"
+      ],
+      "inputs": [
+        {
+          "name": "message",
+          "type": "string",
+          "limits": "max 2KB"
+        },
+        {
+          "name": "repeat",
+          "type": "number",
+          "limits": "1-20"
+        }
+      ],
+      "defaultInputs": {
+        "message": "Hello from the secure runner",
+        "repeat": 2
+      },
+      "examples": [
+        {
+          "title": "Hello (small run)",
+          "inputs": {
+            "message": "Hello from the secure runner",
+            "repeat": 2
+          },
+          "expectedOutput": "Echoed message output"
+        },
+        {
+          "title": "Stress test (bounded)",
+          "inputs": {
+            "message": "Repeat me",
+            "repeat": 10
+          },
+          "expectedOutput": "Echoed message repeated multiple times"
+        }
+      ],
+      "explain": "**What this tool does**\n\nThis is a simple compute demo that sends a small payload to the secure runner and returns output.\n\n**Why it exists**\n\nIt proves the boundary between the browser and server compute in a safe way.\n\n**When to use it**\n\n✅ Testing that compute is available\n✅ Understanding how metering and limits work\n\n**Safety**\n\n- No untrusted code execution in the browser\n- Strict limits on runtime, output size, and memory\n\nIf the secure runner is not available, you will see a clear error message."
+    },
     {
       "id": "architecture-diagram-studio",
       "title": "Architecture Diagram Studio",

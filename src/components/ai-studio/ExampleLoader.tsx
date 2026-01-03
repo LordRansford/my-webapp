@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { X, ArrowRight, CheckCircle2, Circle, Loader2 } from "lucide-react";
 import { AIStudioExample } from "@/lib/ai-studio/examples/types";
+import { createProjectFromExample, getLastOpenedProjectId, getProjectById, setLastOpenedProjectId } from "@/lib/ai-studio/projects/store";
 
 interface ExampleLoaderProps {
   example: AIStudioExample;
@@ -20,8 +21,15 @@ export default function ExampleLoader({ example, onLoad, onClose }: ExampleLoade
     setIsLoading(true);
     setError(null);
     try {
-      // Simulate loading - in production, this would load the example config
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // Create a real local project artefact so "Load" is not theatre.
+      // This gives users something tangible to return to, export, and run.
+      const lastId = getLastOpenedProjectId();
+      const existing = lastId ? getProjectById(lastId) : null;
+      const project =
+        existing && existing.exampleId === example.id
+          ? existing
+          : createProjectFromExample(example);
+      setLastOpenedProjectId(project.id);
       setIsLoading(false);
       onLoad();
     } catch (err) {

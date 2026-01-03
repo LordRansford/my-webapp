@@ -3,6 +3,15 @@ import { MarketingPageTemplate } from "@/components/templates/PageTemplates";
 
 const tools = [
   {
+    id: "dns-lookup",
+    title: "DNS lookup",
+    purpose: "Look up DNS records for a public hostname (server-assisted).",
+    category: "Cybersecurity",
+    level: "Beginner",
+    compute: "Compute",
+    href: "/tools/cyber/dns-lookup",
+  },
+  {
     id: "python-playground",
     title: "Python playground",
     purpose: "Run small Python experiments in-browser (Pyodide).",
@@ -181,6 +190,24 @@ const tools = [
     level: "Advanced",
     compute: "Browser-only",
     href: "/tools/data/metrics-definition-studio",
+  },
+  {
+    id: "whois-summary",
+    title: "WHOIS summary (safe)",
+    purpose: "Quick, safe domain context and guidance (server-assisted; educational fallback).",
+    category: "Cybersecurity",
+    level: "Beginner",
+    compute: "Compute",
+    href: "/tools/cyber/whois-summary",
+  },
+  {
+    id: "sandbox-echo",
+    title: "Sandbox echo",
+    purpose: "Send a message to the secure runner and get it back (compute demo).",
+    category: "Software Architecture",
+    level: "Beginner",
+    compute: "Compute",
+    href: "/tools/sandbox-echo",
   },
 ];
 
