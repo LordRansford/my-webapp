@@ -359,6 +359,16 @@ body {
   }
 }
 
+/* iOS safe area support for fixed UI */
+.safe-top-right {
+  top: calc(1rem + env(safe-area-inset-top));
+  right: calc(1rem + env(safe-area-inset-right));
+}
+.safe-bottom-right {
+  bottom: calc(1rem + env(safe-area-inset-bottom));
+  right: calc(1rem + env(safe-area-inset-right));
+}
+
 /* Navigation contrast: ensure WCAG AA compliance across all states */
 .nav-links a,
 .site-header nav a {
@@ -439,9 +449,13 @@ html.dark .site-header nav a:not([data-active="true"]):hover {
 }
 
 .nav-links {
-  display: flex;
   align-items: center;
   gap: 0.8rem;
+}
+
+/* Respect Tailwind "hidden" on small screens */
+.nav-links.hidden {
+  display: none !important;
 }
 
 .nav-links a {

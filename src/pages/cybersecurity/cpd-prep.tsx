@@ -9,7 +9,7 @@ function daysBetween(a: Date, b: Date) {
   return Math.floor(ms / (1000 * 60 * 60 * 24));
 }
 
-export default function CybersecurityCpdPrepPage(props: { access: "locked" | "active" | "expired"; startedAtIso?: string }) {
+export default function CybersecurityCpdPrepPage(props: { access: "locked" | "active" | "expired"; startedAtIso?: string; referenceCode?: string }) {
   const startedAt = props.startedAtIso ? new Date(props.startedAtIso) : null;
   const days = startedAt ? daysBetween(new Date(), startedAt) : null;
 
@@ -70,6 +70,36 @@ export default function CybersecurityCpdPrepPage(props: { access: "locked" | "ac
 
         {props.access === "active" ? (
           <>
+            <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-3">
+              <h2 className="text-xl font-semibold text-slate-900">Support</h2>
+              <p className="text-sm text-slate-700">
+                Start with Professor Ransford for fast answers. If you are still stuck, email ransford.amponsah@ransfordsnotes.com.
+              </p>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-800">
+                Include your CPD reference code, the course level, and the page link. I will reply as soon as I can.
+              </div>
+              {props.referenceCode ? (
+                <div className="flex flex-wrap items-center gap-2">
+                  <div className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900">
+                    Reference {props.referenceCode}
+                  </div>
+                  <button
+                    type="button"
+                    className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+                    onClick={async () => {
+                      try {
+                        await navigator.clipboard.writeText(String(props.referenceCode));
+                      } catch {
+                        // ignore
+                      }
+                    }}
+                  >
+                    Copy reference
+                  </button>
+                </div>
+              ) : null}
+            </section>
+
             <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
               <h2 className="text-xl font-semibold text-slate-900">Readiness map</h2>
               <p className="text-sm text-slate-700">
@@ -155,7 +185,7 @@ export async function getServerSideProps(ctx: any) {
     .findFirst({
       where: { userId, courseId: "cybersecurity" },
       orderBy: { createdAt: "asc" },
-      select: { createdAt: true },
+      select: { id: true, createdAt: true },
     })
     .catch(() => null as any);
 
@@ -164,6 +194,6 @@ export async function getServerSideProps(ctx: any) {
 
   const startedAt = entitlement.createdAt as Date;
   const expired = daysBetween(new Date(), startedAt) > 365;
-  return { props: { access: expired ? "expired" : "active", startedAtIso: startedAt.toISOString() } };
+  return { props: { access: expired ? "expired" : "active", startedAtIso: startedAt.toISOString(), referenceCode: String(entitlement.id || "") } };
 }
 

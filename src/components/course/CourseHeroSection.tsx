@@ -46,12 +46,14 @@ export default function CourseHeroSection({
 }: CourseHeroSectionProps) {
   return (
     <div
-      className={`not-prose rounded-3xl border border-slate-200 bg-gradient-to-br ${gradientClasses[gradient]} p-6 shadow-sm mb-8 ${className} dark:border-slate-700 dark:from-slate-800 dark:via-slate-800 dark:to-slate-800/80`}
+      className={`not-prose relative overflow-hidden rounded-[28px] border border-slate-200 bg-gradient-to-br ${gradientClasses[gradient]} p-6 shadow-sm mb-8 ${className} dark:border-slate-700 dark:from-slate-800 dark:via-slate-800 dark:to-slate-800/80`}
     >
+      <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-gradient-to-br from-emerald-200/40 to-sky-200/25 blur-3xl" />
+      <div aria-hidden="true" className="pointer-events-none absolute -left-20 -bottom-24 h-56 w-56 rounded-full bg-gradient-to-br from-amber-200/30 to-indigo-200/20 blur-3xl" />
       <div className="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center">
         {icon && (
           <span
-            className="inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-indigo-100 bg-indigo-50 text-indigo-700 dark:border-indigo-900 dark:bg-indigo-900/30 dark:text-indigo-300"
+            className="inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-900 shadow-sm dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
             role="img"
             aria-label={`${eyebrow} icon`}
           >

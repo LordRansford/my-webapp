@@ -166,7 +166,7 @@ function NavLinks({ vertical = false, pathname, onLinkClick }: { vertical?: bool
   return (
     <nav
       aria-label={vertical ? "Primary navigation (mobile)" : "Primary navigation"}
-      className={vertical ? "flex flex-col gap-2" : "nav-links hidden items-center gap-2 lg:flex"}
+      className={vertical ? "flex flex-col gap-2" : "nav-links hidden items-center gap-2 xl:flex"}
     >
       {navItems.map((item) => {
         const active = isActive(item.href);
@@ -305,7 +305,7 @@ export default function Header() {
         <div className="flex items-center gap-3">
           <button
             type="button"
-            className={`flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 lg:hidden ${focusStyle}`}
+            className={`flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 xl:hidden ${focusStyle}`}
             aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen((prev) => !prev)}
@@ -325,14 +325,14 @@ export default function Header() {
 
         <NavLinks pathname={pathname} onLinkClick={() => setMobileOpen(false)} />
 
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="hidden items-center gap-3 xl:flex">
           {isSignedIn && <CreditBalanceWidget compact />}
           <AccountAction variant="desktop" isSignedIn={isSignedIn} onActionClick={() => setMobileOpen(false)} />
         </div>
       </div>
 
       {mobileOpen ? (
-        <div className="border-t border-[color:var(--line)] bg-[var(--surface)] px-4 py-4 lg:hidden">
+        <div className="border-t border-[color:var(--line)] bg-[var(--surface)] px-4 py-4 xl:hidden">
           <NavLinks vertical pathname={pathname} onLinkClick={() => setMobileOpen(false)} />
           <div className="mt-3 flex flex-col gap-2">
             <AccountAction variant="mobile" isSignedIn={isSignedIn} onActionClick={() => setMobileOpen(false)} />

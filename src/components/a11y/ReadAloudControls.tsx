@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Pause, Play, Square } from "lucide-react";
+import { highlightAnchorFromLocation } from "@/lib/ui/highlightAnchor";
 
 type Status = "idle" | "playing" | "paused";
 type ReadMode = "page" | "section";
@@ -95,6 +96,44 @@ function canFindInPage() {
   // window.find is supported in most modern browsers.
   // It highlights matches using the browser selection, which is accessible.
   return typeof window !== "undefined" && typeof (window as any).find === "function";
+}
+
+function findFirstTextMatch(selector: string, query: string) {
+  try {
+    const root = document.querySelector(selector);
+    if (!root) return false;
+    const q = String(query || "").trim().toLowerCase();
+    if (!q) return false;
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, {
+      acceptNode: (node) => {
+        const el = node as Element;
+        const tag = el.tagName?.toLowerCase?.() || "";
+        if (["script", "style", "noscript"].includes(tag)) return NodeFilter.FILTER_REJECT;
+        const text = (el.textContent || "").toLowerCase();
+        if (text.includes(q)) return NodeFilter.FILTER_ACCEPT;
+        return NodeFilter.FILTER_SKIP;
+      },
+    } as any);
+    const hit = walker.nextNode() as Element | null;
+    if (!hit) return false;
+    (hit as any).scrollIntoView?.({ behavior: "smooth", block: "center" });
+    // Reuse the anchor highlight style as a general focus affordance.
+    const id = (hit as any).id ? `#${String((hit as any).id)}` : "";
+    if (id) {
+      const url = new URL(window.location.href);
+      url.hash = id;
+      window.history.replaceState(null, "", url.toString());
+      highlightAnchorFromLocation();
+    } else {
+      (hit as HTMLElement).classList.add("outline", "outline-2", "outline-slate-400", "outline-offset-4", "rounded-lg");
+      window.setTimeout(() => {
+        (hit as HTMLElement).classList.remove("outline", "outline-2", "outline-slate-400", "outline-offset-4", "rounded-lg");
+      }, 1400);
+    }
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export default function ReadAloudControls({
@@ -262,10 +301,13 @@ export default function ReadAloudControls({
   const findNext = () => {
     const q = String(query || "").trim();
     if (!q) return;
-    if (!findAvailable) return;
     try {
-      // Search forward, wrap around.
-      (window as any).find(q, false, false, true, false, true, false);
+      if (findAvailable) {
+        // Search forward, wrap around.
+        (window as any).find(q, false, false, true, false, true, false);
+      } else {
+        findFirstTextMatch(selector, q);
+      }
     } catch {
       // ignore
     }
@@ -397,7 +439,6 @@ export default function ReadAloudControls({
           className="inline-flex h-10 items-center justify-center rounded-full border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
           onClick={findNext}
           aria-label="Find next match"
-          disabled={!findAvailable}
         >
           Next
         </button>

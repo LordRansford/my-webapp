@@ -175,6 +175,7 @@
   "/software-architecture/beginner": "pages/software-architecture/beginner.js",
   "/software-architecture/intermediate": "pages/software-architecture/intermediate.js",
   "/software-architecture/summary": "pages/software-architecture/summary.js",
+  "/status": "pages/status.js",
   "/studios": "pages/studios.html",
   "/studios/ai-hub": "pages/studios/ai-hub.html",
   "/studios/architecture-diagram-studio/children-mode": "pages/studios/architecture-diagram-studio/children-mode.html",

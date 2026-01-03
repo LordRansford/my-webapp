@@ -64,7 +64,7 @@ export default function AccessibilityControls() {
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="fixed top-4 right-4 z-50 flex items-center justify-center h-12 w-12 rounded-full bg-gradient-to-br from-sky-500 to-blue-600 text-white shadow-lg hover:shadow-xl hover:scale-110 focus:outline-none focus:ring-4 focus:ring-sky-300 focus:ring-offset-2 transition-all duration-200"
+          className="safe-top-right fixed z-50 flex items-center justify-center h-12 w-12 rounded-full bg-gradient-to-br from-sky-500 to-blue-600 text-white shadow-lg hover:shadow-xl hover:scale-110 focus:outline-none focus:ring-4 focus:ring-sky-300 focus:ring-offset-2 transition-all duration-200"
           aria-label="Open accessibility settings"
           aria-expanded={isOpen}
         >
@@ -73,7 +73,7 @@ export default function AccessibilityControls() {
       )}
 
       {isOpen && (
-        <div className="fixed top-4 right-4 z-50 w-96 max-w-[calc(100vw-2rem)] rounded-2xl border-2 border-slate-200 bg-white shadow-2xl backdrop-blur-sm">
+        <div className="safe-top-right fixed z-50 w-96 max-w-[calc(100vw-2rem)] rounded-2xl border-2 border-slate-200 bg-white shadow-2xl backdrop-blur-sm">
           {/* Header */}
           <div className="flex items-center justify-between p-5 border-b border-slate-200 bg-gradient-to-r from-sky-50 to-blue-50 rounded-t-2xl">
             <div className="flex items-center gap-3">

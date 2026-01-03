@@ -815,6 +815,15 @@ type ApiRouteConfig = {
   type __Unused = __Check
 }
 
+// Validate ../../src/app/api/admin/feedback/triage/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/admin/feedback/triage">> = Specific
+  const handler = {} as typeof import("../../src/app/api/admin/feedback/triage/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../src/app/api/admin/permission-tokens/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/admin/permission-tokens">> = Specific
@@ -864,6 +873,15 @@ type ApiRouteConfig = {
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/admin/support/[id]/status">> = Specific
   const handler = {} as typeof import("../../src/app/api/admin/support/[id]/status/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../src/app/api/admin/support/draft/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/admin/support/draft">> = Specific
+  const handler = {} as typeof import("../../src/app/api/admin/support/draft/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check
@@ -2700,6 +2718,15 @@ type ApiRouteConfig = {
 {
   type __IsExpected<Specific extends PagesPageConfig> = Specific
   const handler = {} as typeof import("../../src/pages/my-cpd/records.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../src/pages/status.tsx
+{
+  type __IsExpected<Specific extends PagesPageConfig> = Specific
+  const handler = {} as typeof import("../../src/pages/status.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

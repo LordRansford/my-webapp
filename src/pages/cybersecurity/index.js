@@ -14,6 +14,7 @@ import SafeIcon from "@/components/content/SafeIcon";
 import ToolCard from "@/components/notes/ToolCard";
 import QuizBlock from "@/components/notes/QuizBlock";
 import { ErrorBoundary } from "@/components/notes/ErrorBoundary";
+import { Shield, Layers, Target, Gamepad2 } from "lucide-react";
 
 const SecurityHabitPlannerTool = dynamic(() => import("@/components/notes/tools/cybersecurity/overview/SecurityHabitPlannerTool"), { ssr: false });
 
@@ -29,6 +30,11 @@ export default function CybersecurityOverviewPage({ source, headings }) {
         summary: l.summary,
         href: l.route,
         estimatedHours: Number(l.estimatedHours || l.estimated_hours) || undefined,
+        icon:
+          l.id === "foundations" ? <Shield className="h-6 w-6" aria-hidden="true" /> :
+          l.id === "applied" ? <Layers className="h-6 w-6" aria-hidden="true" /> :
+          <Target className="h-6 w-6" aria-hidden="true" />,
+        badge: "CPD ready",
         progress: getCompletionForLevel(state, "cybersecurity", l.id, cyberSections?.[l.id] || []).percent
           ? { percent: getCompletionForLevel(state, "cybersecurity", l.id, cyberSections?.[l.id] || []).percent }
           : { percent: 0 },
@@ -40,6 +46,8 @@ export default function CybersecurityOverviewPage({ source, headings }) {
         summary: "Recap key ideas, test yourself with scenarios, and keep your CPD evidence clean.",
         href: "/cybersecurity/summary",
         estimatedHours: 3,
+        icon: <Gamepad2 className="h-6 w-6" aria-hidden="true" />,
+        badge: "Practice",
         progress: { percent: 0 },
       },
     ];

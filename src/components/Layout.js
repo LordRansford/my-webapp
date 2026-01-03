@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import TestingModeBanner from "@/components/TestingModeBanner";
+import BetaBanner from "@/components/notes/BetaBanner";
 import SpotifyMiniPlayerMount from "@/components/spotify/SpotifyMiniPlayerMount";
 import AppShell from "@/components/navigation/AppShell";
 export default function Layout({
@@ -16,6 +17,9 @@ export default function Layout({
       </Head>
 
       <TestingModeBanner />
+      <div className="mx-auto max-w-6xl px-4 pt-4">
+        <BetaBanner />
+      </div>
       <AppShell>
         {children}
       </AppShell>

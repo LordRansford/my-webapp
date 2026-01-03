@@ -1,0 +1,8 @@
+__turbopack_load_page_chunks__("/data-studio/lineage", [
+  "static/chunks/6bd1b060cc02463e.js",
+  "static/chunks/f0f43ebb724b8b11.js",
+  "static/chunks/d1ea35920c32a766.js",
+  "static/chunks/01073211ade0ab07.js",
+  "static/chunks/65978fe5dcd43e0f.js",
+  "static/chunks/turbopack-8647fc04619c67e7.js"
+])
