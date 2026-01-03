@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "debugId": "2b72aafe-0127-5b7f-91c1-f0b88ae45b15",
-  "sections": [
-    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["../../../src/lib/db/prisma.ts"],"sourcesContent":["import { PrismaClient } from \"@prisma/client\";\n\n// Default DB for local dev when env is missing.\n// This keeps local dev lightweight and avoids \"silent\" runtime failures.\nif (!process.env.DATABASE_URL) {\n  process.env.DATABASE_URL = \"file:./data/dev.db\";\n}\n\ndeclare global {\n  var __prisma: PrismaClient | undefined;\n}\n\nexport const prisma: PrismaClient =\n  global.__prisma ||\n  new PrismaClient({\n    log: [\"error\"],\n  });\n\nif (process.env.NODE_ENV !== \"production\") {\n  global.__prisma = prisma;\n}\n\n\n"],"names":[],"mappings":"uHAAA,IAAA,EAAA,EAAA,CAAA,CAAA,MAII,CAAC,QAAQ,GAAG,CAAC,YAAY,EAAE,AAC7B,SAAQ,GAAG,CAAC,YAAY,CAAG,oBAAA,EAOtB,IAAM,EACX,OAAO,QAAQ,EACf,IAAI,EAAA,YAAY,CAAC,CACf,IAAK,CAAC,QAAQ,AAChB"}}]
-}

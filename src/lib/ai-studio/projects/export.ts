@@ -129,12 +129,16 @@ function artefactMarkdown(project: AIStudioProject) {
   const receiptLine = receipt
     ? `Receipt: mode=${receipt.mode} durationMs=${receipt.durationMs} creditsCharged=${receipt.creditsCharged}\n\n`
     : "Receipt: not available\n\n";
-  return `${header}## Latest run\n\nRan at: ${run.ranAt}\n\n${receiptLine}## Output\n\n\`\`\`json\n${JSON.stringify(run.output, null, 2)}\n\`\`\`\n`;
+  const files = Array.isArray((run as any).files) ? ((run as any).files as any[]) : [];
+  const filesSection =
+    files.length > 0
+      ? `## Generated files\n\n${files.map((f) => `- ${f.filename}${f.description ? ` — ${f.description}` : ""}`).join("\n")}\n\n`
+      : "";
+  return `${header}## Latest run\n\nRan at: ${run.ranAt}\n\n${receiptLine}${filesSection}## Output\n\n\`\`\`json\n${JSON.stringify(run.output, null, 2)}\n\`\`\`\n`;
 }
 
-export async function exportProjectAsPackZip(project: AIStudioProject) {
+export async function buildProjectPackZipBlob(project: AIStudioProject): Promise<Blob> {
   const slug = project.title.replace(/[^a-z0-9]+/gi, "-").toLowerCase();
-  const base = `${slug}-${project.id}`;
   const zip = new JSZip();
 
   const runs = Array.isArray(project.runs) ? project.runs : project.lastRun ? [project.lastRun] : [];
@@ -144,14 +148,61 @@ export async function exportProjectAsPackZip(project: AIStudioProject) {
   zip.file("project.json", JSON.stringify(project, null, 2));
   zip.file("run-history.json", JSON.stringify({ projectId: project.id, runs }, null, 2));
 
+  // Add generated files from runs (if present) under generated/<run>/...
+  const generatedFolder = zip.folder("generated");
+  if (generatedFolder) {
+    for (const r of runs) {
+      const runKey = String((r as any).ranAt || "").replace(/[:.]/g, "-").slice(0, 40) || "run";
+      const runFolder = generatedFolder.folder(runKey);
+      const files = Array.isArray((r as any).files) ? ((r as any).files as any[]) : [];
+      for (const f of files) {
+        const filename = String(f.filename || "file.txt").replace(/^\//, "");
+        const content = typeof f.content === "string" ? f.content : JSON.stringify(f.content ?? "", null, 2);
+        runFolder?.file(filename, content);
+      }
+    }
+  }
+
   const checklist = checklistForExample(project.exampleId);
   zip.file("NEXT_STEPS.md", `# Next steps\n\n${checklist.map((c) => `- ${c}`).join("\n")}\n`);
   zip.file("ARTEFACT.md", artefactMarkdown(project));
 
   const pdfBytes = await buildProjectPdfBytes(project);
-  zip.file("project-summary.pdf", pdfBytes);
+  zip.file("project-summary.pdf", Uint8Array.from(pdfBytes));
 
-  const blob = await zip.generateAsync({ type: "blob" });
+  // Lightweight audit metadata for enterprise-style handoff.
+  const latest = runs[0] || project.lastRun || null;
+  zip.file(
+    "AUDIT.json",
+    JSON.stringify(
+      {
+        projectId: project.id,
+        title: project.title,
+        exampleId: project.exampleId,
+        createdAt: project.createdAt,
+        updatedAt: project.updatedAt,
+        runCount: runs.length,
+        latestRun: latest
+          ? {
+              ranAt: (latest as any).ranAt,
+              receipt: (latest as any).receipt || null,
+              files: Array.isArray((latest as any).files) ? (latest as any).files.map((f: any) => ({ filename: f.filename, kind: f.kind, mime: f.mime })) : [],
+            }
+          : null,
+        note: "This is a local-first export pack. Outputs are deterministic demos unless otherwise stated.",
+      },
+      null,
+      2
+    )
+  );
+
+  return await zip.generateAsync({ type: "blob" });
+}
+
+export async function exportProjectAsPackZip(project: AIStudioProject) {
+  const slug = project.title.replace(/[^a-z0-9]+/gi, "-").toLowerCase();
+  const base = `${slug}-${project.id}`;
+  const blob = await buildProjectPackZipBlob(project);
   downloadBlob(`${base}.zip`, blob);
 }
 

@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "debugId": "3b7aac25-3aaf-1a35-89e3-b95d3ab772e7",
-  "sections": [
-    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["../../../../src/app/admin/system/page.tsx"],"sourcesContent":["export const metadata = {\n  title: \"Admin: System\",\n  robots: { index: false, follow: false },\n};\n\nexport default function AdminSystemPage() {\n  return (\n    <main className=\"mx-auto max-w-6xl px-4 py-10 md:px-6 lg:px-8 space-y-3\">\n      <h1 className=\"text-2xl font-semibold text-slate-900\">System</h1>\n      <p className=\"text-slate-700\">Placeholder. System tools will be added in a later prompt.</p>\n      <div className=\"rounded-2xl border border-slate-200 bg-white p-5 text-sm text-slate-700\">No actions available yet.</div>\n    </main>\n  );\n}\n\n\n"],"names":[],"mappings":"ybAKe,SAAS,IACtB,MACE,CAAA,EAAA,EAAA,IAAA,EAAC,OAAA,CAAK,UAAU,mEACd,CAAA,EAAA,EAAA,GAAA,EAAC,KAAA,CAAG,UAAU,iDAAwC,WACtD,CAAA,EAAA,EAAA,GAAA,EAAC,IAAA,CAAE,UAAU,0BAAiB,+DAC9B,CAAA,EAAA,EAAA,GAAA,EAAC,MAAA,CAAI,UAAU,mFAA0E,gCAG/F,mCAbwB,CACtB,MAAO,gBACP,OAAQ,CAAE,OAAO,EAAO,QAAQ,CAAM,CACxC"}}]
-}

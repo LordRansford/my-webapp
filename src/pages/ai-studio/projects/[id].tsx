@@ -10,10 +10,11 @@ import { useRouter } from "next/router";
 import { Download, FileText, Link as LinkIcon, Play, Trash2 } from "lucide-react";
 import type { AIStudioProject } from "@/lib/ai-studio/projects/store";
 import { deleteProject, getProjectById, setLastOpenedProjectId, updateProjectRun } from "@/lib/ai-studio/projects/store";
-import { exportProjectAsJson, exportProjectAsPackZip, exportProjectAsPdf } from "@/lib/ai-studio/projects/export";
+import { buildProjectPackZipBlob, exportProjectAsJson, exportProjectAsPackZip, exportProjectAsPdf } from "@/lib/ai-studio/projects/export";
 import { runAiStudioProjectLocal } from "@/lib/ai-studio/projects/run";
 import RunReceiptPanel from "@/components/ai-studio/RunReceiptPanel";
 import { createProjectShareCode } from "@/lib/ai-studio/projects/share";
+import GeneratedFilesPanel from "@/components/shared/GeneratedFilesPanel";
 
 type ComputeEstimate = {
   ok: boolean;
@@ -36,6 +37,17 @@ export default function AIStudioProjectDetailsPage() {
   const [computeEstimate, setComputeEstimate] = useState<ComputeEstimate | null>(null);
   const [selectedRunAt, setSelectedRunAt] = useState<string | null>(null);
   const [computePreset, setComputePreset] = useState<"light" | "standard" | "heavy">("light");
+  const [shareLink, setShareLink] = useState<string | null>(null);
+
+  async function blobToBase64(blob: Blob): Promise<string> {
+    const bytes = new Uint8Array(await blob.arrayBuffer());
+    let binary = "";
+    const chunk = 0x8000;
+    for (let i = 0; i < bytes.length; i += chunk) {
+      binary += String.fromCharCode(...bytes.subarray(i, i + chunk));
+    }
+    return btoa(binary);
+  }
 
   const isStory = project?.exampleId === "story-generator";
   const isHomework = project?.exampleId === "homework-helper";
@@ -161,7 +173,7 @@ export default function AIStudioProjectDetailsPage() {
         return;
       }
 
-      updateProjectRun(project.id, { input: prompt, output: data.output, receipt: data.receipt });
+      updateProjectRun(project.id, { input: prompt, output: data.output, receipt: data.receipt, files: Array.isArray(data.files) ? data.files : [] });
       const updated = getProjectById(project.id);
       setProject(updated);
       const latest = updated?.runs?.[0]?.ranAt || updated?.lastRun?.ranAt || null;
@@ -227,6 +239,40 @@ export default function AIStudioProjectDetailsPage() {
             </button>
             <button
               type="button"
+              onClick={async () => {
+                setShareLink(null);
+                setBusy(true);
+                setError(null);
+                try {
+                  const blob = await buildProjectPackZipBlob(project);
+                  const zipBase64 = await blobToBase64(blob);
+                  const res = await fetch("/api/share/packs/create", {
+                    method: "POST",
+                    headers: { "content-type": "application/json" },
+                    body: JSON.stringify({ title: project.title, projectId: project.id, zipBase64, expiresInDays: 7 }),
+                  });
+                  const data = await res.json().catch(() => null);
+                  if (!res.ok || !data?.ok) {
+                    setError(String(data?.error || "Failed to create share link. You may need to sign in."));
+                    return;
+                  }
+                  const url = `${window.location.origin}${data.sharePath}`;
+                  setShareLink(url);
+                  await navigator.clipboard.writeText(url);
+                  alert("Share link copied. Anyone with this link can download your ZIP pack until it expires.");
+                } catch (e) {
+                  setError(e instanceof Error ? e.message : "Failed to create share link.");
+                } finally {
+                  setBusy(false);
+                }
+              }}
+              className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+            >
+              <LinkIcon className="w-4 h-4" aria-hidden="true" />
+              Create share link (7 days)
+            </button>
+            <button
+              type="button"
               onClick={() => exportProjectAsPackZip(project)}
               className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
             >
@@ -260,6 +306,16 @@ export default function AIStudioProjectDetailsPage() {
         {error ? (
           <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-900" role="alert">
             {error}
+          </div>
+        ) : null}
+
+        {shareLink ? (
+          <div className="rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-900">
+            <p className="text-xs font-semibold text-slate-700">Share link (copied)</p>
+            <p className="mt-1 break-all text-xs text-slate-900">{shareLink}</p>
+            <p className="mt-1 text-[11px] text-slate-600">
+              Anyone with this link can download your ZIP pack until it expires. Make sure you are not sharing sensitive data.
+            </p>
           </div>
         ) : null}
 
@@ -420,6 +476,9 @@ export default function AIStudioProjectDetailsPage() {
 
                 <div className="space-y-3">
                   {selected.receipt ? <RunReceiptPanel receipt={selected.receipt} /> : null}
+                      {Array.isArray((selected as any).files) && (selected as any).files.length ? (
+                        <GeneratedFilesPanel files={(selected as any).files} title="Generated files" />
+                      ) : null}
                   <div className="flex flex-wrap gap-2">
                     {typeof selected.input === "string" ? (
                       <button

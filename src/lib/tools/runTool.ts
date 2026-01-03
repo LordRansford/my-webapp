@@ -10,11 +10,13 @@ import { runJs } from "@/lib/sandbox/js/runJs";
 import { runPython } from "@/lib/sandbox/python/runPython";
 import { runSql } from "@/lib/sandbox/sql/runSql";
 import type { ToolError } from "@/components/tools/ErrorPanel";
+import type { GeneratedFile } from "@/lib/compute/generatedFiles";
 
 export interface ToolRunResult {
   ok: boolean;
   output?: string;
   receipt?: unknown;
+  files?: GeneratedFile[];
   warnings?: string[];
   metrics?: {
     durationMs: number;
@@ -192,6 +194,7 @@ export async function runTool(
             ok: true,
             output: typeof data.output === "string" ? data.output : JSON.stringify(data.output, null, 2),
             receipt: data.receipt ?? null,
+            files: Array.isArray(data.files) ? data.files : [],
             metrics: {
               durationMs: duration,
               cpuMs: duration,

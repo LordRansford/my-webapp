@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "debugId": "cac0361e-c93c-2834-7eca-97d640855c3b",
-  "sections": [
-    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["../../../../src/app/admin/billing/layout.tsx"],"sourcesContent":["import { getServerSession } from \"next-auth\";\nimport { authOptions } from \"@/lib/auth/options\";\nimport AdminAccessDeniedPage from \"@/app/admin/access-denied/page\";\nimport { requireAdminPermission } from \"@/lib/admin/rbac\";\n\nexport default async function AdminBillingLayout({ children }: { children: React.ReactNode }) {\n  const session = await getServerSession(authOptions).catch(() => null);\n  try {\n    requireAdminPermission(session?.user || null, \"VIEW_BILLING\");\n  } catch {\n    return <AdminAccessDeniedPage />;\n  }\n  return <>{children}</>;\n}\n\n\n"],"names":[],"mappings":"0DAAA,EAAA,EAAA,CAAA,CAAA,OACA,EAAA,EAAA,CAAA,CAAA,QACA,EAAA,EAAA,CAAA,CAAA,QACA,EAAA,EAAA,CAAA,CAAA,QAEe,eAAe,EAAmB,UAAE,CAAQ,CAAiC,EAC1F,IAAM,EAAU,MAAM,CAAA,EAAA,EAAA,gBAAA,AAAgB,EAAC,EAAA,WAAW,EAAE,KAAK,CAAC,IAAM,MAChE,GAAI,CACF,CAAA,EAAA,EAAA,sBAAA,AAAsB,EAAC,GAAS,MAAQ,KAAM,eAChD,CAAE,KAAM,CACN,MAAO,CAAA,EAAA,EAAA,GAAA,EAAC,EAAA,OAAqB,CAAA,CAAA,EAC/B,CACA,MAAO,CAAA,EAAA,EAAA,GAAA,EAAA,EAAA,QAAA,CAAA,UAAG,GACZ"}}]
-}

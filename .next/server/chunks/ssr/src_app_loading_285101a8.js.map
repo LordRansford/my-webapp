@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "debugId": "91a4fb50-4677-c92c-3a67-a1be545e4d6e",
-  "sections": [
-    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["../../../../src/app/loading.js"],"sourcesContent":["export default function Loading() {\n  return (\n    <main className=\"mx-auto max-w-3xl px-4 py-12 md:px-6 lg:px-8\">\n      <div className=\"rounded-3xl border border-slate-200 bg-white/90 p-8 shadow-sm\">\n        <p className=\"text-xs font-semibold uppercase tracking-wide text-slate-600\">Loading</p>\n        <p className=\"mt-2 text-sm text-slate-700\">Preparing the page...</p>\n      </div>\n    </main>\n  );\n}\n\n\n"],"names":[],"mappings":"0DAAe,SAAS,IACtB,MACE,CAAA,EAAA,EAAA,GAAA,EAAC,OAAA,CAAK,UAAU,wDACd,CAAA,EAAA,EAAA,IAAA,EAAC,MAAA,CAAI,UAAU,0EACb,CAAA,EAAA,EAAA,GAAA,EAAC,IAAA,CAAE,UAAU,wEAA+D,YAC5E,CAAA,EAAA,EAAA,GAAA,EAAC,IAAA,CAAE,UAAU,uCAA8B,8BAInD"}}]
-}

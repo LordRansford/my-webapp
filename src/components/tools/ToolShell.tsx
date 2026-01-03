@@ -10,6 +10,8 @@ import { runTool, validateInputs, type ValidationError } from "@/lib/tools/runTo
 import { createToolError } from "./ErrorPanel";
 import type { ToolError } from "./ErrorPanel";
 import type { UnifiedRunReceipt } from "@/lib/compute/receipts";
+import type { GeneratedFile } from "@/lib/compute/generatedFiles";
+import GeneratedFilesPanel from "@/components/shared/GeneratedFilesPanel";
 
 export type ExecutionMode = "local" | "compute";
 
@@ -181,6 +183,7 @@ export default function ToolShell({
   const [output, setOutput] = useState<string | null>(null);
   const [error, setError] = useState<ToolError | null>(null);
   const [receipt, setReceipt] = useState<UnifiedRunReceipt | null>(null);
+  const [files, setFiles] = useState<GeneratedFile[]>([]);
   const [status, setStatus] = useState<"idle" | "running" | "completed" | "failed">("idle");
   const [isRunning, setIsRunning] = useState(false);
   const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
@@ -222,6 +225,7 @@ export default function ToolShell({
     setOutput(null);
     setError(null);
     setReceipt(null);
+    setFiles([]);
     setShowResetReminder(false);
     setStatus("running");
     setIsRunning(true);
@@ -241,6 +245,7 @@ export default function ToolShell({
             output: runResult.output,
             receipt: (runResult.receipt as UnifiedRunReceipt | null) ?? null,
           };
+          setFiles(Array.isArray(runResult.files) ? (runResult.files as GeneratedFile[]) : []);
         } else {
           result = {
             success: false,
@@ -280,6 +285,7 @@ export default function ToolShell({
     setOutput(null);
     setError(null);
     setReceipt(null);
+    setFiles([]);
     setStatus("idle");
     setValidationErrors([]);
     setShowResetReminder(false);
@@ -295,6 +301,7 @@ export default function ToolShell({
     setOutput(null);
     setError(null);
     setReceipt(null);
+    setFiles([]);
     setStatus("idle");
     setShowResetReminder(false);
     // Load the example inputs
@@ -455,6 +462,9 @@ export default function ToolShell({
 
           {/* Receipt Display (compute runs) */}
           {receipt && !error ? <RunReceiptPanel receipt={receipt} /> : null}
+
+          {/* Generated Files (compute runs) */}
+          {files.length && !error ? <GeneratedFilesPanel files={files} /> : null}
 
           {/* Output Display */}
           {output !== null && !error && (

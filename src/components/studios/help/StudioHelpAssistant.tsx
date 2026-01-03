@@ -1,28 +1,11 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import { Download, Sparkles, Wand2 } from "lucide-react";
+import { Sparkles, Wand2 } from "lucide-react";
+import type { GeneratedFile } from "@/lib/compute/generatedFiles";
+import GeneratedFilesPanel from "@/components/shared/GeneratedFilesPanel";
 
 type StudioId = "dev" | "cyber" | "data" | "ai" | "architecture" | "lab";
-
-type GeneratedFile = {
-  filename: string;
-  content: string;
-  mime?: string;
-  description?: string;
-};
-
-function downloadText(filename: string, content: string, mime = "text/plain") {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
 
 const studioMeta: Record<StudioId, { label: string; helpScope: string; exampleTypes: Array<{ id: string; label: string }> }> = {
   dev: {
@@ -259,43 +242,7 @@ export default function StudioHelpAssistant(props: { initialStudio?: string }) {
             </div>
           ) : null}
 
-          {files.length ? (
-            <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-slate-900">Generated files</h3>
-              <div className="grid gap-3 md:grid-cols-2">
-                {files.map((f) => (
-                  <div key={f.filename} className="rounded-xl border border-slate-200 bg-white p-4 space-y-2">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="min-w-0">
-                        <p className="text-xs font-semibold text-slate-900 truncate">{f.filename}</p>
-                        {f.description ? <p className="text-xs text-slate-600">{f.description}</p> : null}
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() => navigator.clipboard.writeText(f.content)}
-                          className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
-                        >
-                          Copy
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => downloadText(f.filename, f.content, f.mime || "text/plain")}
-                          className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
-                        >
-                          <Download className="h-3 w-3" aria-hidden="true" />
-                          Download
-                        </button>
-                      </div>
-                    </div>
-                    <pre className="max-h-56 overflow-auto rounded-lg border border-slate-200 bg-slate-50 p-3 text-xs text-slate-900 whitespace-pre-wrap">
-                      {f.content}
-                    </pre>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : null}
+          {files.length ? <GeneratedFilesPanel files={files} title="Generated files" /> : null}
         </div>
       ) : null}
     </section>

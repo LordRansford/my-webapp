@@ -10,6 +10,7 @@
 
 import type { AIStudioExample } from "@/lib/ai-studio/examples/types";
 import type { UnifiedRunReceipt } from "@/lib/compute/receipts";
+import type { GeneratedFile } from "@/lib/compute/generatedFiles";
 
 export type AIStudioRunReceipt = UnifiedRunReceipt;
 
@@ -28,12 +29,14 @@ export type AIStudioProject = {
     input?: unknown;
     output: unknown;
     receipt?: AIStudioRunReceipt;
+    files?: GeneratedFile[];
   }>;
   lastRun?: {
     ranAt: string;
     input?: unknown;
     output: unknown;
     receipt?: AIStudioRunReceipt;
+    files?: GeneratedFile[];
   };
 };
 
@@ -84,6 +87,7 @@ export function getProjects(): AIStudioProject[] {
         input: lastRun.input,
         output: lastRun.output,
         receipt: lastRun.receipt,
+        files: Array.isArray(lastRun.files) ? (lastRun.files as GeneratedFile[]) : undefined,
       };
     }
 
@@ -154,11 +158,14 @@ export function updateProjectLastRun(projectId: string, output: unknown) {
   saveProjects(next);
 }
 
-export function updateProjectRun(projectId: string, params: { input?: unknown; output: unknown; receipt?: AIStudioRunReceipt }) {
+export function updateProjectRun(
+  projectId: string,
+  params: { input?: unknown; output: unknown; receipt?: AIStudioRunReceipt; files?: GeneratedFile[] }
+) {
   const projects = getProjects();
   const idx = projects.findIndex((p) => p.id === projectId);
   if (idx < 0) return;
-  const runEntry = { ranAt: nowIso(), input: params.input, output: params.output, receipt: params.receipt };
+  const runEntry = { ranAt: nowIso(), input: params.input, output: params.output, receipt: params.receipt, files: params.files };
   const existingRuns = Array.isArray(projects[idx].runs) ? projects[idx].runs! : projects[idx].lastRun ? [projects[idx].lastRun] : [];
   const nextRuns = [runEntry, ...existingRuns].slice(0, 30);
   const updated: AIStudioProject = {
