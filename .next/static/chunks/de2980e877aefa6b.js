@@ -1,0 +1,16 @@
+__turbopack_load_page_chunks__("/courses/[course]/[lesson]", [
+  "static/chunks/23e57ea933fe87a3.js",
+  "static/chunks/6bd1b060cc02463e.js",
+  "static/chunks/48c11802c3f193fa.js",
+  "static/chunks/0f7c72f45123340f.js",
+  "static/chunks/2fcd2aa21d8c3e53.js",
+  "static/chunks/540a845f9e34e2a4.js",
+  "static/chunks/f0f43ebb724b8b11.js",
+  "static/chunks/89eea2f9f1ffcd12.js",
+  "static/chunks/d1ea35920c32a766.js",
+  "static/chunks/a6a29af3297ffde1.js",
+  "static/chunks/40af4d152b74484d.js",
+  "static/chunks/e3b04a0f56b7905b.js",
+  "static/chunks/35a2a4d6394f8c3b.js",
+  "static/chunks/turbopack-b3b773fc984091a5.js"
+])

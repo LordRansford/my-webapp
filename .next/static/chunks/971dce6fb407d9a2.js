@@ -1,8 +1,0 @@
-__turbopack_load_page_chunks__("/ai-studios/sections/AiFundamentalsLab", [
-  "static/chunks/82f50e14cd109e0a.js",
-  "static/chunks/6bd1b060cc02463e.js",
-  "static/chunks/f0f43ebb724b8b11.js",
-  "static/chunks/640dc3620eb10de9.js",
-  "static/chunks/d1ea35920c32a766.js",
-  "static/chunks/turbopack-c8ce3f16db24131c.js"
-])

@@ -6,7 +6,7 @@
   "rootMainFiles": [],
   "pages": {
     "/software-architecture": [
-      "static/chunks/5572631f0b805762.js",
+      "static/chunks/60a5b82a41e8e41d.js",
       "static/chunks/6bd1b060cc02463e.js",
       "static/chunks/2fcd2aa21d8c3e53.js",
       "static/chunks/48c11802c3f193fa.js",
@@ -15,8 +15,8 @@
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/f0f43ebb724b8b11.js",
       "static/chunks/fe1de81744e54f04.js",
-      "static/chunks/640dc3620eb10de9.js",
-      "static/chunks/turbopack-31bdecd6c646e07a.js"
+      "static/chunks/a6a29af3297ffde1.js",
+      "static/chunks/turbopack-30fad7d299a2ae12.js"
     ]
   },
   "ampFirstPages": []

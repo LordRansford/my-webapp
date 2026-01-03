@@ -54,7 +54,7 @@ export async function GET(req: Request) {
   const questions = await prisma.question.findMany({
     where: { assessmentId: assessment.id, tags: { contains: versionTag } },
     orderBy: { createdAt: "asc" },
-    select: { id: true, type: true, bloomLevel: true, question: true, options: true, correctAnswer: true, explanation: true, tags: true },
+    select: { id: true, type: true, bloomLevel: true, question: true, options: true, correctAnswer: true, explanation: true, optionRationales: true, tags: true },
     take: 500,
   });
 
@@ -74,6 +74,7 @@ export async function GET(req: Request) {
         options: q.options ? (safeJsonParse(q.options) as any) : null,
         correctAnswer: safeJsonParse(q.correctAnswer),
         explanation: q.explanation,
+        optionRationales: q.optionRationales ? (safeJsonParse(q.optionRationales) as any) : null,
         tags: q.tags,
         published: parsePublished(q.tags),
       })),

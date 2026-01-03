@@ -7,12 +7,12 @@
   "pages": {
     "/tools/software-architecture/js-sandbox": [
       "static/chunks/68ca4ee79c3ad302.js",
-      "static/chunks/22e83800a36f3b2e.js",
+      "static/chunks/055c85576ee1fb66.js",
       "static/chunks/6bd1b060cc02463e.js",
-      "static/chunks/640dc3620eb10de9.js",
+      "static/chunks/a6a29af3297ffde1.js",
       "static/chunks/d1ea35920c32a766.js",
       "static/chunks/f0f43ebb724b8b11.js",
-      "static/chunks/turbopack-6526d125582ba2de.js"
+      "static/chunks/turbopack-c43ed03ea379282d.js"
     ]
   },
   "ampFirstPages": []

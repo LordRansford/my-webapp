@@ -30,20 +30,24 @@ function scoreAttempt(params: {
   answers: Record<string, number | number[] | string | null>;
 }) {
   let correct = 0;
+  const perQuestion: Array<{ questionId: string; correct: boolean; answer: any }> = [];
   for (const q of params.questions) {
     const raw = params.answers[q.id];
     const expected = JSON.parse(q.correctAnswer) as any;
-    if (typeof expected === "number" && typeof raw === "number" && raw === expected) correct += 1;
-    if (typeof expected === "string" && typeof raw === "string" && raw === expected) correct += 1;
+    let ok = false;
+    if (typeof expected === "number" && typeof raw === "number" && raw === expected) ok = true;
+    if (typeof expected === "string" && typeof raw === "string" && raw === expected) ok = true;
     if (Array.isArray(expected) && Array.isArray(raw)) {
       const a = expected.slice().sort().join("|");
       const b = raw.slice().sort().join("|");
-      if (a === b) correct += 1;
+      if (a === b) ok = true;
     }
+    if (ok) correct += 1;
+    perQuestion.push({ questionId: q.id, correct: ok, answer: raw });
   }
   const total = params.questions.length || 1;
   const percent = Math.round((correct / total) * 100);
-  return { correct, total, percent };
+  return { correct, total, percent, perQuestion };
 }
 
 export async function POST(req: Request) {
@@ -129,6 +133,20 @@ export async function POST(req: Request) {
       },
       select: { id: true, score: true, passed: true, completedAt: true },
     });
+
+    if (Array.isArray(scored.perQuestion) && scored.perQuestion.length) {
+      await prisma.assessmentAttemptItem
+        .createMany({
+          data: scored.perQuestion.map((p) => ({
+            attemptId: attempt.id,
+            questionId: p.questionId,
+            correct: Boolean(p.correct),
+            answer: p.answer === undefined ? null : safeJsonString(p.answer),
+          })),
+          skipDuplicates: true,
+        })
+        .catch(() => null);
+    }
 
     await prisma.assessmentSession.delete({ where: { id: examSession.id } }).catch(() => null);
 

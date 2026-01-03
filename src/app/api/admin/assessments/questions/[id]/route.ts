@@ -54,6 +54,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
   const nextBloom = patch?.bloomLevel != null ? Math.max(1, Math.min(6, Number(patch.bloomLevel) || 1)) : null;
   const nextOptions = Array.isArray(patch?.options) ? patch.options.map((x: any) => String(x || "").trim()).filter(Boolean) : null;
   const nextCorrect = patch?.correctAnswer;
+  const nextRationales = Array.isArray(patch?.optionRationales) ? patch.optionRationales.map((x: any) => String(x ?? "").trimEnd()) : null;
 
   const data: any = { tags: nextTags };
   if (nextQuestion != null && nextQuestion.trim().length >= 10) data.question = nextQuestion.trim();
@@ -61,6 +62,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
   if (nextBloom != null) data.bloomLevel = nextBloom;
   if (nextOptions) data.options = safeJsonString(nextOptions);
   if (nextCorrect != null) data.correctAnswer = safeJsonString(nextCorrect);
+  if (nextRationales) data.optionRationales = safeJsonString(nextRationales);
 
   await prisma.question.update({ where: { id }, data });
 

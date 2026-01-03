@@ -45,6 +45,17 @@ const BLUEPRINT: Record<string, Array<{ domain: string; count: number }>> = {
   ],
 };
 
+function domainFromTags(tags: string) {
+  const parts = String(tags || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  for (const p of parts) {
+    if (p.startsWith("domain:")) return p.slice("domain:".length);
+  }
+  return "";
+}
+
 function shuffle<T>(items: T[]) {
   const arr = items.slice();
   for (let i = arr.length - 1; i > 0; i -= 1) {
@@ -128,9 +139,10 @@ export async function POST(req: Request) {
       take: 2,
       select: { questionIds: true },
     });
+    const lastAttemptIds = recentAttempts[0]?.questionIds ? parseJsonArray(recentAttempts[0].questionIds) : [];
     const avoid = new Set<string>();
-    for (const a of recentAttempts) {
-      for (const id of parseJsonArray(a.questionIds || "[]")) avoid.add(String(id));
+    if (recentAttempts[1]?.questionIds) {
+      for (const id of parseJsonArray(recentAttempts[1].questionIds || "[]")) avoid.add(String(id));
     }
 
     const existing = await prisma.assessmentSession.findUnique({
@@ -187,19 +199,11 @@ export async function POST(req: Request) {
     const byDomain = new Map<string, string[]>();
     const all = pool.map((r) => ({ id: r.id, tags: String(r.tags || "") }));
     for (const row of all) {
-      const tags = row.tags;
-      const parts = tags
-        .split(",")
-        .map((s) => s.trim())
-        .filter(Boolean);
-      for (const p of parts) {
-        if (!p.startsWith("domain:")) continue;
-        const d = p.slice("domain:".length);
-        if (!d) continue;
-        const list = byDomain.get(d) || [];
-        list.push(row.id);
-        byDomain.set(d, list);
-      }
+      const d = domainFromTags(row.tags);
+      if (!d) continue;
+      const list = byDomain.get(d) || [];
+      list.push(row.id);
+      byDomain.set(d, list);
     }
 
     const picked: string[] = [];
@@ -225,9 +229,60 @@ export async function POST(req: Request) {
       return out;
     }
 
+    // Retake mix: include a fixed overlap of previously missed questions when possible.
+    const overlapTarget = 15;
+    const overlapPicked: string[] = [];
+    if (lastAttemptIds.length) {
+      const lastAttempt = await prisma.assessmentAttempt.findFirst({
+        where: { userId, assessmentId: assessment.id, courseVersion },
+        orderBy: { completedAt: "desc" },
+        select: { id: true },
+      });
+      if (lastAttempt?.id) {
+        const missed = await prisma.assessmentAttemptItem.findMany({
+          where: { attemptId: lastAttempt.id, correct: false },
+          select: { questionId: true },
+          take: 200,
+        });
+        const missedIds = shuffle(missed.map((m) => m.questionId)).filter((id) => all.some((x) => x.id === id));
+        overlapPicked.push(...missedIds.slice(0, overlapTarget));
+      }
+      // Fill overlap with random from last attempt if not enough missed
+      if (overlapPicked.length < overlapTarget) {
+        const remaining = shuffle(lastAttemptIds.map((x) => String(x)));
+        for (const id of remaining) {
+          if (overlapPicked.length >= overlapTarget) break;
+          if (overlapPicked.includes(id)) continue;
+          if (!all.some((x) => x.id === id)) continue;
+          overlapPicked.push(id);
+        }
+      }
+    }
+
+    const overlapDomainCounts = new Map<string, number>();
+    if (overlapPicked.length) {
+      const overlapRows = all.filter((r) => overlapPicked.includes(r.id));
+      for (const r of overlapRows) {
+        const d = domainFromTags(r.tags);
+        if (!d) continue;
+        overlapDomainCounts.set(d, (overlapDomainCounts.get(d) || 0) + 1);
+      }
+      for (const id of overlapPicked) {
+        picked.push(id);
+        pickedSet.add(id);
+      }
+      // Avoid the rest of the last attempt so the mix feels fresh.
+      for (const id of lastAttemptIds.map((x) => String(x))) {
+        if (pickedSet.has(id)) continue;
+        avoid.add(id);
+      }
+    }
+
     for (const b of blueprint) {
+      const already = overlapDomainCounts.get(b.domain) || 0;
+      const needed = Math.max(0, b.count - already);
       const list = byDomain.get(b.domain) || [];
-      const out = takeFrom(list, b.count);
+      const out = takeFrom(list, needed);
       for (const id of out) {
         if (pickedSet.has(id)) continue;
         picked.push(id);

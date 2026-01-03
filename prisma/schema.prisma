@@ -749,11 +749,13 @@ model Question {
   options          String?      // JSON array for MCQ/MultiResponse
   correctAnswer    String       // JSON (single value or array)
   explanation      String       // Detailed explanation of the correct answer
+  optionRationales String?      // JSON array aligned with options
   tags             String       // Comma-separated tags
   createdAt        DateTime     @default(now())
   updatedAt        DateTime     @updatedAt
 
   assessment       Assessment   @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  attemptItems     AssessmentAttemptItem[]
 
   @@index([assessmentId])
   @@index([bloomLevel])
@@ -774,12 +776,30 @@ model AssessmentAttempt {
 
   user          UserIdentity @relation(fields: [userId], references: [id], onDelete: Cascade)
   assessment    Assessment   @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  items         AssessmentAttemptItem[]
 
   @@index([userId])
   @@index([assessmentId])
   @@index([passed])
   @@index([completedAt])
   @@index([courseVersion])
+}
+
+model AssessmentAttemptItem {
+  id         String   @id @default(cuid())
+  attemptId  String
+  questionId String
+  correct    Boolean
+  answer     String?  // JSON
+  createdAt  DateTime @default(now())
+
+  attempt  AssessmentAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question Question          @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([attemptId, questionId])
+  @@index([attemptId])
+  @@index([questionId])
+  @@index([correct])
 }
 
 model AssessmentSession {

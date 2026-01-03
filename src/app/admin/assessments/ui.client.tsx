@@ -12,6 +12,7 @@ type QuestionRow = {
   options: string[] | null;
   correctAnswer: any;
   explanation: string;
+  optionRationales: string[] | null;
   tags: string;
   published: boolean;
 };
@@ -150,6 +151,7 @@ export default function AdminAssessmentsClient(props: { canManage: boolean }) {
             options: q.options,
             correctAnswer: q.correctAnswer,
             explanation: q.explanation,
+            optionRationales: q.optionRationales,
             tags: q.tags,
             bloomLevel: q.bloomLevel,
           },
@@ -265,7 +267,15 @@ export default function AdminAssessmentsClient(props: { canManage: boolean }) {
       <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-lg font-semibold text-slate-900">Questions</h2>
-          <div className="text-xs text-slate-600">Tag `published` is required for exam selection</div>
+          <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600">
+            <span>Tag `published` is required for exam selection</span>
+            <a
+              className="font-semibold text-emerald-700 hover:underline"
+              href={`/api/admin/assessments/answer-key?courseId=${encodeURIComponent(selected.courseId)}&levelId=${encodeURIComponent(selected.levelId)}&version=${encodeURIComponent(selected.version)}`}
+            >
+              Download answer key
+            </a>
+          </div>
         </div>
         <div className="space-y-3">
           {(data?.questions || []).map((q) => {
@@ -369,6 +379,24 @@ export default function AdminAssessmentsClient(props: { canManage: boolean }) {
                           });
                         }}
                       />
+                    </div>
+
+                    <div className="space-y-1">
+                      <div className="text-xs font-semibold text-slate-700">Option rationales</div>
+                      <textarea
+                        className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900"
+                        rows={4}
+                        value={(q.optionRationales || []).join("\n")}
+                        onChange={(e) => {
+                          const lines = e.target.value.split("\n").map((s) => s.trimEnd());
+                          setData((prev) => {
+                            if (!prev) return prev;
+                            return { ...prev, questions: prev.questions.map((x) => (x.id === q.id ? { ...x, optionRationales: lines } : x)) };
+                          });
+                        }}
+                        placeholder="One line per option. Include why each option is correct or wrong."
+                      />
+                      <div className="text-xs text-slate-600">Keep the number of lines aligned with options</div>
                     </div>
 
                     <div className="grid gap-3 md:grid-cols-2">
