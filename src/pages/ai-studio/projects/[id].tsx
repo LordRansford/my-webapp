@@ -12,6 +12,7 @@ import type { AIStudioProject } from "@/lib/ai-studio/projects/store";
 import { deleteProject, getProjectById, setLastOpenedProjectId, updateProjectRun } from "@/lib/ai-studio/projects/store";
 import { exportProjectAsJson, exportProjectAsPdf } from "@/lib/ai-studio/projects/export";
 import { runAiStudioProjectLocal } from "@/lib/ai-studio/projects/run";
+import RunReceiptPanel from "@/components/ai-studio/RunReceiptPanel";
 
 type ComputeEstimate = {
   ok: boolean;
@@ -34,6 +35,8 @@ export default function AIStudioProjectDetailsPage() {
   const [computeEstimate, setComputeEstimate] = useState<ComputeEstimate | null>(null);
 
   const isStory = project?.exampleId === "story-generator";
+  const isHomework = project?.exampleId === "homework-helper";
+  const isSupport = project?.exampleId === "customer-support-bot";
 
   useEffect(() => {
     if (!projectId) return;
@@ -44,14 +47,23 @@ export default function AIStudioProjectDetailsPage() {
       if (p.exampleId === "story-generator") {
         setPrompt(typeof p.lastRun?.input === "string" ? (p.lastRun.input as string) : "A brave robot exploring a new planet");
       }
+      if (p.exampleId === "homework-helper") {
+        setPrompt(typeof p.lastRun?.input === "string" ? (p.lastRun.input as string) : "How do I solve 2x + 5 = 15?");
+      }
+      if (p.exampleId === "customer-support-bot") {
+        setPrompt(typeof p.lastRun?.input === "string" ? (p.lastRun.input as string) : "How do I return an item?");
+      }
     } else {
       setProject(null);
     }
   }, [projectId]);
 
   const computeToolId = useMemo(() => {
-    // For now, story-generator uses a dedicated compute toolId (allowlisted on /api/tools/run).
-    return project?.exampleId === "story-generator" ? "ai-story-generator" : null;
+    if (!project) return null;
+    if (project.exampleId === "story-generator") return "ai-story-generator";
+    if (project.exampleId === "homework-helper") return "ai-homework-helper";
+    if (project.exampleId === "customer-support-bot") return "ai-support-bot";
+    return null;
   }, [project?.exampleId]);
 
   useEffect(() => {
@@ -96,7 +108,7 @@ export default function AIStudioProjectDetailsPage() {
     setBusy(true);
     setError(null);
     try {
-      const input = isStory ? prompt : undefined;
+      const input = isStory || isHomework || isSupport ? prompt : undefined;
       const { output, receipt } = await runAiStudioProjectLocal({ project, input });
       updateProjectRun(project.id, { input, output, receipt });
       const updated = getProjectById(project.id);
@@ -113,7 +125,7 @@ export default function AIStudioProjectDetailsPage() {
     setBusy(true);
     setError(null);
     try {
-      if (!isStory) {
+      if (!isStory && !isHomework && !isSupport) {
         setError("Compute runs are not implemented for this project yet.");
         return;
       }
@@ -124,7 +136,7 @@ export default function AIStudioProjectDetailsPage() {
         body: JSON.stringify({
           toolId: computeToolId,
           mode: "compute",
-          inputs: { prompt },
+          inputs: isStory ? { prompt } : isHomework ? { question: prompt } : { question: prompt },
         }),
       });
       const data = await res.json().catch(() => null);
@@ -236,6 +248,38 @@ export default function AIStudioProjectDetailsPage() {
                 Tip: start simple, then add details. Keep it kind and safe for children.
               </p>
             </div>
+          ) : isHomework ? (
+            <div className="space-y-2">
+              <label htmlFor="prompt" className="text-sm font-semibold text-slate-900">
+                Question
+              </label>
+              <textarea
+                id="prompt"
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                rows={4}
+                className="w-full rounded-lg border border-slate-300 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+              />
+              <p className="text-xs text-slate-600">
+                Tip: write the exact equation if you can (for example, 2x + 5 = 15). This demo is intentionally limited for safety.
+              </p>
+            </div>
+          ) : isSupport ? (
+            <div className="space-y-2">
+              <label htmlFor="prompt" className="text-sm font-semibold text-slate-900">
+                Customer question
+              </label>
+              <textarea
+                id="prompt"
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                rows={3}
+                className="w-full rounded-lg border border-slate-300 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+              />
+              <p className="text-xs text-slate-600">
+                Tip: include the intent (return, refund, delivery). This is a safe demo and does not access real customer data.
+              </p>
+            </div>
           ) : (
             <p className="text-sm text-slate-700">
               This project does not have a runnable interface yet. Local demo runs may still work depending on the template.
@@ -283,12 +327,7 @@ export default function AIStudioProjectDetailsPage() {
           <h2 className="text-lg font-semibold text-slate-900">Latest output</h2>
           {project.lastRun ? (
             <>
-              {project.lastRun.receipt ? (
-                <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs text-slate-700">
-                  Receipt: {project.lastRun.receipt.mode} · {project.lastRun.receipt.durationMs} ms ·{" "}
-                  {project.lastRun.receipt.creditsCharged} credits
-                </div>
-              ) : null}
+              {project.lastRun.receipt ? <RunReceiptPanel receipt={project.lastRun.receipt} /> : null}
               <pre className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs text-slate-900 overflow-auto whitespace-pre-wrap">
                 {JSON.stringify(project.lastRun.output, null, 2)}
               </pre>

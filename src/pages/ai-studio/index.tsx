@@ -401,6 +401,13 @@ export default function AIStudioPage() {
                       Browse Examples
                       <ArrowRight className="w-4 h-4" />
                     </button>
+                    <Link
+                      href="/ai-studio/projects"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-amber-300 text-amber-800 rounded-lg hover:bg-amber-50 transition-colors font-semibold text-sm"
+                    >
+                      Open projects
+                      <span aria-hidden="true">→</span>
+                    </Link>
                   </div>
                 </div>
               </div>

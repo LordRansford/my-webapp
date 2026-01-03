@@ -164,3 +164,34 @@ export function deleteProject(projectId: string) {
   }
 }
 
+export function importProject(raw: unknown): { ok: true; project: AIStudioProject } | { ok: false; error: string } {
+  if (!raw || typeof raw !== "object") return { ok: false, error: "Invalid project file." };
+  const p = raw as any;
+  if (typeof p.title !== "string" || typeof p.exampleId !== "string") return { ok: false, error: "Missing required project fields." };
+
+  // Sanitize and avoid ID collisions.
+  const projects = getProjects();
+  const incomingId = typeof p.id === "string" ? p.id : newId();
+  const exists = projects.some((x) => x.id === incomingId);
+  const id = exists ? newId() : incomingId;
+
+  const createdAt = typeof p.createdAt === "string" ? p.createdAt : nowIso();
+  const updatedAt = typeof p.updatedAt === "string" ? p.updatedAt : nowIso();
+
+  const project: AIStudioProject = {
+    id,
+    title: String(p.title).slice(0, 120),
+    exampleId: String(p.exampleId).slice(0, 80),
+    audience: (p.audience || "all") as any,
+    difficulty: (p.difficulty || "beginner") as any,
+    category: String(p.category || "unknown").slice(0, 80),
+    createdAt,
+    updatedAt,
+    config: (p.config || {}) as any,
+    lastRun: p.lastRun && typeof p.lastRun === "object" ? (p.lastRun as any) : undefined,
+  };
+
+  saveProjects([project, ...projects]);
+  return { ok: true, project };
+}
+

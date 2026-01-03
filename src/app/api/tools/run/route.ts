@@ -254,6 +254,144 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true, output: metered.output, receipt: metered.receipt });
     }
 
+    if (toolId === "ai-homework-helper") {
+      const schema = z.object({ question: z.string().trim().min(1).max(300) });
+      const parsed = schema.safeParse(body.inputs);
+      if (!parsed.success) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: {
+              code: "validation_error",
+              message: "Provide a question (1–300 characters).",
+              fixSuggestion: "Try: How do I solve 2x + 5 = 15?",
+            },
+          },
+          { status: 400 }
+        );
+      }
+
+      const question = parsed.data.question;
+
+      const metered = await runWithMetering({
+        req,
+        userId,
+        toolId: "ai-homework-helper",
+        inputBytes: Buffer.byteLength(question),
+        requestedComplexityPreset: "standard",
+        execute: async () => {
+          await new Promise((r) => setTimeout(r, Math.min(900, 120 + question.length * 2)));
+          const matched = question.replace(/\s+/g, " ").match(/(\d+)\s*x\s*\+\s*(\d+)\s*=\s*(\d+)/i);
+          const payload: any = { question, ranAt: new Date().toISOString() };
+          if (matched) {
+            const a = Number(matched[1]);
+            const b = Number(matched[2]);
+            const c = Number(matched[3]);
+            payload.steps = [`Subtract ${b} from both sides → ${a}x = ${c - b}`, `Divide both sides by ${a} → x = ${(c - b) / a}`];
+            payload.answer = `x = ${(c - b) / a}`;
+          } else {
+            payload.steps = [
+              "Rewrite the problem in a simpler form (remove extra words).",
+              "Identify what is being asked.",
+              "Show one step at a time, and check your result at the end.",
+            ];
+            payload.answer = "This demo can only solve simple equations like 2x + 5 = 15.";
+          }
+          payload.safety = { mode: "safe-demo", note: "No external model calls. Deterministic output for reliability." };
+          return { output: payload, outputBytes: Buffer.byteLength(JSON.stringify(payload)) };
+        },
+      });
+
+      if (!metered.ok) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: {
+              code: "run_blocked",
+              message: metered.message,
+              fixSuggestion: metered.estimate?.reason || "Try a shorter question, or sign in to run beyond the free tier.",
+            },
+            estimate: metered.estimate,
+          },
+          { status: metered.status }
+        );
+      }
+
+      return NextResponse.json({ success: true, output: metered.output, receipt: metered.receipt });
+    }
+
+    if (toolId === "ai-support-bot") {
+      const schema = z.object({ question: z.string().trim().min(1).max(300) });
+      const parsed = schema.safeParse(body.inputs);
+      if (!parsed.success) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: {
+              code: "validation_error",
+              message: "Provide a question (1–300 characters).",
+              fixSuggestion: "Try: How do I return an item?",
+            },
+          },
+          { status: 400 }
+        );
+      }
+
+      const question = parsed.data.question;
+
+      const metered = await runWithMetering({
+        req,
+        userId,
+        toolId: "ai-support-bot",
+        inputBytes: Buffer.byteLength(question),
+        requestedComplexityPreset: "standard",
+        execute: async () => {
+          await new Promise((r) => setTimeout(r, Math.min(900, 120 + question.length * 2)));
+          const q = question.toLowerCase();
+          let reply =
+            "I can help with orders, returns, delivery, and account questions. Tell me what you need, and include your order number if you have one.";
+          if (q.includes("return")) {
+            reply =
+              "To return an item: 1) Sign in, 2) Open Orders, 3) Select the item, 4) Choose Return, 5) Print the label, 6) Drop it off. If the item is damaged, contact support first.";
+          } else if (q.includes("refund")) {
+            reply =
+              "Refunds usually process after the return is received. Check your Orders page for the status. If it has been more than 7 days since delivery, contact support with your order number.";
+          } else if (q.includes("delivery") || q.includes("shipping")) {
+            reply =
+              "For delivery updates, check the tracking link in your Orders page. If tracking has not updated for 48 hours, contact support and include your order number.";
+          } else if (q.includes("password") || q.includes("sign in") || q.includes("login")) {
+            reply =
+              "If you cannot sign in, use the password reset link on the sign-in page. If you do not receive the email, check spam and confirm the address is correct.";
+          }
+
+          const payload = {
+            question,
+            reply,
+            safety: { mode: "safe-demo", note: "No external model calls. Deterministic output for reliability." },
+            ranAt: new Date().toISOString(),
+          };
+          return { output: payload, outputBytes: Buffer.byteLength(JSON.stringify(payload)) };
+        },
+      });
+
+      if (!metered.ok) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: {
+              code: "run_blocked",
+              message: metered.message,
+              fixSuggestion: metered.estimate?.reason || "Try a shorter question, or sign in to run beyond the free tier.",
+            },
+            estimate: metered.estimate,
+          },
+          { status: metered.status }
+        );
+      }
+
+      return NextResponse.json({ success: true, output: metered.output, receipt: metered.receipt });
+    }
+
     // Default: preserve previous behaviour for unknown tools
     return NextResponse.json(
       {

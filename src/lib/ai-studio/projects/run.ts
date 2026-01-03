@@ -59,6 +59,77 @@ export async function runAiStudioProjectLocal(params: {
       ],
       ranAt: nowIso(),
     };
+  } else if (params.project.exampleId === "homework-helper") {
+    const questionRaw = typeof input === "string" ? input : JSON.stringify(input);
+    const question = clampStr(questionRaw || "How do I solve 2x + 5 = 15?", 300);
+
+    // Very small, deterministic “teaching” solver for simple linear equations.
+    // This is intentionally limited: it is a safe demo, not a full math engine.
+    const matched = question.replace(/\s+/g, " ").match(/(\d+)\s*x\s*\+\s*(\d+)\s*=\s*(\d+)/i);
+    let outputObj: any;
+    if (matched) {
+      const a = Number(matched[1]);
+      const b = Number(matched[2]);
+      const c = Number(matched[3]);
+      const step1 = `Subtract ${b} from both sides → ${a}x = ${c - b}`;
+      const step2 = `Divide both sides by ${a} → x = ${(c - b) / a}`;
+      outputObj = {
+        question,
+        steps: [step1, step2],
+        answer: `x = ${(c - b) / a}`,
+        safety: {
+          mode: "safe-demo",
+          note: "Deterministic demo: handles only a simple ax + b = c form.",
+        },
+        ranAt: nowIso(),
+      };
+    } else {
+      outputObj = {
+        question,
+        steps: [
+          "Rewrite the problem in a simpler form (remove extra words).",
+          "Identify what is being asked.",
+          "Show one step at a time, and check your result at the end.",
+        ],
+        answer: "This demo can only solve simple equations like 2x + 5 = 15.",
+        safety: {
+          mode: "safe-demo",
+          note: "Deterministic demo: not a general solver.",
+        },
+        ranAt: nowIso(),
+      };
+    }
+    output = outputObj;
+  } else if (params.project.exampleId === "customer-support-bot") {
+    const questionRaw = typeof input === "string" ? input : JSON.stringify(input);
+    const question = clampStr(questionRaw || "How do I return an item?", 300);
+    const q = question.toLowerCase();
+
+    let reply =
+      "I can help with orders, returns, delivery, and account questions. Tell me what you need, and include your order number if you have one.";
+    if (q.includes("return")) {
+      reply =
+        "To return an item: 1) Sign in, 2) Open Orders, 3) Select the item, 4) Choose Return, 5) Print the label, 6) Drop it off. If the item is damaged, contact support first.";
+    } else if (q.includes("refund")) {
+      reply =
+        "Refunds usually process after the return is received. Check your Orders page for the status. If it has been more than 7 days since delivery, contact support with your order number.";
+    } else if (q.includes("delivery") || q.includes("shipping")) {
+      reply =
+        "For delivery updates, check the tracking link in your Orders page. If tracking has not updated for 48 hours, contact support and include your order number.";
+    } else if (q.includes("password") || q.includes("sign in") || q.includes("login")) {
+      reply =
+        "If you cannot sign in, use the password reset link on the sign-in page. If you do not receive the email, check spam and confirm the address is correct.";
+    }
+
+    output = {
+      question,
+      reply,
+      safety: {
+        mode: "safe-demo",
+        note: "Deterministic demo: no external model calls.",
+      },
+      ranAt: nowIso(),
+    };
   } else {
     // Generic fallback: return the example preview output if present.
     output =

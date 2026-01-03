@@ -278,6 +278,32 @@ export const TOOL_COMPUTE_PROFILES: Record<string, ToolComputeProfile> = {
     typicalSteps: 70,
     guidance: ["Compare behaviours, not vibes.", "Look for quiet failures and edge cases.", "Decide when not to use AI."],
   },
+
+  // AI Studio project compute demos (server metered, deterministic).
+  "ai-story-generator": {
+    toolId: "ai-story-generator",
+    label: "Story generator (safe demo)",
+    computeClass: "A",
+    typicalInputBytes: 160,
+    typicalSteps: 40,
+    guidance: ["Keep prompts short for cheaper runs.", "Add detail gradually.", "Use child-friendly language for child projects."],
+  },
+  "ai-homework-helper": {
+    toolId: "ai-homework-helper",
+    label: "Homework helper (safe demo)",
+    computeClass: "A",
+    typicalInputBytes: 220,
+    typicalSteps: 55,
+    guidance: ["Write the exact equation if possible.", "Ask for steps, not just answers.", "Check the final answer by substitution."],
+  },
+  "ai-support-bot": {
+    toolId: "ai-support-bot",
+    label: "Support bot (safe demo)",
+    computeClass: "A",
+    typicalInputBytes: 220,
+    typicalSteps: 55,
+    guidance: ["Keep one intent per message (return/refund/delivery).", "Avoid sensitive personal data in demos.", "Save strong replies as templates."],
+  },
 };
 
 export function getToolComputeProfile(toolId?: string | null): ToolComputeProfile | null {
