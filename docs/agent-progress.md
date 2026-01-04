@@ -32,3 +32,10 @@ This file is maintained by the Cursor agent during the overnight implementation.
 - **Tests**:
   - `npm -s run build` ✅
 
+### Checkpoint: Task C implemented (/tools hub)
+- **Change**: Rebuilt `/tools` to render from the unified registry:
+  - New client component `src/components/tools/ToolsHubClient.tsx` (search + category filter + badges derived from routes and contract metadata).
+  - `src/pages/tools.js` now renders the hub (client-only) and removes the hardcoded tools list.
+- **Tests**:
+  - `npm -s run build` ✅
+

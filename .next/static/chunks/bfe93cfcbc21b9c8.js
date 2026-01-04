@@ -1,8 +1,0 @@
-__turbopack_load_page_chunks__("/cyber-studio/policy-generator", [
-  "static/chunks/6bd1b060cc02463e.js",
-  "static/chunks/f26738b365165cc4.js",
-  "static/chunks/f0f43ebb724b8b11.js",
-  "static/chunks/01073211ade0ab07.js",
-  "static/chunks/d1ea35920c32a766.js",
-  "static/chunks/turbopack-f382ad492e75b09f.js"
-])
