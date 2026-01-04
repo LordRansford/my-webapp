@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Layout from "@/components/Layout";
 
 export default function AccreditationPage() {
@@ -11,8 +12,8 @@ export default function AccreditationPage() {
           <p className="eyebrow">CPD aligned</p>
           <h1>Accreditation and CPD alignment</h1>
           <p className="lead">
-            This platform supports self-directed CPD with clear time estimates, practical work, and mapping to recognised skill areas. It
-            does not claim formal endorsement unless explicitly stated.
+            This platform supports self-directed CPD with clear time estimates, practical work, and mapping to recognised skill areas. It does not
+            claim formal endorsement unless explicitly stated with supporting documentation (and ideally a link you can click).
           </p>
         </header>
 
@@ -21,6 +22,13 @@ export default function AccreditationPage() {
           <p>
             Courses, labs, and templates include realistic exercises and time guidance so you can log self-directed CPD hours responsibly.
             Outputs are suitable as evidence alongside your own notes and employer policies.
+          </p>
+          <p className="muted">
+            If you want the “how” and the “why” in one place, see{" "}
+            <Link className="text-link" href="/trust-and-about">
+              Trust and About
+            </Link>{" "}
+            (it is surprisingly short for a policy page — you’re welcome).
           </p>
         </section>
 
@@ -42,6 +50,10 @@ export default function AccreditationPage() {
           <p className="text-muted">CPD certificates will be optional and available later.</p>
           <p className="text-muted">
             No certification, approval, or endorsement is implied unless explicitly announced with supporting documentation.
+          </p>
+          <p className="muted">
+            Trademarks: TOGAF® is a registered trademark of The Open Group. “Institution of Mechanical Engineers” and “IMechE” are trademarks of
+            their respective owners.
           </p>
         </section>
 

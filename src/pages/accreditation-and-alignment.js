@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Layout from "@/components/Layout";
 
 export default function AccreditationAndAlignment() {
@@ -11,9 +12,8 @@ export default function AccreditationAndAlignment() {
           <p className="eyebrow">Ransford&apos;s Notes</p>
           <h1>Accreditation and Alignment</h1>
           <p className="lead">
-            This page explains how the notes align with recognised professional frameworks and how learners can use
-            them for continuing professional development. It also sets expectations about what this site is and what it
-            is not.
+            How the notes align with common professional frameworks, how to use them for CPD responsibly, and what I do (and absolutely do not)
+            claim. No hype. No implied endorsements. No “trust me” footnotes.
           </p>
         </header>
 
@@ -24,6 +24,14 @@ export default function AccreditationAndAlignment() {
             experience and are built on top of official documentation, standards, and widely accepted best practice.
             They are designed to support serious learning and to complement, not replace, official training and
             certification.
+          </p>
+          <p className="muted">
+            Where I reference qualifications or professional activities (for example, TOGAF® certification or IMechE volunteering), I link to public
+            verification sources where possible. See{" "}
+            <Link className="text-link" href="/about#credentials">
+              credentials & verification
+            </Link>
+            .
           </p>
         </section>
 
@@ -73,6 +81,18 @@ export default function AccreditationAndAlignment() {
             matures I may seek formal CPD accreditation for selected tracks. If that happens it will be clearly
             signposted and supported with appropriate documentation.
           </p>
+          <div className="callout callout--warning">
+            <div className="callout__header">
+              <p className="callout__title">A note on “CPD-aligned” versus “accredited”</p>
+            </div>
+            <div className="callout__body">
+              <p className="muted">
+                “CPD-aligned” here means the learning is structured and evidence-friendly (time estimates, outcomes, exercises, and exportable
+                summaries). It does not mean a professional body has endorsed it, unless a specific page explicitly says so and provides the
+                supporting documentation.
+              </p>
+            </div>
+          </div>
         </section>
 
         <section className="section">
@@ -97,6 +117,10 @@ export default function AccreditationAndAlignment() {
             professional consultancy, and do not guarantee examination success. Any use of ideas from this site in a
             production or regulatory context must be checked against the relevant laws, standards, and internal
             policies.
+          </p>
+          <p className="muted">
+            Trademarks: TOGAF® is a registered trademark of The Open Group. “Institution of Mechanical Engineers” and “IMechE” are trademarks of
+            their respective owners.
           </p>
         </section>
       </main>

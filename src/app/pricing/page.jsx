@@ -25,6 +25,20 @@ export default function PricingPage() {
           Everything educational stays open. Supporters fund the unglamorous bits: hosting, security maintenance, tool improvements, new templates,
           and accessibility polish. No guilt trips. Just a clear deal.
         </p>
+        <div className="flex flex-wrap gap-2 pt-1">
+          <Link
+            href="/about"
+            className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-50"
+          >
+            Who’s behind this?
+          </Link>
+          <Link
+            href="/trust-and-about"
+            className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-50"
+          >
+            Trust & verification
+          </Link>
+        </div>
       </section>
 
       <section className="mt-10 grid gap-6 md:grid-cols-3" aria-label="Plans">
@@ -86,6 +100,18 @@ export default function PricingPage() {
       </section>
 
       <section className="mt-10 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 className="text-xl font-semibold text-slate-900">Why keep learning free?</h2>
+        <p className="mt-2 text-sm text-slate-700">
+          Because the world already has enough “pay to unlock the introduction” nonsense. The goal here is depth, clarity, and consistency (and
+          that works best when the learning content is accessible to anyone who is willing to do the work.
+        </p>
+        <p className="mt-2 text-sm text-slate-700">
+          Paid features are limited to the expensive bits: compute above the free tier, and later on, formal assessment/verification work where
+          appropriate.
+        </p>
+      </section>
+
+      <section className="mt-10 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
         <h2 className="text-xl font-semibold text-slate-900">Credits and compute</h2>
         <p className="mt-2 text-sm text-slate-700">
           Everything educational stays free. Credits only apply to compute above the free tier. Tools show an estimate before you run and a summary after.
@@ -141,6 +167,9 @@ export default function PricingPage() {
         </p>
         <p className="mt-2 text-sm text-slate-700">
           Pricing also helps keep the site free for everyone and funds updates, question maintenance, and quality assurance.
+        </p>
+        <p className="mt-2 text-xs text-slate-600">
+          No external endorsement is implied unless explicitly stated with supporting documentation.
         </p>
       </section>
     </MarketingPageTemplate>
