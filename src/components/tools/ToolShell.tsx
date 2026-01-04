@@ -4,10 +4,14 @@ import React, { useState, ReactNode, useEffect, useMemo } from "react";
 import CreditEstimate from "./CreditEstimate";
 import ErrorPanel from "./ErrorPanel";
 import ToolSelfTest from "./ToolSelfTest";
+import RunReceiptPanel from "./RunReceiptPanel";
 import { getDefaultInputs, getToolExamples, getToolExplain } from "@/lib/tools/loadCatalog";
 import { runTool, validateInputs, type ValidationError } from "@/lib/tools/runTool";
 import { createToolError } from "./ErrorPanel";
 import type { ToolError } from "./ErrorPanel";
+import type { UnifiedRunReceipt } from "@/lib/compute/receipts";
+import type { GeneratedFile } from "@/lib/compute/generatedFiles";
+import GeneratedFilesPanel from "@/components/shared/GeneratedFilesPanel";
 
 export type ExecutionMode = "local" | "compute";
 
@@ -178,6 +182,8 @@ export default function ToolShell({
   const [inputs, setInputs] = useState<Record<string, unknown>>(mergedDefaults);
   const [output, setOutput] = useState<string | null>(null);
   const [error, setError] = useState<ToolError | null>(null);
+  const [receipt, setReceipt] = useState<UnifiedRunReceipt | null>(null);
+  const [files, setFiles] = useState<GeneratedFile[]>([]);
   const [status, setStatus] = useState<"idle" | "running" | "completed" | "failed">("idle");
   const [isRunning, setIsRunning] = useState(false);
   const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
@@ -218,13 +224,15 @@ export default function ToolShell({
     // Clear previous results
     setOutput(null);
     setError(null);
+    setReceipt(null);
+    setFiles([]);
     setShowResetReminder(false);
     setStatus("running");
     setIsRunning(true);
 
     try {
       // Use unified runner if onRun not provided, otherwise use custom handler
-      let result: { success: boolean; output?: string | unknown; error?: ToolError };
+      let result: { success: boolean; output?: string | unknown; error?: ToolError; receipt?: UnifiedRunReceipt | null };
       
       if (onRun) {
         result = await onRun(mode, inputs);
@@ -235,7 +243,9 @@ export default function ToolShell({
           result = {
             success: true,
             output: runResult.output,
+            receipt: (runResult.receipt as UnifiedRunReceipt | null) ?? null,
           };
+          setFiles(Array.isArray(runResult.files) ? (runResult.files as GeneratedFile[]) : []);
         } else {
           result = {
             success: false,
@@ -249,6 +259,7 @@ export default function ToolShell({
 
       if (result.success) {
         setStatus("completed");
+        if (result.receipt) setReceipt(result.receipt);
         setOutput(typeof result.output === "string" ? result.output : JSON.stringify(result.output, null, 2));
       } else {
         setStatus("failed");
@@ -273,6 +284,8 @@ export default function ToolShell({
     setInputs(mergedDefaults);
     setOutput(null);
     setError(null);
+    setReceipt(null);
+    setFiles([]);
     setStatus("idle");
     setValidationErrors([]);
     setShowResetReminder(false);
@@ -287,6 +300,8 @@ export default function ToolShell({
     // Clear previous results when loading example
     setOutput(null);
     setError(null);
+    setReceipt(null);
+    setFiles([]);
     setStatus("idle");
     setShowResetReminder(false);
     // Load the example inputs
@@ -444,6 +459,12 @@ export default function ToolShell({
 
           {/* Error Display */}
           {error && <ErrorPanel error={error} onDismiss={() => setError(null)} />}
+
+          {/* Receipt Display (compute runs) */}
+          {receipt && !error ? <RunReceiptPanel receipt={receipt} /> : null}
+
+          {/* Generated Files (compute runs) */}
+          {files.length && !error ? <GeneratedFilesPanel files={files} /> : null}
 
           {/* Output Display */}
           {output !== null && !error && (

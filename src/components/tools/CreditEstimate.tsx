@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import type { ToolContract } from "./ToolShell";
 
 interface CreditEstimateProps {
@@ -14,21 +14,92 @@ interface CreditEstimateProps {
  * Updates live as inputs change.
  */
 export default function CreditEstimate({ contract, mode, inputs }: CreditEstimateProps) {
+  const [serverEstimate, setServerEstimate] = useState<{
+    estimatedCreditCost: number;
+    willChargeCredits: boolean;
+    freeTierRemainingMs: number;
+    estimatedWallTimeMs: number;
+    reasons?: string[];
+  } | null>(null);
+  const [serverEstimateError, setServerEstimateError] = useState<string | null>(null);
+
+  const inputBytes = useMemo(() => {
+    let bytes = 0;
+    for (const value of Object.values(inputs)) {
+      if (value !== null && value !== undefined) {
+        const str = typeof value === "string" ? value : JSON.stringify(value);
+        bytes += new Blob([str]).size;
+      }
+    }
+    return bytes;
+  }, [inputs]);
+
+  // Prefer the authoritative estimate engine for compute-mode tools.
+  useEffect(() => {
+    let alive = true;
+    async function fetchEstimate() {
+      if (mode !== "compute") {
+        setServerEstimate(null);
+        setServerEstimateError(null);
+        return;
+      }
+
+      // Only estimate server-side runs (avoid noise for local-only tools).
+      if (!contract.runner || !String(contract.runner).startsWith("/api/")) {
+        setServerEstimate(null);
+        setServerEstimateError(null);
+        return;
+      }
+
+      try {
+        setServerEstimateError(null);
+        const res = await fetch("/api/compute/estimate", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            toolId: contract.id,
+            inputBytes,
+            requestedComplexityPreset: "light",
+          }),
+        });
+        const data = await res.json().catch(() => null);
+        if (!alive) return;
+        if (!res.ok || !data?.ok) {
+          setServerEstimate(null);
+          setServerEstimateError(typeof data?.error === "string" ? data.error : "Estimate unavailable");
+          return;
+        }
+        setServerEstimate({
+          estimatedCreditCost: Number(data.estimatedCreditCost || 0),
+          willChargeCredits: Boolean(data.willChargeCredits),
+          freeTierRemainingMs: Number(data.freeTierRemainingMs || 0),
+          estimatedWallTimeMs: Number(data.estimatedWallTimeMs || 0),
+          reasons: Array.isArray(data.reasons) ? data.reasons : [],
+        });
+      } catch (e) {
+        if (!alive) return;
+        setServerEstimate(null);
+        setServerEstimateError("Estimate unavailable");
+      }
+    }
+    fetchEstimate();
+    return () => {
+      alive = false;
+    };
+  }, [contract.id, contract.runner, inputBytes, mode]);
+
   const estimatedCredits = useMemo(() => {
     if (mode === "local") {
       return 0;
     }
 
+    if (serverEstimate) {
+      return serverEstimate.estimatedCreditCost;
+    }
+
     const { baseCredits, perKbCredits, complexityMultiplierHints = {} } = contract.creditModel;
 
     // Calculate input size in KB
-    let inputBytes = 0;
-    for (const [key, value] of Object.entries(inputs)) {
-      if (value !== null && value !== undefined) {
-        const str = typeof value === "string" ? value : JSON.stringify(value);
-        inputBytes += new Blob([str]).size;
-      }
-    }
     const inputKb = Math.ceil(inputBytes / 1024);
 
     // Calculate complexity multiplier
@@ -72,6 +143,17 @@ export default function CreditEstimate({ contract, mode, inputs }: CreditEstimat
   const explanation = useMemo(() => {
     if (mode === "local") {
       return "Local mode runs entirely in your browser. No credits required.";
+    }
+
+    if (serverEstimate) {
+      const seconds = Math.max(0, Math.round(serverEstimate.estimatedWallTimeMs / 1000));
+      const freeSeconds = Math.max(0, Math.round(serverEstimate.freeTierRemainingMs / 1000));
+      const suffix = serverEstimate.willChargeCredits ? "This estimate may change based on runtime." : "This run is likely within your free tier.";
+      return `Estimated runtime: ~${seconds}s. Free tier remaining today: ~${freeSeconds}s. ${suffix}`;
+    }
+
+    if (serverEstimateError) {
+      return serverEstimateError;
     }
 
     const parts: string[] = [];

@@ -17,9 +17,10 @@ import ExampleLoader from "./ExampleLoader";
 import ErrorBoundaryWrapper from "./ErrorBoundaryWrapper";
 import LoadingSpinner from "./LoadingSpinner";
 import { debounce } from "@/lib/studios/performance/optimizations";
+import { createProjectFromExample, setLastOpenedProjectId } from "@/lib/ai-studio/projects/store";
 
 interface ExampleGalleryProps {
-  onLoadExample?: (example: AIStudioExample) => void;
+  onLoadExample?: (example?: AIStudioExample) => void;
   selectedAudience?: string;
 }
 
@@ -77,6 +78,9 @@ export default function ExampleGallery({ onLoadExample, selectedAudience }: Exam
 
   const handleLoadExample = (example: AIStudioExample) => {
     if (onLoadExample) {
+      // Make "Load Example" create a real artefact even when skipping the preview modal.
+      const project = createProjectFromExample(example);
+      setLastOpenedProjectId(project.id);
       onLoadExample(example);
     } else {
       setSelectedExample(example);
@@ -201,10 +205,12 @@ export default function ExampleGallery({ onLoadExample, selectedAudience }: Exam
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {filteredExamples.map((example) => (
-            <div
+            <button
               key={example.id}
-              className="rounded-2xl border border-slate-200 bg-white p-6 hover:shadow-lg transition-all cursor-pointer"
+              type="button"
+              className="rounded-2xl border border-slate-200 bg-white p-6 hover:shadow-lg transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2"
               onClick={() => handleLoadExample(example)}
+              aria-label={`Open example: ${example.title}`}
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
@@ -259,7 +265,7 @@ export default function ExampleGallery({ onLoadExample, selectedAudience }: Exam
                   <Eye className="w-4 h-4" aria-hidden="true" />
                 </button>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       )}

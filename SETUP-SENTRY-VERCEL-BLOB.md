@@ -17,7 +17,7 @@ Create or update your `.env.local` file in the project root with the following v
 NEXT_PUBLIC_SENTRY_DSN=https://18ce20185c853218c17f8ae07b0a910c@04510635376836608.ingest.de.sentry.io/4510635463999568
 
 # Vercel Blob Storage
-BLOB_READ_WRITE_TOKEN=vercel_blob_rw_UuhVh3M1IDJgNtMG_iVjfFbe4ZavEw1BfnPveoB3Z1dW7zU
+BLOB_READ_WRITE_TOKEN=vercel_blob_rw_REPLACE_WITH_YOUR_TOKEN
 ```
 
 ### For Vercel Deployment

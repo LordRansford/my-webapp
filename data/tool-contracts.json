@@ -1,6 +1,156 @@
 {
   "tools": [
     {
+      "id": "dns-lookup",
+      "route": "/tools/cyber/dns-lookup",
+      "title": "DNS lookup",
+      "purpose": "Look up DNS records for a public hostname (server-assisted).",
+      "execution": "sandboxed-server",
+      "inputs": [
+        {
+          "name": "target",
+          "type": "string",
+          "limits": "public hostname, max 200 chars"
+        }
+      ],
+      "limits": {
+        "cpuMs": 5000,
+        "memoryMb": 128,
+        "outputKb": 64,
+        "wallMs": 7000,
+        "inputKb": 1
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "/api/tools/run",
+      "failureModes": [
+        "validation_error",
+        "timeout",
+        "network_error",
+        "credits_insufficient"
+      ],
+      "statusStates": [
+        "idle",
+        "queued",
+        "running",
+        "completed",
+        "failed"
+      ],
+      "executionModes": [
+        "compute"
+      ],
+      "defaultMode": "compute",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Look up DNS records for a public hostname (server-assisted).",
+      "listed": true
+    },
+    {
+      "id": "whois-summary",
+      "route": "/tools/cyber/whois-summary",
+      "title": "WHOIS summary (safe)",
+      "purpose": "Quick, safe domain context and guidance (educational fallback).",
+      "execution": "sandboxed-server",
+      "inputs": [
+        {
+          "name": "target",
+          "type": "string",
+          "limits": "public hostname, max 200 chars"
+        }
+      ],
+      "limits": {
+        "cpuMs": 5000,
+        "memoryMb": 128,
+        "outputKb": 32,
+        "wallMs": 7000,
+        "inputKb": 1
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "/api/tools/run",
+      "failureModes": [
+        "validation_error",
+        "timeout",
+        "credits_insufficient"
+      ],
+      "statusStates": [
+        "idle",
+        "running",
+        "completed",
+        "failed"
+      ],
+      "executionModes": [
+        "compute"
+      ],
+      "defaultMode": "compute",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Quick, safe domain context and guidance (educational fallback).",
+      "listed": true
+    },
+    {
+      "id": "sandbox-echo",
+      "route": "/tools/sandbox-echo",
+      "title": "Sandbox echo",
+      "purpose": "Send a short message to the secure runner and get it back.",
+      "execution": "sandboxed-server",
+      "inputs": [
+        {
+          "name": "message",
+          "type": "string",
+          "limits": "max 2KB"
+        },
+        {
+          "name": "repeat",
+          "type": "number",
+          "limits": "1-20"
+        }
+      ],
+      "limits": {
+        "cpuMs": 15000,
+        "memoryMb": 128,
+        "outputKb": 128,
+        "wallMs": 20000,
+        "inputKb": 2
+      },
+      "credits": {
+        "costPerRun": 0
+      },
+      "runner": "/api/jobs/create",
+      "failureModes": [
+        "validation_error",
+        "timeout",
+        "runner_unavailable",
+        "credits_insufficient"
+      ],
+      "statusStates": [
+        "idle",
+        "queued",
+        "running",
+        "completed",
+        "failed"
+      ],
+      "executionModes": [
+        "compute"
+      ],
+      "defaultMode": "compute",
+      "creditModel": {
+        "baseCredits": 0,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Send a short message to the secure runner and get it back.",
+      "listed": true
+    },
+    {
       "id": "architecture-diagram-studio",
       "route": "/studios/architecture-diagram-studio",
       "title": "Architecture Diagram Studio",
@@ -63,7 +213,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Generate draft architecture diagrams from structured inputs."
+      "description": "Generate draft architecture diagrams from structured inputs.",
+      "listed": false
     },
     {
       "id": "game-canvas",
@@ -103,7 +254,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Interactive games with keyboard and touch; offline after first load."
+      "description": "Interactive games with keyboard and touch; offline after first load.",
+      "listed": false
     },
     {
       "id": "vision-quick-check",
@@ -150,7 +302,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Validate and preview images; guide on size/format."
+      "description": "Validate and preview images; guide on size/format.",
+      "listed": false
     },
     {
       "id": "speech-sound-analysis",
@@ -199,7 +352,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Analyze uploaded/recorded audio; transcript and basic metrics."
+      "description": "Analyze uploaded/recorded audio; transcript and basic metrics.",
+      "listed": false
     },
     {
       "id": "code-lab",
@@ -252,7 +406,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Run code safely in a sandbox with allowlisted languages."
+      "description": "Run code safely in a sandbox with allowlisted languages.",
+      "listed": false
     },
     {
       "id": "python-playground",
@@ -298,7 +453,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Run small Python experiments in-browser (Pyodide)."
+      "description": "Run small Python experiments in-browser (Pyodide).",
+      "listed": true
     },
     {
       "id": "js-sandbox",
@@ -343,7 +499,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Test JS behaviour and parsing safely."
+      "description": "Test JS behaviour and parsing safely.",
+      "listed": true
     },
     {
       "id": "sql-sqlite",
@@ -388,7 +545,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Practise queries and joins locally."
+      "description": "Practise queries and joins locally.",
+      "listed": true
     },
     {
       "id": "rsa-oaep",
@@ -443,7 +601,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Generate keys and explain asymmetric crypto."
+      "description": "Generate keys and explain asymmetric crypto.",
+      "listed": true
     },
     {
       "id": "entropy-hashing",
@@ -491,7 +650,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Visualise randomness and the avalanche effect."
+      "description": "Visualise randomness and the avalanche effect.",
+      "listed": true
     },
     {
       "id": "password-entropy",
@@ -533,7 +693,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Compare length vs complexity trade-offs."
+      "description": "Compare length vs complexity trade-offs.",
+      "listed": true
     },
     {
       "id": "cert-viewer",
@@ -577,7 +738,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Inspect certificate fields and trust cues."
+      "description": "Inspect certificate fields and trust cues.",
+      "listed": true
     },
     {
       "id": "regex-tester",
@@ -627,7 +789,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Extract patterns and groups from sample text."
+      "description": "Extract patterns and groups from sample text.",
+      "listed": true
     },
     {
       "id": "schema-inspector",
@@ -671,7 +834,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Explore entities, fields, and relationships."
+      "description": "Explore entities, fields, and relationships.",
+      "listed": true
     },
     {
       "id": "logic-gates",
@@ -723,7 +887,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Learn AND/OR/XOR with truth tables."
+      "description": "Learn AND/OR/XOR with truth tables.",
+      "listed": true
     },
     {
       "id": "risk-register-builder",
@@ -766,7 +931,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Structure and prioritise risks with likelihood, impact, and mitigations."
+      "description": "Structure and prioritise risks with likelihood, impact, and mitigations.",
+      "listed": true
     },
     {
       "id": "decision-log-generator",
@@ -824,7 +990,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Create auditable records of decisions and rationale."
+      "description": "Create auditable records of decisions and rationale.",
+      "listed": true
     },
     {
       "id": "architecture-tradeoff-analysis",
@@ -878,7 +1045,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Compare options against constraints and non-functional requirements."
+      "description": "Compare options against constraints and non-functional requirements.",
+      "listed": true
     },
     {
       "id": "data-classification-helper",
@@ -936,7 +1104,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Classify sensitivity and handling requirements in plain terms."
+      "description": "Classify sensitivity and handling requirements in plain terms.",
+      "listed": true
     },
     {
       "id": "threat-modelling-lite",
@@ -994,7 +1163,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Run a STRIDE-style walkthrough without diagrams."
+      "description": "Run a STRIDE-style walkthrough without diagrams.",
+      "listed": true
     },
     {
       "id": "control-mapping-tool",
@@ -1047,7 +1217,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Map controls to standards at a conceptual level (ISO, NIST, SOC 2)."
+      "description": "Map controls to standards at a conceptual level (ISO, NIST, SOC 2).",
+      "listed": true
     },
     {
       "id": "process-friction-mapper",
@@ -1100,7 +1271,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Identify where process slows delivery or creates risk."
+      "description": "Identify where process slows delivery or creates risk.",
+      "listed": true
     },
     {
       "id": "technical-debt-qualifier",
@@ -1158,7 +1330,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Describe and prioritise debt with impact, cost, and risk."
+      "description": "Describe and prioritise debt with impact, cost, and risk.",
+      "listed": true
     },
     {
       "id": "incident-postmortem-builder",
@@ -1226,7 +1399,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Create learning-focused post-incident reviews and actions."
+      "description": "Create learning-focused post-incident reviews and actions.",
+      "listed": true
     },
     {
       "id": "metrics-definition-studio",
@@ -1289,7 +1463,8 @@
         "perKbCredits": 0,
         "complexityMultiplierHints": {}
       },
-      "description": "Define useful metrics and avoid vanity measurements."
+      "description": "Define useful metrics and avoid vanity measurements.",
+      "listed": true
     }
   ]
 }

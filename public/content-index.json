@@ -1,6 +1,12 @@
 {
-  "generatedAt": "2026-01-02T11:19:33.942Z",
+  "generatedAt": "2026-01-03T22:07:58.596Z",
   "pages": [
+    {
+      "route": "/courses/_cpd-checklist",
+      "title": "CPD readiness checklist",
+      "sourcePath": "/content/courses/_cpd-checklist.mdx",
+      "sections": []
+    },
     {
       "route": "/courses/ai/advanced",
       "title": "AI Advanced",
@@ -1944,7 +1950,7 @@
         },
         {
           "depth": 3,
-          "title": "Module 8: The \"Ilities\" Framework (2.0 hours)",
+          "title": "Module 8: The 'Ilities' Framework (2.0 hours)",
           "anchor": "module-8-the-ilities-framework-20-hours",
           "excerpt": "Evaluate systems across quality attributes including security, privacy, accessibility, performance, reliability, scalability, maintainability, and more."
         },
@@ -2691,12 +2697,6 @@
           "excerpt": "If diagrams still feel fuzzy, revisit Foundations. If integration or data felt heavy, revisit Intermediate. If domains and distributed patterns need time, revisit Advanced and pick one topic to go deeper on."
         }
       ]
-    },
-    {
-      "route": "/courses/_cpd-checklist",
-      "title": "CPD readiness checklist",
-      "sourcePath": "/content/courses/_cpd-checklist.mdx",
-      "sections": []
     },
     {
       "route": "/ai/advanced",

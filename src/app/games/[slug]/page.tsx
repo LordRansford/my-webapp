@@ -11,6 +11,7 @@ import { notFound, useParams } from "next/navigation";
 import { GameErrorBoundary } from "@/lib/games/framework/GameErrorBoundary";
 import { Suspense } from "react";
 import dynamic from "next/dynamic";
+import { GameCanvasTemplate } from "@/components/templates/PageTemplates";
 
 // Game registry - maps slug to component
 const GAME_REGISTRY: Record<
@@ -212,10 +213,17 @@ export default function GamePage() {
   const gameName = game.metadata.title || "Game";
 
   return (
-    <GameErrorBoundary gameName={gameName}>
-      <Suspense fallback={<LoadingFallback />}>
-        <GameComponent />
-      </Suspense>
-    </GameErrorBoundary>
+    <GameCanvasTemplate
+      breadcrumbs={[
+        { label: "Games", href: "/games" },
+        { label: gameName.replace(/\s*\|\s*Games\s*$/i, ""), href: `/games/${encodeURIComponent(slug)}` },
+      ]}
+    >
+      <GameErrorBoundary gameName={gameName}>
+        <Suspense fallback={<LoadingFallback />}>
+          <GameComponent />
+        </Suspense>
+      </GameErrorBoundary>
+    </GameCanvasTemplate>
   );
 }

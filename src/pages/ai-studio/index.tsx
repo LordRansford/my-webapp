@@ -33,6 +33,11 @@ import ContextualHelp from "@/components/ai-studio/ContextualHelp";
 import LoadingSpinner from "@/components/ai-studio/LoadingSpinner";
 import { Suspense } from "react";
 import { auditLogger, AuditActions } from "@/lib/studios/security/auditLogger";
+import { getLastOpenedProjectId, getProjectById, getProjects, updateProjectLastRun } from "@/lib/ai-studio/projects/store";
+import type { AIStudioProject } from "@/lib/ai-studio/projects/store";
+import { setLastOpenedProjectId, updateProjectRun } from "@/lib/ai-studio/projects/store";
+import { runAiStudioProjectLocal } from "@/lib/ai-studio/projects/run";
+import ProjectsPanel from "@/components/ai-studio/ProjectsPanel";
 
 // Lazy load heavy POC components
 const BrowserTrainingPOC = dynamic(
@@ -83,7 +88,7 @@ const TrainingJobMonitor = dynamic(
   }
 );
 
-type ViewMode = "dashboard" | "training" | "validation" | "builder" | "orchestrator" | "datasets" | "jobs";
+type ViewMode = "dashboard" | "projects" | "training" | "validation" | "builder" | "orchestrator" | "datasets" | "jobs";
 
 export default function AIStudioPage() {
   const router = useRouter();
@@ -92,6 +97,8 @@ export default function AIStudioPage() {
   const [selectedJob, setSelectedJob] = useState<string | null>(null);
   const [showExamples, setShowExamples] = useState(false);
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
+  const [projects, setProjects] = useState<AIStudioProject[]>([]);
+  const [activeProject, setActiveProject] = useState<AIStudioProject | null>(null);
 
   useEffect(() => {
     const completed = localStorage.getItem("ai-studio-onboarding-completed");
@@ -104,11 +111,49 @@ export default function AIStudioPage() {
     }
   }, [router]);
 
+  useEffect(() => {
+    // Load local-first projects and restore last opened project
+    const list = getProjects();
+    setProjects(list);
+    const lastId = getLastOpenedProjectId();
+    if (lastId) {
+      const p = getProjectById(lastId);
+      if (p) setActiveProject(p);
+    }
+  }, [showExamples]);
+
+  const refreshProjects = () => {
+    const list = getProjects();
+    setProjects(list);
+    const lastId = getLastOpenedProjectId();
+    setActiveProject(lastId ? getProjectById(lastId) : null);
+  };
+
+  const openProject = (projectId: string) => {
+    setLastOpenedProjectId(projectId);
+    const p = getProjectById(projectId);
+    setActiveProject(p);
+    setActiveView("dashboard");
+  };
+
+  const runProject = async (projectId: string) => {
+    const p = getProjectById(projectId);
+    if (!p) return;
+    setLastOpenedProjectId(projectId);
+    setActiveProject(p);
+
+    const input = p.exampleId === "story-generator" ? "A brave robot exploring a new planet" : undefined;
+    const { output, receipt } = await runAiStudioProjectLocal({ project: p, input });
+    updateProjectRun(projectId, { input, output, receipt });
+    setActiveProject(getProjectById(projectId));
+    setProjects(getProjects());
+  };
+
   const quickStats = [
-    { label: "Models", value: "12", icon: Layers, color: "blue" },
-    { label: "Datasets", value: "8", icon: Database, color: "green" },
-    { label: "Training Jobs", value: "3", icon: Play, color: "purple" },
-    { label: "Agents", value: "5", icon: Zap, color: "amber" },
+    { label: "Projects", value: String(projects.length), icon: Layers, color: "blue" },
+    { label: "Datasets", value: "—", icon: Database, color: "green" },
+    { label: "Training Jobs", value: "—", icon: Play, color: "purple" },
+    { label: "Agents", value: "—", icon: Zap, color: "amber" },
   ];
 
   const recentActivity = [
@@ -119,6 +164,16 @@ export default function AIStudioPage() {
 
   const renderContent = () => {
     switch (activeView) {
+      case "projects":
+        return (
+          <ProjectsPanel
+            projects={projects}
+            activeProjectId={activeProject?.id || null}
+            onOpen={openProject}
+            onRun={runProject}
+            onRefresh={refreshProjects}
+          />
+        );
       case "training":
         return (
           <Suspense fallback={<LoadingSpinner message="Loading training interface..." />}>
@@ -204,6 +259,20 @@ export default function AIStudioPage() {
 
             {/* Quick Actions */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <button
+                onClick={() => setActiveView("projects")}
+                className="p-6 bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 rounded-2xl hover:shadow-md transition-all text-left group"
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="p-3 bg-slate-500 rounded-xl group-hover:scale-110 transition-transform">
+                    <Layers className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-slate-900">Projects</h3>
+                </div>
+                <p className="text-sm text-slate-700">
+                  Open, run, export, and manage the projects created from examples
+                </p>
+              </button>
               <button
                 onClick={() => setActiveView("training")}
                 className="p-6 bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-2xl hover:shadow-md transition-all text-left group"
@@ -332,10 +401,71 @@ export default function AIStudioPage() {
                       Browse Examples
                       <ArrowRight className="w-4 h-4" />
                     </button>
+                    <Link
+                      href="/ai-studio/projects"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-amber-300 text-amber-800 rounded-lg hover:bg-amber-50 transition-colors font-semibold text-sm"
+                    >
+                      Open projects
+                      <span aria-hidden="true">→</span>
+                    </Link>
                   </div>
                 </div>
               </div>
             </div>
+
+            {/* Latest Loaded Project */}
+            {activeProject ? (
+              <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-slate-900">Loaded project</h3>
+                    <p className="text-sm text-slate-600 mt-1">
+                      <span className="font-semibold text-slate-900">{activeProject.title}</span>{" "}
+                      <span className="text-slate-500">({activeProject.difficulty} · {activeProject.audience})</span>
+                    </p>
+                    <p className="text-xs text-slate-500 mt-2">
+                      This is a local-first project artefact created from an example. You can run a safe demo and export the configuration.
+                    </p>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        runProject(activeProject.id);
+                      }}
+                      className="px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors font-semibold text-sm"
+                    >
+                      Run
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const payload = JSON.stringify(activeProject, null, 2);
+                        navigator.clipboard.writeText(payload);
+                      }}
+                      className="px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors font-semibold text-sm"
+                    >
+                      Copy project JSON
+                    </button>
+                  </div>
+                </div>
+
+                {activeProject.lastRun ? (
+                  <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <p className="text-xs font-semibold text-slate-700 mb-2">Latest demo output</p>
+                    {activeProject.lastRun.receipt ? (
+                      <p className="text-xs text-slate-600 mb-2">
+                        Receipt: {activeProject.lastRun.receipt.mode} · {activeProject.lastRun.receipt.durationMs} ms ·{" "}
+                        {activeProject.lastRun.receipt.creditsCharged} credits
+                      </p>
+                    ) : null}
+                    <pre className="text-xs text-slate-900 overflow-auto whitespace-pre-wrap">
+                      {JSON.stringify(activeProject.lastRun.output, null, 2)}
+                    </pre>
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
 
             {/* Continue Learning Section */}
             <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl">
@@ -514,7 +644,19 @@ export default function AIStudioPage() {
                     Back to Dashboard
                   </button>
                 </div>
-                <ExampleGallery />
+                <ExampleGallery
+                  onLoadExample={() => {
+                    // Refresh local projects and restore last opened project after a load
+                    const list = getProjects();
+                    setProjects(list);
+                    const lastId = getLastOpenedProjectId();
+                    if (lastId) {
+                      const p = getProjectById(lastId);
+                      if (p) setActiveProject(p);
+                    }
+                    setShowExamples(false);
+                  }}
+                />
               </div>
             ) : (
               renderContent()

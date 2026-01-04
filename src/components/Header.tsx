@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import BrandLogo from "@/components/BrandLogo";
 import { signIn, useSession } from "next-auth/react";
 import CreditBalanceWidget from "@/components/studios/CreditBalanceWidget";
@@ -10,148 +10,16 @@ import CreditBalanceWidget from "@/components/studios/CreditBalanceWidget";
 type NavItem = { 
   label: string; 
   href: string;
-  submenu?: { label: string; href: string }[];
 };
 
 const navItems: NavItem[] = [
-  { label: "Courses", href: "/courses" },
-  { 
-    label: "Studios", 
-    href: "/studios/hub",
-    submenu: [
-      { label: "Unified Hub", href: "/studios/hub" },
-      { label: "AI Studio", href: "/studios/ai-hub" },
-      { label: "Dev Studio", href: "/dev-studio" },
-      { label: "Cyber Studio", href: "/cyber-studio" },
-      { label: "Data Studio", href: "/data-studio" },
-      { label: "Architecture Studio", href: "/studios/architecture-diagram-studio" },
-    ]
-  },
-  { label: "Tools", href: "/tools" },
-  { 
-    label: "Games hub", 
-    href: "/games/hub",
-    submenu: [
-      { label: "Games Hub", href: "/games/hub" },
-      { label: "All Games", href: "/games" },
-      { label: "Practice Games", href: "/practice" },
-      { label: "Thinking Gym", href: "/thinking-gym" },
-    ]
-  },
-  { label: "Updates", href: "/updates" },
-  { label: "About", href: "/about" },
+  { label: "Learn", href: "/courses" },
+  { label: "Labs", href: "/tools" },
+  { label: "Studios", href: "/studios" },
+  { label: "Play", href: "/games" },
 ];
 
-function NavItemWithDropdown({ 
-  item, 
-  active, 
-  vertical, 
-  onLinkClick 
-}: { 
-  item: NavItem; 
-  active: boolean; 
-  vertical: boolean; 
-  onLinkClick: () => void;
-}) {
-  const [isOpen, setIsOpen] = useState(false);
-  const navRef = useRef<HTMLDivElement>(null);
-  const focusStyle =
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600";
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (navRef.current && !navRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    }
-
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
-    }
-  }, [isOpen]);
-
-  if (vertical) {
-    // Mobile: render as nested list
-    return (
-      <div className="space-y-2">
-        <Link
-          href={item.href}
-          aria-current={active ? "page" : undefined}
-          data-active={active}
-          className={`rounded-2xl border border-slate-200 bg-white px-3 py-2 text-base font-semibold transition ${
-            active 
-              ? "bg-slate-900 text-white shadow-sm hover:bg-slate-800" 
-              : "text-slate-900 hover:bg-slate-100"
-          } ${focusStyle}`}
-          onClick={onLinkClick}
-        >
-          {item.label}
-        </Link>
-        {item.submenu && (
-          <ul className="ml-4 space-y-1 border-l border-slate-200 pl-4">
-            {item.submenu.map((subItem) => (
-              <li key={subItem.href}>
-                <Link
-                  href={subItem.href}
-                  className="block rounded-lg px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors"
-                  onClick={onLinkClick}
-                >
-                  {subItem.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    );
-  }
-
-  // Desktop: render as dropdown (using existing nav-links styles for consistency)
-  return (
-    <div ref={navRef} className="relative">
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        aria-expanded={isOpen}
-        aria-haspopup="true"
-        aria-label={`${item.label} menu`}
-        className={`nav-links__trigger ${focusStyle} ${
-          active 
-            ? "bg-slate-900 text-white shadow-sm hover:bg-slate-800" 
-            : "text-slate-900 bg-transparent hover:bg-slate-100 hover:text-slate-900"
-        }`}
-      >
-        {item.label}
-        <span className="nav-links__chevron" aria-hidden="true">
-          {isOpen ? "▲" : "▼"}
-        </span>
-      </button>
-      {isOpen && item.submenu && (
-        <nav
-          className="nav-links__dropdown"
-          role="menu"
-          aria-label={`${item.label} submenu`}
-        >
-          {item.submenu.map((subItem) => (
-            <Link
-              key={subItem.href}
-              href={subItem.href}
-              className="nav-links__dropdown-item"
-              role="menuitem"
-              onClick={() => {
-                setIsOpen(false);
-                onLinkClick();
-              }}
-            >
-              {subItem.label}
-            </Link>
-          ))}
-        </nav>
-      )}
-    </div>
-  );
-}
+const donateLink = { label: "Donate", href: "/support/donate" };
 
 function NavLinks({ vertical = false, pathname, onLinkClick }: { vertical?: boolean; pathname: string | null; onLinkClick: () => void }) {
   const focusStyle =
@@ -170,17 +38,6 @@ function NavLinks({ vertical = false, pathname, onLinkClick }: { vertical?: bool
     >
       {navItems.map((item) => {
         const active = isActive(item.href);
-        if (item.submenu) {
-          return (
-            <NavItemWithDropdown
-              key={item.href}
-              item={item}
-              active={active}
-              vertical={vertical}
-              onLinkClick={onLinkClick}
-            />
-          );
-        }
         return (
           <Link
             key={item.href}
@@ -273,6 +130,13 @@ export default function Header() {
         <div className="hidden items-center gap-3 lg:flex">
           {isSignedIn && <CreditBalanceWidget compact />}
           <AccountAction variant="desktop" isSignedIn={isSignedIn} onActionClick={() => setMobileOpen(false)} />
+          <Link
+            href={donateLink.href}
+            className={`rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50 ${focusStyle}`}
+            onClick={() => setMobileOpen(false)}
+          >
+            {donateLink.label}
+          </Link>
         </div>
       </div>
 
@@ -281,6 +145,13 @@ export default function Header() {
           <NavLinks vertical pathname={pathname} onLinkClick={() => setMobileOpen(false)} />
           <div className="mt-3 flex flex-col gap-2">
             <AccountAction variant="mobile" isSignedIn={isSignedIn} onActionClick={() => setMobileOpen(false)} />
+            <Link
+              href={donateLink.href}
+              className={`rounded-2xl border border-slate-200 bg-white px-3 py-2 text-base font-semibold text-slate-900 shadow-sm hover:bg-slate-50 ${focusStyle}`}
+              onClick={() => setMobileOpen(false)}
+            >
+              {donateLink.label}
+            </Link>
           </div>
         </div>
       ) : null}
