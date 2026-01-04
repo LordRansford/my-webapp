@@ -5,12 +5,14 @@ export default defineConfig({
   testMatch: /.*\.(spec|test)\.(ts|js|mjs)/,
   timeout: 60_000,
   use: {
-    baseURL: "http://127.0.0.1:3000",
+    // Use localhost to avoid dev-origin mismatches (127.0.0.1 vs localhost)
+    // which can trip strict security headers and keep Next.js "hide FOUC" enabled.
+    baseURL: "http://localhost:3000",
     headless: true,
   },
   webServer: {
     command: "npm run dev -- --port 3000",
-    url: "http://127.0.0.1:3000",
+    url: "http://localhost:3000",
     reuseExistingServer: true,
     timeout: 120_000,
   },

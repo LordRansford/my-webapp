@@ -19,14 +19,18 @@ const nextConfig = {
     if (!config.externals) {
       config.externals = [];
     }
-    // Add function-based externals for optional dependencies
-    config.externals.push(({ request }, callback) => {
-      if (request === '@sentry/nextjs' || request === '@aws-sdk/client-s3') {
-        // Mark as external - will be resolved at runtime
-        return callback(null, `commonjs ${request}`);
-      }
-      callback();
-    });
+    // Add function-based externals for optional dependencies.
+    // IMPORTANT: only do this for server bundles. Marking these as `commonjs` in client bundles
+    // can emit `require(...)` calls which crash in the browser ("require is not defined").
+    if (isServer) {
+      config.externals.push(({ request }, callback) => {
+        if (request === "@sentry/nextjs" || request === "@aws-sdk/client-s3") {
+          // Mark as external - resolved at runtime on the server if available.
+          return callback(null, `commonjs ${request}`);
+        }
+        callback();
+      });
+    }
 
     // Windows watchpack + filesystem cache can be flaky and crash dev server.
     // Disable webpack filesystem cache in dev to avoid missing pack.gz errors.
