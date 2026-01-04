@@ -47,3 +47,10 @@ This file is maintained by the Cursor agent during the overnight implementation.
 - **Tests**:
   - `npm -s run build` ✅
 
+### Checkpoint: Task E implemented (preview → Run live)
+- **Change**: Connected preview template pages to the TemplateRunner where a definition exists:
+  - `PreviewBanner` now shows a **Run live** link when a matching runner definition exists.
+  - `TemplateViewer` detects runner availability via `templateDefinitions` and wires the link to `/templates/run/[slug]`.
+- **Tests**:
+  - `npm -s run build` ✅
+

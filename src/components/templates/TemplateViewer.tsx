@@ -3,6 +3,7 @@ import { MathInsightBlock } from "@/components/templates/MathInsightBlock";
 import { TemplateSection } from "@/components/templates/TemplateSection";
 import { PreviewBanner } from "@/components/templates/PreviewBanner";
 import type { TemplateSection as TemplateSectionData, TemplatePreview } from "@/data/templates/templates.stub";
+import { templateDefinitions } from "../../../content/templates/definitions";
 
 type TemplateViewerProps = {
   template: TemplatePreview;
@@ -38,10 +39,12 @@ export function TemplateViewer({ template }: TemplateViewerProps) {
   const underlying = sections.find((section) => section.id === "underlying-logic");
   const outputs = sections.find((section) => section.id === "outputs");
   const professional = sections.find((section) => section.id === "professional-notes");
+  const hasRunner = templateDefinitions.some((def) => def.slug === template.slug);
+  const runHref = hasRunner ? `/templates/run/${template.slug}` : undefined;
 
   return (
     <div className="min-h-screen bg-slate-50 pb-16">
-      <PreviewBanner />
+      <PreviewBanner runHref={runHref} />
       <div className="mx-auto flex max-w-5xl flex-col gap-8 px-4 pt-6 sm:pt-10">
         <header className="rounded-3xl bg-white ring-1 ring-slate-100 shadow-[0_18px_45px_rgba(15,23,42,0.06)] p-6 sm:p-8 space-y-4">
           <div className="flex flex-wrap items-center gap-2">
