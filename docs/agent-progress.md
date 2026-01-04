@@ -54,3 +54,28 @@ This file is maintained by the Cursor agent during the overnight implementation.
 - **Tests**:
   - `npm -s run build` ✅
 
+### Checkpoint: Task F implemented (standalone games hub)
+- **Change**: Created a dedicated standalone games hub at `/games/hub` listing only 20 games (not course-linked):
+  - Standalone registry: `src/lib/catalog/games.ts`
+  - Hub UI: `src/app/games/hub/StandaloneGamesHub.client.tsx`
+  - Hub page wired: `src/app/games/hub/page.tsx`
+- **Tests**:
+  - `npm -s run build` ✅
+
+### Checkpoint: Task G implemented (minimal-risk course-linked games upgrades)
+- **Goal**: Improve course-linked practice game hubs without breaking gameplay or course dependencies.
+- **Change**:
+  - Made the cybersecurity + digitalisation practice hubs registry-driven (metadata source-of-truth) while keeping existing embedded game components:
+    - `src/components/games/GameHub.jsx` now reads titles/descriptions/minutes/levels from `src/lib/games-registry.ts`
+    - `src/components/games/DigitalisationGameHub.jsx` now reads titles/descriptions/minutes/levels from `src/lib/games-registry.ts`
+  - Added optional level/minute pills to embedded practice game cards:
+    - `src/components/games/GameCard.jsx`
+- **Tests**:
+  - `npm -s run build` ✅
+
+### Final checkpoint
+- **Status**: All requested hubs and routes build successfully.
+- **Notes**:
+  - Build output continues to show pre-existing credit-enforcement warnings; no new build failures introduced by this work.
+  - Git commits were not created in this cloud agent environment (per environment constraints); changes are left in the working tree for review/commit.
+
