@@ -103,9 +103,11 @@ export default function DigitalisationHub() {
               href: "/digitalisation/beginner",
             }}
             secondaryActions={[
-              { label: "Track CPD", href: "/my-cpd" },
-              { label: "Export CPD evidence", href: "/my-cpd/evidence" },
+              { label: "Pricing and CPD", href: "/pricing" },
+              { label: "Sign in for CPD tracking", href: "/signin" },
+              { label: "My CPD evidence", href: "/my-cpd/evidence" },
               { label: "Open dashboards", href: "/dashboards/digitalisation" },
+              { label: "Open the labs", href: "/tools" },
             ]}
             icon={<Network size={20} />}
             gradient="green"

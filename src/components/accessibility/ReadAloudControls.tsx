@@ -130,7 +130,7 @@ export default function ReadAloudControls() {
   }
 
   return (
-    <div className="read-aloud-controls fixed bottom-4 right-4 z-40 flex flex-col gap-3">
+    <div className="read-aloud-controls safe-bottom-right fixed z-40 flex flex-col gap-3">
       <div className="rounded-2xl border-2 border-slate-200 bg-white p-3 shadow-xl backdrop-blur-sm flex items-center gap-2">
         <button
           type="button"

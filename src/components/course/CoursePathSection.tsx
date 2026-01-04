@@ -16,6 +16,8 @@ interface Level {
     percent: number;
     label?: string;
   };
+  icon?: ReactNode;
+  badge?: string;
 }
 
 interface CoursePathSectionProps {
@@ -49,8 +51,10 @@ export default function CoursePathSection({
             description={level.description}
             summary={level.summary}
             label={level.label}
+            badge={level.badge}
             estimatedHours={level.estimatedHours}
             progress={level.progress}
+            icon={level.icon}
           />
         ))}
       </div>

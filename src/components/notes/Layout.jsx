@@ -11,12 +11,9 @@ import PreviewBanner from "./PreviewBanner";
 import cybersecurityCourse from "../../../content/courses/cybersecurity.json";
 import { useEffect, useMemo, useState } from "react";
 import FeedbackPanel from "@/components/feedback/FeedbackPanel";
-import { highlightAnchorFromLocation } from "@/lib/mentor/highlight";
-import dynamic from "next/dynamic";
+import { highlightAnchorFromLocation } from "@/lib/ui/highlightAnchor";
 import ReadAloudControls from "@/components/a11y/ReadAloudControls";
 import { CourseAssessmentTemplate, CourseLessonTemplate, CourseOverviewTemplate } from "@/components/templates/PageTemplates";
-
-const AssistantShell = dynamic(() => import("@/components/assistants/AssistantShell"), { ssr: false });
 
 /** @param {{ meta?: any, headings?: any[], children: any, activeLevelId?: any, showContentsSidebar?: boolean, showStepper?: boolean, useAppShell?: boolean }} props */
 export default function NotesLayout(props) {
@@ -193,7 +190,6 @@ export default function NotesLayout(props) {
         ) : null}
         <main className="w-full max-w-full flex-1">
           <BetaBanner />
-          <AssistantShell />
           <header className="mb-4 rounded-3xl border border-gray-200 bg-white/90 p-4 shadow-sm backdrop-blur">
             <p className="eyebrow m-0 text-gray-700">
               {sectionLabelMap[resolvedSection] || "Notes"} · {meta.level || "Notes"}
@@ -206,7 +202,7 @@ export default function NotesLayout(props) {
             ) : null}
             {meta.description ? <p className="mt-2 text-base text-gray-800">{meta.description}</p> : null}
             <div className="mt-3 flex flex-wrap gap-2">
-              {showReadAloud ? <ReadAloudControls selector="main article" label="Listen" /> : null}
+              {showReadAloud ? <ReadAloudControls selector="main article" label="Listen" activeHeadingId={activeId} /> : null}
             </div>
             <div className="mt-4">
               {resolvedShowStepper ? (

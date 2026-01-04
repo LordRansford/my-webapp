@@ -26,8 +26,13 @@ export async function getWorkspaceIdentity(req: Request) {
     const signed = getCookie(req, WORKSPACE_COOKIE.name);
     const raw = signed ? verifyWorkspaceToken(signed) : null;
     const tokenRaw = raw || newWorkspaceTokenRaw();
-    const ws = await getOrCreateWorkspaceSession({ tokenRaw });
-    workspaceSessionId = String(ws.id);
+    try {
+      const ws = await getOrCreateWorkspaceSession({ tokenRaw });
+      workspaceSessionId = String(ws.id);
+    } catch {
+      // DB may be unavailable/misconfigured (e.g. CI or local smoke tests). Treat as anonymous without persistence.
+      workspaceSessionId = null;
+    }
     if (!raw) setCookieValue = signWorkspaceToken(tokenRaw);
   }
 

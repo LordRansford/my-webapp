@@ -1,0 +1,153 @@
+---
+title: "Network Models for Security and Operations"
+description: "Security, monitoring, and operations thinking built on correct network foundations."
+level: "practice"
+courseId: "network-models"
+levelId: "practice"
+summary: "Security, monitoring, and operations thinking built on correct network foundations."
+estimatedHours: 16
+learningObjectives:
+  - "Map common failures and controls to the right layer and explain why."
+  - "Design a small monitoring and logging plan using layer aware signals."
+  - "Explain how to reason about packet captures safely and ethically."
+---
+
+import ProgressBar from "@/components/notes/ProgressBar"
+import PageNav from "@/components/notes/PageNav"
+import ToolCard from "@/components/notes/ToolCard"
+import Callout from "@/components/notes/Callout"
+import GlossaryTip from "@/components/notes/GlossaryTip"
+import QuizBlock from "@/components/notes/QuizBlock"
+import SectionProgressToggle from "@/components/notes/SectionProgressToggle"
+import LevelProgressBar from "@/components/course/LevelProgressBar"
+import CPDTracker from "@/components/CPDTracker"
+import SectionHeader from "@/components/course/SectionHeader"
+import SubsectionHeader from "@/components/course/SubsectionHeader"
+import BodyText from "@/components/course/BodyText"
+import DiagramBlock from "@/components/DiagramBlock"
+import { networkSectionManifest } from "@/lib/networkSections"
+
+<ProgressBar mode="scroll" />
+
+# Network models for security and operations
+
+<LevelProgressBar courseId="network-models" levelId="practice" sectionIds={networkSectionManifest.practice} />
+
+<CPDTracker courseId="network-models" levelId="practice" estimatedHours={16} />
+
+<CPDAssessmentPromo courseName="Network models" levelLabel="Practice" assessmentHref="/network-models/assessment/practice" />
+
+<BodyText>
+  In practice, the model becomes valuable when you can place controls and signals correctly.
+  This level is about security and operations thinking, grounded in correct network foundations.
+</BodyText>
+
+---
+
+<SectionHeader variant="content" emoji="🛡️" id="net-practice-security-by-layer">
+  Security by layer
+</SectionHeader>
+
+<SectionProgressToggle courseId="network-models" levelId="practice" sectionId="net-practice-security-by-layer" />
+
+Here is a simple way to avoid security theatre.
+Put each control where it can actually work.
+
+Examples:
+
+1. A strong password policy does not fix a broken access control check in an API.
+2. TLS protects data in transit. It does not validate what the application does with data.
+3. A firewall can block unwanted traffic. It cannot fix an unsafe query inside your code.
+
+Use layers to place your controls, then verify the control with a test.
+
+---
+
+<SectionHeader variant="content" emoji="📈" id="net-practice-observability-and-signals">
+  Observability and signals
+</SectionHeader>
+
+<SectionProgressToggle courseId="network-models" levelId="practice" sectionId="net-practice-observability-and-signals" />
+
+When a user says "the site is slow", you need signals that separate causes.
+
+1. Link signals such as packet loss and retransmissions.
+2. Transport signals such as connection time and resets.
+3. Application signals such as response time and error rate.
+
+If you only have application logs, you will miss many failure patterns.
+
+<ToolCard title="Signal triage matrix" description="Pick a symptom and isolate one boundary at a time.">
+  <SignalTriageMatrixTool />
+</ToolCard>
+
+---
+
+<SectionHeader variant="content" emoji="🔎" id="net-practice-captures-without-hacking">
+  Packet captures without hacking
+</SectionHeader>
+
+<SectionProgressToggle courseId="network-models" levelId="practice" sectionId="net-practice-captures-without-hacking" />
+
+Packet capture is observation. It is not exploitation.
+Only capture traffic you own or are authorised to inspect.
+
+The goal in this course is interpretation:
+
+1. Identify the protocols you see.
+2. Confirm the order of events.
+3. Relate a symptom to one layer boundary.
+
+You do not need to craft attack traffic to learn these skills.
+
+<ToolCard title="Packet capture filter builder" description="Wireshark display filters and tcpdump capture filters for common investigations.">
+  <PacketCaptureFilterBuilderTool />
+</ToolCard>
+
+---
+
+<SectionHeader variant="content" emoji="🧱" id="net-practice-enterprise-segmentation">
+  Enterprise segmentation and trust zones
+</SectionHeader>
+
+<SectionProgressToggle courseId="network-models" levelId="practice" sectionId="net-practice-enterprise-segmentation" />
+
+Segmentation is the practice of limiting which systems can talk to which systems.
+It reduces blast radius. It also makes incidents easier to contain.
+
+I think in zones:
+
+1. Public edge and CDN.
+2. Application tier.
+3. Data tier.
+4. Admin and management plane.
+
+The most common failure is letting the management plane become reachable from places it should not be.
+
+---
+
+<SectionHeader variant="content" emoji="✅" id="net-practice-capstone">
+  Capstone
+</SectionHeader>
+
+<SectionProgressToggle courseId="network-models" levelId="practice" sectionId="net-practice-capstone" />
+
+Write a one page troubleshooting report for a made up incident.
+The incident can be "users cannot load the login page" or "some users get random timeouts".
+
+Your report must include:
+
+1. Symptom and impact.
+2. Three hypotheses, one per layer boundary.
+3. One test per hypothesis.
+4. What evidence would confirm or disprove each hypothesis.
+
+<QuizBlock
+  title="Quick check"
+  questions={[
+    { q: "What does TLS protect", a: "Confidentiality and integrity of data in transit between endpoints." },
+    { q: "What is segmentation for", a: "Reducing blast radius by limiting allowed communication paths." },
+    { q: "What is a safe use of packet capture", a: "Observing authorised traffic to confirm protocol behaviour and event order." },
+  ]}
+/>
+

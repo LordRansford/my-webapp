@@ -1,22 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getTotalCpdHours } from "@/components/CPDTracker";
-
-export default function CPDHoursTotal({ courseId, courseName }) {
-  const [total, setTotal] = useState(0);
-
-  useEffect(() => {
-    setTotal(getTotalCpdHours(courseId));
-  }, [courseId]);
+export default function CPDHoursTotal({ courseName, totalHours }) {
+  const total = Number(totalHours) || 0;
 
   return (
-    <div className="mb-4 rounded-2xl border border-gray-200 bg-white/85 p-4 shadow-sm">
-      <p className="text-sm font-semibold text-gray-900">Your recorded CPD hours for {courseName}</p>
-      <p className="text-base font-semibold text-gray-800">{total.toFixed(1)} hours</p>
-      <p className="text-xs text-gray-700">
-        This stays in your browser only. If you need official CPD credit, log your time with your professional body as well.
-      </p>
+    <div className="mb-4 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">CPD hours</div>
+      <div className="mt-2 text-lg font-semibold text-slate-900">{courseName}</div>
+      <div className="mt-2 flex items-baseline gap-2">
+        <div className="text-3xl font-semibold text-slate-900">{total ? total.toFixed(0) : "0"}</div>
+        <div className="text-sm font-semibold text-slate-600">hours</div>
+      </div>
+      <div className="mt-2 text-sm text-slate-700">
+        Hours are fixed by the course design. Timed assessment time is included once on pass.
+      </div>
     </div>
   );
 }

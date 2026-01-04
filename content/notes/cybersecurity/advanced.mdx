@@ -5,7 +5,7 @@ level: "practice"
 courseId: "cybersecurity"
 levelId: "practice"
 summary: "Crypto in practice, secure architecture, detection and response, and governance you can apply in real organisations."
-estimatedHours: 14
+estimatedHours: 32
 learningObjectives:
   - "Analyse a system design for weak assumptions across identity, secrets, and trust boundaries."
   - "Evaluate vulnerability and incident information to prioritise remediation and response."
@@ -32,33 +32,74 @@ import { cyberSections } from "@/lib/cyberSections"
 
 <LevelProgressBar courseId="cybersecurity" levelId="practice" sectionIds={cyberSections.practice} />
 
-<CPDTracker courseId="cybersecurity" levelId="practice" estimatedHours={14} />
+<CPDTracker courseId="cybersecurity" levelId="practice" estimatedHours={32} />
 
 <BodyText>
-  This level joins everything up: how crypto actually gets used, how secure architecture and zero trust feel in practice, how detection and response run, and how governance and career paths connect. Keep it concrete, keep it honest.
+  This level joins everything up. How crypto actually gets used, how secure architecture and zero trust feel in practice, how detection and response run, and how governance and career paths connect. Keep it concrete, keep it honest.
 </BodyText>
 
 ---
 
-<SectionHeader variant="content" emoji="🔐" id="crypto-practice">
-  Cryptography in practice
+## Secure SDLC and release discipline
+
+<SectionHeader variant="content" emoji="🧩" id="practice-p1-secure-sdlc">
+  Module P1. Secure SDLC
 </SectionHeader>
 
-<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="advanced-crypto-practice" />
+<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p1-secure-sdlc" />
+
+Security becomes real when it is built into how work ships. A secure SDLC is not a list of gates that slow teams down. It is a set of small controls that make failure harder to hide and easier to recover from.
+
+The practical question is where you place controls so they catch the right problems at the right time. The early stages should catch design mistakes. The later stages should catch configuration and drift. The goal is not perfect prevention. The goal is verified safety and fast containment.
+
+Use the tool below to write a minimal release posture for one product. Keep it small enough that teams can follow it on a bad day.
+
+<ToolCard
+  id="secure-sdlc-gate-planner"
+  title="Plan a secure SDLC gate set"
+  description="Pick a small set of controls per stage and define how you will verify they work."
+>
+  <SecureSdlcGatePlannerTool />
+</ToolCard>
+
+<QuizBlock
+  id="practice-p1-secure-sdlc"
+  courseId="cybersecurity"
+  levelId="practice"
+  sectionId="practice-p1-secure-sdlc"
+  title="Quick check. Secure SDLC"
+  questions={[
+    { q: "What is the point of a secure SDLC", a: "To build safety and verification into delivery so failures are caught and contained early." },
+    { q: "Why do early gates matter", a: "They catch design mistakes before they become expensive and hard to unwind." },
+    { q: "What is a useful quality for a gate", a: "It is measurable, repeatable, and does not depend on heroics." },
+    { q: "Why avoid too many gates", a: "Overweight process encourages bypassing and makes real risk harder to see." },
+    { q: "What should every gate have", a: "A clear owner and a definition of how it will be verified." },
+  ]}
+/>
+
+---
+
+## Applied cryptography and protocol reasoning
+
+<SectionHeader variant="content" emoji="🔐" id="practice-p3-runtime-and-cloud-security">
+  Module P3. Runtime and cloud security
+</SectionHeader>
+
+<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p3-runtime-and-cloud-security" />
 
 Crypto is only useful when it is applied correctly. Most organisations do not lose because the maths was broken. They lose because assumptions drift, keys leak, validation gets skipped, or somebody treats "encrypted" as a risk stamp that means "safe".
 
 Transport Layer Security (TLS) works because both sides agree a <GlossaryTip term="cipher suite">set of algorithms for key exchange, encryption and integrity</GlossaryTip>. A <GlossaryTip term="certificate authority">trusted issuer of certificates</GlossaryTip> vouches for a site identity. <GlossaryTip term="mutual TLS">Both client and server present certificates</GlossaryTip> when both need to prove who they are. Keys must be generated well, stored safely, rotated, and revoked when things change.
 
-**Why this exists**: crypto is how you make identity and data trustworthy across boundaries you do not control. It protects confidentiality, yes, but also integrity and authenticity. Without those, you cannot make reliable decisions from logs, API calls, or financial transactions.
+**Why this exists**. Crypto is how you make identity and data trustworthy across boundaries you do not control. It protects confidentiality, yes, but also integrity and authenticity. Without those, you cannot make reliable decisions from logs, API calls, or financial transactions.
 
-**Who owns it**: shared. Platform or SRE teams usually own the TLS and certificate lifecycle. App teams own correct use in code, including token validation and signature checks. Security sets policy and guardrails (approved algorithms, key management requirements, review gates). Third parties often own pieces too, like managed certificate services or an external public key infrastructure (PKI).
+**Who owns it**. Shared. Platform or SRE teams usually own the TLS and certificate lifecycle. App teams own correct use in code, including token validation and signature checks. Security sets policy and guardrails (approved algorithms, key management requirements, review gates). Third parties often own pieces too, like managed certificate services or an external public key infrastructure (PKI).
 
-**Trade offs**: strict validation and short lived certificates reduce risk, but they increase operational load and outage risk if automation is weak. Hardware backed keys and dedicated key management systems reduce blast radius, but cost money and add complexity. mTLS raises assurance, but can slow delivery if identity and certificate operations are immature.
+**Trade offs**. Strict validation and short lived certificates reduce risk, but they increase operational load and outage risk if automation is weak. Hardware backed keys and dedicated key management systems reduce blast radius, but cost money and add complexity. mTLS raises assurance, but can slow delivery if identity and certificate operations are immature.
 
-**Failure modes**: the classics are still the classics. Outdated algorithms, self signed certificates where trust is needed, weak random number generation, keys shared between environments, skipping verification, and quietly disabling checks to "unblock" a deployment. Another big one is ownership fuzziness: nobody feels responsible for expiry, revocation, or emergency key rotation until it is on fire.
+**Failure modes**. The classics are still the classics. Outdated algorithms, self signed certificates where trust is needed, weak random number generation, keys shared between environments, skipping verification, and quietly disabling checks to "unblock" a deployment. Another big one is ownership fuzziness. Nobody feels responsible for expiry, revocation, or emergency key rotation until it is on fire.
 
-**Maturity thinking**:
+**Maturity thinking**.
 Basic looks like modern defaults, automated certificate renewal, and no hard coded secrets in repos.
 Good looks like policy backed automation (approved ciphers, minimum key sizes), per environment isolation, and reliable revocation and rotation with tests.
 Excellent looks like hardware backed keys where it matters, measured control effectiveness (how often validation failures are correctly caught), and incident ready procedures for rapid key compromise response.
@@ -103,14 +144,14 @@ Before this tool, treat it like a design review check. You are simulating the mo
 
 After you run it, translate the output into standards. The policy decision is not "pick the biggest number". It is "define approved primitives, minimum strengths, and deprecation timelines", then enforce those in CI and procurement. If your system cannot support modern options, that is a risk acceptance decision that should be explicit and time boxed.
 
-One more leadership lens: weak crypto choices are often a symptom of rushed delivery or copy paste culture. Fixing it usually needs guardrails (defaults) more than training.
+One more leadership lens. Weak crypto choices are often a symptom of rushed delivery or copy paste culture. Fixing it usually needs guardrails (defaults) more than training.
 
 <QuizBlock
-  id="advanced-crypto-practice"
+  id="practice-p3-runtime-and-cloud-security"
   courseId="cybersecurity"
   levelId="practice"
-  sectionId="advanced-crypto-practice"
-  title="Quick check: crypto in practice"
+  sectionId="practice-p3-runtime-and-cloud-security"
+  title="Quick check. Runtime and cloud security"
   questions={[
     { q: "What does a cipher suite specify", a: "The algorithms for key exchange, encryption and integrity used in a session." },
     { q: "Why do we trust a certificate", a: "Because a certificate authority signs it and the client validates that signature and chain." },
@@ -124,45 +165,51 @@ One more leadership lens: weak crypto choices are often a symptom of rushed deli
 
 ---
 
-<SectionHeader variant="content" emoji="🏗️" id="secure-architecture">
-  Secure architecture and zero trust thinking
+## Security architecture and system design thinking
+
+This section is about turning risk into design decisions you can defend. In practice, architecture is where you decide what must be true for your system to be safe, and what you will do when those assumptions fail.
+
+## Identity, trust, and zero trust architecture
+
+<SectionHeader variant="content" emoji="🏗️" id="practice-p2-exposure-reduction-zero-trust">
+  Module P2. Exposure reduction and zero trust
 </SectionHeader>
 
-<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="advanced-secure-architecture" />
+<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p2-exposure-reduction-zero-trust" />
 
-Zero trust is simple: never assume the network is friendly, always verify access, limit blast radius. <GlossaryTip term="zero trust">Design where no implicit trust is granted based on network location</GlossaryTip>. <GlossaryTip term="microsegment">Breaking systems into small zones with tight policy</GlossaryTip> reduces how far an attacker can move. Defence in depth still matters: identity, network, application, and data controls should stack.
+Zero trust is simple. Never assume the network is friendly, always verify access, limit blast radius. <GlossaryTip term="zero trust">Design where no implicit trust is granted based on network location</GlossaryTip>. <GlossaryTip term="microsegment">Breaking systems into small zones with tight policy</GlossaryTip> reduces how far an attacker can move. Defence in depth still matters. Identity, network, application, and data controls should stack.
 
-**Why this exists**: architecture is how you prevent one compromise from becoming an organisational outage. It is also how you control "security debt" so you can still ship. Segmentation, strong identity, and explicit trust boundaries reduce lateral movement and make detection and recovery feasible.
+**Why this exists**. Architecture is how you prevent one compromise from becoming an organisational outage. It is also how you control "security debt" so you can still ship. Segmentation, strong identity, and explicit trust boundaries reduce lateral movement and make detection and recovery feasible.
 
-**Who owns it**: architects and platform teams usually own the reference patterns and guardrails. Product and engineering teams own implementation. Security owns threat modelling standards, policy, and review for high risk systems. Leadership owns trade offs because architecture choices often impact cost, speed, and customer friction.
+**Who owns it**. Architects and platform teams usually own the reference patterns and guardrails. Product and engineering teams own implementation. Security owns threat modelling standards, policy, and review for high risk systems. Leadership owns trade offs because architecture choices often impact cost, speed, and customer friction.
 
-**Trade offs**: more segmentation and stronger identity can increase latency, complexity, and operational burden. Strict policies can break integrations. Zero trust can become security theatre if it is a slogan without ownership, telemetry, and an exception process. Some controls also shift risk rather than reduce it (for example, moving trust to a single identity provider without hardening it).
+**Trade offs**. More segmentation and stronger identity can increase latency, complexity, and operational burden. Strict policies can break integrations. Zero trust can become security theatre if it is a slogan without ownership, telemetry, and an exception process. Some controls also shift risk rather than reduce it (for example, moving trust to a single identity provider without hardening it).
 
-**Failure modes**: flat networks with broad permissions, shared admin access, and hidden "break glass" paths that bypass controls. Another common failure is pretending every system deserves the same rigor, which spreads teams thin and leads to random controls rather than deliberate coverage.
+**Failure modes**. Flat networks with broad permissions, shared admin access, and hidden "break glass" paths that bypass controls. Another common failure is pretending every system deserves the same rigor, which spreads teams thin and leads to random controls rather than deliberate coverage.
 
-**Maturity thinking**:
+**Maturity thinking**.
 Basic looks like clear trust boundaries, MFA (multi-factor authentication) for admin, and sane network segmentation between tiers.
 Good looks like strong service identity, default deny policies, tested emergency access, and consistent logging at control points.
 Excellent looks like measured blast radius reduction, continuous validation of assumptions, and governance that makes exceptions rare, visible, and time boxed.
 
 This is where cyber stops being an IT problem and becomes an organisational capability. Architecture is the translation layer between risk and reality. The board talks about impact. Engineers talk about systems. Architecture is where those meet. If you cannot explain your design to a non technical leader, you probably cannot defend it under pressure either.
 
-If you want an enterprise baseline, Cyber Essentials Plus is a good mental anchor. It is not perfect. Nothing is. But it forces useful basics: secure configuration, access control, malware protection, patch management, and boundary protections. In practice, these are the controls that keep your worst day from turning into a month.
+If you want an enterprise baseline, Cyber Essentials Plus is a good mental anchor. It is not perfect. Nothing is. But it forces useful basics. Secure configuration, access control, malware protection, patch management, and boundary protections. In practice, these are the controls that keep your worst day from turning into a month.
 
 <DiagramBlock
   title="Layered, segmented view"
-  subtitle="User access checked at every hop; segments limit lateral movement."
+  subtitle="User access checked at every hop. Segments limit lateral movement."
 >
   <div className="text-xs sm:text-sm leading-5 space-y-2">
     <div>User → Web tier (auth + WAF) → API tier (mTLS + authZ) → Data tier (policy + encryption)</div>
-    <div>Segments between tiers; inspection and logging at each boundary.</div>
+    <div>Segments between tiers. Inspection and logging at each boundary.</div>
     <div className="text-gray-700">Breaches should be contained to the smallest zone.</div>
   </div>
 </DiagramBlock>
 
-Patterns that help: strong identity and device posture, least privilege, service-to-service authentication, network policy that defaults to deny, explicit trust boundaries, and observability everywhere. Avoid flat networks, shared admin accounts, and hidden backdoors that bypass controls.
+Patterns that help include strong identity and device posture, least privilege, service to service authentication, network policy that defaults to deny, explicit trust boundaries, and observability everywhere. Avoid flat networks, shared admin accounts, and hidden backdoors that bypass controls.
 
-Before the tool, pick a story: "A laptop is compromised", "A token is stolen", or "A build agent is popped". You are not drawing a network diagram for fun. You are deciding which compromise becomes a minor incident and which one becomes a headline.
+Before the tool, pick a story. "A laptop is compromised", "A token is stolen", or "A build agent is popped". You are not drawing a network diagram for fun. You are deciding which compromise becomes a minor incident and which one becomes a headline.
 
 <ToolCard
   id="zero-trust-map"
@@ -172,7 +219,7 @@ Before the tool, pick a story: "A laptop is compromised", "A token is stolen", o
   <TrustGraphTool />
 </ToolCard>
 
-Afterwards, your output is a prioritised backlog and an ownership map. Which edges should not exist. Which identities should be constrained. Which segments need policy. Which logs must exist for detection. This is also where you connect to Cyber Essentials Plus style thinking: if you cannot explain your boundary protections and access control clearly, you probably cannot evidence them either.
+Afterwards, your output is a prioritised backlog and an ownership map. Which edges should not exist. Which identities should be constrained. Which segments need policy. Which logs must exist for detection. This is also where you connect to Cyber Essentials Plus style thinking. If you cannot explain your boundary protections and access control clearly, you probably cannot evidence them either.
 
 Before the next tool, make a decision about constraints. Are you optimising for speed of delivery, for resilience, for compliance evidence, or for cost. You cannot maximise all of them, so be honest about what you are trading.
 
@@ -184,48 +231,87 @@ Before the next tool, make a decision about constraints. Are you optimising for 
   <SecureDesignTradeoffLab />
 </ToolCard>
 
-After you run it, the lead move is to turn "nice to have" into "decided". Write down what is mandatory, what is optional, and what is explicitly accepted risk. Then align it to governance: architecture standards, design review checklists, and exception handling. If you cannot enforce it, it is not a standard, it is a wish.
+After you run it, the lead move is to turn "nice to have" into "decided". Write down what is mandatory, what is optional, and what is explicitly accepted risk. Then align it to governance. Architecture standards, design review checklists, and exception handling. If you cannot enforce it, it is not a standard, it is a wish.
 
 <QuizBlock
-  id="advanced-secure-architecture"
+  id="practice-p2-exposure-reduction-zero-trust"
   courseId="cybersecurity"
   levelId="practice"
-  sectionId="advanced-secure-architecture"
-  title="Quick check: secure architecture"
+  sectionId="practice-p2-exposure-reduction-zero-trust"
+  title="Quick check. Secure architecture"
   questions={[
-    { q: "What is the core idea of zero trust", a: "Do not grant implicit trust based on network location; verify every access." },
+    { q: "What is the core idea of zero trust", a: "Do not grant implicit trust based on network location. Verify every access." },
     { q: "How does microsegmentation help", a: "It limits lateral movement by confining access to small zones." },
     { q: "Why keep defence in depth", a: "Different layers catch different failures so one miss is not catastrophic." },
     { q: "Name one sign of a flat network", a: "Many services reachable without policy separation or filtering." },
-    { q: "Where should you log in this architecture", a: "At every boundary: web, API, data access, and admin actions." },
+    { q: "Where should you log in this architecture", a: "At every boundary. Web, API, data access, and admin actions." },
     { q: "Why avoid shared admin accounts", a: "They hide accountability and make abuse or mistakes hard to trace." },
   ]}
 />
 
 ---
 
-<SectionHeader variant="content" emoji="🔍" id="detection-response">
-  Detection, response and threat hunting
+## Detection, response, and operational security
+
+<SectionHeader variant="content" emoji="🧯" id="practice-p5-vulnerability-management">
+  Module P5. Vulnerability management
 </SectionHeader>
 
-<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="advanced-detection-response" />
+<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p5-vulnerability-management" />
+
+Vulnerability management is not a panic feed. It is a system for deciding what matters now, what can wait, and what you will never fix and must isolate. The hard part is prioritisation under uncertainty and limited capacity.
+
+A good triage decision uses a few simple inputs. Exposure, impact, exploitability signals, and how fast you can safely patch. If your process only sorts by severity labels, it will fail in the real world.
+
+Use the tool below to practise triage on defensive scenarios. The aim is to justify a priority and write down what you would do in the first day.
+
+<ToolCard
+  id="vulnerability-triage-planner"
+  title="Triage vulnerabilities without panic"
+  description="Score a scenario by exposure and impact, then choose a practical response plan."
+>
+  <VulnerabilityTriagePlannerTool />
+</ToolCard>
+
+<QuizBlock
+  id="practice-p5-vulnerability-management"
+  courseId="cybersecurity"
+  levelId="practice"
+  sectionId="practice-p5-vulnerability-management"
+  title="Quick check. Vulnerability management"
+  questions={[
+    { q: "What is the goal of vulnerability management", a: "To reduce risk through prioritised remediation and sensible compensating controls." },
+    { q: "What is a common failure mode", a: "Sorting only by severity label and ignoring exposure and business impact." },
+    { q: "What matters when you cannot patch quickly", a: "Containment, monitoring, and limiting blast radius until you can fix." },
+    { q: "Why track patch windows", a: "To make risk decisions explicit and reduce silent backlog growth." },
+    { q: "What is one good output from triage", a: "A documented priority and a first day response plan." },
+  ]}
+/>
+
+---
+
+<SectionHeader variant="content" emoji="🔍" id="practice-p6-detection-and-incident-response">
+  Module P6. Detection and incident response
+</SectionHeader>
+
+<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p6-detection-and-incident-response" />
 
 Detection closes the gap between compromise and action. A <GlossaryTip term="SIEM">Security information and event management (SIEM), a platform that collects and correlates security events</GlossaryTip> feeds alerts to a <GlossaryTip term="SOC">security operations centre (SOC), a team that monitors and responds</GlossaryTip>. Good detection reduces <GlossaryTip term="dwell time">how long an attacker stays unnoticed</GlossaryTip>. Response follows a loop: triage, contain, eradicate, recover, and learn.
 
-**Why this exists**: prevention fails. Detection and response are how you limit business impact when (not if) you have a bad day. This is also where trust gets rebuilt: customers do not need perfection, but they do need competent, transparent handling.
+**Why this exists**. Prevention fails. Detection and response are how you limit business impact when (not if) you have a bad day. This is also where trust gets rebuilt. Customers do not need perfection, but they do need competent, transparent handling.
 
-**Who owns it**: SOC and incident response teams own day to day triage and response. Engineering owns fix and deploy. IT owns endpoint actions. Security leadership owns priorities, playbooks, and escalation rules. Leadership and legal often co-own external communication and reporting decisions. Third parties (managed detection and response, cloud providers) frequently own part of the telemetry and response actions.
+**Who owns it**. SOC and incident response teams own day to day triage and response. Engineering owns fix and deploy. IT owns endpoint actions. Security leadership owns priorities, playbooks, and escalation rules. Leadership and legal often co own external communication and reporting decisions. Third parties (managed detection and response, cloud providers) frequently own part of the telemetry and response actions.
 
-**Trade offs**: more detection rules can mean more noise. Aggressive thresholds catch more, but can burn analysts out and lead to missed real incidents due to alert fatigue. Heavy containment can protect systems, but can also take critical services offline. Good programmes balance risk reduction with operational sustainability.
+**Trade offs**. More detection rules can mean more noise. Aggressive thresholds catch more, but can burn analysts out and lead to missed real incidents due to alert fatigue. Heavy containment can protect systems, but can also take critical services offline. Good programmes balance risk reduction with operational sustainability.
 
-**Failure modes**: collecting logs without being able to answer questions from them. Another is treating a SIEM as a product purchase rather than an operating model. Also common: no clear owner for response decisions, no tested playbooks, and no authority to contain when it hurts.
+**Failure modes**. Collecting logs without being able to answer questions from them. Another is treating a SIEM as a product purchase rather than an operating model. Also common. No clear owner for response decisions, no tested playbooks, and no authority to contain when it hurts.
 
-**Maturity thinking**:
+**Maturity thinking**.
 Basic looks like centralised logging, MFA for admin, and a minimal set of high value detections (auth anomalies, privilege changes, critical config changes).
 Good looks like playbooks, on-call rotation, regular tabletop exercises, and tuning based on real incidents.
 Excellent looks like measured time to detect and time to contain, cross team drills, and a learning loop where fixes land in architecture and detection rules within days, not quarters.
 
-Threat hunting is proactive: forming a hypothesis and looking for weak signals before an alert fires. In some platforms you will see UEBA (user and entity behavior analytics), which is basically pattern detection over behaviour. Use it, but do not worship it. Playbooks standardise common steps; tabletop exercises build muscle memory.
+Threat hunting is proactive. Forming a hypothesis and looking for weak signals before an alert fires. In some platforms you will see UEBA (user and entity behavior analytics), which is basically pattern detection over behaviour. Use it, but do not worship it. Playbooks standardise common steps. Tabletop exercises build muscle memory.
 
 <DiagramBlock
   title="From events to action"
@@ -263,11 +349,11 @@ Before the next tool, pick an acceptable risk of noise. If you tune for zero fal
 After you run it, document the judgement. Which threshold do you choose, why, and what compensating controls exist (for example, extra logging, rate limits, step-up authentication). Then turn it into an operating rule: who can change thresholds, how changes are reviewed, and what you monitor to detect drift.
 
 <QuizBlock
-  id="advanced-detection-response"
+  id="practice-p6-detection-and-incident-response"
   courseId="cybersecurity"
   levelId="practice"
-  sectionId="advanced-detection-response"
-  title="Quick check: detection and response"
+  sectionId="practice-p6-detection-and-incident-response"
+  title="Quick check. Detection and response"
   questions={[
     { q: "What does a SIEM do", a: "Collects and correlates events to surface potential security issues." },
     { q: "Why does dwell time matter", a: "The longer an attacker remains undetected, the more damage they can do." },
@@ -280,23 +366,77 @@ After you run it, document the judgement. Which threshold do you choose, why, an
 
 ---
 
-<SectionHeader variant="content" emoji="📋" id="governance-frameworks">
-  Governance, frameworks and your career
+<SectionHeader variant="content" emoji="📦" id="practice-p4-supply-chain-security">
+  Module P4. Supply chain security
 </SectionHeader>
 
-<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="advanced-governance-career" />
+<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p4-supply-chain-security" />
+
+## Supply chain and systemic risk
+
+Supply chain risk is the uncomfortable truth that you inherit other people’s security decisions. Libraries, build tools, CI runners, contractors, and SaaS vendors all become part of your system. The attacker’s trade off is simple: compromise one upstream dependency and reuse it against many downstream targets.
+
+In practice, supply chain work looks like ownership and verification: who can publish packages, who can approve build changes, what is signed, what is pinned, and how you detect tampering. It is also about blast radius: least privilege tokens, isolated environments, and the ability to revoke quickly.
+
+<QuizBlock
+  id="practice-p4-supply-chain-security"
+  courseId="cybersecurity"
+  levelId="practice"
+  sectionId="practice-p4-supply-chain-security"
+  title="Quick check. Supply chain and systemic risk"
+  questions={[
+    { q: "What is supply chain risk in security", a: "Risk introduced through third parties like dependencies, build tools, vendors, and services you rely on." },
+    { q: "Why are software dependencies attractive targets", a: "One compromise can impact many downstream projects." },
+    { q: "Name one practical supply chain control", a: "Pinning versions, verifying signatures, or restricting who can publish and approve changes." },
+    { q: "What is a common blast radius reducer for CI", a: "Least-privilege tokens and isolating build environments." },
+  ]}
+/>
+
+---
+
+<SectionHeader variant="content" emoji="⚖️" id="practice-p8-system-ilities">
+  Module P8. System ilities
+</SectionHeader>
+
+<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p8-system-ilities" />
+
+## Adversarial trade offs and failure analysis
+
+Adversaries optimise for cost and probability of success, not elegance. Defence is the same: you rarely get perfect coverage, so you choose controls that change attacker economics and give you time to respond.
+
+Failure analysis is how you stop repeating the same incident with new branding. Look for the broken assumption, the missing guardrail, and the point where a human had to make a call without enough information.
+
+<QuizBlock
+  id="practice-p8-system-ilities"
+  courseId="cybersecurity"
+  levelId="practice"
+  sectionId="practice-p8-system-ilities"
+  title="Quick check. System ilities"
+  questions={[
+    { q: "What do attackers typically optimise for", a: "Low cost and high probability of success, not perfect technique." },
+    { q: "What does it mean to change attacker economics", a: "Make attacks more expensive, noisy, or slow so they are less likely to succeed." },
+    { q: "What is the first question in failure analysis", a: "Which assumption failed and why was the system allowed to rely on it?" },
+    { q: "What is one good post-incident outcome", a: "A concrete system change that prevents or detects the same class of failure next time." },
+  ]}
+/>
+
+<SectionHeader variant="content" emoji="📋" id="practice-p7-privacy-ethics-auditability">
+  Module P7. Privacy, ethics, and auditability
+</SectionHeader>
+
+<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p7-privacy-ethics-auditability" />
 
 This section is the glue. It is temporary tooling in a way, because your first versions will be imperfect. That is normal. The point is to build a loop that makes the next version better.
 
-**Why this exists**: governance is how you scale security beyond heroics. It turns individual expertise into repeatable decisions: what is acceptable, what is mandatory, and how to prove it. This is where CISSP style risk management and NIST CSF 2.0 (Cybersecurity Framework) thinking stop being theory and start shaping budgets, roadmaps, and accountability.
+**Why this exists**. Governance is how you scale security beyond heroics. It turns individual expertise into repeatable decisions. What is acceptable, what is mandatory, and how to prove it. This is where CISSP style risk management and NIST CSF 2.0 (Cybersecurity Framework) thinking stop being theory and start shaping budgets, roadmaps, and accountability.
 
-**Who owns it**: leadership owns risk appetite and acceptance. Security owns the framework, policy, and measurement approach. Risk and compliance teams often co-own reporting and assurance. Engineering and IT own implementation. Procurement owns third party requirements. Everyone touches it, which is why ownership must be explicit.
+**Who owns it**. Leadership owns risk appetite and acceptance. Security owns the framework, policy, and measurement approach. Risk and compliance teams often co own reporting and assurance. Engineering and IT own implementation. Procurement owns third party requirements. Everyone touches it, which is why ownership must be explicit.
 
-**Trade offs**: too much governance slows delivery and creates workarounds. Too little governance creates random controls, inconsistent risk decisions, and surprise incidents. The goal is not paperwork. The goal is predictable decision making.
+**Trade offs**. Too much governance slows delivery and creates workarounds. Too little governance creates random controls, inconsistent risk decisions, and surprise incidents. The goal is not paperwork. The goal is predictable decision making.
 
-**Failure modes**: confusing output with outcome. Policies that nobody can follow. Controls with no owner. Security being asked to "own risk" without authority, budget, or influence. Another failure mode is measuring what is easy rather than what matters, which creates a false sense of progress.
+**Failure modes**. Confusing output with outcome. Policies that nobody can follow. Controls with no owner. Security being asked to "own risk" without authority, budget, or influence. Another failure mode is measuring what is easy rather than what matters, which creates a false sense of progress.
 
-**Maturity thinking**:
+**Maturity thinking**.
 Basic looks like clear policies for access, patching, and logging, plus a simple risk register with named owners.
 Good looks like standards that are enforceable, design reviews for high risk changes, and a clear exception process with time boxes.
 Excellent looks like evidence driven decisions, control effectiveness measurement, and a culture where teams ask early because the process helps them, not because they fear it.
@@ -309,7 +449,7 @@ This aligns strongly to the NIST Cybersecurity Framework 2.0 Govern function. Go
 
 Cyber is not only for the security team. Product decisions create attack surface. Procurement decisions create supply chain risk. HR decisions shape onboarding and offboarding. Finance decisions shape tooling and staffing. Operations decisions shape patch windows and incident response. In real organisations, the best security work looks like good coordination.
 
-At a high level, you can think in three layers:
+At a high level, you can think in three layers.
 
 The board sets direction and risk appetite. Executives allocate budget and accept trade offs. Operations do the work and manage daily risk. When those layers are not aligned, the organisation drifts into security theatre. Everybody is busy, but the actual risk barely moves.
 
@@ -335,7 +475,7 @@ If you are reading a post incident report, look for evidence that the team under
 
 Most security metrics are <GlossaryTip term="security theatre">activity that looks reassuring but does not reduce real risk</GlossaryTip> because they measure activity, not risk reduction. Counting completed training, scanned hosts, or patched tickets tells you effort. It does not tell you outcome.
 
-Leading indicators change before the bad thing happens. Lagging indicators measure after the bad thing happened. Both matter, but they answer different questions. At small scale, simple leading indicators can be powerful: time to patch a critical issue, percentage of admin actions logged, percentage of accounts with multi-factor authentication enabled, and time to revoke access for a leaver.
+Leading indicators change before the bad thing happens. Lagging indicators measure after the bad thing happened. Both matter, but they answer different questions. At small scale, simple leading indicators can be powerful. Time to patch a critical issue, percentage of admin actions logged, percentage of accounts with multi factor authentication enabled, and time to revoke access for a leaver.
 
 When you can, measure <GlossaryTip term="control effectiveness">whether a control changes outcomes, not whether it exists on paper</GlossaryTip>. Did a control actually prevent an unsafe action. Did it detect a real issue with low noise. Did it reduce time to recover. If you cannot answer those, you are measuring comfort, not security.
 
@@ -347,7 +487,7 @@ Responsible security practice treats the public interest as real. It respects pr
 
 Resilience is long term. It is honest risk discussion, clear ownership, and the habit of improving after failure. The best teams I have worked with were not perfect. They were curious, calm, and willing to change.
 
-Career paths stay wide: architecture, incident response, cloud, governance, or product security. Certs can help (CISSP, GSEC, cloud provider tracks) but practice and communication matter most.
+Career paths stay wide. Architecture, incident response, cloud, governance, or product security. Certs can help (CISSP, GSEC, cloud provider tracks) but practice and communication matter most.
 
 <DiagramBlock
   title="From objectives to controls"
@@ -370,7 +510,7 @@ Before you map anything, decide why you are doing it. Are you trying to explain 
   <FrameworkMappingTool />
 </ToolCard>
 
-After you map, ask the leadership question: what decision does this help. Framework mapping is useful when it clarifies ownership, gaps, and evidence. It is not useful when it becomes an exercise in categorisation. Use it to decide priorities (what must be done next quarter) and to communicate clearly with auditors and sponsors.
+After you map, ask the leadership question. What decision does this help. Framework mapping is useful when it clarifies ownership, gaps, and evidence. It is not useful when it becomes an exercise in categorisation. Use it to decide priorities (what must be done next quarter) and to communicate clearly with auditors and sponsors.
 
 Before the next tool, be honest about your audience. Are you planning for an engineer on a product team, a security analyst, an architect, or a manager with budget responsibility. The right learning path depends on the decisions you will be asked to make.
 
@@ -385,11 +525,11 @@ Before the next tool, be honest about your audience. Are you planning for an eng
 Afterwards, treat the output as a roadmap, not an identity. Career planning is a governance skill too: you are choosing where to build depth so you can lead decisions under pressure. If a certification helps you structure knowledge and communicate credibility, great. If it becomes a proxy for competence, it becomes theatre.
 
 <QuizBlock
-  id="advanced-governance-career"
+  id="practice-p7-privacy-ethics-auditability"
   courseId="cybersecurity"
   levelId="practice"
-  sectionId="advanced-governance-career"
-  title="Quick check: governance and career"
+  sectionId="practice-p7-privacy-ethics-auditability"
+  title="Quick check. Privacy, ethics, and auditability"
   questions={[
     { q: "Why use a framework like NIST CSF 2.0", a: "It provides shared language and coverage across Govern, Identify, Protect, Detect, Respond and Recover, making gaps and priorities easier to communicate." },
     { q: "What is risk appetite", a: "The level of risk an organisation is willing to accept, which should shape priorities and exception decisions." },
@@ -397,6 +537,45 @@ Afterwards, treat the output as a roadmap, not an identity. Career planning is a
     { q: "How do frameworks help with audits", a: "They organise controls and evidence so gaps and progress are visible." },
     { q: "Name one security career path", a: "Incident response, security architecture, cloud security, product security or governance." },
     { q: "What matters more than memorising acronyms", a: "Being able to explain risk and controls clearly and apply them in real systems." },
+  ]}
+/>
+
+---
+
+<SectionHeader variant="content" emoji="🏆" id="practice-p9-capstone-professional-practice">
+  Module P9. Capstone professional practice
+</SectionHeader>
+
+<SectionProgressToggle courseId="cybersecurity" levelId="practice" sectionId="practice-p9-capstone-professional-practice" />
+
+Pick one system you understand. Produce a short professional pack you could defend in a review. Include the system goal, the highest impact risks, the most important controls, and the evidence you would keep.
+
+<ToolCard
+  id="operational-security-pack"
+  title="Build an operational security pack"
+  description="Capture the system scope, top risks, controls, verification, and evidence in one defensible pack."
+>
+  <OperationalSecurityPackTool />
+</ToolCard>
+
+<ToolCard
+  id="framework-mapping-capstone"
+  title="Map controls to a framework"
+  description="Use a framework map to make your controls explainable and auditable."
+>
+  <FrameworkMappingTool />
+</ToolCard>
+
+<QuizBlock
+  id="practice-p9-capstone-professional-practice"
+  courseId="cybersecurity"
+  levelId="practice"
+  sectionId="practice-p9-capstone-professional-practice"
+  title="Quick check. Capstone"
+  questions={[
+    { q: "What makes a capstone defensible", a: "Clear scope, clear risk choices, and clear evidence you can show." },
+    { q: "Why include evidence", a: "Evidence turns claims into something you can verify and audit." },
+    { q: "What is one useful evidence artefact", a: "A threat model, an access review record, or an incident exercise write up." },
   ]}
 />
 

@@ -27,17 +27,6 @@ export type JobRunnerToolLimits = {
 const SECOND_MS = 1000;
 
 export const JOB_RUNNER_TOOL_LIMITS: Record<string, JobRunnerToolLimits> = {
-  "mentor-query": {
-    toolId: "mentor-query",
-    maxInputBytesFreeAnon: 1_000,
-    maxInputBytesFreeAuthed: 6_000,
-    maxRunMsHardCap: 60 * SECOND_MS,
-    freeMsPerDayAuthed: 30 * SECOND_MS,
-    freeMsPerDayAnon: 8 * SECOND_MS,
-    creditsPerMsPaid: 1 / (10 * SECOND_MS), // 1 credit per 10s paid
-    allowAnonymous: true,
-    allowAuthed: true,
-  },
   "whois-summary": {
     toolId: "whois-summary",
     maxInputBytesFreeAnon: 300,
@@ -179,16 +168,6 @@ export const TOOL_COMPUTE_PROFILES: Record<string, ToolComputeProfile> = {
   "tls-inspect": { toolId: "tls-inspect", label: "TLS inspect", computeClass: "B", typicalInputBytes: 120, typicalSteps: 1, guidance: ["Use a hostname rather than an IP.", "Retry only after you confirm the service is up."] },
   "whois-summary": { toolId: "whois-summary", label: "WHOIS summary", computeClass: "B", typicalInputBytes: 120, typicalSteps: 1, guidance: ["Compare results with context and expected registrant."] },
   "ip-reputation": { toolId: "ip-reputation", label: "IP reputation", computeClass: "B", typicalInputBytes: 60, typicalSteps: 1, guidance: ["Combine with logs and behavioural indicators."] },
-
-  // Mentor (server assisted, bounded).
-  "mentor-query": {
-    toolId: "mentor-query",
-    label: "Mentor",
-    computeClass: "B",
-    typicalInputBytes: 2_000,
-    typicalSteps: 6,
-    guidance: ["Ask one focused question at a time.", "Include the page link so the match is tighter.", "Shorter questions usually respond faster."],
-  },
 
   // Template access evaluation (server assisted, bounded).
   "templates-request-download": {

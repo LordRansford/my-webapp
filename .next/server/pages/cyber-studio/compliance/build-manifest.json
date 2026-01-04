@@ -1,0 +1,18 @@
+{
+  "devFiles": [],
+  "ampDevFiles": [],
+  "polyfillFiles": [],
+  "lowPriorityFiles": [],
+  "rootMainFiles": [],
+  "pages": {
+    "/cyber-studio/compliance": [
+      "static/chunks/6bd1b060cc02463e.js",
+      "static/chunks/cc51a9ddf48ac37d.js",
+      "static/chunks/f0f43ebb724b8b11.js",
+      "static/chunks/01073211ade0ab07.js",
+      "static/chunks/d1ea35920c32a766.js",
+      "static/chunks/turbopack-34304628fe7f3242.js"
+    ]
+  },
+  "ampFirstPages": []
+}

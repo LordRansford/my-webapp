@@ -24,6 +24,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     { href: "/admin", label: "Overview", enabled: true },
     { href: "/admin/users", label: "Users", enabled: true },
     { href: "/admin/support", label: "Support", enabled: true },
+    { href: "/admin/assessments", label: "Assessments", enabled: hasPermission(role, "VIEW_ASSESSMENTS") },
     { href: "/admin/billing", label: "Billing overview", enabled: canViewBilling },
     { href: "/admin/billing/credits", label: "Credits ledger", enabled: canViewBilling },
     { href: "/admin/billing/usage", label: "Usage and costs", enabled: canViewBilling },

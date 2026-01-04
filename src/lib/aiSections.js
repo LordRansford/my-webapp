@@ -1,8 +1,15 @@
-const advancedSections = [
-  "ai-advanced-transformers-and-llms",
-  "ai-advanced-diffusion-and-generative-media",
-  "ai-advanced-agentic-ai-and-tools",
-  "ai-advanced-evaluation-and-governance",
+const practiceStrategySections = [
+  "ai-advanced-transformers-and-agents",
+  "ai-advanced-diffusion-and-generation",
+  "ai-advanced-production-and-monitoring",
+  "ai-advanced-governance-and-strategy",
+];
+
+const intermediateSections = [
+  "ai-intermediate-prompts-and-patterns",
+  "ai-intermediate-embeddings-and-search",
+  "ai-intermediate-rag-with-docs",
+  "ai-intermediate-simple-agents",
 ];
 
 const summarySections = [
@@ -19,12 +26,10 @@ export const aiSectionManifest = {
     "ai-foundations-learning-paradigms",
     "ai-foundations-responsible-ai-basics",
   ],
-  intermediate: [
-    "ai-intermediate-data-prep-and-feature-engineering",
-    "ai-intermediate-training-loop",
-    "ai-intermediate-evaluation-metrics",
-    "ai-intermediate-serving-and-monitoring",
-  ],
-  advanced: advancedSections,
+  intermediate: intermediateSections,
+  // Alias to support the main course structure.
+  applied: intermediateSections,
+  advanced: practiceStrategySections,
+  "practice-strategy": practiceStrategySections,
   summary: summarySections,
 };

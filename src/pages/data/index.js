@@ -80,8 +80,9 @@ export default function DataHub() {
               href: "/data/foundations",
             }}
             secondaryActions={[
-              { label: "Track CPD", href: "/my-cpd" },
-              { label: "Export CPD evidence", href: "/my-cpd/evidence" },
+              { label: "Pricing and CPD", href: "/pricing" },
+              { label: "Sign in for CPD tracking", href: "/signin" },
+              { label: "My CPD evidence", href: "/my-cpd/evidence" },
               { label: "Open the labs", href: "/tools" },
             ]}
             icon={<Database size={20} />}

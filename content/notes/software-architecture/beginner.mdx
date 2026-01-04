@@ -28,7 +28,7 @@ import SystemDashboard from "@/components/notes/tools/architecture/beginner/Syst
 
 # Software Architecture Notes - Beginner
 
-<LevelProgressBar courseId="software-architecture" levelId="foundations" sectionIds={foundationsSectionIds} />
+<LevelProgressBar courseId="software-architecture" levelId="foundations" sectionIds={softwareArchitectureSectionManifest.foundations} />
 
 <CPDTracker courseId="software-architecture" levelId="foundations" estimatedHours={10} />
 
@@ -50,7 +50,7 @@ import SystemDashboard from "@/components/notes/tools/architecture/beginner/Syst
 Architecture exists to manage complexity over time and keep change affordable.
 </Callout>
 
-Systems rot when responsibilities blur, boundaries leak, and decisions drift. Architecture is the discipline of making the hard-to-change decisions explicit: how to split the system, where to place responsibility, how to communicate, and what to optimise for.
+Systems rot when responsibilities blur, boundaries leak, and decisions drift. Architecture is the discipline of making the hard to change decisions explicit. How to split the system, where to place responsibility, how to communicate, and what to optimise for.
 
 If changing a choice would force many teams to rewrite code, it is almost always an architectural decision.
 
@@ -78,8 +78,8 @@ A system is parts plus purpose plus constraints.
 A system has components, interactions, constraints, and an environment. Without a clear purpose, there is no system to design. In software this usually means users, interfaces, services, data stores, external systems, and the people operating them.
 
 <GlossaryTip term="System">
-Plain: Interacting parts organised to achieve a purpose under constraints.  
-Formal: A bounded set of components whose interactions produce observable behaviour toward a goal.
+Plain language. Interacting parts organised to achieve a purpose under constraints.  
+Formal wording. A bounded set of components whose interactions produce observable behaviour toward a goal.
 </GlossaryTip>
 
 Purpose drives structure. If the purpose shifts, architecture must respond or it will decay.
@@ -114,11 +114,11 @@ Architecture is how the system is decomposed, how responsibilities are placed, h
 Boundaries fail quietly. Good architecture makes them explicit.
 </Callout>
 
-Structure answers: what are the major parts, what each part owns, and what is allowed to change. A component is a unit of responsibility: a module, service, or external system. A boundary defines responsibility, knowledge limits, allowed interactions, and change impact.
+Structure answers three questions. What are the major parts, what each part owns, and what is allowed to change. A component is a unit of responsibility. A module, service, or external system. A boundary defines responsibility, knowledge limits, allowed interactions, and change impact.
 
 <GlossaryTip term="Boundary">
-Plain: A separation that limits how components interact and change.  
-Formal: A defined interface and responsibility line that constrains coupling and change propagation.
+Plain language. A separation that limits how components interact and change.  
+Formal wording. A defined interface and responsibility line that constrains coupling and change propagation.
 </GlossaryTip>
 
 <ToolCard title="&#128736; Map components and responsibilities">
@@ -167,11 +167,11 @@ Performance, security, availability, scalability, maintainability, and reliabili
 Every architectural decision is a trade-off. Be explicit.
 </Callout>
 
-Simplicity versus flexibility, consistency versus availability, speed of delivery versus maintainability. None are universally correct; they must align with purpose. Document the trade-off, the reason, and the expected review point.
+Simplicity versus flexibility, consistency versus availability, speed of delivery versus maintainability. None are universally correct. They must align with purpose. Document the trade off, the reason, and the expected review point.
 
 <GlossaryTip term="Trade-off">
-Plain: Improving one quality at the cost of another.  
-Formal: A decision where optimising one attribute degrades another due to shared constraints.
+Plain language. Improving one quality at the cost of another.  
+Formal wording. A decision where optimising one attribute degrades another due to shared constraints.
 </GlossaryTip>
 
 <ToolCard title="&#9881; Explore trade-offs visually">
@@ -243,7 +243,7 @@ Observation reveals load behaviour, bottlenecks, and failures. It validates assu
     { q: "What makes architecture different from design details", a: "It governs structure and decisions that are hard to change." },
     { q: "Why do boundaries matter most", a: "They define ownership, limit coupling, and control change impact." },
     { q: "How do quality attributes shape design", a: "They force structural choices to satisfy performance, security, availability, and more." },
-    { q: "Why must architecture evolve", a: "Purpose and constraints change; architecture must adapt to stay useful." },
+    { q: "Why must architecture evolve", a: "Purpose and constraints change. Architecture must adapt to stay useful." },
   ]}
 />
 

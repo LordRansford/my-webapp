@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import ToolShell from "@/components/tools/ToolShell";
+import ToolShell, { useToolInputs } from "@/components/tools/ToolShell";
 import { getToolContract } from "@/lib/tools/loadContract";
 import { createToolError } from "@/components/tools/ErrorPanel";
 import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
@@ -42,13 +42,93 @@ const examples = [
   },
 ];
 
-export default function MetricsDefinitionStudioPage() {
-  const [metricName, setMetricName] = useState("");
-  const [definition, setDefinition] = useState("");
-  const [calculation, setCalculation] = useState("");
-  const [units, setUnits] = useState("");
-  const [source, setSource] = useState("");
+function MetricsDefinitionForm() {
+  const { inputs, setInputs } = useToolInputs();
+  const metricName = typeof inputs.metricName === "string" ? inputs.metricName : "";
+  const definition = typeof inputs.definition === "string" ? inputs.definition : "";
+  const calculation = typeof inputs.calculation === "string" ? inputs.calculation : "";
+  const units = typeof inputs.units === "string" ? inputs.units : "";
+  const source = typeof inputs.source === "string" ? inputs.source : "";
 
+  return (
+    <div className="space-y-4">
+      <div>
+        <label htmlFor="metricName" className="block text-sm font-semibold text-slate-900">
+          Metric Name <span className="text-red-600">*</span>
+        </label>
+        <input
+          id="metricName"
+          type="text"
+          value={metricName}
+          onChange={(e) => setInputs((prev) => ({ ...prev, metricName: e.target.value }))}
+          maxLength={200}
+          className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+          placeholder="e.g., Daily Active Users (DAU)"
+        />
+      </div>
+      <div>
+        <label htmlFor="definition" className="block text-sm font-semibold text-slate-900">
+          Definition <span className="text-red-600">*</span>
+        </label>
+        <textarea
+          id="definition"
+          value={definition}
+          onChange={(e) => setInputs((prev) => ({ ...prev, definition: e.target.value }))}
+          rows={3}
+          maxLength={1000}
+          className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+          placeholder="What does this metric measure?"
+        />
+      </div>
+      <div>
+        <label htmlFor="calculation" className="block text-sm font-semibold text-slate-900">
+          Calculation
+        </label>
+        <textarea
+          id="calculation"
+          value={calculation}
+          onChange={(e) => setInputs((prev) => ({ ...prev, calculation: e.target.value }))}
+          rows={4}
+          maxLength={2000}
+          className="mt-2 w-full rounded-lg border border-slate-300 p-3 font-mono text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+          placeholder="How is it calculated? (e.g., COUNT(DISTINCT user_id) WHERE ...)"
+        />
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label htmlFor="units" className="block text-sm font-semibold text-slate-900">
+            Units
+          </label>
+          <input
+            id="units"
+            type="text"
+            value={units}
+            onChange={(e) => setInputs((prev) => ({ ...prev, units: e.target.value }))}
+            maxLength={50}
+            className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+            placeholder="e.g., Count, %, $"
+          />
+        </div>
+        <div>
+          <label htmlFor="source" className="block text-sm font-semibold text-slate-900">
+            Data Source
+          </label>
+          <input
+            id="source"
+            type="text"
+            value={source}
+            onChange={(e) => setInputs((prev) => ({ ...prev, source: e.target.value }))}
+            maxLength={500}
+            className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+            placeholder="e.g., User activity logs"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function MetricsDefinitionStudioPage() {
   if (!contract) {
     return (
       <div className="mx-auto max-w-4xl p-6">
@@ -120,81 +200,8 @@ ${JSON.stringify(json, null, 2)}
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ metricName, definition, calculation, units, source }}>
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="metricName" className="block text-sm font-semibold text-slate-900">
-              Metric Name <span className="text-red-600">*</span>
-            </label>
-            <input
-              id="metricName"
-              type="text"
-              value={metricName}
-              onChange={(e) => setMetricName(e.target.value)}
-              maxLength={200}
-              className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-              placeholder="e.g., Daily Active Users (DAU)"
-            />
-          </div>
-          <div>
-            <label htmlFor="definition" className="block text-sm font-semibold text-slate-900">
-              Definition <span className="text-red-600">*</span>
-            </label>
-            <textarea
-              id="definition"
-              value={definition}
-              onChange={(e) => setDefinition(e.target.value)}
-              rows={3}
-              maxLength={1000}
-              className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-              placeholder="What does this metric measure?"
-            />
-          </div>
-          <div>
-            <label htmlFor="calculation" className="block text-sm font-semibold text-slate-900">
-              Calculation
-            </label>
-            <textarea
-              id="calculation"
-              value={calculation}
-              onChange={(e) => setCalculation(e.target.value)}
-              rows={4}
-              maxLength={2000}
-              className="mt-2 w-full rounded-lg border border-slate-300 p-3 font-mono text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-              placeholder="How is it calculated? (e.g., COUNT(DISTINCT user_id) WHERE ...)"
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="units" className="block text-sm font-semibold text-slate-900">
-                Units
-              </label>
-              <input
-                id="units"
-                type="text"
-                value={units}
-                onChange={(e) => setUnits(e.target.value)}
-                maxLength={50}
-                className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-                placeholder="e.g., Count, %, $"
-              />
-            </div>
-            <div>
-              <label htmlFor="source" className="block text-sm font-semibold text-slate-900">
-                Data Source
-              </label>
-              <input
-                id="source"
-                type="text"
-                value={source}
-                onChange={(e) => setSource(e.target.value)}
-                maxLength={500}
-                className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-                placeholder="e.g., User activity logs"
-              />
-            </div>
-          </div>
-        </div>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples}>
+        <MetricsDefinitionForm />
       </ToolShell>
     </div>
   );

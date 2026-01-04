@@ -26,29 +26,42 @@ interface Layer {
   };
 }
 
-export default function ModelBuilderPOC() {
-  const [layers, setLayers] = useState<Layer[]>([
-    {
-      id: "1",
-      type: "dense",
-      config: { units: 64, activation: "relu" },
-    },
-    {
-      id: "2",
-      type: "dropout",
-      config: { rate: 0.2 },
-    },
-    {
-      id: "3",
-      type: "dense",
-      config: { units: 32, activation: "relu" },
-    },
-    {
-      id: "4",
-      type: "dense",
-      config: { units: 1, activation: "sigmoid" },
-    },
-  ]);
+export type ModelBuilderLayer = Layer;
+
+type ModelBuilderPOCProps = {
+  /**
+   * Optional preset injected by Examples.
+   */
+  initialLayers?: Layer[];
+  loadedExampleLabel?: string;
+};
+
+export default function ModelBuilderPOC(props: ModelBuilderPOCProps) {
+  const [layers, setLayers] = useState<Layer[]>(
+    () =>
+      props.initialLayers ?? [
+        {
+          id: "1",
+          type: "dense",
+          config: { units: 64, activation: "relu" },
+        },
+        {
+          id: "2",
+          type: "dropout",
+          config: { rate: 0.2 },
+        },
+        {
+          id: "3",
+          type: "dense",
+          config: { units: 32, activation: "relu" },
+        },
+        {
+          id: "4",
+          type: "dense",
+          config: { units: 1, activation: "sigmoid" },
+        },
+      ]
+  );
 
   const [selectedLayer, setSelectedLayer] = useState<string | null>(null);
   const [showCode, setShowCode] = useState(false);
@@ -166,6 +179,14 @@ model.compile({
 
   return (
     <div className="space-y-6 p-6 bg-white rounded-2xl shadow-lg border border-slate-200">
+      {props.loadedExampleLabel ? (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+          <p className="font-semibold">Loaded example preset</p>
+          <p className="mt-1">
+            {props.loadedExampleLabel}. This is a <strong>safe visual builder</strong> (no external calls).
+          </p>
+        </div>
+      ) : null}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-slate-900">Visual Model Builder POC</h2>

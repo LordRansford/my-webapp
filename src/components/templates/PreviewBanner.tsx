@@ -1,6 +1,7 @@
 import React from "react";
+import Link from "next/link";
 
-export function PreviewBanner() {
+export function PreviewBanner({ runHref }: { runHref?: string }) {
   return (
     <div className="sticky top-2 z-30 mx-auto max-w-5xl px-4">
       <div className="rounded-2xl border border-slate-200 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white shadow-lg shadow-slate-900/10 px-4 py-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
@@ -11,7 +12,17 @@ export function PreviewBanner() {
             <p className="text-xs text-slate-200">No downloads, exports, or saved state. Explore safely.</p>
           </div>
         </div>
-        <div className="text-xs font-semibold text-slate-200">Live calculators intentionally disabled</div>
+        <div className="flex items-center gap-3">
+          <div className="text-xs font-semibold text-slate-200">Live calculators intentionally disabled</div>
+          {runHref ? (
+            <Link
+              href={runHref}
+              className="inline-flex items-center justify-center rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white ring-1 ring-white/20 transition hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+            >
+              Run live
+            </Link>
+          ) : null}
+        </div>
       </div>
     </div>
   );

@@ -21,10 +21,10 @@ Add these for **Production** environment:
 
 ```bash
 # Sentry (Error Tracking)
-NEXT_PUBLIC_SENTRY_DSN=https://18ce20185c853218c17f8ae07b0a910c@04510635376836608.ingest.de.sentry.io/4510635463999568
+NEXT_PUBLIC_SENTRY_DSN=<your-sentry-dsn>
 
 # Vercel Blob Storage
-BLOB_READ_WRITE_TOKEN=vercel_blob_rw_UuhVh3M1IDJgNtMG_iVjfFbe4ZavEw1BfnPveoB3Z1dW7zU
+BLOB_READ_WRITE_TOKEN=<your-blob-read-write-token>
 
 # NextAuth (REQUIRED for Google sign-in)
 NEXTAUTH_SECRET=<generate-strong-random-secret-32-chars>
@@ -42,8 +42,8 @@ DATABASE_URL=postgresql://user:password@host:5432/dbname?sslmode=require
 
 # Stripe (REQUIRED for donations/credits)
 STRIPE_ENABLED=true
-STRIPE_SECRET_KEY=sk_live_...  # LIVE KEY for production!
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...  # LIVE KEY for production!
+STRIPE_SECRET_KEY=sk_<your-stripe-secret-key>  # Use your live-mode key in production
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_<your-stripe-publishable-key>  # Use your live-mode key in production
 STRIPE_WEBHOOK_SECRET=whsec_...  # From Stripe webhook endpoint
 
 # Email Service (Resend - Optional, for magic link auth)
@@ -75,8 +75,8 @@ NEXT_PUBLIC_PLAUSIBLE_DOMAIN=www.ransfordsnotes.com
 2. **Switch to Live mode** (toggle in top right)
 3. **Get API keys**:
    - Developers → API keys
-   - Copy **Publishable key** (`pk_live_...`)
-   - Copy **Secret key** (`sk_live_...`)
+   - Copy **Publishable key** (live mode)
+   - Copy **Secret key** (live mode)
 4. **Create webhook endpoint**:
    - Developers → Webhooks → Add endpoint
    - URL: `https://www.ransfordsnotes.com/api/stripe/webhook`
@@ -127,8 +127,8 @@ Copy the result and add to Vercel as `NEXTAUTH_SECRET`
 - [ ] `GOOGLE_CLIENT_SECRET` - Set
 - [ ] `NEXT_PUBLIC_SITE_URL` - Set to production domain
 - [ ] `STRIPE_ENABLED=true` - Set
-- [ ] `STRIPE_SECRET_KEY` - Set (LIVE key: `sk_live_...`)
-- [ ] `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` - Set (LIVE key: `pk_live_...`)
+- [ ] `STRIPE_SECRET_KEY` - Set (live-mode key)
+- [ ] `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` - Set (live-mode key)
 - [ ] `STRIPE_WEBHOOK_SECRET` - Set
 
 ### Google OAuth Configuration
@@ -173,16 +173,16 @@ Copy the result and add to Vercel as `NEXTAUTH_SECRET`
 Copy-paste this into Vercel (replace placeholders):
 
 ```
-NEXT_PUBLIC_SENTRY_DSN=https://18ce20185c853218c17f8ae07b0a910c@04510635376836608.ingest.de.sentry.io/4510635463999568
-BLOB_READ_WRITE_TOKEN=vercel_blob_rw_UuhVh3M1IDJgNtMG_iVjfFbe4ZavEw1BfnPveoB3Z1dW7zU
+NEXT_PUBLIC_SENTRY_DSN=<your-sentry-dsn>
+BLOB_READ_WRITE_TOKEN=<your-blob-read-write-token>
 NEXTAUTH_SECRET=<generate-32-char-secret>
 NEXTAUTH_URL=https://www.ransfordsnotes.com
 GOOGLE_CLIENT_ID=<your-google-client-id>
 GOOGLE_CLIENT_SECRET=<your-google-client-secret>
 NEXT_PUBLIC_SITE_URL=https://www.ransfordsnotes.com
 STRIPE_ENABLED=true
-STRIPE_SECRET_KEY=sk_live_<your-stripe-secret-key>
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_<your-stripe-publishable-key>
+STRIPE_SECRET_KEY=sk_<your-stripe-secret-key>
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_<your-stripe-publishable-key>
 STRIPE_WEBHOOK_SECRET=whsec_<your-webhook-secret>
 ```
 

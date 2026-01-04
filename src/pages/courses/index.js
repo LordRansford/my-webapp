@@ -18,13 +18,14 @@ export default function CoursesPage({ courses }) {
   const totalHours = courses.reduce((sum, c) => sum + (c.totalEstimatedHours || 0), 0);
   const totalLevels = courses.reduce((sum, c) => sum + (c.bands.length + 1), 0);
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.ransfordsnotes.com";
+  const courseCount = Array.isArray(courses) ? courses.length : 0;
 
   // Generate structured data for courses
   const courseSchema = {
     "@context": "https://schema.org",
     "@type": "ItemList",
     "name": "Ransford's Notes Courses",
-    "description": "Notes with browser practice for cybersecurity, data, software architecture, digitalisation, and AI.",
+    "description": "Notes with browser practice across multiple tracks including cybersecurity, data, software architecture, digitalisation, AI, and networking.",
     "numberOfItems": courses.length,
     "itemListElement": courses.map((course, index) => ({
       "@type": "ListItem",
@@ -71,12 +72,12 @@ export default function CoursesPage({ courses }) {
         <title>Courses - Ransford&apos;s Notes</title>
         <meta
           name="description"
-          content="Notes with browser practice for cybersecurity, data, software architecture, digitalisation, and AI. Five focused tracks from foundations to advanced practice."
+          content={`Notes with browser practice across ${courseCount} focused tracks from foundations to advanced practice.`}
         />
         <meta property="og:title" content="Courses - Ransford's Notes" />
         <meta
           property="og:description"
-          content="Notes with browser practice for cybersecurity, data, software architecture, digitalisation, and AI. Five focused tracks from foundations to advanced practice."
+          content={`Notes with browser practice across ${courseCount} focused tracks from foundations to advanced practice.`}
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={`${siteUrl}/courses`} />
@@ -84,7 +85,7 @@ export default function CoursesPage({ courses }) {
         <meta name="twitter:title" content="Courses - Ransford's Notes" />
         <meta
           name="twitter:description"
-          content="Notes with browser practice for cybersecurity, data, software architecture, digitalisation, and AI."
+          content={`Notes with browser practice across ${courseCount} focused tracks.`}
         />
         <script
           type="application/ld+json"
@@ -97,7 +98,7 @@ export default function CoursesPage({ courses }) {
       </Head>
       <Layout
         title="Courses - Ransford's Notes"
-        description="Notes with browser practice for cybersecurity, data, software architecture, digitalisation, and AI."
+        description="Notes with browser practice across multiple tracks from foundations to advanced practice."
       >
       <MarketingPageTemplate breadcrumbs={[{ label: "Home", href: "/" }, { label: "Courses" }]}>
         {/* Hero Section */}
@@ -110,8 +111,7 @@ export default function CoursesPage({ courses }) {
               Notes that build from foundations to advanced practice
             </h1>
             <p className="max-w-3xl text-base text-slate-700">
-              Five focused tracks. Cybersecurity, AI, Software Architecture, Data, and Digitalisation. Each track has a
-              clear path from foundations to advanced practice, plus a summary with games and practical tools.
+              {courseCount} focused tracks. Each track has a clear path from foundations to advanced practice, plus a summary with games and practical tools.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">

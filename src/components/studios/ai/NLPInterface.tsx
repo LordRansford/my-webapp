@@ -199,7 +199,7 @@ export function NLPInterface({
                 className="p-3 rounded-lg border border-slate-200 bg-slate-50 text-sm"
               >
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="font-medium text-slate-900">"{entry.input}"</span>
+                  <span className="font-medium text-slate-900">&quot;{entry.input}&quot;</span>
                   <span className="text-xs text-slate-500">
                     → {entry.command.intent} ({Math.round(entry.command.confidence * 100)}%)
                   </span>

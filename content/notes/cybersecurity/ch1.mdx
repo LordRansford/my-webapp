@@ -5,15 +5,15 @@ level: "foundations"
 courseId: "cybersecurity"
 levelId: "foundations"
 summary: "Data, networks, attackers, and everyday defences with hands-on labs."
-estimatedHours: 15
+estimatedHours: 8
 learningObjectives:
   - "Explain the CIA triad (confidentiality, integrity, availability) with concrete everyday examples."
   - "Explain how data representation (bits, bytes, encodings) affects security outcomes."
   - "Apply simple checks to passwords, links, and basic account hygiene using the labs."
   - "Analyse a small system to identify trust boundaries and obvious attack surface."
-  - "Demonstrate ability to detect phishing attempts with 90% accuracy."
-  - "Create a personal security improvement plan with evidence of implementation."
-  - "Evaluate breach scenarios and recommend preventive controls."
+  - "Explain how phishing and social engineering attempts work and how to spot realistic red flags."
+  - "Create a personal security improvement plan you can follow and review."
+  - "Evaluate a simple breach scenario and recommend preventive and detective controls."
 ---
 
 import ProgressBar from "@/components/notes/ProgressBar"
@@ -35,25 +35,46 @@ import { cyberSections } from "@/lib/cyberSections"
 
 <LevelProgressBar courseId="cybersecurity" levelId="foundations" sectionIds={cyberSections.foundations} />
 
-<CPDTracker courseId="cybersecurity" levelId="foundations" estimatedHours={15} />
+<CPDTracker courseId="cybersecurity" levelId="foundations" estimatedHours={8} />
 
-<SectionHeader variant="content" emoji="🛡️" id="foundations-overview">
-  Foundations overview
+<SectionHeader variant="content" emoji="🧭" id="foundations-f0-what-security-is">
+  Module F0. What cybersecurity is and is not
 </SectionHeader>
 
-<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-why-cyber-matters" />
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-f0-what-security-is" />
 
-Cybersecurity is about reducing real harm. It protects people, not just computers. It protects money, time, safety, privacy, and trust. When it goes wrong, it often looks ordinary at first. A bank transfer goes to the wrong place. A delivery address changes. A clinic cannot open a record. A small mistake becomes a big mess.
+Cybersecurity is the practice of reducing risk in **digital systems**. It is not magic. It is not perfection. It is a set of decisions and controls that make harm less likely, less severe, and easier to recover from when it happens.
 
-In plain language, my job in cyber is to stop normal mistakes from turning into expensive disasters. I am not trying to build an unbreakable fortress. I am trying to make the easy failures harder, make the hard failures visible, and make recovery faster.
+If you are a child, think of it like this. The internet is a busy city. Cybersecurity is how we do four things.
 
-Attackers succeed in the real world because most systems are normal systems. They are busy, messy, and connected. They have legacy tools, shared inboxes, rushed changes, and staff who are trying to get work done. The attacker does not need perfect skill. They need one good moment. They need one person to trust the wrong thing, or one system to accept an unsafe assumption.
+1. Lock doors that should be locked
+2. Check who is allowed in
+3. Notice when something looks wrong
+4. Have a plan for when mistakes happen
 
-In organisations, this is why security work is mostly about <GlossaryTip term="controls">Controls are the practical checks and safeguards that reduce risk, like MFA, approvals, logging, backups, and patching.</GlossaryTip> and decision making. You will see it in finance processes, HR systems, supplier access, and the boring bits like password resets and account cleanup. The glamorous hacker story is not the most common story.
+You will hear the word **cyber** used as shorthand. Historically it connects to **cybernetics**, the study of control and communication in animals and machines. That term comes from the Greek *kybernētēs*, meaning “steering” or “governor”. It is a good reminder. Security is about steering risk, not pretending risk does not exist.
 
-Here is a short story I have seen in some form more than once. A finance team gets an email that looks like a supplier. The invoice is correct. The tone is correct. The bank details are new. The team is under pressure. They pay. A week later the supplier calls to chase payment. Nobody was hacked in a dramatic way. It was a quiet identity failure plus weak process. The outcome was still real loss.
+### Four terms people mix up
 
-Threats, vulnerabilities, and risk are not the same thing. A <GlossaryTip term="threat">A threat is something that could cause harm, like phishing, malware, or a dishonest insider.</GlossaryTip> is about what could happen. A <GlossaryTip term="vulnerability">A vulnerability is a weakness that makes a threat more likely to succeed, like reused passwords or missing patches.</GlossaryTip> is about what makes it easier. <GlossaryTip term="risk">Risk is likelihood and impact in your context. It is the decision about what you accept, what you reduce, and what you monitor.</GlossaryTip> A threat can exist with low risk if it cannot reach you. A vulnerability can exist with low risk if it has no meaningful impact. Context is the difference between a scary headline and a meaningful decision.
+Let’s define four common terms precisely, using simple language.
+
+- <GlossaryTip term="Vulnerability">A vulnerability is a weakness in a system that could be used to cause harm. One example is a login page that lets you try unlimited passwords.</GlossaryTip>
+- <GlossaryTip term="Exploit">An exploit is a method or technique that takes advantage of a vulnerability. One example is repeatedly guessing passwords until one works.</GlossaryTip>
+- <GlossaryTip term="Incident">An incident is a security event that needs attention. It might be harmless, or it might become serious. One example is suspicious logins from a new country.</GlossaryTip>
+- <GlossaryTip term="Breach">A breach is when security is broken and a real security objective is violated, such as private data being accessed or stolen.</GlossaryTip>
+
+Notice the difference.
+
+1. A vulnerability can exist even if nobody uses it.
+2. An exploit is about how the weakness is used.
+3. An incident is about what happened and whether it needs response.
+4. A breach is about impact. One example is confidentiality being broken.
+
+### What this course deliberately does not teach
+
+This course is defensive and ethical. It does not teach you to break into systems. It teaches you to understand risk, spot weak assumptions, and choose controls that protect people.
+
+Here is a short story that shows what “cyber” looks like in real life. A finance team gets an email that looks like a supplier. The invoice is correct. The tone is correct. The bank details are new. The team is under pressure. They pay. A week later the supplier calls to chase payment. Nobody was hacked in a dramatic way. It was an identity failure plus a weak process. The outcome was still real loss.
 
 <MermaidDiagram caption="Threat, vulnerability, and risk in context">
 {`flowchart TB
@@ -64,11 +85,11 @@ Threats, vulnerabilities, and risk are not the same thing. A <GlossaryTip term="
 `}
 </MermaidDiagram>
 
-Everyday example: if you leave your house key under a plant pot, the threat is someone trying doors, the vulnerability is the predictable hiding place, and the risk depends on your street, your neighbours, and what happens if someone gets inside.
+Everyday example. If you leave your house key under a plant pot, the threat is someone trying doors, the vulnerability is the predictable hiding place, and the risk depends on your street, your neighbours, and what happens if someone gets inside.
 
-Common mistake: treating cyber as a list of bad things that might happen, instead of a set of assumptions you must test. Another common mistake is over focusing on rare, advanced attacks while ignoring easy ones that happen daily.
+Common mistake. Treating cybersecurity as a list of scary words, instead of a habit of checking assumptions. Another common mistake is over focusing on rare, advanced attacks while ignoring the easy ones that happen daily.
 
-Why it matters: when you separate threat, vulnerability, and risk, you stop guessing. You can choose the control that reduces harm most, and you can explain that choice to a manager without waving your hands.
+Why it matters. When you separate threat, vulnerability, and risk, you stop guessing. You can choose the control that reduces harm most, and you can explain that choice to a manager without waving your hands.
 
 <Callout title="A common myth" type="info">
 Cybersecurity is not only about stopping hackers. It is also about preventing accidents, spotting mistakes early, and recovering fast when something breaks.
@@ -88,40 +109,42 @@ Cybersecurity is not only about stopping hackers. It is also about preventing ac
   id="risk-dial"
   title="Risk dial"
   subtitle="See how small choices change harm"
-  description="Move sliders for password strength, software updates, and monitoring to see how overall risk shifts."
+  description="Move the likelihood and impact sliders to see how overall risk shifts."
 >
   <RiskDial />
 </ToolCard>
 
 <QuizBlock
-  id="foundations-why-cyber-matters"
+  id="foundations-f0-what-security-is"
   courseId="cybersecurity"
   levelId="foundations"
-  sectionId="foundations-why-cyber-matters"
-  title="Why cyber matters"
+  sectionId="foundations-f0-what-security-is"
+  title="Quick check. What cybersecurity is"
   questions={[
-    { q: "Why is cybersecurity about people as well as systems", a: "People build, use and are affected by systems; protecting them means reducing real harm." },
-    { q: "What is the goal of Foundations", a: "Give simple mental models for data, movement and trust so later ideas feel grounded." },
-    { q: "Why are broken assumptions dangerous", a: "They hide risk until it is too late, even if the tools look correct." },
-    { q: "How does cybersecurity reduce harm", a: "By controlling who can see or change data and making failure visible and recoverable." },
-    { q: "What three questions sit underneath most controls", a: "Who should see it, who can change it, and how do we recover if something breaks." },
-    { q: "Why is perfect security unrealistic", a: "We need to balance safety with getting work done; the aim is to reduce avoidable harm." },
+    { q: "What is cybersecurity in one sentence", a: "Reducing risk in digital systems so harm is less likely, less severe, and easier to recover from." },
+    { q: "What is a vulnerability", a: "A weakness in a system that could be used to cause harm." },
+    { q: "What is an exploit", a: "A method or technique that takes advantage of a vulnerability." },
+    { q: "What is a security incident", a: "A security event that needs attention, even if it turns out harmless." },
+    { q: "What is a breach", a: "A failure where a security objective is violated, such as private data being accessed or stolen." },
+    { q: "Why is 'secure' contextual", a: "Because controls must balance risk with cost, usability, and time." },
   ]}
 />
 
-### After this section you should be able to:
+### After this section you should be able to
 
-- Explain what cybersecurity is protecting and why attackers often succeed
-- Explain the difference between threat, vulnerability, and risk in context
-- Explain what breaks when identity and process controls are treated as optional
+1. Explain what cybersecurity is and what it is not
+2. Use the terms vulnerability, exploit, incident and breach correctly
+3. Explain why security is about trade offs and context
 
-<SectionHeader variant="content" emoji="⚠️" id="assets-threats-risk">
-  Assets, threats, and risk
+<SectionHeader variant="content" emoji="⚖️" id="foundations-f1-risk-and-outcomes">
+  Module F1. Risk and security outcomes
 </SectionHeader>
 
-<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-data-and-bits" />
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-f1-risk-and-outcomes" />
 
-An <GlossaryTip term="asset">An asset is anything you care about enough to protect, like data, systems, people, time, and trust.</GlossaryTip> It includes obvious things like customer records and laptops, but also things like staff time, reputation, and the ability to keep operating. If payroll fails on Friday, that is an availability problem. If a patient record is wrong, that is an integrity problem. If a private email leaks, that is a confidentiality problem.
+Security is risk management. That sounds like boring business language, but it is actually what makes security **real**. You start by being clear about what matters, what could go wrong, and what you will do about it.
+
+An <GlossaryTip term="Asset">An asset is anything you care about enough to protect, such as data, systems, people, money, time, and trust.</GlossaryTip> It includes obvious things like customer records and laptops, but also things like staff time, reputation, and the ability to keep operating. If payroll fails on Friday, that is an availability problem. If a patient record is wrong, that is an integrity problem. If a private email leaks, that is a confidentiality problem.
 
 Risk is contextual. The same control can be essential in one place and pointless in another. A strict password policy does not help if the real attack path is a shared admin account. A fancy monitoring tool does not help if nobody knows what to do when it alerts. Controls without context turn into theatre. They look reassuring and then fail at the worst time.
 
@@ -129,25 +152,43 @@ This section aligns to CISSP Security and Risk Management and the NIST Cybersecu
 
 We will use one simple example for the rest of Foundations. Imagine a small clinic with an online booking system. The key assets are the patient data, the appointment schedule, the staff time, and the clinic's ability to operate. The threats include phishing, stolen passwords, ransomware, and honest mistakes. The vulnerabilities include reused passwords, no multi-factor authentication (MFA), and missing backups. The risk is how those realities combine for this clinic, not a generic list from a template.
 
-In real organisations, this is how risk conversations should sound: "If this fails, who gets hurt, how quickly, and how would we know." This is why asset lists and data classification exist, even when they feel like paperwork. They make priorities explicit.
+In real organisations, this is how risk conversations should sound. "If this fails, who gets hurt, how quickly, and how would we know." This is why asset lists and data classification exist, even when they feel like paperwork. They make priorities explicit.
 
-Everyday example: your phone is an asset, but so is your ability to get into your bank account. If your phone is lost, the worst case is not "my phone is gone." The worst case is "my identity is used to reset accounts." The asset is not the device. The asset is what the device unlocks.
+Everyday example. Your phone is an asset, but so is your ability to get into your bank account. If your phone is lost, the worst case is not "my phone is gone." The worst case is "my identity is used to reset accounts." The asset is not the device. The asset is what the device unlocks.
 
-Common mistake: starting with controls and tools instead of starting with assets and outcomes. People often buy a scanner, a dashboard, or an audit template before they can answer what they are protecting and why.
+Common mistake. Starting with controls and tools instead of starting with assets and outcomes. People often buy a scanner, a dashboard, or an audit template before they can answer what they are protecting and why.
 
-Why it matters: when you get the asset and context right, you can spend effort where it reduces harm. You stop doing security theatre and start doing risk reduction.
+Why it matters. When you get the asset and context right, you can spend effort where it reduces harm. You stop doing security theatre and start doing risk reduction.
 
-### After this section you should be able to:
+### After this section you should be able to
 
-- Explain why risk is contextual and what breaks when controls are applied blindly
-- Explain how assets, threats, and vulnerabilities connect to real decisions
-- Explain why Identify work comes before tool buying
+1. Explain why risk is contextual and what breaks when controls are applied blindly
+2. Explain how assets, threats, and vulnerabilities connect to real decisions
+3. Explain why Identify work comes before tool buying
 
-<SectionHeader variant="content" emoji="🔐" id="identity-access-trust">
-  Identity, access, and trust
+<QuizBlock
+  id="foundations-f1-risk-and-outcomes"
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-f1-risk-and-outcomes"
+  title="Quick check. Risk and outcomes"
+  questions={[
+    { q: "What is risk", a: "Likelihood and impact in your context, after considering what could go wrong and what you will do about it." },
+    { q: "What is residual risk", a: "The risk that remains after you apply controls." },
+    { q: "Name three security outcomes people use", a: "Confidentiality, integrity, and availability (CIA)." },
+    { q: "What does confidentiality mean", a: "Only the right people or systems can see the information." },
+    { q: "What does integrity mean", a: "Information stays correct, and bad changes are prevented or detectable." },
+    { q: "What does availability mean", a: "Systems are usable when people need them." },
+    { q: "Why can a control become 'theatre'", a: "If it looks reassuring but does not reduce real risk in your situation." },
+    { q: "Why does context matter", a: "Because the same control can be essential in one place and pointless in another." },
+  ]}
+/>
+
+<SectionHeader variant="content" emoji="🔐" id="foundations-f5-identity-and-access">
+  Module F5. Identity and access
 </SectionHeader>
 
-<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-networks-and-packets" />
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-f5-identity-and-access" />
 
 Identity is now the security perimeter because work happens everywhere. Staff work from home. Phones are used for approvals. Vendors have access. Cloud services connect to other cloud services. The question is no longer only "is the network safe". The question is "who is this, and what should they be allowed to do".
 
@@ -155,26 +196,47 @@ Identity is now the security perimeter because work happens everywhere. Staff wo
 
 Passwords are not evil. They are just easy to get wrong. Long passwords are better than clever passwords. Password reuse is the real disaster. <GlossaryTip term="MFA">Multi factor authentication adds a second proof so a leaked password is not enough on its own.</GlossaryTip> It reduces the damage when a password leaks. <GlossaryTip term="Least privilege">Least privilege means giving only the access needed for a job and no more, so mistakes and compromise have a smaller blast radius.</GlossaryTip> It is boring. It is also one of the best risk controls we have.
 
-In real organisations, identity failures show up as: shared accounts, stale accounts, "temporary" exceptions that become permanent, and approvals done on the wrong channel. This is where audit findings come from, but it is also where incidents come from.
+In real organisations, identity failures show up as shared accounts, stale accounts, "temporary" exceptions that become permanent, and approvals done on the wrong channel. This is where audit findings come from, but it is also where incidents come from.
 
-Everyday example: handing someone your house keys is authorisation. Checking their ID at the door is authentication. If you give a spare key to a neighbour "just in case" and never take it back, you created a long lived trust decision without noticing.
+Everyday example. Handing someone your house keys is authorisation. Checking their ID at the door is authentication. If you give a spare key to a neighbour "just in case" and never take it back, you created a long lived trust decision without noticing.
 
-Common mistake: treating identity as a user experience detail instead of a safety system. Another common mistake is giving broad permissions because it is easier, then being surprised when something bad happens quickly.
+Common mistake. Treating identity as a user experience detail instead of a safety system. Another common mistake is giving broad permissions because it is easier, then being surprised when something bad happens quickly.
 
-Why it matters: when identity is strong and access is narrow, a compromised account does not automatically become a full breach. It buys time. It limits harm. It makes detection and recovery possible.
+Why it matters. When identity is strong and access is narrow, a compromised account does not automatically become a full breach. It buys time. It limits harm. It makes detection and recovery possible.
 
-### After this section you should be able to:
+### After this section you should be able to
 
-- Explain the difference between authentication and authorisation
-- Explain what breaks when identity is treated as a soft control
-- Explain why least privilege reduces blast radius during incidents
+1. Explain the difference between authentication and authorisation
+2. Explain what breaks when identity is treated as a soft control
+3. Explain why least privilege reduces blast radius during incidents
+
+<QuizBlock
+  id="foundations-f5-identity-and-access"
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-f5-identity-and-access"
+  title="Quick check. Identity and access"
+  questions={[
+    { q: "What is authentication", a: "Proving who you are, for example with a password plus a second factor." },
+    { q: "What is authorisation", a: "Deciding what you are allowed to do after you are authenticated." },
+    { q: "Why does MFA help", a: "It reduces the damage if a password leaks, because a password alone is not enough." },
+    { q: "What does least privilege mean", a: "Give only the access needed for a job so mistakes and compromise have a smaller blast radius." },
+    { q: "Name one common identity failure", a: "Shared accounts, stale accounts, or broad permissions given for convenience." },
+  ]}
+/>
+
+<SectionHeader variant="content" emoji="🧩" id="foundations-f2-data-and-integrity">
+  Module F2. Data, encoding, and integrity
+</SectionHeader>
+
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-f2-data-and-integrity" />
 
 <DiagramBlock
   title="Bits → bytes → characters"
   subtitle="How a single switch becomes readable text."
 >
   <div className="text-xs sm:text-sm leading-5 space-y-2">
-    <div>Bit: <span className="font-semibold">0</span> or <span className="font-semibold">1</span></div>
+    <div>Bit is <span className="font-semibold">0</span> or <span className="font-semibold">1</span></div>
     <div>8 bits → <span className="font-semibold">0100 0001</span> (decimal 65)</div>
     <div>Encoding table → 65 = <span className="font-semibold">A</span> in ASCII</div>
     <div>UTF 8 can use more than one byte when needed</div>
@@ -198,25 +260,26 @@ Why it matters: when identity is strong and access is narrow, a compromised acco
   id="encoding-playground"
   title="Encoding Playground"
   subtitle="Explore ASCII, UTF-8, Base64, and Hex"
-  description="See how the same text is represented in different encoding schemes. Understand why encoding matters for security—attackers sometimes use encoding to bypass filters."
+  description="See how the same text becomes bytes and symbols. This helps you spot when systems may disagree about what the data means."
   courseId="cybersecurity"
   levelId="foundations"
-  sectionId="foundations-data-and-bits"
+  sectionId="foundations-f2-data-and-integrity"
   cpdMinutesOnUse={5}
 >
   <EncodingPlayground />
 </ToolCard>
 
-**Why encoding matters for security:**
+**Why encoding matters for security**
 
-Attackers often use encoding to hide malicious payloads from simple filters. For example, SQL injection attempts might be URL-encoded or hex-encoded to bypass security controls that only look for plain-text patterns. Understanding how data can be represented in multiple ways helps you recognize obfuscation techniques.
+Encoding changes how text is *represented*, not what it *means*. The security problem happens when one part of a system validates the data one way, but another part interprets it differently. Also, naive keyword checks can miss encoded variants, which is why we prefer robust parsing and context-aware validation.
 
-Real example: The SQL command `SELECT * FROM users` could be encoded as:
-- URL encoding: `%53%45%4C%45%43%54%20%2A%20%46%52%4F%4D%20%75%73%65%72%73`
-- Hex encoding: `53454C454354202A2046524F4D207573657273`
-- Base64: `U0VMRUNUICogRlJPTSB1c2Vycw==`
+Benign example. The word `SELECT` can look very different once encoded, but it is still the same underlying bytes. The lesson is not “memorise encoded strings”. The lesson is “do not rely on brittle string checks for security”.
 
-Simple keyword filters looking for "SELECT" would miss these encoded versions, but the server still interprets them correctly.
+If you are building or reviewing a system, the safer approach is this.
+
+1. Parse inputs using a trusted parser for that format
+2. Validate based on the expected structure and context
+3. Encode outputs in the correct context. Examples include HTML, URL, JSON
 
 <ToolCard
   id="hashing-encryption-lab"
@@ -225,37 +288,27 @@ Simple keyword filters looking for "SELECT" would miss these encoded versions, b
   description="Compare one-way hashing (MD5, SHA-1, SHA-256, bcrypt) with two-way encryption. Learn why MD5 is broken, why bcrypt is better than SHA-256 for passwords, and how rainbow tables work."
   courseId="cybersecurity"
   levelId="foundations"
-  sectionId="foundations-data-and-bits"
+  sectionId="foundations-f2-data-and-integrity"
   cpdMinutesOnUse={10}
 >
   <HashingEncryptionLab />
 </ToolCard>
 
-**Hashing vs Encryption - Key Differences:**
+**Hashing vs encryption key differences**
 
-**Hashing (One-Way):**
-- Cannot be reversed—you cannot get the original data back
-- Used for integrity verification and password storage
-- Same input always produces same output
-- Tiny input change creates completely different hash (avalanche effect)
-- Examples: MD5 (broken), SHA-1 (weak), SHA-256 (strong), bcrypt (password-specific)
+Hashing is one way. You cannot reverse it. It is used for integrity checks and for storing passwords with specialised password hashing. Encryption is two way. You can decrypt with a key. It is used for confidentiality in transit and at rest.
 
-**Encryption (Two-Way):**
-- Can be decrypted with the correct key
-- Used for confidentiality—protecting data in transit or at rest
-- Same plaintext can produce different ciphertext (with different keys/IVs)
-- Examples: AES, RSA, TLS/HTTPS
-
-**Common mistake:** Storing passwords with SHA-256 instead of bcrypt/Argon2. SHA-256 is fast (good for file integrity, bad for passwords). Fast hashing enables brute-force attacks. bcrypt is intentionally slow with unique salts per password, making attacks impractical.
-
-**Rainbow tables:** Pre-computed hashes of common passwords. If you hash "password123" with SHA-256, an attacker can instantly look it up in a rainbow table. Defense: use a salt (random data added before hashing) so the same password produces different hashes for different users. bcrypt does this automatically.
+1. Hashing is one way and it is not reversible
+2. Encryption is reversible with the correct key
+3. A common mistake is storing passwords with a fast hash such as SHA 256. Use bcrypt, Argon2, or scrypt instead
+4. Rainbow tables are precomputed hashes of common passwords. Salts help prevent simple lookups. Password hashing schemes handle salts for you
 
 <QuizBlock
-  id="foundations-data-and-bits"
+  id="foundations-f2-data-and-integrity"
   courseId="cybersecurity"
   levelId="foundations"
-  sectionId="foundations-data-and-bits"
-  title="Data and bits quiz"
+  sectionId="foundations-f2-data-and-integrity"
+  title="Quick check. Data and integrity"
   questions={[
     { q: "What is a bit", a: "A single binary digit that can be 0 or 1." },
     { q: "How many bits are in a byte", a: "Eight bits make one byte." },
@@ -265,33 +318,36 @@ Simple keyword filters looking for "SELECT" would miss these encoded versions, b
     { q: "What happens if you flip the rightmost bit in a byte", a: "You change the value by 1." },
     { q: "Why do encoding mistakes cause security issues", a: "Different interpretations of the same bytes can break validation or create parsing bugs." },
     { q: "Convert decimal 13 to binary", a: "1101 (8 + 4 + 1)." },
-    { q: "Why store text with bytes instead of single bits", a: "Single bits cannot represent enough symbols; bytes provide the range needed for characters." },
+    { q: "Why store text with bytes instead of single bits", a: "Single bits cannot represent enough symbols. Bytes provide the range needed for characters." },
+    { q: "Why is hashing not encryption", a: "Hashing is one way. Encryption is reversible with a key." },
   ]}
 />
 
-### After this section you should be able to:
+### After this section you should be able to
 
-- Explain why representation and parsing mistakes create security risk
-- Explain what breaks when systems disagree on how bytes should be interpreted
-- Explain why integrity controls depend on correct data handling
+1. Explain why representation and parsing mistakes create security risk
+2. Explain what breaks when systems disagree on how bytes should be interpreted
+3. Explain why integrity controls depend on correct data handling
 
-<SectionHeader variant="content" emoji="🛡️" id="defence-detection-response">
-  Defence, detection, response
+<SectionHeader variant="content" emoji="🌐" id="foundations-f3-networks-and-transport">
+  Module F3. Networks, transport, and what leaks
 </SectionHeader>
+
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-f3-networks-and-transport" />
 
 Prevention alone fails. Not because people are lazy, but because systems are complex. Something will slip. A password will leak. A laptop will go missing. A supplier will get compromised. Defence needs layers, and it needs feedback.
 
-This aligns to the NIST Cybersecurity Framework 2.0 Protect, Detect, and Respond functions. Protect reduces likelihood. Detect reduces time to notice. Respond reduces harm and recovery time. Cyber Essentials Plus focuses on practical technical controls that support this loop: secure configuration, access control, malware protection, patch management, and boundary protections.
+This aligns to the NIST Cybersecurity Framework 2.0 Protect, Detect, and Respond functions. Protect reduces likelihood. Detect reduces time to notice. Respond reduces harm and recovery time. Cyber Essentials Plus focuses on practical technical controls that support this loop. Examples include secure configuration, access control, malware protection, patch management, and boundary protections.
 
 Logging matters before incidents. <GlossaryTip term="Logging">Logging is recording important events so you can reconstruct what happened, spot anomalies, and prove or disprove a theory.</GlossaryTip> If you do not collect basic logs, you cannot tell what happened. Then every incident becomes a guessing game. You end up with panic, broad resets, and lost time. A simple response plan beats a heroic late night. It tells people who decides, who communicates, and what evidence to preserve.
 
-In real organisations, this is the difference between "we think it was this account" and "we can show the exact sequence of actions." It is also why detection engineering is a real job. Good teams treat detection as a product: tuned, tested, and improved.
+In real organisations, this is the difference between "we think it was this account" and "we can show the exact sequence of actions." It is also why detection engineering is a real job. Good teams treat detection as a product that is tuned, tested, and improved.
 
-Everyday example: if a fire alarm goes off but nobody knows which room triggered it, everyone wastes time. If the alarm logs the room and the time, you can respond quickly and avoid a full building panic.
+Everyday example. If a fire alarm goes off but nobody knows which room triggered it, everyone wastes time. If the alarm logs the room and the time, you can respond quickly and avoid a full building panic.
 
-Common mistake: turning on every log and then drowning in noise, or logging nothing and then trying to do forensics with guesses. Another common mistake is writing an incident plan that nobody has rehearsed.
+Common mistake. Turning on every log and then drowning in noise, or logging nothing and then trying to do forensics with guesses. Another common mistake is writing an incident plan that nobody has rehearsed.
 
-Why it matters: detection and response are how you limit harm when prevention fails. You cannot undo a breach with wishful thinking. You need evidence, speed, and clear ownership.
+Why it matters. Detection and response are how you limit harm when prevention fails. You cannot undo a breach with wishful thinking. You need evidence, speed, and clear ownership.
 
 Under the hood, data still moves as packets. A packet has a header and a payload. The header is the envelope that tells the network where it is going. The payload is the content. Even when the payload is encrypted, metadata can still reveal behaviour. That is why monitoring often starts with patterns, not secrets.
 
@@ -300,9 +356,9 @@ Under the hood, data still moves as packets. A packet has a header and a payload
   subtitle="Payload stays hidden but the envelope still talks."
 >
   <div className="text-xs sm:text-sm leading-5 space-y-2">
-    <div>Laptop -&gt; Home router -&gt; ISP -&gt; Internet -&gt; Server</div>
-    <div>Header: source, destination, port, length</div>
-    <div>Payload: the content (often encrypted)</div>
+    <div>Laptop -> Home router -> ISP -> Internet -> Server</div>
+    <div>Header includes source, destination, port, length</div>
+    <div>Payload is the content, often encrypted</div>
     <div className="text-gray-600">Metadata like timing and size still leaks patterns.</div>
   </div>
 </DiagramBlock>
@@ -365,27 +421,25 @@ Under the hood, data still moves as packets. A packet has a header and a payload
   description="Learn about Wireshark and network protocol analysis. Explore resources for analyzing real network traffic and identifying security issues."
   courseId="cybersecurity"
   levelId="foundations"
-  sectionId="foundations-networks-and-packets"
+  sectionId="foundations-f3-networks-and-transport"
   cpdMinutesOnUse={5}
 >
   <WiresharkIntro />
 </ToolCard>
 
-**Network security concepts:**
+**Network security concepts**
 
-**HTTPS (HTTP + TLS):** Encrypts web traffic between browser and server. Without HTTPS, passwords, credit cards, and personal data travel in plain text across the network—visible to anyone along the path. Look for the padlock icon in your browser. Never enter sensitive information on HTTP sites.
+1. HTTPS uses HTTP with TLS. It protects data in transit between browser and server. It does not hide all metadata.
+2. DNS stands for Domain Name System. It turns names into IP addresses. DNS can be attacked or manipulated, which is why secure DNS options exist.
+3. VPN stands for Virtual Private Network. It creates an encrypted tunnel to a VPN provider. It can protect traffic from local observers, but the VPN provider still becomes a point of trust.
+4. Network segmentation means separating networks by trust level or function. It limits blast radius when something is compromised.
 
-**DNS (Domain Name System):** Translates human-readable names (google.com) to IP addresses (142.250.185.78). DNS is often unencrypted, revealing which sites you visit even if HTTPS encrypts the page content. DNS can be hijacked to redirect users to fake sites (phishing). Defense: Use DNS-over-HTTPS (DoH) or DNS-over-TLS (DoT) when possible.
+**Common network attack patterns**
 
-**VPN (Virtual Private Network):** Creates encrypted tunnel between your device and VPN server. Hides your traffic from local network observers (coffee shop WiFi, ISP). But the VPN provider can still see your traffic—choose carefully. Not all VPNs are equal in security or privacy.
-
-**Network Segmentation:** Separating networks by trust level or function. Example: Guest WiFi separate from corporate network, payment systems separate from general business network. If one zone is compromised, attackers can't easily reach other zones. Critical lesson from Target breach: vendor access wasn't segmented from payment systems.
-
-**Common network attacks:**
-- **Man-in-the-Middle (MitM):** Attacker intercepts traffic between two parties. Defense: HTTPS, certificate validation.
-- **DNS Hijacking:** Attacker redirects DNS queries to malicious servers. Defense: DNSSEC, DNS-over-HTTPS.
-- **Packet Sniffing:** Capturing network traffic to steal credentials or sensitive data. Defense: Encryption (HTTPS, VPN).
-- **ARP Spoofing:** Attacker tricks devices into sending traffic to wrong destination. Defense: Network monitoring, static ARP entries.
+1. Man in the middle, often shortened to MitM. An attacker tries to intercept traffic. TLS and certificate validation help.
+2. DNS hijacking. An attacker tries to redirect name lookups. DNSSEC and encrypted DNS help.
+3. Packet sniffing. An attacker captures traffic. Encryption helps.
+4. ARP spoofing. An attacker tries to confuse devices about who is who on a local network. Monitoring and secure network design help.
 
 <ToolCard
   id="dns-trust-lab"
@@ -394,7 +448,7 @@ Under the hood, data still moves as packets. A packet has a header and a payload
   description="Learn about DNS queries, DNS hijacking, DNSSEC, and how to identify typosquatting domains used in phishing."
   courseId="cybersecurity"
   levelId="foundations"
-  sectionId="foundations-networks-and-packets"
+  sectionId="foundations-f3-networks-and-transport"
   cpdMinutesOnUse={5}
 >
   <DnsTrustLab />
@@ -407,65 +461,67 @@ Under the hood, data still moves as packets. A packet has a header and a payload
   description="Practice mapping network architecture to identify where attackers might gain access and where trust boundaries should exist."
   courseId="cybersecurity"
   levelId="foundations"
-  sectionId="foundations-networks-and-packets"
+  sectionId="foundations-f3-networks-and-transport"
   cpdMinutesOnUse={10}
 >
   <AttackSurfaceMapper />
 </ToolCard>
 
-**Real-world scenario: Home Network Security**
+**Real world scenario. Home network security**
 
-Your home network is an attack surface too. Consider:
-- **Router:** Default passwords? Firmware updated? Guest network enabled for visitors?
-- **IoT devices:** Smart speakers, cameras, thermostats often have weak security
-- **WiFi:** WPA3 encryption (not WPA2 or WEP)? Strong password? Hidden SSID doesn't add much security
-- **Devices:** Phones, laptops, tablets all need updates and protection
+Your home network is an attack surface too. Consider four areas.
+
+1. Router. Default passwords, firmware updates, guest network
+2. IoT devices. Smart speakers, cameras, and thermostats often have weak security
+3. WiFi. WPA3 where possible, strong passphrase, guest network separation
+4. Devices. Phones, laptops, and tablets need updates and protection
 
 A compromised smart camera can be used to spy on you, launch attacks on other devices, or join a botnet for distributed denial-of-service (DDoS) attacks. Security isn't just about corporate networks.
 
 <QuizBlock
-  id="foundations-networks-and-packets"
+  id="foundations-f3-networks-and-transport"
   courseId="cybersecurity"
   levelId="foundations"
-  sectionId="foundations-networks-and-packets"
-  title="Networks and packets quiz"
+  sectionId="foundations-f3-networks-and-transport"
+  title="Quick check. Networks and transport"
   questions={[
     { q: "What is a packet", a: "A small piece of data with a header and payload used for network transport." },
-    { q: "What is the difference between a header and a payload", a: "The header is routing and control info; the payload is the content being delivered." },
+    { q: "What is the difference between a header and a payload", a: "The header is routing and control info. The payload is the content being delivered." },
     { q: "Why is metadata still sensitive", a: "It can reveal who is talking to whom, when, and how much, even if content is encrypted." },
     { q: "How do protocols like HTTP and TLS relate to lower layers", a: "They sit on top, using lower layers to move packets while adding meaning or encryption." },
     { q: "What does the OSI model help you remember", a: "Different layers handle different concerns, from moving bits to handling applications." },
     { q: "Why are packets used instead of one large blob", a: "Small packets are easier to route, resend on failure and share network capacity." },
     { q: "Name one security control at a network layer", a: "TLS for encrypting traffic or a firewall filtering packets." },
     { q: "How can timing of packets leak information", a: "Patterns in timing can hint at actions like page loads or logins." },
+    { q: "What does TLS mainly protect", a: "It protects confidentiality and integrity of data in transit between endpoints, but it does not hide all metadata." },
   ]}
 />
 
-### After this section you should be able to:
+### After this section you should be able to
 
-- Explain why trust boundaries exist and what breaks when networks are assumed safe
-- Explain how metadata can leak behaviour even when content is encrypted
-- Explain why monitoring often starts with patterns, not secrets
+1. Explain why trust boundaries exist and what breaks when networks are assumed safe
+2. Explain how metadata can leak behaviour even when content is encrypted
+3. Explain why monitoring often starts with patterns, not secrets
 
-<SectionHeader variant="content" emoji="🔒" id="cia-and-attacks">
-  Confidentiality, integrity, availability and simple attacks
+<SectionHeader variant="content" emoji="🔒" id="foundations-f4-cia-and-simple-attacks">
+  Module F4. CIA and simple attacks
 </SectionHeader>
 
-<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-cia-and-simple-attacks" />
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-f4-cia-and-simple-attacks" />
 
-To keep this practical, we will use one simple frame: confidentiality, integrity, and availability, often shortened to CIA. Confidentiality means only the right people can see information. Integrity means changes are correct and visible. Availability means systems are there when needed. The purpose is not to memorise three words. The purpose is to ask better questions.
+To keep this practical, we will use one simple frame. Confidentiality, integrity, and availability are often shortened to CIA. Confidentiality means only the right people can see information. Integrity means changes are correct and visible. Availability means systems are there when needed. The purpose is not to memorise three words. The purpose is to ask better questions.
 
-In plain language: confidentiality is about privacy, integrity is about truth, and availability is about being able to function. Most incidents are one of these three, usually with a second one following close behind.
+In plain language, confidentiality is about privacy, integrity is about truth, and availability is about being able to function. Most incidents are one of these three, usually with a second one following close behind.
 
 When identity is weak, confidentiality fails. When changes are untracked, integrity fails. When backups are missing, availability fails. Good governance makes those failures less likely because it makes the decisions explicit and reviewed.
 
 In real organisations, CIA is how you explain impact to non security people. A leader might not care about a vulnerability ID, but they do care about "patients could not be seen" or "invoices were changed" or "private data leaked." CIA translates technical failures into outcomes.
 
-Everyday example: confidentiality is your bank statement being private, integrity is your balance being correct, and availability is being able to pay for groceries when you are at the checkout.
+Everyday example. Confidentiality is your bank statement being private, integrity is your balance being correct, and availability is being able to pay for groceries when you are at the checkout.
 
-Common mistake: thinking CIA is a checklist where you must maximise all three at once. In practice you trade. Tight security might reduce availability if you lock out staff too often. High availability might reduce confidentiality if you spread access too widely. The job is to choose wisely and explain the trade.
+Common mistake. Thinking CIA is a checklist where you must maximise all three at once. In practice you trade. Tight security might reduce availability if you lock out staff too often. High availability might reduce confidentiality if you spread access too widely. The job is to choose wisely and explain the trade.
 
-Why it matters: CIA is a simple way to reason about controls and to spot what kind of harm you are actually preventing. It helps you avoid security theatre and focus on outcomes.
+Why it matters. CIA is a simple way to reason about controls and to spot what kind of harm you are actually preventing. It helps you avoid security theatre and focus on outcomes.
 
 <DiagramBlock
   title="CIA in plain view"
@@ -475,18 +531,22 @@ Why it matters: CIA is a simple way to reason about controls and to spot what ki
     <div>Confidentiality → only the right people can see it</div>
     <div>Integrity → changes are correct and visible</div>
     <div>Availability → systems are there when needed</div>
-    <div className="text-gray-600">Controls: strong auth, input checks, monitoring, backups, graceful degradation.</div>
+    <div className="text-gray-600">Controls include strong auth, input checks, monitoring, backups, graceful degradation.</div>
   </div>
 </DiagramBlock>
 
-<GlossaryTip term="Entropy">A measure of unpredictability; more entropy means harder to guess secrets like passwords.</GlossaryTip>
+<GlossaryTip term="Entropy">A measure of unpredictability. More entropy means harder to guess secrets like passwords.</GlossaryTip>
 <GlossaryTip term="Payload">The main content inside a packet or message.</GlossaryTip>
 
 <ToolCard
   id="password-strength-lab"
   title="Try building stronger passwords"
   subtitle="See how small changes affect strength"
-  description="Type a pretend password and see feedback about length, variety and guessability. No real passwords are stored; this is a safe, local practice tool."
+  description="Type a pretend password and see feedback about length, variety and guessability. No real passwords are stored. This is a safe, local practice tool."
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-f4-cia-and-simple-attacks"
+  cpdMinutesOnUse={5}
 >
   <PasswordEntropyTool />
 </ToolCard>
@@ -501,11 +561,11 @@ Why it matters: CIA is a simple way to reason about controls and to spot what ki
 </ToolCard>
 
 <QuizBlock
-  id="foundations-cia-and-simple-attacks"
+  id="foundations-f4-cia-and-simple-attacks"
   courseId="cybersecurity"
   levelId="foundations"
-  sectionId="foundations-cia-and-simple-attacks"
-  title="Core ideas quiz"
+  sectionId="foundations-f4-cia-and-simple-attacks"
+  title="Core ideas quiz. CIA in practice"
   questions={[
     { q: "What is confidentiality", a: "Keeping data visible only to the right people or systems." },
     { q: "What is integrity", a: "Keeping data and systems from being changed silently or incorrectly." },
@@ -518,15 +578,17 @@ Why it matters: CIA is a simple way to reason about controls and to spot what ki
   ]}
 />
 
-### After this section you should be able to:
+### After this section you should be able to
 
-- Explain CIA as decision questions, not memorised words
-- Explain what breaks when identity is weak or integrity is not monitored
-- Explain why availability needs planning, not hope
+1. Explain CIA as decision questions, not memorised words
+2. Explain what breaks when identity is weak or integrity is not monitored
+3. Explain why availability needs planning, not hope
 
-<SectionHeader variant="content" emoji="👥" id="human-factors-governance">
-  Human factors and governance
+<SectionHeader variant="content" emoji="👥" id="foundations-f6-human-factors-and-phishing">
+  Module F6. Human factors and phishing
 </SectionHeader>
+
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-f6-human-factors-and-phishing" />
 
 Humans are not the weakest link. Humans are the system. Most insecure behaviour is a rational response to a bad setup. If it takes five minutes to do the safe thing, people will do the fast thing. If approvals block urgent work, people will route around them. If security tools produce noise, people will ignore them.
 
@@ -536,17 +598,139 @@ Real organisational failures are often not technical. They are unclear ownership
 
 In real organisations, governance shows up as: who is allowed to approve exceptions, how access is granted and removed, how incidents are escalated, and what gets funded. Good governance is boring in the best way. It makes security decisions repeatable instead of emotional.
 
-Everyday example: if nobody is clearly responsible for locking up at night, it eventually becomes "someone will do it." That is not a plan. Governance is deciding who locks up, how you check, and what happens if it is missed.
+Everyday example. If nobody is clearly responsible for locking up at night, it eventually becomes "someone will do it." That is not a plan. Governance is deciding who locks up, how you check, and what happens if it is missed.
 
-Common mistake: blaming individuals for predictable system failures. Another common mistake is writing policies that describe an ideal world and then punishing people for living in the real one.
+Common mistake. Blaming individuals for predictable system failures. Another common mistake is writing policies that describe an ideal world and then punishing people for living in the real one.
 
-Why it matters: human factors and governance are what make security sustainable. Without them, controls decay, exceptions pile up, and the organisation only gets serious after harm has happened.
+Why it matters. Human factors and governance are what make security sustainable. Without them, controls decay, exceptions pile up, and the organisation only gets serious after harm has happened.
 
-### After this section you should be able to:
+### After this section you should be able to
 
-- Explain why humans are part of the system and what breaks when processes are unrealistic
-- Explain governance as ownership of trade offs, not documents
-- Explain why clear roles and rehearsed response reduce harm
+1. Explain why humans are part of the system and what breaks when processes are unrealistic
+2. Explain governance as ownership of trade offs, not documents
+3. Explain why clear roles and rehearsed response reduce harm
+
+<ToolCard
+  id="phishing-detection-trainer"
+  title="Phishing detection trainer"
+  subtitle="Build judgement with realistic examples"
+  description="Classify emails and learn practical signals. Sender domains, urgency tactics, mismatched links, and risky requests."
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-f6-human-factors-and-phishing"
+  cpdMinutesOnUse={10}
+>
+  <PhishingDetectionTrainer />
+</ToolCard>
+
+<ToolCard
+  id="social-engineering-simulator"
+  title="Social engineering simulator"
+  subtitle="See how good people get rushed"
+  description="Practice recognising pressure tactics and choosing safe verification steps."
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-f6-human-factors-and-phishing"
+  cpdMinutesOnUse={10}
+>
+  <SocialEngineeringSimulator />
+</ToolCard>
+
+<QuizBlock
+  id="foundations-f6-human-factors-and-phishing"
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-f6-human-factors-and-phishing"
+  title="Quick check. Human factors"
+  questions={[
+    { q: "Why is 'someone clicked a link' not a full explanation", a: "Because systems, incentives, and processes shape behaviour. The fix is usually design and process, not blame." },
+    { q: "What is a safe default action for urgent requests", a: "Pause and verify through an independent channel before taking action." },
+    { q: "Name one common pressure tactic", a: "Urgency, secrecy, authority, or fear." },
+    { q: "What does governance mean in simple terms", a: "Who owns decisions, who accepts risk, and how choices are made and checked." },
+  ]}
+/>
+
+<SectionHeader variant="content" emoji="🕵️" id="foundations-f7-privacy-and-everyday-data-protection">
+  Module F7. Privacy and everyday data protection
+</SectionHeader>
+
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-f7-privacy-and-everyday-data-protection" />
+
+Privacy is a security property. It is about reducing harm from unnecessary collection, unnecessary sharing, and unnecessary retention. If you collect less data, there is less data to leak. If you keep data for less time, there is less to steal later.
+
+<ToolCard
+  id="privacy-threat-modeler"
+  title="Privacy threat modeler"
+  subtitle="Spot harm early"
+  description="Map a simple data flow and ask: who could be harmed, how, and what control reduces that harm."
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-f7-privacy-and-everyday-data-protection"
+  cpdMinutesOnUse={10}
+>
+  <PrivacyThreatModeler />
+</ToolCard>
+
+<ToolCard
+  id="account-hygiene-audit"
+  title="Account hygiene audit"
+  subtitle="Reduce easy identity risk"
+  description="Work through a safe checklist: recovery methods, old accounts, app permissions, and simple hardening steps."
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-f7-privacy-and-everyday-data-protection"
+  cpdMinutesOnUse={10}
+>
+  <AccountHygieneAudit />
+</ToolCard>
+
+<QuizBlock
+  id="foundations-f7-privacy-and-everyday-data-protection"
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-f7-privacy-and-everyday-data-protection"
+  title="Quick check. Privacy"
+  questions={[
+    { q: "What does data minimisation mean", a: "Collect only what you need, for a clear purpose, and no more." },
+    { q: "Why does retention increase risk", a: "Because data you keep can be stolen later. Keeping less reduces future harm." },
+    { q: "What is one privacy-safe habit", a: "Review and remove unused accounts and reduce app permissions." },
+    { q: "Why can logging create privacy risk", a: "Logs can contain personal or sensitive data if you record too much." },
+  ]}
+/>
+
+<SectionHeader variant="content" emoji="✅" id="foundations-f8-foundations-capstone">
+  Module F8. Foundations capstone
+</SectionHeader>
+
+<SectionProgressToggle courseId="cybersecurity" levelId="foundations" sectionId="foundations-f8-foundations-capstone" />
+
+This capstone is about turning learning into action. Choose a small set of changes you can explain. Make them real. Keep it calm and practical.
+
+<ToolCard
+  id="personal-security-baseline"
+  title="Personal security baseline"
+  subtitle="A small plan you can repeat"
+  description="Use a few toggles and a short note to capture what you changed and what you will do next."
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-f8-foundations-capstone"
+  cpdMinutesOnUse={10}
+>
+  <PersonalSecurityBaselineTool />
+</ToolCard>
+
+<QuizBlock
+  id="foundations-f8-foundations-capstone"
+  courseId="cybersecurity"
+  levelId="foundations"
+  sectionId="foundations-f8-foundations-capstone"
+  title="Quick check. Capstone"
+  questions={[
+    { q: "What is the goal of this capstone", a: "Turn the course into a few real actions you can explain and repeat." },
+    { q: "What is one safe default when you are unsure", a: "Pause and verify through an independent channel before acting." },
+    { q: "Why keep the baseline small", a: "Small changes stick. You can build on them without burnout." },
+  ]}
+/>
 
 This is Foundations. Move into Applied next once you can explain every term on this page to another person and show them how the tools work.
 

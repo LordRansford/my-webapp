@@ -1,0 +1,113 @@
+{
+  "generatedAt": "2026-01-04T06:44:32.700Z",
+  "courses": [
+    {
+      "courseId": "ai",
+      "status": "InProgress",
+      "totals": {
+        "totalEstimatedHours": 49,
+        "totalLearningObjectives": 16,
+        "totalTrackedSections": 25,
+        "totalQuizBlocks": 19,
+        "totalTools": 24
+      },
+      "gaps": {
+        "levelsMissingLearningObjectives": [],
+        "levelsMissingQuizBlocks": [],
+        "levelsMissingToolActivities": [],
+        "levelsMissingSectionTracking": [],
+        "recommendations": []
+      }
+    },
+    {
+      "courseId": "cybersecurity",
+      "status": "Ready",
+      "totals": {
+        "totalEstimatedHours": 56,
+        "totalLearningObjectives": 15,
+        "totalTrackedSections": 25,
+        "totalQuizBlocks": 25,
+        "totalTools": 35
+      },
+      "gaps": {
+        "levelsMissingLearningObjectives": [],
+        "levelsMissingQuizBlocks": [],
+        "levelsMissingToolActivities": [],
+        "levelsMissingSectionTracking": [],
+        "recommendations": []
+      }
+    },
+    {
+      "courseId": "data",
+      "status": "Draft",
+      "totals": {
+        "totalEstimatedHours": 34,
+        "totalLearningObjectives": 16,
+        "totalTrackedSections": 22,
+        "totalQuizBlocks": 20,
+        "totalTools": 26
+      },
+      "gaps": {
+        "levelsMissingLearningObjectives": [],
+        "levelsMissingQuizBlocks": [],
+        "levelsMissingToolActivities": [],
+        "levelsMissingSectionTracking": [],
+        "recommendations": []
+      }
+    },
+    {
+      "courseId": "digitalisation",
+      "status": "Draft",
+      "totals": {
+        "totalEstimatedHours": 32,
+        "totalLearningObjectives": 16,
+        "totalTrackedSections": 16,
+        "totalQuizBlocks": 15,
+        "totalTools": 19
+      },
+      "gaps": {
+        "levelsMissingLearningObjectives": [],
+        "levelsMissingQuizBlocks": [],
+        "levelsMissingToolActivities": [],
+        "levelsMissingSectionTracking": [],
+        "recommendations": []
+      }
+    },
+    {
+      "courseId": "network-models",
+      "status": "Draft",
+      "totals": {
+        "totalEstimatedHours": 40,
+        "totalLearningObjectives": 11,
+        "totalTrackedSections": 21,
+        "totalQuizBlocks": 3,
+        "totalTools": 11
+      },
+      "gaps": {
+        "levelsMissingLearningObjectives": [],
+        "levelsMissingQuizBlocks": [],
+        "levelsMissingToolActivities": [],
+        "levelsMissingSectionTracking": [],
+        "recommendations": []
+      }
+    },
+    {
+      "courseId": "software-architecture",
+      "status": "Draft",
+      "totals": {
+        "totalEstimatedHours": 100.7,
+        "totalLearningObjectives": 20,
+        "totalTrackedSections": 27,
+        "totalQuizBlocks": 10,
+        "totalTools": 21
+      },
+      "gaps": {
+        "levelsMissingLearningObjectives": [],
+        "levelsMissingQuizBlocks": [],
+        "levelsMissingToolActivities": [],
+        "levelsMissingSectionTracking": [],
+        "recommendations": []
+      }
+    }
+  ]
+}

@@ -30,6 +30,22 @@ const mdxOptions = {
   ],
 };
 
+const withSectionAliases = (manifest) => {
+  const m = manifest || {};
+  const intermediate = m.intermediate || m.applied || [];
+  const advanced = m.advanced || m.practice || m["practice-strategy"] || [];
+  const out = {
+    foundationsSectionIds: m.foundations || [],
+    intermediateSectionIds: intermediate,
+    advancedSectionIds: advanced,
+    summarySectionIds: m.summary || [],
+  };
+  if (m.applied) out.appliedSectionIds = m.applied;
+  if (m.practice) out.practiceSectionIds = m.practice;
+  if (m["practice-strategy"]) out.practiceStrategySectionIds = m["practice-strategy"];
+  return out;
+};
+
 const readDirIfExists = (dirPath) => {
   try {
     return fs.readdirSync(dirPath);
@@ -70,6 +86,7 @@ const parseJsonCourse = (fileName) => {
 };
 
 const COURSE_TRACK_ORDER = [
+  "network-models",
   "cybersecurity",
   "ai",
   "software-architecture",
@@ -80,6 +97,7 @@ const COURSE_TRACK_ORDER = [
 const COURSE_TRACK_ROUTES = {
   ai: "/ai",
   cybersecurity: "/cybersecurity",
+  "network-models": "/network-models",
   data: "/data",
   digitalisation: "/digitalisation",
   "software-architecture": "/software-architecture",
@@ -97,6 +115,12 @@ const COURSE_TRACK_LEVEL_ROUTES = {
     intermediate: "/cybersecurity/intermediate",
     advanced: "/cybersecurity/advanced",
     summary: "/cybersecurity/summary",
+  },
+  "network-models": {
+    foundations: "/network-models/beginner",
+    intermediate: "/network-models/intermediate",
+    advanced: "/network-models/advanced",
+    summary: "/network-models/summary",
   },
   data: {
     foundations: "/data/foundations",
@@ -299,13 +323,13 @@ export const getLesson = async (courseSlug, lessonSlug) => {
   const { data, content } = matter(source);
   const extraScope =
     courseSlug === "ai"
-      ? { aiSectionManifest }
+      ? { aiSectionManifest, ...withSectionAliases(aiSectionManifest) }
       : courseSlug === "digitalisation"
-      ? { digitalisationSectionManifest }
+      ? { digitalisationSectionManifest, ...withSectionAliases(digitalisationSectionManifest) }
       : courseSlug === "software-architecture"
-      ? { softwareArchitectureSectionManifest }
+      ? { softwareArchitectureSectionManifest, ...withSectionAliases(softwareArchitectureSectionManifest) }
       : courseSlug === "data"
-      ? { dataSectionManifest }
+      ? { dataSectionManifest, ...withSectionAliases(dataSectionManifest) }
       : {};
   const serialised = await serialize(content, {
     scope: { ...data, ...extraScope },

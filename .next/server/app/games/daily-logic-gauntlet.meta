@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/games/layout,_N_T_/games/daily-logic-gauntlet/layout,_N_T_/games/daily-logic-gauntlet/page,_N_T_/games/daily-logic-gauntlet"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/games/daily-logic-gauntlet/__PAGE__",
+    "/games/daily-logic-gauntlet",
+    "/games",
+    "/_index",
+    "/_head"
+  ]
+}

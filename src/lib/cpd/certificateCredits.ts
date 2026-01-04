@@ -2,7 +2,8 @@ export const CPD_CERTIFICATE_CREDITS_DEFAULT = 50;
 
 export const cpdCertificateCreditsByCourseId: Record<string, number> = {
   ai: 50,
-  cybersecurity: 50,
+  // Cybersecurity certificates are included with the certification assessment stage.
+  cybersecurity: 0,
   "software-architecture": 50,
   data: 50,
   digitalisation: 50,

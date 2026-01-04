@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, Suspense, useCallback } from "react";
+import React, { useEffect, useMemo, useState, Suspense } from "react";
 import { 
   Search, 
   Filter, 
@@ -32,12 +32,18 @@ export default function ExampleGallery({ onLoadExample, selectedAudience }: Exam
   const [showPreview, setShowPreview] = useState(false);
 
   // Debounce search to improve performance
-  const debouncedSearch = useCallback(
-    debounce((value: string) => {
-      setSearchQuery(value);
-    }, 300),
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((value: string) => {
+        setSearchQuery(value);
+      }, 300),
     []
   );
+
+  // Cleanup pending debounce work on unmount.
+  useEffect(() => {
+    return () => debouncedSearch.cancel();
+  }, [debouncedSearch]);
 
   const handleSearchChange = (value: string) => {
     setSearchInput(value);

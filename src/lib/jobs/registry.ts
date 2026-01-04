@@ -8,9 +8,6 @@ const RUNNER_NOT_AVAILABLE_MESSAGE = "This feature is not available yet. We are 
 export type JobHandler = (params: { jobId: string; payload: any; userId: string | null; anonKey: string | null; toolId: string }) => Promise<any>;
 
 export const JOB_HANDLERS: Record<string, JobHandler> = {
-  "mentor-query": async ({ jobId, payload }) => {
-    return { jobId, ok: true, message: "mentor-query handler not implemented yet", echo: payload ? "received" : "none" };
-  },
   "whois-summary": async ({ jobId, payload }) => {
     return { jobId, ok: true, message: "whois-summary handler not implemented yet", echo: payload ? "received" : "none" };
   },

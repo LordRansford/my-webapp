@@ -1,10 +1,380 @@
 {
   "courseId": "ai",
   "status": "InProgress",
-  "levels": [],
+  "generatedAt": "2026-01-04T06:44:32.680Z",
+  "version": "1.0.0",
+  "levels": [
+    {
+      "levelId": "advanced",
+      "estimatedHours": 12,
+      "sourceFiles": [
+        {
+          "title": "AI Advanced",
+          "file": "content/courses/ai/advanced.mdx",
+          "stepIndex": 2
+        }
+      ],
+      "learningObjectives": [
+        "Design a production AI system architecture with clear boundaries, failure handling, and observability.",
+        "Evaluate cost, latency, reliability, and quality trade-offs using practical system constraints.",
+        "Define monitoring signals for drift, safety, and performance and explain how to act on them operationally.",
+        "Explain how retrieval, permissions, and data freshness change the risk profile of AI assistants."
+      ],
+      "sectionIds": [
+        "ai-advanced-systems-and-architectures",
+        "ai-advanced-scaling-cost-reliability",
+        "ai-advanced-evaluation-monitoring-governance"
+      ],
+      "quizzes": [
+        {
+          "id": "ai-advanced-systems-quiz",
+          "title": "Check your understanding of AI system architecture",
+          "sectionId": "ai-advanced-systems-and-architectures",
+          "explicitId": true
+        },
+        {
+          "id": "ai-advanced-scaling-quiz",
+          "title": "Check your understanding of scaling and reliability",
+          "sectionId": "ai-advanced-scaling-cost-reliability",
+          "explicitId": true
+        },
+        {
+          "id": "ai-advanced-monitoring-quiz",
+          "title": "Check your understanding of monitoring and governance",
+          "sectionId": "ai-advanced-evaluation-monitoring-governance",
+          "explicitId": true
+        }
+      ],
+      "tools": [
+        {
+          "id": "ai-architecture-explorer",
+          "title": "Explore AI system architectures"
+        },
+        {
+          "id": "ai-scaling-simulator",
+          "title": "Simulate AI system load"
+        },
+        {
+          "id": "ai-monitoring-lab",
+          "title": "Explore model monitoring signals"
+        }
+      ],
+      "evidenceSignals": {
+        "quizzesPresent": true,
+        "toolsPresent": true,
+        "learningObjectivesPresent": true,
+        "sectionTrackingPresent": true
+      }
+    },
+    {
+      "levelId": "intermediate",
+      "estimatedHours": 22,
+      "sourceFiles": [
+        {
+          "title": "AI Intermediate",
+          "file": "content/courses/ai/intermediate.mdx",
+          "stepIndex": 1
+        },
+        {
+          "title": "AI Intermediate",
+          "file": "content/notes/ai/intermediate.mdx",
+          "stepIndex": 1
+        }
+      ],
+      "learningObjectives": [
+        "Explain the training loop in plain language and diagnose common failure modes like overfitting and leakage.",
+        "Design a basic evaluation plan (metrics + thresholds) that matches a real-world decision and risk profile.",
+        "Describe how data quality, features, and representation affect model behaviour in production.",
+        "Select an appropriate deployment pattern (batch, real-time, retrieval-augmented) and explain the trade-offs."
+      ],
+      "sectionIds": [
+        "ai-intermediate-models-and-training",
+        "ai-intermediate-data-features-representation",
+        "ai-intermediate-evaluation",
+        "ai-intermediate-deployment",
+        "ai-intermediate-governance",
+        "ai-intermediate-prompts-and-patterns",
+        "ai-intermediate-embeddings-and-search",
+        "ai-intermediate-rag-with-docs",
+        "ai-intermediate-simple-agents"
+      ],
+      "quizzes": [
+        {
+          "id": "ai-intermediate-training-dynamics-quiz",
+          "title": "Quick check: models and training dynamics",
+          "sectionId": "ai-intermediate-models-and-training",
+          "explicitId": true
+        },
+        {
+          "id": "ai-intermediate-representation-quiz",
+          "title": "Quick check: features and representation",
+          "sectionId": "ai-intermediate-data-features-representation",
+          "explicitId": true
+        },
+        {
+          "id": "ai-intermediate-evaluation-quiz",
+          "title": "Quick check: evaluation and metrics",
+          "sectionId": "ai-intermediate-evaluation",
+          "explicitId": true
+        },
+        {
+          "id": "ai-intermediate-deployment-quiz",
+          "title": "Quick check: deployment, monitoring and drift",
+          "sectionId": "ai-intermediate-deployment",
+          "explicitId": true
+        },
+        {
+          "id": "ai-intermediate-responsible-ai-quiz",
+          "title": "Quick check: responsible AI and deployment risks",
+          "sectionId": "ai-intermediate-governance",
+          "explicitId": true
+        },
+        {
+          "id": "ai-intermediate-prompts-quiz",
+          "title": "Check your prompt instincts",
+          "sectionId": null,
+          "explicitId": true
+        },
+        {
+          "id": "ai-intermediate-embeddings-quiz",
+          "title": "Quick check. Embeddings and search",
+          "sectionId": null,
+          "explicitId": true
+        },
+        {
+          "id": "ai-intermediate-rag-quiz",
+          "title": "Quick check. Retrieval workflows",
+          "sectionId": null,
+          "explicitId": true
+        },
+        {
+          "id": "ai-intermediate-agents-quiz",
+          "title": "Quick check. Simple agents",
+          "sectionId": null,
+          "explicitId": true
+        }
+      ],
+      "tools": [
+        {
+          "id": "training-dynamics-simulator",
+          "title": "See how models learn"
+        },
+        {
+          "id": "feature-representation-explorer",
+          "title": "Explore data representations"
+        },
+        {
+          "id": "model-metrics-playground",
+          "title": "Explore model evaluation trade offs"
+        },
+        {
+          "id": "ai-serving-monitor",
+          "title": "Spot monitoring signals"
+        },
+        {
+          "id": "ai-risk-scenario-simulator",
+          "title": "Spot AI risks before they ship"
+        },
+        {
+          "id": "prompt-pattern-playground",
+          "title": "Prompt pattern playground"
+        },
+        {
+          "id": "embedding-search-lab",
+          "title": "Embedding and search lab"
+        },
+        {
+          "id": "mini-rag-lab",
+          "title": "Mini RAG lab"
+        },
+        {
+          "id": "agent-toy-lab",
+          "title": "Tiny agent with tools"
+        }
+      ],
+      "evidenceSignals": {
+        "quizzesPresent": true,
+        "toolsPresent": true,
+        "learningObjectivesPresent": true,
+        "sectionTrackingPresent": true
+      }
+    },
+    {
+      "levelId": "summary",
+      "estimatedHours": 7,
+      "sourceFiles": [
+        {
+          "title": "AI Summary and games",
+          "file": "content/courses/ai/summary-and-games.mdx",
+          "stepIndex": 3
+        },
+        {
+          "title": "AI Summary and games",
+          "file": "content/courses/ai/summary.mdx",
+          "stepIndex": 3
+        }
+      ],
+      "learningObjectives": [
+        "Explain key concepts from the track in plain language without copying definitions.",
+        "Apply concepts to short scenarios and identify what matters most.",
+        "Analyse mistakes and misconceptions surfaced by the games and quizzes.",
+        "Evaluate what you would do next to strengthen weak areas."
+      ],
+      "sectionIds": [
+        "ai-summary-big-ideas",
+        "ai-summary-mistakes-myths",
+        "ai-summary-mental-models",
+        "ai-summary-games-challenges",
+        "ai-summary-reflection",
+        "ai-summary-concepts",
+        "ai-summary-scenarios",
+        "ai-summary-create",
+        "ai-summary-master"
+      ],
+      "quizzes": [
+        {
+          "id": "ai-summary-recap-quiz",
+          "title": "Recap quiz",
+          "sectionId": "ai-summary-games-challenges",
+          "explicitId": true
+        },
+        {
+          "id": "ai-summary-scenarios-quiz",
+          "title": "Scenario quiz",
+          "sectionId": "ai-summary-games-challenges",
+          "explicitId": true
+        },
+        {
+          "id": "ai-summary-master-quiz",
+          "title": "AI track master quiz",
+          "sectionId": "ai-summary-master",
+          "explicitId": true
+        }
+      ],
+      "tools": [
+        {
+          "id": "ai-summary-identify-system",
+          "title": "Identify the AI system"
+        },
+        {
+          "id": "ai-summary-spot-failure-mode",
+          "title": "Spot the failure mode"
+        },
+        {
+          "id": "ai-summary-choose-metric",
+          "title": "Choose the right metric"
+        },
+        {
+          "id": "ai-summary-flash-cards",
+          "title": "AI flash cards"
+        },
+        {
+          "id": "ai-summary-odd-one-out",
+          "title": "Odd one out"
+        },
+        {
+          "id": "ai-summary-scenario-triage",
+          "title": "AI scenario triage"
+        },
+        {
+          "id": "ai-summary-mini-project",
+          "title": "Design a tiny AI project"
+        },
+        {
+          "id": "ai-summary-build-your-own-quiz",
+          "title": "Build your own AI quiz"
+        }
+      ],
+      "evidenceSignals": {
+        "quizzesPresent": true,
+        "toolsPresent": true,
+        "learningObjectivesPresent": true,
+        "sectionTrackingPresent": true
+      }
+    },
+    {
+      "levelId": "foundations",
+      "estimatedHours": 8,
+      "sourceFiles": [
+        {
+          "title": "AI Foundations",
+          "file": "content/notes/ai/beginner.mdx",
+          "stepIndex": 0
+        }
+      ],
+      "learningObjectives": [
+        "Understand core AI vocabulary (features, labels, training, validation, testing) well enough to explain it clearly.",
+        "Explain how simple models learn patterns from data and where they commonly fail.",
+        "Apply basic checks for leakage, overfitting, and threshold trade offs using the labs.",
+        "Evaluate model outputs with a beginner friendly view of quality, bias, and risk."
+      ],
+      "sectionIds": [
+        "ai-foundations-what-is-ai",
+        "ai-foundations-data-and-representation",
+        "ai-foundations-learning-paradigms",
+        "ai-foundations-responsible-ai-basics"
+      ],
+      "quizzes": [
+        {
+          "id": "ai-foundations-what-is-ai-quiz",
+          "title": "Quick check. What is AI",
+          "sectionId": "ai-foundations-what-is-ai",
+          "explicitId": true
+        },
+        {
+          "id": "ai-foundations-data-quiz",
+          "title": "Quick check. Data and representation",
+          "sectionId": "ai-foundations-data-and-representation",
+          "explicitId": true
+        },
+        {
+          "id": "ai-foundations-learning-quiz",
+          "title": "Quick check. Supervised and unsupervised learning",
+          "sectionId": "ai-foundations-learning-paradigms",
+          "explicitId": true
+        },
+        {
+          "id": "ai-foundations-responsible-quiz",
+          "title": "Quick check. Responsible AI basics and limitations",
+          "sectionId": "ai-foundations-responsible-ai-basics",
+          "explicitId": true
+        }
+      ],
+      "tools": [
+        {
+          "id": "ai-examples-explorer",
+          "title": "Explore simple AI examples"
+        },
+        {
+          "id": "vector-visualiser",
+          "title": "See how data becomes numbers"
+        },
+        {
+          "id": "tiny-classifier-lab",
+          "title": "Train a tiny classifier"
+        },
+        {
+          "id": "ai-risk-scenarios",
+          "title": "Spot AI risks in everyday scenarios"
+        }
+      ],
+      "evidenceSignals": {
+        "quizzesPresent": true,
+        "toolsPresent": true,
+        "learningObjectivesPresent": true,
+        "sectionTrackingPresent": true
+      }
+    }
+  ],
   "evidence": {
     "progressTracking": "Server CPD state + analytics",
-    "certificates": "UUID verification, issuance pending Ready status"
+    "certificates": "UUID with public verification page"
+  },
+  "coverageSummary": {
+    "totalEstimatedHours": 49,
+    "totalLearningObjectives": 16,
+    "totalTrackedSections": 25,
+    "totalQuizBlocks": 19,
+    "totalTools": 24
   }
 }
-

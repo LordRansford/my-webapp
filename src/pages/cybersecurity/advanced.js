@@ -1,7 +1,6 @@
 import dynamic from "next/dynamic";
-import Link from "next/link";
 import { useMemo } from "react";
-import NotesLayout from "@/components/notes/Layout";
+import CourseLessonTemplate from "@/components/course/CourseLessonTemplate";
 import { MDXRenderer } from "@/components/notes/MDXRenderer";
 import { loadNote } from "@/lib/content/loadNote";
 import ToolCard from "@/components/notes/ToolCard";
@@ -21,6 +20,7 @@ import SectionHeader from "@/components/course/SectionHeader";
 import SubsectionHeader from "@/components/course/SubsectionHeader";
 import BodyText from "@/components/course/BodyText";
 import { cyberSections } from "@/lib/cyberSections";
+import CPDAssessmentPromo from "@/components/course/CPDAssessmentPromo";
 
 const TrustGraphTool = dynamic(() => import("@/components/notes/tools/cybersecurity/advanced/TrustGraphTool"), { ssr: false });
 const ProtocolAssumptionsTool = dynamic(() => import("@/components/notes/tools/cybersecurity/advanced/ProtocolAssumptionsTool"), { ssr: false });
@@ -39,6 +39,18 @@ const TokenSecurityLab = dynamic(() => import("@/components/dashboards/cybersecu
 const SecureDesignTradeoffLab = dynamic(() => import("@/components/dashboards/cybersecurity/advanced/SecureDesignTradeoffLab"), { ssr: false });
 const DetectionRuleTuner = dynamic(() => import("@/components/dashboards/cybersecurity/advanced/DetectionRuleTuner"), { ssr: false });
 const AdvancedQuizBoard = dynamic(() => import("@/components/dashboards/cybersecurity/advanced/AdvancedQuizBoard"), { ssr: false });
+const SecureSdlcGatePlannerTool = dynamic(
+  () => import("@/components/notes/tools/cybersecurity/advanced/SecureSdlcGatePlannerTool"),
+  { ssr: false }
+);
+const VulnerabilityTriagePlannerTool = dynamic(
+  () => import("@/components/notes/tools/cybersecurity/advanced/VulnerabilityTriagePlannerTool"),
+  { ssr: false }
+);
+const OperationalSecurityPackTool = dynamic(
+  () => import("@/components/notes/tools/cybersecurity/advanced/OperationalSecurityPackTool"),
+  { ssr: false }
+);
 
 export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
@@ -77,12 +89,15 @@ export default function Page({ source, headings }) {
       SecureDesignTradeoffLab,
       DetectionRuleTuner,
       AdvancedQuizBoard,
+      SecureSdlcGatePlannerTool,
+      VulnerabilityTriagePlannerTool,
+      OperationalSecurityPackTool,
     }),
     []
   );
 
   return (
-    <NotesLayout
+    <CourseLessonTemplate
       meta={{
         title: "Cybersecurity Practice and Strategy",
         description: "Advanced systems, adversaries, and resilience",
@@ -93,17 +108,22 @@ export default function Page({ source, headings }) {
       }}
       activeLevelId="practice"
       headings={headings}
+      courseHref="/cybersecurity"
+      courseLabel="Cybersecurity"
+      dashboardHref="/dashboards/cybersecurity"
+      labsHref="/tools/cybersecurity"
+      studiosHref="/cyber-studios"
     >
-      <div className="mb-4">
-        <Link
-          href="/cybersecurity"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-900 focus:outline-none focus:ring focus:ring-blue-200"
-        >
-          Back to Cybersecurity overview
-        </Link>
+      <div className="mb-6">
+        <CPDAssessmentPromo
+          courseName="Cybersecurity"
+          levelLabel="Practice and Strategy"
+          assessmentHref="/cybersecurity/assessment/practice"
+          prepHref="/cybersecurity/cpd-prep"
+        />
       </div>
       <MDXRenderer source={source} components={mdxComponents} />
-    </NotesLayout>
+    </CourseLessonTemplate>
   );
 }
 

@@ -7,6 +7,7 @@ import { rateLimit } from "@/lib/security/rateLimit";
 import { issueCpdCertificate } from "@/lib/cpd/issueCertificate";
 import { enforceCreditGate, creditGateErrorResponse } from "@/lib/credits/enforceCreditGate";
 import { getCpdCertificateCredits } from "@/lib/cpd/certificateCredits";
+import { prisma } from "@/lib/db/prisma";
 
 export async function POST(req: Request) {
   return withRequestLogging(req, { route: "POST /api/certificates/issue" }, async () => {
@@ -44,10 +45,18 @@ export async function POST(req: Request) {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
     try {
+      let nameOverride: string | null = null;
+      if ((baseCourseId || courseId) === "cybersecurity") {
+        const profile = await prisma.learnerProfile
+          .findUnique({ where: { userId: session.user.id }, select: { certificateName: true } })
+          .catch(() => null as any);
+        if (profile?.certificateName) nameOverride = String(profile.certificateName);
+      }
+
       // Note: issueCpdCertificate internally calls deductCreditsFromLots to deduct credits
       const issued = await issueCpdCertificate({
         userId: session.user.id,
-        userDisplayName: session.user?.name || null,
+        userDisplayName: nameOverride || session.user?.name || null,
         userEmail: session.user?.email || null,
         courseId,
         siteUrl,

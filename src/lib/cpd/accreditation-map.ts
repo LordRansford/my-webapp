@@ -67,7 +67,7 @@ export const ACCREDITATION_MAP: AccreditationMapping[] = [
       },
     ],
     applicableBodies: ["cpd_certification_service", "bcs", "iet"],
-    cpdHours: 14,
+    cpdHours: 56,
     version: "1.0.0",
   },
   {

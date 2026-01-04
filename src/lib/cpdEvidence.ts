@@ -7,6 +7,7 @@ const trackLabels: Record<CPDTrackId, string> = {
   "software-architecture": "Software Development and Architecture",
   digitalisation: "Digitalisation",
   data: "Data",
+  "network-models": "Network models",
 };
 
 const toHours = (minutes: number) => minutesToHours(minutes);
@@ -30,7 +31,7 @@ const formatActivityLine = (entry: CPDState["activity"][number]) => {
 
 export function buildEvidenceText(
   state: CPDState,
-  trackIds: CPDTrackId[] = ["cyber", "ai", "software-architecture", "digitalisation", "data"]
+  trackIds: CPDTrackId[] = ["cyber", "ai", "software-architecture", "digitalisation", "data", "network-models"]
 ) {
   const lines: string[] = [];
   lines.push("Name: ");

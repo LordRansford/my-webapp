@@ -6,6 +6,7 @@ export const activeCourseVersionByCourseId: Record<string, string> = {
   "software-architecture": DEFAULT_VERSION,
   data: DEFAULT_VERSION,
   digitalisation: DEFAULT_VERSION,
+  "network-models": DEFAULT_VERSION,
 };
 
 export function getActiveCourseVersion(courseId: string) {

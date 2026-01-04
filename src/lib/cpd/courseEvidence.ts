@@ -5,7 +5,7 @@ import matter from "gray-matter";
 import type { CPDState } from "@/lib/cpd";
 import { minutesToHours } from "@/lib/cpd/calculations";
 
-export type CourseId = "cybersecurity" | "ai" | "software-architecture" | "data" | "digitalisation";
+export type CourseId = "cybersecurity" | "ai" | "software-architecture" | "data" | "digitalisation" | "network-models";
 
 export type CourseLevelId = "foundations" | "intermediate" | "advanced" | "applied" | "practice" | "summary";
 
@@ -93,6 +93,12 @@ export function getCourseLevelMeta(courseId: CourseId, levelId: CourseLevelId): 
       advanced: "courses/digitalisation/advanced.mdx",
       summary: "courses/digitalisation/summary.mdx",
     },
+    "network-models": {
+      foundations: "courses/network-models/foundations.mdx",
+      applied: "courses/network-models/intermediate.mdx",
+      practice: "courses/network-models/advanced.mdx",
+      summary: "courses/network-models/summary.mdx",
+    },
   };
 
   const mdxPath = mdxPathByCourse?.[courseId]?.[levelId];
@@ -150,6 +156,7 @@ export function buildCourseEvidenceSummary(params: {
 
   const trackId =
     params.courseId === "cybersecurity" ? "cyber" :
+    params.courseId === "network-models" ? "network-models" :
     params.courseId === "software-architecture" ? "software-architecture" :
     params.courseId === "digitalisation" ? "digitalisation" :
     params.courseId === "data" ? "data" :
@@ -169,9 +176,11 @@ export function buildCourseEvidenceSummary(params: {
 
   const completionDate = pickCompletionDate(params.cpdState, trackId, params.levelId);
 
-  // Prefer the explicit "overall" tracker minutes for recorded hours, since that is what users set manually.
-  const overallMinutes =
-    (params.cpdState.sections || []).find((s) => s.trackId === trackId && s.levelId === params.levelId && s.sectionId === "overall")?.minutes || 0;
+  // Fixed hours policy:
+  // - Learners cannot self-declare hours
+  // - Recorded hours match the fixed estimated hours
+  // - Timed assessment time is included once when the level is completed
+  const assessmentHours = completionDate ? (params.levelId === "summary" ? 0 : (75 / 60)) : 0;
 
   return {
     courseId: params.courseId,
@@ -180,7 +189,7 @@ export function buildCourseEvidenceSummary(params: {
     levelTitle,
     learnerIdentifier: params.learnerIdentifier,
     estimatedHours,
-    recordedHours: minutesToHours(overallMinutes),
+    recordedHours: Math.round((Number(estimatedHours) + assessmentHours) * 10) / 10,
     completionDate,
     objectivesCovered,
     evidenceSignals: {

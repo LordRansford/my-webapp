@@ -31,7 +31,7 @@ for (const varName of requiredVars) {
     const displayValue = varName.includes('KEY') || varName.includes('SECRET')
       ? `${value.substring(0, 8)}...${value.substring(value.length - 4)}`
       : varName === 'EMAIL_SERVER'
-      ? value.replace(/:[^:@]+@/, ':****@/) // Mask password in SMTP URL
+      ? value.replace(/:[^:@]+@/, ':****@') // Mask password in SMTP URL
       : value;
     console.log(`✅ ${varName}: ${displayValue}`);
   }

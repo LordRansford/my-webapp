@@ -34,7 +34,24 @@ interface TrainingState {
   };
 }
 
-export default function BrowserTrainingPOC() {
+type BrowserTrainingPOCProps = {
+  /**
+   * Optional preset injected by Examples.
+   * This keeps the demo safe (browser-only), but makes "Load example" feel real.
+   */
+  initialTrainingConfig?: Partial<{
+    learningRate: number;
+    batchSize: number;
+    epochs: number;
+    validationSplit: number;
+  }>;
+  /**
+   * Optional banner shown above the POC to explain the loaded example.
+   */
+  loadedExampleLabel?: string;
+};
+
+export default function BrowserTrainingPOC(props: BrowserTrainingPOCProps) {
   const [model, setModel] = useState<tf.LayersModel | null>(null);
   const [trainingState, setTrainingState] = useState<TrainingState>({
     status: "idle",
@@ -56,12 +73,12 @@ export default function BrowserTrainingPOC() {
   });
 
   const [isPaused, setIsPaused] = useState(false);
-  const [trainingConfig, setTrainingConfig] = useState({
-    learningRate: 0.001,
-    batchSize: 32,
-    epochs: 50,
-    validationSplit: 0.2,
-  });
+  const [trainingConfig, setTrainingConfig] = useState(() => ({
+    learningRate: props.initialTrainingConfig?.learningRate ?? 0.001,
+    batchSize: props.initialTrainingConfig?.batchSize ?? 32,
+    epochs: props.initialTrainingConfig?.epochs ?? 50,
+    validationSplit: props.initialTrainingConfig?.validationSplit ?? 0.2,
+  }));
 
   // Create a simple model for demonstration
   const createModel = useCallback(() => {
@@ -250,6 +267,14 @@ export default function BrowserTrainingPOC() {
 
   return (
     <div className="space-y-6 p-6 bg-white rounded-2xl shadow-lg border border-slate-200">
+      {props.loadedExampleLabel ? (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+          <p className="font-semibold">Loaded example preset</p>
+          <p className="mt-1">
+            {props.loadedExampleLabel}. This runs <strong>fully in your browser</strong> with synthetic data (safe by design).
+          </p>
+        </div>
+      ) : null}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-slate-900">Browser Training POC</h2>

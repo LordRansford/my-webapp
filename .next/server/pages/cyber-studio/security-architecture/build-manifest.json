@@ -1,0 +1,18 @@
+{
+  "devFiles": [],
+  "ampDevFiles": [],
+  "polyfillFiles": [],
+  "lowPriorityFiles": [],
+  "rootMainFiles": [],
+  "pages": {
+    "/cyber-studio/security-architecture": [
+      "static/chunks/6bd1b060cc02463e.js",
+      "static/chunks/f0f43ebb724b8b11.js",
+      "static/chunks/01073211ade0ab07.js",
+      "static/chunks/d1ea35920c32a766.js",
+      "static/chunks/5d589ae503189188.js",
+      "static/chunks/turbopack-12fabca57c3815e4.js"
+    ]
+  },
+  "ampFirstPages": []
+}

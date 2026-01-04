@@ -9,8 +9,8 @@ export type HeaderContract = {
 
 export const HeaderContract: HeaderContract = {
   props: {},
-  allowed: ["Logo", "Learn", "Labs", "Studios", "Play", "Donate", "Account/Sign in", "Sticky"],
-  forbidden: ["Dropdown menus", "Icon-only items", "Progress indicators"],
+  allowed: ["Logo", "Courses", "Tools", "Studios", "Games hub", "Updates", "About", "Account/Sign in", "Sticky"],
+  forbidden: ["Icon-only items", "Progress indicators"],
 };
 
 export type FooterContract = {
@@ -59,18 +59,6 @@ export const ToolCardContract: ToolCardContract = {
   forbidden: ["Empty description", "Fixed heights", "Inline styles", "Missing usage hint"],
 };
 
-export type MentorChatWidgetContract = {
-  props: { pageContext?: unknown };
-  allowed: string[];
-  forbidden: string[];
-};
-
-export const MentorChatWidgetContract: MentorChatWidgetContract = {
-  props: { pageContext: undefined },
-  allowed: ["Collapsed/expanded states", "Context-aware answers", "Links to site sections"],
-  forbidden: ["Icon-only triggers", "Refusals without alternatives"],
-};
-
 export type FeedbackChatWidgetContract = {
   props: {};
   allowed: string[];
@@ -81,6 +69,18 @@ export const FeedbackChatWidgetContract: FeedbackChatWidgetContract = {
   props: {},
   allowed: ["Screenshot upload", "Page context capture"],
   forbidden: ["Icon-only triggers"],
+};
+
+export type ProfessorChatWidgetContract = {
+  props: {};
+  allowed: string[];
+  forbidden: string[];
+};
+
+export const ProfessorChatWidgetContract: ProfessorChatWidgetContract = {
+  props: {},
+  allowed: ["Course help", "Tool help", "Citations to site pages", "Assessment integrity pause"],
+  forbidden: ["Exam help during active timed sessions", "Icon-only triggers"],
 };
 
 export type GameCanvasContract = {

@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import ToolShell from "@/components/tools/ToolShell";
+import ToolShell, { useToolInputs } from "@/components/tools/ToolShell";
 import { getToolContract } from "@/lib/tools/loadContract";
 import { createToolError } from "@/components/tools/ErrorPanel";
 import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
@@ -51,11 +51,64 @@ function generateTruthTable(gateType: string): Array<{ a: boolean; b: boolean; o
   }));
 }
 
-export default function LogicGatesPage() {
-  const [gateType, setGateType] = useState<"AND" | "OR" | "XOR">("AND");
-  const [inputA, setInputA] = useState(true);
-  const [inputB, setInputB] = useState(true);
+function LogicGatesForm() {
+  const { inputs, setInputs } = useToolInputs();
+  const gateType = (inputs.gateType as "AND" | "OR" | "XOR") || "AND";
+  const inputA = Boolean(inputs.inputA);
+  const inputB = Boolean(inputs.inputB);
 
+  return (
+    <div className="space-y-4">
+      <div>
+        <label htmlFor="gateType" className="block text-sm font-semibold text-slate-900">
+          Gate Type
+        </label>
+        <select
+          id="gateType"
+          value={gateType}
+          onChange={(e) => setInputs((prev) => ({ ...prev, gateType: e.target.value }))}
+          className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+        >
+          <option value="AND">AND</option>
+          <option value="OR">OR</option>
+          <option value="XOR">XOR</option>
+        </select>
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label htmlFor="inputA" className="block text-sm font-semibold text-slate-900">
+            Input A
+          </label>
+          <select
+            id="inputA"
+            value={inputA ? "1" : "0"}
+            onChange={(e) => setInputs((prev) => ({ ...prev, inputA: e.target.value === "1" }))}
+            className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+          >
+            <option value="0">0 (False)</option>
+            <option value="1">1 (True)</option>
+          </select>
+        </div>
+        <div>
+          <label htmlFor="inputB" className="block text-sm font-semibold text-slate-900">
+            Input B
+          </label>
+          <select
+            id="inputB"
+            value={inputB ? "1" : "0"}
+            onChange={(e) => setInputs((prev) => ({ ...prev, inputB: e.target.value === "1" }))}
+            className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+          >
+            <option value="0">0 (False)</option>
+            <option value="1">1 (True)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function LogicGatesPage() {
   if (!contract) {
     return (
       <div className="mx-auto max-w-4xl p-6">
@@ -103,54 +156,8 @@ export default function LogicGatesPage() {
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ gateType, inputA, inputB }}>
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="gateType" className="block text-sm font-semibold text-slate-900">
-              Gate Type
-            </label>
-            <select
-              id="gateType"
-              value={gateType}
-              onChange={(e) => setGateType(e.target.value as "AND" | "OR" | "XOR")}
-              className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-            >
-              <option value="AND">AND</option>
-              <option value="OR">OR</option>
-              <option value="XOR">XOR</option>
-            </select>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="inputA" className="block text-sm font-semibold text-slate-900">
-                Input A
-              </label>
-              <select
-                id="inputA"
-                value={inputA ? "1" : "0"}
-                onChange={(e) => setInputA(e.target.value === "1")}
-                className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-              >
-                <option value="0">0 (False)</option>
-                <option value="1">1 (True)</option>
-              </select>
-            </div>
-            <div>
-              <label htmlFor="inputB" className="block text-sm font-semibold text-slate-900">
-                Input B
-              </label>
-              <select
-                id="inputB"
-                value={inputB ? "1" : "0"}
-                onChange={(e) => setInputB(e.target.value === "1")}
-                className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-              >
-                <option value="0">0 (False)</option>
-                <option value="1">1 (True)</option>
-              </select>
-            </div>
-          </div>
-        </div>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples}>
+        <LogicGatesForm />
       </ToolShell>
     </div>
   );

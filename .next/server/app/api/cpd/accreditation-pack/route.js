@@ -1,0 +1,10 @@
+var R=require("../../../../chunks/[turbopack]_runtime.js")("server/app/api/cpd/accreditation-pack/route.js")
+R.c("server/chunks/[root-of-the-server]__9b56c106._.js")
+R.c("server/chunks/node_modules_next_f2da0d3e._.js")
+R.c("server/chunks/node_modules_next_dist_esm_build_templates_app-route_63ea3cf5.js")
+R.c("server/chunks/[root-of-the-server]__34fd47d2._.js")
+R.c("server/chunks/_fe4a3a31._.js")
+R.c("server/chunks/node_modules_next_dist_23bfe24c._.js")
+R.c("server/chunks/_next-internal_server_app_api_cpd_accreditation-pack_route_actions_81d33091.js")
+R.m(665599)
+module.exports=R.m(665599).exports

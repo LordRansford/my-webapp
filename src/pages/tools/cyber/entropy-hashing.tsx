@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import ToolShell from "@/components/tools/ToolShell";
+import ToolShell, { useToolInputs } from "@/components/tools/ToolShell";
 import { getToolContract } from "@/lib/tools/loadContract";
 import { createToolError } from "@/components/tools/ErrorPanel";
 import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
@@ -32,10 +32,53 @@ async function hashInput(input: string, algorithm: string): Promise<string> {
   return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-export default function EntropyHashingPage() {
-  const [input, setInput] = useState("");
-  const [algorithm, setAlgorithm] = useState<"SHA-256" | "MD5" | "SHA-1">("SHA-256");
+function EntropyHashingForm() {
+  const { inputs, setInputs } = useToolInputs();
+  const input = typeof inputs.input === "string" ? inputs.input : "";
+  const algorithm = (inputs.algorithm as "SHA-256" | "MD5" | "SHA-1") || "SHA-256";
 
+  return (
+    <div className="space-y-4">
+      <div>
+        <label htmlFor="input" className="block text-sm font-semibold text-slate-900">
+          Input Text
+        </label>
+        <textarea
+          id="input"
+          value={input}
+          onChange={(e) => setInputs((prev) => ({ ...prev, input: e.target.value }))}
+          rows={5}
+          maxLength={1024}
+          className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+          placeholder="Enter text to hash..."
+        />
+        <p className="mt-1 text-xs text-slate-600">Max 1KB</p>
+      </div>
+      <div>
+        <label htmlFor="algorithm" className="block text-sm font-semibold text-slate-900">
+          Algorithm
+        </label>
+        <select
+          id="algorithm"
+          value={algorithm}
+          onChange={(e) => setInputs((prev) => ({ ...prev, algorithm: e.target.value }))}
+          className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+        >
+          <option value="SHA-256">SHA-256 (Recommended)</option>
+          <option value="MD5" disabled>
+            MD5 (Not available in Web Crypto API)
+          </option>
+          <option value="SHA-1" disabled>
+            SHA-1 (Not available in Web Crypto API)
+          </option>
+        </select>
+        <p className="mt-1 text-xs text-slate-600">Only SHA-256 is supported via Web Crypto API</p>
+      </div>
+    </div>
+  );
+}
+
+export default function EntropyHashingPage() {
   if (!contract) {
     return (
       <div className="mx-auto max-w-4xl p-6">
@@ -111,40 +154,8 @@ export default function EntropyHashingPage() {
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ input, algorithm }}>
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="input" className="block text-sm font-semibold text-slate-900">
-              Input Text
-            </label>
-            <textarea
-              id="input"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              rows={5}
-              maxLength={1024}
-              className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-              placeholder="Enter text to hash..."
-            />
-            <p className="mt-1 text-xs text-slate-600">Max 1KB</p>
-          </div>
-          <div>
-            <label htmlFor="algorithm" className="block text-sm font-semibold text-slate-900">
-              Algorithm
-            </label>
-            <select
-              id="algorithm"
-              value={algorithm}
-              onChange={(e) => setAlgorithm(e.target.value as "SHA-256" | "MD5" | "SHA-1")}
-              className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-            >
-              <option value="SHA-256">SHA-256 (Recommended)</option>
-              <option value="MD5" disabled>MD5 (Not available in Web Crypto API)</option>
-              <option value="SHA-1" disabled>SHA-1 (Not available in Web Crypto API)</option>
-            </select>
-            <p className="mt-1 text-xs text-slate-600">Only SHA-256 is supported via Web Crypto API</p>
-          </div>
-        </div>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples}>
+        <EntropyHashingForm />
       </ToolShell>
     </div>
   );

@@ -47,7 +47,7 @@ Foundations complete. You are on Intermediate. Advanced and Summary stay locked 
 
 Data architecture is how data is organised, moved, and protected across systems. It sets the lanes so teams can build without tripping over each other. Pipelines exist because raw data is messy and scattered. They pull from sources, clean and combine, and land it where people and products can use it.
 
-There are two broad ways data moves: batch means scheduled chunks, streaming means small events flowing continuously. Both need clear boundaries so one team's changes do not break another's work. If a pipeline fails, dashboards go blank, models drift, and trust drops.
+There are two broad ways data moves. Batch means scheduled chunks. Streaming means small events flowing continuously. Both need clear boundaries so one team's changes do not break another's work. If a pipeline fails, dashboards go blank, models drift, and trust drops.
 
 When you design a pipeline, think about ownership at each hop, the contracts between steps, and how to recover when something breaks. A simple diagram often exposes gaps before a single line of code is written.
 
@@ -89,7 +89,7 @@ When you design a pipeline, think about ownership at each hop, the contracts bet
   courseId="data"
   levelId="intermediate"
   sectionId="data-intermediate-architectures-and-pipelines"
-  title="Quick check: architectures and pipelines"
+  title="Quick check. Architectures and pipelines"
   questions={[
     { q: "Why do pipelines exist", a: "To move, clean, and combine data so it can be used reliably." },
     { q: "What happens when a pipeline breaks", a: "Dashboards, reports, and models get stale or wrong." },
@@ -108,7 +108,7 @@ When you design a pipeline, think about ownership at each hop, the contracts bet
 
 Governance is agreeing how data is handled so people can work quickly without being reckless. Ownership is the person or team that decides purpose and access. Stewardship is the day to day care of definitions, quality, and metadata. Accountability means someone can explain how a change was made and why.
 
-Policies are not paperwork for their own sake. They are guardrails: who can see a column, how long data is kept, what checks run before sharing. Even a shared spreadsheet is governance in miniature: who edits, who reviews, what happens when something looks off.
+Policies are not paperwork for their own sake. They are guardrails. Who can see a column, how long data is kept, what checks run before sharing. Even a shared spreadsheet is governance in miniature. Who edits, who reviews, what happens when something looks off.
 
 Trust grows when policies are clear, controls are enforced, and feedback loops exist. If a report is wrong and nobody owns it, confidence collapses quickly.
 
@@ -146,7 +146,7 @@ Trust grows when policies are clear, controls are enforced, and feedback loops e
   courseId="data"
   levelId="intermediate"
   sectionId="data-intermediate-governance-and-stewardship"
-  title="Quick check: governance and stewardship"
+  title="Quick check. Governance and stewardship"
   questions={[
     { q: "Why does governance exist", a: "To balance safe data use with speed and clarity." },
     { q: "What does ownership mean", a: "Deciding purpose and access." },
@@ -162,11 +162,11 @@ Trust grows when policies are clear, controls are enforced, and feedback loops e
 
 <SectionProgressToggle courseId="data" levelId="intermediate" sectionId="data-intermediate-interoperability-and-standards" />
 
-Interoperability means systems understand each other. It is shared meaning, not just shared pipes. Standards help: common formats, schemas, and naming. A schema is the agreed structure and data types. When systems misalign, data lands in the wrong fields, numbers become strings, or meaning gets lost.
+Interoperability means systems understand each other. It is shared meaning, not just shared pipes. Standards help through common formats, schemas, and naming. A schema is the agreed structure and data types. When systems misalign, data lands in the wrong fields, numbers become strings, or meaning gets lost.
 
 Formats like JSON or CSV carry data, but standards and contracts explain what each field means. An API (application programming interface) without a contract is guesswork. A file without a schema requires detective work.
 
-Small mismatches cause big effects: dates in different orders, currencies missing, names split differently. Aligning schemas early saves hours of cleanup and prevents silent errors.
+Small mismatches cause big effects. Dates in different orders, currencies missing, names split differently. Aligning schemas early saves hours of cleanup and prevents silent errors.
 
 <DiagramBlock title="Interoperability check" subtitle="Alignment vs mismatch">
   <div className="grid gap-3 sm:grid-cols-2 text-xs text-slate-700">
@@ -194,7 +194,7 @@ Small mismatches cause big effects: dates in different orders, currencies missin
   courseId="data"
   levelId="intermediate"
   sectionId="data-intermediate-interoperability-and-standards"
-  title="Quick check: interoperability and standards"
+  title="Quick check. Interoperability and standards"
   questions={[
     { q: "What is interoperability", a: "Systems sharing data with the same meaning." },
     { q: "What is a schema", a: "An agreed structure and types for data." },
@@ -210,11 +210,11 @@ Small mismatches cause big effects: dates in different orders, currencies missin
 
 <SectionProgressToggle courseId="data" levelId="intermediate" sectionId="data-intermediate-analysis-and-insight" />
 
-Analysis is asking good questions of data and checking that the answers hold up. Descriptive thinking asks what happened. Diagnostic thinking asks why. Statistics exist to separate signal from noise: averages summarise, distributions show spread, trends show direction.
+Analysis is asking good questions of data and checking that the answers hold up. Descriptive thinking asks what happened. Diagnostic thinking asks why. Statistics exist to separate signal from noise. Averages summarise, distributions show spread, trends show direction.
 
-Averages hide detail. A long tail or a split between groups can change the story. Trends can be seasonal or random. Always pair a number with context: when it was measured, who is included, what changed.
+Averages hide detail. A long tail or a split between groups can change the story. Trends can be seasonal or random. Always pair a number with context. When it was measured, who is included, what changed.
 
-Insight is not a chart; it is a statement backed by data and understanding. Decisions follow insight, and they should note assumptions so they can be revisited.
+Insight is not a chart. It is a statement backed by data and understanding. Decisions follow insight, and they should note assumptions so they can be revisited.
 
 <DiagramBlock title="From data to decision" subtitle="Question, summarise, decide">
   <div className="grid gap-3 sm:grid-cols-4 text-xs text-slate-700">
@@ -250,7 +250,7 @@ Insight is not a chart; it is a statement backed by data and understanding. Deci
   courseId="data"
   levelId="intermediate"
   sectionId="data-intermediate-analysis-and-insight"
-  title="Quick check: analysis and insight"
+  title="Quick check. Analysis and insight"
   questions={[
     { q: "What is descriptive thinking", a: "Explaining what happened." },
     { q: "What is diagnostic thinking", a: "Explaining why something happened." },
@@ -268,7 +268,7 @@ Insight is not a chart; it is a statement backed by data and understanding. Deci
 
 Data risk is broader than security. Misuse, misinterpretation, and neglect can harm people and decisions. Ethics asks whether we should use data in a certain way, not just whether we can. Strategic value comes from using data to improve services, not just to collect more of it.
 
-Risk points appear along the lifecycle: collection without consent, processing without checks, sharing beyond purpose, keeping data forever. Controls and culture reduce these risks. A small habit, like logging changes or reviewing outliers, prevents large mistakes.
+Risk points appear along the lifecycle. Collection without consent, processing without checks, sharing beyond purpose, keeping data forever. Controls and culture reduce these risks. A small habit, like logging changes or reviewing outliers, prevents large mistakes.
 
 Treat data as a long term asset. Good stewardship, clear value cases, and honest communication build trust that lasts beyond a single project.
 
@@ -306,11 +306,11 @@ Treat data as a long term asset. Good stewardship, clear value cases, and honest
   courseId="data"
   levelId="intermediate"
   sectionId="data-intermediate-risk-ethics-strategic-value"
-  title="Quick check: risk, ethics, and strategic value"
+  title="Quick check. Risk, ethics, and strategic value"
   questions={[
     { q: "What is data risk beyond security", a: "Misuse, misinterpretation, or harm from poor handling." },
     { q: "Why do ethics matter", a: "To ensure data use respects people and purpose." },
-    { q: "Where do risks appear", a: "All along the lifecycle: collect, process, share, and retain." },
+    { q: "Where do risks appear", a: "All along the lifecycle. Collect, process, share, and retain." },
     { q: "What builds long term value", a: "Clear purpose, stewardship, and honest communication." },
     { q: "Why log changes and outliers", a: "Small habits catch issues before they spread." },
   ]}
@@ -328,10 +328,10 @@ Intermediate will reuse the data quality sandbox, the data flow visualiser, and 
 {/* CPD alignment: Intermediate must include applied learning, real scenarios, decision making, and professional judgement. No certification claims on this page. */}
 
 {/* CI quality gates for Data Intermediate:
-- Each section needs at least 3 explanatory paragraphs, 1 DiagramBlock, 1 ToolCard, and 1 QuizBlock.
-- No section may be shorter than its Foundations counterpart.
-- No bullet-only sections.
-- No unexplained acronyms.
+1. Each section needs at least 3 explanatory paragraphs, 1 DiagramBlock, 1 ToolCard, and 1 QuizBlock.
+2. No section may be shorter than its Foundations counterpart.
+3. No bullet only sections.
+4. No unexplained acronyms.
 */}
 
 <PageNav prevHref="/data/foundations" prevLabel="Foundations" nextHref="/data/advanced" nextLabel="Advanced" showTop showBottom />

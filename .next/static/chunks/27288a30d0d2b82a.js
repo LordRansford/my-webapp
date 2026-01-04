@@ -1,0 +1,11 @@
+__turbopack_load_page_chunks__("/accreditation-and-alignment", [
+  "static/chunks/514a101f47df90ad.js",
+  "static/chunks/6bd1b060cc02463e.js",
+  "static/chunks/2fcd2aa21d8c3e53.js",
+  "static/chunks/f0f43ebb724b8b11.js",
+  "static/chunks/01073211ade0ab07.js",
+  "static/chunks/48c11802c3f193fa.js",
+  "static/chunks/0bc6a6ce1252e2eb.js",
+  "static/chunks/d1ea35920c32a766.js",
+  "static/chunks/turbopack-1d43183ea5e5b63b.js"
+])

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-02T11:19:34.979Z",
+  "generatedAt": "2026-01-04T06:44:32.516Z",
   "tools": [
     {
       "id": "architecture-diagram-studio",
@@ -246,9 +246,29 @@
           "limits": "js|py (allowlist only)"
         }
       ],
-      "defaultInputs": {},
-      "examples": [],
-      "explain": ""
+      "defaultInputs": {
+        "language": "js",
+        "code": "console.log(\"Hello world\")"
+      },
+      "examples": [
+        {
+          "title": "Hello world",
+          "inputs": {
+            "language": "js",
+            "code": "console.log(\"Hello world\")"
+          },
+          "expectedOutput": "Hello world"
+        },
+        {
+          "title": "Simple loop",
+          "inputs": {
+            "language": "js",
+            "code": "let sum = 0;\nfor (let i = 1; i <= 5; i++) sum += i;\nconsole.log(\"sum\", sum);"
+          },
+          "expectedOutput": "sum 15"
+        }
+      ],
+      "explain": "Code Lab lets you run small snippets in a locked-down environment for safe practice. Use it for learning language basics, testing tiny algorithms, and verifying assumptions. Do not use it for secrets, private data, or anything that requires network access. The runner is designed to be constrained and auditable. If you see a runner unavailable error, it means the secure compute service is not enabled or is temporarily offline. Inputs: language and code. Limits: short runtime and output caps."
     },
     {
       "id": "python-playground",
@@ -506,24 +526,28 @@
         }
       ],
       "defaultInputs": {
-        "action": "generate"
+        "p": 3,
+        "q": 11,
+        "message": "7"
       },
       "examples": [
         {
-          "title": "Generate Key Pair",
+          "title": "Simple Demo (p=3, q=11, message=7)",
           "inputs": {
-            "action": "generate"
+            "p": 3,
+            "q": 11,
+            "message": "7"
           },
-          "expectedOutput": "Public and private key pair generated"
+          "expectedOutput": "Encrypted/decrypted values match original message"
         },
         {
-          "title": "Encrypt Message",
+          "title": "Larger Primes (p=7, q=13, message=42)",
           "inputs": {
-            "action": "encrypt",
-            "publicKey": "",
-            "message": "Hello, RSA!"
+            "p": 7,
+            "q": 13,
+            "message": "42"
           },
-          "expectedOutput": "Encrypted ciphertext"
+          "expectedOutput": "Encrypted/decrypted values match original message"
         }
       ],
       "explain": "The RSA lab demonstrates asymmetric cryptography using RSA-OAEP with SHA-256. It lets you generate key pairs, encrypt messages, and decrypt ciphertext. Use it to understand how public-key cryptography works and see the difference between encryption and signing. Don't use it for production cryptographic operations - this is educational. Inputs: action (string) - 'generate', 'encrypt', or 'decrypt'. Limits: 2000ms CPU, 64MB memory, 16KB output. Security: Uses Web Crypto API with strict key size limits."
@@ -572,20 +596,23 @@
         }
       ],
       "defaultInputs": {
-        "input": "Hello, world!"
+        "input": "Hello, world!",
+        "algorithm": "SHA-256"
       },
       "examples": [
         {
           "title": "Hash Text",
           "inputs": {
-            "input": "Hello, world!"
+            "input": "Hello, world!",
+            "algorithm": "SHA-256"
           },
           "expectedOutput": "SHA-256 hash of the input text"
         },
         {
           "title": "Avalanche Effect",
           "inputs": {
-            "input": "Hello, world"
+            "input": "Hello, world",
+            "algorithm": "SHA-256"
           },
           "expectedOutput": "Different hash from 'Hello, world!' (demonstrates avalanche effect)"
         }
@@ -902,7 +929,7 @@
         }
       ],
       "defaultInputs": {
-        "gate": "AND",
+        "gateType": "AND",
         "inputA": true,
         "inputB": true
       },
@@ -910,7 +937,7 @@
         {
           "title": "AND Gate",
           "inputs": {
-            "gate": "AND",
+            "gateType": "AND",
             "inputA": true,
             "inputB": true
           },
@@ -919,7 +946,7 @@
         {
           "title": "OR Gate",
           "inputs": {
-            "gate": "OR",
+            "gateType": "OR",
             "inputA": false,
             "inputB": true
           },
@@ -967,26 +994,58 @@
         }
       ],
       "defaultInputs": {
-        "riskName": "Data breach",
-        "likelihood": "medium",
-        "impact": "high"
+        "risks": [
+          {
+            "id": "1",
+            "description": "Unauthorized access to customer PII database",
+            "likelihood": "Medium",
+            "impact": "High",
+            "mitigations": "Encryption at rest, access controls, audit logging"
+          }
+        ]
       },
       "examples": [
         {
-          "title": "Create Risk Entry",
+          "title": "Data Breach Risk Set",
           "inputs": {
-            "riskName": "Data breach",
-            "likelihood": "medium",
-            "impact": "high"
+            "risks": [
+              {
+                "id": "1",
+                "description": "Unauthorized access to customer PII database",
+                "likelihood": "Medium",
+                "impact": "High",
+                "mitigations": "Encryption at rest, access controls, audit logging, regular security audits"
+              },
+              {
+                "id": "2",
+                "description": "Third-party vendor data breach",
+                "likelihood": "Low",
+                "impact": "High",
+                "mitigations": "Vendor security assessments, contractual requirements, monitoring"
+              }
+            ]
           },
           "expectedOutput": "Structured risk register entry with priority score"
         },
         {
-          "title": "Multiple Risks",
+          "title": "Availability Risks Set",
           "inputs": {
-            "riskName": "Service outage",
-            "likelihood": "low",
-            "impact": "critical"
+            "risks": [
+              {
+                "id": "1",
+                "description": "Cloud provider outage affecting production",
+                "likelihood": "Low",
+                "impact": "High",
+                "mitigations": "Multi-region deployment, disaster recovery plan"
+              },
+              {
+                "id": "2",
+                "description": "Database performance degradation",
+                "likelihood": "Medium",
+                "impact": "Medium",
+                "mitigations": "Performance monitoring, query optimization, capacity planning"
+              }
+            ]
           },
           "expectedOutput": "Prioritized risk with mitigation suggestions"
         }
@@ -1049,10 +1108,11 @@
       "defaultInputs": {
         "decision": "Use microservices architecture",
         "context": "Need to scale independently",
-        "alternatives": [
+        "options": [
           "Monolith",
-          "Serverless"
-        ]
+          "Microservices"
+        ],
+        "rationale": "Choose microservices to scale components independently while keeping boundaries clear."
       },
       "examples": [
         {
@@ -1060,10 +1120,11 @@
           "inputs": {
             "decision": "Use microservices architecture",
             "context": "Need to scale independently",
-            "alternatives": [
+            "options": [
               "Monolith",
-              "Serverless"
-            ]
+              "Microservices"
+            ],
+            "rationale": "Microservices chosen to scale parts independently and reduce coupling."
           },
           "expectedOutput": "Structured decision log with context, alternatives, and rationale"
         },
@@ -1072,10 +1133,11 @@
           "inputs": {
             "decision": "Use PostgreSQL",
             "context": "Need ACID compliance and complex queries",
-            "alternatives": [
+            "options": [
               "MongoDB",
               "MySQL"
-            ]
+            ],
+            "rationale": "PostgreSQL chosen for strong consistency, SQL flexibility, and operational maturity."
           },
           "expectedOutput": "Decision log documenting database selection rationale"
         }
@@ -1136,10 +1198,16 @@
           "Option A",
           "Option B"
         ],
+        "constraints": [
+          "Zero downtime required"
+        ],
         "criteria": [
           "Performance",
           "Cost",
-          "Security"
+          "Security",
+          "Operational complexity",
+          "Scalability",
+          "Compliance"
         ]
       },
       "examples": [
@@ -1150,10 +1218,16 @@
               "Option A",
               "Option B"
             ],
+            "constraints": [
+              "Must be auditable"
+            ],
             "criteria": [
               "Performance",
               "Cost",
-              "Security"
+              "Security",
+              "Operational complexity",
+              "Scalability",
+              "Compliance"
             ]
           },
           "expectedOutput": "Scored comparison table with trade-offs highlighted"
@@ -1166,11 +1240,17 @@
               "On-premise",
               "Hybrid"
             ],
+            "constraints": [
+              "Zero downtime required",
+              "Must support rollback"
+            ],
             "criteria": [
               "Cost",
               "Security",
               "Scalability",
-              "Compliance"
+              "Compliance",
+              "Complexity",
+              "Rollback speed"
             ]
           },
           "expectedOutput": "Multi-criteria analysis with weighted scores"
@@ -1232,23 +1312,31 @@
         }
       ],
       "defaultInputs": {
-        "dataType": "Customer email addresses",
-        "sensitivity": "medium"
+        "assetName": "Customer email addresses",
+        "sensitivity": "Internal",
+        "compliance": [],
+        "impact": "Medium"
       },
       "examples": [
         {
-          "title": "Classify Data",
+          "title": "Customer PII (GDPR)",
           "inputs": {
-            "dataType": "Customer email addresses",
-            "sensitivity": "medium"
+            "assetName": "Customer Personal Identifiable Information",
+            "sensitivity": "Confidential",
+            "compliance": [
+              "GDPR"
+            ],
+            "impact": "High"
           },
           "expectedOutput": "Classification with handling requirements and controls"
         },
         {
-          "title": "High Sensitivity Data",
+          "title": "Public Marketing Content",
           "inputs": {
-            "dataType": "Payment card numbers",
-            "sensitivity": "high"
+            "assetName": "Website Content and Blog Posts",
+            "sensitivity": "Public",
+            "compliance": [],
+            "impact": "Low"
           },
           "expectedOutput": "Strict classification with encryption and access control requirements"
         }
@@ -1310,10 +1398,15 @@
       ],
       "defaultInputs": {
         "systemName": "Web Application",
-        "components": [
-          "Frontend",
-          "API",
-          "Database"
+        "assets": [
+          "User accounts",
+          "Session tokens"
+        ],
+        "trustBoundaries": [
+          "Browser ↔ API"
+        ],
+        "threats": [
+          "Credential stuffing"
         ]
       },
       "examples": [
@@ -1321,10 +1414,18 @@
           "title": "STRIDE Analysis",
           "inputs": {
             "systemName": "Web Application",
-            "components": [
-              "Frontend",
-              "API",
-              "Database"
+            "assets": [
+              "Customer payment data",
+              "Authentication tokens"
+            ],
+            "trustBoundaries": [
+              "Public internet to API gateway",
+              "API gateway to database"
+            ],
+            "threats": [
+              "Man-in-the-middle attack intercepting data",
+              "SQL injection in queries",
+              "DoS attack on login endpoint"
             ]
           },
           "expectedOutput": "STRIDE threat analysis report"
@@ -1333,10 +1434,18 @@
           "title": "API Service Threats",
           "inputs": {
             "systemName": "Payment API",
-            "components": [
-              "API Gateway",
-              "Auth Service",
-              "Payment Processor"
+            "assets": [
+              "Payment authorizations",
+              "API keys"
+            ],
+            "trustBoundaries": [
+              "Client ↔ API gateway",
+              "API gateway ↔ payment processor"
+            ],
+            "threats": [
+              "Replay attacks",
+              "Abuse of rate limits",
+              "Key leakage"
             ]
           },
           "expectedOutput": "Threat analysis focusing on authentication and data protection"
@@ -1393,33 +1502,26 @@
         }
       ],
       "defaultInputs": {
-        "control": "Access Control",
-        "frameworks": [
-          "ISO 27001",
-          "NIST CSF"
-        ]
+        "controlDescription": "Multi-factor authentication for all users",
+        "framework": "NIST_CSF",
+        "mapping": "PR.AC-7"
       },
       "examples": [
         {
-          "title": "Map Control",
+          "title": "MFA Control → NIST CSF",
           "inputs": {
-            "control": "Access Control",
-            "frameworks": [
-              "ISO 27001",
-              "NIST CSF"
-            ]
+            "controlDescription": "Multi-factor authentication for all users",
+            "framework": "NIST_CSF",
+            "mapping": "PR.AC-7"
           },
           "expectedOutput": "Mapping of control to framework requirements"
         },
         {
           "title": "Encryption Control",
           "inputs": {
-            "control": "Data Encryption",
-            "frameworks": [
-              "ISO 27001",
-              "NIST CSF",
-              "SOC 2"
-            ]
+            "controlDescription": "Encryption at rest for sensitive data",
+            "framework": "ISO_27001",
+            "mapping": "A.10.1.1"
           },
           "expectedOutput": "Cross-framework mapping showing alignment and gaps"
         }
@@ -1475,22 +1577,37 @@
         }
       ],
       "defaultInputs": {
-        "processName": "Code Review",
-        "steps": [
+        "processSteps": [
           "Submit PR",
           "Review",
           "Approve"
+        ],
+        "actors": [
+          "Developer",
+          "Reviewer"
+        ],
+        "frictionPoints": [
+          "Reviews bottlenecked by availability"
         ]
       },
       "examples": [
         {
           "title": "Map Process Friction",
           "inputs": {
-            "processName": "Code Review",
-            "steps": [
-              "Submit PR",
-              "Review",
-              "Approve"
+            "processSteps": [
+              "Submit application",
+              "HR review",
+              "IT account setup",
+              "First day orientation"
+            ],
+            "actors": [
+              "Candidate",
+              "HR",
+              "IT"
+            ],
+            "frictionPoints": [
+              "Manual email coordination between departments",
+              "Background check takes 2-3 weeks"
             ]
           },
           "expectedOutput": "Friction analysis with bottlenecks and improvement suggestions"
@@ -1498,12 +1615,20 @@
         {
           "title": "Deployment Process",
           "inputs": {
-            "processName": "Production Deployment",
-            "steps": [
+            "processSteps": [
               "Build",
-              "Test",
-              "Staging",
-              "Production"
+              "Automated tests",
+              "Code review",
+              "Production deploy"
+            ],
+            "actors": [
+              "Developer",
+              "Reviewer",
+              "DevOps"
+            ],
+            "frictionPoints": [
+              "Manual deployment approval required",
+              "Rollback process is manual and slow"
             ]
           },
           "expectedOutput": "Friction points identified with time estimates and blockers"
@@ -1566,16 +1691,18 @@
       ],
       "defaultInputs": {
         "debtItem": "Legacy authentication system",
-        "impact": "high",
-        "cost": "medium"
+        "impact": "High",
+        "urgency": "Medium",
+        "cost": "Medium"
       },
       "examples": [
         {
           "title": "Qualify Debt",
           "inputs": {
             "debtItem": "Legacy authentication system",
-            "impact": "high",
-            "cost": "medium"
+            "impact": "High",
+            "urgency": "High",
+            "cost": "Medium"
           },
           "expectedOutput": "Prioritized debt item with impact and cost analysis"
         },
@@ -1583,8 +1710,9 @@
           "title": "Outdated Dependencies",
           "inputs": {
             "debtItem": "React 16 dependencies",
-            "impact": "medium",
-            "cost": "high"
+            "impact": "Medium",
+            "urgency": "High",
+            "cost": "Low"
           },
           "expectedOutput": "Debt qualification with risk assessment and remediation plan"
         }
@@ -1655,26 +1783,65 @@
         }
       ],
       "defaultInputs": {
-        "incidentTitle": "Service Outage",
-        "severity": "high",
-        "duration": "2 hours"
+        "title": "Service Outage",
+        "dateTime": "2026-01-02T10:00",
+        "impact": "Service unavailable for 2 hours",
+        "timeline": [
+          "10:30 - Alert triggered",
+          "10:45 - Root cause identified",
+          "11:30 - Service recovered"
+        ],
+        "rootCauses": [
+          "Missing query timeout configuration"
+        ],
+        "actionItems": [
+          "Add query timeout of 30 seconds"
+        ]
       },
       "examples": [
         {
           "title": "Create Post-Mortem",
           "inputs": {
-            "incidentTitle": "Service Outage",
-            "severity": "high",
-            "duration": "2 hours"
+            "title": "Production Database Outage",
+            "dateTime": "2026-01-01T10:30",
+            "impact": "Service unavailable for 2 hours, affecting 15,000 users",
+            "timeline": [
+              "10:30 AM - Database connection pool exhausted",
+              "10:35 AM - Alert triggered, on-call engineer notified",
+              "10:45 AM - Identified runaway query consuming all connections",
+              "11:15 AM - Query killed, connection pool restored",
+              "11:30 AM - Service fully recovered"
+            ],
+            "rootCauses": [
+              "Missing query timeout configuration",
+              "No connection pool monitoring alerts"
+            ],
+            "actionItems": [
+              "Add query timeout of 30 seconds",
+              "Implement connection pool monitoring"
+            ]
           },
           "expectedOutput": "Structured post-mortem template with timeline, root cause, and actions"
         },
         {
           "title": "Security Incident",
           "inputs": {
-            "incidentTitle": "Unauthorized Access Attempt",
-            "severity": "critical",
-            "duration": "30 minutes"
+            "title": "Unauthorized Access Attempt",
+            "dateTime": "2026-01-02T09:00",
+            "impact": "Attempted unauthorized access detected and blocked",
+            "timeline": [
+              "9:00 AM - Unusual login patterns detected",
+              "9:05 AM - Security team notified",
+              "9:10 AM - Access blocked, user account suspended"
+            ],
+            "rootCauses": [
+              "Weak password policy",
+              "No MFA enforcement for admin accounts"
+            ],
+            "actionItems": [
+              "Enforce stronger password requirements",
+              "Require MFA for all admin accounts"
+            ]
           },
           "expectedOutput": "Security-focused post-mortem with containment steps and prevention measures"
         }
@@ -1741,16 +1908,20 @@
       ],
       "defaultInputs": {
         "metricName": "API Response Time",
-        "type": "latency",
-        "target": "200ms"
+        "definition": "Time between request received and response sent by the API.",
+        "calculation": "p95(response_time_ms) over 5 minutes",
+        "units": "ms",
+        "source": "API access logs"
       },
       "examples": [
         {
           "title": "Define Metric",
           "inputs": {
             "metricName": "API Response Time",
-            "type": "latency",
-            "target": "200ms"
+            "definition": "Time between request received and response sent by the API.",
+            "calculation": "p95(response_time_ms) over 5 minutes",
+            "units": "ms",
+            "source": "API access logs"
           },
           "expectedOutput": "Metric specification with definition, measurement method, and targets"
         },
@@ -1758,13 +1929,86 @@
           "title": "Error Rate Metric",
           "inputs": {
             "metricName": "API Error Rate",
-            "type": "rate",
-            "target": "< 0.1%"
+            "definition": "Percentage of API requests that result in an error (4xx or 5xx).",
+            "calculation": "(COUNT(*) WHERE status_code >= 400) / COUNT(*) * 100",
+            "units": "Percentage (%)",
+            "source": "API access logs"
           },
           "expectedOutput": "Error rate metric with SLO definition and alerting thresholds"
         }
       ],
       "explain": "The metrics definition studio helps you define useful metrics and avoid vanity measurements. It guides you through specifying what to measure, how to measure it, and what targets to set. Use it to create meaningful metrics that drive decisions. Don't use it as a replacement for formal metrics frameworks. Inputs: metricName, type, target, measurementMethod (strings). Limits: 300ms CPU, 32MB memory, 32KB output. Security: Specification only."
+    },
+    {
+      "id": "sandbox-echo",
+      "title": "Sandbox echo",
+      "description": "Sends a small payload to the secure compute runner and returns stdout. Use it to confirm the runner is available and your credits setup is working.",
+      "route": "/tools/sandbox-echo",
+      "executionModes": [
+        "compute"
+      ],
+      "defaultMode": "compute",
+      "limits": {
+        "cpuMs": 2000,
+        "memoryMb": 128,
+        "outputKb": 64,
+        "wallMs": 8000,
+        "inputKb": 64
+      },
+      "creditModel": {
+        "baseCredits": 1,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "runner": "/api/jobs/create",
+      "failureModes": [
+        "runner_unavailable",
+        "timeout",
+        "rate_limited",
+        "insufficient_credits"
+      ],
+      "statusStates": [
+        "idle",
+        "queued",
+        "running",
+        "completed",
+        "failed"
+      ],
+      "inputs": [
+        {
+          "name": "message",
+          "type": "string",
+          "limits": "max 1KB"
+        },
+        {
+          "name": "repeat",
+          "type": "number",
+          "limits": "1 to 20"
+        }
+      ],
+      "defaultInputs": {
+        "message": "Hello from the secure runner",
+        "repeat": 2
+      },
+      "examples": [
+        {
+          "title": "Basic echo",
+          "inputs": {
+            "message": "Hello",
+            "repeat": 2
+          },
+          "expectedOutput": "Hello\nHello"
+        },
+        {
+          "title": "Runner health check",
+          "inputs": {
+            "message": "runner ok",
+            "repeat": 1
+          },
+          "expectedOutput": "runner ok"
+        }
+      ],
+      "explain": "Sandbox echo is a small health check tool for the secure compute runner. It sends a short message to the runner and returns the output, so you can confirm that jobs can be queued, executed, and billed correctly. Use it to diagnose availability and credit issues. If it fails, check that you are signed in, that the runner is enabled, and that you have credits. Inputs: message, repeat. Limits: small input, short runtime, fixed output cap."
     }
   ]
 }

@@ -1,7 +1,6 @@
 import dynamic from "next/dynamic";
-import Link from "next/link";
-import { useEffect, useMemo } from "react";
-import NotesLayout from "@/components/notes/Layout";
+import { useMemo } from "react";
+import CourseLessonTemplate from "@/components/course/CourseLessonTemplate";
 import { MDXRenderer } from "@/components/notes/MDXRenderer";
 import { loadNote } from "@/lib/content/loadNote";
 import ToolCard from "@/components/notes/ToolCard";
@@ -24,7 +23,7 @@ import SectionHeader from "@/components/course/SectionHeader";
 import SubsectionHeader from "@/components/course/SubsectionHeader";
 import BodyText from "@/components/course/BodyText";
 import { cyberSections } from "@/lib/cyberSections";
-import { safeAgentLog } from "@/lib/safeAgentLog";
+import CPDAssessmentPromo from "@/components/course/CPDAssessmentPromo";
 
 const BitChangeTool = dynamic(() => import("@/components/notes/tools/cybersecurity/ch1/BitChangeTool"), { ssr: false });
 const EncodingExplorerTool = dynamic(() => import("@/components/notes/tools/cybersecurity/ch1/EncodingExplorerTool"), { ssr: false });
@@ -53,6 +52,7 @@ const AttackSurfaceMapper = dynamic(() => import("@/components/notes/tools/cyber
 const DnsTrustLab = dynamic(() => import("@/components/notes/tools/cybersecurity/foundations/DnsTrustLab"), { ssr: false });
 const PrivacyThreatModeler = dynamic(() => import("@/components/notes/tools/cybersecurity/foundations/PrivacyThreatModeler"), { ssr: false });
 const AccountHygieneAudit = dynamic(() => import("@/components/notes/tools/cybersecurity/foundations/AccountHygieneAudit"), { ssr: false });
+const PersonalSecurityBaselineTool = dynamic(() => import("@/components/notes/tools/cybersecurity/foundations/PersonalSecurityBaselineTool"), { ssr: false });
 
 export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
@@ -99,6 +99,7 @@ export default function Page({ source, headings }) {
       DnsTrustLab,
       PrivacyThreatModeler,
       AccountHygieneAudit,
+      PersonalSecurityBaselineTool,
       Recap,
       PageNav,
       GlossaryTip,
@@ -114,18 +115,8 @@ export default function Page({ source, headings }) {
     []
   );
 
-  useEffect(() => {
-    safeAgentLog({
-      page: "cybersecurity/beginner",
-      location: "pages/cybersecurity/beginner.js",
-      message: "mdxComponents keys",
-      data: { keys: Object.keys(mdxComponents) },
-      timestamp: Date.now(),
-    });
-  }, [mdxComponents]);
-
   return (
-    <NotesLayout
+    <CourseLessonTemplate
       meta={{
         title: "Cybersecurity Foundations",
         description: "Level 1 of my cybersecurity course. Data, networks, attackers, and everyday defences with hands-on labs.",
@@ -136,17 +127,22 @@ export default function Page({ source, headings }) {
       }}
       activeLevelId="foundations"
       headings={headings}
+      courseHref="/cybersecurity"
+      courseLabel="Cybersecurity"
+      dashboardHref="/dashboards/cybersecurity"
+      labsHref="/tools/cybersecurity"
+      studiosHref="/cyber-studios"
     >
-      <div className="mb-4">
-        <Link
-          href="/cybersecurity"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-900 focus:outline-none focus:ring focus:ring-blue-200"
-        >
-          Back to Cybersecurity overview
-        </Link>
+      <div className="mb-6">
+        <CPDAssessmentPromo
+          courseName="Cybersecurity"
+          levelLabel="Foundations"
+          assessmentHref="/cybersecurity/assessment/foundations"
+          prepHref="/cybersecurity/cpd-prep"
+        />
       </div>
       <MDXRenderer source={source} components={mdxComponents} />
-    </NotesLayout>
+    </CourseLessonTemplate>
   );
 }
 

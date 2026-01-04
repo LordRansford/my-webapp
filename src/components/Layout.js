@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import TestingModeBanner from "@/components/TestingModeBanner";
+import BetaBanner from "@/components/notes/BetaBanner";
 import SpotifyMiniPlayerMount from "@/components/spotify/SpotifyMiniPlayerMount";
 import AppShell from "@/components/navigation/AppShell";
 export default function Layout({
@@ -12,10 +13,14 @@ export default function Layout({
     <>
       <Head>
         <title>{title}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta name="description" content={description} />
       </Head>
 
       <TestingModeBanner />
+      <div className="mx-auto max-w-6xl px-4 pt-4">
+        <BetaBanner />
+      </div>
       <AppShell>
         {children}
       </AppShell>

@@ -19,25 +19,25 @@ export default function WiresharkIntro() {
 
       <div className="p-4 bg-blue-50 border border-blue-300 rounded-lg">
         <div className="font-semibold text-blue-900 mb-2">Learning Objectives</div>
-        <ul className="text-xs text-blue-800 space-y-1 ml-4">
-          <li className="list-disc">Identify unencrypted HTTP traffic</li>
-          <li className="list-disc">Recognize common protocols (DNS, HTTPS, TCP)</li>
-          <li className="list-disc">Spot suspicious network patterns</li>
-          <li className="list-disc">Understand packet headers vs payload</li>
-        </ul>
+        <ol className="text-xs text-blue-800 space-y-1 ml-4 list-decimal">
+          <li>Identify unencrypted HTTP traffic</li>
+          <li>Recognize common protocols (DNS, HTTPS, TCP)</li>
+          <li>Spot suspicious network patterns</li>
+          <li>Understand packet headers vs payload</li>
+        </ol>
       </div>
 
       <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
         <div className="font-semibold mb-2">Recommended Resources</div>
         <div className="text-xs space-y-2">
           <div>
-            <strong>CloudShark:</strong> Web-based packet analysis (cloudshark.org)
+            <strong>CloudShark</strong> Web based packet analysis (cloudshark.org)
           </div>
           <div>
-            <strong>Wireshark Download:</strong> wireshark.org
+            <strong>Wireshark download</strong> wireshark.org
           </div>
           <div>
-            <strong>Sample PCAP files:</strong> wireshark.org/download/samples
+            <strong>Sample PCAP files</strong> wireshark.org/download/samples
           </div>
         </div>
       </div>

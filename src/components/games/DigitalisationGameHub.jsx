@@ -1,5 +1,6 @@
 "use client";
 
+import { getPracticeGamesByCategory } from "@/lib/games-registry";
 import GameCard from "./GameCard";
 import VisionGame from "./VisionGame";
 import MaturityGame from "./MaturityGame";
@@ -8,23 +9,22 @@ import EcosystemGame from "./EcosystemGame";
 import RoadmapSprintGame from "./RoadmapSprintGame";
 
 export default function DigitalisationGameHub() {
+  const games = getPracticeGamesByCategory("digitalisation");
+  const componentsById = {
+    "vision-and-value": <VisionGame />,
+    "maturity-and-readiness": <MaturityGame />,
+    "trade-offs-and-constraints": <DigitalTradeoffGame />,
+    "ecosystems-and-trust": <EcosystemGame />,
+    "roadmap-sprint": <RoadmapSprintGame />,
+  };
+
   return (
     <div className="rn-game-hub">
-      <GameCard title="Vision and value" description="Connect a simple digital vision to outcomes and evidence of success.">
-        <VisionGame />
-      </GameCard>
-      <GameCard title="Maturity and readiness" description="Place an organisation on a maturity scale and see what breaks when you jump too far.">
-        <MaturityGame />
-      </GameCard>
-      <GameCard title="Trade offs and constraints" description="Balance ambition, risk, cost, and capacity for a small set of initiatives.">
-        <DigitalTradeoffGame />
-      </GameCard>
-      <GameCard title="Ecosystems and trust" description="Make decisions in a shared ecosystem and watch trust and resilience move.">
-        <EcosystemGame />
-      </GameCard>
-      <GameCard title="Roadmap sprint" description="Plan a three year roadmap quickly and see where you over or under invest.">
-        <RoadmapSprintGame />
-      </GameCard>
+      {games.map((g) => (
+        <GameCard key={g.id} title={g.title} description={g.description} meta={{ level: g.level, minutes: g.minutes }}>
+          {componentsById[g.id] || null}
+        </GameCard>
+      ))}
     </div>
   );
 }

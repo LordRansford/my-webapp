@@ -21,7 +21,7 @@ export default function TermsPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-slate-900 mb-4">1. Acceptance of Terms</h2>
             <p className="text-slate-700 mb-4">
-              By accessing and using RansfordsNotes ("the Service"), you accept and agree to be bound by these Terms of Service. 
+              By accessing and using RansfordsNotes (&quot;the Service&quot;), you accept and agree to be bound by these Terms of Service. 
               If you do not agree to these terms, please do not use our Service.
             </p>
           </section>
@@ -113,7 +113,7 @@ export default function TermsPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-slate-900 mb-4">8. Limitation of Liability</h2>
             <p className="text-slate-700 mb-4">
-              RansfordsNotes is provided "as is" and "as available" without warranties of any kind, either express or implied. 
+              RansfordsNotes is provided &quot;as is&quot; and &quot;as available&quot; without warranties of any kind, either express or implied. 
               We are not liable for any damages arising from your use of the Service, including but not limited to:
             </p>
             <ul className="list-disc pl-6 text-slate-700 mb-4 space-y-2">
@@ -146,7 +146,7 @@ export default function TermsPage() {
             </p>
             <ul className="list-disc pl-6 text-slate-700 mb-4 space-y-2">
               <li>Posting the updated Terms on this page</li>
-              <li>Updating the "Last updated" date</li>
+              <li>Updating the &quot;Last updated&quot; date</li>
               <li>Sending an email notification (for major changes)</li>
             </ul>
             <p className="text-slate-700 mb-4">

@@ -4,6 +4,18 @@ import { AppError } from "@/server/errors";
 const HEARD_OPTIONS = ["Family", "Friend", "Work colleague", "Other"] as const;
 const SCREENSHOT_MAX_LEN = 900_000; // conservative cap for data URL length
 
+function autoCategory(input: { message: string; url: string; pageTitle: string }) {
+  const m = `${input.message || ""} ${input.pageTitle || ""} ${input.url || ""}`.toLowerCase();
+  if (m.includes("payment") || m.includes("stripe") || m.includes("checkout") || m.includes("card")) return "billing";
+  if (m.includes("sign in") || m.includes("signin") || m.includes("login") || m.includes("google")) return "auth";
+  if (m.includes("cpd") || m.includes("certificate") || m.includes("assessment")) return "cpd";
+  if (m.includes("tool") || m.includes("/tools") || m.includes("lab")) return "tools";
+  if (m.includes("mobile") || m.includes("iphone") || m.includes("android") || m.includes("responsive")) return "mobile";
+  if (m.includes("bug") || m.includes("broken") || m.includes("error") || m.includes("crash")) return "bug";
+  if (m.includes("search") || m.includes("read aloud") || m.includes("speech")) return "accessibility";
+  return "general";
+}
+
 export type FeedbackPayload = {
   name?: string;
   heardFrom: (typeof HEARD_OPTIONS)[number];
@@ -77,6 +89,8 @@ export async function submitFeedback(raw: any) {
     });
   }
 
+  const resolvedCategory = category || autoCategory({ message, url, pageTitle });
+
   await prisma.feedbackSubmission.create({
     data: {
       sessionId,
@@ -84,7 +98,7 @@ export async function submitFeedback(raw: any) {
       source: heardFrom,
       pageUrl: url || "/feedback",
       pageTitle: pageTitle || null,
-      category: category || null,
+      category: resolvedCategory || null,
       followUp: followUp || null,
       clientSummary: clientSummary || null,
       message,

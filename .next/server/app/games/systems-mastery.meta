@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/games/layout,_N_T_/games/systems-mastery/layout,_N_T_/games/systems-mastery/page,_N_T_/games/systems-mastery"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/games/systems-mastery/__PAGE__",
+    "/games/systems-mastery",
+    "/games",
+    "/_index",
+    "/_head"
+  ]
+}

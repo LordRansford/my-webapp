@@ -1,4 +1,4 @@
-export type CPDTrackId = "cyber" | "ai" | "software-architecture" | "digitalisation" | "data";
+export type CPDTrackId = "cyber" | "ai" | "software-architecture" | "digitalisation" | "data" | "network-models";
 
 export interface CPDSectionKey {
   trackId: CPDTrackId;
@@ -39,6 +39,71 @@ const emptyState = (): CPDState => ({
 
 const isBrowser = typeof window !== "undefined";
 
+/**
+ * Legacy section IDs exist in older content. We keep them as aliases so:
+ * - existing learner progress still counts after an ID migration
+ * - content can migrate to canonical IDs without breaking progress bars
+ *
+ * IMPORTANT:
+ * - Canonical IDs should be stable and live in docs/courses/CYBERSECURITY_MASTER_SYLLABUS.md
+ * - Aliases should only be added for real historical IDs used in production content.
+ */
+const LEGACY_SECTION_ALIASES: Partial<
+  Record<CPDTrackId, Partial<Record<string, Partial<Record<string, string[]>>>>>
+> = {
+  cyber: {
+    foundations: {
+      // Old "Foundations overview" toggle + quiz lived under this ID.
+      // Canonical syllabus splits this into a dedicated Module F0.
+      "foundations-f0-what-security-is": ["foundations-why-cyber-matters"],
+
+      // Old module IDs from the original Foundations page.
+      "foundations-f2-data-and-integrity": ["foundations-data-and-bits"],
+      "foundations-f3-networks-and-transport": ["foundations-networks-and-packets"],
+      "foundations-f4-cia-and-simple-attacks": ["foundations-cia-and-simple-attacks"],
+
+      // Old manifest had a placeholder capstone ID, keep it as an alias.
+      "foundations-f8-foundations-capstone": ["foundations-checkpoint-capstone"],
+    },
+    applied: {
+      "applied-a1-threat-modelling-as-design": ["applied-threat-modelling"],
+      "applied-a2-identity-and-access-control": ["applied-auth-sessions-access"],
+      "applied-a6-logging-and-detection-basics": ["applied-logging-and-risk"],
+    },
+    practice: {
+      "practice-p2-exposure-reduction-zero-trust": ["practice-p1-secure-architecture-zero-trust", "advanced-secure-architecture"],
+      "practice-p3-runtime-and-cloud-security": ["practice-p0-crypto-in-practice", "advanced-crypto-practice"],
+      "practice-p4-supply-chain-security": ["practice-p3-supply-chain-risk", "advanced-supply-chain-risk"],
+      "practice-p6-detection-and-incident-response": ["practice-p2-detection-and-incident-response", "advanced-detection-response"],
+      "practice-p7-privacy-ethics-auditability": ["practice-p5-governance-and-professional-practice", "advanced-governance-career"],
+      "practice-p8-system-ilities": ["practice-p4-adversarial-tradeoffs", "advanced-adversarial-tradeoffs"],
+      "practice-p9-capstone-professional-practice": ["practice-p6-capstone"],
+    },
+  },
+};
+
+export function getSectionAliases(trackId: CPDTrackId, levelId: string, sectionId: string): string[] {
+  const canonical = String(sectionId || "").trim();
+  if (!canonical) return [];
+  const aliases = LEGACY_SECTION_ALIASES?.[trackId]?.[levelId]?.[canonical] ?? [];
+  const all = [canonical, ...aliases].map((s) => String(s).trim()).filter(Boolean);
+  return Array.from(new Set(all));
+}
+
+export function isSectionCompleted(state: CPDState, trackId: CPDTrackId, levelId: string, sectionId: string): boolean {
+  const ids = getSectionAliases(trackId, levelId, sectionId);
+  if (ids.length === 0) return false;
+  return ids.some((id) =>
+    state.sections.some(
+      (section) =>
+        section.trackId === trackId &&
+        section.levelId === levelId &&
+        section.sectionId === id &&
+        section.completed
+    )
+  );
+}
+
 const normaliseSection = (input: any): CPDSectionState | null => {
   if (!input || typeof input !== "object") return null;
   const { trackId, levelId, sectionId, completed, minutes, lastUpdated } = input;
@@ -68,6 +133,34 @@ const normaliseActivity = (input: any): CPDActivity | null => {
   };
 };
 
+function isNetworkModelsSectionId(sectionId: string) {
+  const id = String(sectionId || "").trim().toLowerCase();
+  // Network Models content is consistently namespaced.
+  return id.startsWith("net-") || id.startsWith("network-models-");
+}
+
+function migrateLegacyNetworkModels(state: CPDState): CPDState {
+  // Historical bug: network-models pages previously resolved to trackId "ai".
+  // We can safely migrate because network models section IDs are namespaced.
+  const next: CPDState = { ...state, sections: [...state.sections], activity: [...state.activity] };
+
+  let changed = false;
+  for (const s of next.sections) {
+    if (s.trackId === "ai" && isNetworkModelsSectionId(s.sectionId)) {
+      (s as any).trackId = "network-models";
+      changed = true;
+    }
+  }
+  for (const a of next.activity) {
+    if (a.trackId === "ai" && isNetworkModelsSectionId(a.sectionId)) {
+      (a as any).trackId = "network-models";
+      changed = true;
+    }
+  }
+
+  return changed ? next : state;
+}
+
 export function getInitialCPDState(): CPDState {
   if (!isBrowser) return emptyState();
   try {
@@ -82,7 +175,7 @@ export function getInitialCPDState(): CPDState {
     const activity = Array.isArray(parsed.activity)
       ? parsed.activity.map(normaliseActivity).filter(Boolean)
       : [];
-    return { version, sections, activity };
+    return migrateLegacyNetworkModels({ version, sections, activity });
   } catch {
     return emptyState();
   }
@@ -140,6 +233,7 @@ export function getTotalsForTrack(state: CPDState, trackId: CPDTrackId) {
 
 export function resolveTrackId(courseId: string): CPDTrackId {
   if (courseId === "cybersecurity" || courseId === "cyber") return "cyber";
+  if (courseId === "network-models" || courseId === "network") return "network-models";
   if (courseId === "software-architecture" || courseId === "architecture") return "software-architecture";
   if (courseId === "digitalisation") return "digitalisation";
   if (courseId === "data") return "data";
@@ -153,13 +247,7 @@ export function getCompletionForLevel(
   sectionIds: string[] = []
 ) {
   const completedCount = sectionIds.filter((sectionId) =>
-    state.sections.some(
-      (section) =>
-        section.trackId === trackId &&
-        section.levelId === levelId &&
-        section.sectionId === sectionId &&
-        section.completed
-    )
+    isSectionCompleted(state, trackId, levelId, sectionId)
   ).length;
   const totalCount = sectionIds.length;
   const percent = totalCount === 0 ? 0 : Math.round((completedCount / totalCount) * 100);

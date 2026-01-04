@@ -1,7 +1,7 @@
 "use client";
 
 export type AssistantsOpenState = {
-  mentorOpen: boolean;
+  professorOpen: boolean;
   feedbackOpen: boolean;
 };
 
@@ -10,11 +10,11 @@ const KEY = "rn_assistants_open_state_v1";
 export function readAssistantsOpenState(): AssistantsOpenState {
   try {
     const raw = window.sessionStorage.getItem(KEY);
-    if (!raw) return { mentorOpen: false, feedbackOpen: false };
+    if (!raw) return { professorOpen: false, feedbackOpen: false };
     const p = JSON.parse(raw);
-    return { mentorOpen: Boolean(p?.mentorOpen), feedbackOpen: Boolean(p?.feedbackOpen) };
+    return { professorOpen: Boolean(p?.professorOpen), feedbackOpen: Boolean(p?.feedbackOpen) };
   } catch {
-    return { mentorOpen: false, feedbackOpen: false };
+    return { professorOpen: false, feedbackOpen: false };
   }
 }
 
@@ -27,7 +27,7 @@ export function writeAssistantsOpenState(next: AssistantsOpenState) {
 }
 
 export function enforceOneOpen(next: AssistantsOpenState): AssistantsOpenState {
-  if (next.mentorOpen && next.feedbackOpen) return { mentorOpen: next.mentorOpen, feedbackOpen: false };
+  if (next.professorOpen && next.feedbackOpen) return { professorOpen: next.professorOpen, feedbackOpen: false };
   return next;
 }
 

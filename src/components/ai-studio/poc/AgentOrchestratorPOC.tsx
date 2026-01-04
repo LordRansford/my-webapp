@@ -28,28 +28,41 @@ interface Workflow {
   connections: { from: string; to: string }[];
 }
 
-export default function AgentOrchestratorPOC() {
-  const [workflow, setWorkflow] = useState<Workflow>({
-    agents: [
-      {
-        id: "1",
-        name: "Research Agent",
-        type: "single",
-        model: "gpt-4",
-        tools: ["web-search", "code-execution"],
-        status: "idle",
-      },
-      {
-        id: "2",
-        name: "Analysis Agent",
-        type: "single",
-        model: "gpt-4",
-        tools: ["data-analysis", "visualization"],
-        status: "idle",
-      },
-    ],
-    connections: [{ from: "1", to: "2" }],
-  });
+export type AgentOrchestratorWorkflow = Workflow;
+
+type AgentOrchestratorPOCProps = {
+  /**
+   * Optional preset injected by Examples.
+   */
+  initialWorkflow?: Workflow;
+  loadedExampleLabel?: string;
+};
+
+export default function AgentOrchestratorPOC(props: AgentOrchestratorPOCProps) {
+  const [workflow, setWorkflow] = useState<Workflow>(
+    () =>
+      props.initialWorkflow ?? {
+        agents: [
+          {
+            id: "1",
+            name: "Research Agent",
+            type: "single",
+            model: "gpt-4",
+            tools: ["web-search", "code-execution"],
+            status: "idle",
+          },
+          {
+            id: "2",
+            name: "Analysis Agent",
+            type: "single",
+            model: "gpt-4",
+            tools: ["data-analysis", "visualization"],
+            status: "idle",
+          },
+        ],
+        connections: [{ from: "1", to: "2" }],
+      }
+  );
 
   const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
   const [isExecuting, setIsExecuting] = useState(false);
@@ -169,6 +182,14 @@ export default function AgentOrchestratorPOC() {
 
   return (
     <div className="space-y-6 p-6 bg-white rounded-2xl shadow-lg border border-slate-200">
+      {props.loadedExampleLabel ? (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+          <p className="font-semibold">Loaded example preset</p>
+          <p className="mt-1">
+            {props.loadedExampleLabel}. This orchestrator is a <strong>safe simulation</strong> (no external agents run).
+          </p>
+        </div>
+      ) : null}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-slate-900">Agent Orchestrator POC</h2>

@@ -1290,6 +1290,58 @@
         "complexityMultiplierHints": {}
       },
       "description": "Define useful metrics and avoid vanity measurements."
+    },
+    {
+      "id": "sandbox-echo",
+      "route": "/tools/sandbox-echo",
+      "title": "Sandbox echo",
+      "purpose": "Health check tool for the secure compute runner.",
+      "execution": "sandboxed-server",
+      "inputs": [
+        {
+          "name": "message",
+          "type": "string",
+          "limits": "max 1KB"
+        },
+        {
+          "name": "repeat",
+          "type": "number",
+          "limits": "1 to 20"
+        }
+      ],
+      "limits": {
+        "cpuMs": 2000,
+        "memoryMb": 128,
+        "outputKb": 64,
+        "wallMs": 8000
+      },
+      "credits": {
+        "costPerRun": 1
+      },
+      "runner": "/api/jobs/create",
+      "failureModes": [
+        "runner_unavailable",
+        "timeout",
+        "rate_limited",
+        "insufficient_credits"
+      ],
+      "statusStates": [
+        "idle",
+        "queued",
+        "running",
+        "completed",
+        "failed"
+      ],
+      "executionModes": [
+        "compute"
+      ],
+      "defaultMode": "compute",
+      "creditModel": {
+        "baseCredits": 1,
+        "perKbCredits": 0,
+        "complexityMultiplierHints": {}
+      },
+      "description": "Sends a small payload to the secure compute runner and returns stdout. Use it to confirm the runner is available and your credits setup is working."
     }
   ]
 }

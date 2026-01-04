@@ -1,0 +1,12 @@
+var R=require("../../../../../chunks/[turbopack]_runtime.js")("server/app/api/ai-studio/compute/estimate/route.js")
+R.c("server/chunks/[root-of-the-server]__e467c231._.js")
+R.c("server/chunks/[root-of-the-server]__a010711e._.js")
+R.c("server/chunks/node_modules_next_dist_23bfe24c._.js")
+R.c("server/chunks/node_modules_next_f2da0d3e._.js")
+R.c("server/chunks/node_modules_aa474d64._.js")
+R.c("server/chunks/_79b23dc3._.js")
+R.c("server/chunks/[root-of-the-server]__34fd47d2._.js")
+R.c("server/chunks/node_modules_zod_v4_classic_external_fa90cebf.js")
+R.c("server/chunks/_next-internal_server_app_api_ai-studio_compute_estimate_route_actions_dc913e29.js")
+R.m(482477)
+module.exports=R.m(482477).exports

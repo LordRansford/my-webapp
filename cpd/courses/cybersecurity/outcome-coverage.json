@@ -1,0 +1,69 @@
+{
+  "courseId": "cybersecurity",
+  "generatedAt": "2026-01-04T06:44:32.698Z",
+  "status": "Ready",
+  "version": "1.0.0",
+  "coverage": {
+    "levels": [
+      {
+        "levelId": "practice",
+        "estimatedHours": 32,
+        "learningObjectivesCount": 4,
+        "learningObjectivesMissing": false,
+        "trackedSectionsCount": 9,
+        "quizBlocksCount": 9,
+        "toolsCount": 12,
+        "signals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      },
+      {
+        "levelId": "foundations",
+        "estimatedHours": 8,
+        "learningObjectivesCount": 7,
+        "learningObjectivesMissing": false,
+        "trackedSectionsCount": 9,
+        "quizBlocksCount": 9,
+        "toolsCount": 16,
+        "signals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      },
+      {
+        "levelId": "applied",
+        "estimatedHours": 16,
+        "learningObjectivesCount": 4,
+        "learningObjectivesMissing": false,
+        "trackedSectionsCount": 7,
+        "quizBlocksCount": 7,
+        "toolsCount": 7,
+        "signals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      }
+    ],
+    "totals": {
+      "totalEstimatedHours": 56,
+      "totalLearningObjectives": 15,
+      "totalTrackedSections": 25,
+      "totalQuizBlocks": 25,
+      "totalTools": 35
+    },
+    "gaps": {
+      "levelsMissingLearningObjectives": [],
+      "levelsMissingQuizBlocks": [],
+      "levelsMissingToolActivities": [],
+      "levelsMissingSectionTracking": [],
+      "recommendations": []
+    }
+  }
+}

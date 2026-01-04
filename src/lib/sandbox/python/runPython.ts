@@ -19,9 +19,34 @@ export interface PythonRunResult {
   };
 }
 
+export type PythonRuntimeStatusPhase = "loading_runtime" | "ready" | "running";
+
+type PythonWorkerMessage =
+  | { type: "status"; requestId: string; phase: string; message?: string }
+  | {
+      type: "result";
+      requestId: string;
+      success: boolean;
+      stdout?: string[];
+      result?: string;
+      error?: { code: string; message: string };
+    };
+
+let sharedWorker: Worker | null = null;
+let sharedWorkerBusy = false;
+
+function createPyWorker(): Worker {
+  // Use a static worker file instead of blob URL to avoid importScripts issues.
+  // The worker file is served from /pyodide-worker.js
+  return new Worker("/pyodide-worker.js");
+}
+
 export async function runPython(
   code: string,
-  contract: ToolContract
+  contract: ToolContract,
+  opts?: {
+    onStatus?: (phase: PythonRuntimeStatusPhase | string, message?: string) => void;
+  }
 ): Promise<PythonRunResult> {
   // Validate input size
   const inputKb = new Blob([code]).size / 1024;
@@ -36,12 +61,21 @@ export async function runPython(
   }
 
   return new Promise((resolve) => {
-    // Use a static worker file instead of blob URL to avoid importScripts issues
-    // The worker file is served from /pyodide-worker.js
-    const worker = new Worker('/pyodide-worker.js');
+    // Reuse a shared worker so Pyodide only needs to load once per session.
+    // If a run is already in-flight, fall back to a one-off worker to avoid cross-talk.
+    const useShared = !sharedWorkerBusy;
+    const worker = useShared ? (sharedWorker ?? (sharedWorker = createPyWorker())) : createPyWorker();
+    if (useShared) sharedWorkerBusy = true;
+
+    const requestId =
+      typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : String(Date.now());
 
     const timeout = setTimeout(() => {
       worker.terminate();
+      if (useShared) {
+        sharedWorker = null;
+        sharedWorkerBusy = false;
+      }
       resolve({
         success: false,
         error: {
@@ -52,32 +86,48 @@ export async function runPython(
     }, contract.limits.wallMs);
 
     worker.onmessage = (e) => {
+      const msg = e.data as PythonWorkerMessage;
+      if (!msg || typeof msg !== "object" || msg.requestId !== requestId) return;
+
+      if (msg.type === "status") {
+        opts?.onStatus?.(msg.phase, msg.message);
+        // Intentionally do not resolve; this lets the UI stay responsive while Pyodide loads.
+        return;
+      }
+
+      if (msg.type !== "result") return;
+
       clearTimeout(timeout);
-      worker.terminate();
-      
-      const response = e.data;
-      if (response.success) {
+      if (!useShared) worker.terminate();
+      if (useShared) sharedWorkerBusy = false;
+
+      if (msg.success) {
         resolve({
           success: true,
           output: {
-            stdout: response.stdout || [],
-            result: response.result || "",
+            stdout: msg.stdout || [],
+            result: msg.result || "",
           },
         });
-      } else {
-        resolve({
-          success: false,
-          error: response.error || {
-            code: "unknown_error",
-            message: "Execution failed",
-          },
-        });
+        return;
       }
+
+      resolve({
+        success: false,
+        error: msg.error || {
+          code: "unknown_error",
+          message: "Execution failed",
+        },
+      });
     };
 
     worker.onerror = (err) => {
       clearTimeout(timeout);
       worker.terminate();
+      if (useShared) {
+        sharedWorker = null;
+        sharedWorkerBusy = false;
+      }
       
       const errorMsg = err.message || "Worker execution failed";
       resolve({
@@ -90,6 +140,7 @@ export async function runPython(
     };
 
     worker.postMessage({
+      requestId,
       code,
       timeoutMs: contract.limits.cpuMs,
       maxOutputKb: contract.limits.outputKb,

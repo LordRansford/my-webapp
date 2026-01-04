@@ -51,7 +51,7 @@ export type TemplateDefinition = {
   fields: TemplateField[];
   disclaimer: string;
   exportProfile: {
-    formats: Array<"pdf" | "docx" | "xlsx" | "json">;
+    formats: Array<"pdf" | "docx" | "csv" | "json">;
     copySummary?: boolean;
   };
   charts: string[];

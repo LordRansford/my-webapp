@@ -1,0 +1,3 @@
+{
+  "/api/templates/[templateId]": "pages/api/templates/[templateId].js"
+}

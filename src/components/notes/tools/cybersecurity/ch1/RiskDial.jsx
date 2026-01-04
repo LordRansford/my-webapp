@@ -68,7 +68,7 @@ export default function RiskDial() {
       </div>
 
       <p className="text-sm text-gray-700">
-        Notice how increasing either factor increases risk, and how zero likelihood or zero impact would result in zero risk.
+        Notice how increasing either factor increases risk. In this simple model, if either factor were zero the risk would be zero, but the sliders start at 1 to keep the exercise focused on relative comparisons.
       </p>
 
       <ToolStateActions

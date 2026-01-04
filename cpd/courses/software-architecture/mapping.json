@@ -1,10 +1,380 @@
 {
   "courseId": "software-architecture",
   "status": "Draft",
-  "levels": [],
+  "generatedAt": "2026-01-04T06:44:32.693Z",
+  "version": "1.0.0",
+  "levels": [
+    {
+      "levelId": "advanced",
+      "estimatedHours": 14,
+      "sourceFiles": [
+        {
+          "title": "Software Development and Architecture Advanced",
+          "file": "content/courses/software-architecture/advanced.mdx",
+          "stepIndex": 2
+        }
+      ],
+      "learningObjectives": [
+        "Analyse architecture decisions in complex systems using realistic constraints and failure modes.",
+        "Explain advanced patterns (events, CQRS, observability) in practical terms.",
+        "Evaluate risk and resilience trade offs and their operational consequences.",
+        "Apply decision recording and governance thinking to keep systems changeable over time."
+      ],
+      "sectionIds": [
+        "soft-arch-advanced-domain-and-bounded-contexts",
+        "soft-arch-advanced-patterns-and-distribution",
+        "soft-arch-advanced-resilience-performance",
+        "soft-arch-advanced-evolution-and-governance"
+      ],
+      "quizzes": [
+        {
+          "id": "soft-arch-advanced-domains-quiz",
+          "title": "Quick check: domains and bounded contexts",
+          "sectionId": "soft-arch-advanced-domain-and-bounded-contexts",
+          "explicitId": true
+        },
+        {
+          "id": "soft-arch-advanced-patterns-quiz",
+          "title": "Quick check: patterns and distribution",
+          "sectionId": "soft-arch-advanced-patterns-and-distribution",
+          "explicitId": true
+        },
+        {
+          "id": "soft-arch-advanced-resilience-quiz",
+          "title": "Quick check: resilience and scale",
+          "sectionId": "soft-arch-advanced-resilience-performance",
+          "explicitId": true
+        },
+        {
+          "id": "soft-arch-advanced-governance-quiz",
+          "title": "Quick check: evolution and governance",
+          "sectionId": "soft-arch-advanced-evolution-and-governance",
+          "explicitId": true
+        }
+      ],
+      "tools": [
+        {
+          "id": "soft-arch-domain-mapper",
+          "title": "Domain and bounded context mapper"
+        },
+        {
+          "id": "soft-arch-cqrs-events-lab",
+          "title": "CQRS and events lab"
+        },
+        {
+          "id": "soft-arch-resilience-simulator",
+          "title": "Resilience and latency simulator"
+        },
+        {
+          "id": "soft-arch-adr-workbench",
+          "title": "Architecture decision workbench"
+        }
+      ],
+      "evidenceSignals": {
+        "quizzesPresent": true,
+        "toolsPresent": true,
+        "learningObjectivesPresent": true,
+        "sectionTrackingPresent": true
+      }
+    },
+    {
+      "levelId": "foundations",
+      "estimatedHours": 45.2,
+      "sourceFiles": [
+        {
+          "title": "Architecture and Design",
+          "file": "content/courses/software-architecture/foundations/architecture-design.mdx",
+          "stepIndex": 0
+        },
+        {
+          "title": "Deployment and CI/CD",
+          "file": "content/courses/software-architecture/foundations/deployment-cicd.mdx",
+          "stepIndex": 0
+        },
+        {
+          "title": "Discovery and Requirements",
+          "file": "content/courses/software-architecture/foundations/discovery-requirements.mdx",
+          "stepIndex": 0
+        },
+        {
+          "title": "The \"Ilities\" Framework",
+          "file": "content/courses/software-architecture/foundations/ilities-framework.mdx",
+          "stepIndex": 0
+        },
+        {
+          "title": "Implementation (Build)",
+          "file": "content/courses/software-architecture/foundations/implementation.mdx",
+          "stepIndex": 0
+        },
+        {
+          "title": "Operations",
+          "file": "content/courses/software-architecture/foundations/operations.mdx",
+          "stepIndex": 0
+        },
+        {
+          "title": "OSI Model and Browser/Terminal Diagnostics",
+          "file": "content/courses/software-architecture/foundations/osi-diagnostics.mdx",
+          "stepIndex": 0
+        },
+        {
+          "title": "Verification and Testing",
+          "file": "content/courses/software-architecture/foundations/verification-testing.mdx",
+          "stepIndex": 0
+        },
+        {
+          "title": "Software Architecture Foundations - Complete Lifecycle Coverage",
+          "file": "content/courses/software-architecture/foundations.mdx",
+          "stepIndex": 0
+        }
+      ],
+      "learningObjectives": [
+        "Map user journeys, define NFRs, and apply threat modelling fundamentals.",
+        "Document architecture using C4 models, ADRs, and security by design principles.",
+        "Implement secure coding practices including input validation and session management.",
+        "Apply comprehensive testing strategies including OWASP ASVS and accessibility testing.",
+        "Design CI/CD pipelines with DevSecOps integration.",
+        "Apply SRE principles for reliable operations and incident response.",
+        "Use OSI model and diagnostic tools for troubleshooting.",
+        "Evaluate systems across multiple quality attributes (the 'ilities')."
+      ],
+      "sectionIds": [
+        "soft-arch-foundations-architecture-design",
+        "soft-arch-foundations-deployment-cicd",
+        "soft-arch-foundations-discovery-requirements",
+        "soft-arch-foundations-ilities-framework",
+        "soft-arch-foundations-implementation",
+        "soft-arch-foundations-operations",
+        "soft-arch-foundations-osi-diagnostics",
+        "soft-arch-foundations-verification-testing",
+        "soft-arch-foundations-assessment"
+      ],
+      "quizzes": [
+        {
+          "id": "soft-arch-foundations-lifecycle-quiz",
+          "title": "Quick check: architecture foundations across the lifecycle",
+          "sectionId": "soft-arch-foundations-discovery-requirements",
+          "explicitId": true
+        }
+      ],
+      "tools": [
+        {
+          "id": null,
+          "title": "Discovery and Requirements"
+        },
+        {
+          "id": null,
+          "title": "Architecture and Design"
+        },
+        {
+          "id": null,
+          "title": "Implementation (Build)"
+        },
+        {
+          "id": null,
+          "title": "Verification and Testing"
+        },
+        {
+          "id": null,
+          "title": "Deployment and CI/CD"
+        },
+        {
+          "id": null,
+          "title": "Operations"
+        },
+        {
+          "id": null,
+          "title": "OSI Model and Diagnostics"
+        },
+        {
+          "id": null,
+          "title": "The 'Ilities' Framework"
+        }
+      ],
+      "evidenceSignals": {
+        "quizzesPresent": true,
+        "toolsPresent": true,
+        "learningObjectivesPresent": true,
+        "sectionTrackingPresent": true
+      }
+    },
+    {
+      "levelId": "intermediate",
+      "estimatedHours": 37.5,
+      "sourceFiles": [
+        {
+          "title": "Advanced Security Architecture",
+          "file": "content/courses/software-architecture/intermediate/advanced-security.mdx",
+          "stepIndex": 0
+        },
+        {
+          "title": "Cloud-Native Patterns",
+          "file": "content/courses/software-architecture/intermediate/cloud-native-patterns.mdx",
+          "stepIndex": 0
+        },
+        {
+          "title": "Data Architecture",
+          "file": "content/courses/software-architecture/intermediate/data-architecture.mdx",
+          "stepIndex": 0
+        },
+        {
+          "title": "Infrastructure as Code",
+          "file": "content/courses/software-architecture/intermediate/infrastructure-as-code.mdx",
+          "stepIndex": 0
+        },
+        {
+          "title": "Performance & Scalability Engineering",
+          "file": "content/courses/software-architecture/intermediate/performance-engineering.mdx",
+          "stepIndex": 0
+        },
+        {
+          "title": "Service Design & Decomposition",
+          "file": "content/courses/software-architecture/intermediate/service-decomposition.mdx",
+          "stepIndex": 0
+        },
+        {
+          "title": "Software Development and Architecture Intermediate",
+          "file": "content/courses/software-architecture/intermediate.mdx",
+          "stepIndex": 1
+        }
+      ],
+      "learningObjectives": [
+        "Explain common architecture styles and integration patterns with clear examples.",
+        "Apply service boundary and data ownership thinking to a realistic scenario.",
+        "Analyse coupling, latency, and consistency trade offs in designs.",
+        "Evaluate design options against non functional needs, not personal preference."
+      ],
+      "sectionIds": [
+        "soft-arch-intermediate-advanced-security",
+        "soft-arch-intermediate-cloud-native-patterns",
+        "soft-arch-intermediate-data-architecture",
+        "soft-arch-intermediate-infrastructure-as-code",
+        "soft-arch-intermediate-performance-engineering",
+        "soft-arch-intermediate-service-decomposition",
+        "soft-arch-intermediate-architecture-styles",
+        "soft-arch-intermediate-integration-and-apis",
+        "soft-arch-intermediate-quality-attributes",
+        "soft-arch-intermediate-data-and-state"
+      ],
+      "quizzes": [
+        {
+          "id": "soft-arch-intermediate-architecture-styles-quiz",
+          "title": "Quick check: architecture styles",
+          "sectionId": "soft-arch-intermediate-architecture-styles",
+          "explicitId": true
+        },
+        {
+          "id": "soft-arch-intermediate-integration-quiz",
+          "title": "Quick check: integration and APIs",
+          "sectionId": "soft-arch-intermediate-integration-and-apis",
+          "explicitId": true
+        },
+        {
+          "id": "soft-arch-intermediate-quality-quiz",
+          "title": "Quick check: quality attributes",
+          "sectionId": "soft-arch-intermediate-quality-attributes",
+          "explicitId": true
+        },
+        {
+          "id": "soft-arch-intermediate-state-quiz",
+          "title": "Quick check: data and state",
+          "sectionId": "soft-arch-intermediate-data-and-state",
+          "explicitId": true
+        }
+      ],
+      "tools": [
+        {
+          "id": "soft-arch-architecture-style-explorer",
+          "title": "Architecture style explorer"
+        },
+        {
+          "id": "soft-arch-api-integrations-lab",
+          "title": "Integration and API lab"
+        },
+        {
+          "id": "soft-arch-quality-tradeoffs",
+          "title": "Quality trade off explorer"
+        },
+        {
+          "id": "soft-arch-consistency-simulator",
+          "title": "Consistency and state simulator"
+        }
+      ],
+      "evidenceSignals": {
+        "quizzesPresent": true,
+        "toolsPresent": true,
+        "learningObjectivesPresent": true,
+        "sectionTrackingPresent": true
+      }
+    },
+    {
+      "levelId": "summary",
+      "estimatedHours": 4,
+      "sourceFiles": [
+        {
+          "title": "Software Development and Architecture: Summary and games",
+          "file": "content/courses/software-architecture/summary.mdx",
+          "stepIndex": 3
+        }
+      ],
+      "learningObjectives": [
+        "Explain the core architecture ideas from the track in plain language.",
+        "Apply patterns to short scenarios and identify the key trade offs.",
+        "Analyse common failure stories and what design signals were missed.",
+        "Evaluate what you would practise next to improve judgement."
+      ],
+      "sectionIds": [
+        "soft-arch-summary-you-made-it",
+        "soft-arch-summary-big-picture",
+        "soft-arch-summary-games-labs",
+        "soft-arch-summary-next-steps"
+      ],
+      "quizzes": [
+        {
+          "id": "soft-arch-summary-quick-quiz",
+          "title": "Quick check: can you still think like an architect",
+          "sectionId": "soft-arch-summary-games-labs",
+          "explicitId": true
+        }
+      ],
+      "tools": [
+        {
+          "id": "soft-arch-summary-architecture-bingo",
+          "title": "Architecture bingo"
+        },
+        {
+          "id": "soft-arch-summary-style-matcher",
+          "title": "Style matcher"
+        },
+        {
+          "id": "soft-arch-summary-failure-story",
+          "title": "Failure story explorer"
+        },
+        {
+          "id": "soft-arch-summary-sequence-puzzle",
+          "title": "Sequence diagram puzzle"
+        },
+        {
+          "id": "soft-arch-summary-tradeoff-slider",
+          "title": "Trade off slider"
+        }
+      ],
+      "evidenceSignals": {
+        "quizzesPresent": true,
+        "toolsPresent": true,
+        "learningObjectivesPresent": true,
+        "sectionTrackingPresent": true
+      }
+    }
+  ],
   "evidence": {
     "progressTracking": "Server CPD state + analytics",
-    "certificates": "Available after Ready status"
+    "certificates": "UUID with public verification page"
+  },
+  "coverageSummary": {
+    "totalEstimatedHours": 100.7,
+    "totalLearningObjectives": 20,
+    "totalTrackedSections": 27,
+    "totalQuizBlocks": 10,
+    "totalTools": 21
   }
 }
-

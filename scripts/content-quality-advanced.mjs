@@ -1,7 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const FILE = process.argv[2] || "src/pages/ai/advanced.js";
+// Advanced AI content is authored as MDX. Validate the MDX source rather than
+// the Next.js wrapper page.
+const FILE = process.argv[2] || "content/notes/ai/advanced.mdx";
 
 function fail(msg) {
   console.error(`\nADVANCED QUALITY FAILED\n${msg}\n`);
@@ -32,8 +34,10 @@ requiredSections.forEach((title) => {
 });
 
 // Basic checks for structure and depth proxies
-const h2Count = (raw.match(/<h2>/g) || []).length;
-if (h2Count < requiredSections.length) fail(`Need at least ${requiredSections.length} sections (h2). Found ${h2Count}.`);
+const sectionCount = (raw.match(/<SectionHeader\b/g) || []).length + (raw.match(/\n##\s+/g) || []).length;
+if (sectionCount < requiredSections.length) {
+  fail(`Need at least ${requiredSections.length} sections. Found ${sectionCount}.`);
+}
 
 const toolCards = (raw.match(/<ToolCard\b/g) || []).length;
 if (toolCards < 5) fail(`Need at least 5 ToolCard components. Found ${toolCards}.`);
@@ -42,7 +46,14 @@ const quizBlocks = (raw.match(/<QuizBlock\b/g) || []).length;
 if (quizBlocks < 1) fail(`Need at least 1 QuizBlock. Found ${quizBlocks}.`);
 
 // Word count proxy to catch shallowness
-const textOnly = raw.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+const textOnly = raw
+  // Drop MDX imports/frontmatter quickly
+  .replace(/^\s*---[\s\S]*?---\s*/m, " ")
+  .replace(/^\s*import .+$/gm, " ")
+  // Drop JSX tags (keep the text outside them)
+  .replace(/<[^>]+>/g, " ")
+  .replace(/\s+/g, " ")
+  .trim();
 const words = textOnly.split(" ").filter(Boolean).length;
 if (words < 1800) fail(`Content too shallow. Found about ${words} words; need at least 1800 for Advanced.`);
 

@@ -45,9 +45,19 @@ model UserIdentity {
   
   // Assessment and Certificate relations
   assessmentAttempts AssessmentAttempt[]
+  assessmentSessions AssessmentSession[]
   certificates Certificate[]
+  learnerProfile LearnerProfile?
 
   @@index([provider, providerAccountId])
+}
+
+model LearnerProfile {
+  userId          String   @id
+  certificateName String
+  lockedAt        DateTime @default(now())
+
+  user UserIdentity @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model SupportTicket {
@@ -721,6 +731,7 @@ model Assessment {
 
   questions     Question[]
   attempts      AssessmentAttempt[]
+  sessions      AssessmentSession[]
 
   @@unique([courseId, levelId])
   @@index([courseId])
@@ -738,11 +749,13 @@ model Question {
   options          String?      // JSON array for MCQ/MultiResponse
   correctAnswer    String       // JSON (single value or array)
   explanation      String       // Detailed explanation of the correct answer
+  optionRationales String?      // JSON array aligned with options
   tags             String       // Comma-separated tags
   createdAt        DateTime     @default(now())
   updatedAt        DateTime     @updatedAt
 
   assessment       Assessment   @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  attemptItems     AssessmentAttemptItem[]
 
   @@index([assessmentId])
   @@index([bloomLevel])
@@ -753,6 +766,8 @@ model AssessmentAttempt {
   id            String   @id @default(cuid())
   userId        String
   assessmentId  String
+  courseVersion String // course version at time of attempt
+  questionIds   String // JSON array of served question ids in order
   score         Int      // Percentage
   passed        Boolean
   answers       String   // JSON of user answers
@@ -761,9 +776,47 @@ model AssessmentAttempt {
 
   user          UserIdentity @relation(fields: [userId], references: [id], onDelete: Cascade)
   assessment    Assessment   @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  items         AssessmentAttemptItem[]
 
   @@index([userId])
   @@index([assessmentId])
   @@index([passed])
   @@index([completedAt])
+  @@index([courseVersion])
+}
+
+model AssessmentAttemptItem {
+  id         String   @id @default(cuid())
+  attemptId  String
+  questionId String
+  correct    Boolean
+  answer     String?  // JSON
+  createdAt  DateTime @default(now())
+
+  attempt  AssessmentAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question Question          @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([attemptId, questionId])
+  @@index([attemptId])
+  @@index([questionId])
+  @@index([correct])
+}
+
+model AssessmentSession {
+  id           String   @id @default(cuid())
+  userId       String
+  assessmentId String
+  questionIds  String   // JSON array of question ids in order
+  startedAt    DateTime @default(now())
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user       UserIdentity @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assessment Assessment   @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, assessmentId])
+  @@index([userId])
+  @@index([assessmentId])
+  @@index([expiresAt])
 }

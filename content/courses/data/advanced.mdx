@@ -71,7 +71,7 @@ In words, measure how far each value is from the mean, square it, and average it
 
 Standard deviation is the square root of variance. It puts spread back into the same units as the data. Example: $\sigma = \sqrt{2.67} \approx 1.63$.
 
-Probability distributions describe how likely values are. A fair coin has a distribution of 0.5 heads and 0.5 tails. Real data distributions are rarely symmetrical; knowing the shape stops us from trusting averages blindly.
+Probability distributions describe how likely values are. A fair coin has a distribution of 0.5 heads and 0.5 tails. Real data distributions are rarely symmetrical. Knowing the shape stops us from trusting averages blindly.
 
 <DiagramBlock title="From observations to vectors" subtitle="Raw values into structure">
   <div className="grid gap-3 sm:grid-cols-3 text-xs text-slate-700">
@@ -103,7 +103,7 @@ Probability distributions describe how likely values are. A fair coin has a dist
   courseId="data"
   levelId="advanced"
   sectionId="data-advanced-math-foundations"
-  title="Quick check: mathematical foundations"
+  title="Quick check. Mathematical foundations"
   questions={[
     { q: "What does variance capture", a: "How far values are spread around the mean." },
     { q: "What is standard deviation", a: "The square root of variance, in the same units as the data." },
@@ -121,7 +121,7 @@ Probability distributions describe how likely values are. A fair coin has a dist
 
 Models are simplified representations of reality. They exist so teams can agree on how data fits together. Abstraction hides detail to make systems manageable. The risk is that hidden detail was needed for a decision you care about.
 
-Entity relationships show how things connect: customers place orders, orders contain items. Dimensional models separate facts (events) from dimensions (who, what, when). Simpler models are easy to query but may miss nuance; richer models can be harder to govern.
+Entity relationships show how things connect. Customers place orders, orders contain items. Dimensional models separate facts (events) from dimensions (who, what, when). Simpler models are easy to query but may miss nuance. Richer models can be harder to govern.
 
 Design trade offs are unavoidable. A lean model may skip location because it is not needed today. Later, when someone asks about regional patterns, the model cannot answer. Bias also hides in models: if a field is dropped, whole groups can disappear from analysis.
 
@@ -155,7 +155,7 @@ Design trade offs are unavoidable. A lean model may skip location because it is 
   courseId="data"
   levelId="advanced"
   sectionId="data-advanced-models-and-abstraction"
-  title="Quick check: models and abstraction"
+  title="Quick check. Models and abstraction"
   questions={[
     { q: "What is abstraction", a: "Simplifying reality so systems can be built and understood." },
     { q: "How can models create bias", a: "By dropping fields that represent certain groups or details." },
@@ -170,7 +170,7 @@ Design trade offs are unavoidable. A lean model may skip location because it is 
 
 <SectionProgressToggle courseId="data" levelId="advanced" sectionId="data-advanced-analytics-and-inference" />
 
-Inference is about drawing conclusions while admitting uncertainty. Correlation means two things move together; causation means one affects the other. Mistaking correlation for causation leads to confident but wrong decisions.
+Inference is about drawing conclusions while admitting uncertainty. Correlation means two things move together. Causation means one affects the other. Mistaking correlation for causation leads to confident but wrong decisions.
 
 Sampling takes a subset of the population. If the sample is biased or too small, the answer will drift from reality. Confidence is how sure we are that the sample reflects the population. Errors creep in when data is noisy, samples are skewed, or models are overconfident.
 
@@ -202,7 +202,7 @@ Statistics is humility with numbers. Every estimate should come with a range and
   courseId="data"
   levelId="advanced"
   sectionId="data-advanced-analytics-and-inference"
-  title="Quick check: analytics and inference"
+  title="Quick check. Analytics and inference"
   questions={[
     { q: "What is correlation", a: "Two things moving together without proving cause." },
     { q: "What is causation", a: "One thing influencing another." },
@@ -251,7 +251,7 @@ A simple intuition: you can respond fast by reading nearby copies, but those cop
   courseId="data"
   levelId="advanced"
   sectionId="data-advanced-platforms-and-distributed"
-  title="Quick check: platforms and distributed systems"
+  title="Quick check. Platforms and distributed systems"
   questions={[
     { q: "Why do systems distribute", a: "To handle scale, resilience, and locality." },
     { q: "What is latency", a: "Time taken to respond to a request." },
@@ -266,7 +266,7 @@ A simple intuition: you can respond fast by reading nearby copies, but those cop
 
 <SectionProgressToggle courseId="data" levelId="advanced" sectionId="data-advanced-governance-regulation" />
 
-Regulation exists to protect people and markets. Accountability means someone can explain what data is used, why, and with what safeguards. Auditability means we can trace who did what and when. These are not just legal boxes; they build trust with users and stakeholders.
+Regulation exists to protect people and markets. Accountability means someone can explain what data is used, why, and with what safeguards. Auditability means we can trace who did what and when. These are not just legal boxes. They build trust with users and stakeholders.
 
 Ethics and trust sit beside regulation. If a decision harms people, compliance alone is not enough. Long term consequences include fines, loss of reputation, and slower delivery because teams stop trusting data.
 
@@ -304,7 +304,7 @@ Ethics and trust sit beside regulation. If a decision harms people, compliance a
   courseId="data"
   levelId="advanced"
   sectionId="data-advanced-governance-regulation"
-  title="Quick check: governance, regulation, and accountability"
+  title="Quick check. Governance, regulation, and accountability"
   questions={[
     { q: "Why does regulation exist", a: "To protect people and markets from harm." },
     { q: "What is accountability", a: "Being able to explain data use and safeguards." },
@@ -353,7 +353,7 @@ Monetisation can be direct (selling insights) or indirect (better products). Loc
   courseId="data"
   levelId="advanced"
   sectionId="data-advanced-strategic-asset"
-  title="Quick check: data as a strategic asset"
+  title="Quick check. Data as a strategic asset"
   questions={[
     { q: "What creates data value", a: "Better decisions, products, and trusted relationships." },
     { q: "What is a network effect", a: "Value increasing as more participants share data." },
@@ -365,26 +365,26 @@ Monetisation can be direct (selling insights) or indirect (better products). Loc
 ---
 
 {/* Mathematics roadmap (for maintainers):
-- Linear algebra intuition (vectors, matrices, transformations)
-- Probability and uncertainty (events, conditional thinking)
-- Distributions and variance
-- Correlation versus causation
-- Sampling theory
-- Error propagation
+1. Linear algebra intuition (vectors, matrices, transformations)
+2. Probability and uncertainty (events, conditional thinking)
+3. Distributions and variance
+4. Correlation versus causation
+5. Sampling theory
+6. Error propagation
 Maths will be explained visually and intuitively. Formal notation will be introduced gradually. Every formula will include explanation and example.
 */}
 
 {/* CPD and professional alignment:
-- Aligns with senior professional CPD expectations
-- Anchored in strategic and architectural thinking
-- Supports cross disciplinary leadership without making certification claims
+1. Aligns with senior professional CPD expectations
+2. Anchored in strategic and architectural thinking
+3. Supports cross disciplinary leadership without making certification claims
 */}
 
 {/* CI quality gates for Data Advanced:
-- Each section needs at least 4 long explanatory paragraphs, 1 mathematical concept explained, 1 DiagramBlock, and 1 advanced ToolCard.
-- Include applied reasoning; avoid purely conceptual sections.
-- No unexplained mathematical symbols.
-- No copy pasted content from Foundations or Intermediate.
+1. Each section needs at least 4 long explanatory paragraphs, 1 mathematical concept explained, 1 DiagramBlock, and 1 advanced ToolCard.
+2. Include applied reasoning and avoid purely conceptual sections.
+3. No unexplained mathematical symbols.
+4. No copy pasted content from Foundations or Intermediate.
 */}
 
 <PageNav prevHref="/data/intermediate" prevLabel="Intermediate" nextHref="/data/summary" nextLabel="Summary and games" showTop showBottom />

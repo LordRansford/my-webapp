@@ -20,8 +20,9 @@ export default function ExampleLoader({ example, onLoad, onClose }: ExampleLoade
     setIsLoading(true);
     setError(null);
     try {
-      // Simulate loading - in production, this would load the example config
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // Load the example into the parent studio.
+      // Keep a short delay for perceived responsiveness, but do not fake a "load" that doesn't apply anything.
+      await new Promise((resolve) => setTimeout(resolve, 250));
       setIsLoading(false);
       onLoad();
     } catch (err) {

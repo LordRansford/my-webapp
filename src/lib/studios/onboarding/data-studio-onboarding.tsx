@@ -129,8 +129,8 @@ export const dataStudioOnboardingSteps: OnboardingStep[] = [
           </ol>
         </div>
         <p className="text-sm text-slate-600">
-          <strong>Example:</strong> Add a dataset called "Customer Orders" with a description, tags like 
-          "sales" and "customer", and information about when it was last updated.
+          <strong>Example:</strong> Add a dataset called &quot;Customer Orders&quot; with a description, tags like{" "}
+          &quot;sales&quot; and &quot;customer&quot;, and information about when it was last updated.
         </p>
       </div>
     )

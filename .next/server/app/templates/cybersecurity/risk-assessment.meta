@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/templates/layout,_N_T_/templates/cybersecurity/layout,_N_T_/templates/cybersecurity/risk-assessment/layout,_N_T_/templates/cybersecurity/risk-assessment/page,_N_T_/templates/cybersecurity/risk-assessment"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/templates/cybersecurity/risk-assessment/__PAGE__",
+    "/templates/cybersecurity/risk-assessment",
+    "/templates/cybersecurity",
+    "/templates",
+    "/_index",
+    "/_head"
+  ]
+}

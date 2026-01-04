@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import ToolShell from "@/components/tools/ToolShell";
+import ToolShell, { useToolInputs } from "@/components/tools/ToolShell";
 import { getToolContract } from "@/lib/tools/loadContract";
 import { createToolError } from "@/components/tools/ErrorPanel";
 import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
@@ -77,12 +77,113 @@ const examples = [
   },
 ];
 
-export default function ThreatModellingLitePage() {
-  const [systemName, setSystemName] = useState("");
-  const [assets, setAssets] = useState<string[]>([""]);
-  const [trustBoundaries, setTrustBoundaries] = useState<string[]>([""]);
-  const [threats, setThreats] = useState<string[]>([""]);
+function ThreatModellingForm() {
+  const { inputs, setInputs } = useToolInputs();
+  const systemName = typeof inputs.systemName === "string" ? inputs.systemName : "";
+  const assets = Array.isArray(inputs.assets) ? (inputs.assets as string[]) : [""];
+  const trustBoundaries = Array.isArray(inputs.trustBoundaries) ? (inputs.trustBoundaries as string[]) : [""];
+  const threats = Array.isArray(inputs.threats) ? (inputs.threats as string[]) : [""];
 
+  const updateArray = (key: "assets" | "trustBoundaries" | "threats", index: number, value: string) => {
+    setInputs((prev) => {
+      const arr = Array.isArray(prev[key]) ? ([...(prev[key] as string[])] as string[]) : [""];
+      arr[index] = value;
+      return { ...prev, [key]: arr };
+    });
+  };
+
+  const addToArray = (key: "assets" | "trustBoundaries" | "threats", max: number) => {
+    setInputs((prev) => {
+      const arr = Array.isArray(prev[key]) ? ([...(prev[key] as string[])] as string[]) : [""];
+      if (arr.length < max) arr.push("");
+      return { ...prev, [key]: arr };
+    });
+  };
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <label htmlFor="systemName" className="block text-sm font-semibold text-slate-900">
+          System Name <span className="text-red-600">*</span>
+        </label>
+        <input
+          id="systemName"
+          type="text"
+          value={systemName}
+          onChange={(e) => setInputs((prev) => ({ ...prev, systemName: e.target.value }))}
+          maxLength={200}
+          className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+          placeholder="Name of the system or feature"
+        />
+      </div>
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <label className="block text-sm font-semibold text-slate-900">Assets (max 20)</label>
+          {assets.length < 20 && (
+            <button type="button" onClick={() => addToArray("assets", 20)} className="text-xs text-slate-600 underline">
+              + Add Asset
+            </button>
+          )}
+        </div>
+        {assets.map((asset, idx) => (
+          <input
+            key={idx}
+            type="text"
+            value={asset}
+            onChange={(e) => updateArray("assets", idx, e.target.value)}
+            maxLength={200}
+            className="mt-2 w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+            placeholder={`Asset ${idx + 1}`}
+          />
+        ))}
+      </div>
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <label className="block text-sm font-semibold text-slate-900">Trust Boundaries (max 10)</label>
+          {trustBoundaries.length < 10 && (
+            <button type="button" onClick={() => addToArray("trustBoundaries", 10)} className="text-xs text-slate-600 underline">
+              + Add Boundary
+            </button>
+          )}
+        </div>
+        {trustBoundaries.map((boundary, idx) => (
+          <input
+            key={idx}
+            type="text"
+            value={boundary}
+            onChange={(e) => updateArray("trustBoundaries", idx, e.target.value)}
+            maxLength={200}
+            className="mt-2 w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+            placeholder={`Trust boundary ${idx + 1}`}
+          />
+        ))}
+      </div>
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <label className="block text-sm font-semibold text-slate-900">Threats (max 30)</label>
+          {threats.length < 30 && (
+            <button type="button" onClick={() => addToArray("threats", 30)} className="text-xs text-slate-600 underline">
+              + Add Threat
+            </button>
+          )}
+        </div>
+        {threats.map((threat, idx) => (
+          <input
+            key={idx}
+            type="text"
+            value={threat}
+            onChange={(e) => updateArray("threats", idx, e.target.value)}
+            maxLength={200}
+            className="mt-2 w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+            placeholder={`Threat ${idx + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default function ThreatModellingLitePage() {
   if (!contract) {
     return (
       <div className="mx-auto max-w-4xl p-6">
@@ -147,18 +248,6 @@ ${strideThreats.map((t, i) => `${i + 1}. ${t}`).join("\n")}
     return { success: true, output: markdown };
   };
 
-  const updateArray = (setter: React.Dispatch<React.SetStateAction<string[]>>, index: number, value: string) => {
-    setter((prev) => {
-      const newArr = [...prev];
-      newArr[index] = value;
-      return newArr;
-    });
-  };
-
-  const addToArray = (setter: React.Dispatch<React.SetStateAction<string[]>>, max: number) => {
-    setter((prev) => (prev.length < max ? [...prev, ""] : prev));
-  };
-
   return (
     <div className="mx-auto max-w-6xl p-6">
       <nav className="mb-4">
@@ -167,86 +256,8 @@ ${strideThreats.map((t, i) => `${i + 1}. ${t}`).join("\n")}
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ systemName, assets, trustBoundaries, threats }}>
-        <div className="space-y-6">
-          <div>
-            <label htmlFor="systemName" className="block text-sm font-semibold text-slate-900">
-              System Name <span className="text-red-600">*</span>
-            </label>
-            <input
-              id="systemName"
-              type="text"
-              value={systemName}
-              onChange={(e) => setSystemName(e.target.value)}
-              maxLength={200}
-              className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-              placeholder="Name of the system or feature"
-            />
-          </div>
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <label className="block text-sm font-semibold text-slate-900">Assets (max 20)</label>
-              {assets.length < 20 && (
-                <button type="button" onClick={() => addToArray(setAssets, 20)} className="text-xs text-slate-600 underline">
-                  + Add Asset
-                </button>
-              )}
-            </div>
-            {assets.map((asset, idx) => (
-              <input
-                key={idx}
-                type="text"
-                value={asset}
-                onChange={(e) => updateArray(setAssets, idx, e.target.value)}
-                maxLength={200}
-                className="mt-2 w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-                placeholder={`Asset ${idx + 1}`}
-              />
-            ))}
-          </div>
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <label className="block text-sm font-semibold text-slate-900">Trust Boundaries (max 10)</label>
-              {trustBoundaries.length < 10 && (
-                <button type="button" onClick={() => addToArray(setTrustBoundaries, 10)} className="text-xs text-slate-600 underline">
-                  + Add Boundary
-                </button>
-              )}
-            </div>
-            {trustBoundaries.map((boundary, idx) => (
-              <input
-                key={idx}
-                type="text"
-                value={boundary}
-                onChange={(e) => updateArray(setTrustBoundaries, idx, e.target.value)}
-                maxLength={200}
-                className="mt-2 w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-                placeholder={`Trust boundary ${idx + 1}`}
-              />
-            ))}
-          </div>
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <label className="block text-sm font-semibold text-slate-900">Threats (max 30)</label>
-              {threats.length < 30 && (
-                <button type="button" onClick={() => addToArray(setThreats, 30)} className="text-xs text-slate-600 underline">
-                  + Add Threat
-                </button>
-              )}
-            </div>
-            {threats.map((threat, idx) => (
-              <input
-                key={idx}
-                type="text"
-                value={threat}
-                onChange={(e) => updateArray(setThreats, idx, e.target.value)}
-                maxLength={200}
-                className="mt-2 w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-                placeholder={`Threat ${idx + 1}`}
-              />
-            ))}
-          </div>
-        </div>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples}>
+        <ThreatModellingForm />
       </ToolShell>
     </div>
   );

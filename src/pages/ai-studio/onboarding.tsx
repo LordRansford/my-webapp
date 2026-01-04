@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import { 
   X, 
   ArrowRight, 
@@ -43,19 +44,23 @@ export default function OnboardingPage() {
         <div className="space-y-4">
           <p className="text-slate-700">
             AI Studio is your platform for building, training, and deploying AI models. 
-            Whether you're a beginner or an expert, we'll guide you through everything.
+            Whether you&apos;re a beginner or an expert, we&apos;ll guide you through everything.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
             <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
               <h4 className="font-semibold text-slate-900 mb-2">Learn First</h4>
               <p className="text-sm text-slate-700">
-                New to AI? Start with our <a href="/ai-studios" className="text-blue-600 hover:underline">Learning Studio</a> to understand the fundamentals.
+                New to AI? Start with our{" "}
+                <Link href="/ai-studios" className="text-blue-600 hover:underline">
+                  Learning Studio
+                </Link>{" "}
+                to understand the fundamentals.
               </p>
             </div>
             <div className="p-4 bg-purple-50 border border-purple-200 rounded-xl">
               <h4 className="font-semibold text-slate-900 mb-2">Build Now</h4>
               <p className="text-sm text-slate-700">
-                Ready to build? We'll show you how to create your first model, upload datasets, and deploy.
+                Ready to build? We&apos;ll show you how to create your first model, upload datasets, and deploy.
               </p>
             </div>
           </div>
@@ -82,7 +87,11 @@ export default function OnboardingPage() {
           <div className="mt-6 p-4 bg-slate-50 rounded-xl">
             <p className="text-sm font-semibold text-slate-900 mb-2">Try it:</p>
             <p className="text-sm text-slate-700">
-              Go to <a href="/ai-studio/datasets" className="text-purple-600 hover:underline">Datasets</a> to upload your first dataset or load an example.
+              Go to{" "}
+              <Link href="/ai-studio/datasets" className="text-purple-600 hover:underline">
+                Datasets
+              </Link>{" "}
+              to upload your first dataset or load an example.
             </p>
           </div>
         </div>
@@ -108,7 +117,11 @@ export default function OnboardingPage() {
           <div className="mt-6 p-4 bg-slate-50 rounded-xl">
             <p className="text-sm font-semibold text-slate-900 mb-2">Try it:</p>
             <p className="text-sm text-slate-700">
-              Visit the <a href="/ai-studio" className="text-purple-600 hover:underline">Dashboard</a> and click "Build Model" to get started.
+              Visit the{" "}
+              <Link href="/ai-studio" className="text-purple-600 hover:underline">
+                Dashboard
+              </Link>{" "}
+              and click &quot;Build Model&quot; to get started.
             </p>
           </div>
         </div>
@@ -134,7 +147,7 @@ export default function OnboardingPage() {
           <div className="mt-6 p-4 bg-slate-50 rounded-xl">
             <p className="text-sm font-semibold text-slate-900 mb-2">Try it:</p>
             <p className="text-sm text-slate-700">
-              Click "Train Model" on the dashboard to start a training job.
+              Click &quot;Train Model&quot; on the dashboard to start a training job.
             </p>
           </div>
         </div>
@@ -160,7 +173,11 @@ export default function OnboardingPage() {
           <div className="mt-6 p-4 bg-slate-50 rounded-xl">
             <p className="text-sm font-semibold text-slate-900 mb-2">Try it:</p>
             <p className="text-sm text-slate-700">
-              Go to <a href="/ai-studio/agents" className="text-purple-600 hover:underline">Agents</a> to create your first agent.
+              Go to{" "}
+              <Link href="/ai-studio/agents" className="text-purple-600 hover:underline">
+                Agents
+              </Link>{" "}
+              to create your first agent.
             </p>
           </div>
         </div>
@@ -174,7 +191,7 @@ export default function OnboardingPage() {
       content: (
         <div className="space-y-4">
           <p className="text-slate-700">
-            Not sure where to start? Load one of our pre-built examples to see how it's done, 
+            Not sure where to start? Load one of our pre-built examples to see how it&apos;s done, 
             then customize it for your needs.
           </p>
           <ul className="list-disc pl-5 space-y-2 text-slate-700">

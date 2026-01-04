@@ -1,0 +1,3 @@
+{
+  "/api/tools/tls-inspect/route": "app/api/tools/tls-inspect/route.js"
+}

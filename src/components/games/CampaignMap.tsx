@@ -29,7 +29,7 @@ export function CampaignMap({ onSelectMission, store }: CampaignMapProps) {
 
   return (
     <div className="w-full max-w-6xl mx-auto p-6">
-      <h2 className="text-3xl font-bold text-slate-900 mb-2">Campaign: Charis's Challenge</h2>
+      <h2 className="text-3xl font-bold text-slate-900 mb-2">Campaign: Charis&apos;s Challenge</h2>
       <p className="text-slate-600 mb-8">12 missions dedicated to Charis Chung Amponsah</p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">

@@ -195,17 +195,18 @@ export function DownloadOptionsModal({ open, onClose, template }) {
                 {loading ? "Preparing..." : "Download"}
               </button>
             )}
-          <Link
-            className="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
-            href="/support"
-          >
-            Support this site
-          </Link>
-          {previewEnabled ? (
-            <Link className="text-sm font-semibold text-slate-700 underline" href="/admin/template-permissions">
-              I already have permission
+            <Link
+              className="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+              href="/support"
+            >
+              Support this site
             </Link>
-          ) : null}
+            {previewEnabled ? (
+              <Link className="text-sm font-semibold text-slate-700 underline" href="/admin/template-permissions">
+                I already have permission
+              </Link>
+            ) : null}
+          </div>
         </div>
 
         {status ? (

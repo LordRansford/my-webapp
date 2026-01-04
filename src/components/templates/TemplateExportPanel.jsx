@@ -97,11 +97,11 @@ export default function TemplateExportPanel({
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Exports</p>
           <p className="text-sm text-slate-700">
-            Choose PDF, DOCX, or XLSX. A consent check will confirm intended use and attribution rules before download.
+            Choose PDF, DOCX, or CSV. A consent check will confirm intended use and attribution rules before download.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          {["pdf", "docx", "xlsx", "png"].map((format) => (
+          {["pdf", "docx", "csv", "png"].map((format) => (
             <button
               key={format}
               type="button"

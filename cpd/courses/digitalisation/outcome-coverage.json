@@ -1,0 +1,84 @@
+{
+  "courseId": "digitalisation",
+  "generatedAt": "2026-01-04T06:44:32.692Z",
+  "status": "Draft",
+  "version": "1.0.0",
+  "coverage": {
+    "levels": [
+      {
+        "levelId": "advanced",
+        "estimatedHours": 10,
+        "learningObjectivesCount": 4,
+        "learningObjectivesMissing": false,
+        "trackedSectionsCount": 4,
+        "quizBlocksCount": 4,
+        "toolsCount": 4,
+        "signals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      },
+      {
+        "levelId": "foundations",
+        "estimatedHours": 8,
+        "learningObjectivesCount": 4,
+        "learningObjectivesMissing": false,
+        "trackedSectionsCount": 4,
+        "quizBlocksCount": 4,
+        "toolsCount": 4,
+        "signals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      },
+      {
+        "levelId": "intermediate",
+        "estimatedHours": 10,
+        "learningObjectivesCount": 4,
+        "learningObjectivesMissing": false,
+        "trackedSectionsCount": 4,
+        "quizBlocksCount": 4,
+        "toolsCount": 4,
+        "signals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      },
+      {
+        "levelId": "summary",
+        "estimatedHours": 4,
+        "learningObjectivesCount": 4,
+        "learningObjectivesMissing": false,
+        "trackedSectionsCount": 4,
+        "quizBlocksCount": 3,
+        "toolsCount": 7,
+        "signals": {
+          "quizzesPresent": true,
+          "toolsPresent": true,
+          "learningObjectivesPresent": true,
+          "sectionTrackingPresent": true
+        }
+      }
+    ],
+    "totals": {
+      "totalEstimatedHours": 32,
+      "totalLearningObjectives": 16,
+      "totalTrackedSections": 16,
+      "totalQuizBlocks": 15,
+      "totalTools": 19
+    },
+    "gaps": {
+      "levelsMissingLearningObjectives": [],
+      "levelsMissingQuizBlocks": [],
+      "levelsMissingToolActivities": [],
+      "levelsMissingSectionTracking": [],
+      "recommendations": []
+    }
+  }
+}

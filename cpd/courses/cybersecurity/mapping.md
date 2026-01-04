@@ -1,21 +1,33 @@
-# Mapping – Cybersecurity
+# Mapping – cybersecurity
 
-- **Course ID**: cybersecurity
-- **Status**: Ready
-- **Delivery**: self paced web, tools + quizzes
+- Status: Ready
+- Generated: 2026-01-04T06:44:32.698Z
+- Total estimated hours: 56
+- Total learning objectives: 15
+- Total tracked sections: 25
+- Total quiz blocks: 25
+- Total tools: 35
 
-## Levels and estimates
-- Foundations — 10 hours (frontmatter estimated)
-- Applied — 12 hours
-- Practice — 14 hours
+## practice
+- Estimated hours (sum of sections): 32
+- Source files: 1
+- Learning objectives: 4
+- Tracked sections: 9
+- Quiz blocks: 9
+- Tools: 12
 
-## Outcomes and links
-- Sections align to outcomes in the course MDX frontmatter.
-- Quizzes: at least one per level (see embedded QuizBlock components).
-- Tools: TLS Inspect, DNS lookup, IP reputation, WHOIS summary used as applied evidence.
+## foundations
+- Estimated hours (sum of sections): 8
+- Source files: 1
+- Learning objectives: 7
+- Tracked sections: 9
+- Quiz blocks: 9
+- Tools: 16
 
-## Evidence storage
-- Progress: server CPD state + analytics events
-- Certificates: UUID with public verification page
-- Downloads: mapping.json in this folder (machine readable)
-
+## applied
+- Estimated hours (sum of sections): 16
+- Source files: 1
+- Learning objectives: 4
+- Tracked sections: 7
+- Quiz blocks: 7
+- Tools: 7

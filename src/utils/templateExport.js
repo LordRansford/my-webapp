@@ -1,8 +1,8 @@
 import { saveAs } from "file-saver";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import { Document, HeadingLevel, Packer, Paragraph, TextRun, ImageRun } from "docx";
-import * as XLSX from "xlsx";
-import { applyDocxMetadata, applyPdfMetadata, applyXlsxMetadata, buildTemplateMetadata } from "./templateMetadata";
+import Papa from "papaparse";
+import { applyDocxMetadata, applyPdfMetadata, buildTemplateMetadata } from "./templateMetadata";
 import { recordExport } from "@/lib/history/exportHistory";
 import { unlockCommercialNoAttribution } from "@/lib/entitlements/entitlements";
 import { captureElementImage, sliceImageDataUrl } from "./exportCapture";
@@ -294,36 +294,27 @@ async function exportPngFromImage({ image }) {
   return new Blob([blob], { type: "image/png" });
 }
 
-function exportXlsx({ title, category, sections, version, intendedUse, includeAttribution, footerLine, metadata }) {
+function exportCsv({ title, category, sections, version, intendedUse, includeAttribution, footerLine, metadata }) {
   const safeSections = normalizeSections(sections);
-  const wb = XLSX.utils.book_new();
-  applyXlsxMetadata(wb, metadata);
+  const rows = [["Section", "Details"]];
+  rows.push(["Title", title]);
+  rows.push(["Category", category]);
+  rows.push(["Version", version]);
+  rows.push(["Intended use", intendedUse]);
+  rows.push(["Include attribution", includeAttribution ? "yes" : "no"]);
+  rows.push(["Exported at", new Date(metadata.exportedAt).toLocaleString()]);
+  if (footerLine) rows.push(["Footer", footerLine]);
+  rows.push(["", ""]);
+  rows.push(["Section", "Details"]);
 
-  const rows = [
-    ["Title", title],
-    ["Category", category],
-    ["Version", version],
-    ["Intended use", intendedUse],
-    ["Exported at", new Date(metadata.exportedAt).toLocaleString()],
-  ];
-  if (footerLine) {
-    rows.push(["Footer", footerLine]);
-  }
-  const summarySheet = XLSX.utils.aoa_to_sheet(rows);
-  XLSX.utils.book_append_sheet(wb, summarySheet, "Summary");
-
-  const sectionRows = [["Section", "Details"]];
   safeSections.forEach((section) => {
     const items = Array.isArray(section.body) ? section.body : [section.body];
     items.forEach((item, index) => {
-      sectionRows.push([index === 0 ? section.heading : "", item]);
+      rows.push([index === 0 ? section.heading : "", item]);
     });
   });
-  const detailSheet = XLSX.utils.aoa_to_sheet(sectionRows);
-  XLSX.utils.book_append_sheet(wb, detailSheet, "Details");
-
-  const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-  return new Blob([wbout], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+  const csv = Papa.unparse(rows, { quotes: true });
+  return new Blob([csv], { type: "text/csv;charset=utf-8" });
 }
 
 export async function exportTemplate({
@@ -381,8 +372,8 @@ export async function exportTemplate({
         metadata,
       });
     }
-  } else if (format === "xlsx") {
-    blob = exportXlsx({
+  } else if (format === "csv") {
+    blob = exportCsv({
       title,
       category,
       sections: sectionsForExport,

@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/studios/layout,_N_T_/studios/architecture-diagram-studio/layout,_N_T_/studios/architecture-diagram-studio/templates/layout,_N_T_/studios/architecture-diagram-studio/templates/page,_N_T_/studios/architecture-diagram-studio/templates"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/studios/architecture-diagram-studio/templates/__PAGE__",
+    "/studios/architecture-diagram-studio/templates",
+    "/studios/architecture-diagram-studio",
+    "/studios",
+    "/_index",
+    "/_head"
+  ]
+}

@@ -72,7 +72,9 @@ async function checkDatabase(): Promise<ComponentHealth> {
 function checkStorage(): ComponentHealth {
   const startTime = Date.now();
   try {
-    const dataDir = path.join(process.cwd(), "data");
+    // Vercel serverless has a read-only filesystem except for /tmp.
+    // Use /tmp for write checks to avoid false negatives in production.
+    const dataDir = process.env.VERCEL ? path.join("/tmp", "ransfordsnotes") : path.join(process.cwd(), "data");
     
     // Check if data directory exists and is writable
     if (!fs.existsSync(dataDir)) {
@@ -157,14 +159,14 @@ async function checkCredits(): Promise<ComponentHealth> {
 /**
  * Check tools registry health
  */
-function checkTools(): ComponentHealth {
+async function checkTools(): Promise<ComponentHealth> {
   const startTime = Date.now();
   try {
-    const { getToolDefinition, getAllTools } = require("@/lib/tools/registry");
-    
+    const { TOOL_REGISTRY } = await import("@/lib/tools/registry");
+    const toolIds = Object.keys(TOOL_REGISTRY || {});
+
     // Check if tools registry is accessible
-    const tools = getAllTools();
-    if (!tools || tools.length === 0) {
+    if (toolIds.length === 0) {
       return {
         status: "degraded",
         message: "No tools registered",
@@ -174,8 +176,8 @@ function checkTools(): ComponentHealth {
     }
 
     // Check if we can get a tool definition
-    const testTool = getToolDefinition(tools[0]?.id || "");
-    if (!testTool) {
+    const first = TOOL_REGISTRY[toolIds[0]!] || null;
+    if (!first?.toolId) {
       return {
         status: "degraded",
         message: "Tools registry accessible but tool definitions not loading",
@@ -208,7 +210,7 @@ export async function getSystemHealth(): Promise<HealthStatus> {
     checkDatabase(),
     Promise.resolve(checkStorage()),
     checkCredits(),
-    Promise.resolve(checkTools()),
+    checkTools(),
   ]);
 
   // Determine overall status

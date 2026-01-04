@@ -163,7 +163,7 @@ export default function PasswordManagerWorkshop() {
         <div className="p-4 bg-green-50 border border-green-300 rounded-lg">
           <div className="font-semibold text-green-900 mb-1">🎉 Workshop Complete!</div>
           <p className="text-xs text-green-800">
-            You've completed the password manager setup. Continue using it for all new accounts and gradually update old ones.
+            You&apos;ve completed the password manager setup. Continue using it for all new accounts and gradually update old ones.
           </p>
         </div>
       )}
@@ -172,10 +172,10 @@ export default function PasswordManagerWorkshop() {
         <div className="font-semibold text-yellow-900 mb-2">💡 Best Practices</div>
         <ul className="text-xs text-yellow-800 space-y-1 ml-4">
           <li className="list-disc">Never reuse passwords across accounts</li>
-          <li className="list-disc">Use password manager's generator—don't create passwords yourself</li>
+          <li className="list-disc">Use password manager&apos;s generator—don&apos;t create passwords yourself</li>
           <li className="list-disc">Enable browser extension for auto-fill convenience</li>
           <li className="list-disc">Regularly audit and remove old/unused accounts</li>
-          <li className="list-disc">Don't share your master password with anyone</li>
+          <li className="list-disc">Don&apos;t share your master password with anyone</li>
         </ul>
       </div>
 

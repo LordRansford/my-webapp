@@ -33,6 +33,9 @@ import ContextualHelp from "@/components/ai-studio/ContextualHelp";
 import LoadingSpinner from "@/components/ai-studio/LoadingSpinner";
 import { Suspense } from "react";
 import { auditLogger, AuditActions } from "@/lib/studios/security/auditLogger";
+import type { AIStudioExample } from "@/lib/ai-studio/examples/types";
+import type { ModelBuilderLayer } from "@/components/ai-studio/poc/ModelBuilderPOC";
+import type { AgentOrchestratorWorkflow } from "@/components/ai-studio/poc/AgentOrchestratorPOC";
 
 // Lazy load heavy POC components
 const BrowserTrainingPOC = dynamic(
@@ -85,6 +88,84 @@ const TrainingJobMonitor = dynamic(
 
 type ViewMode = "dashboard" | "training" | "validation" | "builder" | "orchestrator" | "datasets" | "jobs";
 
+type ExamplePreset = {
+  view: Exclude<ViewMode, "dashboard" | "datasets" | "jobs">;
+  label: string;
+  trainingConfig?: {
+    learningRate?: number;
+    batchSize?: number;
+    epochs?: number;
+    validationSplit?: number;
+  };
+  builderLayers?: ModelBuilderLayer[];
+  workflow?: AgentOrchestratorWorkflow;
+};
+
+function deriveExamplePreset(example: AIStudioExample): ExamplePreset {
+  const label = `${example.title} (${example.audience}, ${example.difficulty})`;
+
+  // Heuristic mapping: we start by making "Load example" real for what exists today.
+  // Anything not backed by a real runtime is routed to a safe POC simulation.
+  const modelType = example.config?.model?.type;
+  const arch = String(example.config?.model?.architecture || "").toLowerCase();
+  const training = example.config?.training;
+
+  if (modelType === "classification" || modelType === "regression" || arch.includes("mobilenet") || arch.includes("resnet") || arch.includes("bert")) {
+    // Use browser training POC for "trainable" examples (safe synthetic data).
+    return {
+      view: "training",
+      label,
+      trainingConfig: {
+        epochs: training?.epochs,
+        batchSize: training?.batchSize,
+        learningRate: training?.learningRate,
+        validationSplit: training?.validationSplit,
+      },
+    };
+  }
+
+  if (arch.includes("gpt") || modelType === "generation") {
+    // Route to agent orchestrator as a safe simulation of multi-step AI behaviour.
+    return {
+      view: "orchestrator",
+      label,
+      workflow: {
+        agents: [
+          {
+            id: "1",
+            name: `${example.useCase} Agent`,
+            type: "single",
+            model: example.config?.model?.architecture || "gpt-4",
+            tools: ["web-search", "data-analysis"],
+            status: "idle",
+          },
+          {
+            id: "2",
+            name: "Quality & Safety Agent",
+            type: "single",
+            model: example.config?.model?.architecture || "gpt-4",
+            tools: ["visualization"],
+            status: "idle",
+          },
+        ],
+        connections: [{ from: "1", to: "2" }],
+      },
+    };
+  }
+
+  // Default: model builder (safe, tangible output: generated code)
+  return {
+    view: "builder",
+    label,
+    builderLayers: [
+      { id: "1", type: "dense", config: { units: 64, activation: "relu" } },
+      { id: "2", type: "dropout", config: { rate: 0.2 } },
+      { id: "3", type: "dense", config: { units: 32, activation: "relu" } },
+      { id: "4", type: "dense", config: { units: 1, activation: "sigmoid" } },
+    ],
+  };
+}
+
 export default function AIStudioPage() {
   const router = useRouter();
   const [activeView, setActiveView] = useState<ViewMode>("dashboard");
@@ -92,6 +173,8 @@ export default function AIStudioPage() {
   const [selectedJob, setSelectedJob] = useState<string | null>(null);
   const [showExamples, setShowExamples] = useState(false);
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
+  const [loadedExample, setLoadedExample] = useState<AIStudioExample | null>(null);
+  const [loadedPreset, setLoadedPreset] = useState<ExamplePreset | null>(null);
 
   useEffect(() => {
     const completed = localStorage.getItem("ai-studio-onboarding-completed");
@@ -117,12 +200,28 @@ export default function AIStudioPage() {
     { type: "deployment", message: "Sentiment Analyzer deployed to production", time: "1 day ago" },
   ];
 
+  const handleLoadExample = (example: AIStudioExample) => {
+    setLoadedExample(example);
+    const preset = deriveExamplePreset(example);
+    setLoadedPreset(preset);
+    setShowExamples(false);
+    setActiveView(preset.view);
+    try {
+      localStorage.setItem("ai-studio-last-example", JSON.stringify({ id: example.id, at: Date.now() }));
+    } catch {
+      // ignore
+    }
+  };
+
   const renderContent = () => {
     switch (activeView) {
       case "training":
         return (
           <Suspense fallback={<LoadingSpinner message="Loading training interface..." />}>
-            <BrowserTrainingPOC />
+            <BrowserTrainingPOC
+              initialTrainingConfig={loadedPreset?.trainingConfig}
+              loadedExampleLabel={loadedPreset?.label}
+            />
           </Suspense>
         );
       case "validation":
@@ -134,13 +233,19 @@ export default function AIStudioPage() {
       case "builder":
         return (
           <Suspense fallback={<LoadingSpinner message="Loading model builder..." />}>
-            <ModelBuilderPOC />
+            <ModelBuilderPOC
+              initialLayers={loadedPreset?.builderLayers}
+              loadedExampleLabel={loadedPreset?.label}
+            />
           </Suspense>
         );
       case "orchestrator":
         return (
           <Suspense fallback={<LoadingSpinner message="Loading agent orchestrator..." />}>
-            <AgentOrchestratorPOC />
+            <AgentOrchestratorPOC
+              initialWorkflow={loadedPreset?.workflow}
+              loadedExampleLabel={loadedPreset?.label}
+            />
           </Suspense>
         );
       case "datasets":
@@ -420,9 +525,9 @@ export default function AIStudioPage() {
                       title: "Getting Started",
                       content: (
                         <div>
-                          <p>Welcome to AI Studio! Here's how to get started:</p>
+                          <p>Welcome to AI Studio! Here&apos;s how to get started:</p>
                           <ol className="list-decimal pl-5 mt-2 space-y-1">
-                            <li>Explore examples to see what's possible</li>
+                            <li>Explore examples to see what&apos;s possible</li>
                             <li>Follow the guided workflow to build your first model</li>
                             <li>Use the learning studio to understand concepts</li>
                             <li>Deploy your models to production</li>
@@ -459,7 +564,7 @@ export default function AIStudioPage() {
                       New to AI Studio?
                     </h2>
                     <p className="text-slate-700 mb-4">
-                      Take our quick onboarding tour to learn how to build your first AI model, or explore examples to see what's possible.
+                      Take our quick onboarding tour to learn how to build your first AI model, or explore examples to see what&apos;s possible.
                     </p>
                     <div className="flex gap-3">
                       <Link
@@ -514,7 +619,7 @@ export default function AIStudioPage() {
                     Back to Dashboard
                   </button>
                 </div>
-                <ExampleGallery />
+                <ExampleGallery onLoadExample={handleLoadExample} />
               </div>
             ) : (
               renderContent()

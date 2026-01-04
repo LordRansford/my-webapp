@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import ToolShell from "@/components/tools/ToolShell";
+import ToolShell, { useToolInputs } from "@/components/tools/ToolShell";
 import { getToolContract } from "@/lib/tools/loadContract";
 import { createToolError } from "@/components/tools/ErrorPanel";
 import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
@@ -90,11 +90,105 @@ interface Risk {
   mitigations: string;
 }
 
-export default function RiskRegisterBuilderPage() {
-  const [risks, setRisks] = useState<Risk[]>([
-    { id: "1", description: "", likelihood: "Medium", impact: "Medium", mitigations: "" },
-  ]);
+function RiskRegisterForm() {
+  const { inputs, setInputs } = useToolInputs();
+  const risks = Array.isArray(inputs.risks)
+    ? (inputs.risks as Risk[])
+    : ([{ id: "1", description: "", likelihood: "Medium", impact: "Medium", mitigations: "" }] as Risk[]);
 
+  const setRisks = (next: Risk[]) => setInputs((prev) => ({ ...prev, risks: next }));
+
+  const addRisk = () => {
+    setRisks([
+      ...risks,
+      { id: String(risks.length + 1), description: "", likelihood: "Medium", impact: "Medium", mitigations: "" },
+    ]);
+  };
+
+  const updateRisk = (id: string, field: keyof Risk, value: string | "Low" | "Medium" | "High") => {
+    setRisks(risks.map((r) => (r.id === id ? { ...r, [field]: value } : r)));
+  };
+
+  const removeRisk = (id: string) => {
+    const next = risks.filter((r) => r.id !== id);
+    setRisks(next.length > 0 ? next : [{ id: "1", description: "", likelihood: "Medium", impact: "Medium", mitigations: "" }]);
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold text-slate-900">Risks</h3>
+        <button
+          type="button"
+          onClick={addRisk}
+          className="rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-slate-800"
+        >
+          + Add Risk
+        </button>
+      </div>
+      {risks.map((risk) => (
+        <div key={risk.id} className="rounded-lg border border-slate-200 bg-white p-4">
+          <div className="mb-3 flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-600">Risk #{risk.id}</span>
+            <button type="button" onClick={() => removeRisk(risk.id)} className="text-xs text-red-600 hover:underline">
+              Remove
+            </button>
+          </div>
+          <div className="space-y-3">
+            <div>
+              <label className="block text-xs font-semibold text-slate-900">Description</label>
+              <textarea
+                value={risk.description}
+                onChange={(e) => updateRisk(risk.id, "description", e.target.value)}
+                rows={2}
+                className="mt-1 w-full rounded border border-slate-300 p-2 text-sm"
+                placeholder="Describe the risk..."
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-semibold text-slate-900">Likelihood</label>
+                <select
+                  value={risk.likelihood}
+                  onChange={(e) => updateRisk(risk.id, "likelihood", e.target.value as "Low" | "Medium" | "High")}
+                  className="mt-1 w-full rounded border border-slate-300 p-2 text-sm"
+                >
+                  <option value="Low">Low</option>
+                  <option value="Medium">Medium</option>
+                  <option value="High">High</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-900">Impact</label>
+                <select
+                  value={risk.impact}
+                  onChange={(e) => updateRisk(risk.id, "impact", e.target.value as "Low" | "Medium" | "High")}
+                  className="mt-1 w-full rounded border border-slate-300 p-2 text-sm"
+                >
+                  <option value="Low">Low</option>
+                  <option value="Medium">Medium</option>
+                  <option value="High">High</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-900">Mitigations</label>
+              <textarea
+                value={risk.mitigations}
+                onChange={(e) => updateRisk(risk.id, "mitigations", e.target.value)}
+                rows={2}
+                className="mt-1 w-full rounded border border-slate-300 p-2 text-sm"
+                placeholder="Describe mitigations..."
+              />
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default function RiskRegisterBuilderPage() {
   if (!contract) {
     return (
       <div className="mx-auto max-w-4xl p-6">
@@ -141,18 +235,6 @@ export default function RiskRegisterBuilderPage() {
     return { success: true, output: JSON.stringify(result, null, 2) };
   };
 
-  const addRisk = () => {
-    setRisks([...risks, { id: String(risks.length + 1), description: "", likelihood: "Medium", impact: "Medium", mitigations: "" }]);
-  };
-
-  const updateRisk = (id: string, field: keyof Risk, value: string | "Low" | "Medium" | "High") => {
-    setRisks(risks.map((r) => (r.id === id ? { ...r, [field]: value } : r)));
-  };
-
-  const removeRisk = (id: string) => {
-    setRisks(risks.filter((r) => r.id !== id));
-  };
-
   return (
     <div className="mx-auto max-w-6xl p-6">
       <nav className="mb-4">
@@ -161,81 +243,8 @@ export default function RiskRegisterBuilderPage() {
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ risks }}>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-slate-900">Risks</h3>
-            <button
-              type="button"
-              onClick={addRisk}
-              className="rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-slate-800"
-            >
-              + Add Risk
-            </button>
-          </div>
-          {risks.map((risk) => (
-            <div key={risk.id} className="rounded-lg border border-slate-200 bg-white p-4">
-              <div className="mb-3 flex items-center justify-between">
-                <span className="text-xs font-semibold text-slate-600">Risk #{risk.id}</span>
-                <button
-                  type="button"
-                  onClick={() => removeRisk(risk.id)}
-                  className="text-xs text-red-600 hover:underline"
-                >
-                  Remove
-                </button>
-              </div>
-              <div className="space-y-3">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-900">Description</label>
-                  <textarea
-                    value={risk.description}
-                    onChange={(e) => updateRisk(risk.id, "description", e.target.value)}
-                    rows={2}
-                    className="mt-1 w-full rounded border border-slate-300 p-2 text-sm"
-                    placeholder="Describe the risk..."
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-900">Likelihood</label>
-                    <select
-                      value={risk.likelihood}
-                      onChange={(e) => updateRisk(risk.id, "likelihood", e.target.value as "Low" | "Medium" | "High")}
-                      className="mt-1 w-full rounded border border-slate-300 p-2 text-sm"
-                    >
-                      <option value="Low">Low</option>
-                      <option value="Medium">Medium</option>
-                      <option value="High">High</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-900">Impact</label>
-                    <select
-                      value={risk.impact}
-                      onChange={(e) => updateRisk(risk.id, "impact", e.target.value as "Low" | "Medium" | "High")}
-                      className="mt-1 w-full rounded border border-slate-300 p-2 text-sm"
-                    >
-                      <option value="Low">Low</option>
-                      <option value="Medium">Medium</option>
-                      <option value="High">High</option>
-                    </select>
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-900">Mitigations</label>
-                  <textarea
-                    value={risk.mitigations}
-                    onChange={(e) => updateRisk(risk.id, "mitigations", e.target.value)}
-                    rows={2}
-                    className="mt-1 w-full rounded border border-slate-300 p-2 text-sm"
-                    placeholder="Describe mitigations..."
-                  />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples}>
+        <RiskRegisterForm />
       </ToolShell>
     </div>
   );

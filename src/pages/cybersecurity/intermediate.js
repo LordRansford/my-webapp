@@ -1,7 +1,6 @@
 import dynamic from "next/dynamic";
-import Link from "next/link";
 import { useMemo } from "react";
-import NotesLayout from "@/components/notes/Layout";
+import CourseLessonTemplate from "@/components/course/CourseLessonTemplate";
 import { MDXRenderer } from "@/components/notes/MDXRenderer";
 import { loadNote } from "@/lib/content/loadNote";
 import ToolCard from "@/components/learn/ToolCard";
@@ -21,6 +20,7 @@ import SectionHeader from "@/components/course/SectionHeader";
 import SubsectionHeader from "@/components/course/SubsectionHeader";
 import BodyText from "@/components/course/BodyText";
 import { cyberSections } from "@/lib/cyberSections";
+import CPDAssessmentPromo from "@/components/course/CPDAssessmentPromo";
 
 const ThreatScenarioMapper = dynamic(() => import("@/components/dashboards/cybersecurity/intermediate/ThreatScenarioMapper"), { ssr: false });
 const AttackSurfaceExplorer = dynamic(() => import("@/components/dashboards/cybersecurity/intermediate/AttackSurfaceExplorer"), { ssr: false });
@@ -31,6 +31,10 @@ const RiskTradeoffVisualizer = dynamic(() => import("@/components/dashboards/cyb
 const IntermediateQuizBoard = dynamic(() => import("@/components/dashboards/cybersecurity/intermediate/IntermediateQuizBoard"), { ssr: false });
 const Quiz = dynamic(() => import("@/components/Quiz"), { ssr: false });
 const Recap = dynamic(() => import("@/components/notes/Recap"), { ssr: false });
+const FeatureSecurityReviewPackTool = dynamic(
+  () => import("@/components/notes/tools/cybersecurity/intermediate/FeatureSecurityReviewPackTool"),
+  { ssr: false }
+);
 
 export default function Page({ source, headings }) {
   const mdxComponents = useMemo(
@@ -65,12 +69,13 @@ export default function Page({ source, headings }) {
       Quiz,
       PageNav,
       Recap,
+      FeatureSecurityReviewPackTool,
     }),
     []
   );
 
   return (
-    <NotesLayout
+    <CourseLessonTemplate
       meta={{
         title: "Applied Cybersecurity",
         description: "How systems fail and how we defend them",
@@ -81,17 +86,22 @@ export default function Page({ source, headings }) {
       }}
       activeLevelId="applied"
       headings={headings}
+      courseHref="/cybersecurity"
+      courseLabel="Cybersecurity"
+      dashboardHref="/dashboards/cybersecurity"
+      labsHref="/tools/cybersecurity"
+      studiosHref="/cyber-studios"
     >
-      <div className="mb-4">
-        <Link
-          href="/cybersecurity"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-900 focus:outline-none focus:ring focus:ring-blue-200"
-        >
-          Back to Cybersecurity overview
-        </Link>
+      <div className="mb-6">
+        <CPDAssessmentPromo
+          courseName="Cybersecurity"
+          levelLabel="Applied"
+          assessmentHref="/cybersecurity/assessment/applied"
+          prepHref="/cybersecurity/cpd-prep"
+        />
       </div>
       <MDXRenderer source={source} components={mdxComponents} />
-    </NotesLayout>
+    </CourseLessonTemplate>
   );
 }
 

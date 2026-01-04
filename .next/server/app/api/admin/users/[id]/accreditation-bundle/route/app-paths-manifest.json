@@ -1,0 +1,3 @@
+{
+  "/api/admin/users/[id]/accreditation-bundle/route": "app/api/admin/users/[id]/accreditation-bundle/route.js"
+}

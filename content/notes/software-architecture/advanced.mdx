@@ -28,7 +28,7 @@ import DashboardFrame from "@/components/dashboards/DashboardFrame"
 
 # Software Architecture Notes - Advanced
 
-<LevelProgressBar courseId="software-architecture" levelId="practice-strategy" sectionIds={practiceStrategySectionIds} />
+<LevelProgressBar courseId="software-architecture" levelId="practice-strategy" sectionIds={softwareArchitectureSectionManifest.advanced} />
 
 <CPDTracker courseId="software-architecture" levelId="practice-strategy" estimatedHours={14} />
 
@@ -50,7 +50,7 @@ import DashboardFrame from "@/components/dashboards/DashboardFrame"
 At scale, architecture shapes organisations as much as it shapes software.
 </Callout>
 
-Advanced architecture deals with portfolios of systems, shared platforms, legacy coexistence, and long-term organisational impact. It is socio-technical: changing the system often requires changing team boundaries, incentives, and ownership. A diagram alone is never enough; organisational design is part of the architecture.
+Advanced architecture deals with portfolios of systems, shared platforms, legacy coexistence, and long term organisational impact. It is socio technical. Changing the system often requires changing team boundaries, incentives, and ownership. A diagram alone is never enough. Organisational design is part of the architecture.
 
 ---
 
@@ -65,8 +65,8 @@ Systems mirror communication paths.
 Systems reflect the communication structures of the teams that build them. If teams are siloed, systems become siloed. If incentives reward speed without responsibility, coupling appears in the wrong places. Changing architecture often means adjusting teams, ownership, and coordination, not just code.
 
 <GlossaryTip term="Conway’s Law">
-Plain: Systems copy how teams talk to each other.  
-Formal: The design of a system mirrors the communication structure of the organisation that produced it.
+Plain language. Systems copy how teams talk to each other.  
+Formal wording. The design of a system mirrors the communication structure of the organisation that produced it.
 </GlossaryTip>
 
 ---
@@ -95,11 +95,11 @@ Modern organisations build platforms: identity, data, integration, observability
 Design for failure because it is inevitable at scale.
 </Callout>
 
-Components fail, networks degrade, dependencies misbehave. Resilience is the capacity to absorb failure and recover without catastrophic loss. It uses redundancy, isolation, graceful degradation, and observability. Avoiding failure entirely is unrealistic; designing for failure is essential.
+Components fail, networks degrade, dependencies misbehave. Resilience is the capacity to absorb failure and recover without catastrophic loss. It uses redundancy, isolation, graceful degradation, and observability. Avoiding failure entirely is unrealistic. Designing for failure is essential.
 
 <GlossaryTip term="Resilience">
-Plain: The system keeps delivering value when parts fail.  
-Formal: The ability of a system to absorb disruptions and continue operating within acceptable bounds.
+Plain language. The system keeps delivering value when parts fail.  
+Formal wording. The ability of a system to absorb disruptions and continue operating within acceptable bounds.
 </GlossaryTip>
 
 <ToolCard title="Resilience and failure simulator">
@@ -136,7 +136,7 @@ Effective governance sets clear constraints, encourages autonomy within boundari
 Good architecture leaves the system healthier than you found it.
 </Callout>
 
-Advanced architects act as stewards. They think in years, focus on capability rather than features, and manage both technical and organisational debt. They know architecture is never finished; it evolves with purpose, constraints, and environment.
+Advanced architects act as stewards. They think in years, focus on capability rather than features, and manage both technical and organisational debt. They know architecture is never finished. It evolves with purpose, constraints, and environment.
 
 ---
 

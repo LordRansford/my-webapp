@@ -291,7 +291,7 @@ export default function CyberSummary() {
               <SafeIcon name="activity" size={20} color="currentColor" style={{ marginRight: 0 }} />
             </span>
             <div>
-              <h2 className="text-xl font-semibold text-gray-900">Games and playful practice</h2>
+              <h2 className="text-xl font-semibold text-gray-900">Games that build judgement</h2>
               <p className="text-base text-gray-700">
                 These games are here to help you revisit key ideas in a low pressure way. None record scores or personal details. Just play, notice what feels fuzzy, and jump back to the notes if needed.
               </p>

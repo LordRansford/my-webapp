@@ -1,0 +1,18 @@
+{
+  "devFiles": [],
+  "ampDevFiles": [],
+  "polyfillFiles": [],
+  "lowPriorityFiles": [],
+  "rootMainFiles": [],
+  "pages": {
+    "/data-studio/governance": [
+      "static/chunks/6bd1b060cc02463e.js",
+      "static/chunks/f0f43ebb724b8b11.js",
+      "static/chunks/01073211ade0ab07.js",
+      "static/chunks/d1ea35920c32a766.js",
+      "static/chunks/7ddae69f2dbe3c12.js",
+      "static/chunks/turbopack-d5679e10c09233a1.js"
+    ]
+  },
+  "ampFirstPages": []
+}

@@ -6,7 +6,7 @@ export type ToolRegistryEntry = {
   tips: string[];
 };
 
-// Minimal registry for mentor suggestions. This can grow over time.
+// Minimal registry for on site suggestions. This can grow over time.
 export const toolRegistry: ToolRegistryEntry[] = [
   {
     id: "cyber_game_trust_boundary",
