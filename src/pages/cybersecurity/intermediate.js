@@ -20,6 +20,7 @@ import SectionProgressToggle from "@/components/notes/SectionProgressToggle";
 import SectionHeader from "@/components/course/SectionHeader";
 import SubsectionHeader from "@/components/course/SubsectionHeader";
 import BodyText from "@/components/course/BodyText";
+import CaseStudy, { Timeline, TimelineEvent, RootCause, LessonsLearned, TechnicalDetails, ImpactAnalysis } from "@/components/notes/CaseStudy";
 import { cyberSections } from "@/lib/cyberSections";
 
 const ThreatScenarioMapper = dynamic(() => import("@/components/dashboards/cybersecurity/intermediate/ThreatScenarioMapper"), { ssr: false });
@@ -65,6 +66,13 @@ export default function Page({ source, headings }) {
       Quiz,
       PageNav,
       Recap,
+      CaseStudy,
+      Timeline,
+      TimelineEvent,
+      RootCause,
+      LessonsLearned,
+      TechnicalDetails,
+      ImpactAnalysis,
     }),
     []
   );
