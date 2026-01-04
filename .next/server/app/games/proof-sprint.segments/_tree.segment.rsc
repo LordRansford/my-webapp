@@ -1,4 +1,4 @@
-:HL["/_next/static/chunks/09f86ca015653552.css","style"]
+:HL["/_next/static/chunks/aa37dfd6ef0aec3c.css","style"]
 :HL["/_next/static/chunks/a6f6a374fbd656c4.css","style"]
 :HC["/",""]
-0:{"buildId":"ThlopgKBXTkKjhv6yholi","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"games","paramType":null,"paramKey":"games","hasRuntimePrefetch":false,"slots":{"children":{"name":"proof-sprint","paramType":null,"paramKey":"proof-sprint","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
+0:{"buildId":"MN3jQyvlQXUH29G3nSfs_","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"games","paramType":null,"paramKey":"games","hasRuntimePrefetch":false,"slots":{"children":{"name":"proof-sprint","paramType":null,"paramKey":"proof-sprint","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
