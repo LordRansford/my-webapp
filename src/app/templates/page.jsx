@@ -3,7 +3,8 @@ import { CategoryGrid } from "@/components/templates/CategoryGrid";
 import { TEMPLATE_CATEGORIES } from "@/data/templates/categories";
 import SupportBanner from "@/components/SupportBanner";
 import Link from "next/link";
-import { templateDefinitions } from "../../../content/templates/definitions";
+import { getTemplatesRegistry } from "@/lib/catalog";
+import { TemplatesHubClient } from "@/components/templates/TemplatesHubClient";
 
 export const metadata = {
   title: "Templates",
@@ -11,10 +12,44 @@ export const metadata = {
 };
 
 export default function TemplatesLandingPage() {
-  const counts = templateDefinitions.reduce((acc, def) => {
-    acc[def.category] = (acc[def.category] || 0) + 1;
+  const all = getTemplatesRegistry();
+
+  // Merge preview + runner entries into a single hub card where possible.
+  const mergedMap = new Map();
+  for (const t of all) {
+    const key = `${t.category}:${t.slug}`;
+    const existing = mergedMap.get(key) || {
+      id: key,
+      title: t.title,
+      description: t.description,
+      category: t.category,
+      tags: [],
+      badges: [],
+      previewHref: undefined,
+      runHref: undefined,
+    };
+
+    existing.title = existing.title || t.title;
+    existing.description = existing.description || t.description;
+    existing.category = existing.category || t.category;
+    existing.tags = Array.from(new Set([...(existing.tags || []), ...(t.tags || [])]));
+
+    const badges = [...(existing.badges || []), ...(t.badges || [])];
+    existing.badges = badges.filter((b, idx) => badges.findIndex((x) => x.label === b.label) === idx);
+
+    if (t.hasRunner) existing.runHref = t.runHref || t.href;
+    else existing.previewHref = t.href;
+
+    mergedMap.set(key, existing);
+  }
+
+  const templates = Array.from(mergedMap.values()).sort((a, b) => a.title.localeCompare(b.title));
+
+  const counts = templates.reduce((acc, tpl) => {
+    acc[tpl.category] = (acc[tpl.category] || 0) + 1;
     return acc;
   }, {});
+
   return (
     <main className="mx-auto max-w-6xl px-4 py-12 md:px-6 lg:px-8">
       <section className="space-y-5 rounded-3xl bg-gradient-to-r from-slate-50 via-sky-50/60 to-slate-50 p-8 shadow-sm ring-1 ring-slate-100">
@@ -56,6 +91,10 @@ export default function TemplatesLandingPage() {
         <CategoryGrid categories={TEMPLATE_CATEGORIES} counts={counts} />
       </section>
 
+      <section className="mt-10">
+        <TemplatesHubClient templates={templates} />
+      </section>
+
       <section className="mt-10" aria-label="Support this work">
         <SupportBanner />
       </section>
@@ -74,32 +113,8 @@ export default function TemplatesLandingPage() {
         </Link>
       </section>
 
-      <section className="space-y-3 rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-wide text-slate-600">Interactive templates</p>
-            <h2 className="text-xl font-semibold text-slate-900">Try the runners</h2>
-            <p className="text-sm text-slate-700">Live inputs with instant results. No downloads, processed locally.</p>
-          </div>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {templateDefinitions.slice(0, 6).map((tpl) => (
-            <div key={tpl.slug} className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-slate-50/80 p-6 shadow-sm">
-              <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">Preview + runner</div>
-              <h3 className="text-lg font-semibold text-slate-900">{tpl.title}</h3>
-              <p className="text-base text-slate-700 flex-1">{tpl.description}</p>
-              <div className="flex items-center justify-between text-xs text-slate-700">
-                <span>Estimated {tpl.estimatedMinutes} mins</span>
-              </div>
-              <a
-                href={`/templates/run/${tpl.slug}`}
-                className="inline-flex items-center justify-center rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
-              >
-                Open runner
-              </a>
-            </div>
-          ))}
-        </div>
+      <section className="mt-10 rounded-2xl border border-slate-200 bg-white/90 p-4 text-sm text-slate-700 shadow-sm" aria-label="Note">
+        Interactive runners are shown inline above (when available) with a <strong>Run live</strong> button.
       </section>
     </main>
   );

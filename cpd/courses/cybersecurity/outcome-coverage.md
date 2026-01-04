@@ -1,6 +1,6 @@
 # Outcome coverage – cybersecurity
 
-Generated: 2026-01-04T06:05:42.234Z
+Generated: 2026-01-04T06:10:27.841Z
 Status: Ready
 
 ## Summary

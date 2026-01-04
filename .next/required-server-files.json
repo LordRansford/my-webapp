@@ -4,7 +4,7 @@
     "env": {
       "_sentryRewriteFramesDistDir": ".next",
       "_sentryRewriteFramesAssetPrefixPath": "",
-      "_sentryRelease": "0979399f6de5368ddcb64e54b8510048745ce330"
+      "_sentryRelease": "10204052cbdfdd2cfcafce8c971f4e1985dfa666"
     },
     "typescript": {
       "ignoreBuildErrors": false

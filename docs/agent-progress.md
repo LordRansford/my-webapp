@@ -39,3 +39,11 @@ This file is maintained by the Cursor agent during the overnight implementation.
 - **Tests**:
   - `npm -s run build` ✅
 
+### Checkpoint: Task D implemented (/templates hub)
+- **Change**: Upgraded `/templates` landing page (app router) to include a registry-driven hub list with:
+  - Search + category filter
+  - Unified cards that can show both **Preview** and **Run live** actions when both exist
+  - Backed by `getTemplatesRegistry()` (merged preview registry + runner definitions)
+- **Tests**:
+  - `npm -s run build` ✅
+
