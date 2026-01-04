@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import ToolShell from "@/components/tools/ToolShell";
+import ToolShell, { useToolInputs } from "@/components/tools/ToolShell";
 import { getToolContract } from "@/lib/tools/loadContract";
 import { createToolError } from "@/components/tools/ErrorPanel";
 import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
@@ -39,12 +39,81 @@ const examples = [
   },
 ];
 
-export default function TechnicalDebtQualifierPage() {
-  const [debtItem, setDebtItem] = useState("");
-  const [impact, setImpact] = useState<"High" | "Medium" | "Low">("Medium");
-  const [urgency, setUrgency] = useState<"High" | "Medium" | "Low">("Medium");
-  const [cost, setCost] = useState<"High" | "Medium" | "Low">("Medium");
+function TechnicalDebtForm() {
+  const { inputs, setInputs } = useToolInputs();
+  const debtItem = typeof inputs.debtItem === "string" ? inputs.debtItem : "";
+  const impact = (inputs.impact as "High" | "Medium" | "Low") || "Medium";
+  const urgency = (inputs.urgency as "High" | "Medium" | "Low") || "Medium";
+  const cost = (inputs.cost as "High" | "Medium" | "Low") || "Medium";
 
+  return (
+    <div className="space-y-4">
+      <div>
+        <label htmlFor="debtItem" className="block text-sm font-semibold text-slate-900">
+          Technical Debt Item <span className="text-red-600">*</span>
+        </label>
+        <textarea
+          id="debtItem"
+          value={debtItem}
+          onChange={(e) => setInputs((prev) => ({ ...prev, debtItem: e.target.value }))}
+          rows={3}
+          maxLength={500}
+          className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+          placeholder="Describe the technical debt..."
+        />
+      </div>
+      <div className="grid grid-cols-3 gap-4">
+        <div>
+          <label htmlFor="impact" className="block text-sm font-semibold text-slate-900">
+            Impact
+          </label>
+          <select
+            id="impact"
+            value={impact}
+            onChange={(e) => setInputs((prev) => ({ ...prev, impact: e.target.value }))}
+            className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+          >
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+          </select>
+        </div>
+        <div>
+          <label htmlFor="urgency" className="block text-sm font-semibold text-slate-900">
+            Urgency
+          </label>
+          <select
+            id="urgency"
+            value={urgency}
+            onChange={(e) => setInputs((prev) => ({ ...prev, urgency: e.target.value }))}
+            className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+          >
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+          </select>
+        </div>
+        <div>
+          <label htmlFor="cost" className="block text-sm font-semibold text-slate-900">
+            Cost to Fix
+          </label>
+          <select
+            id="cost"
+            value={cost}
+            onChange={(e) => setInputs((prev) => ({ ...prev, cost: e.target.value }))}
+            className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+          >
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function TechnicalDebtQualifierPage() {
   if (!contract) {
     return (
       <div className="mx-auto max-w-4xl p-6">
@@ -97,70 +166,8 @@ export default function TechnicalDebtQualifierPage() {
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ debtItem, impact, urgency, cost }}>
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="debtItem" className="block text-sm font-semibold text-slate-900">
-              Technical Debt Item <span className="text-red-600">*</span>
-            </label>
-            <textarea
-              id="debtItem"
-              value={debtItem}
-              onChange={(e) => setDebtItem(e.target.value)}
-              rows={3}
-              maxLength={500}
-              className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-              placeholder="Describe the technical debt..."
-            />
-          </div>
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <label htmlFor="impact" className="block text-sm font-semibold text-slate-900">
-                Impact
-              </label>
-              <select
-                id="impact"
-                value={impact}
-                onChange={(e) => setImpact(e.target.value as typeof impact)}
-                className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-              >
-                <option value="Low">Low</option>
-                <option value="Medium">Medium</option>
-                <option value="High">High</option>
-              </select>
-            </div>
-            <div>
-              <label htmlFor="urgency" className="block text-sm font-semibold text-slate-900">
-                Urgency
-              </label>
-              <select
-                id="urgency"
-                value={urgency}
-                onChange={(e) => setUrgency(e.target.value as typeof urgency)}
-                className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-              >
-                <option value="Low">Low</option>
-                <option value="Medium">Medium</option>
-                <option value="High">High</option>
-              </select>
-            </div>
-            <div>
-              <label htmlFor="cost" className="block text-sm font-semibold text-slate-900">
-                Cost to Fix
-              </label>
-              <select
-                id="cost"
-                value={cost}
-                onChange={(e) => setCost(e.target.value as typeof cost)}
-                className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-              >
-                <option value="Low">Low</option>
-                <option value="Medium">Medium</option>
-                <option value="High">High</option>
-              </select>
-            </div>
-          </div>
-        </div>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples}>
+        <TechnicalDebtForm />
       </ToolShell>
     </div>
   );

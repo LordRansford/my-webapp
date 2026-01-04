@@ -19,6 +19,8 @@ export interface PythonRunResult {
   };
 }
 
+export type PythonRuntimeStatusPhase = "loading_runtime" | "ready" | "running";
+
 type PythonWorkerMessage =
   | { type: "status"; requestId: string; phase: string; message?: string }
   | {
@@ -41,7 +43,10 @@ function createPyWorker(): Worker {
 
 export async function runPython(
   code: string,
-  contract: ToolContract
+  contract: ToolContract,
+  opts?: {
+    onStatus?: (phase: PythonRuntimeStatusPhase | string, message?: string) => void;
+  }
 ): Promise<PythonRunResult> {
   // Validate input size
   const inputKb = new Blob([code]).size / 1024;
@@ -85,6 +90,7 @@ export async function runPython(
       if (!msg || typeof msg !== "object" || msg.requestId !== requestId) return;
 
       if (msg.type === "status") {
+        opts?.onStatus?.(msg.phase, msg.message);
         // Intentionally do not resolve; this lets the UI stay responsive while Pyodide loads.
         return;
       }

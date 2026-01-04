@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import ToolShell from "@/components/tools/ToolShell";
+import ToolShell, { useToolInputs } from "@/components/tools/ToolShell";
 import { getToolContract } from "@/lib/tools/loadContract";
 import { createToolError } from "@/components/tools/ErrorPanel";
 import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
@@ -85,14 +85,137 @@ const examples = [
   },
 ];
 
-export default function IncidentPostMortemBuilderPage() {
-  const [title, setTitle] = useState("");
-  const [dateTime, setDateTime] = useState(new Date().toISOString().slice(0, 16));
-  const [impact, setImpact] = useState("");
-  const [timeline, setTimeline] = useState<string[]>([""]);
-  const [rootCauses, setRootCauses] = useState<string[]>([""]);
-  const [actionItems, setActionItems] = useState<string[]>([""]);
+function IncidentPostmortemForm() {
+  const { inputs, setInputs } = useToolInputs();
+  const title = typeof inputs.title === "string" ? inputs.title : "";
+  const dateTime = typeof inputs.dateTime === "string" ? inputs.dateTime : new Date().toISOString().slice(0, 16);
+  const impact = typeof inputs.impact === "string" ? inputs.impact : "";
+  const timeline = Array.isArray(inputs.timeline) ? (inputs.timeline as string[]) : [""];
+  const rootCauses = Array.isArray(inputs.rootCauses) ? (inputs.rootCauses as string[]) : [""];
+  const actionItems = Array.isArray(inputs.actionItems) ? (inputs.actionItems as string[]) : [""];
 
+  const updateArray = (key: "timeline" | "rootCauses" | "actionItems", index: number, value: string) => {
+    setInputs((prev) => {
+      const arr = Array.isArray(prev[key]) ? ([...(prev[key] as string[])] as string[]) : [""];
+      arr[index] = value;
+      return { ...prev, [key]: arr };
+    });
+  };
+
+  const addItem = (key: "timeline" | "rootCauses" | "actionItems", max: number) => {
+    setInputs((prev) => {
+      const arr = Array.isArray(prev[key]) ? ([...(prev[key] as string[])] as string[]) : [""];
+      if (arr.length < max) arr.push("");
+      return { ...prev, [key]: arr };
+    });
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label htmlFor="title" className="block text-sm font-semibold text-slate-900">
+            Title <span className="text-red-600">*</span>
+          </label>
+          <input
+            id="title"
+            type="text"
+            value={title}
+            onChange={(e) => setInputs((prev) => ({ ...prev, title: e.target.value }))}
+            maxLength={200}
+            className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+            placeholder="Incident title"
+          />
+        </div>
+        <div>
+          <label htmlFor="dateTime" className="block text-sm font-semibold text-slate-900">
+            Date/Time
+          </label>
+          <input
+            id="dateTime"
+            type="datetime-local"
+            value={dateTime}
+            onChange={(e) => setInputs((prev) => ({ ...prev, dateTime: e.target.value }))}
+            className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+          />
+        </div>
+      </div>
+      <div>
+        <label htmlFor="impact" className="block text-sm font-semibold text-slate-900">
+          Impact
+        </label>
+        <textarea
+          id="impact"
+          value={impact}
+          onChange={(e) => setInputs((prev) => ({ ...prev, impact: e.target.value }))}
+          rows={3}
+          maxLength={1000}
+          className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+          placeholder="What was affected and to what extent?"
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-semibold text-slate-900 mb-2">Timeline Events (max 50)</label>
+        {timeline.map((e, idx) => (
+          <input
+            key={idx}
+            type="text"
+            value={e}
+            onChange={(ev) => updateArray("timeline", idx, ev.target.value)}
+            maxLength={500}
+            className="mt-2 w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+            placeholder={`Event ${idx + 1}`}
+          />
+        ))}
+        {timeline.length < 50 && (
+          <button type="button" onClick={() => addItem("timeline", 50)} className="mt-2 text-xs text-slate-600 underline">
+            + Add Event
+          </button>
+        )}
+      </div>
+      <div>
+        <label className="block text-sm font-semibold text-slate-900 mb-2">Root Causes (max 20)</label>
+        {rootCauses.map((c, idx) => (
+          <input
+            key={idx}
+            type="text"
+            value={c}
+            onChange={(e) => updateArray("rootCauses", idx, e.target.value)}
+            maxLength={500}
+            className="mt-2 w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+            placeholder={`Root cause ${idx + 1}`}
+          />
+        ))}
+        {rootCauses.length < 20 && (
+          <button type="button" onClick={() => addItem("rootCauses", 20)} className="mt-2 text-xs text-slate-600 underline">
+            + Add Root Cause
+          </button>
+        )}
+      </div>
+      <div>
+        <label className="block text-sm font-semibold text-slate-900 mb-2">Action Items (max 30)</label>
+        {actionItems.map((a, idx) => (
+          <input
+            key={idx}
+            type="text"
+            value={a}
+            onChange={(e) => updateArray("actionItems", idx, e.target.value)}
+            maxLength={500}
+            className="mt-2 w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+            placeholder={`Action item ${idx + 1}`}
+          />
+        ))}
+        {actionItems.length < 30 && (
+          <button type="button" onClick={() => addItem("actionItems", 30)} className="mt-2 text-xs text-slate-600 underline">
+            + Add Action Item
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default function IncidentPostMortemBuilderPage() {
   if (!contract) {
     return (
       <div className="mx-auto max-w-4xl p-6">
@@ -143,14 +266,6 @@ ${validActionItems.length > 0 ? validActionItems.map((a, i) => `${i + 1}. ${a}`)
     return { success: true, output: markdown };
   };
 
-  const updateArray = (setter: React.Dispatch<React.SetStateAction<string[]>>, index: number, value: string) => {
-    setter((prev) => {
-      const newArr = [...prev];
-      newArr[index] = value;
-      return newArr;
-    });
-  };
-
   return (
     <div className="mx-auto max-w-6xl p-6">
       <nav className="mb-4">
@@ -159,120 +274,8 @@ ${validActionItems.length > 0 ? validActionItems.map((a, i) => `${i + 1}. ${a}`)
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ title, dateTime, impact, timeline, rootCauses, actionItems }}>
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="title" className="block text-sm font-semibold text-slate-900">
-                Title <span className="text-red-600">*</span>
-              </label>
-              <input
-                id="title"
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                maxLength={200}
-                className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-                placeholder="Incident title"
-              />
-            </div>
-            <div>
-              <label htmlFor="dateTime" className="block text-sm font-semibold text-slate-900">
-                Date/Time
-              </label>
-              <input
-                id="dateTime"
-                type="datetime-local"
-                value={dateTime}
-                onChange={(e) => setDateTime(e.target.value)}
-                className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-              />
-            </div>
-          </div>
-          <div>
-            <label htmlFor="impact" className="block text-sm font-semibold text-slate-900">
-              Impact
-            </label>
-            <textarea
-              id="impact"
-              value={impact}
-              onChange={(e) => setImpact(e.target.value)}
-              rows={3}
-              maxLength={1000}
-              className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-              placeholder="What was affected and to what extent?"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-slate-900 mb-2">Timeline Events (max 50)</label>
-            {timeline.map((e, idx) => (
-              <input
-                key={idx}
-                type="text"
-                value={e}
-                onChange={(ev) => updateArray(setTimeline, idx, ev.target.value)}
-                maxLength={500}
-                className="mt-2 w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-                placeholder={`Event ${idx + 1}`}
-              />
-            ))}
-            {timeline.length < 50 && (
-              <button
-                type="button"
-                onClick={() => setTimeline([...timeline, ""])}
-                className="mt-2 text-xs text-slate-600 underline"
-              >
-                + Add Event
-              </button>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-slate-900 mb-2">Root Causes (max 20)</label>
-            {rootCauses.map((c, idx) => (
-              <input
-                key={idx}
-                type="text"
-                value={c}
-                onChange={(e) => updateArray(setRootCauses, idx, e.target.value)}
-                maxLength={500}
-                className="mt-2 w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-                placeholder={`Root cause ${idx + 1}`}
-              />
-            ))}
-            {rootCauses.length < 20 && (
-              <button
-                type="button"
-                onClick={() => setRootCauses([...rootCauses, ""])}
-                className="mt-2 text-xs text-slate-600 underline"
-              >
-                + Add Root Cause
-              </button>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-slate-900 mb-2">Action Items (max 30)</label>
-            {actionItems.map((a, idx) => (
-              <input
-                key={idx}
-                type="text"
-                value={a}
-                onChange={(e) => updateArray(setActionItems, idx, e.target.value)}
-                maxLength={500}
-                className="mt-2 w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-                placeholder={`Action item ${idx + 1}`}
-              />
-            ))}
-            {actionItems.length < 30 && (
-              <button
-                type="button"
-                onClick={() => setActionItems([...actionItems, ""])}
-                className="mt-2 text-xs text-slate-600 underline"
-              >
-                + Add Action Item
-              </button>
-            )}
-          </div>
-        </div>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples}>
+        <IncidentPostmortemForm />
       </ToolShell>
     </div>
   );

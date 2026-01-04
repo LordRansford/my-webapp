@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import ToolShell from "@/components/tools/ToolShell";
+import ToolShell, { useToolInputs } from "@/components/tools/ToolShell";
 import { getToolContract } from "@/lib/tools/loadContract";
 import { createToolError } from "@/components/tools/ErrorPanel";
 import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
@@ -82,11 +82,92 @@ const examples = [
   },
 ];
 
-export default function ArchitectureTradeoffAnalysisPage() {
-  const [options, setOptions] = useState<string[]>(["", ""]);
-  const [constraints, setConstraints] = useState<string[]>([""]);
-  const [criteria, setCriteria] = useState<string[]>(["", "", "", "", "", ""]);
+function ArchitectureTradeoffForm() {
+  const { inputs, setInputs } = useToolInputs();
+  const options = Array.isArray(inputs.options) ? (inputs.options as string[]) : ["", ""];
+  const constraints = Array.isArray(inputs.constraints) ? (inputs.constraints as string[]) : [""];
+  const criteria = Array.isArray(inputs.criteria) ? (inputs.criteria as string[]) : ["", "", "", "", "", ""];
 
+  const updateArray = (key: "options" | "constraints" | "criteria", index: number, value: string) => {
+    setInputs((prev) => {
+      const arr = Array.isArray(prev[key]) ? ([...(prev[key] as string[])] as string[]) : [];
+      arr[index] = value;
+      return { ...prev, [key]: arr };
+    });
+  };
+
+  const addItem = (key: "options" | "constraints" | "criteria", max: number, blank: string = "") => {
+    setInputs((prev) => {
+      const arr = Array.isArray(prev[key]) ? ([...(prev[key] as string[])] as string[]) : [];
+      if (arr.length < max) arr.push(blank);
+      return { ...prev, [key]: arr };
+    });
+  };
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <label className="block text-sm font-semibold text-slate-900 mb-2">Options (2-3)</label>
+        {options.map((opt, idx) => (
+          <input
+            key={idx}
+            type="text"
+            value={opt}
+            onChange={(e) => updateArray("options", idx, e.target.value)}
+            maxLength={1000}
+            className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+            placeholder={`Option ${idx + 1}`}
+          />
+        ))}
+        {options.length < 3 && (
+          <button type="button" onClick={() => addItem("options", 3)} className="mt-2 text-xs text-slate-600 underline">
+            + Add Option
+          </button>
+        )}
+      </div>
+      <div>
+        <label className="block text-sm font-semibold text-slate-900 mb-2">Constraints (max 20)</label>
+        {constraints.map((c, idx) => (
+          <input
+            key={idx}
+            type="text"
+            value={c}
+            onChange={(e) => updateArray("constraints", idx, e.target.value)}
+            maxLength={200}
+            className="mt-2 w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+            placeholder={`Constraint ${idx + 1}`}
+          />
+        ))}
+        {constraints.length < 20 && (
+          <button type="button" onClick={() => addItem("constraints", 20)} className="mt-2 text-xs text-slate-600 underline">
+            + Add Constraint
+          </button>
+        )}
+      </div>
+      <div>
+        <label className="block text-sm font-semibold text-slate-900 mb-2">Criteria (6-10)</label>
+        {criteria.map((c, idx) => (
+          <input
+            key={idx}
+            type="text"
+            value={c}
+            onChange={(e) => updateArray("criteria", idx, e.target.value)}
+            maxLength={500}
+            className="mt-2 w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+            placeholder={`Criterion ${idx + 1}`}
+          />
+        ))}
+        {criteria.length < 10 && (
+          <button type="button" onClick={() => addItem("criteria", 10)} className="mt-2 text-xs text-slate-600 underline">
+            + Add Criterion
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default function ArchitectureTradeoffAnalysisPage() {
   if (!contract) {
     return (
       <div className="mx-auto max-w-4xl p-6">
@@ -133,14 +214,6 @@ export default function ArchitectureTradeoffAnalysisPage() {
     return { success: true, output: JSON.stringify(result, null, 2) };
   };
 
-  const updateArray = (setter: React.Dispatch<React.SetStateAction<string[]>>, index: number, value: string) => {
-    setter((prev) => {
-      const newArr = [...prev];
-      newArr[index] = value;
-      return newArr;
-    });
-  };
-
   return (
     <div className="mx-auto max-w-6xl p-6">
       <nav className="mb-4">
@@ -149,78 +222,8 @@ export default function ArchitectureTradeoffAnalysisPage() {
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ options, constraints, criteria }}>
-        <div className="space-y-6">
-          <div>
-            <label className="block text-sm font-semibold text-slate-900 mb-2">Options (2-3)</label>
-            {options.map((opt, idx) => (
-              <input
-                key={idx}
-                type="text"
-                value={opt}
-                onChange={(e) => updateArray(setOptions, idx, e.target.value)}
-                maxLength={1000}
-                className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-                placeholder={`Option ${idx + 1}`}
-              />
-            ))}
-            {options.length < 3 && (
-              <button
-                type="button"
-                onClick={() => setOptions([...options, ""])}
-                className="mt-2 text-xs text-slate-600 underline"
-              >
-                + Add Option
-              </button>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-slate-900 mb-2">Constraints (max 20)</label>
-            {constraints.map((c, idx) => (
-              <input
-                key={idx}
-                type="text"
-                value={c}
-                onChange={(e) => updateArray(setConstraints, idx, e.target.value)}
-                maxLength={200}
-                className="mt-2 w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-                placeholder={`Constraint ${idx + 1}`}
-              />
-            ))}
-            {constraints.length < 20 && (
-              <button
-                type="button"
-                onClick={() => setConstraints([...constraints, ""])}
-                className="mt-2 text-xs text-slate-600 underline"
-              >
-                + Add Constraint
-              </button>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-slate-900 mb-2">Criteria (6-10)</label>
-            {criteria.map((c, idx) => (
-              <input
-                key={idx}
-                type="text"
-                value={c}
-                onChange={(e) => updateArray(setCriteria, idx, e.target.value)}
-                maxLength={500}
-                className="mt-2 w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-                placeholder={`Criterion ${idx + 1}`}
-              />
-            ))}
-            {criteria.length < 10 && (
-              <button
-                type="button"
-                onClick={() => setCriteria([...criteria, ""])}
-                className="mt-2 text-xs text-slate-600 underline"
-              >
-                + Add Criterion
-              </button>
-            )}
-          </div>
-        </div>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples}>
+        <ArchitectureTradeoffForm />
       </ToolShell>
     </div>
   );

@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import ToolShell from "@/components/tools/ToolShell";
+import ToolShell, { useToolInputs } from "@/components/tools/ToolShell";
 import { getToolContract } from "@/lib/tools/loadContract";
 import { createToolError } from "@/components/tools/ErrorPanel";
 import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
@@ -54,11 +54,62 @@ function modInverse(a: number, m: number): number {
   return 1;
 }
 
-export default function RsaLabPage() {
-  const [p, setP] = useState(3);
-  const [q, setQ] = useState(11);
-  const [message, setMessage] = useState("7");
+function RsaLabForm() {
+  const { inputs, setInputs } = useToolInputs();
+  const p = typeof inputs.p === "number" ? inputs.p : Number(inputs.p) || 3;
+  const q = typeof inputs.q === "number" ? inputs.q : Number(inputs.q) || 11;
+  const message = typeof inputs.message === "string" ? inputs.message : String(inputs.message ?? "7");
 
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label htmlFor="p" className="block text-sm font-semibold text-slate-900">
+            Prime p
+          </label>
+          <input
+            id="p"
+            type="number"
+            value={p}
+            onChange={(e) => setInputs((prev) => ({ ...prev, p: Number(e.target.value) }))}
+            min={2}
+            max={100}
+            className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+          />
+        </div>
+        <div>
+          <label htmlFor="q" className="block text-sm font-semibold text-slate-900">
+            Prime q
+          </label>
+          <input
+            id="q"
+            type="number"
+            value={q}
+            onChange={(e) => setInputs((prev) => ({ ...prev, q: Number(e.target.value) }))}
+            min={2}
+            max={100}
+            className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+          />
+        </div>
+      </div>
+      <div>
+        <label htmlFor="message" className="block text-sm font-semibold text-slate-900">
+          Message (number)
+        </label>
+        <input
+          id="message"
+          type="text"
+          value={message}
+          onChange={(e) => setInputs((prev) => ({ ...prev, message: e.target.value }))}
+          className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+          placeholder="Enter numeric message"
+        />
+      </div>
+    </div>
+  );
+}
+
+export default function RsaLabPage() {
   if (!contract) {
     return (
       <div className="mx-auto max-w-4xl p-6">
@@ -132,52 +183,8 @@ export default function RsaLabPage() {
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ p, q, message }}>
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="p" className="block text-sm font-semibold text-slate-900">
-                Prime p
-              </label>
-              <input
-                id="p"
-                type="number"
-                value={p}
-                onChange={(e) => setP(Number(e.target.value))}
-                min={2}
-                max={100}
-                className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-              />
-            </div>
-            <div>
-              <label htmlFor="q" className="block text-sm font-semibold text-slate-900">
-                Prime q
-              </label>
-              <input
-                id="q"
-                type="number"
-                value={q}
-                onChange={(e) => setQ(Number(e.target.value))}
-                min={2}
-                max={100}
-                className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-              />
-            </div>
-          </div>
-          <div>
-            <label htmlFor="message" className="block text-sm font-semibold text-slate-900">
-              Message (number)
-            </label>
-            <input
-              id="message"
-              type="text"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-              placeholder="Enter numeric message"
-            />
-          </div>
-        </div>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples}>
+        <RsaLabForm />
       </ToolShell>
     </div>
   );

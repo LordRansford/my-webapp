@@ -1,8 +1,66 @@
-[00:00:01.443] Server  WARN    [@sentry/nextjs] It appears you've configured a `sentry.server.config.ts` file. Please ensure to put this file's content into the `register()` function of a Next.js instrumentation file instead. To ensure correct functionality of the SDK, `Sentry.init` must be called inside of an instrumentation file. Learn more about setting up an instrumentation file in Next.js: https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation. You can safely delete the `sentry.server.config.ts` file afterward.
-[00:00:01.444] Server  WARN    [@sentry/nextjs] Could not find a Next.js instrumentation file. This indicates an incomplete configuration of the Sentry SDK. An instrumentation file is required for the Sentry SDK to be initialized on the server: https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#create-initialization-config-files (you can suppress this warning by setting SENTRY_SUPPRESS_INSTRUMENTATION_FILE_WARNING=1 as environment variable)
-[00:00:01.446] Server  WARN    [@sentry/nextjs] It appears you've configured a `sentry.edge.config.ts` file. Please ensure to put this file's content into the `register()` function of a Next.js instrumentation file instead. To ensure correct functionality of the SDK, `Sentry.init` must be called inside of an instrumentation file. Learn more about setting up an instrumentation file in Next.js: https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation. You can safely delete the `sentry.edge.config.ts` file afterward.
-[00:00:01.448] Server  WARN    [@sentry/nextjs] DEPRECATION WARNING: It is recommended renaming your `sentry.client.config.ts` file, or moving its content to `instrumentation-client.ts`. When using Turbopack `sentry.client.config.ts` will no longer work. Read more about the `instrumentation-client.ts` file: https://nextjs.org/docs/app/api-reference/file-conventions/instrumentation-client
-[00:00:01.768] Server  LOG      ✓ Ready in 1533ms
-[00:00:04.808] Server  LOG      ○ Compiling / ...
-[00:00:09.701] Server  WARN    Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta
-[00:00:11.639] Server  WARN    Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta
+[00:00:01.150] Server  WARN    [@sentry/nextjs] It appears you've configured a `sentry.server.config.ts` file. Please ensure to put this file's content into the `register()` function of a Next.js instrumentation file instead. To ensure correct functionality of the SDK, `Sentry.init` must be called inside of an instrumentation file. Learn more about setting up an instrumentation file in Next.js: https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation. You can safely delete the `sentry.server.config.ts` file afterward.
+[00:00:01.150] Server  WARN    [@sentry/nextjs] Could not find a Next.js instrumentation file. This indicates an incomplete configuration of the Sentry SDK. An instrumentation file is required for the Sentry SDK to be initialized on the server: https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#create-initialization-config-files (you can suppress this warning by setting SENTRY_SUPPRESS_INSTRUMENTATION_FILE_WARNING=1 as environment variable)
+[00:00:01.152] Server  WARN    [@sentry/nextjs] It appears you've configured a `sentry.edge.config.ts` file. Please ensure to put this file's content into the `register()` function of a Next.js instrumentation file instead. To ensure correct functionality of the SDK, `Sentry.init` must be called inside of an instrumentation file. Learn more about setting up an instrumentation file in Next.js: https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation. You can safely delete the `sentry.edge.config.ts` file afterward.
+[00:00:01.153] Server  WARN    [@sentry/nextjs] DEPRECATION WARNING: It is recommended renaming your `sentry.client.config.ts` file, or moving its content to `instrumentation-client.ts`. When using Turbopack `sentry.client.config.ts` will no longer work. Read more about the `instrumentation-client.ts` file: https://nextjs.org/docs/app/api-reference/file-conventions/instrumentation-client
+[00:00:01.412] Server  LOG      ✓ Ready in 1218ms
+[00:00:04.433] Server  LOG      ○ Compiling / ...
+[00:00:07.008] Server  WARN    Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta
+[00:00:08.314] Server  WARN    Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta
+[00:00:12.062] Server  LOG      ○ Compiling /tools/ai/python-playground ...
+[00:00:14.438] Server  WARN    Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta
+[00:00:15.195] Server  WARN    auth:warn "NEXTAUTH_URL"
+[00:00:15.195] Server  WARN    auth:warn "NO_SECRET"
+[00:00:17.614] Server  WARN    Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta
+[00:00:18.333] Server  WARN    auth:warn "NEXTAUTH_URL"
+[00:00:18.333] Server  WARN    auth:warn "NO_SECRET"
+[00:00:20.451] Server  WARN    Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta
+[00:00:21.106] Server  WARN    auth:warn "NEXTAUTH_URL"
+[00:00:21.106] Server  WARN    auth:warn "NO_SECRET"
+[00:00:23.407] Server  WARN    Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta
+[00:00:24.054] Server  WARN    auth:warn "NEXTAUTH_URL"
+[00:00:24.054] Server  WARN    auth:warn "NO_SECRET"
+[00:00:26.615] Server  WARN    Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta
+[00:00:27.278] Server  WARN    auth:warn "NEXTAUTH_URL"
+[00:00:27.278] Server  WARN    auth:warn "NO_SECRET"
+[00:00:29.535] Server  WARN    Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta
+[00:00:30.179] Server  WARN    auth:warn "NEXTAUTH_URL"
+[00:00:30.179] Server  WARN    auth:warn "NO_SECRET"
+[00:00:32.407] Server  WARN    Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta
+[00:00:33.060] Server  WARN    auth:warn "NEXTAUTH_URL"
+[00:00:33.061] Server  WARN    auth:warn "NO_SECRET"
+[00:00:35.310] Server  WARN    Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta
+[00:00:35.954] Server  WARN    auth:warn "NEXTAUTH_URL"
+[00:00:35.955] Server  WARN    auth:warn "NO_SECRET"
+[00:00:38.232] Server  WARN    Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta
+[00:00:38.886] Server  WARN    auth:warn "NEXTAUTH_URL"
+[00:00:38.887] Server  WARN    auth:warn "NO_SECRET"
+[00:00:41.145] Server  WARN    Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta
+[00:00:41.810] Server  WARN    auth:warn "NEXTAUTH_URL"
+[00:00:41.811] Server  WARN    auth:warn "NO_SECRET"
+[00:00:44.035] Server  WARN    Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta
+[00:00:44.674] Server  WARN    auth:warn "NEXTAUTH_URL"
+[00:00:44.675] Server  WARN    auth:warn "NO_SECRET"
+[00:00:46.970] Server  WARN    Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta
+[00:00:47.645] Server  WARN    auth:warn "NEXTAUTH_URL"
+[00:00:47.645] Server  WARN    auth:warn "NO_SECRET"
+[00:00:49.872] Server  WARN    Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta
+[00:00:50.512] Server  WARN    auth:warn "NEXTAUTH_URL"
+[00:00:50.512] Server  WARN    auth:warn "NO_SECRET"
+[00:00:52.751] Server  WARN    Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta
+[00:00:53.388] Server  WARN    auth:warn "NEXTAUTH_URL"
+[00:00:53.388] Server  WARN    auth:warn "NO_SECRET"
+[00:00:55.666] Server  WARN    Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta
+[00:00:56.326] Server  WARN    auth:warn "NEXTAUTH_URL"
+[00:00:56.326] Server  WARN    auth:warn "NO_SECRET"
+[00:00:58.671] Server  WARN    Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta
+[00:00:59.329] Server  WARN    auth:warn "NEXTAUTH_URL"
+[00:00:59.330] Server  WARN    auth:warn "NO_SECRET"
+[00:01:01.538] Server  WARN    Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta
+[00:01:02.151] Server  WARN    auth:warn "NEXTAUTH_URL"
+[00:01:02.151] Server  WARN    auth:warn "NO_SECRET"
+[00:01:04.379] Server  WARN    Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta
+[00:01:05.004] Server  WARN    auth:warn "NEXTAUTH_URL"
+[00:01:05.004] Server  WARN    auth:warn "NO_SECRET"
+[00:01:07.303] Server  WARN    Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta
+[00:01:07.943] Server  WARN    auth:warn "NEXTAUTH_URL"
+[00:01:07.943] Server  WARN    auth:warn "NO_SECRET"

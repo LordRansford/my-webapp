@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, ReactNode, useEffect, useMemo } from "react";
+import React, { useState, ReactNode, useEffect, useMemo, createContext, useContext } from "react";
 import CreditEstimate from "./CreditEstimate";
 import ErrorPanel from "./ErrorPanel";
 import ToolSelfTest from "./ToolSelfTest";
@@ -59,6 +59,21 @@ interface ToolShellProps {
 }
 
 type Tab = "run" | "explain" | "examples";
+
+type ToolInputsContextValue = {
+  inputs: Record<string, unknown>;
+  setInputs: React.Dispatch<React.SetStateAction<Record<string, unknown>>>;
+};
+
+const ToolInputsContext = createContext<ToolInputsContextValue | null>(null);
+
+export function useToolInputs(): ToolInputsContextValue {
+  const ctx = useContext(ToolInputsContext);
+  if (!ctx) {
+    throw new Error("useToolInputs must be used within <ToolShell>");
+  }
+  return ctx;
+}
 
 // Simple markdown-like parser for explain text
 function renderExplainText(text: string): React.ReactNode {
@@ -299,7 +314,8 @@ export default function ToolShell({
 
   return (
     // Add bottom padding so floating UI never blocks tool actions.
-    <div className="tool-shell pb-24">
+    <ToolInputsContext.Provider value={{ inputs, setInputs }}>
+      <div className="tool-shell pb-24">
       {/* Self Test Banner */}
       <ToolSelfTest
         contract={contract}
@@ -535,7 +551,8 @@ export default function ToolShell({
           )}
         </div>
       )}
-    </div>
+      </div>
+    </ToolInputsContext.Provider>
   );
 }
 

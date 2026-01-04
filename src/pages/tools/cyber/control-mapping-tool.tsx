@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import ToolShell from "@/components/tools/ToolShell";
+import ToolShell, { useToolInputs } from "@/components/tools/ToolShell";
 import { getToolContract } from "@/lib/tools/loadContract";
 import { createToolError } from "@/components/tools/ErrorPanel";
 import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
@@ -57,11 +57,62 @@ const frameworkMappings: Record<string, Record<string, string>> = {
   },
 };
 
-export default function ControlMappingToolPage() {
-  const [controlDescription, setControlDescription] = useState("");
-  const [framework, setFramework] = useState<"NIST_CSF" | "ISO_27001" | "CIS_Controls">("NIST_CSF");
-  const [mapping, setMapping] = useState("");
+function ControlMappingForm() {
+  const { inputs, setInputs } = useToolInputs();
+  const controlDescription = typeof inputs.controlDescription === "string" ? inputs.controlDescription : "";
+  const framework = (inputs.framework as "NIST_CSF" | "ISO_27001" | "CIS_Controls") || "NIST_CSF";
+  const mapping = typeof inputs.mapping === "string" ? inputs.mapping : "";
 
+  return (
+    <div className="space-y-4">
+      <div>
+        <label htmlFor="controlDescription" className="block text-sm font-semibold text-slate-900">
+          Control Description <span className="text-red-600">*</span>
+        </label>
+        <textarea
+          id="controlDescription"
+          value={controlDescription}
+          onChange={(e) => setInputs((prev) => ({ ...prev, controlDescription: e.target.value }))}
+          rows={3}
+          maxLength={500}
+          className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+          placeholder="e.g., Multi-factor authentication for all users"
+        />
+      </div>
+      <div>
+        <label htmlFor="framework" className="block text-sm font-semibold text-slate-900">
+          Framework
+        </label>
+        <select
+          id="framework"
+          value={framework}
+          onChange={(e) => setInputs((prev) => ({ ...prev, framework: e.target.value }))}
+          className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+        >
+          <option value="NIST_CSF">NIST CSF</option>
+          <option value="ISO_27001">ISO 27001</option>
+          <option value="CIS_Controls">CIS Controls</option>
+        </select>
+      </div>
+      <div>
+        <label htmlFor="mapping" className="block text-sm font-semibold text-slate-900">
+          Framework Mapping
+        </label>
+        <input
+          id="mapping"
+          type="text"
+          value={mapping}
+          onChange={(e) => setInputs((prev) => ({ ...prev, mapping: e.target.value }))}
+          maxLength={200}
+          className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+          placeholder="e.g., PR.AC-7 (will be suggested if control matches known patterns)"
+        />
+      </div>
+    </div>
+  );
+}
+
+export default function ControlMappingToolPage() {
   if (!contract) {
     return (
       <div className="mx-auto max-w-4xl p-6">
@@ -111,52 +162,8 @@ export default function ControlMappingToolPage() {
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ controlDescription, framework, mapping }}>
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="controlDescription" className="block text-sm font-semibold text-slate-900">
-              Control Description <span className="text-red-600">*</span>
-            </label>
-            <textarea
-              id="controlDescription"
-              value={controlDescription}
-              onChange={(e) => setControlDescription(e.target.value)}
-              rows={3}
-              maxLength={500}
-              className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-              placeholder="e.g., Multi-factor authentication for all users"
-            />
-          </div>
-          <div>
-            <label htmlFor="framework" className="block text-sm font-semibold text-slate-900">
-              Framework
-            </label>
-            <select
-              id="framework"
-              value={framework}
-              onChange={(e) => setFramework(e.target.value as typeof framework)}
-              className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-            >
-              <option value="NIST_CSF">NIST CSF</option>
-              <option value="ISO_27001">ISO 27001</option>
-              <option value="CIS_Controls">CIS Controls</option>
-            </select>
-          </div>
-          <div>
-            <label htmlFor="mapping" className="block text-sm font-semibold text-slate-900">
-              Framework Mapping
-            </label>
-            <input
-              id="mapping"
-              type="text"
-              value={mapping}
-              onChange={(e) => setMapping(e.target.value)}
-              maxLength={200}
-              className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-              placeholder="e.g., PR.AC-7 (will be suggested if control matches known patterns)"
-            />
-          </div>
-        </div>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples}>
+        <ControlMappingForm />
       </ToolShell>
     </div>
   );

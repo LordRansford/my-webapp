@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import ToolShell from "@/components/tools/ToolShell";
+import ToolShell, { useToolInputs } from "@/components/tools/ToolShell";
 import { getToolContract } from "@/lib/tools/loadContract";
 import { createToolError } from "@/components/tools/ErrorPanel";
 import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
@@ -73,11 +73,92 @@ const examples = [
   },
 ];
 
-export default function ProcessFrictionMapperPage() {
-  const [processSteps, setProcessSteps] = useState<string[]>(["", ""]);
-  const [actors, setActors] = useState<string[]>([""]);
-  const [frictionPoints, setFrictionPoints] = useState<string[]>([""]);
+function ProcessFrictionForm() {
+  const { inputs, setInputs } = useToolInputs();
+  const processSteps = Array.isArray(inputs.processSteps) ? (inputs.processSteps as string[]) : ["", ""];
+  const actors = Array.isArray(inputs.actors) ? (inputs.actors as string[]) : [""];
+  const frictionPoints = Array.isArray(inputs.frictionPoints) ? (inputs.frictionPoints as string[]) : [""];
 
+  const updateArray = (key: "processSteps" | "actors" | "frictionPoints", index: number, value: string) => {
+    setInputs((prev) => {
+      const arr = Array.isArray(prev[key]) ? ([...(prev[key] as string[])] as string[]) : [];
+      arr[index] = value;
+      return { ...prev, [key]: arr };
+    });
+  };
+
+  const addItem = (key: "processSteps" | "actors" | "frictionPoints", max: number) => {
+    setInputs((prev) => {
+      const arr = Array.isArray(prev[key]) ? ([...(prev[key] as string[])] as string[]) : [];
+      if (arr.length < max) arr.push("");
+      return { ...prev, [key]: arr };
+    });
+  };
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <label className="block text-sm font-semibold text-slate-900 mb-2">Process Steps (max 30)</label>
+        {processSteps.map((step, idx) => (
+          <input
+            key={idx}
+            type="text"
+            value={step}
+            onChange={(e) => updateArray("processSteps", idx, e.target.value)}
+            maxLength={500}
+            className="mt-2 w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+            placeholder={`Step ${idx + 1}`}
+          />
+        ))}
+        {processSteps.length < 30 && (
+          <button type="button" onClick={() => addItem("processSteps", 30)} className="mt-2 text-xs text-slate-600 underline">
+            + Add Step
+          </button>
+        )}
+      </div>
+      <div>
+        <label className="block text-sm font-semibold text-slate-900 mb-2">Actors (max 20)</label>
+        {actors.map((actor, idx) => (
+          <input
+            key={idx}
+            type="text"
+            value={actor}
+            onChange={(e) => updateArray("actors", idx, e.target.value)}
+            maxLength={200}
+            className="mt-2 w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+            placeholder={`Actor ${idx + 1}`}
+          />
+        ))}
+        {actors.length < 20 && (
+          <button type="button" onClick={() => addItem("actors", 20)} className="mt-2 text-xs text-slate-600 underline">
+            + Add Actor
+          </button>
+        )}
+      </div>
+      <div>
+        <label className="block text-sm font-semibold text-slate-900 mb-2">Friction Points (max 20)</label>
+        {frictionPoints.map((friction, idx) => (
+          <input
+            key={idx}
+            type="text"
+            value={friction}
+            onChange={(e) => updateArray("frictionPoints", idx, e.target.value)}
+            maxLength={500}
+            className="mt-2 w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+            placeholder={`Friction point ${idx + 1}`}
+          />
+        ))}
+        {frictionPoints.length < 20 && (
+          <button type="button" onClick={() => addItem("frictionPoints", 20)} className="mt-2 text-xs text-slate-600 underline">
+            + Add Friction Point
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default function ProcessFrictionMapperPage() {
   if (!contract) {
     return (
       <div className="mx-auto max-w-4xl p-6">
@@ -114,14 +195,6 @@ export default function ProcessFrictionMapperPage() {
     return { success: true, output: JSON.stringify(result, null, 2) };
   };
 
-  const updateArray = (setter: React.Dispatch<React.SetStateAction<string[]>>, index: number, value: string) => {
-    setter((prev) => {
-      const newArr = [...prev];
-      newArr[index] = value;
-      return newArr;
-    });
-  };
-
   return (
     <div className="mx-auto max-w-6xl p-6">
       <nav className="mb-4">
@@ -130,78 +203,8 @@ export default function ProcessFrictionMapperPage() {
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ processSteps, actors, frictionPoints }}>
-        <div className="space-y-6">
-          <div>
-            <label className="block text-sm font-semibold text-slate-900 mb-2">Process Steps (max 30)</label>
-            {processSteps.map((step, idx) => (
-              <input
-                key={idx}
-                type="text"
-                value={step}
-                onChange={(e) => updateArray(setProcessSteps, idx, e.target.value)}
-                maxLength={500}
-                className="mt-2 w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-                placeholder={`Step ${idx + 1}`}
-              />
-            ))}
-            {processSteps.length < 30 && (
-              <button
-                type="button"
-                onClick={() => setProcessSteps([...processSteps, ""])}
-                className="mt-2 text-xs text-slate-600 underline"
-              >
-                + Add Step
-              </button>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-slate-900 mb-2">Actors (max 20)</label>
-            {actors.map((actor, idx) => (
-              <input
-                key={idx}
-                type="text"
-                value={actor}
-                onChange={(e) => updateArray(setActors, idx, e.target.value)}
-                maxLength={200}
-                className="mt-2 w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-                placeholder={`Actor ${idx + 1}`}
-              />
-            ))}
-            {actors.length < 20 && (
-              <button
-                type="button"
-                onClick={() => setActors([...actors, ""])}
-                className="mt-2 text-xs text-slate-600 underline"
-              >
-                + Add Actor
-              </button>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-slate-900 mb-2">Friction Points (max 20)</label>
-            {frictionPoints.map((friction, idx) => (
-              <input
-                key={idx}
-                type="text"
-                value={friction}
-                onChange={(e) => updateArray(setFrictionPoints, idx, e.target.value)}
-                maxLength={500}
-                className="mt-2 w-full rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-                placeholder={`Friction point ${idx + 1}`}
-              />
-            ))}
-            {frictionPoints.length < 20 && (
-              <button
-                type="button"
-                onClick={() => setFrictionPoints([...frictionPoints, ""])}
-                className="mt-2 text-xs text-slate-600 underline"
-              >
-                + Add Friction Point
-              </button>
-            )}
-          </div>
-        </div>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples}>
+        <ProcessFrictionForm />
       </ToolShell>
     </div>
   );

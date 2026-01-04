@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import ToolShell from "@/components/tools/ToolShell";
+import ToolShell, { useToolInputs } from "@/components/tools/ToolShell";
 import { getToolContract } from "@/lib/tools/loadContract";
 import { runPython } from "@/lib/sandbox/python/runPython";
 import { createToolError } from "@/components/tools/ErrorPanel";
@@ -42,8 +42,37 @@ for key, value in data.items():
   },
 ];
 
+function PythonEditor({ statusText }: { statusText: string | null }) {
+  const { inputs, setInputs } = useToolInputs();
+  const code = typeof inputs.code === "string" ? inputs.code : "";
+
+  return (
+    <div className="space-y-4">
+      {statusText ? (
+        <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900" role="status" aria-live="polite">
+          {statusText}
+        </div>
+      ) : null}
+      <div>
+        <label htmlFor="code" className="block text-sm font-semibold text-slate-900">
+          Python Code
+        </label>
+        <textarea
+          id="code"
+          value={code}
+          onChange={(e) => setInputs((prev) => ({ ...prev, code: e.target.value }))}
+          rows={15}
+          className="mt-2 w-full rounded-lg border border-slate-300 p-3 font-mono text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+          placeholder="Enter your Python code here..."
+        />
+        <p className="mt-1 text-xs text-slate-600">Max {contract?.limits.inputKb ?? 0}KB</p>
+      </div>
+    </div>
+  );
+}
+
 export default function PythonPlaygroundPage() {
-  const [code, setCode] = useState('print("Hello, world!")');
+  const [statusText, setStatusText] = useState<string | null>(null);
 
   if (!contract) {
     return (
@@ -84,7 +113,16 @@ export default function PythonPlaygroundPage() {
     }
 
     // Local mode
-    const result = await runPython(codeInput, contract);
+    setStatusText("Loading Python runtime…");
+    const result = await runPython(codeInput, contract, {
+      onStatus: (phase, message) => {
+        if (phase === "loading_runtime") setStatusText("Loading Python runtime… (first load can take ~10–30s)");
+        else if (phase === "ready") setStatusText("Python runtime ready. Running…");
+        else if (phase === "running") setStatusText("Running…");
+        else setStatusText(message || null);
+      },
+    });
+    setStatusText(null);
     if (result.success && result.output) {
       return {
         success: true,
@@ -98,13 +136,6 @@ export default function PythonPlaygroundPage() {
     }
   };
 
-  // Sync code state with ToolShell inputs
-  const handleInputsChange = (inputs: Record<string, unknown>) => {
-    if (inputs.code && typeof inputs.code === "string") {
-      setCode(inputs.code);
-    }
-  };
-
   return (
     <div className="mx-auto max-w-6xl p-6">
       <nav className="mb-4">
@@ -113,27 +144,8 @@ export default function PythonPlaygroundPage() {
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ code }} onInputsChange={handleInputsChange}>
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="code" className="block text-sm font-semibold text-slate-900">
-              Python Code
-            </label>
-            <textarea
-              id="code"
-              value={code}
-              onChange={(e) => {
-                setCode(e.target.value);
-                // Also update ToolShell inputs
-                handleInputsChange({ code: e.target.value });
-              }}
-              rows={15}
-              className="mt-2 w-full rounded-lg border border-slate-300 p-3 font-mono text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-              placeholder="Enter your Python code here..."
-            />
-            <p className="mt-1 text-xs text-slate-600">Max {contract.limits.inputKb}KB</p>
-          </div>
-        </div>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples}>
+        <PythonEditor statusText={statusText} />
       </ToolShell>
     </div>
   );

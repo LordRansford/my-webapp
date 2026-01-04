@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import ToolShell from "@/components/tools/ToolShell";
+import ToolShell, { useToolInputs } from "@/components/tools/ToolShell";
 import { getToolContract } from "@/lib/tools/loadContract";
 import { createToolError } from "@/components/tools/ErrorPanel";
 import type { ToolContract, ExecutionMode } from "@/components/tools/ToolShell";
@@ -51,12 +51,120 @@ const examples = [
   },
 ];
 
-export default function DecisionLogGeneratorPage() {
-  const [decision, setDecision] = useState("");
-  const [context, setContext] = useState("");
-  const [options, setOptions] = useState<string[]>(["", ""]);
-  const [rationale, setRationale] = useState("");
+function DecisionLogForm() {
+  const { inputs, setInputs } = useToolInputs();
+  const decision = typeof inputs.decision === "string" ? inputs.decision : "";
+  const context = typeof inputs.context === "string" ? inputs.context : "";
+  const rationale = typeof inputs.rationale === "string" ? inputs.rationale : "";
+  const options = Array.isArray(inputs.options) ? (inputs.options as string[]) : ["", ""];
 
+  const updateOption = (index: number, value: string) => {
+    setInputs((prev) => {
+      const arr = Array.isArray(prev.options) ? ([...(prev.options as string[])] as string[]) : ["", ""];
+      while (arr.length < 2) arr.push("");
+      arr[index] = value;
+      return { ...prev, options: arr };
+    });
+  };
+
+  const addOption = () => {
+    setInputs((prev) => {
+      const arr = Array.isArray(prev.options) ? ([...(prev.options as string[])] as string[]) : ["", ""];
+      if (arr.length < 4) arr.push("");
+      return { ...prev, options: arr };
+    });
+  };
+
+  const removeOption = (index: number) => {
+    setInputs((prev) => {
+      const arr = Array.isArray(prev.options) ? ([...(prev.options as string[])] as string[]) : ["", ""];
+      if (arr.length <= 2) return prev;
+      return { ...prev, options: arr.filter((_, i) => i !== index) };
+    });
+  };
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <label htmlFor="decision" className="block text-sm font-semibold text-slate-900">
+          Decision <span className="text-red-600">*</span>
+        </label>
+        <input
+          id="decision"
+          type="text"
+          value={decision}
+          onChange={(e) => setInputs((prev) => ({ ...prev, decision: e.target.value }))}
+          maxLength={200}
+          className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+          placeholder="What was decided?"
+        />
+      </div>
+      <div>
+        <label htmlFor="context" className="block text-sm font-semibold text-slate-900">
+          Context
+        </label>
+        <textarea
+          id="context"
+          value={context}
+          onChange={(e) => setInputs((prev) => ({ ...prev, context: e.target.value }))}
+          rows={4}
+          maxLength={2000}
+          className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+          placeholder="Constraints, goals, stakeholders..."
+        />
+      </div>
+      <div>
+        <div className="flex items-center justify-between">
+          <label className="block text-sm font-semibold text-slate-900">
+            Options (2-4) <span className="text-red-600">*</span>
+          </label>
+          {options.length < 4 && (
+            <button type="button" onClick={addOption} className="text-xs text-slate-600 underline hover:text-slate-900">
+              + Add Option
+            </button>
+          )}
+        </div>
+        {options.map((opt, idx) => (
+          <div key={idx} className="mt-2 flex gap-2">
+            <input
+              type="text"
+              value={opt}
+              onChange={(e) => updateOption(idx, e.target.value)}
+              maxLength={500}
+              className="flex-1 rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+              placeholder={`Option ${idx + 1}`}
+            />
+            {options.length > 2 && (
+              <button
+                type="button"
+                onClick={() => removeOption(idx)}
+                className="rounded-lg border border-slate-300 px-3 text-sm text-red-600 hover:bg-red-50"
+              >
+                ×
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+      <div>
+        <label htmlFor="rationale" className="block text-sm font-semibold text-slate-900">
+          Rationale
+        </label>
+        <textarea
+          id="rationale"
+          value={rationale}
+          onChange={(e) => setInputs((prev) => ({ ...prev, rationale: e.target.value }))}
+          rows={4}
+          maxLength={2000}
+          className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+          placeholder="Why was this option chosen? What trade-offs were considered?"
+        />
+      </div>
+    </div>
+  );
+}
+
+export default function DecisionLogGeneratorPage() {
   if (!contract) {
     return (
       <div className="mx-auto max-w-4xl p-6">
@@ -128,20 +236,6 @@ ${new Date().toISOString().split("T")[0]}
     };
   };
 
-  const updateOption = (index: number, value: string) => {
-    const newOptions = [...options];
-    newOptions[index] = value;
-    setOptions(newOptions);
-  };
-
-  const addOption = () => {
-    if (options.length < 4) setOptions([...options, ""]);
-  };
-
-  const removeOption = (index: number) => {
-    if (options.length > 2) setOptions(options.filter((_, i) => i !== index));
-  };
-
   return (
     <div className="mx-auto max-w-6xl p-6">
       <nav className="mb-4">
@@ -150,88 +244,8 @@ ${new Date().toISOString().split("T")[0]}
         </Link>
       </nav>
 
-      <ToolShell contract={contract} onRun={handleRun} examples={examples} initialInputs={{ decision, context, options, rationale }}>
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="decision" className="block text-sm font-semibold text-slate-900">
-              Decision <span className="text-red-600">*</span>
-            </label>
-            <input
-              id="decision"
-              type="text"
-              value={decision}
-              onChange={(e) => setDecision(e.target.value)}
-              maxLength={200}
-              className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-              placeholder="What was decided?"
-            />
-          </div>
-          <div>
-            <label htmlFor="context" className="block text-sm font-semibold text-slate-900">
-              Context
-            </label>
-            <textarea
-              id="context"
-              value={context}
-              onChange={(e) => setContext(e.target.value)}
-              rows={4}
-              maxLength={2000}
-              className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-              placeholder="Constraints, goals, stakeholders..."
-            />
-          </div>
-          <div>
-            <div className="flex items-center justify-between">
-              <label className="block text-sm font-semibold text-slate-900">
-                Options (2-4) <span className="text-red-600">*</span>
-              </label>
-              {options.length < 4 && (
-                <button
-                  type="button"
-                  onClick={addOption}
-                  className="text-xs text-slate-600 underline hover:text-slate-900"
-                >
-                  + Add Option
-                </button>
-              )}
-            </div>
-            {options.map((opt, idx) => (
-              <div key={idx} className="mt-2 flex gap-2">
-                <input
-                  type="text"
-                  value={opt}
-                  onChange={(e) => updateOption(idx, e.target.value)}
-                  maxLength={500}
-                  className="flex-1 rounded-lg border border-slate-300 p-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-                  placeholder={`Option ${idx + 1}`}
-                />
-                {options.length > 2 && (
-                  <button
-                    type="button"
-                    onClick={() => removeOption(idx)}
-                    className="rounded-lg border border-slate-300 px-3 text-sm text-red-600 hover:bg-red-50"
-                  >
-                    ×
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
-          <div>
-            <label htmlFor="rationale" className="block text-sm font-semibold text-slate-900">
-              Rationale
-            </label>
-            <textarea
-              id="rationale"
-              value={rationale}
-              onChange={(e) => setRationale(e.target.value)}
-              rows={4}
-              maxLength={2000}
-              className="mt-2 w-full rounded-lg border border-slate-300 p-3 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
-              placeholder="Why was this option chosen? What trade-offs were considered?"
-            />
-          </div>
-        </div>
+      <ToolShell contract={contract} onRun={handleRun} examples={examples}>
+        <DecisionLogForm />
       </ToolShell>
     </div>
   );
