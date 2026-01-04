@@ -1,0 +1,8 @@
+__turbopack_load_page_chunks__("/dev-studio/api-designer", [
+  "static/chunks/6bd1b060cc02463e.js",
+  "static/chunks/f0f43ebb724b8b11.js",
+  "static/chunks/d1ea35920c32a766.js",
+  "static/chunks/01073211ade0ab07.js",
+  "static/chunks/2d8a66995a593943.js",
+  "static/chunks/turbopack-e090555c45b07d8d.js"
+])

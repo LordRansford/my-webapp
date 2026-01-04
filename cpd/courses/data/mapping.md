@@ -1,7 +1,7 @@
 # Mapping – data
 
 - Status: Draft
-- Generated: 2026-01-04T05:53:11.123Z
+- Generated: 2026-01-04T06:01:14.478Z
 - Total estimated hours: 34
 - Total learning objectives: 16
 - Total tracked sections: 22

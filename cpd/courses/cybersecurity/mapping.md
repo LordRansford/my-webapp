@@ -1,7 +1,7 @@
 # Mapping – cybersecurity
 
 - Status: Ready
-- Generated: 2026-01-04T05:53:11.126Z
+- Generated: 2026-01-04T06:01:14.483Z
 - Total estimated hours: 56
 - Total learning objectives: 15
 - Total tracked sections: 25

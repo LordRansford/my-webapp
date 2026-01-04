@@ -6,7 +6,7 @@
   "rootMainFiles": [],
   "pages": {
     "/ai/summary": [
-      "static/chunks/96081d544e996126.js",
+      "static/chunks/b01503d5136a65b4.js",
       "static/chunks/154c87f8bc7ef611.js",
       "static/chunks/2fcd2aa21d8c3e53.js",
       "static/chunks/48c11802c3f193fa.js",
@@ -17,7 +17,7 @@
       "static/chunks/30bacc71719868c1.js",
       "static/chunks/01073211ade0ab07.js",
       "static/chunks/bc79c3254eff7aa5.js",
-      "static/chunks/turbopack-5d5948bc82d0c919.js"
+      "static/chunks/turbopack-88a287eef9e77584.js"
     ]
   },
   "ampFirstPages": []

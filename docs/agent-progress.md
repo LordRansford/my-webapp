@@ -25,3 +25,10 @@ This file is maintained by the Cursor agent during the overnight implementation.
   - `npm -s run build` ✅ (Next.js production build + TypeScript pass)
   - Notes: build emits pre-existing credit-enforcement warnings and “tool contracts not found in tools.js” warnings; no new failures introduced by Task A changes.
 
+### Checkpoint: Task B implemented (/dashboards hub)
+- **Change**: Replaced the `/dashboards` landing page (pages router) with a registry-driven hub UI:
+  - New client component `src/components/dashboards/DashboardsHubClient.tsx` (search + category filter + badges).
+  - `src/pages/dashboards/index.js` now renders the hub (client-only via dynamic import) inside `NotesLayout`.
+- **Tests**:
+  - `npm -s run build` ✅
+

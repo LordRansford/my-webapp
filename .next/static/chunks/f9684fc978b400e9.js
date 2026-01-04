@@ -1,8 +1,0 @@
-__turbopack_load_page_chunks__("/ai-studios/sections/ModelTypesLab", [
-  "static/chunks/1dfe8b02a9a4c301.js",
-  "static/chunks/6bd1b060cc02463e.js",
-  "static/chunks/d1ea35920c32a766.js",
-  "static/chunks/01073211ade0ab07.js",
-  "static/chunks/f0f43ebb724b8b11.js",
-  "static/chunks/turbopack-c72a233c3e7bb885.js"
-])
