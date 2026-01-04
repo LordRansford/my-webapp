@@ -1,0 +1,15 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" fill="#7F1D1D" rx="8"/>
+  <text x="100" y="90" font-family="system-ui, sans-serif" font-size="32" font-weight="bold" fill="white" text-anchor="middle">
+    IMechE
+  </text>
+  <text x="100" y="120" font-family="system-ui, sans-serif" font-size="14" fill="#FCA5A5" text-anchor="middle">
+    ESTD 1847
+  </text>
+  <text x="100" y="150" font-family="system-ui, sans-serif" font-size="10" fill="#FCA5A5" text-anchor="middle">
+    Council Member
+  </text>
+  <text x="100" y="180" font-family="system-ui, sans-serif" font-size="8" fill="#DC2626" text-anchor="middle">
+    Replace with actual IMechE membership card
+  </text>
+</svg>

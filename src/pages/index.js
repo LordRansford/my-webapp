@@ -262,11 +262,15 @@ export default function Home({ posts }) {
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Trust</p>
             <h2 className="mt-2 text-2xl font-semibold text-slate-900">Built for credible learning</h2>
             <p className="mt-2 text-sm text-slate-700">
-              This started as personal notes for real work, then evolved into a platform. The goal is accuracy, clarity, and decision-ready thinking.
+              Created by <strong>Ransford Chung Amponsah</strong>, a Chartered Engineer (CEng MIMechE), TOGAF® Certified Practitioner, and IMechE Council Member. 
+              This started as personal notes for real work in digitalisation, then evolved into a platform.
             </p>
             <p className="mt-2 text-sm text-slate-700">
-              It is designed to align with CPD expectations and professional standards, without claiming accreditation unless explicitly stated.
+              The goal is accuracy, clarity, and decision-ready thinking. All content is designed to align with CPD expectations and professional standards.
             </p>
+            <Link href="/about" className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-slate-900 underline decoration-slate-300 underline-offset-4 hover:decoration-slate-600">
+              Learn about the creator <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
           </div>
           <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Early access</p>

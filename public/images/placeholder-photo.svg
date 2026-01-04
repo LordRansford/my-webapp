@@ -1,0 +1,8 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" fill="#E2E8F0"/>
+  <circle cx="256" cy="200" r="80" fill="#94A3B8"/>
+  <path d="M96 432C96 362.562 152.562 306 222 306H290C359.438 306 416 362.562 416 432V512H96V432Z" fill="#94A3B8"/>
+  <text x="256" y="480" font-family="system-ui, sans-serif" font-size="14" fill="#475569" text-anchor="middle">
+    Replace with your professional photo
+  </text>
+</svg>
