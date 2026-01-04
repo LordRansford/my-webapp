@@ -1,55 +1,22 @@
 import Layout from "@/components/Layout";
 import { StaticInfoTemplate } from "@/components/templates/PageTemplates";
+import Link from "next/link";
 
 export default function TrustAndAbout() {
   return (
     <Layout
-      title="Trust and About Ransford"
-      description="Who I am, why I built Ransford's Notes, and how I try to keep it accurate, safe, and useful."
+      title="Trust and Methodology"
+      description="How I try to keep this site accurate, safe, and useful."
     >
-      <StaticInfoTemplate breadcrumbs={[{ label: "Home", href: "/" }, { label: "Trust and About" }]}>
+      <StaticInfoTemplate breadcrumbs={[{ label: "Home", href: "/" }, { label: "Trust and Methodology" }]}>
         <header className="page-header">
           <p className="eyebrow">Ransford&apos;s Notes</p>
-          <h1>Trust and About Ransford</h1>
+          <h1>Trust and Methodology</h1>
           <p className="lead">
-            I built Ransford&apos;s Notes so that people who feel lost in data, cybersecurity, artificial
-            intelligence, and digitalisation can have a place that explains things slowly and practically.
-            This page explains who I am, how I work, and how I try to keep this site trustworthy.
+            This page explains how I maintain the notes, how the tools run safely, and the principles behind the content.
+            For more about me, please see the <Link href="/about" className="text-blue-600 hover:underline">About page</Link>.
           </p>
         </header>
-
-        <section className="section">
-          <h2>Who I am</h2>
-          <p>
-            My name is Ransford Chung Amponsah. I work in the United Kingdom energy sector in data and digitalisation.
-            My background is in mechanical engineering and I moved into digital work after realising how central
-            software, data, and security had become to real world systems like energy networks.
-          </p>
-          <p>
-            A turning point for me was a visit to Octopus Energy in London where I saw how seriously they treated their
-            digital platform and data. After that visit I moved into a data and digitalisation role and began a long
-            journey of self study in cybersecurity, architecture, and artificial intelligence.
-          </p>
-          <p>
-            I have taken a range of professional courses and exams in cybersecurity, cloud, and artificial
-            intelligence and I keep studying. These notes are my way of sharing what I have learnt with people who are
-            on a similar path, especially those who do not come from a computer science background.
-          </p>
-        </section>
-
-        <section className="section">
-          <h2>Why this site exists</h2>
-          <p>
-            When I started learning, I found that most resources assumed a strong technical background or moved too
-            fast. I also noticed that many people in policy, regulation, and engineering are asked to make decisions
-            about digital systems without ever getting a calm explanation of what is going on under the surface.
-          </p>
-          <p>
-            Ransford&apos;s Notes is my attempt to fix a small part of that problem. I want this site to feel like you are
-            sitting with me and we are working through the ideas step by step, from the ground up, with real examples
-            and tools you can try in your browser.
-          </p>
-        </section>
 
         <section className="section">
           <h2>Who this site is for</h2>
