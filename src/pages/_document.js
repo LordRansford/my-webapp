@@ -6,7 +6,6 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         {/* Safety failsafe:
             Next.js injects a "hide FOUC" style (body{display:none}) which should be removed by runtime JS.
             In some strict-header/dev/test environments, that removal can fail and the entire app appears blank.
