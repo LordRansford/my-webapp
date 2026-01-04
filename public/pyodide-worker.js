@@ -5,6 +5,54 @@ let pyodide = null;
 let loading = false;
 let loadPromise = null;
 
+function blobSizeKb(text) {
+  try {
+    return new Blob([text]).size / 1024;
+  } catch (e) {
+    // Fallback: best-effort approximation
+    return (text && text.length ? text.length / 1024 : 0);
+  }
+}
+
+function postStatus(requestId, phase, message) {
+  try {
+    self.postMessage({ type: "status", requestId: requestId, phase: phase, message: message });
+  } catch (e) {
+    // ignore
+  }
+}
+
+function postResult(requestId, payload) {
+  self.postMessage(
+    Object.assign(
+      {
+        type: "result",
+        requestId: requestId,
+      },
+      payload
+    )
+  );
+}
+
+function buildPyodideLoadHelp(errorMsg) {
+  const base =
+    "Python runtime failed to load (Pyodide). This usually happens when your network blocks the CDN or your browser blocks cross-origin scripts.";
+
+  const hints = [];
+  const msg = String(errorMsg || "");
+  if (/csp|content security policy|refused to load the script/i.test(msg)) {
+    hints.push("Your Content Security Policy blocked loading Pyodide. Allow `cdn.jsdelivr.net` (or self-host Pyodide).");
+  } else if (/networkerror|failed to fetch|load failed|importScripts/i.test(msg)) {
+    hints.push("Your network may be blocking Pyodide. Allowlist `cdn.jsdelivr.net` (and fallback jsDelivr domains) or self-host Pyodide.");
+  }
+
+  hints.push(
+    "If you control deployment: ensure `script-src` allows Pyodide and that cross-origin requests to the Pyodide CDN are permitted."
+  );
+
+  return base + (hints.length ? " " + hints.join(" ") : "");
+}
+
 async function loadPyodideInstance() {
   if (pyodide) return pyodide;
   if (loading && loadPromise) return loadPromise;
@@ -12,17 +60,34 @@ async function loadPyodideInstance() {
   loading = true;
   loadPromise = (async () => {
     try {
-      // Load Pyodide script
-      importScripts('https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js');
-      
-      // Wait for loadPyodide to be available
-      if (typeof self.loadPyodide === 'undefined') {
-        throw new Error('loadPyodide not available after importScripts');
+      // Load Pyodide script (with resilient jsDelivr domain fallbacks).
+      // We intentionally keep the version pinned for safety/reproducibility.
+      const sources = [
+        { script: "https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js", index: "https://cdn.jsdelivr.net/pyodide/v0.24.1/full/" },
+        { script: "https://fastly.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js", index: "https://fastly.jsdelivr.net/pyodide/v0.24.1/full/" },
+        { script: "https://gcore.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js", index: "https://gcore.jsdelivr.net/pyodide/v0.24.1/full/" },
+      ];
+
+      let lastErr = null;
+      for (let i = 0; i < sources.length; i++) {
+        const src = sources[i];
+        try {
+          importScripts(src.script);
+          if (typeof self.loadPyodide === "undefined") {
+            throw new Error("loadPyodide not available after importScripts");
+          }
+          pyodide = await self.loadPyodide({ indexURL: src.index });
+          break;
+        } catch (e) {
+          lastErr = e;
+          pyodide = null;
+          // Continue to next source
+        }
       }
-      
-      pyodide = await self.loadPyodide({
-        indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/',
-      });
+
+      if (!pyodide) {
+        throw lastErr || new Error("Unable to load Pyodide from any CDN source");
+      }
       
       // Block networking
       pyodide.runPython(`
@@ -35,7 +100,8 @@ async function loadPyodideInstance() {
       return pyodide;
     } catch (err) {
       loading = false;
-      throw new Error('Failed to load Pyodide: ' + (err instanceof Error ? err.message : String(err)));
+      const msg = err instanceof Error ? err.message : String(err);
+      throw new Error("Failed to load Pyodide: " + msg);
     }
   })();
   
@@ -44,25 +110,33 @@ async function loadPyodideInstance() {
 
 function truncateOutput(output, maxKb) {
   const maxBytes = maxKb * 1024;
-  if (output.length <= maxBytes) return output;
-  return output.slice(0, maxBytes) + '\n... (truncated, max ' + maxKb + 'KB)';
+  try {
+    const sizeBytes = new Blob([output]).size;
+    if (sizeBytes <= maxBytes) return output;
+  } catch (e) {
+    if (output.length <= maxBytes) return output;
+  }
+  return output.slice(0, maxBytes) + "\n... (truncated, max " + maxKb + "KB)";
 }
 
 self.onmessage = async function(e) {
-  const { code, timeoutMs, maxOutputKb } = e.data;
+  const { requestId, code, timeoutMs, maxOutputKb } = e.data || {};
+  if (!requestId) return;
 
   const timeoutId = setTimeout(function() {
-    self.postMessage({
+    postResult(requestId, {
       success: false,
       stdout: [],
-      result: '',
-      error: { code: 'timeout', message: 'Execution exceeded ' + timeoutMs + 'ms limit' }
+      result: "",
+      error: { code: "timeout", message: "Execution exceeded " + timeoutMs + "ms limit" },
     });
     self.close();
   }, timeoutMs);
 
   try {
+    postStatus(requestId, "loading_runtime", "Loading Python runtime...");
     const py = await loadPyodideInstance();
+    postStatus(requestId, "ready", "Python runtime ready.");
     
     // Capture stdout/stderr
     py.runPython(`
@@ -76,6 +150,7 @@ self.onmessage = async function(e) {
     `);
 
     // Run user code
+    postStatus(requestId, "running", "Running code...");
     py.runPython(code);
     
     // Get captured output
@@ -94,10 +169,10 @@ self.onmessage = async function(e) {
     const truncatedOutput = truncateOutput(output, maxOutputKb);
     const stdoutLines = output.split('\n').filter(function(line) { return line.trim(); });
 
-    self.postMessage({
+    postResult(requestId, {
       success: true,
       stdout: stdoutLines,
-      result: truncatedOutput
+      result: truncatedOutput,
     });
   } catch (err) {
     clearTimeout(timeoutId);
@@ -112,18 +187,28 @@ self.onmessage = async function(e) {
       errorCode = 'name_error';
     } else if (errorMsg.indexOf('TypeError') !== -1) {
       errorCode = 'type_error';
-    } else if (errorMsg.indexOf('loadPyodide') !== -1 || errorMsg.indexOf('Failed to load') !== -1) {
-      errorCode = 'worker_error';
+    } else if (errorMsg.indexOf('loadPyodide') !== -1 || errorMsg.indexOf('Failed to load') !== -1 || errorMsg.indexOf('importScripts') !== -1) {
+      errorCode = 'pyodide_load_failed';
     }
     
-    self.postMessage({
+    const help =
+      errorCode === "pyodide_load_failed"
+        ? buildPyodideLoadHelp(errorMsg)
+        : "";
+
+    const extra =
+      errorCode === "pyodide_load_failed"
+        ? " (Tip: first load can take ~10–30s; after that, runs should be fast.)"
+        : "";
+
+    postResult(requestId, {
       success: false,
       stdout: [],
-      result: '',
+      result: "",
       error: {
         code: errorCode,
-        message: errorMsg
-      }
+        message: (errorMsg || "Execution failed") + extra + (help ? "\n\n" + help : ""),
+      },
     });
   }
 };

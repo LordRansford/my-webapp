@@ -1,7 +1,7 @@
 # Mapping – network-models
 
 - Status: Draft
-- Generated: 2026-01-04T00:54:45.317Z
+- Generated: 2026-01-04T01:02:16.775Z
 - Total estimated hours: 40
 - Total learning objectives: 11
 - Total tracked sections: 21
