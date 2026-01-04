@@ -247,9 +247,9 @@ function AccountAction({ variant, isSignedIn }: { variant: "desktop" | "mobile";
   if (isSignedIn) {
     if (variant === "mobile") {
       return (
-        <a href="/account" className={base}>
+        <Link href="/account" className={base}>
           Account
-        </a>
+        </Link>
       );
     }
     return (
@@ -264,9 +264,9 @@ function AccountAction({ variant, isSignedIn }: { variant: "desktop" | "mobile";
 
   if (variant === "mobile") {
     return (
-      <a href="/signin" className={base}>
+      <Link href="/signin" className={base}>
         Sign in
-      </a>
+      </Link>
     );
   }
   return (
